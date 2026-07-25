@@ -1,39 +1,29 @@
-# Mathematical Foundations of Machine Learning — Study Notes
+# Mathematical Foundations — Study Notes
 
-Deep-dive notes for the NPTEL / IISc Bangalore course **Mathematical Foundations of Machine Learning** (Prof. Prathosh A P).
+Packages for NPTEL / IISc lectures (generative AI math foundations and related).
 
-- **Playlist:** https://www.youtube.com/playlist?list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu  
-- **Style:** ELI5 + Feynman teach-back, heavy ASCII diagrams, lecture-faithful  
-- **Layout:** one folder per video (playlist index prefix)
+## Skill
 
-## Lectures completed
+**`/youtube-lecture-tutor`** — **only** skill for full lecture packages:
 
-| # | Folder | Video | Topics |
-|---|--------|-------|--------|
-| 03 | [`03-Lec02-Probability-Theory-1-Part1/`](./03-Lec02-Probability-Theory-1-Part1/) | [Lec 02 Recap of Probability Theory - 1, Part 1](https://www.youtube.com/watch?v=YLx3hBqt28k) | Random experiment, sample space, measure intuition, probability triplet (Ω, F, P) |
+```
+PREREQUISITES.md → NOTES.md (architecture Exec Summary + 6–10 topics) → quiz.html
+```
 
-## Per-video package
+Law: `~/.grok/skills/youtube-lecture-tutor/`  
+(especially `output-blog-contract.md` + `executive-summary-architecture.md`)  
+Do not use removed skills (`lecture-study-package`, `youtube-blog-notes`).
+## Lectures
 
-Each lecture folder aims to contain:
+| Folder | Video | Type | Notes |
+|--------|-------|------|--------|
+| [`02-Lec01-Overview-Function-Approximation/`](./02-Lec01-Overview-Function-Approximation/) | [Lec 01 Overview of Function Approximation](https://www.youtube.com/watch?v=G2h7nD_Stxg) | math_technical | FA + model/algorithm + vectors + semantic gap + FA↔distributions; claim-mined |
+| [`03-Lec02-Recap-Probability-Theory-Part1/`](./03-Lec02-Recap-Probability-Theory-Part1/) | [Lec 02 Recap of Probability Theory - 1, Part 1](https://www.youtube.com/watch?v=YLx3hBqt28k) | math_technical | FA→RE→Ω→F→P; deep beginner PREREQS; claim-mined (~70) |
+| [`09-Lec01-Introduction-GenerativeAI-Probability/`](./09-Lec01-Introduction-GenerativeAI-Probability/) | [Lec 01 Introduction](https://www.youtube.com/watch?v=H05WDy9Mngk) | math_technical | Mission → uncertainty → (Ω,F,P) → RV |
 
-- `NOTES.md` — main study document (diagrams + analogies + ML hooks)
-- `TRANSCRIPT.md` — cleaned auto-captions with timestamps
-- `metadata.json` — source metadata
-- `screenshots/` — key board/slide frames
-- `raw/` — intermediate caption/video artifacts
+## Study one package
 
-## How to study
-
-1. Read `NOTES.md` top to bottom like a blog (one continuous argument).  
-2. Pause the video at the timestamp ranges on each section.  
-3. Use the check-yourself questions at the end.  
-4. Keep `TRANSCRIPT.md` open if you want the instructor’s exact wording.
-
-## Skill used for this series
-
-User skill **`youtube-blog-notes`** (`~/.grok/skills/youtube-blog-notes/`): continuous blog-style notes from any YouTube URL — no Vertex / project IDs. Invoke with `/youtube-blog-notes` or paste a lecture URL.
-
-## Next up (when you want)
-
-- Lec 03 — Probability Theory Part 2  
-- Remaining probability recap lectures, then function approximation → learning theory arc
+1. `PREREQUISITES.md`  
+2. `NOTES.md` **architecture** Executive Summary first (blueprint)  
+3. Topics in order  
+4. `quiz.html` (browser)  

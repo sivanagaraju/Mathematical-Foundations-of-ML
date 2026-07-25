@@ -1,0 +1,29 @@
+{
+  "title": "Lec 01 Overview of Function Approximation",
+  "video_id": "G2h7nD_Stxg",
+  "url": "https://www.youtube.com/watch?v=G2h7nD_Stxg",
+  "duration_seconds": 2869,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A P",
+  "description": "Function Approximation, Probabilistic View Point, Deterministic View Point",
+  "playlist_id": "PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu",
+  "playlist_index": 2,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "topic_count": 7,
+  "topics": [
+    "Why this course exists — math as precision language",
+    "Core problem — given D, find f",
+    "Ill-posed / overfitting seed",
+    "Guess, model, algorithm — how learning works",
+    "Probabilistic view; X-rays as vectors in R^d",
+    "Semantic gap — light vs disease; speech physics",
+    "Statistical methods, review list, FA to distributions"
+  ],
+  "worldview_arc": "deterministic function approximation → probabilistic / distribution estimation via semantic gap",
+  "claims_mined": 57,
+  "note": "URL index=3 was wrong for this video id; playlist index 2 is correct for G2h7nD_Stxg"
+}
