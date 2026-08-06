@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · Lec 05 · Joints, conditionals, margins</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · Lec 05 · Joints, conditionals, margins</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q1", "part": "prerequisites", "tag": "Warm-up · sets ∩", "anchor": "PREREQUISITES.md#p1-sets-and", "prompt": "Die Ω={1,2,3,4,5,6}, A=even={2,4,6}, B={1,2,3}. What is A∩B?", "options": [{"key": "A", "text": "{1,2,3,4,5,6}"}, {"key": "B", "text": "{2}"}, {"key": "C", "text": "{4,6}"}, {"key": "D", "text": "∅"}], "answer": "B", "whyCorrect": "Only 2 is both even and in {1,2,3}.", "whyOthers": {"A": "That is the whole Ω (union-ish thinking).", "C": "Those are even but not in B.", "D": "2 is in both."}, "diagram": "  A∩B={2}", "useLater": "Joints score intersections of preimage events."}, {"id": "q2", "part": "prerequisites", "tag": "Warm-up · RV map", "anchor": "PREREQUISITES.md#p2-rv-cdf", "prompt": "In the warm-up, what is “random” about a random variable X:Ω→R?", "options": [{"key": "A", "text": "The rule X flips randomly on the same ω each time"}, {"key": "B", "text": "R itself is random and Ω is fixed forever"}, {"key": "C", "text": "Nothing in the map: X is deterministic; uncertainty is which ω occurs"}, {"key": "D", "text": "Only empty outcomes are random"}], "answer": "C", "whyCorrect": "X is a function; uncertainty sits in the experiment outcome.", "whyOthers": {"A": "That would not be a function.", "B": "Opposite of the setup.", "D": "Nonsense."}, "diagram": "  uncertain ω · fixed X(ω)", "useLater": "Vector RVs are still deterministic maps."}, {"id": "q3", "part": "prerequisites", "tag": "Warm-up · pushforward CDF", "anchor": "PREREQUISITES.md#p2-rv-cdf", "prompt": "Fair coin, X(H)=1, X(T)=0. What is P_X(0.5) if P_X(x)=P(X≤x)?", "options": [{"key": "A", "text": "1/2"}, {"key": "B", "text": "0"}, {"key": "C", "text": "1"}, {"key": "D", "text": "2"}], "answer": "A", "whyCorrect": "X≤0.5 only for T; fair coin gives P({T})=1/2.", "whyOthers": {"B": "T maps into (-∞,0.5].", "C": "That is P_X after both 0 and 1 are included (e.g. at 1).", "D": "Probabilities are at most 1."}, "diagram": "  P_X(0.5)=P({T})=1/2", "useLater": "Joints generalize this with ∩ of two preimages."}, {"id": "q4", "part": "prerequisites", "tag": "Warm-up · multi maps", "anchor": "PREREQUISITES.md#p3-multi-maps", "prompt": "Why can one sample space Ω host two random variables?", "options": [{"key": "A", "text": "Because sets forbid more than one function between them"}, {"key": "B", "text": "Because every RV must invent a brand-new Ω"}, {"key": "C", "text": "Because only densities can be multiple"}, {"key": "D", "text": "Because many functions can share the same domain Ω"}], "answer": "D", "whyCorrect": "Many maps Ω→R are allowed; that is multiple RVs on one experiment.", "whyOthers": {"A": "Sets allow many functions.", "B": "Opposite of the warm-up.", "C": "Not the reason."}, "diagram": "  Ω──X1→R   Ω──X2→R", "useLater": "Topic 3 multi-RV box."}, {"id": "q5", "part": "prerequisites", "tag": "Warm-up · joint preimage", "anchor": "PREREQUISITES.md#p4-joint-preimage", "prompt": "What set does “X1≤a and X2≤b” become on the shared Ω?", "options": [{"key": "A", "text": "The union X1^{-1}((-∞,a]) ∪ X2^{-1}((-∞,b])"}, {"key": "B", "text": "The intersection X1^{-1}((-∞,a]) ∩ X2^{-1}((-∞,b])"}, {"key": "C", "text": "Only the singleton {a,b}"}, {"key": "D", "text": "The empty set always"}], "answer": "B", "whyCorrect": "Both conditions at once = intersection of the two preimages.", "whyOthers": {"A": "Union is “or,” not “and.”", "C": "Not a region of outcomes.", "D": "Usually nonempty."}, "diagram": "  E = pre1 ∩ pre2", "useLater": "Joint definition Topic 4."}, {"id": "q6", "part": "prerequisites", "tag": "Warm-up · vector views", "anchor": "PREREQUISITES.md#p5-vector-vs-scalars", "prompt": "How are “one vector RV X:Ω→R^d” and “d scalar RVs on the same Ω” related in the warm-up?", "options": [{"key": "A", "text": "They are competing incompatible theories"}, {"key": "B", "text": "They are equivalent views of the same structure"}, {"key": "C", "text": "Only the scalar view is ever legal"}, {"key": "D", "text": "Only the vector view can have a joint"}], "answer": "B", "whyCorrect": "Same idea: one map to R^d or d coordinate maps on one Ω.", "whyOthers": {"A": "Lecture equates them.", "C": "Both legal.", "D": "Joints live with either view."}, "diagram": "  X:Ω→R^d  ≡  X1..Xd:Ω→R", "useLater": "Topic 5 equivalence."}, {"id": "q7", "part": "prerequisites", "tag": "Warm-up · P(A|B)", "anchor": "PREREQUISITES.md#p6-conditional-events", "prompt": "Fair die, B=even={2,4,6}, A={6}. What is P(A|B)?", "options": [{"key": "A", "text": "1/6"}, {"key": "B", "text": "1/2"}, {"key": "C", "text": "1/3"}, {"key": "D", "text": "1"}], "answer": "C", "whyCorrect": "P(A∩B)/P(B)=(1/6)/(1/2)=1/3 after shrinking to even faces.", "whyOthers": {"A": "Unconditional P(A), not given even.", "B": "That is P(B).", "D": "Not certain given even."}, "diagram": "  (1/6)/(1/2)=1/3", "useLater": "RV conditionals fix Y=y the same way."}, {"id": "q8", "part": "prerequisites", "tag": "Warm-up · marginal name", "anchor": "PREREQUISITES.md#p7-conditional-marginal", "prompt": "Why are single-variable distributions from a joint table called “marginals”?", "options": [{"key": "A", "text": "Because they live on the margins (edges) of the joint table after summing"}, {"key": "B", "text": "Because they are always independent"}, {"key": "C", "text": "Because they ignore probability entirely"}, {"key": "D", "text": "Because they only exist for continuous densities"}], "answer": "A", "whyCorrect": "Sum along edges of the discrete joint table — the margins.", "whyOthers": {"B": "Independence is separate.", "C": "They are still distributions.", "D": "Discrete tables motivate the name."}, "diagram": "  table edges = margins", "useLater": "Topic 7 marginal definition."}, {"id": "q9", "part": "prerequisites", "tag": "Warm-up · conditional RV", "anchor": "PREREQUISITES.md#p7-conditional-marginal", "prompt": "In p(x|y), what must you do with y?", "options": [{"key": "A", "text": "Keep y random and free inside the same expression"}, {"key": "B", "text": "Replace y by the empty set"}, {"key": "C", "text": "Fix y at a value, then describe x in that restricted world"}, {"key": "D", "text": "Set y equal to x always"}], "answer": "C", "whyCorrect": "Conditioner is fixed; the world shrinks to {Y=y}.", "whyOthers": {"A": "That muddies the conditional.", "B": "Not the definition.", "D": "Not required."}, "diagram": "  fix y → describe x", "useLater": "Topic 6 conditional distributions."}, {"id": "q10", "part": "prerequisites", "tag": "Warm-up · ML bridge", "anchor": "PREREQUISITES.md#p8-why", "prompt": "In the X-ray / disease thread, which objects need joint/conditional language?", "options": [{"key": "A", "text": "Only the learning rate schedule"}, {"key": "B", "text": "Image features X and label Y that share one experiment story"}, {"key": "C", "text": "Only filenames on disk"}, {"key": "D", "text": "Only density heights with no sample space"}], "answer": "B", "whyCorrect": "Image and disease/label are multi-RV objects on a shared story.", "whyOthers": {"A": "Optimizer detail, not this lecture.", "C": "Not probability structure.", "D": "Foundations require Ω and measures."}, "diagram": "  X image · Y disease · joint/cond", "useLater": "Topic 7 bridge."}, {"id": "q11", "part": "prerequisites", "tag": "Warm-up · joint ≠ product", "anchor": "PREREQUISITES.md#p4-joint-preimage", "prompt": "From the warm-up joint table: P(X=0)=0.3, P(Y=1)=0.6, and the joint cell P(X=0, Y=1)=0.2. Why is P(X=0)·P(Y=1)=0.18 not automatically the joint?", "options": [{"key": "A", "text": "Because joints are never numbers in [0,1]"}, {"key": "B", "text": "Because you must always multiply marginals to get joints"}, {"key": "C", "text": "Because 0.18 is larger than 0.2, so the product is the true joint"}, {"key": "D", "text": "Because multiplying marginals assumes independence; the joint is P of both together and can differ"}], "answer": "D", "whyCorrect": "The definition of a joint is the probability of the shared event (both at once), not the product of separate marginals. Product equals joint only under independence, which is a special case—not the definition. Here 0.2 ≠ 0.18 shows dependence can appear in the table.", "whyOthers": {"A": "Joint probabilities are still in [0,1]; 0.2 is valid.", "B": "Opposite trap: product is independence, not the definition of joint.", "C": "0.18 is smaller than 0.2; the table cell is the joint, not the product."}, "diagram": "  joint cell 0.2  ≠  0.3×0.6=0.18", "useLater": "Topic 4: joint via intersection of preimages on one Omega, not default multiply."}, {"id": "q12", "part": "prerequisites", "tag": "Warm-up · P vs p", "anchor": "PREREQUISITES.md#p7-conditional-marginal", "prompt": "In this course arc (before the density lecture), what is the careful reading of capital P versus lowercase p when you see both P(A|B) and p(x|y)=p(x,y)/p(y)?", "options": [{"key": "A", "text": "Capital P and lowercase p are identical; both mean density height at a single point"}, {"key": "B", "text": "Capital P sizes events/sets (and CDF-style set evaluations); lowercase p is density-style notation whose full theory comes next—same shrink-and-renormalize idea, not treating height as event probability"}, {"key": "C", "text": "Lowercase p is only for discrete tables; capital P is only for continuous models"}, {"key": "D", "text": "Capital P is illegal once you write a conditional; only p is allowed"}], "answer": "B", "whyCorrect": "The lecture already writes joint/marginal conditionals in density-style p while postponing densities. Keep capital P for set/event sizing (and CDF language); treat lowercase p as structural preview of densities, not as if the height were already the probability of the point.", "whyOthers": {"A": "That reopens the density trap from earlier lectures.", "C": "Roles are not split that way; discrete often uses capital P on cells.", "D": "Event conditionals P(A|B) remain foundational."}, "diagram": "  P(events) · p(density-style preview)", "useLater": "Topic 6 conditionals + Topic 7 margins; densities next class."}, {"id": "q13", "part": "prerequisites", "tag": "Warm-up · P(B)>0", "anchor": "PREREQUISITES.md#p6-conditional-events", "prompt": "Why does the definition P(A|B)=P(A∩B)/P(B) require P(B)>0? What goes wrong if P(B)=0?", "options": [{"key": "A", "text": "Nothing: you can always divide by zero and get a valid probability"}, {"key": "B", "text": "P(B) must be greater than 1 before conditioning is allowed"}, {"key": "C", "text": "If P(B)=0 then B never occurs, so given B is not a meaningful conditioning world and division by zero is undefined"}, {"key": "D", "text": "P(B)>0 is only needed for continuous densities, never for dice"}], "answer": "C", "whyCorrect": "Conditioning means: shrink the world to B, then re-score A inside that world. If P(B)=0, B is impossible—there is no positive-probability world to shrink into, and the formula divides by zero. Dice and continuous models both need a conditioner with positive probability (or a more advanced theory beyond this primer).", "whyOthers": {"A": "Division by zero is undefined; probabilities are not fixed that way.", "B": "Probabilities are at most 1; the requirement is positive, not greater than 1.", "D": "The die example uses the same rule; P(even)=1/2>0."}, "diagram": "  need P(B)>0 · shrink to B · then score A", "useLater": "Same discipline for P(Y=y)>0 before p(x|y) or discrete P(X=x|Y=y)."}, {"id": "q14", "part": "notes", "tag": "Map · master architecture", "anchor": "NOTES.md#executive-summary--architecture-of-this-lecture", "prompt": "On the master map of this lecture, which chain is the whole-video job?", "options": [{"key": "A", "text": "Delete Ω and only memorize density heights"}, {"key": "B", "text": "Stay on one scalar RV forever and never form joints"}, {"key": "C", "text": "Recap pushforward → vector / multi-RV → joint via ∩ → conditionals & margins → X-ray next"}, {"key": "D", "text": "Replace probability with filename lookup"}], "answer": "C", "whyCorrect": "Exec Summary arc: recap, vector/multi-RV, joint ∩, conditionals, margins, stop at X-ray.", "whyOthers": {"A": "Opposite of the foundations.", "B": "This lecture is multi-RV.", "D": "Not the architecture."}, "diagram": "  recap→vector→joint→cond/marg→STOP", "useLater": "Closed-book map of the video."}, {"id": "q15", "part": "notes", "tag": "Topic 1 · realizations", "anchor": "NOTES.md#topic-1-recap-realizations-and-pushforward-cdf-0000–0204", "prompt": "What does the recap call data vectors (realizations) relative to the RV?", "options": [{"key": "A", "text": "Points in the range of the RV function"}, {"key": "B", "text": "The sample space Ω itself"}, {"key": "C", "text": "Only density heights at a single coordinate"}, {"key": "D", "text": "Events that never get measured"}], "answer": "A", "whyCorrect": "Practice works with realizations = range vectors of X.", "whyOthers": {"B": "Ω is the domain; data live in the range.", "C": "Density is not the realization.", "D": "Realizations are measured."}, "diagram": "  data ∈ range(X)", "useLater": "Always remember Ω behind the measurement."}, {"id": "q16", "part": "notes", "tag": "Topic 2 · vector RV", "anchor": "NOTES.md#topic-2-vector-valued-random-variables-0204–0353", "prompt": "What is a vector-valued random variable in this lecture?", "options": [{"key": "A", "text": "A random matrix with no domain"}, {"key": "B", "text": "A map X:Ω→R^d (range is d-dimensional real space)"}, {"key": "C", "text": "A density height that is always 1"}, {"key": "D", "text": "Any list of filenames"}], "answer": "B", "whyCorrect": "Generalize scalar RV: codomain R^d; still a function.", "whyOthers": {"A": "Not the definition given.", "C": "Not an RV definition.", "D": "Not probability structure."}, "diagram": "  X: Ω → R^d", "useLater": "Equivalence with d scalars next."}, {"id": "q17", "part": "notes", "tag": "Topic 4 · joint", "anchor": "NOTES.md#topic-4-joint-distribution-via-inverse-image-intersection-0724–1117", "prompt": "How is the joint P_{X1,X2}(a,b) defined?", "options": [{"key": "A", "text": "Always as P(X1≤a)×P(X2≤b) with no shared Ω"}, {"key": "B", "text": "As the density height at (a,b) only"}, {"key": "C", "text": "As P of the empty set always"}, {"key": "D", "text": "As P( X1^{-1}((-∞,a]) ∩ X2^{-1}((-∞,b]) )"}], "answer": "D", "whyCorrect": "Joint = P of the intersection of the two cumulative preimages.", "whyOthers": {"A": "Product is independence, not the definition.", "B": "Height is not the CDF joint definition.", "C": "Not always empty."}, "diagram": "  joint = P(pre1 ∩ pre2)", "useLater": "Extend to d scalars the same way."}, {"id": "q18", "part": "notes", "tag": "Topic 5 · equivalence", "anchor": "NOTES.md#topic-5-vector-rv-equals-d-scalars-on-the-same-ω-1117–1311", "prompt": "What does the lecture claim about a vector RV and d scalar RVs on the same Ω?", "options": [{"key": "A", "text": "They are exactly the same idea (two views)"}, {"key": "B", "text": "They can never describe the same data"}, {"key": "C", "text": "Only scalars are allowed after this lecture"}, {"key": "D", "text": "Vector RVs forbid joints"}], "answer": "A", "whyCorrect": "Course WLOG works with d-dim vector RVs because the views match.", "whyOthers": {"B": "They are equated.", "C": "Both views stay available.", "D": "Joints are the connection."}, "diagram": "  vector ≡ d scalars + joint", "useLater": "Conditionals on multi-coordinate data."}, {"id": "q19", "part": "notes", "tag": "Topic 6 · conditional", "anchor": "NOTES.md#topic-6-conditional-probability-and-distributions-1311–1721", "prompt": "For events, what is P(A|B) when P(B)>0?", "options": [{"key": "A", "text": "P(A)+P(B)"}, {"key": "B", "text": "P(A∩B)/P(B)"}, {"key": "C", "text": "P(A)/P(B) without intersection"}, {"key": "D", "text": "P(B) only"}], "answer": "B", "whyCorrect": "Intersect then renormalize by P(B).", "whyOthers": {"A": "Not a probability of A given B.", "C": "Missing the intersection.", "D": "Ignores A."}, "diagram": "  P(A|B)=P(A∩B)/P(B)", "useLater": "p(x|y)=joint/marginal for RVs."}, {"id": "q20", "part": "notes", "tag": "Topic 6 · fix y", "anchor": "NOTES.md#topic-6-conditional-probability-and-distributions-1311–1721", "prompt": "When writing a conditional distribution p(x|y), what is true of y?", "options": [{"key": "A", "text": "y is held fixed; the effective sample space shrinks"}, {"key": "B", "text": "y must remain fully random inside the same symbol"}, {"key": "C", "text": "y is deleted from the model forever"}, {"key": "D", "text": "y is always equal to the empty outcome"}], "answer": "A", "whyCorrect": "Conditioner fixed at a value; describe x in that smaller world.", "whyOthers": {"B": "Lecture insists y is fixed.", "C": "Conditioning uses y; does not delete the concept.", "D": "Nonsense."}, "diagram": "  fix y · describe x", "useLater": "Image given disease label."}, {"id": "q21", "part": "notes", "tag": "Topic 7 · marginal", "anchor": "NOTES.md#topic-7-marginals-and-the-x-ray-bridge-1721–2142", "prompt": "How do you obtain a marginal of X from a joint of (X,Y) in the continuous case?", "options": [{"key": "A", "text": "Multiply by a constant density height only"}, {"key": "B", "text": "Delete Ω and keep only Y"}, {"key": "C", "text": "Integrate the joint over the range of Y (nullify Y)"}, {"key": "D", "text": "Always set the joint equal to 1"}], "answer": "C", "whyCorrect": "Integrate (or sum) the other variable out of the joint.", "whyOthers": {"A": "Not the definition.", "B": "Wrong operation.", "D": "Not a marginalization rule."}, "diagram": "  p(x)=∫ p(x,y) dy", "useLater": "Denominator of conditionals."}, {"id": "q22", "part": "notes", "tag": "Connect · joint to conditional", "anchor": "NOTES.md#topic-6-conditional-probability-and-distributions-1311–1721", "prompt": "Which connection does the lecture use between joint, conditional, and marginal?", "options": [{"key": "A", "text": "Conditional = joint / marginal (conditioner), with y fixed"}, {"key": "B", "text": "Conditional = marginal + joint with no division"}, {"key": "C", "text": "Joint is never used once margins exist"}, {"key": "D", "text": "Margins replace Ω permanently"}], "answer": "A", "whyCorrect": "p(x|y)=p(x,y)/p(y) in the continuous write-up.", "whyOthers": {"B": "Missing renormalization.", "C": "Joints stay central.", "D": "Ω remains the foundation."}, "diagram": "  cond = joint / marg", "useLater": "Full toolkit for multi-RV ML."}, {"id": "q23", "part": "notes", "tag": "Topic 7 · bridge", "anchor": "NOTES.md#topic-7-marginals-and-the-x-ray-bridge-1721–2142", "prompt": "What does the lecture stop to promise next after joints/conditionals/margins?", "options": [{"key": "A", "text": "Ground the X-ray disease problem in this language, then densities"}, {"key": "B", "text": "Abandon probability and only use linear algebra forever"}, {"key": "C", "text": "Prove that joints never exist"}, {"key": "D", "text": "Replace all RVs with constant zero"}], "answer": "A", "whyCorrect": "Bridge: X-ray diseased/non-disease grounding, then density functions.", "whyOthers": {"B": "Course continues probability for ML.", "C": "Joints were just defined.", "D": "Nonsense."}, "diagram": "  next: X-ray + densities", "useLater": "Series continuity into density lecture."}, {"id": "q24", "part": "notes", "tag": "Topic 6 · different range dims", "anchor": "NOTES.md#topic-6-conditional-probability-and-distributions-1311–1721", "prompt": "In the lecture, X and Y are RVs on the same Omega, and we form P(X|Y). Must their ranges have the same dimension?", "options": [{"key": "A", "text": "Yes: both must map to the same R^d or conditionals are illegal"}, {"key": "B", "text": "No: one may live in R^d and the other in R^k (e.g. image features vs a low-dim label); they still need a shared Omega"}, {"key": "C", "text": "Ranges must both be empty sets"}, {"key": "D", "text": "Only Y may be vector-valued; X must always be scalar"}], "answer": "B", "whyCorrect": "He explicitly allows different range spaces (R^d vs R^k). The shared object is the sample space Omega, not the dimension of the codomain. That is exactly the ML setup: high-dim image X and low-dim disease label Y.", "whyOthers": {"A": "Same dimension is not required.", "C": "Nonsense.", "D": "Both may be vector-valued; X is often the high-dim one."}, "diagram": "  X:Omega→R^d   Y:Omega→R^k   same Omega", "useLater": "X-ray / disease joint and conditionals."}, {"id": "q25", "part": "notes", "tag": "Topic 6–7 · discrete conditional", "anchor": "NOTES.md#topic-6-conditional-probability-and-distributions-1311–1721", "prompt": "Using the joint table P(X=0,Y=0)=0.1, P(X=0,Y=1)=0.2, P(X=1,Y=0)=0.3, P(X=1,Y=1)=0.4, what is P(X=0 | Y=1)?", "options": [{"key": "A", "text": "0.2"}, {"key": "B", "text": "0.3"}, {"key": "C", "text": "1/3"}, {"key": "D", "text": "0.6"}], "answer": "C", "whyCorrect": "P(Y=1)=0.2+0.4=0.6 (column margin). P(X=0|Y=1)=P(X=0,Y=1)/P(Y=1)=0.2/0.6=1/3. Same shrink-and-renormalize idea as P(A|B); the joint cell is not already the conditional.", "whyOthers": {"A": "That is the joint cell P(X=0,Y=1), before dividing by the marginal.", "B": "That is P(X=0)=0.1+0.2, not the conditional given Y=1.", "D": "That is P(Y=1), the denominator alone."}, "diagram": "  0.2 / 0.6 = 1/3", "useLater": "Conditional = joint / marginal; margins are table edges (Topic 7)."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

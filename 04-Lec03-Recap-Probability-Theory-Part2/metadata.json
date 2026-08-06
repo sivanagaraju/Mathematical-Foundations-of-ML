@@ -1,0 +1,25 @@
+{
+  "title": "Lec 03 Recap of Probability Theory - 1, Part 2",
+  "video_id": "DaBw9qBpt2s",
+  "url": "https://www.youtube.com/watch?v=DaBw9qBpt2s",
+  "duration_seconds": 870,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "playlist_index": 4,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Probability triplet (Omega, F, P)",
+    "Abstraction is not enough: need numbers",
+    "Sensors and vectors: X-ray bridge",
+    "Random variable X maps Omega to reals",
+    "Range R^d; image as range element",
+    "Full data story and Borel/P cliffhanger"
+  ]
+}

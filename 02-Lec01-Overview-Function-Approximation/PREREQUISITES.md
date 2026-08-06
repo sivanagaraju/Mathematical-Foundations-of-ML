@@ -1,222 +1,177 @@
-# Warm-up before Lec 01 (function approximation)
+# Prerequisites — warm-up before Lec 01
 
-> **Do this first** if sets, functions, vectors, or “data as pairs” feel new.  
-> Then open [NOTES.md](./NOTES.md) at the Executive Summary.  
-> Basics only — not a second full lecture.
+> **Do this first.** Then open [NOTES.md](./NOTES.md) at the **Executive Summary** map.  
+> Basics only — not a second lecture. They unlock words on the master map if you are rusty.
 
 ```
-  After this warm-up you should be able to say:
+  After this warm-up you can say:
 
-  "A set is a bag of things. A function maps each allowed input to exactly one output.
-   Data D is a finite list of (input, output) pairs we observed.
-   Function approximation means: estimate the unknown map f so new inputs still get outputs.
-   A vector is an ordered list of numbers; an image can be stacked into one long vector.
-   When f is unknown we guess a class of shapes, then pick one member using data."
+  "A function maps each allowed input to one output."
+  "Data is a finite list of (input, output) pairs."
+  "A model is an estimate of a hidden rule, not the rule itself."
+  "An image can be stacked into one long vector of numbers."
+  "When physics cannot write the rule, counting many repeats still helps."
 ```
 
 ---
 
-## Sets (bags of things)
+## 1. Sets: bags of allowed things
 
 <a id="p1-sets"></a>
 
-A **set** is a collection of **distinct** objects. Order does not matter.
+A **set** is a collection of allowed objects. Picture a labeled bag: members are in; non-members are out.
 
-**Examples**
-
-- Die faces: $\mathcal{X} = \{1,2,3,4,5,6\}$  
-- Two labels: $\mathcal{Y} = \{0,1\}$ (e.g. no disease / disease)
-
-**Membership:** $x \in \mathcal{X}$ means “$x$ is in the bag.”  
-**Empty set:** $\emptyset$ has nothing in it.
+Mini scene: exam scores from 0 to 100 form a set. Score 73 is in; 150 is out.
 
 ```
-  bag X (allowed inputs)     bag Y (allowed outputs)
-     { times, images, … }       { positions, 0/1, … }
+  set X = { allowed "x" values }
+  set Y = { allowed "y" values }
 ```
 
-In the lecture, the **domain** is one set (inputs) and the **range** is another (outputs).  
-(A **subset** $A \subseteq B$ is a smaller bag inside a bigger bag — useful later in probability; light for this video.)
+The lecture’s **domain** and **range** are just two bags with different jobs.
 
 ---
 
-## Functions (reliable maps)
+## 2. Functions: a rule that never freelances
 
 <a id="p2-functions"></a>
 
-A **function** $f : \mathcal{X} \to \mathcal{Y}$ is a rule: each allowed input from $\mathcal{X}$ produces **exactly one** output in $\mathcal{Y}$.
+A **function** $f$ from $X$ to $Y$ sends **each** element of $X$ to **exactly one** element of $Y$.
+
+Like a vending machine: same button → same product every time.
 
 ```
-  OK function                    NOT a function
-  x=1 ──► 2                      x=2 ──► 5
-  x=2 ──► 5                      x=2 ──► 9   ← two outputs for same x
-  x=3 ──► 10
+  x  ──f──►  y = f(x)
+
+  OK:     one y per x
+  NOT OK: same x sometimes y1, sometimes y2
 ```
 
-Same $x$ always gives the same $y$. That reliability is why engineers like functions.
+$$
+f : X \to Y
+$$
 
-**Course examples**
+In words: $f$ takes anything allowed in $X$ and returns one thing in $Y$.
 
-- $f(t)$ = planet position at time $t$  
-- $f(\text{X-ray}) \in \{0,1\}$ = disease / no disease  
+You do **not** need a formula. “$f$ exists but is unknown” is allowed — that is the learning problem.
 
 ---
 
-## Ordered pairs and data $D$
+## 3. Ordered pairs and a data notebook
 
-<a id="p3-data"></a>
+<a id="p3-pairs-data"></a>
 
-An **ordered pair** $(x,y)$ means: “when the input was $x$, we saw output $y$.”
+An **ordered pair** $(x,y)$ means “this input with this observed output.” Order matters: $(2,5)$ is not $(5,2)$.
 
-**Data** is a finite list of such pairs:
+**Data** $D$ is a **finite list of pairs** you actually saw:
 
 $$
-D = \{(x_1,y_1),\ (x_2,y_2),\ \ldots,\ (x_n,y_n)\}
+D = \{(x_1,y_1),\ldots,(x_n,y_n)\}
 $$
 
+In words: $D$ is a notebook of $n$ experiments — snapshots, not the full rule.
+
 ```
-  SEE a tiny D (n = 3)
-
-    time t=1 → position 2
-    time t=2 → position 5
-    time t=3 → position 10
-    time t=4 → ???   ← why we need more than a table of old rows
+  Notebook D
+  night 1 → position A
+  night 2 → position B
+  night 3 → position C
+  night 10 → ??? (never written)
 ```
-
-We **do not** start by knowing the true map $f$. We only see evaluations of it (plus, later, noise).
-
-**Goal (informal):** given $D$, find a useful estimate of $f$ so a **new** $x$ still gets a $y$.
 
 ---
 
-## Vectors, stacking, and $\mathbb{R}^d$ (the board’s language)
+## 4. Domain and range in plain English
 
-<a id="p4-vectors"></a>
+<a id="p4-domain-range"></a>
 
-### Vector (Plain English)
+| Word | Plain meaning |
+|------|----------------|
+| **Domain** | What you may put in ($X$) |
+| **Range** (here) | What kind of answers are allowed out ($Y$) |
 
-A **vector** is a **long list of numbers** that stands for one thing (one image, one audio clip, …).
-
-- 2 numbers → a point on a flat paper (2D)  
-- 3 numbers → a point in ordinary space (3D)  
-- 100 numbers → a point in a 100-dimensional space (you cannot draw it, but the math is the same idea: one list = one point)
-
-### Euclidean space (Plain English)
-
-**Euclidean space** means the normal “flat geometry” world where distance is the usual kind of distance (as on a graph paper), not a curved weird surface.
-
-- $\mathbb{R}$ = all real numbers (a line)  
-- $\mathbb{R}^2$ = plane (two real coordinates)  
-- $\mathbb{R}^3$ = ordinary 3D  
-- $\mathbb{R}^d$ = same idea with $d$ coordinates  
-
-**How you specify it:** you only need the dimension $d$. Write $\mathbb{R}^d$. Every point is a list of $d$ real numbers.
-
-### What $\mathbb{R}^{pq}$ means on the board
-
-He often uses $p$ = number of **rows** (height) and $q$ = number of **columns** (width) of an image.
-
-$$
-d = p \times q
-\qquad
-x \in \mathbb{R}^{pq}
-\quad\text{means:}\quad
-\text{one list of } p\cdot q \text{ real numbers}
-$$
-
-Same as $\mathbb{R}^d$ with $d=pq$.
-
-### Stacking (flattening) — the process he draws (~24:02)
-
-Start with a **matrix** (table of pixels). Values might be brightness 0–255.
-
-**Example: 2 rows × 3 columns**
+“Input/output” is fine casually. The lecturer prefers domain/range because later these connect to **random variables**.
 
 ```
-  IMAGE MATRIX (what you see as a picture)
-
-         col1   col2   col3
-  row1    a      c      e
-  row2    b      d      f
-
-  [ a  c  e ]
-  [ b  d  f ]
+  domain X ----f----> range Y
+    time               position
+    X-ray image        disease 0/1
+    speech vector      phone / word
 ```
-
-**Stack columns top-to-bottom, left-to-right** (his board process):
-
-```
-  col1 first     then col2     then col3
-     a              c              e
-     b              d              f
-       \            |            /
-        \           |           /
-         \          |          /
-          ▼         ▼         ▼
-
-  ONE LONG COLUMN VECTOR  (length 6 = 2×3)
-
-     ┌   ┐
-     │ a │
-     │ b │
-     │ c │
-     │ d │
-     │ e │
-     │ f │
-     └   ┘
-
-  This is one point in  ℝ^{6}  (also written ℝ^{2·3} or ℝ^{pq}).
-```
-
-**Tiny numbers version:**
-
-```
-  [ 10  30  50 ]
-  [ 20  40  60 ]
-
-  →  x = (10, 20, 30, 40, 50, 60)  ∈  ℝ^6
-```
-
-**Why do this?** Most ML math wants **one vector per example**. After stacking, the whole image is one input point; algorithms can measure “nearness,” average, fit functions $f:\mathbb{R}^{pq}\to\{0,1\}$, etc.
-
-Real X-ray: same idea, $d$ is huge (thousands), still “one point in $\mathbb{R}^d$.” A **scalar** is only the special case $d=1$.
 
 ---
 
-## Guess a class, then refine (models)
+## 5. Estimate vs truth (models before jargon)
 
-<a id="p5-models"></a>
+<a id="p5-estimate"></a>
 
-When $f$ is unknown, people **guess a class of shapes** (all ellipses, all parabolas, later: all neural nets of a fixed size). That class is the menu of allowed candidates.
+True rule $f$ generated the pairs. You almost never hold $f$. You build a stand-in $\hat{f}$.
 
-Each concrete choice inside the class is a **model** / estimate of $f$.
+- **Truth $f$:** hidden rule  
+- **Estimate / model:** rule you write and use  
+- **Useful:** good enough on questions you care about  
 
 ```
-  CLASS = catalog                 DATA picks one member
-  all ellipses / all lines        D favors one specific curve
-        │
-        ▼
-  model f̂  →  use on new x
+  reality:  x ──f──► y      (unknown)
+  practice: x ──hat f──► prediction
 ```
 
-Field saying (quoted in class): *all models are wrong, but some are useful.*
+Slogan later: “all models are wrong but some are useful” sits on this split.
 
 ---
 
-## What “ill-posed / blind” means (preview)
+## 6. Vectors and matrices (enough for X-rays)
 
-<a id="p6-illposed"></a>
+<a id="p6-vectors"></a>
 
-If you only have a few points and **no** assumption about the shape of $f$, many different curves can pass through the same points and **disagree** on a new $x$. That is the problem being **blind** or **ill-posed**.
+A **vector** is an ordered list of numbers, e.g. $(2,5,1)$ in $\mathbb{R}^3$.
+
+A **matrix** is a rectangle of numbers. A grayscale image is a matrix of pixel intensities (often 0–255).
 
 ```
-  three dots → many curves fit them
-  at a new x they disagree
+  Tiny 2×3 "image":
+    10  20  30
+    40  50  60
+
+  Stack columns → one vector length 6:
+  (10, 40, 20, 50, 30, 60)
 ```
 
-Memorizing only the training pairs (table lookup) also fails on new $x$ — a preview of **overfitting**.
+The lecture treats each X-ray as one point in $\mathbb{R}^{P Q}$ after this stacking.
+
+---
+
+## 7. High dimension without fear
+
+<a id="p7-high-dim"></a>
+
+2D needs 2 numbers; 3D needs 3; $d$ dimensions need $d$ numbers. You cannot draw $d=10{,}000$, but distance and averaging still work on paper and in code.
+
+```
+  d=2:  point on a plane
+  d=3:  point in a room
+  d=PQ: one whole image after stacking — still one point
+```
+
+“High-dimensional” means **many numbers per example**, not magic.
+
+---
+
+## 8. Chance from many repeats (pre-probability)
+
+<a id="p8-repeats"></a>
+
+If a process is too messy for clean physics (coin in turbulent air), you can still **repeat** and **count**.
+
+```
+  toss 10_000 times
+  count heads H
+  rough chance of heads ≈ H / 10_000
+```
+
+You did not solve the fluid dynamics. You still got a useful number. The lecture calls related ideas **statistical methods** and motivates **probability theory** as the precise language for “repeated observations → estimates.” Deeper objects (sample space, random variable, measure) are previewed at the end of NOTES and taught next lectures.
 
 ---
 
 Ready → [NOTES.md](./NOTES.md) (start at **Executive Summary**).  
-Quiz: [quiz.html](./quiz.html) — Part A covers this file.
+Quiz later: [quiz.html](./quiz.html) Part A = this file.

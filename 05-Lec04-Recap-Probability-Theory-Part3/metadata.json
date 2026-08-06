@@ -1,0 +1,26 @@
+{
+  "title": "Lec 04 Recap of Probability Theory - 1, Part 3",
+  "video_id": "0R6Agp4tqSU",
+  "url": "https://www.youtube.com/watch?v=0R6Agp4tqSU",
+  "duration_seconds": 1746,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "playlist_index": 7,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 7,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Borel sets and pushforward measure",
+    "CDF via inverse images",
+    "Measurable RVs; estimating P is the course job",
+    "New triplet on the range; products in R^d",
+    "Vector-valued RVs and product geometry",
+    "CDF is a measure; density is not",
+    "Multiple RVs, two X-ray experiments, review"
+  ]
+}

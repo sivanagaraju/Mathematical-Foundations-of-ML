@@ -1,0 +1,27 @@
+{
+  "title": "Lec 06 Understanding a Chest X-Ray as Sample from Distribution",
+  "video_id": "bdcvsSNAHIk",
+  "url": "https://www.youtube.com/watch?v=bdcvsSNAHIk",
+  "duration_seconds": 1610,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Feature or Data, Label or Target",
+  "playlist_index": 8,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 7,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Ground the X-ray in probability language",
+    "Image grid stacked into a vector in R^d",
+    "Sample space, realizations, physics to statistics",
+    "Trap: data values are not probabilities",
+    "Distribution specifies the sample space; course mission",
+    "Labels as a second RV; joints; ranges of X and Y",
+    "Dataset, feature/label space, i.i.d. cliffhanger"
+  ]
+}

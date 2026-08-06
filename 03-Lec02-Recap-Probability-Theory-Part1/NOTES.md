@@ -1,21 +1,21 @@
 # Lec 02 — Recap of Probability Theory (Part 1)
 
-**Video:** [Lec 02 Recap of Probability Theory - 1, Part 1](https://www.youtube.com/watch?v=YLx3hBqt28k)**Channel:** NPTEL — Indian Institute of Science, Bengaluru**Duration:** ~32 min
-
-> **Study path:** [PREREQUISITES.md](./PREREQUISITES.md) first → this map → topics in order → [quiz.html](./quiz.html).
+**Video:** [Lec 02 Recap of Probability Theory - 1, Part 1](https://www.youtube.com/watch?v=YLx3hBqt28k) · NPTEL / IISc  
+**Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md)  
+**Previous:** [Lec 01 Function Approximation](../02-Lec01-Overview-Function-Approximation/NOTES.md)
 
 ---
 
 ## Table of Contents
 
-1. [Topic 1: From function approximation to why physics fails](#topic-1-from-function-approximation-to-why-physics-fails-0002–0353) (00:02–03:53)
-2. [Topic 2: Statistical turn and the function-approximation ↔ distribution bridge](#topic-2-statistical-turn-and-the-function-approximation--distribution-bridge-0353–0554) (03:53–05:54)
-3. [Topic 3: Decide under uncertainty; the random experiment](#topic-3-decide-under-uncertainty-the-random-experiment-0554–0918) (05:54–09:18)
-4. [Topic 4: Every ML datapoint comes from a random experiment](#topic-4-every-ml-datapoint-comes-from-a-random-experiment-0918–1211) (09:18–12:11)
-5. [Topic 5: Sample space $\Omega$](#topic-5-sample-space-omega-1211–1413) (12:11–14:13)
-6. [Topic 6: Why measures — the length analogy](#topic-6-why-measures--the-length-analogy-1413–1731) (14:13–17:31)
-7. [Topic 7: Subsets of $\Omega$, events, and the need for $P$](#topic-7-subsets-of-omega-events-and-the-need-for-p-1731–2243) (17:31–22:43)
-8. [Topic 8: Probability measure $P$ — properties, meaning, abstraction](#topic-8-probability-measure-p--properties-meaning-abstraction-2243–3213) (22:43–32:13)
+1. [Topic 1 — From function approximation to the statistical path](#topic-1-from-function-approximation-to-the-statistical-path-0000–0554) (00:00–05:54)
+2. [Topic 2 — Uncertainty, random experiment, where randomness stops](#topic-2-uncertainty-random-experiment-where-randomness-stops-0554–0918) (05:54–09:18)
+3. [Topic 3 — Random experiments in ML: X-ray, spam, brain](#topic-3-random-experiments-in-ml-x-ray-spam-brain-0918–1211) (09:18–12:11)
+4. [Topic 4 — Sample space Ω](#topic-4-sample-space-ω-1211–1413) (12:11–14:13)
+5. [Topic 5 — Why measure: length and Lebesgue analogy](#topic-5-why-measure-length-and-lebesgue-analogy-1413–1703) (14:13–17:03)
+6. [Topic 6 — Ω need not be numeric; subsets of Ω](#topic-6-ω-need-not-be-numeric-subsets-of-ω-1703–2110) (17:03–21:10)
+7. [Topic 7 — Probability measure P, axioms, events](#topic-7-probability-measure-p-axioms-events-2110–2640) (21:10–26:40)
+8. [Topic 8 — Meaning deferred; abstraction; close](#topic-8-meaning-deferred-abstraction-close-2640–3213) (26:40–32:13)
 9. [External references](#external-references)
 10. [Sources](#sources)
 
@@ -23,736 +23,567 @@
 
 ## Executive Summary — architecture of this lecture
 
-### Architect’s lead
+Job: turn last lecture’s **function approximation (FA)** into a probabilistic story so “estimate a distribution” matches “estimate $f$.” Method: start from a **random experiment (RE)**, list all outcomes as **sample space** $\Omega$, take allowed subsets as **events**, and size them with a **probability measure** $P$. Fork: physics-first $f$ is often blocked; repeated observations + this measure stack replace it.
 
-This video is the **architecture phase** of the course’s probability stack — not a bag of coin-toss tricks.
+**Worldview arc:** from deterministic FA (given data $D$, estimate $f$) **to** RE → $\Omega$ → events → $P$ (distribution estimation next).
 
-The **system goal** never changes from last lecture: machine learning means **function approximation (FA)** — estimate an unknown map $f$ so you can **predict** labels on inputs you have not seen. The **system design** does change. Pure physics-first discovery of $f$ often fails (messy coin dynamics; X-ray light is not the same object as “diseased”). Engineers switch to a **statistical path**: many observations, then a formal toolkit for uncertainty.
-
-Part 1 reverse-engineers that toolkit into durable components you will reuse for the rest of the course:
+### System context
 
 ```
-  random experiment → sample space Ω → events → probability measure P
+  ╔══════════════════════════════════════╗
+  ║ Outside this video                   ║
+  ║ · Lec 01 FA / model+algorithm        ║
+  ║ · full measure theory course         ║
+  ║ · RVs, pushforward, densities later  ║
+  ╚════════════════╤═════════════════════╝
+                   │ this lecture installs
+                   ▼
+          ┌────────────────────┐
+          │ Probability stack  │
+          │ RE → Ω → F → P     │
+          └────────────────────┘
 ```
 
-**Worldview arc:** from a **deterministic** FA story (“estimate $f$”) to a **probabilistic** architecture (“size questions about outcomes with $P$”) — same prediction goal, new engineering language.
-
-### System context (what sits outside this lecture)
+### Main blueprint
 
 ```
-  ╔════════════════════╗         ╔══════════════════════════╗
-  ║  LAST LECTURE      ║         ║  LATER LECTURES (STOP)   ║
-  ║  FA: estimate f    ║         ║  random variables        ║
-  ║  from data D       ║         ║  pushforward /           ║
-  ║  for prediction    ║         ║  distribution functions  ║
-  ╚═════════╤══════════╝         ╚════════════▲═════════════╝
-            │ supplies goal                    │ deferred
-            ▼                                  │
-  ┌────────────────────────────────────────────┴─────────────┐
-  │           THIS VIDEO = probability foundations (Part 1)  │
-  │           installs RE, Ω, events F, measure P            │
-  └──────────────────────────────────────────────────────────┘
-            │
-            ▼
-  ╔════════════════════╗
-  ║  REAL WORLD USE    ║
-  ║  clinician needs a ║
-  ║  yes/no decision   ║
-  ╚════════════════════╝
+  ╔════════ FA (Lec 01) ════════╗
+  ║ given D, estimate f         ║
+  ║ physics path often blocked  ║
+  ╚════════════╤════════════════╝
+               │ statistical path
+               ▼
+  ┌────────────────────────────┐
+  │ WHY: decide under          │
+  │ uncertainty (decisions     │
+  │ still end deterministic)   │
+  └────────────┬───────────────┘
+               ▼
+  ┌────────────────────────────┐
+  │ RE  random experiment      │
+  │ designer chooses RE        │
+  │ outcomes appear            │
+  └────────────┬───────────────┘
+               │ collect outcomes
+               ▼
+  ┌────────────────────────────┐
+  │ Ω  sample space            │
+  │ all possible outcomes      │
+  │ (may be non-numeric!)      │
+  └────────────┬───────────────┘
+               │ subsets
+               ▼
+  ┌────────────────────────────┐
+  │ F  events (subsets we size)│
+  └────────────┬───────────────┘
+               │ assign measure
+               ▼
+  ┌────────────────────────────┐
+  │ P  probability measure     │
+  │ P:F→[0,1]                  │
+  │ mini: ≥0 · ≤1 · P(Ω)=1     │
+  │      P(∅)=0 · disjoint add │
+  └────────────┬───────────────┘
+               │
+  ┌ · · · · · ·┴ · · · · · · · ┐
+  │ STOP: RVs / pushforward /  │
+  │ distribution estimation    │
+  └ · · · · · · · · · · · · · ·┘
 ```
 
-### Main blueprint — concept architecture (boxes + arrows)
+### Scenario walkthrough (X-ray)
+
+1. Want $f$: image → diseased/not (FA). Physics of light ≠ disease label.  
+2. Treat whole clinic process as **RE**.  
+3. All possible process outcomes form $\Omega$ (abstract, not yet numbers).  
+4. Events = subsets of $\Omega$ (e.g. “labeled diseased”).  
+5. $P$ sizes those events in $[0,1]$.  
+6. Later lectures: turn outcomes into numbers via random variables and estimate distributions — twin of estimating $f$.
+
+### Failure / contrast path
 
 ```
-  ╔══════════════════════════════════════════════════════════╗
-  ║  GOAL (external)                                         ║
-  ║  Predict y_new for x_new   via estimated map f           ║
-  ╚══════════════════════════════╤═══════════════════════════╝
-                                 │ needs an estimate of f
-                    ┌────────────┴────────────┐
-                    │                         │
-                    ▼                         ▼
-         ┌──────────────────┐      ┌──────────────────────┐
-         │ PATH A           │      │ PATH B (this course) │
-         │ physics-first FA │      │ statistical FA       │
-         │ model dynamics / │      │ many observations    │
-         │ light physics    │      │ learn patterns       │
-         └────────┬─────────┘      └──────────┬───────────┘
-                  │                           │
-               ──X──► often BLOCKED            │ enters formal toolkit
-          coin dynamics hard                  │
-          light ≠ disease label               │
-          (semantic gap)                      ▼
-                                 ┌────────────────────────┐
-                                 │ ① RANDOM EXPERIMENT    │
-                                 │    (RE)                │
-                                 │  designer chooses it   │
-                                 │  assumed primitive     │
-                                 └───────────┬────────────┘
-                                             │ produces
-                                             ▼
-                                 ┌────────────────────────┐
-                                 │ ② OUTCOMES             │
-                                 │    ω, ω′, …            │
-                                 └───────────┬────────────┘
-                                             │ collected as
-                                             ▼
-                                 ┌────────────────────────┐
-                                 │ ③ SAMPLE SPACE  Ω      │
-                                 │  all possible outcomes │
-                                 │  · may be non-numeric  │
-                                 │  · abstract OK (H/T,   │
-                                 │    clinical story)     │
-                                 └───────────┬────────────┘
-                                             │ form subsets
-                                             ▼
-                                 ┌────────────────────────┐
-                                 │ ④ EVENTS  ∈ F          │
-                                 │  questions about ω     │
-                                 │  e.g. "label=disease"  │
-                                 └───────────┬────────────┘
-                                             │ sized by
-                                             ▼
-                                 ┌────────────────────────┐
-                                 │ ⑤ PROBABILITY MEASURE  │
-                                 │    P : F → [0, 1]      │
-                                 │  ┌──────────────────┐  │
-                                 │  │ mini: P(Ω)=1     │  │
-                                 │  │       P(∅)=0     │  │
-                                 │  │       P(A)≥0,≤1  │  │
-                                 │  │ A∩B=∅ ⇒ add      │  │
-                                 │  └──────────────────┘  │
-                                 │  meaning ("likelihood")│
-                                 │  optional until decision│
-                                 └───────────┬────────────┘
-                                             │
-                              ┌ · · · · · · ·┴ · · · · · · · ┐
-                              │ STOP (Part 1 boundary)       │
-                              │ RVs as maps Ω→numbers        │
-                              │ pushforward distributions    │
-                              │ full σ-algebra formalism     │
-                              │ → later recap lectures       │
-                              └ · · · · · · · · · · · · · · ┘
-
-  Legend:  ──X──► blocked path    solid boxes = installed here
-           ┌· ·┐ later / out of scope
+  Physics-first f          Statistical path
+  coin dynamics            many observations
+  light → disease law      RE → Ω → P
+       │                        │
+    ──X──► hard                 ▼
+                           works with data
 ```
 
-### Scenario walkthrough — one X-ray through the blueprint
+Starting only from “events have likelihoods” without the set/measure stack is the weak teaching path the instructor rejects.
 
-```
-  person becomes ill → radiology → X-ray → file → clinician label
-         \________________ RE (①) : whole pipeline ________________/
+### STOP / out of scope
 
-  one completed pipeline          =  one outcome ω          (②)
-  all imaginable pipelines        =  sample space Ω         (③)
-  "those with disease label"      =  event A ⊆ Ω            (④)
-  how large is A under our model  =  P(A) ∈ [0,1]           (⑤)
-
-  prediction job still sits above: estimate f(image) → label
-  probability is the language for uncertainty under that job
-```
-
-Same pattern for spam (draft → send → label) or a brain sensor protocol: **name the RE**, then the rest of the architecture is mechanical.
-
-### Failure / contrast (why architecture forks)
-
-
-| Wrong system design                                                     | Right system design (this lecture)              |
-| ------------------------------------------------------------------------- | ------------------------------------------------- |
-| Demand full physics of light/coin before any learning                   | Keep FA goal; admit physics path often blocked  |
-| Treat “learn$f$” and “estimate a distribution” as different courses | Same project; distribution language packages FA |
-| Call every object “random” forever                                    | Spend “random” on RE; then set/measure math   |
-| Assume$\Omega\subseteq\mathbb{R}$ always                                | $\Omega$ may be abstract; numbers later via RVs |
-| Start probability as “likelihood vibes” only                          | Set → subsets → measure$P$, meaning deferred  |
-
-### STOP — out of scope for Part 1
-
-- Formal σ-algebra axioms beyond the informal $F$
-- Random variables as pushforward maps
-- Distribution functions and divergence minimization machinery
-
-Those hang **below** the STOP line on the blueprint; Part 1 ends when $P$ is a well-behaved size on events.
+No full σ-algebra axioms course, no constructed random variables, no trained models. Next: random variables, pushforward measures, distribution estimation as the parallel of FA.
 
 ### Load-bearing claims (closed-book)
 
-1. FA = estimate $f$ for **prediction** on new inputs.
-2. Physics-first FA fails when dynamics are hard or labels are abstract.
-3. Statistical path: many observations, same prediction goal.
-4. After RE + outcomes, the rest is set/measure theory.
-5. $\Omega$ = all possible outcomes; need not be numeric.
-6. Events are subsets of $\Omega$; $P:F\to[0,1]$ with cake rules.
-7. Meaning of $P$ can wait until a real decision (e.g. diagnosis).
-8. Part 1 does **not** finish RVs or full distributions.
+- FA fails physics-first on many ML labels → statistical / probabilistic path.  
+- After RE + outcomes, randomness stops; rest is sets + measures.  
+- Designer chooses the RE; ML data points are RE outcomes.  
+- Sample space $\Omega$ = all possible outcomes; need not be numeric.  
+- Need a measure to size sets (length analogy on $\mathbb{R}$).  
+- Probability measure $P:F\to[0,1]$ with $P(\Omega)=1$, $P(\emptyset)=0$, non-negative, disjoint additivity.  
+- Events = elements of $F$.  
+- Assign human meaning of $P$ late; math can run abstractly.
 
-**Course:** Mathematical Foundations of Machine Learning (IISc / NPTEL).
+**Speaker / course:** NPTEL — Indian Institute of Science, Bengaluru · MFML · Lec 02 Part 1.
 
 ---
 
-## Topic 1: From function approximation to why physics fails (00:02–03:53)
+## Topic 1: From function approximation to the statistical path (00:00–05:54)
 
 ### Where this sits on the master map
 
-Opening problem: keep the **FA prediction goal**, but see why a pure **physics-first** hunt for $f$ often fails — so probability has a reason to enter.
-Warm-up: [sets](./PREREQUISITES.md#p1-sets), [functions](./PREREQUISITES.md#p3-functions), [function approximation](./PREREQUISITES.md#p3b-fa).
+**BRIDGE / WHY** box: why this course leaves pure FA language and enters probability. Refresh [why from FA](./PREREQUISITES.md#p8-why-from-fa) and last lecture’s domain/range if needed.
 
 ### Board / screenshot
 
-![Bridge from function approximation to probability foundations](./screenshots/composites/ch01-full-panel1of3.png)
+![FA recap and statistical motivation](./screenshots/composites/ch01-topic-01-fa-to-stats-panel1of1.png)
 
-**Figure — early board (~00:02–05:00):** course mission; FA recap; ladder named for later (sample space, σ-algebra, distribution functions) even though Part 1 only builds the bottom rungs.
+**Figure — ~00:00–05:50:** board work connecting last lecture’s FA setup to the need for a statistical / probabilistic framework.
 
 ### What he is establishing
 
-Class two of **Mathematical Foundations of Machine Learning**. The plan is to build **foundations of probability** while **connecting** two viewpoints:
+Class 2 of **Mathematical Foundations of Machine Learning** mostly builds **foundations of probability theory** and connects two views: the **deterministic** view of **function approximation (FA)** and the **probabilistic** view of **distribution estimation**. That bridge is the whole reason for the hour.
 
-- **Deterministic FA:** there is a map $f$; estimate it from data.
-- **Probabilistic view (later name):** distribution estimation.
+Recap of Lec 01: you are given observations from two sets; there exists a mapping $f$; the task is to **estimate $f$ given the observations**. Why care? **Prediction.** Given domain points whose range values you do not know, you want to predict those range values. The running medical example: an image mapped to $\{0,1\}$ for benign vs disease labels. Abstract method: **guess** what $f$ is, then **refine** the guess with observations.
 
-The ladder across lectures includes sample spaces, σ-algebra, distribution functions. Part 1 spends most of its minutes on the earliest rungs.
+That approach is not feasible for every problem because the **physics** of $f$ is often unreachable. Coin toss: even with weight, toss angle, environment, predicting the face from first principles is hard. X-ray classification is worse: sensors measure light transmission/reflection, while the target is an abstract label “diseased.” Finding that mapping from physics is not trivial.
 
-**ML as FA (recap).** You get observations from two sets. A mapping $f$ relates them. The job is to **estimate** that $f$. That is function approximation.
+**Solution path:** statistical solving — make **multiple observations** and try to discern the underlying pattern without solving the full physical generator. At a high level, that is the probabilistic framework. Today concretizes what “multiple observations” means and how function learning corresponds to probability and statistics.
 
-**Why bother?** **Prediction.** For some new inputs from the domain you do **not** know the output. You want the estimated map to fill those outputs in.
+A trap students fall into: FA with images and labels feels neat; hearing “estimate a distribution by divergence minimization” feels alien. The instructor claims those are the same scientific job in two languages. Bridging high-school-style FA to first-course probability ideas is the explicit goal.
 
-**Running example.** An X-ray (or image) maps to a label in $\{0,1\}$ — disease or not, malignant or benign. Estimate the image→label map.
-
-**Abstract recipe.** Guess a class of shapes for $f$, then **refine** the guess with observations.
-
-**Where that recipe stalls.** Getting to the **physics** and reading off the true $f$ is not feasible for many problems.
-
-**Coin.** In principle you could measure mass, toss angle, air — and still not get a reliable physics-first prediction of heads vs tails. Dynamics are too hard.
-
-**X-ray is harder.** You measure light through (or reflected by) tissue. The target label “diseased / not” is an **abstract clinical idea**, not a light-meter reading. That **semantic gap** blocks pure physics-first FA.
-
-So the **goal** of FA stays right (predict labels). What fails is insisting on a **complete physical model** first — that is the wrong method, not the wrong goal. You can now name that tension in plain words. Still missing: the engineers’ replacement when physics is blocked (many observations) — next topic, not this one.
+You can now restate FA, name why physics fails on coin/X-ray, and state the statistical path in one sentence. Still missing: the formal objects (RE, $\Omega$, $P$) that make “multiple observations” precise.
 
 ### Analogy for this topic only
 
-Stay with the X-ray.
+You have three labeled X-rays and a new scan. FA says: invent a rule image→label. Physics says: derive disease from photon paths. That derivation stalls.
 
-The machine reports **how much light** passed through the chest. Someone asks: **is this person diseased?**
+**What do you do instead?** Collect many labeled scans and learn the pattern from data. That is the statistical path this lecture will formalize.
 
-- A bright region is not automatically “no disease.”
-- A dark region is not automatically “disease.”
-- Listing every scanner physics constant still does not *equal* the clinical label.
-
-**Can light physics alone answer “diseased or not”?** Treating the light reading as if it *were* the disease label skips the real gap. The honest conclusion **for this topic** is only: measurement and label live at different levels, so pure physics-first function approximation stalls.
-
-In lecture words: light (or coin physics) ≠ abstract label — semantic gap blocks physics-first FA.
+In lecture words: guess-and-refine $f$ when physics works; when it fails, repeated observations under a probability framework.
 
 ### Local picture
 
 ```
-  PHYSICS PATH (often blocked)          WHAT WE WANT
-  ────────────────────────────          ────────────
-  light through tissue                  label ∈ {0,1}
-  coin mass, angle, air                 H or T
-           │                                   ▲
-           │  hard / abstract labels            │
-           └─ estimate map f (function approx) ┘
-                 fails if we demand full physics first
+  FA (Lec 01)                 Statistical path (today)
+  ------------                ------------------------
+  D pairs → estimate f        many outcomes → patterns
+  physics of f                RE + measures (next topics)
+         \                    /
+          └── distribution estimation (bridge)
 ```
 
-**Notice:** the goal stays “estimate a map for prediction.” What fails is the *method* when physics and labels refuse to meet.
+**Notice:** “distribution” is not a new hobby — it is FA rewritten.
 
 ### Bridge
 
-If physics-first FA is blocked, what do engineers do instead — and how does that later sound like “distributions”? Topic 2.
+To use statistics under uncertainty, we need a mathematical start. That start is not “randomness defined.” It is a **random experiment**.
 
 ---
 
-## Topic 2: Statistical turn and the function-approximation ↔ distribution bridge (03:53–05:54)
+## Topic 2: Uncertainty, random experiment, where randomness stops (05:54–09:18)
 
 ### Where this sits on the master map
 
-**Shift:** from first-principles physics to a **statistical** path — and the slogan that distribution estimation is FA in a new language.
-Warm-up: [function approximation](./PREREQUISITES.md#p3b-fa).
+**RE START** box. Warm-up: [uncertainty vs decision](./PREREQUISITES.md#p5-uncertainty), [outcomes](./PREREQUISITES.md#p6-outcomes).
 
 ### Board / screenshot
 
-![Statistical vs physics path](./screenshots/composites/ch01-full-panel1of3.png)
+![Random experiment introduction](./screenshots/composites/ch02-topic-02-uncertainty-re-panel1of1.png)
 
-**Figure — ~03:50–05:50:** many observations instead of full physics; the conceptual gap people feel between “learn $f$” and “estimate a distribution.”
+**Figure — ~05:54–09:10:** framework for deciding under uncertainty; random experiment and outcomes entering the board language.
 
 ### What he is establishing
 
-**Statistical way out.** Instead of solving from first principles, make **multiple observations** and try to discern the underlying function **from those observations**. Still “learn $f$,” but evidence is empirical repetition, not a complete physical model.
+Probability theory exists so we can **decide under uncertainty** with mathematical tooling. Irony: after all the nondeterministic modeling, **decisions are deterministic**. A clinician cannot usefully stop at “diseased with probability 60%” alone — care needs a decision. Conditions start uncertain; actions still collapse to one choice.
 
-Today’s deeper job is to **concretize** what “multiple observations” means and how function learning lines up with probability and statistics.
+The least well-defined idea in the whole space is **randomness** itself. Theory starts from a **random experiment (RE)** that we **assume** we understand. The RE produces outcomes that are measurable (in the informal sense of “we can record them”). That is the farthest the word “random” really travels.
 
-**The gap people miss.** This sentence feels neat:
+Once you have an RE and its outcomes, **randomness stops**. Everything after is **set theory and measure theory**. The instructor repeats a Lec 01 punchline: there is **nothing random about a random variable** — it is a **deterministic function**.
 
-> image, labels, function image→label — learn that function
+The collection of all possible outcomes becomes a **set**. Coin toss RE: two faces. Die roll: six faces. Critical design point: **you choose the RE**. Tossing once and tossing five times are different experiments. The RE is not sacred; fix RE and outcomes, and the rest follows.
 
-This sentence feels like another course:
-
-> there is an **underlying distribution** we estimate (e.g. by **divergence minimization**)
-
-**They are the same project** in probabilistic packaging. High-school-style FA and first-course probability ideas must be bridged so “distribution” does not float free of “function.”
-
-**Why probability at all?** We must **decide under uncertainty**. We need a mathematical framework — started in the next topics.
-
-The trap is treating “learn $f$” and “estimate a distribution” as unrelated subjects. They are one arc. You can now state that bridge in plain words. Still missing: where the word **random** enters formally so the math can start.
+You can now define RE, list outcomes for coin/die, and state that randomness ends after outcomes. Still missing: how ML data fits as RE outcomes, and the formal name sample space.
 
 ### Analogy for this topic only
 
-Same X-ray archive, same prediction job for a **new** film.
+A board game box says “roll the die.” Outcomes: faces 1–6. After the die lands on 4, nobody argues about quantum foam. They look up rules on a table of faces.
 
-- Old language: “estimate the map from image to disease label.”
-- New language that will appear later: “estimate an underlying distribution over (image, label) pairs.”
+**Question:** is “roll once” the same experiment as “roll until you get a 6”? No — the designer picks the RE, then lists outcomes.
 
-**Are those two different mountains?** Treating them as disconnected courses is the trap. Both aim at predicting the label; the second is the probabilistic packaging of the first.
-
-In lecture words: distribution estimation (even via divergence minimization) is what function learning becomes in the probabilistic view.
+In lecture words: RE → outcomes → set; random word mostly ends there.
 
 ### Local picture
 
 ```
-  "learn f: image → label"     function approximation (FA)
-           │
-           │  same project, new math
-           ▼
-  "estimate a distribution"
-   (e.g. divergence min)       probabilistic / statistical path
+  uncertain world ──► RE ──► outcomes {…}
+                              │
+                              ▼
+                     set theory + measures
+                     (randomness "stops")
+
+  Designer picks RE:  1 toss  vs  5 tosses
 ```
 
-**Notice:** skip this bridge and later losses / “distributions” feel like a different course. They are not.
+**Notice:** RE is a modeling choice, not a law of nature handed to you.
 
 ### Bridge
 
-We need math for uncertainty — yet final clinical decisions are still hard yes/no. Where does “random” enter formally? Topic 3.
+In ML, every dataset row should be seen as coming from some RE. Next: X-ray clinics, spam, and brain measurements.
 
 ---
 
-## Topic 3: Decide under uncertainty; the random experiment (05:54–09:18)
+## Topic 3: Random experiments in ML — X-ray, spam, brain (09:18–12:11)
 
 ### Where this sits on the master map
 
-**Foundation:** the only loosely defined idea is **randomness** / the **random experiment (RE)**. After outcomes are named, the rest is set theory and measure theory.
-Warm-up: [sets](./PREREQUISITES.md#p1-sets), [functions](./PREREQUISITES.md#p3-functions).
+**RE IN ML** box: make the abstract RE concrete for data. Without this, people treat a PNG or email string as if it fell from the sky. With it, every row is an outcome of a process. Warm-up: [experiments and outcomes](./PREREQUISITES.md#p6-outcomes).
 
 ### Board / screenshot
 
-![Random experiment and outcomes](./screenshots/composites/ch01-full-panel2of3.png)
+![ML examples as random experiments](./screenshots/composites/ch03-topic-03-re-in-ml-panel1of1.png)
 
-**Figure — ~06:00–09:00:** RE as start; outcomes as a set; coin/die; designer chooses the experiment.
+**Figure — ~09:18–12:00:** X-ray pipeline and related examples cast as random experiments producing data.
 
 ### What he is establishing
 
-**Irony of decisions.** Probability models uncertainty, but **final decisions are deterministic**. A clinician cannot stop usefully at “diseased with probability 60%” alone — decisions must land as actions. Starting conditions are nondeterministic; we still decide **under uncertainty**. That is why we need mathematical tooling.
+Because the course is probabilistic, **everything you see must relate to a random experiment**. Machine learning’s starting point is: there exists an RE whose outcome we are dealing with.
 
-**Randomness is poorly defined.** In the whole probabilistic setup, the notion that is **not well defined** is randomness itself.
+**X-ray labeling:** the RE is not “a matrix of pixels” alone. It is the entire process — someone becomes diseased, goes to radiology, is imaged, the image is printed/uploaded, a clinician assigns a label. That whole story is the experiment. Every data point should be seen through that lens.
 
-**Random experiment (RE).** Everything starts from a RE — also not fully formalized. We **assume** we know what it is: an experiment that produces measurable **outcomes**.
+**Spam filter:** someone decides to draft and send a spam (or ham) email; someone labels it. Spam is subjective — labels are philosophical later — but the process is still an RE. Natural language text, images, brain measurements: each measurement is an **outcome** of an RE (a person with a brain doing something while you measure).
 
-**Where “random” stops.** Once the RE and its outcomes are fixed, **randomness language mostly ends**. Everything else is **set theory and measure theory**. A **random variable** (later) is a **deterministic function** of the outcome — nothing “random” about the map itself.
+Once the RE is fixed, randomness stops and **set theory begins**. That transition is intentional and important.
 
-**Outcomes form a set.** Coin RE → $\{H,T\}$. Die RE → $\{1,\ldots,6\}$.
+The wrong move is to start probability mid-file: “here is a matrix of pixels, assign probabilities to pixels,” with no experiment. The right move is process-first: clinic (or inbox) process → outcome → later sizes.
 
-**Designer chooses the RE.** One toss and five tosses are **different** experiments (2 vs $2^5=32$ outcomes). A RE is not sacrosanct; once you fix experiment + outcomes, the rest follows.
-
-A common confusion is to call *everything* random forever. Spend “random” mainly on the experiment; then switch to ordinary sets and functions. You can now say: decisions are deterministic under uncertainty; the RE is the assumed start; the **designer** chooses it. Still missing: what the RE looks like for real ML pipelines.
+You can now retell X-ray and spam as REs and treat every training row as an outcome. Still missing: the formal set that collects all possible outcomes — the sample space.
 
 ### Analogy for this topic only
 
-Same physical coin.
+A hospital shift: patient walks in, X-ray taken, doctor clicks “diseased.” That whole chain is one run of the experiment. Tomorrow’s patient is another run.
 
-- Declare “one toss” → $\Omega$ has 2 faces.
-- Declare “five tosses” → $\Omega$ has 32 sequences.
+**Is the data point “the PNG file” or “the clinic process that produced it”?** The lecture wants the process view so probability has a place to start.
 
-**Once that choice is fixed, must every later object stay “mysteriously random”?** The trap is yes. The right move is: after RE + outcomes, work with ordinary sets and deterministic functions of outcomes.
-
-In lecture words: after the random experiment and its outcomes, randomness stops; the rest is set/measure theory. A random variable is a deterministic function.
+In lecture words: data points = outcomes of an underlying RE.
 
 ### Local picture
 
 ```
-  uncertain world  →  probability tooling
-                           │
-                           ▼
-                 RANDOM EXPERIMENT (assumed)
-                           │
-                      outcomes
-                           │
-                           ▼
-                 set of all outcomes   ← "random" mostly ends
-                           │
-                 set theory + measure theory
-                           │
-                 later: RV = deterministic map from outcomes
+  RE (X-ray pipeline)
+    disease → clinic → image → label
+              │
+              ▼
+         one outcome ω
+         (one data case)
+
+  Same idea: spam email process · brain measurement process
 ```
 
-**Micro numbers:** one-toss RE → 2 outcomes; five-toss RE → 32 sequence-outcomes. Same coin; designer chose differently.
-
-**Notice:** fixing the RE is a **modeling choice**, not discovery of a unique “true random object.”
+**Notice:** pixels/text are how outcomes appear in the computer — not the whole RE definition.
 
 ### Bridge
 
-In ML, every file on disk should come from some RE. What does that look like for X-rays, spam, brain data? Topic 4.
+Collect every possible outcome of the fixed RE into one set. That set is the **sample space**.
 
 ---
 
-## Topic 4: Every ML datapoint comes from a random experiment (09:18–12:11)
+## Topic 4: Sample space Ω (12:11–14:13)
 
 ### Where this sits on the master map
 
-**Application:** probabilistic ML starts by naming the RE behind data.
-Warm-up: [abstract outcomes](./PREREQUISITES.md#p6-abstract).
+**Ω** box: the first durable set object after the RE. It answers “what are all the possibilities we admit?” before any probability numbers exist. Warm-up: [sets](./PREREQUISITES.md#p1-sets). The leftover problem from Topic 3 is that naming a process is not yet a mathematical object you can size — $\Omega$ is that object’s carrier set.
 
 ### Board / screenshot
 
-![X-ray pipeline as random experiment](./screenshots/composites/ch01-full-panel2of3.png)
+![Sample space definition](./screenshots/composites/ch04-topic-04-sample-space-panel1of1.png)
 
-**Figure — ~09:30–12:00:** full clinical imaging + labeling pipeline as the RE; spam and brain as further examples.
+**Figure — ~12:11–14:10:** sample space as the set of all possible outcomes; transition toward needing a measure.
 
 ### What he is establishing
 
-From a probabilistic standpoint, **everything you see** must relate to a random experiment. For ML, the starting point is: there is a RE whose outcome we deal with.
+Outcomes of the random experiment are collected in a set called the **sample space**, denoted $\Omega$ (spoken “sample space” on the board): the set of **all possible outcomes**.
 
-**X-ray labeling RE.** Not “the pixel matrix alone.” The whole story: person becomes diseased → radiology → X-ray machine → file on disk → **clinician labels**. That pipeline **is** the random experiment.
+Do not demand a definition of randomness. Assume an RE produces outcomes; put them in a set. Done.
 
-**Every datapoint** should be seen as arising from an underlying RE.
+Humor: computer science uses **deterministic** algorithms to generate “random” numbers — hence **pseudorandom**. The irony underscores that “random” is slippery while sets are not.
 
-**Spam / text.** Draft → send → human labels spam or not. “Spam” is **subjective** — all labels have a subjective side. Still, the pipeline is a RE; the email is an outcome.
+But the goal is still prediction — e.g. whether an X-ray is diseased. Merely saying “this image is an outcome of an RE” does not finish the job. You must move forward from $\Omega$.
 
-**Brain measurement.** Person + protocol + sensor → measurement as outcome of a RE.
-
-Once the RE is fixed, randomness stops and **set theory begins** — collect outcomes into a set (next topic).
-
-Do not treat a training row as a free-floating file with no story — that is the wrong start. Behind X-ray rows, spam rows, and sensor rows are full pipelines. You can now describe those as random experiments and say every ML datapoint is an **outcome**. Still missing: the formal name of the set of all outcomes (sample space).
+You can now define $\Omega$ and refuse the “what is randomness?” rabbit hole. Still missing: how to size subsets of $\Omega$ so comparison and “likelihood” can start.
 
 ### Analogy for this topic only
 
-One labeled X-ray on disk is a short **receipt** from a longer clinical visit.
+A theater lists every seat: $\Omega = \{\text{seat A1}, \text{A2}, \ldots\}$. A show run picks one occupied pattern. You have not yet said which seats are “likely” — you only listed possibilities.
 
-- Visit: person → radiology → machine → file → clinician label.
-- Receipt: one row or image file in the dataset.
+**Question:** is listing seats enough to price tickets by popularity? No — you need a way to score subsets of seats.
 
-**Is that file the whole universe, or evidence from a longer process?** The trap is to start math as if the CSV row appeared from nowhere. The right move is to treat the row as an **outcome** of the full RE.
-
-In lecture words: every datapoint is an outcome of an underlying random experiment.
+In lecture words: $\Omega$ enumerates outcomes; scoring comes next via measure.
 
 ### Local picture
 
 ```
-  X-RAY RE (one modeling choice)
+  RE  ──produces──►  outcomes
+                        │
+                        ▼
+                 Ω = { all possible outcomes }
 
-  person → radiology → X-ray → file → clinician label
-     \______________________________________________/
-                    one outcome ω
-
-  spam:   draft → send → label spam?        → outcome
-  brain:  subject + protocol → sensor read   → outcome
+  Coin: Ω = {H, T}
+  Die:  Ω = {1,2,3,4,5,6}
 ```
 
-**Notice:** the image tensor is part of the story, not the whole definition of $\omega$. That prepares “$\Omega$ need not be numeric.”
+**Notice:** $\Omega$ is a list of possibilities, not yet probabilities.
 
 ### Bridge
 
-Outcomes are collected into a set. Name that set and admit what a bare set cannot do. Topic 5.
+Sets alone do not let you compare. You need a **measure** — like length on the real line.
 
 ---
 
-## Topic 5: Sample space $\Omega$ (12:11–14:13)
+## Topic 5: Why measure — length and Lebesgue analogy (14:13–17:03)
 
 ### Where this sits on the master map
 
-**$\Omega$:** set of all possible outcomes — still not enough for prediction until we add a measure.
-Warm-up: [sets](./PREREQUISITES.md#p1-sets).
+**MEASURE NEED** box. Warm-up: [measure](./PREREQUISITES.md#p4-measure).
 
 ### Board / screenshot
 
-![Sample space definition](./screenshots/composites/ch01-full-panel2of3.png)
+![Length measure analogy](./screenshots/composites/ch05-topic-05-why-measure-panel1of1.png)
 
-**Figure — ~12:10–14:00:** sample space as set of all outcomes; need for measure; pseudo-random aside.
+**Figure — ~14:13–17:00:** comparing subsets of reals with length; area/volume generalization toward measures on sample spaces.
 
 ### What he is establishing
 
-**Definition.** Outcomes of the RE are collected in the **sample space** $\Omega$: the **set of all possible outcomes**.
+Given a set, you cannot do the work of probability without assigning a **measure** — a mathematical sizing that lets you compare. It is not casually “the length of the set” in every setting; it is a notion that plays the role of size.
 
-**Do not demand a deep definition of randomness.** Assume the RE produces outcomes; put them in a set. That is the modeling move.
+On the real numbers, the familiar measure is **length** (Lebesgue measure, as named). Draw two subsets of $\mathbb{R}$: a short interval $A$ and a long interval $B$. Which is bigger? $B$, because length($A$) < length($B$). Without length, “bigger” is undefined.
 
-**CS irony.** “Random number generators” are **deterministic algorithms** — hence **pseudo-random**. After the RE modeling gesture, the rest of the theory is ordinary deterministic math.
+In $\mathbb{R}^2$, people use **area**; in $\mathbb{R}^3$, **volume**; in $\mathbb{R}^d$, a generalized Lebesgue volume. The **semantics** of what the number means can depend on the setting, but **some** measure must be assigned to work with sets.
 
-**$\Omega$ alone is not enough.** Seeing the X-ray process as a RE does not by itself answer “diseased or not.” We must move further.
+Now consider **subsets of the sample space**. The program is the same: size those subsets with a measure analogous to length on $\mathbb{R}$.
 
-**Need a measure.** A bare set is not enough; we need a mathematical **size** on (allowed) subsets. Length is the familiar intuition next — but probability will be a different measure.
-
-You do not need a final philosophy of randomness before writing $\Omega$ — waiting for that definition is a trap. Form the sample space, then prepare to size its subsets. You can now define $\Omega$ and say why a bare set cannot finish prediction. Still missing: a concrete picture of “size,” then probability as a measure.
+You can now explain why $\Omega$ alone is incomplete and use the length analogy. Still missing: $\Omega$ may not look like $\mathbb{R}$ at all — and which measure becomes “probability.”
 
 ### Analogy for this topic only
 
-Coin model: $\Omega=\{H,T\}$ lists **everything that could happen**.
+Two sticks on a table: 10 cm and 30 cm. **Which is longer?** You answer with a length rule.
 
-- Known: heads or tails can occur.
-- Unknown: how often, or how large a subset is.
+Without a ruler-like rule, “longer” is social argument. Probability will put a ruler on outcome-sets, not on wood.
 
-**Does listing the two faces already give probability?** The trap is yes. The right move: $\Omega$ is only the menu of outcomes; subsets still need a measure.
-
-In lecture words: sample space = all possible outcomes; without a measure on subsets we cannot proceed.
+In lecture words: length on $\mathbb{R}$ is the intuition; $P$ will be the special measure on subsets of $\Omega$.
 
 ### Local picture
 
 ```
-  random experiment
-         │
-         ▼
-   outcomes ω₁, ω₂, …
-         │
-         ▼
-   Ω = { all possible outcomes }     sample space
-         │
-         │  still missing
-         ▼
-   MEASURE on subsets of Ω
+  R:   A = [0,1]   length 1
+       B = [0,3]   length 3  → B bigger
+
+  R2: area · R3: volume · Rd: generalized volume
+
+  Next: subsets of Ω need some measure (not necessarily "length")
 ```
 
-**Micro numbers:** $|\Omega|=2$ for a fair-coin model is a **count of outcomes**, not yet $P(\{H\})$.
-
-**Notice:** listing outcomes ≠ assigning likelihoods.
+**Notice:** measure = comparison tool; meaning of the number can wait.
 
 ### Bridge
 
-What is a “measure” in a picture everyone knows? Length on the real line. Topic 6.
+What are elements of $\Omega$ for X-rays? Not automatically real numbers. Hold that carefully.
 
 ---
 
-## Topic 6: Why measures — the length analogy (14:13–17:31)
+## Topic 6: Ω need not be numeric; subsets of Ω (17:03–21:10)
 
 ### Where this sits on the master map
 
-**Measure:** how we compare subsets before probability arrives.
-Warm-up: [size / measure](./PREREQUISITES.md#p4-measure).
+**ABSTRACT Ω** box — kills the “Ω is always numbers” misconception. After the length analogy on $\mathbb{R}$, beginners over-correct and force fake coordinates on coins and clinics. Warm-up: [sets](./PREREQUISITES.md#p1-sets) and [subsets](./PREREQUISITES.md#p2-subsets).
 
 ### Board / screenshot
 
-![Length measure on subsets of the real line](./screenshots/composites/ch01-full-panel3of3.png)
+![Abstract non-numeric sample space](./screenshots/composites/ch06-topic-06-nonnumeric-omega-panel1of1.png)
 
-**Figure — ~14:40–17:00:** short vs long intervals by length; area/volume; lead-in to subsets of $\Omega$.
+**Figure — ~17:03–21:00:** X-ray/coin sample spaces as abstract outcomes; question of assigning measures on subsets $F$.
 
 ### What he is establishing
 
-To work quantitatively with subsets, assign a **measure** — a mathematical size. This is not a full measure-theory course; the idea is enough.
+For the X-ray RE, $\Omega$ enumerates possible process outcomes as people are imaged — still **not** automatically a real-number coordinate. Coin: elements are **head** and **tail**, with no numeric meaning yet. **Sample space need not be numeric.** That is essential.
 
-**$\mathbb{R}$ as a set.** Two subsets — which is bigger? Membership alone does not decide.
+How do you quantify abstract outcomes? Later: **random variables** and **pushforward measures**. For now: $\Omega$ only enumerates outcomes of an experiment into a set. Sets are collections of objects; foundations assume we know what objects are.
 
-**Length (Lebesgue).** The familiar measure on the line. A short interval $A$ and a long interval $B$: $B$ is bigger **because of length**.
+Wrong move: rewrite coin $\Omega$ as $\{0,1\}$ on day one and pretend the hard part is over. That smuggles a random variable in early and hides abstraction. Right move: keep head/tail (or clinic process) as members; ask whether we can size **subsets**.
 
-**Higher dimensions.** $\mathbb{R}^2$ → area; $\mathbb{R}^3$ → volume; $\mathbb{R}^d$ → $d$-volume. Same idea: quantify size.
+Question parallel to length on $\mathbb{R}$: can we assign a measure on **subsets of sample space**? Not necessarily length — some other measure. Rough construction: take the set, form subsets, assign a measure on those subsets. Call the collection of subsets we work with $F$ (informal stand-in for the event field / σ-algebra; this is not a full measure-theory course). Measures must satisfy properties (non-negativity and others).
 
-**Meaning of a measure can depend on setting**, but you need *some* measure to work on top of a set.
-
-**Next target.** Subsets of the **sample space** — can we assign a measure there as we assign length on subsets of $\mathbb{R}$?
-
-In the X-ray story, $\Omega$ holds outcomes of imaging pipelines — still not “numbers as elements” yet.
-
-Comparing subsets of $\mathbb{R}$ by “which has more points” fails when both intervals are infinite — that is the wrong comparison. Use **length** (then area, volume, $d$-volume). You can now explain why measure is needed and name that Lebesgue family. Still missing: the same need on **abstract** sample spaces.
+You can now insist $\Omega$ may be abstract and state the subset-measure program. Still missing: the special measure $P$ and its axioms.
 
 ### Analogy for this topic only
 
-Two intervals on the board — both infinite as sets of points.
+A coin has faces engraved “H” and “T,” not “0.0” and “1.0.” The sample space is a **label set**.
 
-**Which is bigger?** Counting points does not decide. **Length** does (e.g. 1 vs 10).
+**Can you still ask “how often heads?”** Yes — after you put a measure on subsets like $\{H\}$. Numbers come from the measure (and later maps), not because $\Omega$ started numeric.
 
-Carry that pattern forward: events inside $\Omega$ will also need a measure — not length, but probability.
-
-In lecture words: length (Lebesgue) compares subsets of the reals; we need *some* measure on subsets of $\Omega$.
+In lecture words: $\Omega$ abstract; measure on subsets; RVs later for numbers.
 
 ### Local picture
 
 ```
-  REAL LINE
-  set A:  |===|              length small
-  set B:  |===========|      length large  → B bigger under length
+  Coin Ω = {H, T}     ← not reals
+  X-ray Ω = { process outcomes … }  ← abstract
 
-  R² area · R³ volume · R^d d-volume
+  Subsets (candidates for events):
+    {H} · {T} · {H,T} · ∅
 
-  SAME NEED ON Ω:
-  subsets of Ω  ──need──►  some measure (not necessarily length)
+  Goal: assign a measure on such subsets (F)
 ```
 
-**Micro numbers:** length$([0,1])=1$, length$([0,10])=10$.
-
-**Notice:** measure answers “how much,” not only “which points.”
+**Notice:** “non-numeric $\Omega$” prevents forcing fake coordinates too early.
 
 ### Bridge
 
-$\Omega$ may be abstract (H/T, clinical stories). Its subsets still need a measure — probability. Topic 7.
+The measure used throughout probability is the **probability measure** $P$.
 
 ---
 
-## Topic 7: Subsets of $\Omega$, events, and the need for $P$ (17:31–22:43)
+## Topic 7: Probability measure $P$, axioms, events (21:10–26:40)
 
 ### Where this sits on the master map
 
-**Events and $F$:** non-numeric $\Omega$, subsets, introduce **probability measure $P$**.
-Warm-up: [subsets](./PREREQUISITES.md#p2-subsets), [abstract outcomes](./PREREQUISITES.md#p6-abstract).
+**P + AXIOMS** box — core formal payload. Warm-up: [unit interval](./PREREQUISITES.md#p7-unit-interval), [subsets](./PREREQUISITES.md#p2-subsets).
 
 ### Board / screenshot
 
-![Subsets of sample space and measure P](./screenshots/composites/ch01-full-panel3of3.png)
+![Probability measure and properties](./screenshots/composites/ch07-topic-07-probability-measure-panel1of1.png)
 
-**Figure — ~17:30–22:40:** $\Omega$ not necessarily numeric; subsets; $P$ maps into $[0,1]$.
+**Figure — ~21:10–26:30:** $P$ as a function on subsets; properties non-negativity, bound 1, $P(\Omega)=1$, empty set, disjoint additivity; events named.
 
 ### What he is establishing
 
-**$\Omega$ need not be numeric.** Coin outcomes are $H$ and $T$ — no numerical notion yet. X-ray $\Omega$ is not automatically a subset of $\mathbb{R}$. Sample space is abstract: all possible outcomes enumerated in a set.
+The measure we work with is the **probability measure**, written $P$. A measure is a **function**. Probability measure takes elements of $F$ — subsets of the sample space — and returns values in $[0,1]$ **by definition**.
 
-**Numbers later.** Turning abstract outcomes into computation numbers uses **random variables** and **pushforward measures** — later. For now: experiment → outcomes → set, independent of numeric coding.
+Concrete micro case: fair coin, $\Omega=\{H,T\}$, let $A=\{H\}$. If the model says “fair,” you want a number on $A$ that is half of the whole. The axioms force the whole to be 1 and empty to be 0 so half can mean 0.5 cleanly.
 
-**X-ray element of $\Omega$.** One element can be the **whole story** (diseased → imaged → labeled diseased), not “a pixel matrix alone.”
+Always keep the analogy: length measure on subsets of reals. Properties of $P$ (as taught here):
 
-**Sets as objects.** A set is a collection of objects; we assume we know what objects are and proceed. English is fragile; math is the other language.
+- For any $A\in F$, $P(A)\ge 0$ (non-negative), and $P(A)\le 1$ (upper bound — unlike raw length, which can be arbitrarily large).  
+- $P(\Omega)=1$.  
+- $P(\emptyset)=0$.  
+- If $A,B\in F$ are disjoint ($A\cap B=\emptyset$), then measures **add**: $P(A\cup B)=P(A)+P(B)$ (finite additivity as presented).
 
-**Big question.** As we put **length** on subsets of $\mathbb{R}$, can we put a measure on **subsets of $\Omega$**? It will **not** be the length measure — it is **some other measure**.
+Wrong move: treat $P$ as free poetry that can be 2 on some events and −1 on others. Right move: obey the size rules first; interpret later.
 
-**Construction (informal).** Take a set; form (allowed) subsets; call that collection $F$ (in full theory a σ-algebra — kept light here). Goal: assign a measure on $F$.
+So far this is a pure mathematical construct. You *may* interpret $P(A)$ as the **likelihood** of an event — but “likelihood,” like “length,” is an intuition you already carry; the instructor refuses to pretend it is more primitive than the axioms.
 
-**Measures have properties** (non-negative; sensible behavior when one set sits inside another) — not a full axiom dump.
+Elements of $F$ are called **events**: subsets of sample space that receive a probability measure.
 
-**Probability measure $P$.** The measure we work with. $P$ is a **function** that takes elements of $F$ (subsets of $\Omega$) and, by definition, maps them into $[0,1]$.
+Powerful ML point: algorithms can run treating $P$ as abstract numbers. Only when a doctor must hand a diagnosis to a patient do you need the human meaning layer.
 
-Do not assume $\Omega\subseteq\mathbb{R}$ always — that is the wrong default. You can now say: $\Omega$ need not be numeric; events are subsets in $F$; probability is $P:F\to[0,1]$. Still missing: the explicit cake rules for $P$ and the optional “likelihood” reading.
+You can now write $P:F\to[0,1]$ with the listed properties and define events. Still open: philosophy of meaning, abstraction across data types, and the closing recipe.
 
 ### Analogy for this topic only
 
-Coin outcomes $H,T$ are not numbers until you code them. An X-ray outcome can be the full clinical story.
+Imagine a whole pizza. One slice is three-tenths of it; a non-overlapping slice is two-tenths. Together they are five-tenths of the pizza.
 
-Form subsets (“heads,” “labeled disease”). **Must every outcome already be a real number before those subsets can have a size?** The trap is yes. The right move: put $P$ on the **folders** (events); numeric coding of cards can wait.
+**What if the slices overlap?** You cannot just add the fractions — same spirit as the disjoint-additivity rule.
 
-In lecture words: sample space need not be numeric; assign a probability measure on subsets of $\Omega$.
+In lecture words: $P$ sizes events like pieces of a unit whole; axioms keep the sizing consistent.
 
 ### Local picture
 
 ```
-  Ω  (H/T, clinical stories, …)
-   │
-   ├── subsets A, B, …  ∈  F   (events)
-   │
-   └── P : F → [0,1]
-            A ↦ P(A)
+  P : F → [0,1]
 
-  NOT required yet: Ω ⊆ ℝ
-  numbers on ω  →  later via random variables
+  P(A) ≥ 0,  P(A) ≤ 1
+  P(Ω) = 1,  P(∅) = 0
+  A∩B=∅  ⇒  P(A∪B)=P(A)+P(B)
+
+  event = member of F = measurable subset of Ω
 ```
 
-**Micro numbers:** fair coin $F$ includes $\emptyset,\{H\},\{T\},\{H,T\}$; e.g. $P(\{H\})=1/2$, $P(\Omega)=1$, $P(\emptyset)=0$.
-
-**Notice:** $P$ acts on **sets of outcomes**, not on vibes.
+**Notice:** unit total $P(\Omega)=1$ is what makes “percent chance” language available later.
 
 ### Bridge
 
-What rules must $P$ obey, and must we call $P(A)$ a “likelihood”? Topic 8.
+If $P$ is “just a measure,” when do meanings like “70% chance” enter — and why delay them?
 
 ---
 
-## Topic 8: Probability measure $P$ — properties, meaning, abstraction (22:43–32:13)
+## Topic 8: Meaning deferred; abstraction; close (26:40–32:13)
 
 ### Where this sits on the master map
 
-**$P$ + meaning:** cake rules, events, deferred likelihood, power of abstraction, close on ignorance modeling.
-Warm-up: [unit measure / cake](./PREREQUISITES.md#p5-unit).
+**INTERPRET + STOP** — how to use $P$ without trapping yourself, and the lecture’s closing recipe. Warm-up: [unit interval meanings](./PREREQUISITES.md#p7-unit-interval) and [uncertainty vs decision](./PREREQUISITES.md#p5-uncertainty). You have axioms; you still need a policy for when “70% chance” language is allowed.
 
 ### Board / screenshot
 
-![Properties of probability measure](./screenshots/composites/ch01-full-panel3of3.png)
+![Abstraction and closing philosophy](./screenshots/composites/ch08-topic-08-meaning-abstraction-panel1of1.png)
 
-**Figure — ~22:40–end:** $P:F\to[0,1]$; non-negativity; $P(\Omega)=1$; $P(\emptyset)=0$; disjoint add; meaning deferred; data as range of random variables (preview).
+**Figure — ~26:40–32:00:** working with abstract measures; data as range of random variables; closing stack RE → set → subsets → measure.
 
 ### What he is establishing
 
-**Definition.** $P$ maps events in $F$ to $[0,1]$. Free analogy: “like length on subsets of $\mathbb{R}$,” with different constraints.
+**Power of math:** abstract first; assign meanings late. That makes cross-pollination easy — a probabilist can pick up ML; precision is why people call physics applied math.
 
-**Properties taught**
+Course stance: see **data as elements of the range space of random variables**. Estimate an underlying probability measure with algorithms. Then images, text, time series, brain scans are all **vectors** in that range space — one generalist view.
 
-1. $P(A)\ge 0$ for any event $A$.
-2. $P(A)\le 1$ (upper bound — unlike length).
-3. $P(\Omega)=1$ (whole space).
-4. $P(\emptyset)=0$ (empty event).
-5. If $A\cap B=\emptyset$, then $P(A\cup B)=P(A)+P(B)$.
+You may assign meaning: $P(A)=0.7$ as “70% chance $A$ occurs.” Meanings help intuition. But the math runs even without them, and the same formal $P$ can mean different things in different applications — like “area under a curve” meaning different physical quantities. Prefer looking at probability as a **measure on subsets of sample space**; ascribe likelihood language when useful.
 
-$$
-P : F \to [0,1],\quad
-P(\Omega)=1,\quad
-P(\emptyset)=0,\quad
-A\cap B=\emptyset \Rightarrow P(A\cup B)=P(A)+P(B).
+Weak teaching path (rejected): start only from “events have likelihoods.” Strong path: set, subsets, measure with properties.
 
-$$
+Closing philosophy links **ignorance modeling** from Lec 01: an omniscient physicist might predict a coin deterministically; we cannot, so we use this stack. There is nothing that forces “the world is random” as a metaphysical claim. Practical recipe:
 
-**In words:** $P$ sizes allowed questions about outcomes; the sure event has size 1; the impossible event has size 0; non-overlapping questions add.
+**random experiment → outcomes → set ($\Omega$) → subsets (events) → assign measure ($P$).**
 
-**Still a construct.** You *may* read $P(A)$ as **likelihood** of event $A$ — without demanding a deeper definition of “likelihood” than of “length.”
-
-**Events.** Elements of $F$ are **events** — each gets a $P$ value.
-
-**Meaning can wait.** Most of the ML math can run **without** assigning a story to $P$, until a doctor must hand a **diagnosis** to a patient. Abstraction: work formally, assign meaning late.
-
-**Course lens (preview).** See data as elements of the **range space of random variables** — then images, text, time series, brain signals all become **vectors** under one view, with an underlying $P$ estimated by algorithms.
-
-**Optional gloss.** $P(A)=0.7$ can mean “about 70% chance” if that helps — different applications may attach different stories to the same formal measure (like area under different curves).
-
-**How not to start probability.** Do not begin with “events and likelihood vibes.” Prefer **set → subsets → measure**, meaning later.
-
-**Ignorance modeling.** If you were omniscient about coin physics, the toss would be deterministic. We use probability because we **cannot**. There is a sense in which “nothing is random about the world”; randomness is not defined. Practical slogan:
-
-> Experiment → outcomes → set $\Omega$ → subsets → assign measure $P$. **That’s it.**
-
-Build $P$ with cake rules; attach likelihood when decisions force it — do not fail by waiting for a final philosophy of chance. You can now list the properties of $P$, define events, explain deferred meaning, and state RE → $\Omega$ → $F$ → $P$. Still missing (later lectures): random variables, pushforwards, full $\sigma$-algebra.
+You can now state deferred meaning, the generalist data view, and the five-step recipe. Still missing for the course: building random variables and connecting back to distribution estimation as FA’s twin — next sessions.
 
 ### Analogy for this topic only
 
-The formal machine only needs numbers $P(A)$ with cake rules. A clinician may later need “about 70% chance” for a patient.
+Two labs use “area under a curve.” One means total distance from speed; another means total charge from current. The **geometry** is shared; the **story** differs.
 
-- Math path: sizes in $[0,1]$; $P(\Omega)=1$; disjoint events add.
-- Decision path: translate a size into advice when a human must act.
+**Should you freeze the geometry to one story on day one?** No — keep the measure abstract, attach the story at deployment (doctor, spam filter, …).
 
-**Must math freeze until “chance” is philosophically settled?** The trap is yes. The right move: run on the measure first; assign meaning when decisions force it.
-
-In lecture words: probability is a measure on subsets of the sample space; meaning (likelihood) can be deferred until decisions force it.
+In lecture words: $P$ is the geometry; likelihood talk is optional story; recipe ends at measure.
 
 ### Local picture
 
 ```
-  PART-1 PIPELINE
+  Recipe (this lecture):
+    RE → outcomes → Ω → events (subsets) → P
 
-  random experiment
-        → outcomes
-        → Ω
-        → F = events (subsets)
-        → P : F → [0,1]
-             P(Ω)=1, P(∅)=0, ≥0, ≤1
-             A∩B=∅ ⇒ P(A∪B)=P(A)+P(B)
+  Deferred:
+    random variables · pushforward · estimate distributions
+    (= twin of estimate f)
 
-  meaning ("likelihood") ── optional until real decisions
-  data as RV range vectors ── later formal step
+  Meaning layer (optional until action):
+    P(A)=0.7  ~  "70% chance"  if that helps
 ```
 
-**Micro numbers:** $P(\Omega)=1$, $P(\emptyset)=0$, $P(A)=0.7$ → optional “70% chance.” Disjoint: $P(A)=0.3$, $P(B)=0.2$ ⇒ $P(A\cup B)=0.5$.
-
-**Notice:** Part 1 ends on the **construct**, not combinatorics drills — ready for random variables next.
+**Notice:** STOP is intentional — foundations first, RVs next.
 
 ### Bridge
 
-How do abstract outcomes become the **numbers** we train on, and how does $P$ push forward to a distribution on those numbers? That is the random-variable / distribution-function ladder — next recap parts.
+You own the probability stack that makes statistical FA precise. Next lectures attach numbers via random variables and complete the FA ↔ distribution estimation bridge.
 
 ---
 
 ## External references
 
-
-| Resource                                                                                                                                                                                       | Matches lecture…                      | Why it helps                                                      |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------------------------- |
-| [MIT OCW 6.041 — Lecture 1: Probability Models and Axioms](https://ocw.mit.edu/courses/6-041sc-probabilistic-systems-analysis-and-applied-probability-fall-2013/resources/lecture-1-video-2/) | Topics 5–8 ($\Omega$, events, axioms) | Clean parallel treatment after you have this lecture’s FA bridge |
-| [MIT RES.6-012 — Sample space & probability axioms](https://www.youtube.com/playlist?list=PLUl4u3cNGP60hI9ATjSFgLZpbNJ7myAg6)                                                                 | Topics 5, 7, 8                         | Short clips for beginners                                         |
-| [Wikipedia — Probability axioms (Kolmogorov)](https://en.wikipedia.org/wiki/Probability_axioms)                                                                                               | Topic 8 properties of$P$               | Compact formal list once intuition is in place                    |
-| [StackExchange — Measure theory vs probability](https://math.stackexchange.com/questions/4748560/understanding-the-relationship-between-measure-theory-and-probability-theory)                | Topics 6–7                            | “Probability is a special measure” without a full course        |
+| Resource | Matches lecture… | Why it helps |
+|----------|------------------|--------------|
+| [3Blue1Brown — Bayes theorem / probability intuition](https://www.youtube.com/watch?v=HZGCoVF3YvM) | Topics 2,7–8 uncertainty and $P$ as sizes | Visual unit-whole intuition for measures on events |
+| [StatQuest — Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4) | Topic 8 meaning of $P$ / likelihood language | Separates formal $P$ talk from casual “likely” |
+| [MIT 6.041SC — Lecture 1 Probability models and axioms](https://www.youtube.com/watch?v=j9WZyLZCBzs) | Topics 4–7 Ω, events, axioms | University parallel to the $P$ properties |
+| [Seeing Theory — Basic Probability (Brown)](https://seeingtheory.brown.edu/basic-probability/index.html) | Topics 4,7 sample space & events | Interactive outcomes → events practice |
+| [Josh Starmer StatQuest homepage](https://statquest.org/) | Topics 1,8 bridge stats language | Short blog/videos that stay concrete |
+| [Lec 01 package (this series)](../02-Lec01-Overview-Function-Approximation/NOTES.md) | Topic 1 FA bridge | Same course’s FA setup this lecture assumes |
 
 ---
 
 ## Sources
 
-- Video: https://www.youtube.com/watch?v=YLx3hBqt28k
-- Channel: NPTEL — Indian Institute of Science, Bengaluru
-- Package artifacts: `TRANSCRIPT.md`, `raw/captions.en.timed.txt`, `raw/claims/`, `raw/coverage-checklist.md`
-- Course context: Mathematical Foundations of Machine Learning (function approximation → probability)
+- Video: [Lec 02 Recap of Probability Theory - 1, Part 1](https://www.youtube.com/watch?v=YLx3hBqt28k)  
+- Channel: NPTEL — Indian Institute of Science, Bengaluru  
+- Skill: `youtube-lecture-tutor`  
+- Captions: auto-captions cleaned in TRANSCRIPT.md / claim sheets  

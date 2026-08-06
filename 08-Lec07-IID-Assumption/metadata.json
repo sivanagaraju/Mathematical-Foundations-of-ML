@@ -1,0 +1,27 @@
+{
+  "title": "Lec 07 IID Assumption",
+  "video_id": "C83xmx80tMo",
+  "url": "https://www.youtube.com/watch?v=C83xmx80tMo",
+  "duration_seconds": 1841,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Independent Distributions, Identical Distributions",
+  "playlist_index": 9,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 7,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Identically distributed; two views of N points",
+    "Non-IID breaks; event independence",
+    "Independence across points, not dimensions",
+    "Two viewpoints, sampling, and when IID language applies",
+    "Design choice of dataset; test from the same P",
+    "Labels vs one RV; supervised names; ML = estimate P",
+    "Labels synthetic; Q&A recap; formal ML problem"
+  ]
+}

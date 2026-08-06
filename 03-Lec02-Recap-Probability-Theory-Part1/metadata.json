@@ -4,29 +4,24 @@
   "url": "https://www.youtube.com/watch?v=YLx3hBqt28k",
   "duration_seconds": 1933,
   "channel": "NPTEL - Indian Institute of Science, Bengaluru",
-  "instructor": "Prof. Prathosh A P",
-  "description": "Random Experiment, Probability Triplet",
-  "playlist_id": "PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu",
+  "instructor": "NPTEL IISc",
   "playlist_index": 3,
   "skill": "youtube-lecture-tutor",
   "content_type": "math_technical",
+  "topic_count": 8,
   "package_variant": "educative-spine-v3",
   "package_status": "current",
   "requires_claim_mining": true,
-  "topic_count": 8,
-  "topics": [
-    "From function approximation to why physics fails",
-    "Statistical turn and the FA↔distribution bridge",
-    "Decide under uncertainty; the random experiment",
-    "Every ML datapoint comes from a random experiment",
-    "Sample space Omega",
-    "Why measures — the length analogy",
-    "Subsets of Omega, events, and the need for P",
-    "Probability measure P — properties, meaning, abstraction"
-  ],
-  "worldview_arc": "deterministic FA → probabilistic setup (RE → Ω → events F → P)",
-  "claims_mined": 70,
-  "claims_must_teach": 70,
   "beginner_prereqs": true,
-  "note": "Part 1 of probability recap; RV/distribution functions named but deferred"
+  "ingest_evidence": "E3",
+  "topics": [
+    "From FA to the statistical path",
+    "Uncertainty, RE, where randomness stops",
+    "RE in ML: X-ray, spam, brain",
+    "Sample space Omega",
+    "Why measure: length/Lebesgue analogy",
+    "Omega non-numeric; subsets",
+    "Probability measure P, axioms, events",
+    "Meaning deferred; abstraction; close"
+  ]
 }

@@ -1,0 +1,27 @@
+{
+  "title": "Lec 08 Distribution Estimation",
+  "video_id": "aYb8KG9JYsg",
+  "url": "https://www.youtube.com/watch?v=aYb8KG9JYsg",
+  "duration_seconds": 1726,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Distribution Estimation",
+  "playlist_index": 10,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 7,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Context, dataset raw material, range points",
+    "Worldview and IID recap",
+    "Foundational problem: estimate P and/or sample",
+    "What to estimate: moments, P(Y|X), class/reg",
+    "Use cases P(Y), P(X), P(X|Y); inpainting",
+    "Supervised vs unsupervised packaging",
+    "Notation, P(Y)≠P(X|Y), densities next"
+  ]
+}

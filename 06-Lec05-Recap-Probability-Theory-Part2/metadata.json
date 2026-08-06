@@ -1,0 +1,27 @@
+{
+  "title": "Lec 05 Recap of Probability Theory Part 2",
+  "video_id": "R69wew8RrPo",
+  "url": "https://www.youtube.com/watch?v=R69wew8RrPo",
+  "duration_seconds": 1302,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Joint Distribution, Conditional Distributions and Marginal Distributions",
+  "playlist_index": 7,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 7,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Recap: realizations and pushforward CDF",
+    "Vector-valued random variables",
+    "Multiple RVs on one sample space",
+    "Joint distribution via inverse-image intersection",
+    "Vector RV equals d scalars on the same Ω",
+    "Conditional probability and distributions",
+    "Marginals and the X-ray bridge"
+  ]
+}

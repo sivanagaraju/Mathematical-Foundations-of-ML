@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · Lec 07 · IID Assumption</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · Lec 07 · IID Assumption</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q1", "part": "prerequisites", "tag": "Warm-up · identical", "anchor": "PREREQUISITES.md#p1-identical", "prompt": "What does identically distributed mean for n data points in the warm-up?", "options": [{"key": "A", "text": "All points must be numerically equal pixelwise"}, {"key": "B", "text": "They share the same underlying distribution P (experimental conditions not shifting)"}, {"key": "C", "text": "Pixels inside one image are independent"}, {"key": "D", "text": "The sample space must be empty"}], "answer": "B", "whyCorrect": "Identical = same law P for every point.", "whyOthers": {"A": "Same distribution ≠ identical values.", "C": "That confuses independence axes.", "D": "Nonsense."}, "diagram": "  z1,…,zn ~ same P", "useLater": "Topic 1."}, {"id": "q2", "part": "prerequisites", "tag": "Warm-up · event independence", "anchor": "PREREQUISITES.md#p2-indep-events", "prompt": "When are events A and B statistically independent?", "options": [{"key": "A", "text": "P(A∩B)=P(A)+P(B)"}, {"key": "B", "text": "P(A∪B)=P(A)P(B)"}, {"key": "C", "text": "P(A∩B)=P(A)P(B)"}, {"key": "D", "text": "P(A)=P(B)=0 always"}], "answer": "C", "whyCorrect": "Independence is the product rule on the intersection.", "whyOthers": {"A": "Sum is the wrong operator here.", "B": "Union is not the independence definition.", "D": "Not required."}, "diagram": "  P(A∩B)=P(A)P(B)", "useLater": "Topic 2 product joints."}, {"id": "q3", "part": "prerequisites", "tag": "Warm-up · points vs dims", "anchor": "PREREQUISITES.md#p3-points-vs-dims", "prompt": "Under the IID assumption, what is independent?", "options": [{"key": "A", "text": "Every pixel inside one image is independent of every other pixel"}, {"key": "B", "text": "Different data points / observations of each other (e.g. image1 and image2)"}, {"key": "C", "text": "Ω and R^d as sets"}, {"key": "D", "text": "Only the empty dataset"}], "answer": "B", "whyCorrect": "Critical axis: independence across points, not dimensions.", "whyOthers": {"A": "The main trap; pixels usually depend.", "C": "Not the IID claim.", "D": "Nonsense."}, "diagram": "  points ⊥ · pixels may depend", "useLater": "Topic 3 kill shot."}, {"id": "q4", "part": "prerequisites", "tag": "Warm-up · two views", "anchor": "PREREQUISITES.md#p4-two-views", "prompt": "Which pair are the two equivalent views of n data points?", "options": [{"key": "A", "text": "n realizations of one RV, or one realization of n RVs sharing a law"}, {"key": "B", "text": "Only density heights, or only filenames"}, {"key": "C", "text": "Train set empty, or test set empty"}, {"key": "D", "text": "Pixels independent, or labels deleted"}], "answer": "A", "whyCorrect": "Both stories describe the usual dataset; multi-RV view needs full IID words.", "whyOthers": {"B": "Not the lecture views.", "C": "Unrelated.", "D": "Wrong axes."}, "diagram": "  n trials of 1  OR  1 trial of n", "useLater": "Topic 4."}, {"id": "q5", "part": "prerequisites", "tag": "Warm-up · sampling", "anchor": "PREREQUISITES.md#p5-sampling", "prompt": "What does sampling mean operationally in the warm-up?", "options": [{"key": "A", "text": "Deleting the sample space"}, {"key": "B", "text": "Conducting multiple trials of the underlying random experiment"}, {"key": "C", "text": "Setting all probabilities to 1"}, {"key": "D", "text": "Only shuffling filenames"}], "answer": "B", "whyCorrect": "Sampling = multiple trials; tilde means drawn from.", "whyOthers": {"A": "Opposite.", "C": "Nonsense.", "D": "Not the definition."}, "diagram": "  n trials of RE → n observations", "useLater": "Topic 4 tilde."}, {"id": "q6", "part": "prerequisites", "tag": "Warm-up · train/test", "anchor": "PREREQUISITES.md#p6-train-test", "prompt": "Why must test data be assumed to share the training distribution under this theory?", "options": [{"key": "A", "text": "Because algorithms estimate that distribution; other P breaks the assumption"}, {"key": "B", "text": "Because test data must be empty"}, {"key": "C", "text": "Because train and test must be pixelwise identical"}, {"key": "D", "text": "Because IID forbids any test set"}], "answer": "A", "whyCorrect": "Same-P is built into the estimation story; domain shift is a broken assumption.", "whyOthers": {"B": "Test is needed to evaluate.", "C": "Same P ≠ same pixels.", "D": "False."}, "diagram": "  train ~ P · test ~ P", "useLater": "Topic 5."}, {"id": "q7", "part": "prerequisites", "tag": "Warm-up · ML slogan", "anchor": "PREREQUISITES.md#p8-given-d-estimate-p", "prompt": "What is the one-line machine learning problem in this course language?", "options": [{"key": "A", "text": "Given D sampled from unknown P, estimate P (and optionally sample)"}, {"key": "B", "text": "Delete all data and guess labels by taste"}, {"key": "C", "text": "Only draw network diagrams with no distributions"}, {"key": "D", "text": "Force every pixel independent always"}], "answer": "A", "whyCorrect": "Given D, estimate P — course spine.", "whyOthers": {"B": "Not ML here.", "C": "Opposite of the slogan.", "D": "IID trap."}, "diagram": "  D ~ P → estimate P", "useLater": "Topics 6–7."}, {"id": "q8", "part": "prerequisites", "tag": "Warm-up · self-supervised", "anchor": "PREREQUISITES.md#p7-supervised-names", "prompt": "In the warm-up, what is self-supervised learning packaging?", "options": [{"key": "A", "text": "Forbidding any labels forever"}, {"key": "B", "text": "Using some dimensions of the data itself as a label (e.g. mask and reconstruct)"}, {"key": "C", "text": "Only physics simulators with no data"}, {"key": "D", "text": "Setting P=0"}], "answer": "B", "whyCorrect": "Self-supervised carves y from x; inpainting is the lecture example.", "whyOthers": {"A": "That is closer to unsupervised packaging.", "C": "Not the definition.", "D": "Nonsense."}, "diagram": "  mask part of x → predict as y", "useLater": "Topic 6 inpainting."}, {"id": "q9", "part": "prerequisites", "tag": "Warm-up · IID letter split", "anchor": "PREREQUISITES.md#p1-identical", "prompt": "IID packs two separate assumptions. Which pair matches Independently vs Identically?", "options": [{"key": "A", "text": "Independently = same P for every row; Identically = product joint across points"}, {"key": "B", "text": "Independently = pixels independent inside one image; Identically = train equals test pixelwise"}, {"key": "C", "text": "Independently = across data points (joint factors as a product over rows); Identically = every point shares the same underlying distribution P"}, {"key": "D", "text": "Independently and Identically are synonyms; only one claim exists"}], "answer": "C", "whyCorrect": "IID = two glued claims. Independent concerns the multi-point product structure across observations. Identical concerns one shared law P (stable experimental conditions). You can break one without the other.", "whyOthers": {"A": "Swaps the two meanings.", "B": "Confuses independence axes and confuses same-P with identical pixels.", "D": "They are not synonyms; both letters matter."}, "diagram": "  I: product over rows · I: same P", "useLater": "Topics 1–3 unpack each letter."}, {"id": "q10", "part": "prerequisites", "tag": "Warm-up · product not sum", "anchor": "PREREQUISITES.md#p2-indep-events", "prompt": "For statistically independent events A and B, which formula is the definition?", "options": [{"key": "A", "text": "P(A∩B)=P(A)+P(B)"}, {"key": "B", "text": "P(A∪B)=P(A)+P(B)+P(A∩B)"}, {"key": "C", "text": "P(A∩B)=P(A)/P(B)"}, {"key": "D", "text": "P(A∩B)=P(A)P(B)  (product, not sum)"}], "answer": "D", "whyCorrect": "Independence is the product rule on the intersection. In class he presses sum vs product — the answer is product. The same idea lifts to RVs: joint = product of marginals; for n IID points, p(z1,…,zn)=∏ p(zi).", "whyOthers": {"A": "Sum is the common wrong instinct; that is not independence.", "B": "Not the independence definition (and the right-hand side is not a standard identity).", "C": "That resembles a conditional ratio, not independence."}, "diagram": "  P(A∩B)=P(A)·P(B)", "useLater": "Topic 2; joint of n data points under independence."}, {"id": "q11", "part": "prerequisites", "tag": "Warm-up · rows vs columns", "anchor": "PREREQUISITES.md#p3-points-vs-dims", "prompt": "View a dataset as an n×d table (n points, d features/pixels). Where does IID independence live?", "options": [{"key": "A", "text": "Only across columns: every feature independent of every other feature inside a row"}, {"key": "B", "text": "Only on the diagonal cells of the table"}, {"key": "C", "text": "Across rows: data point i independent of data point j (not across columns inside one row)"}, {"key": "D", "text": "Nowhere; IID never mentions independence"}], "answer": "C", "whyCorrect": "IID independence is across observations (rows): image1 ⊥ image2. It does not claim pixel a ⊥ pixel b inside one image. Some algorithms add column independence as an extra assumption; that is not default IID.", "whyOthers": {"A": "The main trap — within-row feature independence is extra, not IID.", "B": "Nonsense.", "D": "The first I is independence (across points)."}, "diagram": "  n×d table: ⊥ across rows, not columns", "useLater": "Topic 3 kill shot; N×d scalars still group by n vectors."}, {"id": "q12", "part": "notes", "tag": "Map · architecture", "anchor": "NOTES.md#executive-summary--architecture-of-this-lecture", "prompt": "On the master map, which chain is the whole-video job?", "options": [{"key": "A", "text": "Delete probability and only store filenames"}, {"key": "B", "text": "Unpack identical + independent(across points), sampling, design of RE, then ML = estimate P from D"}, {"key": "C", "text": "Prove all pixels independent always"}, {"key": "D", "text": "Ban test sets forever"}], "answer": "B", "whyCorrect": "Exec Summary arc of Lec 07.", "whyOthers": {"A": "Opposite.", "C": "Wrong axis.", "D": "Test is required for evaluation."}, "diagram": "  IID → sample → estimate P", "useLater": "Closed-book map."}, {"id": "q13", "part": "notes", "tag": "Topic 2 · non-IID", "anchor": "NOTES.md#topic-2-non-iid-breaks-event-independence-0200–0422", "prompt": "Why might a model trained on lung X-rays fail on brain MRI under this lecture?", "options": [{"key": "A", "text": "Because files cannot be vectors"}, {"key": "B", "text": "Because they are not identically distributed — different experiments / conditions"}, {"key": "C", "text": "Because independence forbids any medical image"}, {"key": "D", "text": "Because P must equal 0"}], "answer": "B", "whyCorrect": "Classic non-IID / identity break across domains.", "whyOthers": {"A": "Images are stacked to vectors.", "C": "Independence is not that claim.", "D": "Nonsense."}, "diagram": "  lung P ≠ brain P", "useLater": "Domain shift language."}, {"id": "q14", "part": "notes", "tag": "Topic 3 · kill shot", "anchor": "NOTES.md#topic-3-independence-across-points-not-dimensions-0422–0736", "prompt": "What does the lecture say independence in IID does NOT mean?", "options": [{"key": "A", "text": "Independence between different data points"}, {"key": "B", "text": "Independence of the joint product of n points"}, {"key": "C", "text": "Independence across dimensions/pixels inside one vector-valued data point"}, {"key": "D", "text": "Anything about multiple observations"}], "answer": "C", "whyCorrect": "Independence is across points; pixels usually depend.", "whyOthers": {"A": "That IS the IID independence claim.", "B": "Related to the multi-point product.", "D": "Opposite."}, "diagram": "  image1 ⊥ image2 · not pixel⊥pixel", "useLater": "Model structure inside an image."}, {"id": "q15", "part": "notes", "tag": "Topic 4 · one-RV view", "anchor": "NOTES.md#topic-4-two-viewpoints-sampling-and-when-iid-language-applies-0736–1101", "prompt": "If you view the dataset as n realizations of a single random variable, what becomes redundant?", "options": [{"key": "A", "text": "The sample space"}, {"key": "B", "text": "Talking about multi-RV independence/identity packaging (only one RV)"}, {"key": "C", "text": "The existence of data"}, {"key": "D", "text": "All of probability"}], "answer": "B", "whyCorrect": "With one RV, multi-RV IID language is not needed the same way.", "whyOthers": {"A": "Ω remains.", "C": "Data are the realizations.", "D": "Nonsense."}, "diagram": "  one RV · n realizations", "useLater": "When full IID phrase is required."}, {"id": "q16", "part": "notes", "tag": "Topic 5 · design", "anchor": "NOTES.md#topic-5-design-choice-of-dataset-test-from-the-same-p-1101–1529", "prompt": "Faces vs buildings: what does the lecture call the choice to treat them as one experiment or two?", "options": [{"key": "A", "text": "A design / packaging choice of the random experiment and dataset"}, {"key": "B", "text": "Impossible by mathematics"}, {"key": "C", "text": "Always mandatory to mix them"}, {"key": "D", "text": "Forbidden once IID is defined"}], "answer": "A", "whyCorrect": "What counts as one RE is design; train faces test buildings breaks identity if not packaged together.", "whyOthers": {"B": "You can package either way.", "C": "Not mandatory.", "D": "IID is assumption on your packaging."}, "diagram": "  design: one RE or two", "useLater": "Dataset construction."}, {"id": "q17", "part": "notes", "tag": "Topic 6 · slogan", "anchor": "NOTES.md#topic-6-labels-vs-one-rv-supervised-names-ml--estimate-p-1529–2103", "prompt": "What is the lecture’s one-line definition of all machine learning?", "options": [{"key": "A", "text": "Given D, estimate P (unknown distribution of the samples)"}, {"key": "B", "text": "Only draw UI mockups"}, {"key": "C", "text": "Ban all random variables"}, {"key": "D", "text": "Set every probability to 1/2"}], "answer": "A", "whyCorrect": "Given D estimate P — rest of course builds estimators.", "whyOthers": {"B": "Not the math definition.", "C": "Opposite.", "D": "Nonsense."}, "diagram": "  D → estimate P", "useLater": "Whole algorithm arc."}, {"id": "q18", "part": "notes", "tag": "Topic 6 · flavors", "anchor": "NOTES.md#topic-6-labels-vs-one-rv-supervised-names-ml--estimate-p-1529–2103", "prompt": "Estimating P(Y|X) with discrete Y is called what in the lecture’s packaging?", "options": [{"key": "A", "text": "Only generative joint sampling"}, {"key": "B", "text": "A classification problem (classifier)"}, {"key": "C", "text": "Deleting X"}, {"key": "D", "text": "Always regression in R^k"}], "answer": "B", "whyCorrect": "P(Y|X) with discrete Y → classification; continuous Y → regression.", "whyOthers": {"A": "Joint P_{X,Y} / sampling is generative packaging.", "C": "Nonsense.", "D": "Regression when Y in R^k."}, "diagram": "  P(Y|X) discrete → classification", "useLater": "Problem naming."}, {"id": "q19", "part": "notes", "tag": "Topic 6 · inpainting", "anchor": "NOTES.md#topic-6-labels-vs-one-rv-supervised-names-ml--estimate-p-1529–2103", "prompt": "In the inpainting example, what plays the role of the label?", "options": [{"key": "A", "text": "The missing / masked pixels to reconstruct"}, {"key": "B", "text": "The empty sample space only"}, {"key": "C", "text": "The learning rate"}, {"key": "D", "text": "A separate hospital name always"}], "answer": "A", "whyCorrect": "Self-supervised: dimensions of data act as label via masking.", "whyOthers": {"B": "Not the example.", "C": "Optimizer detail.", "D": "Not required."}, "diagram": "  mask pixels → reconstruct", "useLater": "Self-supervised packaging."}, {"id": "q20", "part": "notes", "tag": "Topic 7 · formal", "anchor": "NOTES.md#topic-7-labels-synthetic-qa-recap-formal-ml-problem-2103–3041", "prompt": "In the formal board statement, why write P_X rather than always P_{X,Y}?", "options": [{"key": "A", "text": "Because labels never exist"}, {"key": "B", "text": "Because Y can be folded into a bigger X; packaging is flexible"}, {"key": "C", "text": "Because P is always discrete only"}, {"key": "D", "text": "Because sampling is forbidden"}], "answer": "B", "whyCorrect": "He notes Y can be combined into X; still estimate the unknown law of the data object.", "whyOthers": {"A": "Labels are optional packaging.", "C": "Not the reason.", "D": "Generative may learn sampling."}, "diagram": "  Y foldable into X", "useLater": "Unified estimation view."}, {"id": "q21", "part": "notes", "tag": "Connect · axes to ML", "anchor": "NOTES.md#topic-3-independence-across-points-not-dimensions-0422–0736", "prompt": "Which connection links the independence-axes topic to estimating P from a dataset?", "options": [{"key": "A", "text": "We factor the joint over n points (product) while still allowing rich dependence inside each point’s features"}, {"key": "B", "text": "We force every feature independent so P is always uniform"}, {"key": "C", "text": "We never use products of any kind"}, {"key": "D", "text": "We delete all but one pixel forever"}], "answer": "A", "whyCorrect": "IID product is over observations; within-point structure remains modelable.", "whyOthers": {"B": "Extra assumption, not default IID.", "C": "Independence is product.", "D": "Nonsense."}, "diagram": "  ∏_i p(zi) · structure inside zi", "useLater": "Likelihood of whole datasets."}, {"id": "q22", "part": "notes", "tag": "Topic 4 · identical redundant", "anchor": "NOTES.md#topic-4-two-viewpoints-sampling-and-when-iid-language-applies-0736–1101", "prompt": "If you package the dataset as n realizations of a single random variable, why does 'identically distributed' become redundant?", "options": [{"key": "A", "text": "Because there is only one RV, so multi-RV 'same distribution as each other' talk is automatic packaging, not a second claim between many RVs"}, {"key": "B", "text": "Because all probabilities become zero"}, {"key": "C", "text": "Because independence forces all values equal"}, {"key": "D", "text": "Because sampling is forbidden in that view"}], "answer": "A", "whyCorrect": "With one RV and n trials, you do not need to say the RV is identically distributed with other RVs — there is only one. Full IID language (identical + independent between RVs) lives naturally in the multi-RV view: one realization of n RVs sharing P and independent.", "whyOthers": {"B": "Nonsense.", "C": "Independence is not equality of values.", "D": "Sampling is exactly multiple trials of that one RE/RV."}, "diagram": "  one RV · n trials → identity automatic", "useLater": "When textbooks write multi-RV product form."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

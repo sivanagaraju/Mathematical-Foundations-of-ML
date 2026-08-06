@@ -1,212 +1,151 @@
-# Warm-up before Lec 02 (probability foundations)
+# Prerequisites — warm-up before Lec 02 (probability foundations)
 
-> **Do this first** if sets, subsets, “size,” or functions feel shaky.  
-> Then open [NOTES.md](./NOTES.md) at the **Executive Summary**.  
-> This is a **slow basics** warm-up (you asked for stronger foundations) — still not a second full lecture.
+> **Do this first.** Then open [NOTES.md](./NOTES.md) at the **Executive Summary** map.  
+> These are **basics** so the master map (random experiment → sample space → events → probability measure) does not freeze you.  
+> Not a second lecture — short scenes only.
 
 ```
-  After this warm-up you should be able to say:
+  After this warm-up you can say:
 
-  "A set is a bag of distinct things; a subset is a smaller bag inside it.
-   A function maps each allowed input to exactly one output.
-   Function approximation means: estimate an unknown map f from data so we can
-   predict on new inputs (this course’s ML goal before probability language).
-   To compare bags we need a size (a measure), not just a list of members.
-   Probability will be a special size on subsets of outcomes, with total size 1.
-   Outcomes of a messy real process can live in an abstract bag — they need not
-   start as numbers on a number line."
+  "A set is a bag of allowed outcomes; a subset is some of them."
+  "A measure is a fair way to size sets so we can compare them."
+  "Uncertainty is about the situation; a decision is often still a single action."
+  "An experiment can produce different outcomes; we list them before we 'score' them."
+  "Last lecture's f was a mapping; this lecture sizes outcome-sets with a special measure P."
 ```
+
+If you finished Lec 01, skim [function approximation warm-ups](../02-Lec01-Overview-Function-Approximation/PREREQUISITES.md) for domain/range/data pairs; the ideas below are the new probability vocabulary.
 
 ---
 
-## Sets (bags of things)
+## 1. Sets: bags of things
 
 <a id="p1-sets"></a>
 
-A **set** is a collection of **distinct** objects. Order does not matter. Duplicates do not count twice.
-
-**Membership.** We write $x \in S$ when $x$ is in the bag $S$, and $x \notin S$ when it is not.
-
-**Empty set.** The empty bag $\emptyset$ contains nothing.
-
-**Examples**
-
-- Coin faces: $\Omega_{\text{coin}} = \{H, T\}$  
-- Die faces: $\Omega_{\text{die}} = \{1,2,3,4,5,6\}$  
-- Labels for disease: $\mathcal{Y} = \{0,1\}$
+A **set** is a collection of objects treated as a whole. Picture a bag with a label.
 
 ```
-  bag S = { apple, banana, cherry }
-
-  apple ∈ S     grape ∉ S     empty bag = ∅
+  Ω = { H, T }          coin faces
+  D = {1,2,3,4,5,6}     die faces
 ```
 
-In this lecture the big bag of **all possible outcomes** of an experiment is called the **sample space** and is written $\Omega$.
+You do not need fancy axioms yet. You need: “these are the allowed members.”
 
 ---
 
-## Subsets and “events” (questions about outcomes)
+## 2. Subsets: some of the bag
 
 <a id="p2-subsets"></a>
 
-A **subset** $A \subseteq \Omega$ is a bag made only from members already in $\Omega$.
-
-Everyday questions about an experiment become subsets:
-
-| Everyday question | Subset of die $\Omega = \{1..6\}$ |
-|-------------------|-----------------------------------|
-| “Even?” | $A = \{2,4,6\}$ |
-| “At least 5?” | $B = \{5,6\}$ |
-| “Impossible?” | $\emptyset$ |
-| “Anything possible?” | $\Omega$ |
-
-**Union** $A \cup B$ = “in A or B (or both).”  
-**Intersection** $A \cap B$ = “in both.”  
-**Disjoint** means $A \cap B = \emptyset$ (no shared members).
+A **subset** is a smaller (or equal) bag made only from members of a larger set.
 
 ```
-  Ω = {1, 2, 3, 4, 5, 6}
-       ┌─────────────┐
-  A ── │ 2   4   6   │  even
-       └─────────────┘
-  B ── {5, 6}           ≥ 5
-  A ∩ B = {6}
-  A ∪ B = {2, 4, 5, 6}
+  Die Ω = {1,2,3,4,5,6}
+  Even faces A = {2,4,6}   ⊂ Ω
+  Empty set ∅ = { }        no members
 ```
 
-The lecture will call (allowed) subsets of $\Omega$ **events**. You do not need the full formal theory of “which subsets are allowed” yet — just: **questions about outcomes = subsets**.
+In probability language later, many important subsets are called **events** (after we decide which subsets we are allowed to measure).
 
 ---
 
-## Functions (reliable maps)
+## 3. Functions: rules between sets
 
 <a id="p3-functions"></a>
 
-A **function** $f : \mathcal{X} \to \mathcal{Y}$ is a rule: each allowed input from $\mathcal{X}$ produces **exactly one** output in $\mathcal{Y}$.
+A **function** $f$ from set $X$ to set $Y$ assigns **exactly one** output in $Y$ to each input in $X$.
+
+$$
+f : X \to Y
+$$
+
+Last lecture: unknown $f$ mapped images to labels. This lecture will say a **random variable** is also a function (from outcomes to numbers) — deterministic as a map, even if the experiment feels “random.”
 
 ```
-  OK function                    NOT a function
-  x=1 ──► 2                      x=2 ──► 5
-  x=2 ──► 5                      x=2 ──► 9   ← two outputs for same x
-  x=3 ──► 10
+  outcome ω  ──g──►  number g(ω)
 ```
-
-**Last lecture (recap):** machine learning as **function approximation** means estimate an unknown map $f$ from data pairs $(x,y)$.
-
-**This lecture (preview):** a **random variable** will later be a function from outcomes $\omega \in \Omega$ to numbers or vectors — and the lecturer stresses it is a **deterministic** function of $\omega$, not a “random object” in casual English. You only need the *function* idea for now.
 
 ---
 
-## Function approximation (the ML goal this lecture still serves)
-
-<a id="p3b-fa"></a>
-
-**Function approximation (FA)** is the short name for a simple job:
-
-1. There is (or we hope there is) a map $f$ from inputs to outputs.  
-2. We only see a finite list of pairs $(x_i, y_i)$.  
-3. We **estimate** $f$ so that for a **new** $x$ we can still predict $y$.
-
-```
-  known pairs:  (x1 → y1), (x2 → y2), …
-  new input:    x_new  →  ???   ← prediction needs an estimated f
-```
-
-**Tiny example.** Inputs = chest X-ray images; outputs = $\{0,1\}$ (no disease / disease). Function approximation means: estimate the image→label map so a **new** film still gets a predicted label.
-
-This lecture does **not** replace that goal. It builds **probability tools** that will later describe the same project as “distribution estimation.” If you only remember one sentence from this warm-up: **FA = estimate a map for prediction.**
-
----
-
-## Size / measure (why listing members is not enough)
+## 4. What “measure” means before probability
 
 <a id="p4-measure"></a>
 
-Two subsets of the real line can have the same “count” story but different **size**.
+To compare sets you need a **sizing rule** — a **measure**.
 
-Example: which is bigger, $[0,1]$ or $[0,10]$? Both are infinite sets of points. What we actually use is **length**:
-
-$$
-\text{length}([a,b]) = b - a
-$$
-
-So length($[0,1]$) $= 1$ and length($[0,10]$) $= 10$. **Length is a measure.**
+On the real line, **length** is the familiar measure: the interval from 0 to 2 is “bigger” than from 0 to 1 because length 2 > length 1. In the plane, people use **area**; in space, **volume**.
 
 ```
-  number line
-  |====|                  length 1   ← set A
-  |====================|  length 10  ← set B  (bigger under length)
+  set A: [0,1]     length 1
+  set B: [0,3]     length 3
+  → B is larger under length measure
 ```
 
-Other settings use other sizes:
-
-| World | Familiar measure |
-|-------|------------------|
-| subsets of $\mathbb{R}$ | length |
-| subsets of $\mathbb{R}^2$ | area |
-| subsets of $\mathbb{R}^3$ | volume |
-
-**Key idea for the lecture:** once you have a set of outcomes $\Omega$, you still need a **measure** on its subsets before you can talk about “how large” an event is. Probability will be one special choice of measure.
+Probability will invent a special measure $P$ on outcome-sets, capped so the whole sample space gets size 1.
 
 ---
 
-## The special number range $[0,1]$ and “total size 1”
+## 5. Uncertainty vs a final decision
 
-<a id="p5-unit"></a>
+<a id="p5-uncertainty"></a>
 
-A length can be $100$ meters. A **probability measure** is built so every event gets a size between $0$ and $1$, and the **whole** sample space has size **exactly 1**:
-
-$$
-P(\Omega) = 1, \qquad 0 \le P(A) \le 1
-$$
-
-Think of the whole cake as size $1$; each slice is a fraction of the cake.
+**Uncertainty:** you do not know which outcome will appear.  
+**Decision:** you still often must pick **one** action (treat / do not treat; send to spam folder or not).
 
 ```
-  whole cake Ω     size = 1
-  piece A          size = P(A) ∈ [0, 1]
-  empty piece ∅    size = 0
+  uncertain model:  "maybe diseased"
+  clinical decision: treat or not treat  ← one bit
 ```
 
-If two pieces **do not overlap** (disjoint events), their sizes **add**. That is the cake rule behind $P(A \cup B) = P(A)+P(B)$ when $A \cap B = \emptyset$.
-
-You do **not** need a deep philosophy of “chance” to start. Treat $P$ first as a **size function** with these rules. Meaning (“70% likely”) can come later — that is exactly the lecturer’s order.
+The lecture’s joke: probability helps under uncertainty, but doctors and spam filters still output deterministic decisions.
 
 ---
 
-## Abstract outcomes (not everything starts as a number)
+## 6. Experiments and outcomes (pre–random experiment)
 
-<a id="p6-abstract"></a>
+<a id="p6-outcomes"></a>
 
-Beginners often assume every outcome is already a number on a line. The lecture fights that habit.
-
-- Coin outcomes $\{H,T\}$ are **symbols**, not numbers, until you *choose* to code them.  
-- An X-ray “outcome” in the philosophical sample space can mean the whole messy story (person → hospital → image → label), not “a $512\times 512$ matrix” alone.  
-- Numbers on disk (pixels, tokens) come later as **measurements** of those outcomes.
+An **experiment** (everyday sense) is a procedure you run. An **outcome** is one possible result after it runs.
 
 ```
-  abstract outcome ω  (story of the experiment)
-           │
-           │  later: random variable / measurement
-           ▼
-     numbers on disk  (image, email text, …)
+  Experiment: toss a coin once
+  Outcomes:   H or T
+
+  Experiment: open one email and read it
+  Outcomes:   many possible email texts (abstract list)
 ```
 
-If this feels abstract, that is intentional. Probability starts with **sets of outcomes**, then puts a **size** on questions (subsets). Numbers come when we map outcomes to measurements.
+Probability formalizes this as a **random experiment** whose full list of possible outcomes is the **sample space**.
 
 ---
 
-## Mini glossary (words the NOTES map will use)
+## 7. Numbers between 0 and 1 as “sizes”
 
-| Word | Plain meaning (for now) |
-|------|-------------------------|
-| **Function approximation (FA)** | Estimate unknown map $f$ from data to **predict** on new inputs |
-| **Random experiment** | Messy process we treat as the source of outcomes (not fully defined) |
-| **Sample space $\Omega$** | Set of all possible outcomes of that experiment |
-| **Event** | A subset of $\Omega$ — a yes/no question about the outcome |
-| **Probability measure $P$** | A size on events with $P(\Omega)=1$ and $0\le P(A)\le 1$ |
+<a id="p7-unit-interval"></a>
 
-You do **not** need to master formal measure theory before the NOTES. You need these words to read the master map without freezing on acronyms.
+Scores in $[0,1]$ are handy: 0 = none of the whole, 1 = the entire whole, 0.7 = seventy percent of a unit whole.
+
+```
+  0 --------0.7-------- 1
+  empty               full sample space
+```
+
+When $P(A)=0.7$, people often *say* “70% chance,” but the math first only guarantees: $A$ got measure 0.7 under the rules of $P$.
+
+---
+
+## 8. From last lecture: why we need this tooling
+
+<a id="p8-why-from-fa"></a>
+
+**Function approximation (FA)** said: given pairs $D$, estimate unknown $f$. For planets and $F=ma$, physics sometimes writes $f$. For coin tosses and “diseased?” labels, physics is hard — so engineers use **many observations** (statistics).
+
+```
+  FA path:     D  →  estimate f
+  stats path:  many outcomes  →  estimate patterns / measures
+```
+
+This lecture builds the probability objects under that statistical path. Distribution estimation as the twin of FA is the bridge the instructor wants you to feel.
 
 ---
 

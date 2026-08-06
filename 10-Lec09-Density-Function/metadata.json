@@ -1,0 +1,25 @@
+{
+  "title": "Lec 09 Density Function",
+  "video_id": "_QrezNPmxDk",
+  "url": "https://www.youtube.com/watch?v=_QrezNPmxDk",
+  "duration_seconds": 485,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Density Function",
+  "playlist_index": 11,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 5,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Density notation and CDF integral definition",
+    "Trap: p(x) is not a probability",
+    "Uniform[0,1/2] density=2; likelihood",
+    "Why densities; continuous vs discrete PMF",
+    "Estimate density; P vs p; multi-d; next"
+  ]
+}
