@@ -1,0 +1,27 @@
+{
+  "title": "Lec 10 Challenge With ML",
+  "video_id": "767MLwniPKE",
+  "url": "https://www.youtube.com/watch?v=767MLwniPKE",
+  "duration_seconds": 2131,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Parametric Function, Distance Metric, Optimization Problem",
+  "playlist_index": 12,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 7,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Central problem: estimate unknown p; model = estimator",
+    "Dataset D, FA history, assume parametric form",
+    "Model choice p_θ; UFA; model vs algorithm",
+    "Distance metric d(p, p_θ); begging the question",
+    "Training = argmin; full three-step recipe",
+    "Scale, AGI aside, recipe → linreg/DNN/SVM",
+    "ERM equivalence next; formal recap"
+  ]
+}

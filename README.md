@@ -25,6 +25,10 @@ Law: `~/.grok/skills/youtube-lecture-tutor/`
 | [`08-Lec07-IID-Assumption/`](./08-Lec07-IID-Assumption/) | [Lec 07 IID Assumption](https://www.youtube.com/watch?v=C83xmx80tMo) | math_technical | Identical + independent(across points); ML = estimate P |
 | [`09-Lec08-Distribution-Estimation/`](./09-Lec08-Distribution-Estimation/) | [Lec 08 Distribution Estimation](https://www.youtube.com/watch?v=aYb8KG9JYsg) | math_technical | Given D estimate P; targets P(Y\|X)/P(Y)/…; disc vs gen |
 | [`10-Lec09-Density-Function/`](./10-Lec09-Density-Function/) | [Lec 09 Density Function](https://www.youtube.com/watch?v=_QrezNPmxDk) | math_technical | Density p; height≠prob; Uniform height 2; estimate p |
+| [`11-Lec10-Challenges-of-ML/`](./11-Lec10-Challenges-of-ML/) | [Lec 10 Challenge With ML](https://www.youtube.com/watch?v=767MLwniPKE) | math_technical | Unknown p; recipe p_θ→d→argmin; model≠algo; ERM next |
+| [`12-Lec11-Entropy/`](./12-Lec11-Entropy/) | [Lec 11 Entropy](https://www.youtube.com/watch?v=P6wjLz4dRTs) | math_technical | Surprisal −log P; entropy H=−∑p log p; need d |
+| [`13-Lec12-KL-Divergence/`](./13-Lec12-KL-Divergence/) | [Lec 12 KL Divergence](https://www.youtube.com/watch?v=ihkGbIdbbxc) | math_technical | Cross-entropy; KL=CE−H; asymmetric divergence |
+| [`14-Lec01-MFGAI-Introduction/`](./14-Lec01-MFGAI-Introduction/) | [Lec 01 Introduction (MF Generative AI)](https://www.youtube.com/watch?v=H05WDy9Mngk) | math_technical | RE→Ω→P→RV→estimate P_X; GenAI roadmap |
 
 ## Study one package
 

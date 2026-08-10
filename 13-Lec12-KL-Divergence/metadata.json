@@ -1,0 +1,25 @@
+{
+  "title": "Lec 12 Kullback-Leibler (KL) Divergence",
+  "video_id": "ihkGbIdbbxc",
+  "url": "https://www.youtube.com/watch?v=ihkGbIdbbxc",
+  "duration_seconds": 1009,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Cross Entropy, KL Divergence",
+  "playlist_index": 15,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 5,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Goal: pairwise distance; discrete PMFs",
+    "Cross-entropy H(p,q)",
+    "KL = CE - H; formula",
+    "Properties; not a metric",
+    "Continuous KL; board fix; stop"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "title": "Lec 11 Entropy",
+  "video_id": "P6wjLz4dRTs",
+  "url": "https://www.youtube.com/watch?v=P6wjLz4dRTs",
+  "duration_seconds": 1076,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Information, Surprisal, Entropy",
+  "playlist_index": 14,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 5,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Recap: density/dist, recipe, W1/W2 fix",
+    "Need distributional divergences",
+    "Surprisal I(A)=-log P(A)",
+    "Average surprisal for a discrete law",
+    "Entropy named; thermo aside; next"
+  ]
+}

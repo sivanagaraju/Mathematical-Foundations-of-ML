@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · Lec 10 Challenge With ML</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · Lec 10 Challenge With ML</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q1", "part": "prerequisites", "tag": "Warm-up · density", "anchor": "PREREQUISITES.md#p1-density-estimate", "prompt": "A density p_X is primarily a function that:", "options": [{"key": "A", "text": "Always returns a number in [0,1] at every point x"}, {"key": "B", "text": "Maps the range of X to non-negative reals; integrals over regions are probabilities"}, {"key": "C", "text": "Equals P(X=x) for continuous X"}, {"key": "D", "text": "Maps Omega directly to labels y"}], "answer": "B", "whyCorrect": "Density: range to R+; areas/integrals give probabilities. Height need not lie in [0,1].", "whyOthers": {"A": "Heights can exceed 1.", "C": "Continuous point probability is 0; height is not that probability.", "D": "That confuses Omega with the range of X."}, "diagram": "  p: range -> R+ ; area = probability", "useLater": "Central problem estimates this p."}, {"id": "q2", "part": "prerequisites", "tag": "Warm-up · IID", "anchor": "PREREQUISITES.md#p2-iid-dataset", "prompt": "IID samples in a dataset D mean:", "options": [{"key": "A", "text": "Samples are independent and each drawn from the same underlying law"}, {"key": "B", "text": "Each sample is drawn from a different unknown law"}, {"key": "C", "text": "Samples are dependent but identically distributed"}, {"key": "D", "text": "Samples must be integers"}], "answer": "A", "whyCorrect": "IID = independent + identically distributed from the same law.", "whyOthers": {"B": "That would not be identically distributed.", "C": "Independence is required for IID.", "D": "No type restriction."}, "diagram": "  D = {x1..xn} ~ same p, independent", "useLater": "Topic 2 setup."}, {"id": "q3", "part": "prerequisites", "tag": "Warm-up · parametric", "anchor": "PREREQUISITES.md#p3-parametric", "prompt": "A parametric family p_theta is best described as:", "options": [{"key": "A", "text": "One fixed density with no free numbers"}, {"key": "B", "text": "All unrestricted functions with integral 1"}, {"key": "C", "text": "Only neural networks"}, {"key": "D", "text": "A collection of functions sharing a shape, indexed by finite parameters theta"}], "answer": "D", "whyCorrect": "Shared shape; members differ by theta.", "whyOthers": {"A": "That is one instance, not a family.", "B": "That is nonparametric / unrestricted.", "C": "NNs are one example family, not the definition."}, "diagram": "  {p_theta : theta in Theta}", "useLater": "Recipe step 1."}, {"id": "q4", "part": "prerequisites", "tag": "Warm-up · model vs algo", "anchor": "PREREQUISITES.md#p4-model-vs-algo", "prompt": "Model choice vs algorithm:", "options": [{"key": "A", "text": "Model choice picks theta; algorithm picks the family"}, {"key": "B", "text": "They are identical words for training"}, {"key": "C", "text": "Model choice picks the family p_theta; the algorithm searches for a good theta inside that family"}, {"key": "D", "text": "Algorithm always invents a new family if the first is wrong"}], "answer": "C", "whyCorrect": "Family first (leap of faith); algorithm only picks theta inside it.", "whyOthers": {"A": "Roles reversed.", "B": "Lecture separates them carefully.", "D": "He stresses the algorithm will not fix a bad family."}, "diagram": "  family first -> then search theta", "useLater": "Topic 3 line vs quadratic trap."}, {"id": "q5", "part": "prerequisites", "tag": "Warm-up · argmin", "anchor": "PREREQUISITES.md#p6-argmin", "prompt": "For f(theta)=(theta-4)^2, what is argmin_theta f(theta)?", "options": [{"key": "A", "text": "0"}, {"key": "B", "text": "16"}, {"key": "C", "text": "4"}, {"key": "D", "text": "-4"}], "answer": "C", "whyCorrect": "arg min is the minimizer theta=4; the min value is 0.", "whyOthers": {"A": "That is the minimum value, not the argmin.", "B": "f(0)=16 is not the min.", "D": "Wrong side of 4."}, "diagram": "  argmin = 4 ; min value = 0", "useLater": "Training returns theta*, not only the loss number."}, {"id": "q6", "part": "prerequisites", "tag": "Warm-up · recipe", "anchor": "PREREQUISITES.md#p8-recipe", "prompt": "The three-step recipe skeleton is:", "options": [{"key": "A", "text": "Choose p_theta -> define d(p,p_theta) -> theta* = argmin d"}, {"key": "B", "text": "Collect D -> memorize D -> report accuracy"}, {"key": "C", "text": "Prove p known -> sample once -> stop"}, {"key": "D", "text": "Only backprop -> only transformers -> only GPUs"}], "answer": "A", "whyCorrect": "Model, distance, train by argmin — the lecture architecture.", "whyOthers": {"B": "Memorization is not the recipe.", "C": "p is unknown by definition of the challenge.", "D": "Tools, not the mathematical skeleton."}, "diagram": "  (1) model (2) distance (3) train", "useLater": "Entire NOTES map."}, {"id": "q7", "part": "notes", "tag": "Map · master recipe", "anchor": "NOTES.md#executive-summary--architecture-of-this-lecture", "prompt": "On the lecture master architecture, the central ordered recipe is:", "options": [{"key": "A", "text": "Optimize first, then invent a density without samples"}, {"key": "B", "text": "Only unsupervised clustering with no parameters"}, {"key": "C", "text": "Physics simulation of Omega without data"}, {"key": "D", "text": "Model p_theta -> distance d(p,p_theta) -> train by argmin d"}], "answer": "D", "whyCorrect": "Exec Summary blueprint: three slots define ML algorithms.", "whyOthers": {"A": "Order and ingredients wrong.", "B": "Too narrow and not the recipe.", "C": "Not this lecture’s system."}, "diagram": "  p_theta -> d -> argmin", "useLater": "Closed-book load-bearing claim."}, {"id": "q8", "part": "notes", "tag": "Topic 1 · model", "anchor": "NOTES.md#topic-1-central-problem-estimate-unknown-p-model--estimator-0011–0426", "prompt": "According to the lecture, a model is:", "options": [{"key": "A", "text": "An estimate / estimator of the underlying distribution"}, {"key": "B", "text": "The true density p itself"}, {"key": "C", "text": "Only the optimizer (SGD)"}, {"key": "D", "text": "The dataset D"}], "answer": "A", "whyCorrect": "Model = estimate of the underlying distribution (density estimator).", "whyOthers": {"B": "If you had true p, estimation would be done.", "C": "Optimizer is step 3 machinery.", "D": "D is the sample input."}, "diagram": "  model = estimator of p", "useLater": "All models wrong slogan."}, {"id": "q9", "part": "notes", "tag": "Topic 1 · slogan", "anchor": "NOTES.md#topic-1-central-problem-estimate-unknown-p-model--estimator-0011–0426", "prompt": "“All models are wrong. Some are useful” is justified because:", "options": [{"key": "A", "text": "Models never use data"}, {"key": "B", "text": "Every model has d=0 exactly"}, {"key": "C", "text": "Estimators differ from the true density by definition, yet some still help under a metric"}, {"key": "D", "text": "Only linear models are wrong"}], "answer": "C", "whyCorrect": "Density estimators cannot be the exact unknown truth; useful ones still score well.", "whyOthers": {"A": "They are built from samples.", "B": "That would mean perfect recovery always.", "D": "Slogan is about all estimators."}, "diagram": "  estimator != truth ; some useful", "useLater": "Compare models via metrics."}, {"id": "q10", "part": "notes", "tag": "Topic 2 · misnomer", "anchor": "NOTES.md#topic-2-dataset-d-fa-history-assume-parametric-form-0426–0752", "prompt": "The phrase “sample from density p” is a misnomer because strictly:", "options": [{"key": "A", "text": "Densities do not exist"}, {"key": "B", "text": "You sample from a distribution; density is a representation of that law"}, {"key": "C", "text": "IID is never assumed"}, {"key": "D", "text": "Only discrete RVs can be sampled"}], "answer": "B", "whyCorrect": "He flags the leap: sample from distributions, write density casually.", "whyOthers": {"A": "Densities often exist for continuous models.", "C": "IID is assumed for D.", "D": "Continuous sampling is standard."}, "diagram": "  sample ~ distribution ; p describes it", "useLater": "Density convenience later too."}, {"id": "q11", "part": "notes", "tag": "Topic 3 · trap", "anchor": "NOTES.md#topic-3-model-choice-pθ-ufa-model-vs-algorithm-0752–1400", "prompt": "If the true density is quadratic-shaped but you chose a linear family p_theta:", "options": [{"key": "A", "text": "Training automatically switches the family to quadratic"}, {"key": "B", "text": "Distance d becomes negative and fixes the family"}, {"key": "C", "text": "UFA guarantees every linear family is perfect"}, {"key": "D", "text": "You are stuck with a bad family; the algorithm only picks which line/hyperplane member"}], "answer": "D", "whyCorrect": "Model vs algorithm: algorithm does not fix a wrong family choice.", "whyOthers": {"A": "Family is fixed in step 1.", "B": "Distances are non-negative scores.", "C": "UFA is about flexible families like NNs/mixtures, not every linear model."}, "diagram": "  bad family -> stuck; algo picks theta only", "useLater": "Why UFA families matter."}, {"id": "q12", "part": "notes", "tag": "Topic 4 · circularity", "anchor": "NOTES.md#topic-4-distance-metric-dp-pθ-begging-the-question-1400–2048", "prompt": "Defining d(p, p_theta) seems to require unknown p. The lecture’s resolution is:", "options": [{"key": "A", "text": "Statistical methods (e.g. LLN ideas) will let us compute needed pieces from samples later"}, {"key": "B", "text": "Give up and never train"}, {"key": "C", "text": "Set p := p_theta always so d=0"}, {"key": "D", "text": "Only use true metrics with triangle inequality"}], "answer": "A", "whyCorrect": "Begging the question is raised and deferred to probability/statistics tools.", "whyOthers": {"B": "Course continues with a recipe.", "C": "That erases the estimation problem.", "D": "He notes ML often uses non-metrics (divergences)."}, "diagram": "  d needs p? -> estimate via stats/samples", "useLater": "Later lectures on computing distances."}, {"id": "q13", "part": "notes", "tag": "Topic 5 · training", "anchor": "NOTES.md#topic-5-training--argmin-full-three-step-recipe-2048–2538", "prompt": "In this lecture, training means:", "options": [{"key": "A", "text": "Collecting a larger dataset only"}, {"key": "B", "text": "Finding theta* that minimizes d(p, p_theta)"}, {"key": "C", "text": "Renaming p to P"}, {"key": "D", "text": "Proving AGI exists"}], "answer": "B", "whyCorrect": "Training = the optimization / argmin step.", "whyOthers": {"A": "Data is the input, not the definition of training.", "C": "Notation, not training.", "D": "AGI is an aside, not the definition."}, "diagram": "  theta* = argmin d  = training", "useLater": "GD at scale in Topic 6."}, {"id": "q14", "part": "notes", "tag": "Topic 6 · scale", "anchor": "NOTES.md#topic-6-scale-agi-aside-recipe--linregdnnsvm-2538–3114", "prompt": "His economist anecdote contrasts roughly how many parameters vs modern ML?", "options": [{"key": "A", "text": "2 vs 3"}, {"key": "B", "text": "100 vs 101"}, {"key": "C", "text": "8 vs about 8 billion"}, {"key": "D", "text": "Zero vs one"}], "answer": "C", "whyCorrect": "8 parameters called large vs ~8 billion in modern models.", "whyOthers": {"A": "Too small.", "B": "Not the anecdote.", "D": "Not the anecdote."}, "diagram": "  8  vs  8e9  — same math problem", "useLater": "Scale changes; recipe does not."}, {"id": "q15", "part": "notes", "tag": "Connect · algorithms", "anchor": "NOTES.md#topic-6-scale-agi-aside-recipe--linregdnnsvm-2538–3114", "prompt": "Linear regression vs a deep net in his sketch differ mainly by:", "options": [{"key": "A", "text": "Whether samples exist"}, {"key": "B", "text": "Whether p is known exactly"}, {"key": "C", "text": "Whether IID is defined"}, {"key": "D", "text": "Which p_theta, which distance, and which optimizer fill the three slots"}], "answer": "D", "whyCorrect": "Same recipe; different fills become different named methods.", "whyOthers": {"A": "Both use data.", "B": "p unknown for both.", "C": "IID setup shared."}, "diagram": "  (family, d, opt) -> named algorithm", "useLater": "Map any method onto three slots."}, {"id": "q16", "part": "notes", "tag": "Topic 7 · ERM next", "anchor": "NOTES.md#topic-7-erm-equivalence-next-formal-recap-3114–3531", "prompt": "Next lecture’s promised link is that empirical risk minimization (ERM) is:", "options": [{"key": "A", "text": "Unrelated to density estimation"}, {"key": "B", "text": "Exactly the same framework as this lecture’s distribution/density estimation recipe"}, {"key": "C", "text": "Only for unsupervised learning"}, {"key": "D", "text": "A replacement for the IID assumption"}], "answer": "B", "whyCorrect": "He defers the proof: ERM equals today’s recipe; then linear models.", "whyOthers": {"A": "Opposite of his claim.", "C": "ERM is broader ML 101; he wants equivalence.", "D": "IID remains part of the problem statement."}, "diagram": "  ERM  ≡  p_theta -> d -> argmin", "useLater": "Next class starts here."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

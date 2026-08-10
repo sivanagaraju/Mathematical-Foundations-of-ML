@@ -1,0 +1,31 @@
+{
+  "title": "Lec 01 Introduction",
+  "video_id": "H05WDy9Mngk",
+  "url": "https://www.youtube.com/watch?v=H05WDy9Mngk",
+  "duration_seconds": 4252,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Introduction to Generative AI, Random Experiment, Probability Triplet, Random Variable",
+  "playlist_index": 12,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "course_short": "MFGAI",
+  "topics": [
+    "Course mission",
+    "Model families roadmap",
+    "Background & probabilistic frame",
+    "Physics vs non-measurable structure",
+    "Repeated observations",
+    "Random experiment & sample space",
+    "Measure as size; events",
+    "Probability measure P & axioms",
+    "Triplet & surrogates",
+    "RV, CDF, estimate P_X"
+  ]
+}
