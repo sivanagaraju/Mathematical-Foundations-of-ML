@@ -1,7 +1,7 @@
 # Lec 01 — Introduction (Mathematical Foundations of Generative AI)
 
-**Video:** [Lec 01 Introduction](https://www.youtube.com/watch?v=H05WDy9Mngk) · NPTEL / IISc  
-**Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md)  
+**Video:** [Lec 01 Introduction](https://www.youtube.com/watch?v=H05WDy9Mngk) · NPTEL / IISc
+**Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md)
 **Course:** Mathematical Foundations of **Generative AI** (~71 min)
 
 ---
@@ -80,12 +80,12 @@ Job: install the probabilistic stack under generative AI. Method: motivate first
 
 ### Scenario walkthrough
 
-1. Want GenAI under the hood.  
-2. See model families ahead.  
-3. Spam / person-in-image not pure physics.  
-4. Collect many observations.  
-5. Cast as RE with Ω; put P on events.  
-6. Observe only X (pixels/tokens).  
+1. Want GenAI under the hood.
+2. See model families ahead.
+3. Spam / person-in-image not pure physics.
+4. Collect many observations.
+5. Cast as RE with Ω; put P on events.
+6. Observe only X (pixels/tokens).
 7. Estimate law of X to generate.
 
 ### Failure / contrast path
@@ -103,10 +103,10 @@ Full σ-algebra theory; densities/KL; training any specific GenAI model this lec
 
 ### Load-bearing claims (closed-book)
 
-- Course = first-principles math for generative AI.  
-- Physics blocked for abstract labels → probability + repeated data.  
-- RE → Ω → F → P (triplet).  
-- RV $X:\Omega\to\mathbb{R}^d$; $P_X(x)=P(X^{-1}((-\infty,x]))$.  
+- Course = first-principles math for generative AI.
+- Physics blocked for abstract labels → probability + repeated data.
+- RE → Ω → F → P (triplet).
+- RV $X:\Omega\to\mathbb{R}^d$; $P_X(x)=P(X^{-1}((-\infty,x]))$.
 - Goal: **estimate** the distribution of measurements.
 
 **Speaker / course:** NPTEL IISc · MF Generative AI · Lec 01.
@@ -165,11 +165,12 @@ Which families of generative models will the course cover, and how will code lab
 
 ### References for this topic
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [3Blue1Brown — Neural networks](https://www.youtube.com/watch?v=aircAruvnKk) | video | Continuous high-d “measurements” mindset behind modern GenAI |
-| [The Math of Generative AI — learning a data distribution](https://dangattringer.github.io/docs/notes/ai-specializations/image-generation/probabilistic-mathematical-foundations) | notes | States the core job: learn the data distribution |
-| [Coveo — Complete guide to generative models](https://www.coveo.com/blog/generative-models/) | blog | Big-picture survey of GenAI model types |
+
+| Resource                                                                                                                                                                           | Type  | Why it helps                                                   |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- | ---------------------------------------------------------------- |
+| [3Blue1Brown — Neural networks](https://www.youtube.com/watch?v=aircAruvnKk)                                                                                                      | video | Continuous high-d “measurements” mindset behind modern GenAI |
+| [The Math of Generative AI — learning a data distribution](https://dangattringer.github.io/docs/notes/ai-specializations/image-generation/probabilistic-mathematical-foundations) | notes | States the core job: learn the data distribution               |
+| [Coveo — Complete guide to generative models](https://www.coveo.com/blog/generative-models/)                                                                                      | blog  | Big-picture survey of GenAI model types                        |
 
 ---
 
@@ -191,15 +192,16 @@ TA **Chandan** covers **programmatic / implementation** details (e.g. **PyTorch*
 
 **Families planned (names only today):**
 
-| Family | Lecture mentions |
-|--------|------------------|
-| Variational / latent variable | classical **GMM**; **VAEs** + variations |
-| Diffusion | **DDPMs** / denoising diffusion |
-| Adversarial | **GANs** (early buzz-creating family) |
-| Autoregressive | **transformers** → **LLMs** |
-| State-space | **SSM** |
-| Flows | **normalizing flows** |
-| Alignment | later **RLHF**, **DPO** |
+
+| Family                        | Lecture mentions                        |
+| ------------------------------- | ----------------------------------------- |
+| Variational / latent variable | classical**GMM**; **VAEs** + variations |
+| Diffusion                     | **DDPMs** / denoising diffusion         |
+| Adversarial                   | **GANs** (early buzz-creating family)   |
+| Autoregressive                | **transformers** → **LLMs**            |
+| State-space                   | **SSM**                                 |
+| Flows                         | **normalizing flows**                   |
+| Alignment                     | later**RLHF**, **DPO**                  |
 
 Everything sits inside **probabilistic machine learning** — one backbone, many families.
 
@@ -237,11 +239,12 @@ What background should students bring before those families?
 
 ### References for this topic
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
+
+| Resource                                                                                                                                             | Type | Why it helps                               |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ | -------------------------------------------- |
 | [Towards Data Science — VAEs, GANs, Diffusion](https://towardsdatascience.com/generating-images-using-vaes-gans-and-diffusion-models-48963ddeb2b2/) | blog | Side-by-side intro to three major families |
-| [Coveo — Five generative AI models](https://www.coveo.com/blog/generative-models/) | blog | GAN, VAE, AR, flows, transformers overview |
-| [Ayan Das — Diffusion probabilistic models](https://ayandas.me/blogs/2021-12-04-diffusion-prob-models.html) | blog | Diffusion in the GenAI landscape |
+| [Coveo — Five generative AI models](https://www.coveo.com/blog/generative-models/)                                                                  | blog | GAN, VAE, AR, flows, transformers overview |
+| [Ayan Das — Diffusion probabilistic models](https://ayandas.me/blogs/2021-12-04-diffusion-prob-models.html)                                         | blog | Diffusion in the GenAI landscape           |
 
 ---
 
@@ -291,11 +294,12 @@ When does physics modeling fail, forcing a probabilistic path?
 
 ### References for this topic
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Organic Chemistry Tutor — Probability overview](https://www.youtube.com/watch?v=SkidyDQuupA) | video | Sample space & basic probability |
-| [PyTorch official tutorials](https://pytorch.org/tutorials/) | docs | Implementation track he mentions |
-| [Khan Academy — Random variables](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) | course | Parallel probability warm-up |
+
+| Resource                                                                                                                   | Type   | Why it helps                     |
+| ---------------------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------- |
+| [Organic Chemistry Tutor — Probability overview](https://www.youtube.com/watch?v=SkidyDQuupA)                             | video  | Sample space & basic probability |
+| [PyTorch official tutorials](https://pytorch.org/tutorials/)                                                               | docs   | Implementation track he mentions |
+| [Khan Academy — Random variables](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) | course | Parallel probability warm-up     |
 
 ---
 
@@ -321,12 +325,13 @@ Then we need a **probabilistic** way to model uncertainty and non-measurable str
 
 **Concrete contrast:**
 
-| Target | Measurable with instruments? |
-|--------|------------------------------|
-| Mass, position of a rigid body | yes → physics ODEs |
-| “Is this email spam?” | no → abstract/perceptual |
-| “Is person X in the photo?” | no (semantic, not raw sensor) |
-| “Tumor?” on X-ray | label is perceptual judgment |
+
+| Target                         | Measurable with instruments?  |
+| -------------------------------- | ------------------------------- |
+| Mass, position of a rigid body | yes → physics ODEs           |
+| “Is this email spam?”        | no → abstract/perceptual     |
+| “Is person X in the photo?”  | no (semantic, not raw sensor) |
+| “Tumor?” on X-ray            | label is perceptual judgment  |
 
 If you force pure physics on spam, you hit the semantic gap. Instead: probability + data (next topic).
 
@@ -355,11 +360,12 @@ What concrete method replaces closed-form physics when labels are abstract?
 
 ### References for this topic
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [MFML Lec 01 FA package — physics vs stats](../02-Lec01-Overview-Function-Approximation/NOTES.md) | notes | Same fork in related NPTEL series |
-| [Seeing Theory — Basic probability](https://seeingtheory.brown.edu/) | interactive | Builds intuition before formal Ω |
-| [StatQuest — Machine Learning Fundamentals](https://www.youtube.com/watch?v=Gv9_4yMHFhI) | video | Why ML uses data under uncertainty |
+
+| Resource                                                                                           | Type        | Why it helps                       |
+| ---------------------------------------------------------------------------------------------------- | ------------- | ------------------------------------ |
+| [MFML Lec 01 FA package — physics vs stats](../02-Lec01-Overview-Function-Approximation/NOTES.md) | notes       | Same fork in related NPTEL series  |
+| [Seeing Theory — Basic probability](https://seeingtheory.brown.edu/)                              | interactive | Builds intuition before formal Ω  |
+| [StatQuest — Machine Learning Fundamentals](https://www.youtube.com/watch?v=Gv9_4yMHFhI)          | video       | Why ML uses data under uncertainty |
 
 ---
 
@@ -381,8 +387,8 @@ When physics cannot fully specify the system, the method that has **worked** is 
 
 Examples he walks:
 
-- Classify text as spam: collect many emails labeled spam / not spam.  
-- Object in image: collect many images with labels.  
+- Classify text as spam: collect many emails labeled spam / not spam.
+- Object in image: collect many images with labels.
 - Interest in a quantity tied to non-measurable variables: like rolling a die many times and recording outcomes.
 
 Today’s **GenAI landscape** rests on this idea at massive scale: enormous observation corpora instead of closed-form semantic physics.
@@ -422,11 +428,12 @@ How do we formalize “an experiment we can run many times” and its set of out
 
 ### References for this topic
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Organic Chemistry Tutor — Sample space & probability](https://www.youtube.com/watch?v=SkidyDQuupA) | video | Discrete outcomes and counting experiments |
-| [Seeing Theory — Frequentist probability](https://seeingtheory.brown.edu/basic-probability/index.html) | interactive | Long-run frequency intuition |
-| [StatQuest — Histograms / distributions](https://www.youtube.com/watch?v=qBigTkBLU6g) | video | From many observations to a distribution picture |
+
+| Resource                                                                                                | Type        | Why it helps                                     |
+| --------------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------- |
+| [Organic Chemistry Tutor — Sample space & probability](https://www.youtube.com/watch?v=SkidyDQuupA)    | video       | Discrete outcomes and counting experiments       |
+| [Seeing Theory — Frequentist probability](https://seeingtheory.brown.edu/basic-probability/index.html) | interactive | Long-run frequency intuition                     |
+| [StatQuest — Histograms / distributions](https://www.youtube.com/watch?v=qBigTkBLU6g)                  | video       | From many observations to a distribution picture |
 
 ---
 
@@ -452,10 +459,11 @@ Assumption: the experiment can be conducted **multiple times**. Outcomes are col
 
 **Examples:**
 
-| RE | Ω |
-|----|---|
-| Coin | $\{H,T\}$ |
-| Die | $\{1,\ldots,6\}$ |
+
+| RE               | Ω                       |
+| ------------------ | -------------------------- |
+| Coin             | $\{H,T\}$                |
+| Die              | $\{1,\ldots,6\}$         |
 | Face photography | all possible face images |
 
 “Randomness” is **not** cleanly defined as a pure physics primitive here; the **operational math object is Ω**.
@@ -490,11 +498,12 @@ How do we measure the “size” or likelihood of subsets of Ω?
 
 ### References for this topic
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Organic Chemistry Tutor — Sample space](https://www.youtube.com/watch?v=SkidyDQuupA) | video | Building Ω with tree diagrams |
-| [Seeing Theory — Set theory / probability](https://seeingtheory.brown.edu/) | interactive | Sets of outcomes |
-| [MFML Lec 02 — RE→Ω package](../03-Lec02-Recap-Probability-Theory-Part1/NOTES.md) | notes | Deeper parallel treatment |
+
+| Resource                                                                               | Type        | Why it helps                   |
+| ---------------------------------------------------------------------------------------- | ------------- | -------------------------------- |
+| [Organic Chemistry Tutor — Sample space](https://www.youtube.com/watch?v=SkidyDQuupA) | video       | Building Ω with tree diagrams |
+| [Seeing Theory — Set theory / probability](https://seeingtheory.brown.edu/)           | interactive | Sets of outcomes               |
+| [MFML Lec 02 — RE→Ω package](../03-Lec02-Recap-Probability-Theory-Part1/NOTES.md)   | notes       | Deeper parallel treatment      |
 
 ---
 
@@ -551,11 +560,12 @@ What specific axioms make a measure a **probability** measure?
 
 ### References for this topic
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Bright Side of Math — Probability measures intro](https://www.youtube.com/watch?v=DxEbvbGUp_g) | video | Distribution ideas after measure intuition |
-| [Khan Academy — Probability basic concepts](https://www.khanacademy.org/math/statistics-probability) | course | Events and basic rules |
-| [MFML Lec 02 — Why measure](../03-Lec02-Recap-Probability-Theory-Part1/NOTES.md) | notes | Related NPTEL treatment of measures |
+
+| Resource                                                                                              | Type   | Why it helps                               |
+| ------------------------------------------------------------------------------------------------------- | -------- | -------------------------------------------- |
+| [Bright Side of Math — Probability measures intro](https://www.youtube.com/watch?v=DxEbvbGUp_g)      | video  | Distribution ideas after measure intuition |
+| [Khan Academy — Probability basic concepts](https://www.khanacademy.org/math/statistics-probability) | course | Events and basic rules                     |
+| [MFML Lec 02 — Why measure](../03-Lec02-Recap-Probability-Theory-Part1/NOTES.md)                     | notes  | Related NPTEL treatment of measures        |
 
 ---
 
@@ -577,8 +587,8 @@ Define **P** mapping events into $[0,1]$.
 
 **Axioms:**
 
-1. $P(A)\ge 0$ for every event $A$  
-2. $P(\Omega)=1$  
+1. $P(A)\ge 0$ for every event $A$
+2. $P(\Omega)=1$
 3. If $A\cap B=\emptyset$, then $P(A\cup B)=P(A)+P(B)$
 
 **Micro — fair die:** $P(\{6\})=1/6$; even faces $1/2$; even ∪ {1} = $2/3$ because disjoint.
@@ -617,11 +627,12 @@ What triple do we land on, and what do we actually observe in the real world?
 
 ### References for this topic
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Organic Chemistry Tutor — Probability rules](https://www.youtube.com/watch?v=SkidyDQuupA) | video | Basic probability calculations |
-| [Seeing Theory — Probability](https://seeingtheory.brown.edu/basic-probability/index.html) | interactive | Visual P on events |
-| [StatQuest — Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4) | video | Careful language around P |
+
+| Resource                                                                                    | Type        | Why it helps                   |
+| --------------------------------------------------------------------------------------------- | ------------- | -------------------------------- |
+| [Organic Chemistry Tutor — Probability rules](https://www.youtube.com/watch?v=SkidyDQuupA) | video       | Basic probability calculations |
+| [Seeing Theory — Probability](https://seeingtheory.brown.edu/basic-probability/index.html) | interactive | Visual P on events             |
+| [StatQuest — Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4)       | video       | Careful language around P      |
 
 ---
 
@@ -647,15 +658,16 @@ Landed on the **probability triplet** $(\Omega,\mathcal{F},P)$. All ML here assu
 
 **Practice problems:**
 
-1. We often **do not know** Ω.  
-2. We often **do not know** P.  
+1. We often **do not know** Ω.
+2. We often **do not know** P.
 
 What we get are **surrogates / measurements**:
 
-| Abstract process | What we store |
-|------------------|---------------|
-| Person gets X-ray | pixel array on disk |
-| Someone writes spam | Unicode / tokens |
+
+| Abstract process    | What we store       |
+| --------------------- | --------------------- |
+| Person gets X-ray   | pixel array on disk |
+| Someone writes spam | Unicode / tokens    |
 
 Not the “true” abstract outcome of nature’s experiment — a **sensor-facing surrogate**. Need a mathematical object that maps abstract Ω into numbers (next topic: random variable).
 
@@ -690,11 +702,12 @@ What function turns Ω into $\mathbb{R}^d$ measurements, and what do we estimate
 
 ### References for this topic
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [MFML Lec 06 — X-ray as sample](../07-Lec06-XRay-Sample-From-Distribution/NOTES.md) | notes | Same X-ray surrogate story |
-| [3Blue1Brown — Essence of linear algebra (vectors)](https://www.youtube.com/watch?v=fNk_zzaMoSs) | video | Measurements live in vector spaces |
-| [The Math of Generative AI — data distribution](https://dangattringer.github.io/docs/notes/ai-specializations/image-generation/probabilistic-mathematical-foundations) | notes | Generation as learning data laws |
+
+| Resource                                                                                                                                                                | Type  | Why it helps                       |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------ |
+| [MFML Lec 06 — X-ray as sample](../07-Lec06-XRay-Sample-From-Distribution/NOTES.md)                                                                                    | notes | Same X-ray surrogate story         |
+| [3Blue1Brown — Essence of linear algebra (vectors)](https://www.youtube.com/watch?v=fNk_zzaMoSs)                                                                       | video | Measurements live in vector spaces |
+| [The Math of Generative AI — data distribution](https://dangattringer.github.io/docs/notes/ai-specializations/image-generation/probabilistic-mathematical-foundations) | notes | Generation as learning data laws   |
 
 ---
 
@@ -718,6 +731,7 @@ A **random variable** is a **function**
 
 $$
 X:\Omega\to\mathbb{R}^{d}
+
 $$
 
 Students often treat a random variable as a lone random number with no domain. The careful picture is: domain Ω, codomain $\mathbb{R}^d$ — the **measurement map** (pixels, encoded text, features).
@@ -730,13 +744,15 @@ Start from triplet $(\Omega,\mathcal{F},P)$, define $X$ on Ω. Structure on Ω i
 
 $$
 P_X(x)=P(X\le x)=P\big(X^{-1}((-\infty,x])\big)
+
 $$
 
-| Symbol | Meaning |
-|--------|---------|
-| Capital $X$ | the RV (function) |
-| Small $x$ | threshold in $\mathbb{R}$ |
-| $X^{-1}((-\infty,x])$ | outcomes mapping to values $\le x$ |
+
+| Symbol                | Meaning                           |
+| ----------------------- | ----------------------------------- |
+| Capital$X$            | the RV (function)                 |
+| Small$x$              | threshold in$\mathbb{R}$          |
+| $X^{-1}((-\infty,x])$ | outcomes mapping to values$\le x$ |
 
 **Micro:** die faces as RV; $P_X(4)=P(\text{face}\le 4)=4/6$.
 
@@ -777,11 +793,12 @@ Next lectures deepen probability tools and derive generative model families on t
 
 ### References for this topic
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [RiskByNumbers — PMF, PDF, CDF visual](https://www.youtube.com/watch?v=yRbfLlTmPE8) | video | Clear CDF/PDF intuition |
-| [Bright Side of Math — CDF of a random variable](https://www.youtube.com/watch?v=DxEbvbGUp_g) | video | Distribution of a real-valued RV |
-| [MFML Lec 03 — RV definition](../04-Lec03-Recap-Probability-Theory-Part2/NOTES.md) | notes | $X:\Omega\to\mathbb{R}^d$ deep package |
+
+| Resource                                                                                       | Type  | Why it helps                           |
+| ------------------------------------------------------------------------------------------------ | ------- | ---------------------------------------- |
+| [RiskByNumbers — PMF, PDF, CDF visual](https://www.youtube.com/watch?v=yRbfLlTmPE8)           | video | Clear CDF/PDF intuition                |
+| [Bright Side of Math — CDF of a random variable](https://www.youtube.com/watch?v=DxEbvbGUp_g) | video | Distribution of a real-valued RV       |
+| [MFML Lec 03 — RV definition](../04-Lec03-Recap-Probability-Theory-Part2/NOTES.md)            | notes | $X:\Omega\to\mathbb{R}^d$ deep package |
 
 ---
 
@@ -789,16 +806,17 @@ Next lectures deepen probability tools and derive generative model families on t
 
 Per-topic **References for this topic** tables (2–3 each) are the primary study links. Package-level map:
 
-| Resource | Matches lecture… | Why it helps |
-|----------|------------------|--------------|
-| [3Blue1Brown — Neural networks](https://www.youtube.com/watch?v=aircAruvnKk) | Topics 1, 9–10 | High-d continuous measurements |
-| [The Math of Generative AI — data distribution](https://dangattringer.github.io/docs/notes/ai-specializations/image-generation/probabilistic-mathematical-foundations) | Topics 1, 9–10 | Generation = learn a distribution |
-| [Towards Data Science — VAEs, GANs, Diffusion](https://towardsdatascience.com/generating-images-using-vaes-gans-and-diffusion-models-48963ddeb2b2/) | Topic 2 | Model-family overview |
-| [Organic Chemistry Tutor — Probability](https://www.youtube.com/watch?v=SkidyDQuupA) | Topics 3, 6–8 | Sample space & basic P |
-| [Seeing Theory](https://seeingtheory.brown.edu/) | Topics 4–8 | Interactive probability |
-| [RiskByNumbers — PMF/PDF/CDF](https://www.youtube.com/watch?v=yRbfLlTmPE8) | Topic 10 | CDF visual |
-| [MFML Lec 02–03 packages](../03-Lec02-Recap-Probability-Theory-Part1/NOTES.md) | Topics 6–10 | Parallel RE→RV depth |
-| [PyTorch tutorials](https://pytorch.org/tutorials/) | Topics 2–3 | Implementation track |
+
+| Resource                                                                                                                                                                | Matches lecture… | Why it helps                      |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----------------------------------- |
+| [3Blue1Brown — Neural networks](https://www.youtube.com/watch?v=aircAruvnKk)                                                                                           | Topics 1, 9–10   | High-d continuous measurements    |
+| [The Math of Generative AI — data distribution](https://dangattringer.github.io/docs/notes/ai-specializations/image-generation/probabilistic-mathematical-foundations) | Topics 1, 9–10   | Generation = learn a distribution |
+| [Towards Data Science — VAEs, GANs, Diffusion](https://towardsdatascience.com/generating-images-using-vaes-gans-and-diffusion-models-48963ddeb2b2/)                    | Topic 2           | Model-family overview             |
+| [Organic Chemistry Tutor — Probability](https://www.youtube.com/watch?v=SkidyDQuupA)                                                                                   | Topics 3, 6–8    | Sample space & basic P            |
+| [Seeing Theory](https://seeingtheory.brown.edu/)                                                                                                                        | Topics 4–8       | Interactive probability           |
+| [RiskByNumbers — PMF/PDF/CDF](https://www.youtube.com/watch?v=yRbfLlTmPE8)                                                                                             | Topic 10          | CDF visual                        |
+| [MFML Lec 02–03 packages](../03-Lec02-Recap-Probability-Theory-Part1/NOTES.md)                                                                                         | Topics 6–10      | Parallel RE→RV depth             |
+| [PyTorch tutorials](https://pytorch.org/tutorials/)                                                                                                                     | Topics 2–3       | Implementation track              |
 
 Also: each topic section above has its own 2–3 video/blog links.
 
@@ -806,8 +824,8 @@ Also: each topic section above has its own 2–3 video/blog links.
 
 ## Sources
 
-- Video: [Lec 01 Introduction](https://www.youtube.com/watch?v=H05WDy9Mngk)  
-- Channel: NPTEL — Indian Institute of Science, Bengaluru  
-- Course: Mathematical Foundations of Generative AI  
-- Skill: `youtube-lecture-tutor`  
+- Video: [Lec 01 Introduction](https://www.youtube.com/watch?v=H05WDy9Mngk)
+- Channel: NPTEL — Indian Institute of Science, Bengaluru
+- Course: Mathematical Foundations of Generative AI
+- Skill: `youtube-lecture-tutor`
 - Captions cleaned via timed transcript / claim sheets (restructure: **10 topics** for ~71 min)

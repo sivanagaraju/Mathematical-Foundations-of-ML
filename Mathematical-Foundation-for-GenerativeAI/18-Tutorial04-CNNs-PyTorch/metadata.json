@@ -1,0 +1,30 @@
+{
+  "title": "Tutorial 4 : CNNs using PyTorch",
+  "video_id": "BhnGtsMwUCU",
+  "url": "https://www.youtube.com/watch?v=BhnGtsMwUCU",
+  "duration_seconds": 2369,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "CNN mechanics, Conv2d/MaxPool shapes, SimpleCNN on MNIST, train and eval",
+  "playlist_index": 9,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Roadmap and NCHW batch tensor",
+    "Conv mechanics CS231 GIF padding",
+    "Stride weight count weight sharing",
+    "Output size formula and nn.Conv2d",
+    "MaxPool2d no params half size",
+    "SimpleCNN stack shape walkthrough",
+    "Flatten FC head dummy forward",
+    "MNIST transforms Dataset DataLoader",
+    "Mini-batch train CE Adam epochs",
+    "Eval accuracy recap next RNN"
+  ]
+}

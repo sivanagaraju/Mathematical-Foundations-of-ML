@@ -1,0 +1,30 @@
+{
+  "title": "Tutorial 6 : Transfer Learning with PyTorch",
+  "video_id": "ETJG9mmeL5k",
+  "url": "https://www.youtube.com/watch?v=ETJG9mmeL5k",
+  "duration_seconds": 1768,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Pretrained AlexNet VGG ResNet, head swap, ImageNet transforms, MRI fine-tune",
+  "playlist_index": 7,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "LEGO layers pretrained intro",
+    "LeNet and AlexNet architecture",
+    "Head swap and 224 resize rule",
+    "VGG family",
+    "ResNet skip connections",
+    "Transfer fine-tune analogy",
+    "MRI task and baselines",
+    "torchvision weights and transforms",
+    "ImageFolder and replace head",
+    "Train compare and bootcamp recap"
+  ]
+}

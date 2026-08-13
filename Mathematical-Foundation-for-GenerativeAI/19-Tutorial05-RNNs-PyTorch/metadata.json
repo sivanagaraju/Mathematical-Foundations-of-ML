@@ -1,0 +1,30 @@
+{
+  "title": "Tutorial 5 : RNNs using PyTorch",
+  "video_id": "k6zF2NsvVrk",
+  "url": "https://www.youtube.com/watch?v=k6zF2NsvVrk",
+  "duration_seconds": 2295,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Sequence tensors, RNN LSTM GRU cells, sequence classifier, save/load, reusable train/eval",
+  "playlist_index": 8,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Recap CNN and sequences intro",
+    "Sequence tensor batch T feature",
+    "RNN cell math and unroll",
+    "RNN output and hidden shapes",
+    "LSTM gates and cell state",
+    "nn.LSTM API multi-layer note",
+    "GRU reset update gates",
+    "Sequence classifier last hidden",
+    "Toy dataset and train loop",
+    "Save load reusable loops recap"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "title": "Tutorial 2 : Introduction to Numpy",
+  "video_id": "E79ld44pfGM",
+  "url": "https://www.youtube.com/watch?v=E79ld44pfGM",
+  "duration_seconds": 4157,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Essential NumPy functions for AI / ML",
+  "playlist_index": 12,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Why NumPy; create arrays",
+    "Indexing and slicing",
+    "Reshape flatten elementwise broadcast",
+    "Matmul and linear layer",
+    "ReLU softmax MLP forward",
+    "CE loss and mini-MLP",
+    "Manual convolution and pooling",
+    "One-hot and RNN cell",
+    "RNN loop shuffle train-test",
+    "Logistic regression MLP shapes recap"
+  ]
+}

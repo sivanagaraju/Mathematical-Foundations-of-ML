@@ -1,0 +1,30 @@
+{
+  "title": "Lec 02 Generative Models : Problem Formulation",
+  "video_id": "GKfv4l6r7hQ",
+  "url": "https://www.youtube.com/watch?v=GKfv4l6r7hQ",
+  "duration_seconds": 3839,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Distribution Function Estimation, Divergence Minimization, Random Variables",
+  "playlist_index": 12,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Recap: triplet to RV to distribution on R^d",
+    "Images as high-d vectors; stacking",
+    "Text, speech modalities; data-agnostic",
+    "Data in range of RV X",
+    "Know P quantifies uncertainty; estimate p_X",
+    "Data as oil; dataset D ~ p_x",
+    "Central ML: estimate unknown p_x",
+    "Sampling and GenAI problem formulation",
+    "Recipe: model, divergence, train",
+    "Open questions, recap, homework"
+  ]
+}

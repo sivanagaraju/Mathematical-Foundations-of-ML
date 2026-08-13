@@ -1,0 +1,30 @@
+{
+  "title": "Tutorial 7 : Review of Basic Probability 1",
+  "video_id": "owlWCCgYx50",
+  "url": "https://www.youtube.com/watch?v=owlWCCgYx50",
+  "duration_seconds": 3006,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Sample space, event space, probability measure, axioms, conditional probability, Bayes, independence, random variables, CDF, discrete PMF families",
+  "playlist_index": 6,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Probability triplet and three axioms",
+    "Conditional probability as a new assignment",
+    "Law of total probability",
+    "Bayes rule",
+    "Independence of two events",
+    "Total pairwise and conditional independence",
+    "Random variables and pushforward",
+    "CDF definition and properties",
+    "Discrete RV staircase CDF and PMF",
+    "Named discrete families and recap"
+  ]
+}

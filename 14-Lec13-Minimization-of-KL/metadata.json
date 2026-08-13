@@ -1,0 +1,27 @@
+{
+  "title": "Lec 13 Minimization of KL Divergence",
+  "video_id": "Ij4p5hLbfo4",
+  "url": "https://www.youtube.com/watch?v=Ij4p5hLbfo4",
+  "duration_seconds": 1491,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Minimizing KL Divergence, Maximizing Log Likelihood",
+  "playlist_index": 16,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 7,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Recipe return; IID data; general V",
+    "Model p_θ; continuous KL; θ* argmin",
+    "Drop entropy of data",
+    "Unknown p_V; expectation form",
+    "LLN sample mean; big data",
+    "Min KL estimator; forward vs reverse; LOTUS",
+    "Likelihood; MLE equals min KL"
+  ]
+}

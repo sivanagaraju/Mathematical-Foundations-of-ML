@@ -1,0 +1,30 @@
+{
+  "title": "Tutorial 3 : PyTorch Basics",
+  "video_id": "SEtu7Eef5ps",
+  "url": "https://www.youtube.com/watch?v=SEtu7Eef5ps",
+  "duration_seconds": 3728,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Tensors, AutoGrad, Datasets and DataLoaders, MLP",
+  "playlist_index": 10,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Imports version device CUDA/CPU",
+    "Tensor create shape dtype index",
+    "Reshape unsqueeze squeeze permute",
+    "Matmul and autograd intro",
+    "Multi-var grad manual linreg",
+    "nn.Module Linear MSE optimizer",
+    "Activations CrossEntropy logits",
+    "Custom Dataset",
+    "DataLoader batch shuffle",
+    "Full MLP train loop accuracy"
+  ]
+}
