@@ -1,0 +1,30 @@
+{
+  "title": "Tutorial 8 : Review of Basic Probability 2",
+  "video_id": "pQIbfyjSnFk",
+  "url": "https://www.youtube.com/watch?v=pQIbfyjSnFk",
+  "duration_seconds": 3433,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Continuous RVs, PDF, change of variables, expectation, LOTUS, variance, inequalities, numpy sampling",
+  "playlist_index": 5,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "mixed",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Continuous RV and PDF definition",
+    "PDF properties versus PMF",
+    "Uniform exponential Gaussian",
+    "Functions of RVs and change of variables",
+    "Expectation and LOTUS",
+    "Variance",
+    "Markov Chebyshev Jensen",
+    "Numpy dice and Bayes numeric",
+    "Discrete sampling families",
+    "Continuous simulation and recap"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "title": "Tutorial 10 : Review of Machine Learning 1",
+  "video_id": "wjSKM1xFoSU",
+  "url": "https://www.youtube.com/watch?v=wjSKM1xFoSU",
+  "duration_seconds": 2853,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Chandan Jayaram (NPTEL IISc)",
+  "description": "Numerical Problems on MLE and GMMs",
+  "playlist_index": 3,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Why this recap exists",
+    "Sign-censored Normal",
+    "Standardize and write the likelihood",
+    "Bernoulli reduction and MLE of p",
+    "Invert Phi and read the sign of mu-hat",
+    "Two-exponential mixture and latent Z",
+    "Complete-data density and log-likelihood",
+    "E-step responsibilities by Bayes",
+    "The Q-function",
+    "M-step closed forms iterate close"
+  ]
+}

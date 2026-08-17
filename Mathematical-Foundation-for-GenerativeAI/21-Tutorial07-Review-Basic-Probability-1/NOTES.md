@@ -1,9 +1,9 @@
 # Tutorial 7 — Review of Basic Probability 1
 
-**Video:** [Tutorial 7 : Review of Basic Probability 1](https://www.youtube.com/watch?v=owlWCCgYx50) · NPTEL / IISc  
-**Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md)  
-**Previous:** [Tutorial 6 — Transfer Learning](../20-Tutorial06-Transfer-Learning-PyTorch/NOTES.md)  
-**Course:** Mathematical Foundations of **Generative AI** (~50 min)  
+**Video:** [Tutorial 7 : Review of Basic Probability 1](https://www.youtube.com/watch?v=owlWCCgYx50) · NPTEL / IISc
+**Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md)
+**Previous:** [Tutorial 6 — Transfer Learning](../20-Tutorial06-Transfer-Learning-PyTorch/NOTES.md)
+**Course:** Mathematical Foundations of **Generative AI** (~50 min)
 **Speaker:** NPTEL IISc · Triplet, conditionals, Bayes, independence flavors, RVs, discrete CDF/PMF
 
 ---
@@ -27,8 +27,8 @@
 
 ## Executive Summary — architecture of this lecture
 
-**Job:** recap the probability objects this course will keep using.  
-**Method:** rebuild the triplet $(\Omega,\mathcal{F},P)$, then add conditionals, the total law, Bayes, and independence tests, then map outcomes into $\mathbb{R}$ with a random variable.  
+**Job:** recap the probability objects this course will keep using.
+**Method:** rebuild the triplet $(\Omega,\mathcal{F},P)$, then add conditionals, the total law, Bayes, and independence tests, then map outcomes into $\mathbb{R}$ with a random variable.
 **Fork:** specify a discrete law by a CDF or a PMF. Continuous RVs, expectation, and variance wait for the next tutorial.
 
 **Worldview arc:** from “named objects $\Omega$, $\mathcal{F}$, $P$” **to** “discrete $X$ completely specified by a staircase CDF or a mass function.”
@@ -98,15 +98,15 @@
 
 ### Scenario walkthrough
 
-1. Name $\Omega$, $\mathcal{F}$, $P$ and the three axioms.  
-2. Learn $B$ happened → reweigh every event by overlap with $B$.  
-3. Cut $\Omega$ into disjoint $B_i$; write $P(A)$ as a weighted mix.  
-4. Flip $P(A\mid B)$ when $P(B\mid A)$ is the easy piece.  
-5. Test two-event independence by a product.  
-6. Separate total, pairwise, and conditional independence (disease tests).  
-7. Stick real numbers on outcomes (coin 0/1; hotel price vs calories).  
-8. Walk the line: $F(x)=P(X\le x)$.  
-9. Discrete $X$: jumps = masses; PMF or CDF specifies the law.  
+1. Name $\Omega$, $\mathcal{F}$, $P$ and the three axioms.
+2. Learn $B$ happened → reweigh every event by overlap with $B$.
+3. Cut $\Omega$ into disjoint $B_i$; write $P(A)$ as a weighted mix.
+4. Flip $P(A\mid B)$ when $P(B\mid A)$ is the easy piece.
+5. Test two-event independence by a product.
+6. Separate total, pairwise, and conditional independence (disease tests).
+7. Stick real numbers on outcomes (coin 0/1; hotel price vs calories).
+8. Walk the line: $F(x)=P(X\le x)$.
+9. Discrete $X$: jumps = masses; PMF or CDF specifies the law.
 10. Stock families; next hour is continuous + expectation.
 
 ### Failure / contrast path
@@ -126,12 +126,12 @@ Continuous random variables and densities; expectation and variance; a full meas
 
 ### Load-bearing claims (closed-book)
 
-- $(\Omega,\mathcal{F},P)$ is the **probability space**; $P$ obeys **three axioms**.  
-- $P(A\mid B)=P(A\cap B)/P(B)$ only if $B\in\mathcal{F}$ and $P(B)>0$; it is a **new assignment**.  
-- **Total law** uses a partition; **Bayes** rewrites the other conditional.  
-- Independence $=P(A\cap B)=P(A)P(B)$; several stronger/weaker cousins exist.  
-- A **random variable** is a function $X:\Omega\to\mathbb{R}$ and induces $P_X$.  
-- **CDF** accumulates; it **specifies** the law of $X$.  
+- $(\Omega,\mathcal{F},P)$ is the **probability space**; $P$ obeys **three axioms**.
+- $P(A\mid B)=P(A\cap B)/P(B)$ only if $B\in\mathcal{F}$ and $P(B)>0$; it is a **new assignment**.
+- **Total law** uses a partition; **Bayes** rewrites the other conditional.
+- Independence $=P(A\cap B)=P(A)P(B)$; several stronger/weaker cousins exist.
+- A **random variable** is a function $X:\Omega\to\mathbb{R}$ and induces $P_X$.
+- **CDF** accumulates; it **specifies** the law of $X$.
 - **Discrete** $X$ has a **PMF**; CDF is a **staircase** whose jumps are the masses.
 
 **Speaker / course:** NPTEL IISc · Tutorial 7.
@@ -162,6 +162,7 @@ An **event** is a subset of $\Omega$. The **event space** $\mathcal{F}$ (script 
 
 $$
 \mathcal{F} = 2^\Omega
+
 $$
 
 so **every** subset of $\Omega$ is an event. That is enough for discrete examples in this hour.
@@ -170,14 +171,16 @@ so **every** subset of $\Omega$ is an event. That is enough for discrete example
 
 $$
 P : \mathcal{F} \to \mathbb{R}
+
 $$
 
-1. **Non-negativity.** $P(A)\ge 0$ for every event $A$. Negative probability is not allowed.  
-2. **Normalization.** $P(\Omega)=1$. The whole sample space is the certain event.  
+1. **Non-negativity.** $P(A)\ge 0$ for every event $A$. Negative probability is not allowed.
+2. **Normalization.** $P(\Omega)=1$. The whole sample space is the certain event.
 3. **$\sigma$-additivity.** If $A_1,A_2,\ldots\in\mathcal{F}$ are **mutually exclusive** ($A_i\cap A_j=\emptyset$ for $i\neq j$), then
 
 $$
 P\Bigl(\bigcup_i A_i\Bigr) = \sum_i P(A_i)
+
 $$
 
 Mutual exclusion is the green light for turning union into a sum. If the sets overlap you **cannot** add blindly.
@@ -233,13 +236,14 @@ The axioms tell you how $P$ behaves on a **fixed** space. They do not yet tell y
 
 Let $B$ be an event. Two gates must both open before you write $P(A\mid B)$:
 
-- $B\in\mathcal{F}$ (it is a legal event), and  
+- $B\in\mathcal{F}$ (it is a legal event), and
 - $P(B)>0$ (it has positive mass).
 
 Then, for any event $A$,
 
 $$
 P(A\mid B) = \frac{P(A\cap B)}{P(B)}
+
 $$
 
 The board often writes $AB$ for $A\cap B$. That is **notational abuse**; they use it on purpose and want you to notice.
@@ -248,6 +252,7 @@ Read the formula as a **new probability assignment**. After you know $B$ occurre
 
 $$
 P(B\mid B) = 1
+
 $$
 
 In words: the new probability of each event is determined by **what is common with $B$**. You have already learned $B$; you throw away $\Omega\setminus B$ and re-normalize.
@@ -256,6 +261,7 @@ The same idea extends to more than two events. The last board line writes a thre
 
 $$
 P(A\mid BC) = \frac{P(ABC)}{P(BC)}
+
 $$
 
 which is the same definition after you treat “$B$ and $C$ both happened” as the new world (still need $P(BC)>0$).
@@ -307,25 +313,28 @@ One $B$ updates one assignment. Often you do not have a single $B$ — you have 
 
 A **partition** of $\Omega$ is a list $B_1,\ldots,B_m$ of events that
 
-- do not overlap: $B_i\cap B_j=\emptyset$ for $i\neq j$, and  
+- do not overlap: $B_i\cap B_j=\emptyset$ for $i\neq j$, and
 - cover the whole space (their union is $\Omega$).
 
 Draw four rooms $B_1,\ldots,B_4$ (think: four weather types, or four lab machines). Paint an event $A$ in blue that crosses several rooms — “the test is positive,” or “the die shows at least 5.” Then $A$ is exactly the union of the overlaps
 
 $$
 A = \bigcup_{i=1}^{m} (A \cap B_i)
+
 $$
 
 Each slice $A\cap B_i$ lives in a different room, so the slices are **disjoint**. $\sigma$-additivity therefore turns the union into a sum:
 
 $$
 P(A) = \sum_i P(A \cap B_i)
+
 $$
 
 Feed in the definition of conditional probability, $P(A\cap B_i)=P(A\mid B_i)P(B_i)$, and you get the **law of total probability**
 
 $$
 P(A) = \sum_i P(A\mid B_i)\, P(B_i)
+
 $$
 
 In words: pick a room at random with chance $P(B_i)$, then look at the chance of $A$ **inside that room**, and mix.
@@ -379,12 +388,14 @@ Start from the definition and the multiplication rule:
 
 $$
 P(A\mid B) = \frac{P(A\cap B)}{P(B)} = \frac{P(B\mid A)\,P(A)}{P(B)}
+
 $$
 
 If $P(B)$ is ugly, expand it with the **two-set partition** $\{A, A^c\}$. Those two events are mutually exclusive and cover $\Omega$, so the total law applies:
 
 $$
 P(B) = P(B\mid A)\,P(A) + P(B\mid A^c)\,P(A^c)
+
 $$
 
 That is **Bayes’ rule** in the form they write on the board.
@@ -395,6 +406,7 @@ Cartoon numbers (not from a notebook — from the same story they tell): suppose
 
 $$
 P(A\mid B) = \frac{0.99\cdot 0.01}{0.99\cdot 0.01 + 0.01\cdot 0.99} = \frac12
+
 $$
 
 The flipped number is **not** $99\%$. That is why the denominator’s $A^c$ term exists.
@@ -447,6 +459,7 @@ Events $A,B\in\mathcal{F}$ are **independent** when
 
 $$
 P(A\cap B) = P(A)\,P(B)
+
 $$
 
 That is the **definition**. Intersection on the set side becomes **multiplication** on the probability side. The instructor’s side remark: union/intersection in set space correspond, loosely, to plus/times in probability space.
@@ -455,6 +468,7 @@ If $P(A)>0$ and $P(B)>0$, plug the definition into the conditional formula:
 
 $$
 P(A\mid B) = \frac{P(A)P(B)}{P(B)} = P(A)
+
 $$
 
 and likewise $P(B\mid A)=P(B)$. So **conditional equals unconditional**. That is a **consequence** of the product definition, not a replacement for it.
@@ -510,6 +524,7 @@ Two events have one product test. A list $A_1,\ldots,A_M$ has **several** tests 
 
 $$
 P(A_i \cap A_j) = P(A_i)\,P(A_j)
+
 $$
 
 Events may be pairwise independent and **fail** total independence. Exercise: if they are totally independent, are they pairwise independent? (Yes — pairs are allowed subcollections.)
@@ -518,13 +533,14 @@ Events may be pairwise independent and **fail** total independence. Exercise: if
 
 $$
 P(A\cap B\mid C) = P(A\mid C)\,P(B\mid C)
+
 $$
 
 A short algebra chase they sketch: $P(A\mid B,C)=P(A\mid C)$. Given $C$, learning $B$ does not change $A$.
 
 Two corner cases to keep on the desk:
 
-- $A,B$ may be **conditionally independent given $C$** but **not** independent. Classic story: several **independent medical tests** for a disease. Given the disease status, the tests do not talk; unconditionally they are dependent because they share the hidden disease.  
+- $A,B$ may be **conditionally independent given $C$** but **not** independent. Classic story: several **independent medical tests** for a disease. Given the disease status, the tests do not talk; unconditionally they are dependent because they share the hidden disease.
 - $A,B$ may be **independent** but **not** conditionally independent given some other $C$.
 
 You can now name three tests and refuse to treat them as one word. Still missing: why we leave the abstract $\Omega$ and map into **real numbers**.
@@ -575,6 +591,7 @@ We want to compute in **real numbers**. A **random variable** on $(\Omega,\mathc
 
 $$
 X : \Omega \to \mathbb{R}
+
 $$
 
 The famous slogan (already in the lectures): a random variable is **neither random nor a variable**. It is a **deterministic function**. Randomness lives in which $\omega$ the experiment produces; once $\omega$ is in hand, $X(\omega)$ is fixed.
@@ -587,11 +604,12 @@ Any $X$ **induces a new probability space** $(\mathbb{R},\mathcal{B},P_X)$. Here
 
 $$
 P_X(B) = P\bigl(\{\omega\in\Omega : X(\omega)\in B\}\bigr) = P(X\in B)
+
 $$
 
 Go back to $\Omega$, collect every outcome whose sticker landed in $B$, and reuse the **old** $P$.
 
-Coin check: $P_X(\{1\})=P(H)$.  
+Coin check: $P_X(\{1\})=P(H)$.
 Hotel check (one dish only): $P(\text{bill}=120)=P(\text{dishes priced }120)$.
 
 They write $\{X\in B\}$ for the pre-image as notational convenience. $P_X$ satisfies the three axioms — it is a genuine probability measure.
@@ -646,6 +664,7 @@ They also say “distribution function” and “CDF” interchangeably.
 
 $$
 P_X(x) = P\bigl(\{\omega : X(\omega)\le x\}\bigr) = P(X\le x)
+
 $$
 
 Walk the real line from $-\infty$ up to $x$ and **accumulate** every bit of mass whose value is $\le x$. That is why it is called cumulative.
@@ -656,11 +675,11 @@ The CDF **completely specifies** the probability assignment of $X$: if you know 
 
 Properties they insist on:
 
-- $0\le F(x)\le 1$ for all $x$ (it is a probability).  
-- $F(-\infty)=0$, $F(+\infty)=1$.  
-- $F$ is **nondecreasing**, not necessarily **increasing**. It may stay flat. On the coin, $F(0.5)=F(0.6)$.  
-- If $x_1\le x_2$ then $\{X\le x_1\}\subset\{X\le x_2\}$, so $F(x_1)\le F(x_2)$.  
-- $F$ is **right-continuous** and has left limits — left as an exercise (why needed; what fails without it).  
+- $0\le F(x)\le 1$ for all $x$ (it is a probability).
+- $F(-\infty)=0$, $F(+\infty)=1$.
+- $F$ is **nondecreasing**, not necessarily **increasing**. It may stay flat. On the coin, $F(0.5)=F(0.6)$.
+- If $x_1\le x_2$ then $\{X\le x_1\}\subset\{X\le x_2\}$, so $F(x_1)\le F(x_2)$.
+- $F$ is **right-continuous** and has left limits — left as an exercise (why needed; what fails without it).
 - $P(a<X\le b)=F(b)-F(a)$. If you include the point $a$, add $P(X=a)$.
 
 You can now evaluate a coin CDF and refuse the word “increasing” when the graph is flat. Still missing: the discrete case where $F$ is a **staircase** and the jump heights get their own name (PMF).
@@ -718,16 +737,18 @@ Order the support $x_1<x_2<\cdots$ (rename if needed). Put mass $q_i=P(X=x_i)$ w
 
 $$
 P_X(x) - P_X(x^-) = P(X=x)
+
 $$
 
 So the graph is a **staircase / step function**. For three fair coins the jumps are
 
-| $x$ | jump $P(X=x)$ | $F(x)$ after the jump |
-|-----|----------------|------------------------|
-| $0$ | $1/8$ (TTT) | $1/8$ |
-| $1$ | $3/8$ (HTT, THT, TTH) | $4/8$ |
-| $2$ | $3/8$ | $7/8$ |
-| $3$ | $1/8$ (HHH) | $1$ |
+
+| $x$ | jump$P(X=x)$          | $F(x)$ after the jump |
+| ----- | ----------------------- | ----------------------- |
+| $0$ | $1/8$ (TTT)           | $1/8$                 |
+| $1$ | $3/8$ (HTT, THT, TTH) | $4/8$                 |
+| $2$ | $3/8$                 | $7/8$                 |
+| $3$ | $1/8$ (HHH)           | $1$                   |
 
 The **probability mass function (PMF)** $p_X$ (small $p$) is the mass **at** a point: $p_X(x_i)=P(X=x_i)$, and $p_X=0$ off the support. CDF = probability **until** $x$; PMF = probability **at** $x$.
 
@@ -735,6 +756,7 @@ Relationship:
 
 $$
 F(x) = \sum_{x_i \le x} p_X(x_i)
+
 $$
 
 Example: $F(2.5)=p(0)+p(1)+p(2)$.
@@ -793,6 +815,7 @@ Some PMFs appear so often they get names and two-letter parameters. The last blo
 
 $$
 P(1_B = 1) = P(B)
+
 $$
 
 They will use indicators constantly later.
@@ -801,6 +824,7 @@ They will use indicators constantly later.
 
 $$
 P(X=k) = \binom{n}{k} p^k (1-p)^{n-k}, \qquad k=0,\ldots,n
+
 $$
 
 Parameters: $n$ a positive integer, $p\in[0,1]$. Reading: $k$ successes each costing $p$, $n-k$ failures each costing $1-p$, and $\binom{n}{k}$ ways to arrange them. Number of heads in $n$ independent tosses with $P(H)=p$ is binomial. It **is** $n$ independent Bernoulli trials.
@@ -809,6 +833,7 @@ Parameters: $n$ a positive integer, $p\in[0,1]$. Reading: $k$ successes each cos
 
 $$
 p_X(k) = \frac{\lambda^k e^{-\lambda}}{k!}, \qquad k=0,1,2,\ldots
+
 $$
 
 Whenever you propose a PMF, **check the axioms**: each mass in $[0,1]$, and the sum over the support is $1$. They check Poisson with the series $\sum_{k=0}^{\infty} \lambda^k/k! = e^{\lambda}$, so the $e^{-\lambda}$ in front makes the masses add to $1$. Bernoulli/indicator is the easy check $p+(1-p)=1$.
@@ -817,6 +842,7 @@ Whenever you propose a PMF, **check the axioms**: each mass in $[0,1]$, and the 
 
 $$
 P(X=k) = (1-p)^{k-1} p
+
 $$
 
 The first $k-1$ tosses are tails, then a head. That is “probability the first head occurs at the $k$th toss.”
@@ -863,91 +889,102 @@ This lecture is a **chalkboard recap**. It does **not** run Python. Do not look 
 
 ### Topic 1 — Triplet and axioms
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Khan Academy — compound sample spaces](https://www.youtube.com/watch?v=PR-A3UAO7_0) | Video | Ω as a list / tree of outcomes |
-| [Seeing Theory — Basic probability](https://seeingtheory.io/basic-probability/introduction/) | Interactive | Events as regions; mass as area |
-| [Stat 110 home (Blitzstein)](https://stat110.hsites.harvard.edu/) | Course notes | Probability space language |
+
+| Resource                                                                                      | Type         | Why it helps                    |
+| ----------------------------------------------------------------------------------------------- | -------------- | --------------------------------- |
+| [Khan Academy — compound sample spaces](https://www.youtube.com/watch?v=PR-A3UAO7_0)         | Video        | Ω as a list / tree of outcomes |
+| [Seeing Theory — Basic probability](https://seeingtheory.io/basic-probability/introduction/) | Interactive  | Events as regions; mass as area |
+| [Stat 110 home (Blitzstein)](https://stat110.hsites.harvard.edu/)                             | Course notes | Probability space language      |
 
 ### Topic 2 — Conditional probability
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [StatQuest — Probability vs likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4) | Video | “Given that” without new axioms |
-| [Khan Academy — conditional probability](https://www.khanacademy.org/math/statistics-probability/probability-library/conditional-probability-independence/v/calculating-conditional-probability) | Lesson | Die / card conditionals |
-| [Seeing Theory — Compound probability](https://seeingtheory.io/compound-probability/conditional-probability/) | Interactive | Slice $B$, then look at $A$ |
+
+| Resource                                                                                                                                                                                          | Type        | Why it helps                      |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ----------------------------------- |
+| [StatQuest — Probability vs likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4)                                                                                                             | Video       | “Given that” without new axioms |
+| [Khan Academy — conditional probability](https://www.khanacademy.org/math/statistics-probability/probability-library/conditional-probability-independence/v/calculating-conditional-probability) | Lesson      | Die / card conditionals           |
+| [Seeing Theory — Compound probability](https://seeingtheory.io/compound-probability/conditional-probability/)                                                                                    | Interactive | Slice$B$, then look at $A$        |
 
 ### Topic 3 — Total probability
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Stat 110 Lec 5 — total probability](https://www.youtube.com/watch?v=JzDvVgNDxo8) | Video | Partition mix, same rule as the board |
-| [Brilliant — Law of total probability](https://brilliant.org/wiki/law-of-total-probability/) | Notes | Pie-slice derivation |
-| [Seeing Theory — Compound probability](https://seeingtheory.io/compound-probability/conditional-probability/) | Interactive | Weighted rooms |
+
+| Resource                                                                                                       | Type        | Why it helps                          |
+| ---------------------------------------------------------------------------------------------------------------- | ------------- | --------------------------------------- |
+| [Stat 110 Lec 5 — total probability](https://www.youtube.com/watch?v=JzDvVgNDxo8)                             | Video       | Partition mix, same rule as the board |
+| [Brilliant — Law of total probability](https://brilliant.org/wiki/law-of-total-probability/)                  | Notes       | Pie-slice derivation                  |
+| [Seeing Theory — Compound probability](https://seeingtheory.io/compound-probability/conditional-probability/) | Interactive | Weighted rooms                        |
 
 ### Topic 4 — Bayes
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [3Blue1Brown — Bayes theorem](https://www.youtube.com/watch?v=HZGCoVF3YvM) | Video | Geometry of flipping $P(A\mid B)$ |
-| [3Blue1Brown — Bayes lesson (text)](https://www.3blue1brown.com/lessons/bayes-theorem) | Blog | Same pictures, pause-able |
-| [Stat 110 Lec 4 — Bayes](https://www.youtube.com/watch?v=P7NE4WF8j-Q) | Video | $\{A,A^c\}$ denominator |
+
+| Resource                                                                                | Type  | Why it helps                     |
+| ----------------------------------------------------------------------------------------- | ------- | ---------------------------------- |
+| [3Blue1Brown — Bayes theorem](https://www.youtube.com/watch?v=HZGCoVF3YvM)             | Video | Geometry of flipping$P(A\mid B)$ |
+| [3Blue1Brown — Bayes lesson (text)](https://www.3blue1brown.com/lessons/bayes-theorem) | Blog  | Same pictures, pause-able        |
+| [Stat 110 Lec 4 — Bayes](https://www.youtube.com/watch?v=P7NE4WF8j-Q)                  | Video | $\{A,A^c\}$ denominator          |
 
 ### Topic 5 — Two-event independence
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Stat 110 Lec 4 — independence](https://www.youtube.com/watch?v=P7NE4WF8j-Q) | Video | Product test as definition |
-| [Khan Academy — independent events](https://www.khanacademy.org/math/statistics-probability/probability-library/multiplication-rule-independent/v/compound-sample-spaces) | Lesson | When you may multiply |
-| [Seeing Theory — Independence](https://seeingtheory.io/compound-probability/independence/) | Interactive | Product vs “feel unrelated” |
+
+| Resource                                                                                                                                                                   | Type        | Why it helps                  |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ------------------------------- |
+| [Stat 110 Lec 4 — independence](https://www.youtube.com/watch?v=P7NE4WF8j-Q)                                                                                              | Video       | Product test as definition    |
+| [Khan Academy — independent events](https://www.khanacademy.org/math/statistics-probability/probability-library/multiplication-rule-independent/v/compound-sample-spaces) | Lesson      | When you may multiply         |
+| [Seeing Theory — Independence](https://seeingtheory.io/compound-probability/independence/)                                                                                | Interactive | Product vs “feel unrelated” |
 
 ### Topic 6 — Independence flavors
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Stat 110 Lec 5 — conditional independence](https://www.youtube.com/watch?v=JzDvVgNDxo8) | Video | Tests given disease |
-| [Stat 110 notes hub](https://stat110.hsites.harvard.edu/) | Notes | Pairwise ≠ mutual |
-| [Towards Data Science — conditional independence](https://towardsdatascience.com/conditional-independence-the-backbone-of-bayesian-networks-85710f1b35b) | Blog | Same disease-test intuition |
+
+| Resource                                                                                                                                                  | Type  | Why it helps                |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------------------------- |
+| [Stat 110 Lec 5 — conditional independence](https://www.youtube.com/watch?v=JzDvVgNDxo8)                                                                 | Video | Tests given disease         |
+| [Stat 110 notes hub](https://stat110.hsites.harvard.edu/)                                                                                                 | Notes | Pairwise ≠ mutual          |
+| [Towards Data Science — conditional independence](https://towardsdatascience.com/conditional-independence-the-backbone-of-bayesian-networks-85710f1b35b) | Blog  | Same disease-test intuition |
 
 ### Topic 7 — Random variables
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [StatQuest — probability distributions](https://www.youtube.com/watch?v=oI3hZJqXJuc) | Video | What a distribution is |
-| [Khan Academy — discrete random variables](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-discrete/v/discrete-and-continuous-random-variables) | Lesson | $X$ as a numerical label |
-| [Stat 110 notes](https://stat110.hsites.harvard.edu/) | Notes | RV as a function $\Omega\to\mathbb{R}$ |
+
+| Resource                                                                                                                                                                                                 | Type   | Why it helps                          |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------------------------------- |
+| [StatQuest — probability distributions](https://www.youtube.com/watch?v=oI3hZJqXJuc)                                                                                                                    | Video  | What a distribution is                |
+| [Khan Academy — discrete random variables](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-discrete/v/discrete-and-continuous-random-variables) | Lesson | $X$ as a numerical label              |
+| [Stat 110 notes](https://stat110.hsites.harvard.edu/)                                                                                                                                                    | Notes  | RV as a function$\Omega\to\mathbb{R}$ |
 
 ### Topic 8 — CDF
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Khan Academy — cumulative distribution](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-discrete/v/discrete-probability-distribution) | Video | Running total of mass |
-| [Seeing Theory — Distributions](https://seeingtheory.io/probability-distributions/discrete-discrete/) | Interactive | Stairs vs smooth $F$ |
-| [Stat 110 notes](https://stat110.hsites.harvard.edu/) | Notes | $F$ specifies the law |
+
+| Resource                                                                                                                                                                                        | Type        | Why it helps          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ----------------------- |
+| [Khan Academy — cumulative distribution](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-discrete/v/discrete-probability-distribution) | Video       | Running total of mass |
+| [Seeing Theory — Distributions](https://seeingtheory.io/probability-distributions/discrete-discrete/)                                                                                          | Interactive | Stairs vs smooth$F$   |
+| [Stat 110 notes](https://stat110.hsites.harvard.edu/)                                                                                                                                           | Notes       | $F$ specifies the law |
 
 ### Topic 9 — Discrete PMF / staircase
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Khan Academy — discrete probability distribution](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-discrete/v/discrete-probability-distribution) | Video | Mass at a point vs until a point |
-| [Seeing Theory — Discrete distributions](https://seeingtheory.io/probability-distributions/discrete-discrete/) | Interactive | Jumps = atoms |
-| [StatQuest — distributions](https://www.youtube.com/watch?v=oI3hZJqXJuc) | Video | Histogram / pile picture |
+
+| Resource                                                                                                                                                                                                  | Type        | Why it helps                     |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ---------------------------------- |
+| [Khan Academy — discrete probability distribution](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-discrete/v/discrete-probability-distribution) | Video       | Mass at a point vs until a point |
+| [Seeing Theory — Discrete distributions](https://seeingtheory.io/probability-distributions/discrete-discrete/)                                                                                           | Interactive | Jumps = atoms                    |
+| [StatQuest — distributions](https://www.youtube.com/watch?v=oI3hZJqXJuc)                                                                                                                                 | Video       | Histogram / pile picture         |
 
 ### Topic 10 — Named families
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [StatQuest — Binomial](https://www.youtube.com/watch?v=J8jNoF-K8E8) | Video | $n$ independent yes/no trials |
-| [3Blue1Brown — Binomial distributions](https://www.youtube.com/watch?v=8idr1WZ1A7Q) | Video | Why $\binom{n}{k}p^k(1-p)^{n-k}$ |
-| [Khan Academy — binomial](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/binomial-random-variables/v/binomial-distribution) | Lesson | Parameters $n,p$ |
+
+| Resource                                                                                                                                                             | Type   | Why it helps                    |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------------------------- |
+| [StatQuest — Binomial](https://www.youtube.com/watch?v=J8jNoF-K8E8)                                                                                                 | Video  | $n$ independent yes/no trials   |
+| [3Blue1Brown — Binomial distributions](https://www.youtube.com/watch?v=8idr1WZ1A7Q)                                                                                 | Video  | Why$\binom{n}{k}p^k(1-p)^{n-k}$ |
+| [Khan Academy — binomial](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/binomial-random-variables/v/binomial-distribution) | Lesson | Parameters$n,p$                 |
 
 ### Whole-map companions
 
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PREREQUISITES.md (this package)](./PREREQUISITES.md) | Warm-up | #p1–#p8 beginner unlocks |
-| [Seeing Theory](https://seeingtheory.io/) | Interactive hub | All early probability pictures |
-| [Stat 110 YouTube playlist](https://www.youtube.com/playlist?list=PL2SOU6wwxB0uwwH80KTQ6ht66KWxbzTIo) | Video course | Same objects, slower proofs |
+
+| Resource                                                                                              | Type            | Why it helps                   |
+| ------------------------------------------------------------------------------------------------------- | ----------------- | -------------------------------- |
+| [PREREQUISITES.md (this package)](./PREREQUISITES.md)                                                 | Warm-up         | #p1–#p8 beginner unlocks      |
+| [Seeing Theory](https://seeingtheory.io/)                                                             | Interactive hub | All early probability pictures |
+| [Stat 110 YouTube playlist](https://www.youtube.com/playlist?list=PL2SOU6wwxB0uwwH80KTQ6ht66KWxbzTIo) | Video course    | Same objects, slower proofs    |
 
 ---
 

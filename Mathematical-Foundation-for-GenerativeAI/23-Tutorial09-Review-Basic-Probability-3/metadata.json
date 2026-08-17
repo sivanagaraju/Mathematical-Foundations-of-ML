@@ -1,0 +1,30 @@
+{
+  "title": "Tutorial 9 : Review of Basic Probability 3",
+  "video_id": "eDSb3yObtB8",
+  "url": "https://www.youtube.com/watch?v=eDSb3yObtB8",
+  "duration_seconds": 4404,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "Pair of RVs, joint CDF/PMF/PDF, marginals, conditionals, mixed types, independence, IID, Jacobian transform",
+  "playlist_index": 4,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Pair and joint CDF",
+    "Joint CDF properties",
+    "Joint PMF two dice",
+    "Joint PDF triangle",
+    "Marginals unique one way",
+    "Conditional discrete",
+    "Conditional continuous Bayes",
+    "Mixed GMM communication",
+    "Independence and vector RVs",
+    "IID Jacobian recap"
+  ]
+}

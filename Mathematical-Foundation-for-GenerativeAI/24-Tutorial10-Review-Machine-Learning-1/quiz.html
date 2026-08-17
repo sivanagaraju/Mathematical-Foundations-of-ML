@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · Tutorial 10 Review of Machine Learning 1</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · Tutorial 10 Review of Machine Learning 1</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q1", "part": "prerequisites", "tag": "Definition · likelihood", "prompt": "After the notebook is written, a likelihood L(μ) is best described as", "options": [{"key": "A", "text": "The probability that μ itself is true"}, {"key": "B", "text": "A score for each candidate μ given the frozen data"}, {"key": "C", "text": "The density of a new unused observation"}, {"key": "D", "text": "A prior you multiply onto μ before seeing data"}], "answer": "B", "whyCorrect": "Same formula as P(data|μ), but the data sit still and μ is the variable you slide.", "whyOthers": {"A": "That would be a posterior statement about μ, not a likelihood.", "C": "Predictive density is a different object.", "D": "A prior is the MAP ingredient he left as homework."}, "diagram": "  data frozen\n  slide μ  →  L(μ) = how well this μ explains THIS notebook", "useLater": "Topics 2–5 write L(μ) from signs, not from a belief about μ.", "anchor": "PREREQUISITES.md#p1-likelihood"}, {"id": "q2", "part": "prerequisites", "tag": "Compare · IID", "prompt": "n IID realizations from one machine means the joint density", "options": [{"key": "A", "text": "Is a mixture of n different laws"}, {"key": "B", "text": "Cannot be written until Z is observed"}, {"key": "C", "text": "Factors as a product of n copies of the same one-point density"}, {"key": "D", "text": "Equals the average of the n densities"}], "answer": "C", "whyCorrect": "Identical law + independence ⇒ multiply. That is why both problems start with a product.", "whyOthers": {"A": "A mixture is one observation from a coin-then-machine story, not n different laws.", "B": "IID is about the observations; latent Z is extra structure in Problem 2.", "D": "Mixture weights average densities; IID multiplies them."}, "diagram": "  same copier × n independent tickets\n  f(x1,…,xn) = f(x1)·…·f(xn)", "useLater": "Topic 2 (signs) and Topic 7 (complete pairs) both invoke the product.", "anchor": "PREREQUISITES.md#p2-iid"}, {"id": "q3", "part": "prerequisites", "tag": "Worked · Φ", "prompt": "X ~ N(μ,1). After standardizing, P(X < 0) equals", "options": [{"key": "A", "text": "The Normal density of X at 0"}, {"key": "B", "text": "μ itself"}, {"key": "C", "text": "Φ(μ)"}, {"key": "D", "text": "Φ(−μ), the standard-Normal left-area up to −μ"}], "answer": "D", "whyCorrect": "P(X<0)=P(Z<−μ)=Φ(−μ). The complementary plus-probability is Φ(μ).", "whyOthers": {"A": "A density height is not a probability of landing left of a fence.", "B": "μ is a location, not an area.", "C": "Φ(μ) is P(X>0), the plus side."}, "diagram": "  N(μ,1) threshold at 0\n  left area = Φ(−μ)\n  right area = Φ(μ)", "useLater": "Topic 3 builds L(μ) from these two areas.", "anchor": "PREREQUISITES.md#p3-phi"}, {"id": "q4", "part": "prerequisites", "tag": "Worked · Bernoulli", "prompt": "A coin has unknown P(success)=p. You see m successes in n independent trials. The MLE is", "options": [{"key": "A", "text": "p̂ = m/n, the observed fraction"}, {"key": "B", "text": "p̂ = 1/2, because a coin should be fair"}, {"key": "C", "text": "p̂ = n/m"}, {"key": "D", "text": "p̂ = Φ(m/n)"}], "answer": "A", "whyCorrect": "ℓ(p)=m log p+(n−m)log(1−p); ℓ'=0 gives p=m/n. The lecture treats a minus as a success.", "whyOthers": {"B": "Fairness is a prior, not the MLE.", "C": "Reciprocal of the fraction; wrong algebra.", "D": "Φ appears when converting p back to μ, not when estimating p."}, "diagram": "  m S and (n−m) F\n  p̂ = m/n", "useLater": "Topic 4 reduces the sign problem to this coin.", "anchor": "PREREQUISITES.md#p5-bernoulli"}, {"id": "q5", "part": "prerequisites", "tag": "Definition · latent", "prompt": "In a two-component mixture, the latent Z is", "options": [{"key": "A", "text": "The observed waiting time x"}, {"key": "B", "text": "The rate β itself"}, {"key": "C", "text": "The missing component label (which machine cooked this x)"}, {"key": "D", "text": "The number of observations n"}], "answer": "C", "whyCorrect": "Z=1 means component 1. Complete data are pairs (x,z); incomplete data are the x's alone.", "whyOthers": {"A": "x is observed in Problem 2. The switch is not.", "B": "β is a parameter, not a missing label.", "D": "n is known."}, "diagram": "  coin Z → machine 1 or 2 → x\n  you see x, not Z", "useLater": "Topics 6–8: invent Z, then take E[Z|x].", "anchor": "PREREQUISITES.md#p7-latent"}, {"id": "q6", "part": "notes", "tag": "Map · whole lecture", "prompt": "On the master map, this hour installs which two machines?", "options": [{"key": "A", "text": "A CNN trainer and a transfer-learning head swap"}, {"key": "B", "text": "MLE on sign-censored N(μ,1) via Bernoulli+Φ⁻¹, and EM on a two-exponential mixture via E–Q–M"}, {"key": "C", "text": "A joint CDF rectangle formula and a Jacobian transform"}, {"key": "D", "text": "A full MAP derivation and a numerical backprop worksheet"}], "answer": "B", "whyCorrect": "Problem 1 is signs → Φ → coin → invert. Problem 2 is mixture → latent Z → Bayes γ → Q → closed M-step, loop.", "whyOthers": {"A": "That was Tutorial 6 (transfer learning), not this recap.", "C": "That was Tutorial 9 (pairs / Jacobian).", "D": "MAP is homework; NN numericals are the next section."}, "diagram": "  GOAL\n   ├─ PROBLEM 1: signs → L → p̂ → μ̂=Φ⁻¹\n   └─ PROBLEM 2: mix → Z → γ → Q → (π,β) → loop", "useLater": "Every topic is one box on that blueprint.", "anchor": "NOTES.md#executive-summary--architecture-of-this-lecture"}, {"id": "q7", "part": "notes", "tag": "Worked · likelihood", "prompt": "n IID signs from N(μ,1), m of them negative. The likelihood of the recorded data is", "options": [{"key": "A", "text": "The product of n Normal densities of the missing x_i"}, {"key": "B", "text": "Φ(μ)^m Φ(−μ)^{n−m}"}, {"key": "C", "text": "μ̂ = x̄"}, {"key": "D", "text": "[Φ(−μ)]^m [Φ(μ)]^{n−m}"}], "answer": "D", "whyCorrect": "Each minus contributes Φ(−μ); each plus contributes Φ(μ). Build L from what was written down.", "whyOthers": {"A": "The x_i were never recorded — that product is the wrong data model.", "B": "Powers swapped: m minuses need Φ(−μ), not Φ(μ).", "C": "That is ordinary Normal MLE, blocked because x̄ is not on the page."}, "diagram": "  m copies of [left area] × (n−m) copies of [right area]", "useLater": "Topic 4 renames p=Φ(−μ) and maximizes the coin.", "anchor": "NOTES.md#topic-3-standardize-and-write-the-likelihood-0422–0853"}, {"id": "q8", "part": "notes", "tag": "Edge · trap", "prompt": "Why is the usual Normal MLE μ̂ = x̄ the wrong move on this notebook?", "options": [{"key": "A", "text": "The actual x_i were never written — only plus/minus ticks"}, {"key": "B", "text": "The variance is unknown, so the mean is unidentifiable"}, {"key": "C", "text": "The draws are not IID"}, {"key": "D", "text": "Φ is undefined at zero"}], "answer": "A", "whyCorrect": "The model is still N(μ,1). The data object changed: counts of signs, not the numbers.", "whyOthers": {"B": "Variance is known and equal to 1. One parameter: μ.", "C": "He states n IID realizations.", "D": "Φ is a CDF on all of ℝ."}, "diagram": "  TRUE x_i     WRITTEN\n   1.2          +\n  −0.4          −\n  x̄ ──X──► not on the page", "useLater": "Always ask: what was recorded? That is the likelihood's input.", "anchor": "NOTES.md#topic-2-sign-censored-normal-0127–0422"}, {"id": "q9", "part": "notes", "tag": "Connect · Topics 4–5", "prompt": "After p̂ = m/n, how does Topic 5 recover μ̂?", "options": [{"key": "A", "text": "μ̂ = p̂, because a probability is already a mean"}, {"key": "B", "text": "μ̂ = log(m/n)"}, {"key": "C", "text": "m/n = Φ(−μ̂), so μ̂ = −Φ⁻¹(m/n) = Φ⁻¹((n−m)/n)"}, {"key": "D", "text": "μ̂ = β₁ / β₂ from the later mixture"}], "answer": "C", "whyCorrect": "p was defined as Φ(−μ). Invert, then use −Φ⁻¹(q)=Φ⁻¹(1−q).", "whyOthers": {"A": "p is an area, μ is a location. Different units.", "B": "No log appears in the inversion.", "D": "Mixture rates belong to Problem 2."}, "diagram": "  p̂ = m/n = Φ(−μ̂)\n  −μ̂ = Φ⁻¹(m/n)\n  μ̂ = Φ⁻¹((n−m)/n)", "useLater": "Sanity check: many minuses ⇒ μ̂ < 0.", "anchor": "NOTES.md#topic-5-invert-φ-and-read-the-sign-of-μ̂-1401–1831"}, {"id": "q10", "part": "notes", "tag": "Worked · sign of μ̂", "prompt": "If most recorded signs are negative (m/n large), the MLE μ̂ is", "options": [{"key": "A", "text": "Positive, because a Normal mean is always positive"}, {"key": "B", "text": "Negative, because Φ(−μ̂) large forces −μ̂ > 0"}, {"key": "C", "text": "Exactly zero"}, {"key": "D", "text": "Undefined until you restore the missing x_i"}], "answer": "B", "whyCorrect": "Large m/n ⇒ large Φ(−μ̂) ⇒ −μ̂ positive ⇒ μ̂ negative. The algebra matches the picture.", "whyOthers": {"A": "Means can be negative; the data are begging for that.", "C": "Only if m/n = 1/2 (Φ(0)=1/2).", "D": "The whole point is to estimate without restoring x_i."}, "diagram": "  many minuses → hill parked left of 0 → μ̂ < 0", "useLater": "Always check the sign of μ̂ against the majority of ticks.", "anchor": "NOTES.md#topic-5-invert-φ-and-read-the-sign-of-μ̂-1401–1831"}, {"id": "q11", "part": "notes", "tag": "Compare · complete data", "prompt": "In the complete-data density, raising the two component factors to z and 1−z does what?", "options": [{"key": "A", "text": "Selects exactly one component: z=1 keeps kitchen 1, z=0 keeps kitchen 2"}, {"key": "B", "text": "Averages the two exponentials with weights z and 1−z"}, {"key": "C", "text": "Forces β₁ = β₂"}, {"key": "D", "text": "Removes the need for a mixing weight π"}], "answer": "A", "whyCorrect": "Anything^0 = 1, so one factor dies. π still sits inside the surviving factor.", "whyOthers": {"B": "That average is the *observed* mixture, when z is unknown.", "C": "The two rates stay free.", "D": "π is still there: [π β₁ e^{−β₁x}]^z."}, "diagram": "  z=1: keep [π β1 e^{−β1 x}], second factor → 1\n  z=0: keep [(1−π) β2 e^{−β2 x}]", "useLater": "Because ℓ is linear in z, E[z] is a one-line swap (Topic 9).", "anchor": "NOTES.md#topic-7-complete-data-density-and-log-likelihood-2252–2839"}, {"id": "q12", "part": "notes", "tag": "Worked · E-step", "prompt": "The E-step responsibility γ_i equals", "options": [{"key": "A", "text": "The new rate β₁^{new}"}, {"key": "B", "text": "P(Z_i=1), ignoring x_i"}, {"key": "C", "text": "The observed mixture density f(x_i; θ)"}, {"key": "D", "text": "P(Z_i=1 | x_i; θ^{old}) by Bayes, using the frozen old parameters"}], "answer": "D", "whyCorrect": "γ_i = E[Z_i|x_i,θ_old] = posterior of the coin given the plate, computed from θ_old only.", "whyOthers": {"A": "β₁^{new} is an M-step output.", "B": "That is just π^{old}, the prior — Bayes still needs the likelihood of x_i.", "C": "That is the denominator of Bayes, not γ itself."}, "diagram": "  γ = (π_old · Exp_β1_old(x)) / mixture_old(x)", "useLater": "Topic 9 plugs γ into Q; Topic 10 averages those γ's to get π_new.", "anchor": "NOTES.md#topic-8-e-step-responsibilities-by-bayes-2839–3419"}, {"id": "q13", "part": "notes", "tag": "Connect · M-step", "prompt": "Which chain is the M-step update for the first exponential rate?", "options": [{"key": "A", "text": "β₁^{new} = mean of the raw x_i"}, {"key": "B", "text": "β₁^{new} = π^{new}"}, {"key": "C", "text": "β₁^{new} = (Σ γ_i) / (Σ γ_i x_i), then loop with a new E-step"}, {"key": "D", "text": "β₁^{new} = Φ⁻¹(m/n) from Problem 1"}], "answer": "C", "whyCorrect": "Weighted exponential MLE: total responsibility over responsibility-weighted sum of waits. Then θ_new becomes θ_old.", "whyOthers": {"A": "That ignores the soft labels and estimates a single exponential, not a mixture.", "B": "π and β live on different scales.", "D": "Φ⁻¹ belongs to the sign problem."}, "diagram": "  β1 = (claimed plates) / (claimed total wait)\n  then γ ← Bayes(θ_new)  →  repeat", "useLater": "Same shape for β₂ with weights 1−γ_i. That closes the hour.", "anchor": "NOTES.md#topic-10-m-step-closed-forms-iterate-close-3917–4733"}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>
