@@ -1,0 +1,30 @@
+{
+  "title": "Lec 03 f-Divergence and Examples",
+  "video_id": "LR9UQXY_IU8",
+  "url": "https://www.youtube.com/watch?v=LR9UQXY_IU8",
+  "duration_seconds": 2580,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc",
+  "description": "KL Divergence, Reverse KL and JSD",
+  "playlist_index": 2,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Two jobs estimate and sample",
+    "Implicit neural samplers any law",
+    "Recipe model divergence train",
+    "Hole D without either density",
+    "Primitive generator Z to G theta",
+    "Samples are not the law",
+    "Infinite support and multimodal Z",
+    "VDM family and f-divergence definition",
+    "Properties and named family",
+    "Mode cover versus junk variational next"
+  ]
+}
