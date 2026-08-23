@@ -1,791 +1,698 @@
-# W1_L3 — PyTorch tensors (playlist title: F-divergence)
+# W1_L3 — PyTorch Tensors & Hands-On Deep Learning Foundations
 
-> **Video:** [W1_L3 on the IITM playlist](https://www.youtube.com/watch?v=rHnrALMCyIQ&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=3) · **~29 min**  
-> **Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md) · **Quiz:** [quiz.html](./quiz.html)
-
-**Do PREREQUISITES before this article.**
-
-**Title vs recording:** YouTube title and description say *F-divergence / variational divergence minimization*. The **28:43 file is a Colab walkthrough of the official PyTorch tensor tutorial** (create, attributes, `cat`, `@` vs `*`). This package follows **what is on screen and in the audio**, not the metadata. For actual $f$-divergence chalk, use [NPTEL Lec 03](../../Mathematical-Foundation-for-GenerativeAI/25-Lec03-f-Divergence-Examples/NOTES.md) or playlist [W1_L4 VDM](https://www.youtube.com/watch?v=nfZQYopzv20).
-
-**Previous (true lecture):** [W1_L2 problem setting](../01-W1-L2-Introduction-Problem-Setting/NOTES.md) · **Catalog:** [../NOTES.md](../NOTES.md)
-
-| When he hits… | Warm-up |
-|---------------|---------|
-| List → tensor | [p1-list](./PREREQUISITES.md#p1-list) |
-| `shape=(2,3)` | [p2-shape](./PREREQUISITES.md#p2-shape) |
-| NumPy | [p3-numpy](./PREREQUISITES.md#p3-numpy) |
-| Colab / ipynb | [p4-colab](./PREREQUISITES.md#p4-colab) |
-| `tensor.device` | [p5-device](./PREREQUISITES.md#p5-device) |
-| $M\times N$ times $N\times P$ | [p6-matmul](./PREREQUISITES.md#p6-matmul) |
-| `.T` | [p7-transpose](./PREREQUISITES.md#p7-transpose) |
-| `*` vs `@` | [p8-hadamard](./PREREQUISITES.md#p8-hadamard) |
+> **Course:** IIT Madras B.S. Degree in Data Science & AI · **Mathematical Foundations of Generative AI**  
+> **Instructor:** IIT Madras BS Degree Tutorial Team  
+> **Lecture Recording:** [W1_L3 on the IITM Playlist](https://www.youtube.com/watch?v=rHnrALMCyIQ&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=3) (~28:43)  
+> **Prerequisites Warm-up:** [PREREQUISITES.md](./PREREQUISITES.md) · **Self-Assessment Quiz:** [quiz.html](./quiz.html)  
+> **Course Catalog:** [../NOTES.md](../NOTES.md)
 
 ---
 
-## Table of Contents
+## Important Notice on Title vs. Recording Content
 
-1. [Topic 1: Colab GPU, prereqs, CS231n](#topic-1-colab-gpu-prereqs-cs231n-0011–0442) (00:11–04:42)
-2. [Topic 2: Official tutorials and the Colab notebook](#topic-2-official-tutorials-and-the-colab-notebook-0442–0814) (04:42–08:14)
-3. [Topic 3: What a tensor is](#topic-3-what-a-tensor-is-0814–0941) (08:14–09:41)
-4. [Topic 4: Tensor from a list and from NumPy](#topic-4-tensor-from-a-list-and-from-numpy-0941–1234) (09:41–12:34)
-5. [Topic 5: `ones_like` / `rand_like`](#topic-5-ones_like--rand_like-1234–1500) (12:34–15:00)
-6. [Topic 6: Create from a shape](#topic-6-create-from-a-shape-1500–1629) (15:00–16:29)
-7. [Topic 7: shape, dtype, device](#topic-7-shape-dtype-device-1629–1754) (16:29–17:54)
-8. [Topic 8: Concatenate `dim=0` vs `dim=1`](#topic-8-concatenate-dim0-vs-dim1-1754–2043) (17:54–20:43)
-9. [Topic 9: Matrix multiply three ways](#topic-9-matrix-multiply-three-ways-2043–2502) (20:43–25:02)
-10. [Topic 10: Element-wise product](#topic-10-element-wise-product-2502–2843) (25:02–28:43)
-11. [External references](#external-references)
-12. [Sources](#sources)
+> [!NOTE]
+> **Recording vs. Metadata Clarification:**  
+> The YouTube playlist title and description for this slot display *"W1_L3: F-divergence | variational divergence minimization in generative models"*. However, the **actual 28:43 recording is a hands-on tutorial on PyTorch Tensors on Google Colab**.  
+> This comprehensive study guide covers the **exact video content, code demonstrations, and pedagogical explanations presented on screen**. If you are looking for the theoretical chalkboard lecture on $f$-divergences and Variational Divergence Minimization (VDM), refer to [W1_L4 VDM](https://www.youtube.com/watch?v=nfZQYopzv20) or [NPTEL Lecture 03 Notes](../../Mathematical-Foundation-for-GenerativeAI/25-Lec03-f-Divergence-Examples/NOTES.md).
 
 ---
 
-## Executive Summary — architecture of this lecture
+## Quick Navigation Matrix
 
-You need a number-grid that can sit on a GPU so later generative models are not stuck in NumPy. The method is the official PyTorch **Tensors** notebook on **Google Colab**: wrap a list or ndarray, or name a shape; then join, multiply, or Hadamard-multiply. The fork that matters is `@` (matmul, inner dims match) versus `*` (same shape, used in convolutions).
+| Topic & Timestamp | Focus Area | Core Python / PyTorch API | Prerequisite Link |
+| :--- | :--- | :--- | :--- |
+| [Topic 1: Colab GPU, Prereqs & CS231n](#topic-1-colab-gpu-environment-prerequisites--cs231n-review-00110442) (00:11–04:42) | Setup & CNNs | Hosted GPU Runtime / CS231n | [p4-colab](./PREREQUISITES.md#p4-colab) |
+| [Topic 2: Official Tutorials & Colab Notebook](#topic-2-official-pytorch-tutorials--google-colab-workflow-04420814) (04:42–08:14) | Workflow | `.ipynb` Interactive Execution | [p4-colab](./PREREQUISITES.md#p4-colab) |
+| [Topic 3: What is a Tensor?](#topic-3-what-is-a-tensor-08140941) (08:14–09:41) | Data Structure | `torch.Tensor` vs `np.ndarray` | [p3-numpy](./PREREQUISITES.md#p3-numpy) |
+| [Topic 4: Tensor from List and NumPy](#topic-4-tensor-creation-from-python-lists--numpy-arrays-09411234) (09:41–12:34) | Initialization | `torch.tensor()`, `torch.from_numpy()` | [p1-list](./PREREQUISITES.md#p1-list) |
+| [Topic 5: `ones_like` & `rand_like`](#topic-5-tensor-creation-from-existing-tensors-ones_like--rand_like-12341500) (12:34–15:00) | Template Cloning | `torch.ones_like()`, `torch.rand_like()` | [p2-shape](./PREREQUISITES.md#p2-shape) |
+| [Topic 6: Create from Shape Tuples](#topic-6-direct-tensor-creation-from-shape-tuples-15001629) (15:00–16:29) | Direct Allocation | `torch.rand()`, `torch.ones()`, `torch.zeros()` | [p2-shape](./PREREQUISITES.md#p2-shape) |
+| [Topic 7: Shape, Dtype, Device](#topic-7-tensor-attributes--hardware-inspection-16291754) (16:29–17:54) | Metadata | `.shape`, `.dtype`, `.device` | [p5-device](./PREREQUISITES.md#p5-device) |
+| [Topic 8: Concatenate `dim=0` vs `dim=1`](#topic-8-tensor-concatenation-across-dimensions-17542043) (17:54–20:43) | Tensor Stacking | `torch.cat([...], dim=0/1)` | [p2-shape](./PREREQUISITES.md#p2-shape) |
+| [Topic 9: Matrix Multiply Three Ways](#topic-9-matrix-multiplication-three-equivalent-apis-20432502) (20:43–25:02) | Linear Layers | `@`, `.matmul()`, `torch.matmul(out=)` | [p6-matmul](./PREREQUISITES.md#p6-matmul) |
+| [Topic 10: Element-Wise Product](#topic-10-element-wise-hadamard-multiplication-25022843) (25:02–28:43) | Convolutions | `*`, `.mul()`, `torch.mul(out=)` | [p8-hadamard](./PREREQUISITES.md#p8-hadamard) |
+| [Workplace Scenarios](#workplace-scenarios--debugging-tensors) | Hands-on Debugging | Production Tensor Issues | — |
+| [External References](#external-references) | Multi-Source Study | 2–3 Videos & 2–3 Docs/Blogs per Subtopic | — |
 
-**Worldview arc:** from “we will code simple DGM models on Colab” **to** a tensor you can create, inspect, concatenate, and multiply two different ways.
+---
 
-### System context
+## Executive Summary & Master Architecture
 
-```
-  ╔════════════════════════════════════╗
-  ║ Later: GANs / VAEs on small data   ║
-  ║ Outside: TensorFlow (optional)     ║
-  ║ Outside: CS231n if CNN rusty       ║
-  ╚══════════════╤═════════════════════╝
-                 │ this 29 min
-                 ▼
-        ┌─────────────────────┐
-        │ Tensor toolkit      │
-        └─────────────────────┘
-                 │
-                 ▼
-        STOP: DataLoader, Autograd, nn.Module
-        NOT this file: f-divergence math
-```
-
-### Main blueprint
+This tutorial provides the **practical, code-level execution engine** for the theoretical principles introduced in Lecture 2. In generative modeling, data points ($x \in \mathbb{R}^D$), latent noise ($z \in \mathbb{R}^k$), network parameters ($\theta$), and objective divergences are all represented and computed using **PyTorch Tensors**.
 
 ```
-  Colab  (.ipynb on a Google GPU box)
-     │  official pytorch.org/tutorials
-     ▼
-  import torch [, numpy as np]
-     │
-     ├─ from data ──► torch.tensor(list)
-     │                torch.from_numpy(ndarray)
-     ├─ from template ──► ones_like / rand_like  (dtype can override)
-     └─ from shape ──► torch.rand / ones / zeros (2, 3)
-                 │
-                 ▼
-  attributes:  .shape   .dtype   .device  (demo stays CPU)
-                 │
-                 ├─ torch.cat([...], dim=1)  → more COLUMNS
-                 ├─ torch.cat([...], dim=0)  → more ROWS
-                 ├─ @  / .matmul / torch.matmul(..., out=)
-                 │     A(M×N) @ B(N×P) = C(M×P)
-                 └─ *  / .mul             same shape (convolutions)
+══════════════════════════════════════════════════════════════════════════════════════════════════
+                            THE PYTORCH TENSOR COMPUTATIONAL BLUEPRINT
+══════════════════════════════════════════════════════════════════════════════════════════════════
+
+  1. THE RUNTIME ENVIRONMENT: GOOGLE COLAB
+     • Hosted Linux VM with 12 GB GPU runtime (No local driver setup required).
+     • Interactive cells execute Python code and persist memory state across blocks.
+
+  2. DATA CONVERSION & INITIALIZATION
+     ┌────────────────────────────────────────────────────────────────────────────────────────┐
+     │ • From Python Data:   data = [[1, 2], [3, 4]] ──► torch.tensor(data)                   │
+     │ • From NumPy Arrays:  np_arr = np.array(...)  ──► torch.from_numpy(np_arr) [Zero-Copy]│
+     │ • From Template:      torch.ones_like(x_data),   torch.rand_like(x_data, dtype=float)  │
+     │ • Direct from Shape:  shape = (2, 3)          ──► torch.rand / ones / zeros(shape)     │
+     └────────────────────────────────────────────────────────────────────────────────────────┘
+
+  3. TENSOR METADATA & HARDWARE MIGRATION
+     • .shape:  Dimensions along each axis (e.g., torch.Size([3, 4]))
+     • .dtype:  Numerical precision (e.g., torch.float32, torch.int64)
+     • .device: Physical memory residency (cpu vs cuda:0 via .to(device))
+
+  4. TENSOR MANIPULATION & ALGEBRAIC OPERATIONS
+     • Concatenation: torch.cat([A, A], dim=1) [Wider / Columns] vs dim=0 [Taller / Rows]
+     • Matrix Multiply (MatMul): (M × N) @ (N × P) ──► (M × P)  [Linear Forward Pass]
+     • Element-Wise (Hadamard): A * B or A.mul(B)              [Convolutions & Masking]
+══════════════════════════════════════════════════════════════════════════════════════════════════
 ```
 
-**Commented hour in one block** (what he actually ran):
+---
+
+## Complete Hands-On Tensor Cheat Sheet in Python / PyTorch
 
 ```python
 import torch
 import numpy as np
 
-# --- create ---
-data = [[1, 2], [3, 4]]              # Python list of lists
-x_data = torch.tensor(data)          # values unchanged; type → Tensor
-np_array = np.array(data)
-x_np = torch.from_numpy(np_array)
+# ==============================================================================
+# 1. INITIALIZATION & CREATION
+# ==============================================================================
+# (a) From native Python list
+data_list = [[1, 2], [3, 4]]
+t_from_list = torch.tensor(data_list)
 
-x_ones = torch.ones_like(x_data)     # same shape as x_data, all 1s
-x_rand = torch.rand_like(x_data, dtype=torch.float)  # override dtype
+# (b) From NumPy array (Zero-Copy memory sharing)
+np_array = np.array(data_list)
+t_from_np = torch.from_numpy(np_array)
 
+# (c) From existing template tensor
+t_ones_like = torch.ones_like(t_from_list)
+t_rand_like = torch.rand_like(t_from_list, dtype=torch.float)  # Override int64 -> float32
+
+# (d) Direct from shape tuple (Rows, Columns)
 shape = (2, 3)
-rand_tensor = torch.rand(shape)
-ones_tensor = torch.ones(shape)
-zeros_tensor = torch.zeros(shape)
+t_rand = torch.rand(shape)    # Uniform [0, 1)
+t_ones = torch.ones(shape)    # All 1.0
+t_zeros = torch.zeros(shape)  # All 0.0
 
-# --- inspect ---
+# ==============================================================================
+# 2. INSPECTION & HARDWARE ATTRIBUTES
+# ==============================================================================
+t_sample = torch.rand(3, 4)
+print(f"Shape:  {t_sample.shape}")   # torch.Size([3, 4])
+print(f"Dtype:  {t_sample.dtype}")   # torch.float32
+print(f"Device: {t_sample.device}")  # cpu
+
+# Device migration (CPU -> GPU)
+device = "cuda" if torch.cuda.is_available() else "cpu"
+t_device = t_sample.to(device)
+
+# ==============================================================================
+# 3. TENSOR CONCATENATION
+# ==============================================================================
+t_base = torch.ones(4, 4)
+# dim=1 concatenates horizontally (increases columns: 4x4 + 4x4 + 4x4 -> 4x12)
+t_cols = torch.cat([t_base, t_base, t_base], dim=1)
+
+# dim=0 concatenates vertically (increases rows: 4x4 + 4x4 + 4x4 -> 12x4)
+t_rows = torch.cat([t_base, t_base, t_base], dim=0)
+
+# ==============================================================================
+# 4. MATRIX MULTIPLICATION (Three Equivalent APIs)
+# ==============================================================================
+# Rule: A (M x N) @ B (N x P) = C (M x P)
+A = torch.ones(4, 4)
+B = A.T  # Transpose flips rows and columns (4x4 -> 4x4)
+
+# API 1: Infix @ operator
+y1 = A @ B
+
+# API 2: Tensor method .matmul()
+y2 = A.matmul(B)
+
+# API 3: Functional API writing into pre-allocated memory
+y3 = torch.empty_like(y1)
+torch.matmul(A, B, out=y3)
+
+assert torch.equal(y1, y2) and torch.equal(y2, y3)
+
+# ==============================================================================
+# 5. ELEMENT-WISE (HADAMARD) MULTIPLICATION
+# ==============================================================================
+# Rule: A (M x N) * B (M x N) = C (M x N) [Same shape required!]
+z1 = A * A
+z2 = A.mul(A)
+z3 = torch.empty_like(A)
+torch.mul(A, A, out=z3)
+
+assert torch.equal(z1, z2) and torch.equal(z2, z3)
+```
+
+---
+
+## Topic 1: Colab GPU Environment, Prerequisites & CS231n Review (00:11–04:42)
+
+### Master Map Placement
+Establishes the computing infrastructure for the course's practical track and references fundamental deep learning prerequisites.
+
+### Chalkboard / Colab Screenshot
+![Welcome to PyTorch Tutorials and Learn the Basics page](./screenshots/composites/ch01-topic-01-colab-prereqs-panel1of1.png)
+*Figure 1.1 (~00:14–02:45):* The official PyTorch documentation homepage (`pytorch.org/tutorials`). The instructor outlines the hardware requirements and prerequisites before launching Google Colab.
+
+### In-Depth Conceptual Exposition
+
+* **Course Coding Philosophy:**
+  Throughout this course, theoretical generative formulations (GANs, VAEs, Diffusion) will be accompanied by hands-on implementations on simple, accessible datasets (MNIST, CIFAR-10, synthetic 2D distributions).
+* **Hardware Setup on Google Colab:**
+  * Google Colab provides a free cloud-hosted Linux virtual machine equipped with a **12 GB NVIDIA GPU**.
+  * All coding exercises are specifically structured to run efficiently within this 12 GB GPU budget.
+* **Assumed Prerequisites:**
+  * **Multilayer Perceptrons (MLPs):** Forward propagation, backpropagation, gradient calculation, activation functions.
+  * **Convolutional Neural Networks (CNNs):** If rusty, the instructor points to **Stanford CS231n (Convolutional Networks for Visual Recognition)**:
+    * *Convolution Operation:* Sliding filter kernels over feature maps.
+    * *Parameter Sharing:* Spatial invariance and parameter efficiency.
+    * *Feature Extraction:* Low-level edges $\to$ mid-level textures $\to$ high-level semantic objects.
+
+```
+                  COURSE PROGRESSION TRACKS
+  ┌─────────────────────────────────────────────────────────────┐
+  │ THEORETICAL TRACK:                                          │
+  │ Problem Setting ──► f-Divergence ──► Variational Minimization│
+  ├─────────────────────────────────────────────────────────────┤
+  │ PRACTICAL CODING TRACK:                                     │
+  │ PyTorch Tensors ──► Datasets & Loaders ──► Neural Models    │
+  └─────────────────────────────────────────────────────────────┘
+```
+
+### Real-World Analogy
+* **The Culinary Masterclass:** In the theory room, you learn the chemistry of caramelization and emulsion ($p_x$, $G_\theta$, divergences). In the kitchen lab, you must know how to handle the chef's knife and pans (PyTorch tensors). If you don't know how to turn on the stove (CNNs/MLPs), the instructor hands you the CS231n kitchen manual.
+
+---
+
+## Topic 2: Official PyTorch Tutorials & Google Colab Workflow (04:42–08:14)
+
+### Master Map Placement
+Navigating official documentation and understanding interactive notebook execution.
+
+### Chalkboard / Colab Screenshot
+![Official Tensors tutorial opened in Google Colab environment](./screenshots/composites/ch02-topic-02-official-tutorials-colab-panel1of1.png)
+*Figure 2.1 (~04:47–08:14):* Opening the official *Tensors* notebook in Google Colab. The instructor highlights text blocks vs. code blocks and remote kernel connectivity.
+
+### In-Depth Conceptual Exposition
+
+* **Official Source Material:**
+  Rather than using fragmented, custom notebooks, the tutorial directly leverages the official public **PyTorch "Learn the Basics"** tutorial repository (`pytorch.org/tutorials/beginner/basics/tensor_tutorial.html`).
+* **Notebook Structure (`.ipynb`):**
+  * **Text / Markdown Blocks:** Structured pedagogical explanations and equations.
+  * **Code Blocks:** Executable Python snippets with run buttons (`[ ▶ ]`).
+* **Remote VM Connection Lifecycle:**
+  * When you open a Colab notebook, your browser connects to a remote Google Cloud server.
+  * The initial cell execution is delayed while Colab provisions the container, attaches the runtime, and initializes the Python 3 kernel.
+  * Package management is pre-configured (PyTorch, Torchvision, NumPy, Matplotlib are pre-installed).
+
+```
+   BROWSER CLIENT (Your Laptop)               GOOGLE CLOUD SERVER (Remote VM)
+  ┌───────────────────────────┐              ┌───────────────────────────────┐
+  │ Google Colab UI (.ipynb)  │   HTTPS      │ Linux Virtual Machine         │
+  │ • Edit code blocks        │ ───────────► │ • Allocates 12 GB Tesla GPU   │
+  │ • Click Run [ ▶ ]         │ ◄─────────── │ • Executes Python 3 Kernel    │
+  └───────────────────────────┘  Cell Output │ • Stores variables in memory  │
+                                             └───────────────────────────────┘
+```
+
+---
+
+## Topic 3: What is a Tensor? (08:14–09:41)
+
+### Master Map Placement
+The foundational mathematical and computational building block of PyTorch.
+
+### Chalkboard / Colab Screenshot
+![Definition of tensors as specialized data structures similar to ndarrays](./screenshots/composites/ch03-topic-03-what-is-a-tensor-panel1of1.png)
+*Figure 3.1 (~08:14–09:12):* Official text defining tensors: *"Tensors are a specialized data structure that are very similar to arrays and matrices... to encode the inputs and outputs of a model, as well as the model’s parameters."*
+
+### In-Depth Conceptual Exposition
+
+* **Definition:**
+  A tensor is a specialized, multi-dimensional geometric array of numerical values.
+* **Tensors vs. NumPy `ndarray`:**
+  * Like NumPy arrays, tensors represent $N$-dimensional grids of numbers (scalars, vectors, matrices, 4D batches).
+  * **Key Distinction 1 (Hardware Acceleration):** PyTorch tensors can seamlessly execute on GPUs, TPUs, and specialized neural accelerators, unlocking massive SIMD parallel computing.
+  * **Key Distinction 2 (Autograd Integration):** Tensors support automatic differentiation, recording computational graphs during forward passes to compute analytical gradients during backpropagation.
+* **Role in Deep Generative Modeling:**
+  * Tensors encode training data batches $X \in \mathbb{R}^{B \times D}$.
+  * Tensors store neural network parameter weights $\theta = \{W_l, b_l\}$.
+  * Tensors hold latent noise variables $Z \in \mathbb{R}^{B \times k}$.
+
+```
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │                            THE TENSOR SPECTRUM                              │
+  │ Rank 0 (Scalar) ──► Rank 1 (Vector) ──► Rank 2 (Matrix) ──► Rank N (Tensor) │
+  │    torch.tensor(5)     torch.randn(4)     torch.randn(3, 3)   torch.randn(B,C,H,W)│
+  └─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Topic 4: Tensor Creation from Python Lists & NumPy Arrays (09:41–12:34)
+
+### Master Map Placement
+Converting existing Python data structures into PyTorch tensors.
+
+### Chalkboard / Colab Screenshot
+![Creating tensors from data list and numpy array](./screenshots/composites/ch04-topic-04-tensor-from-list-numpy-panel1of1.png)
+*Figure 4.1 (~09:54–12:20):* Code demonstrations of `torch.tensor(data)` and `torch.from_numpy(np_array)` using a 2D list `[[1, 2], [3, 4]]`.
+
+### In-Depth Conceptual Exposition
+
+* **Import Conventions:**
+  ```python
+  import torch
+  import numpy as np
+  ```
+* **From Python List (`torch.tensor`):**
+  ```python
+  data = [[1, 2], [3, 4]]
+  x_data = torch.tensor(data)
+  ```
+  * `data` is a nested Python list.
+  * `torch.tensor(data)` constructs a new tensor object. The numerical values ($1, 2, 3, 4$) are preserved, while the underlying data type is upgraded to `torch.int64`.
+* **From NumPy Array (`torch.from_numpy`):**
+  ```python
+  np_array = np.array(data)
+  x_np = torch.from_numpy(np_array)
+  ```
+  * **Zero-Copy Memory Architecture:** `torch.from_numpy()` points directly to NumPy's memory buffer on the CPU. No data copying overhead is incurred.
+
+```
+  Python List: [[1,2],[3,4]] ──► torch.tensor()   ──► New Tensor Memory Buffer
+  NumPy Array: np.array(...) ──► torch.from_numpy()──► Shared Pointer to Array Buffer
+```
+
+---
+
+## Topic 5: Tensor Creation from Existing Tensors (`ones_like` & `rand_like`) (12:34–15:00)
+
+### Master Map Placement
+Cloning structural properties (shape, device, dtype) from an existing tensor.
+
+### Chalkboard / Colab Screenshot
+![ones_like and rand_like with datatype override](./screenshots/composites/ch05-topic-05-ones-rand-like-data-panel1of1.png)
+*Figure 5.1 (~12:20–14:50):* Instantiating `torch.ones_like(x_data)` and `torch.rand_like(x_data, dtype=torch.float)` to override integer types with floating-point random numbers.
+
+### In-Depth Conceptual Exposition
+
+* **Template-Based Creation:**
+  Often you need to initialize a buffer with the **exact same shape and device** as an existing batch of data.
+* **`torch.ones_like(input)`:**
+  Creates a tensor filled with $1.0$ matching the shape and data type of `input`.
+* **`torch.rand_like(input, dtype=...)`:**
+  * Populates a matching shape with uniform random noise $\mathcal{U}[0, 1)$.
+  * **Data Type Overriding:** If `input` has integer type (`int64`), drawing floating-point random numbers requires an explicit override: `dtype=torch.float`.
+
+```python
+x_data = torch.tensor([[1, 2], [3, 4]])  # Integer tensor
+
+# Retains (2, 2) shape, fills with 1s:
+x_ones = torch.ones_like(x_data)
+
+# Retains (2, 2) shape, fills with floats in [0, 1):
+x_rand = torch.rand_like(x_data, dtype=torch.float)
+```
+
+```
+   Existing Tensor x_data (2 × 2, int64)
+   ┌───────────────────────────────────┐
+   │ ones_like ──► Shape (2, 2), int64, All 1s
+   │ rand_like ──► Shape (2, 2), float32, Random Uniform [0, 1)
+   └───────────────────────────────────┘
+```
+
+---
+
+## Topic 6: Direct Tensor Creation from Shape Tuples (15:00–16:29)
+
+### Master Map Placement
+Allocating fresh tensors directly from dimensional specifications.
+
+### Chalkboard / Colab Screenshot
+![Creating tensors from shape: rand, ones, zeros](./screenshots/composites/ch06-topic-06-create-from-shape-panel1of1.png)
+*Figure 6.1 (~15:14–16:04):* Passing a shape tuple `shape = (2, 3)` to `torch.rand()`, `torch.ones()`, and `torch.zeros()`.
+
+### In-Depth Conceptual Exposition
+
+When allocating tensors from scratch (without a template tensor), you pass a **shape tuple**:
+
+```python
+shape = (2, 3)  # 2 Rows, 3 Columns
+
+rand_tensor = torch.rand(shape)    # Uniform random numbers in [0, 1)
+ones_tensor = torch.ones(shape)    # Filled with 1.0
+zeros_tensor = torch.zeros(shape)  # Filled with 0.0
+```
+
+```
+  rand(2, 3)                     ones(2, 3)                     zeros(2, 3)
+  ┌───────┬───────┬───────┐      ┌───────┬───────┬───────┐      ┌───────┬───────┬───────┐
+  │ 0.496 │ 0.768 │ 0.088 │      │  1.0  │  1.0  │  1.0  │      │  0.0  │  0.0  │  0.0  │
+  ├───────┼───────┼───────┤      ├───────┼───────┼───────┤      ├───────┼───────┼───────┤
+  │ 0.132 │ 0.307 │ 0.934 │      │  1.0  │  1.0  │  1.0  │      │  0.0  │  0.0  │  0.0  │
+  └───────┴───────┴───────┘      └───────┴───────┴───────┘      └───────┴───────┴───────┘
+```
+
+* **Shape Flexibility:** The argument can be passed as a tuple `(2, 3)` or as unpacked positional arguments `torch.rand(2, 3)`.
+
+---
+
+## Topic 7: Tensor Attributes & Hardware Inspection (16:29–17:54)
+
+### Master Map Placement
+Inspecting the fundamental properties that define every PyTorch tensor.
+
+### Chalkboard / Colab Screenshot
+![Inspecting shape, dtype, and device attributes](./screenshots/composites/ch07-topic-07-shape-dtype-device-panel1of1.png)
+*Figure 7.1 (~16:29–17:45):* Printing `tensor.shape`, `tensor.dtype`, and `tensor.device` on a $3 \times 4$ random tensor.
+
+### In-Depth Conceptual Exposition
+
+Every PyTorch tensor carries three essential metadata attributes:
+
+```python
 tensor = torch.rand(3, 4)
-tensor.shape, tensor.dtype, tensor.device   # e.g. cpu, float32
 
-# --- join ---
-t_cols = torch.cat([tensor, tensor, tensor], dim=1)  # more columns
-t_rows = torch.cat([tensor, tensor, tensor], dim=0)  # more rows
+print(f"Shape of tensor:  {tensor.shape}")   # torch.Size([3, 4])
+print(f"Datatype of tensor: {tensor.dtype}") # torch.float32
+print(f"Device of tensor:  {tensor.device}") # cpu
+```
 
-# --- matmul (three APIs, same numbers) ---
+1. **`.shape` (or `.size()`):** Returns a `torch.Size` tuple representing dimensions along each axis.
+2. **`.dtype`:** Specifies numerical precision (`torch.float32`, `torch.float64`, `torch.int32`, `torch.int64`, `torch.bool`).
+3. **`.device`:** Identifies physical memory location (`cpu` or `cuda:0`).
+   * By default, all tensors are allocated on the **CPU**.
+   * To migrate tensors to GPU VRAM:
+     ```python
+     if torch.cuda.is_available():
+         tensor = tensor.to("cuda")
+     ```
+
+```
+   ┌─────────────────────────────────────────────────────────────┐
+   │                      TENSOR ATTRIBUTES                      │
+   │  ┌──────────────┐       ┌──────────────┐     ┌───────────┐  │
+   │  │ .shape [3, 4]│       │.dtype float32│     │.device CPU│  │
+   │  └──────────────┘       └──────────────┘     └───────────┘  │
+   └─────────────────────────────────────────────────────────────┘
+```
+
+> [!NOTE]
+> **Slicing and Indexing:**  
+> PyTorch tensor slicing follows standard NumPy syntax (`tensor[0]`, `tensor[:, 0]`, `tensor[..., -1]`). The instructor deliberately bypasses extensive slicing demonstrations, noting that standard NumPy indexing knowledge is sufficient.
+
+---
+
+## Topic 8: Tensor Concatenation Across Dimensions (17:54–20:43)
+
+### Master Map Placement
+Combining multiple tensors along existing axes to assemble feature matrices or mini-batches.
+
+### Chalkboard / Colab Screenshot
+![Concatenating tensors with dim=1 and dim=0](./screenshots/composites/ch08-topic-08-concatenate-panel1of1.png)
+*Figure 8.1 (~18:07–20:29):* Demonstrating `torch.cat([tensor, tensor, tensor], dim=1)` (columns) versus `dim=0` (rows) on $4 \times 4$ tensors.
+
+### In-Depth Conceptual Exposition
+
+When concatenating a sequence of tensors using `torch.cat(tensors, dim=...)`, you must specify the axis along which they are joined:
+
+```python
+tensor = torch.ones(4, 4)
+
+# 1. Concatenate along dim=1 (Horizontal / Columns)
+# Three 4x4 matrices joined side-by-side -> Shape becomes (4, 12)
+t_cols = torch.cat([tensor, tensor, tensor], dim=1)
+
+# 2. Concatenate along dim=0 (Vertical / Rows)
+# Three 4x4 matrices stacked on top of each other -> Shape becomes (12, 4)
+t_rows = torch.cat([tensor, tensor, tensor], dim=0)
+```
+
+```
+  DIMENSION 1 CONCATENATION (dim=1 -> Wider / More Columns):
+  ┌───────────┐ ┌───────────┐ ┌───────────┐     ┌───────────────────────────────────┐
+  │  4 × 4    │ │  4 × 4    │ │  4 × 4    │ ──► │           4 × 12                  │
+  └───────────┘ └───────────┘ └───────────┘     └───────────────────────────────────┘
+
+  DIMENSION 0 CONCATENATION (dim=0 -> Taller / More Rows):
+  ┌───────────┐
+  │  4 × 4    │                                 ┌───────────┐
+  ├───────────┤                                 │           │
+  │  4 × 4    │                                 │   12 × 4  │
+  ├───────────┤                                 │           │
+  │  4 × 4    │                                 └───────────┘
+  └───────────┘
+```
+
+* **`torch.cat` vs. `torch.stack`:**
+  * `torch.cat` concatenates tensors along an **existing dimension** (sizes on other dimensions must match).
+  * `torch.stack` joins tensors along a **new dimension** (all input tensors must have identical shapes).
+
+---
+
+## Topic 9: Matrix Multiplication: Three Equivalent APIs (20:43–25:02)
+
+### Master Map Placement
+The foundational mathematical operation of deep learning: linear neural projections and attention maps.
+
+### Chalkboard / Colab Screenshot
+![Matrix multiplication shape rule and three Colab APIs](./screenshots/composites/ch09-topic-09-matmul-panel1of1.png)
+*Figure 9.1 (~20:43–25:04):* The mathematical rule $A_{M \times N} \times B_{N \times P} = C_{M \times P}$ written on the board, followed by the three equivalent PyTorch multiplication syntaxes.
+
+### In-Depth Conceptual Exposition
+
+* **Mathematical Law:**
+  Matrix multiplication $C = A \times B$ requires that the number of columns in $A$ equals the number of rows in $B$:
+  $$A \in \mathbb{R}^{M \times N}, \quad B \in \mathbb{R}^{N \times P} \implies C = A B \in \mathbb{R}^{M \times P}$$
+* **Transposition (`.T`):**
+  For a $4 \times 4$ tensor, `tensor.T` is its $4 \times 4$ transpose. Multiplying a matrix by its transpose (`tensor @ tensor.T`) is always mathematically legal.
+
+```python
+tensor = torch.ones(4, 4)
+
+# 1. Infix Operator @
 y1 = tensor @ tensor.T
+
+# 2. Tensor Method .matmul()
 y2 = tensor.matmul(tensor.T)
+
+# 3. Functional API with Pre-allocated Output Buffer
 y3 = torch.rand_like(y1)
 torch.matmul(tensor, tensor.T, out=y3)
 
-# --- element-wise (same shape; used in conv) ---
+# All three compute identical numerical values:
+assert torch.equal(y1, y2) and torch.equal(y2, y3)
+```
+
+```
+   Matrix A (M × N)            Matrix B (N × P)                 Matrix C (M × P)
+  ┌──────────────────┐        ┌──────────────────────┐        ┌──────────────────────┐
+  │                  │        │                      │        │                      │
+M │    Row i ────────┼───────►│ Col j                │ ─────► │ C_ij = Row_i · Col_j │
+  │                  │        │                      │        │                      │
+  └──────────────────┘        └──────────────────────┘        └──────────────────────┘
+           N                             P                               P
+                              ▲
+                              │
+                    Inner Dimensions N MUST MATCH!
+```
+
+---
+
+## Topic 10: Element-Wise (Hadamard) Multiplication (25:02–28:43)
+
+### Master Map Placement
+Distinguishing element-wise operations from linear algebra matrix products.
+
+### Chalkboard / Colab Screenshot
+![Element-wise multiplication rule: A & B should be of same size](./screenshots/composites/ch10-topic-10-elementwise-panel1of1.png)
+*Figure 10.1 (~25:19–28:25):* The chalkboard rule *"A & B should be of Same Size"* for element-wise products, with 2D worked calculations and Colab implementations.
+
+### In-Depth Conceptual Exposition
+
+* **Mathematical Law:**
+  Element-wise multiplication (Hadamard product, $A \odot B$) requires that $A$ and $B$ have **identical shapes**:
+  $$C_{i, j} = A_{i, j} \cdot B_{i, j}$$
+
+* **Chalkboard Worked Calculation:**
+  $$A = \begin{bmatrix} 1 & 2 \\ -2 & 3 \end{bmatrix}, \quad B = \begin{bmatrix} 4 & 2 \\ 1 & -1 \end{bmatrix}$$
+  $$C = A \odot B = \begin{bmatrix} 1 \times 4 & 2 \times 2 \\ -2 \times 1 & 3 \times (-1) \end{bmatrix} = \begin{bmatrix} 4 & 4 \\ -2 & -3 \end{bmatrix}$$
+
+```python
+# 1. Infix Operator *
 z1 = tensor * tensor
+
+# 2. Tensor Method .mul()
 z2 = tensor.mul(tensor)
-```
 
-### Scenario walkthrough
-
-Open [pytorch.org/tutorials](https://pytorch.org/tutorials/) → Tensors → **Open in Colab**. First play connects to a Google box. Build `[[1,2],[3,4]]` as a tensor, print `shape`/`dtype`/`device`, then `@ tensor.T` vs `* tensor`. You now have the two products later CNN/GAN notebooks will call without explaining.
-
-### Failure / contrast
-
-```
-  * when you meant @          ──X──►  wrong 2×2
-  @ with inner dims mismatch  ──X──►  runtime error
-  cat without choosing dim    ──X──►  4×12 vs 12×4 surprise
-  assuming local GPU          ──X──►  device is cpu until you .to()
-```
-
-### STOP
-
-No DataLoader, no autograd, no `nn.Module`. Slicing is skipped. **No $f$-divergence** despite the YouTube title.
-
-### Load-bearing claims
-
-- This hour is the official **tensor** notebook on **Colab**.
-- Tensor ≈ NumPy array that can live on a GPU.
-- Create from list, NumPy, `*_like`, or explicit `shape`.
-- Inspect `.shape`, `.dtype`, `.device`.
-- `cat(..., dim=1)` columns; `dim=0` rows.
-- Three matmul APIs agree; inner dimensions must match.
-- `*` is same-size Hadamard (convolutions); not `matmul`.
-
-**Speaker:** IIT Madras BS tutorial TA (not the chalk f-div lecture).
-
----
-
-## Topic 1: Colab GPU, prereqs, CS231n (00:11–04:42)
-
-### Where this sits on the master map
-
-**SETUP.** He frames the rest of the course’s **code** track: simple DGM models on a small GPU. [Colab](./PREREQUISITES.md#p4-colab) unlocks “not your laptop.”
-
-### Board / screenshot
-
-![PyTorch tutorials homepage on Colab](./screenshots/composites/ch01-topic-01-colab-prereqs-panel1of1.png)
-**Figure — ~00:14–02:45:** official “Welcome to PyTorch Tutorials” page; he will click into Learn the Basics.
-
-### What he is establishing
-
-This is a **coding** session: PyTorch so you can implement the theory later on **simple datasets**. Google Colab provides about a **12 GB GPU**; notebooks are written so you do not need more. Bigger models are an “if you have compute” extension.
-
-Last tutorial: forward / backward / training loop. Today: PyTorch **basics**. TensorFlow exists; he will not use it.
-
-Assumed: MLP from last time, and a **basic CNN**. If CNNs are rusty, he points at Stanford **CS231n** notes — neural nets, convolution, parameter sharing, features. That is homework if you freeze, not this hour’s content.
-
-You can now name the kitchen (Colab + PyTorch). You have not created a tensor yet.
-
-### Analogy for this topic only
-
-A cooking class: last week knives (backprop). This week the **pots** (tensors). He assumes you know what a stove is (MLP/CNN). If the stove is fuzzy, he hands you the CS231n manual rather than re-teaching fire.
-
-**If you skip CS231n and never saw a conv, will this hour teach CNNs?** No — he only assumes them.
-
-### Local picture
-
-```
-  theory lectures (W1_L2 …)     coding track (this video)
-           │                            │
-           ▼                            ▼
-     p_x, G_θ, d                  Colab 12GB + PyTorch
-```
-
-Notice: playlist title “F-divergence” does not match this board.
-
-### Bridge
-
-Where do the notebooks live, and whose machine runs the play button?
-
----
-
-## Topic 2: Official tutorials and the Colab notebook (04:42–08:14)
-
-### Where this sits on the master map
-
-**ENV.** Search “pytorch tutorial” → pytorch.org. [Notebook cells](./PREREQUISITES.md#p4-colab).
-
-### Board / screenshot
-
-![Quickstart + Tensors notebook opened in Colab](./screenshots/composites/ch02-topic-02-official-tutorials-colab-panel1of1.png)
-**Figure — ~04:47–08:14:** Learn the Basics nav; Tensors notebook with `import torch`.
-
-### What he is establishing
-
-They **do not write a custom course notebook from scratch**. They walk the **public official tutorial**, then slow down where students usually freeze.
-
-Start with **Quickstart / Tensors**, not the whole site (recipes, C++, audio, …). Each page offers Colab, download, or GitHub. **This session uses Colab.**
-
-`.ipynb` = interactive Python notebook. **Text cells** explain; **code cells** have a play button. First run is slow: Colab must attach a **Google server**. Your laptop is not doing the FLOPs. Packages are already installed.
-
-Python is assumed. If lists and `import` are new, pause and learn Python first.
-
-```python
-# Cell 0 on screen — comments from the official notebook
-# https://pytorch.org/tutorials/beginner/colab
-%matplotlib inline
-```
-
-You can now open the same URL he opened. You still do not know what a tensor *is*.
-
-### Analogy for this topic only
-
-A lab that already stocked the reagents. **Do you pip-install PyTorch on your laptop for this hour?** He says no — Colab’s kitchen is stocked.
-
-### Local picture
-
-```
-  browser  →  Colab ipynb  →  Google VM (CPU/GPU)
-                 │
-                 ▼
-           code cell ▶  (first click: connect)
-```
-
-Notice: “device is not your local resources.”
-
-### Bridge
-
-Why not just use NumPy?
-
----
-
-## Topic 3: What a tensor is (08:14–09:41)
-
-### Where this sits on the master map
-
-**TENSOR** object. [NumPy](./PREREQUISITES.md#p3-numpy), [device](./PREREQUISITES.md#p5-device).
-
-### Board / screenshot
-
-![Official Tensors page: ndarray + GPU + autograd](./screenshots/composites/ch03-topic-03-what-is-a-tensor-panel1of1.png)
-**Figure — ~08:14–09:12:** “Tensors are a specialized data structure… similar to NumPy’s ndarrays, except that tensors can run on GPUs…”
-
-### What he is establishing
-
-Tensors are PyTorch’s **building blocks** — arrays/matrices with extra powers. Like `ndarray`, but they can run on a **GPU** (and other accelerators). That is why these libraries exist for deep learning.
-
-On-screen official text (keep it): tensors hold **inputs, outputs, and model parameters**; they can **share memory** with NumPy; they will later support **autograd**.
-
-Wrong move: treating a tensor as “just a Python list.” Right move: rectangular numbers **plus a device**.
-
-### Analogy for this topic only
-
-Graph paper (NumPy) vs graph paper you can slide onto a forklift (GPU). **Does the 2×2 of ones care which desk it sits on?** Same numbers; different speed.
-
-### Local picture
-
-```
-  Python list     →  slow, not rectangular-enforced
-  np.ndarray      →  fast CPU grid
-  torch.Tensor    →  same grid + .device (cpu/cuda) + autograd later
-```
-
-Notice: GPU is the *point* of tensors; this demo still stays on CPU.
-
-### Bridge
-
-How do you *make* one?
-
----
-
-## Topic 4: Tensor from a list and from NumPy (09:41–12:34)
-
-### Where this sits on the master map
-
-**CREATE from data.** [List](./PREREQUISITES.md#p1-list), [NumPy](./PREREQUISITES.md#p3-numpy).
-
-### Board / screenshot
-
-![data=[[1,2],[3,4]]; torch.tensor; torch.from_numpy](./screenshots/composites/ch04-topic-04-tensor-from-list-numpy-panel1of1.png)
-**Figure — ~09:54–12:20:** `import torch` / `import numpy as np`; `x_data = torch.tensor(data)`; `x_np = torch.from_numpy(np_array)`.
-
-### What he is establishing
-
-Always `import torch`. Import NumPy only if you start from an array.
-
-From a list (no extra library):
-
-```python
-import torch
-import numpy as np
-
-data = [[1, 2], [3, 4]]       # Python list; type(data) is list
-x_data = torch.tensor(data)   # same numbers; now a Tensor
-```
-
-Values are **not** modified. Only the container type changes.
-
-From NumPy:
-
-```python
-np_array = np.array(data)
-x_np = torch.from_numpy(np_array)
-```
-
-First Colab **play** can stall while the VM connects — that is normal.
-
-You can now wrap data you already have. You cannot yet spawn a 2×3 of zeros without a template.
-
-### Analogy for this topic only
-
-Pouring juice from a bottle (list) or a carton (NumPy) into the same glass (tensor). **Does the juice change?** No. The glass can go to the GPU later.
-
-### Local picture
-
-```
-  list ──torch.tensor──► Tensor
-  ndarray ──from_numpy──► Tensor
-```
-
-Notice: `type(data)` stays `list` after you also have `x_data`.
-
-### Bridge
-
-What if you do not have numbers yet — only a desired size?
-
----
-
-## Topic 5: `ones_like` / `rand_like` (12:34–15:00)
-
-### Where this sits on the master map
-
-**CREATE from a template tensor.** [Shape](./PREREQUISITES.md#p2-shape).
-
-### Board / screenshot
-
-![ones_like and rand_like with dtype override](./screenshots/composites/ch05-topic-05-ones-rand-like-data-panel1of1.png)
-**Figure — ~12:20–14:50:** `torch.ones_like(x_data)`; `torch.rand_like(x_data, dtype=torch.float)` “overrides the datatype of x_data.”
-
-### What he is establishing
-
-Two creation philosophies: (A) copy **structure** from existing data; (B) name a **shape**. This box is (A).
-
-```python
-x_ones = torch.ones_like(x_data)   # same shape (and properties), all ones
-x_rand = torch.rand_like(x_data, dtype=torch.float)  # random; dtype override
-```
-
-If `x_data` was integer, `rand_like` without override would stay integer-ish; he **overrides** to `float`. Run `rand` twice → **different** numbers (sampling).
-
-Wrong move: `torch.ones(x_data)` as if the tensor were a shape tuple. Right move: `ones_like`.
-
-### Analogy for this topic only
-
-A cookie cutter from an existing cookie. **Do you need to re-measure the cookie?** No — `*_like` stole the outline. Filling can still change the dough (`dtype`).
-
-### Local picture
-
-```
-  x_data  ──ones_like──►  same shape, all 1
-  x_data  ──rand_like──►  same shape, random (dtype optional)
-```
-
-Notice: properties copy **unless** you override.
-
-### Bridge
-
-Route (B): you only know `(2, 3)`.
-
----
-
-## Topic 6: Create from a shape (15:00–16:29)
-
-### Where this sits on the master map
-
-**CREATE from a tuple.** [Shape](./PREREQUISITES.md#p2-shape).
-
-### Board / screenshot
-
-![shape=(2,3); rand / ones / zeros](./screenshots/composites/ch06-topic-06-create-from-shape-panel1of1.png)
-**Figure — ~15:14–16:04:** `shape = (2, 3)` then `torch.rand(shape)`, `torch.ones(shape)`, `torch.zeros(shape)` with printed output.
-
-### What he is establishing
-
-```python
-shape = (2, 3)
-rand_tensor = torch.rand(shape)     # Uniform(0,1) noise, 2×3
-ones_tensor = torch.ones(shape)
-zeros_tensor = torch.zeros(shape)
-```
-
-First print is random; second all ones; third all zeros. Together with Topic 5 you have **both** doors into a given size: template tensor, or explicit shape.
-
-### Analogy for this topic only
-
-Ordering a blank hotel floor plan: “2 floors, 3 rooms.” **Do you pass a filled guest list?** No — only the shape. `rand` puts strangers in the rooms; `zeros` leaves them empty.
-
-### Local picture
-
-```
-  (2, 3) ─┬─ rand   →  2×3 noise
-          ├─ ones   →  2×3 ones
-          └─ zeros  →  2×3 zeros
-```
-
-Notice: `shape` is a **tuple**, not a tensor.
-
-### Bridge
-
-Once it exists, what can you **ask** it?
-
----
-
-## Topic 7: shape, dtype, device (16:29–17:54)
-
-### Where this sits on the master map
-
-**ATTRIBUTES.** [Device](./PREREQUISITES.md#p5-device).
-
-### Board / screenshot
-
-![print shape, dtype, device — cpu](./screenshots/composites/ch07-topic-07-shape-dtype-device-panel1of1.png)
-**Figure — ~16:29–17:45:** `tensor = torch.rand(3, 4)` then `.shape`, `.dtype`, `.device`. Screen also shows the optional `.to(accelerator)` snippet he postpones.
-
-### What he is establishing
-
-```python
-tensor = torch.rand(3, 4)
-print(tensor.shape)    # torch.Size([3, 4])
-print(tensor.dtype)    # torch.float32
-print(tensor.device)   # cpu   ← this demo
-```
-
-CPU is always present. GPU is optional. He is **not** using GPU yet. Official warning: copying huge tensors between devices is expensive.
-
-He **skips** slicing for the course (NumPy-identical if you already know it). On screen you still see `tensor[0]`, `tensor[:, 0]`, `tensor[..., -1]`, `tensor[:,1] = 0` — he does not dwell.
-
-```python
-# Official, postponed:
-# if torch.accelerator.is_available():
-#     tensor = tensor.to(torch.accelerator.current_accelerator())
-```
-
-Wrong move: reading `device: cpu` as failure. Right move: that is the default until you move it.
-
-### Analogy for this topic only
-
-A shipping label: **how big**, **what’s inside**, **which warehouse**. **If the warehouse says “desk” not “forklift,” is the box empty?** No — it just hasn’t moved.
-
-### Local picture
-
-```
-  tensor
-    .shape   how many along each axis
-    .dtype   int vs float32 vs …
-    .device  cpu | cuda | …
-```
-
-Notice: slicing skipped on purpose.
-
-### Bridge
-
-How do you glue tensors along an axis?
-
----
-
-## Topic 8: Concatenate `dim=0` vs `dim=1` (17:54–20:43)
-
-### Where this sits on the master map
-
-**JOIN.** You must answer “beside or below?”
-
-### Board / screenshot
-
-![torch.cat dim=1 then dim=0](./screenshots/composites/ch08-topic-08-concatenate-panel1of1.png)
-**Figure — ~18:07–20:29:** `t1 = torch.cat([tensor, tensor, tensor], dim=1)` then the same with `dim=0`. Official note: `torch.stack` is a cousin.
-
-### What he is establishing
-
-A tensor is a matrix. Concatenate **next to** (more columns) or **under** (more rows)? That is `dim`.
-
-```python
-# tensor here is 4×4 ones in his demo (torch.ones(4, 4))
-t_cols = torch.cat([tensor, tensor, tensor], dim=1)
-# 4 rows, 12 columns  (three 4×4 side by side)
-
-t_rows = torch.cat([tensor, tensor, tensor], dim=0)
-# 12 rows, 4 columns  (stacked)
-```
-
-`dim=1` → columns. `dim=0` → rows. `torch.stack` is mentioned on screen as a related join (adds a **new** axis rather than extending an existing one — he does not drill it).
-
-Wrong move: calling `cat` and being surprised by 4×12 vs 12×4. Right move: name the dim first.
-
-### Analogy for this topic only
-
-Taping three photos. **Do you tape them in a strip or a stack?** Strip = dim 1 (wider). Stack = dim 0 (taller). Same photos.
-
-### Local picture
-
-```
-  dim=1:  [ A | A | A ]     wider
-  dim=0:  [ A ]
-          [ A ]             taller
-          [ A ]
-```
-
-Notice: all inputs to `cat` need matching sizes on the **other** axis.
-
-### Bridge
-
-Neural nets’ forward pass is not taping — it is **matrix multiply**.
-
----
-
-## Topic 9: Matrix multiply three ways (20:43–25:02)
-
-### Where this sits on the master map
-
-**MATMUL.** [Rule](./PREREQUISITES.md#p6-matmul), [transpose](./PREREQUISITES.md#p7-transpose). He says the whole forward pass is this.
-
-### Board / screenshot
-
-![A(m×n) B(n×p)=C(m×p); @ / matmul / torch.matmul out=](./screenshots/composites/ch09-topic-09-matmul-panel1of1.png)
-**Figure — ~20:43–25:04:** whiteboard shape rule; Colab three APIs with comment “y1, y2, y3 will have the same value.”
-
-### What he is establishing
-
-Matrix multiply is the workhorse of neural nets. A layer’s forward pass **is** a multiply (plus bias/activation later).
-
-Shape law:
-
-$$
-A_{M\times N}\, B_{N\times P} = C_{M\times P}
-$$
-
-In words: **columns of A = rows of B**, else illegal.
-
-`.T` = transpose. For a 4×4, `tensor.T` is still 4×4, so `tensor @ tensor.T` is legal.
-
-Three equivalent APIs (official comments: same value):
-
-```python
-# 1) @  and  .T
-y1 = tensor @ tensor.T
-
-# 2) method on the left tensor
-y2 = tensor.matmul(tensor.T)
-
-# 3) torch.matmul with a preallocated output
-y3 = torch.rand_like(y1)                 # only the shape/dtype
-torch.matmul(tensor, tensor.T, out=y3)   # writes into y3
-```
-
-Wrong move: `@` with inner dims that do not match. Right move: check $N$, or multiply by `.T` when you mean “self Gram.”
-
-You can now write a linear layer’s multiply three ways. Convolution still needs a **different** product.
-
-### Analogy for this topic only
-
-A factory: every incoming conveyor (N) must meet every outgoing (P) through M workers. **If N does not match, do the doors even meet?** No — the plant will not start. Three badges (`@`, `.matmul`, `torch.matmul`) open the **same** plant.
-
-### Local picture
-
-```
-  A  M × N     ×     B  N × P     =     C  M × P
-           └── must match ──┘
-
-  tensor @ tensor.T
-  tensor.matmul(tensor.T)
-  torch.matmul(tensor, tensor.T, out=y3)
-```
-
-Notice: `out=` needs a tensor that already has the result shape.
-
-### Bridge
-
-Convolutions use a **same-size, entry-by-entry** product, not this plant.
-
----
-
-## Topic 10: Element-wise product (25:02–28:43)
-
-### Where this sits on the master map
-
-**HADAMARD.** [Element-wise vs matmul](./PREREQUISITES.md#p8-hadamard). Last box of “the tensor idea.”
-
-### Board / screenshot
-
-![A,B same size; C_ij = A_ij B_ij; tensor * tensor and .mul](./screenshots/composites/ch10-topic-10-elementwise-panel1of1.png)
-**Figure — ~25:19–28:25:** whiteboard “A & B should be of Same Size”; Colab `z1 = tensor * tensor`, `z2 = tensor.mul(tensor)`, `torch.mul(..., out=z3)`.
-
-### What he is establishing
-
-Element-wise (Hadamard) multiply is a **core convolution** operation. **A and B must be the same size.**
-
-Board numbers (he writes 2×2):
-
-```
-  A = [ 1   2 ]     B = [ 4   2 ]      C = [ 1·4    2·2 ]  = [ 4   4 ]
-      [-2   3 ]         [ 1  -1 ]          [-2·1    3·(-1)]    [-2  -3]
-```
-
-(One frame shows a slightly different B entry; the **rule** is pair matching entries.)
-
-```python
-z1 = tensor * tensor          # same shape, entry-wise
-z2 = tensor.mul(tensor)       # same
+# 3. Functional API with Pre-allocated Output Buffer
 z3 = torch.rand_like(tensor)
 torch.mul(tensor, tensor, out=z3)
+
+assert torch.equal(z1, z2) and torch.equal(z2, z3)
 ```
 
-**Not** `matmul`. `mul` ≠ `matmul`.
-
-Recap he wants you to leave with: create (rand/ones), attributes, **two products**. Addition/subtraction are “trivial” so the official page does not linger. **That completes the first idea: the tensor.**
-
-Wrong move: `*` when the forward pass needs `@`. Right move: same-size → `*`; inner-dim handshake → `@`.
-
-### Analogy for this topic only
-
-Two paint-by-number sheets of the **same** picture. **Can you mix cell 1 of A with cell 7 of B?** No — only matching cells. That is convolution’s local multiply. The factory in Topic 9 mixed **every** aisle with **every** dock.
-
-### Local picture
+* **Role in Convolutions & Activations:**
+  * When a convolutional kernel slides over an image patch, it performs element-wise multiplication of the kernel weights with the pixel values, followed by a summation.
+  * Applying non-linear gating (e.g., in Gated Linear Units or attention masks) uses element-wise multiplication.
 
 ```
-  * / mul     same shape     C_ij = A_ij × B_ij     (conv guts)
-  @ / matmul  inner dims     C_ik = Σ_j A_ij B_jk   (linear layer)
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │                           OPERATOR RECAP MATRIX                             │
+  │  Operation             PyTorch Syntax     Shape Rule           Math         │
+  │  Matrix Multiply       A @ B  / .matmul   (M × N) @ (N × P)   A × B (MatMul)│
+  │  Element-Wise Multiply A * B  / .mul      (M × N) * (M × N)   A ⊙ B (Hadamard)│
+  └─────────────────────────────────────────────────────────────────────────────┘
 ```
-
-Notice: he ends the module here. Datasets, autograd, `nn.Module` are later official chapters.
-
-### Bridge
-
-Next coding tutorials (playlist T3+) load data and build models. Next **math** lecture on the playlist is VDM / f-divergence if the titles are to be believed — this file was not that lecture.
 
 ---
 
-## External references
+## Workplace Scenarios & Debugging Tensors
 
-Grouped **by this recording’s topics** (video + docs/blog). All opened. This is a **code** hour, so official PyTorch docs beat chalk notes.
+### Scenario 1: Device Mismatch Exception
+**Context:** A junior engineer sets up a generator training loop:
+```python
+x_real = batch_data.to("cuda")  # Transferred to GPU
+noise = torch.randn(32, 128)    # Allocated on CPU by default
+output = generator(noise)       # Generator weights are on GPU
+loss = divergence(x_real, output)
+```
+**Error:** `RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu!`  
+**Fix:** Explicitly match device on tensor creation: `noise = torch.randn(32, 128, device=x_real.device)`.
 
-### Topic 1 — setup / CNN prereq
-
-| Kind | Resource | Why |
-|------|----------|-----|
-| Notes | [CS231n Convolutional Networks](https://cs231n.github.io/convolutional-networks/) | The CNN manual he actually names |
-| Notes | [CS231n Neural Networks 1](https://cs231n.github.io/neural-networks-1/) | MLP structure he assumes |
-| Video | [3Blue1Brown — But what is a neural network?](https://www.youtube.com/watch?v=aircAruvnKk) | $28\times 28$ as a tensor of 784 numbers |
-
-### Topic 2 — official tutorials / Colab
-
-| Kind | Resource | Why |
-|------|----------|-----|
-| Docs | [PyTorch tutorials index](https://pytorch.org/tutorials/) | Exact site he googles |
-| Docs | [Tensors tutorial (Colab)](https://pytorch.org/tutorials/beginner/basics/tensor_tutorial.html) | The notebook on screen |
-| Docs | [Colab helper he comments](https://pytorch.org/tutorials/beginner/colab) | First cell comment URL |
-
-### Topics 3–4 — tensor vs ndarray; create from data
-
-| Kind | Resource | Why |
-|------|----------|-----|
-| Docs | [PyTorch tensor tutorial — initializing](https://pytorch.org/tutorials/beginner/basics/tensor_tutorial.html) | `torch.tensor` / `from_numpy` |
-| Blog | [PyTorch tensor vs NumPy](https://pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html) | GPU + autograd extras |
-| Tutorial | [CS231n NumPy tutorial](https://cs231n.github.io/python-numpy-tutorial/) | Arrays before tensors |
-
-### Topics 5–7 — `*_like`, shape, attributes
-
-| Kind | Resource | Why |
-|------|----------|-----|
-| Docs | [torch.ones_like](https://pytorch.org/docs/stable/generated/torch.ones_like.html) | Template copy + dtype override |
-| Docs | [Tensor attributes](https://pytorch.org/docs/stable/tensor_attributes.html) | `.shape` `.dtype` `.device` |
-| Docs | [torch.rand](https://pytorch.org/docs/stable/generated/torch.rand.html) | Shape-tuple creation |
-
-### Topic 8 — concatenate
-
-| Kind | Resource | Why |
-|------|----------|-----|
-| Docs | [torch.cat](https://pytorch.org/docs/stable/generated/torch.cat.html) | `dim=` is the whole lesson |
-| Docs | [torch.stack](https://pytorch.org/docs/stable/generated/torch.stack.html) | Cousin named on screen |
-| Video | [Aladdin Persson — PyTorch tutorial tensors](https://www.youtube.com/watch?v=x9JiIFvlUwk) | Same APIs, extra examples |
-
-### Topics 9–10 — `@` vs `*`
-
-| Kind | Resource | Why |
-|------|----------|-----|
-| Docs | [torch.matmul](https://pytorch.org/docs/stable/generated/torch.matmul.html) | The three-API family |
-| Docs | [torch.mul](https://pytorch.org/docs/stable/generated/torch.mul.html) | Element-wise; same size |
-| Video | [3Blue1Brown — matrix multiply as composition](https://www.youtube.com/watch?v=XkY2DOUCWMU) | Why inner dims match |
-| Notes | [CS231n conv notes (element-wise in windows)](https://cs231n.github.io/convolutional-networks/) | Why he says Hadamard shows up in conv |
-
-**If you came for $f$-divergence:** [Stanford CS236 GAN / $f$-GAN notes](https://deepgenerativemodels.github.io/notes/gan/) · [NPTEL Lec 03 package](../../Mathematical-Foundation-for-GenerativeAI/25-Lec03-f-Divergence-Examples/NOTES.md) · playlist [W1_L4 VDM](https://www.youtube.com/watch?v=nfZQYopzv20).
+### Scenario 2: Unintended Hadamard Product in Linear Projection
+**Context:** An engineer implements a custom linear layer without `nn.Linear`:
+```python
+x = torch.randn(32, 128)
+W = torch.randn(128, 64)
+# Intended: Project 128 features down to 64
+# Written:
+h = x * W  # Crashes with Shape Mismatch!
+```
+**Error:** `RuntimeError: The size of tensor a (128) must match the size of tensor b (64) at non-singleton dimension 1`.  
+**Fix:** Use matrix multiplication `h = x @ W`, yielding shape `(32, 64)`.
 
 ---
 
-## Apply it (scenarios)
+## External References
 
-*Workplace-style situations that use **this video’s** APIs only.*
+> Links and curated learning materials for every subtopic covered in this hands-on PyTorch module.
 
-### Scenario 1: Colab vs laptop GPU
+### Topic 1 — Colab GPU Environment & CS231n Foundations
+* **Video Tutorials:**
+  1. [Google Cloud Tech: Getting Started with Google Colab and GPUs](https://www.youtube.com/watch?v=inN8seMm7UI) — Official walkthrough of GPU allocation and cloud VM runtime settings.
+  2. [Stanford CS231n: Lecture 5 — Convolutional Neural Networks](https://www.youtube.com/watch?v=bNb2fEVKeEo) — Comprehensive explanation of convolutions, filters, and parameter sharing.
+  3. [3Blue1Brown: But What is a Convolution?](https://www.youtube.com/watch?v=KuXjwB4LzSA) — Visual intuition for sliding kernels and receptive fields.
+* **Articles & Documentation:**
+  1. [Stanford CS231n: Convolutional Networks Notes](https://cs231n.github.io/convolutional-networks/) — The exact CNN reference recommended in the lecture.
+  2. [Google Colab Official FAQ & Resource Allocation Guide](https://research.google.com/colaboratory/faq.html) — Explains GPU limits, sessions, and kernel persistence.
+  3. [PyTorch Official Installation & Cloud Setup Guide](https://pytorch.org/get-started/locally/) — Hardware prerequisites and CUDA driver compatibility.
 
-**Context:** A teammate clones the official tensor notebook and runs it on a laptop without NVIDIA drivers.  
-**Challenge:** First cell takes 40 s, then `tensor.device` prints `cpu`. They think Colab is “broken.”  
-**Questions:**  
-1. Whose machine is running the cell if they had used **Open in Colab** as he did?  
-2. Is `cpu` a failure in this hour’s demo?
+### Topic 2 — Official PyTorch Tutorials & Notebook Workflow
+* **Video Tutorials:**
+  1. [PyTorch Official: Learn PyTorch in 60 Minutes](https://www.youtube.com/watch?v=u7x8RXwLKzA) — The official video companion to the "Learn the Basics" tutorial series.
+  2. [Aladdin Persson: PyTorch Tutorial 01 — Installation & Environment Setup](https://www.youtube.com/watch?v=x9JiIFvlUwk) — Clean guide to interactive Python notebook workflows.
+  3. [freeCodeCamp: PyTorch for Deep Learning Bootcamp (Basics Module)](https://www.youtube.com/watch?v=V_xro1bcAuA) — Comprehensive beginner-friendly walkthrough of PyTorch in Colab.
+* **Articles & Documentation:**
+  1. [Official PyTorch Tutorials Hub](https://pytorch.org/tutorials/) — The exact website navigated during the lecture.
+  2. [PyTorch Beginner Basics: Tensors Tutorial](https://pytorch.org/tutorials/beginner/basics/tensor_tutorial.html) — The exact interactive notebook executed on screen.
+  3. [Jupyter Project: The Jupyter Notebook Architecture](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html) — Explains kernel execution, cell states, and JSON structure.
 
-<details>
-<summary>Show solution sketch</summary>
+### Topic 3 — What is a Tensor?
+* **Video Tutorials:**
+  1. [StatQuest with Josh Starmer: PyTorch Tensors Explained Step-by-Step](https://www.youtube.com/watch?v=L35fFDpwIM4) — Visual breakdown of rank-0, rank-1, rank-2, and rank-$N$ tensors.
+  2. [Dan Fleisch: What's a Tensor? (Conceptual Physics & Mathematics)](https://www.youtube.com/watch?v=f5liqUk0ZTw) — The classic intuitive explanation of tensors across dimensions.
+  3. [DeepLearningAI: Tensor Operations for Deep Learning](https://www.youtube.com/watch?v=6pn4t4yOqps) — Andrew Ng's overview of tensors in neural computation.
+* **Articles & Documentation:**
+  1. [PyTorch Documentation: `torch.Tensor` Class Reference](https://pytorch.org/docs/stable/tensors.html) — Detailed technical specification of tensor memory layouts and strides.
+  2. [PyTorch Deep Learning Blitz: Tensors](https://pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html) — Deep dive into GPU tensor execution.
+  3. [Eli Bendersky: Understanding PyTorch Tensor Storage and Strides](https://eli.thegreenplace.net/2021/understanding-tensor-storage-and-strides-in-pytorch/) — Clear technical blog on contiguous memory blocks and tensor offsets.
 
-- Topic 2: Colab = Google VM; first play **connects**. Topic 7: default device is **cpu** until `.to(accelerator)`.
-- Steps: use Colab if you want his 12 GB GPU story; on a CPU laptop, tensors still work — just slower.
+### Topic 4 — Tensor Creation from Python Lists & NumPy Arrays
+* **Video Tutorials:**
+  1. [Keith Galli: Complete NumPy & PyTorch Data Conversion Guide](https://www.youtube.com/watch?v=GB9ByLhuxhk) — Practical guide to bridging NumPy arrays and PyTorch tensors.
+  2. [Patrick Loeber: PyTorch Tensor Basics (From Lists to Tensors)](https://www.youtube.com/watch?v=EMXFZB8FVUA) — Step-by-step code demonstrations.
+  3. [StatQuest: NumPy Basics for Machine Learning](https://www.youtube.com/watch?v=QUT1VHiLmmI) — How multi-dimensional arrays work in Python.
+* **Articles & Documentation:**
+  1. [PyTorch Documentation: `torch.tensor`](https://pytorch.org/docs/stable/generated/torch.tensor.html) — Official API docs for constructor syntax and type inferencing.
+  2. [PyTorch Documentation: `torch.from_numpy`](https://pytorch.org/docs/stable/generated/torch.from_numpy.html) — Details on zero-copy memory bridging.
+  3. [Stanford CS231n: Python NumPy Tutorial](https://cs231n.github.io/python-numpy-tutorial/) — Foundational array operations before moving to PyTorch.
 
-</details>
+### Topic 5 — Tensor Creation from Existing Tensors (`ones_like` & `rand_like`)
+* **Video Tutorials:**
+  1. [Aladdin Persson: PyTorch Tensor Initialization Methods](https://www.youtube.com/watch?v=x9JiIFvlUwk) — Demonstrates `ones_like`, `zeros_like`, and `rand_like`.
+  2. [DeepLizard: PyTorch Tensor Creation Options](https://www.youtube.com/watch?v=f3XgffS_74o) — Visual guide to template-based initialization.
+  3. [freeCodeCamp: Tensor Creation Patterns](https://www.youtube.com/watch?v=V_xro1bcAuA) — Explains dtype overrides and device inheritance.
+* **Articles & Documentation:**
+  1. [PyTorch Documentation: `torch.ones_like`](https://pytorch.org/docs/stable/generated/torch.ones_like.html) — Template cloning specifications.
+  2. [PyTorch Documentation: `torch.rand_like`](https://pytorch.org/docs/stable/generated/torch.rand_like.html) — Random uniform sampling with shape inheritance.
+  3. [Machine Learning Mastery: Tensor Creation & Type Casting in PyTorch](https://machinelearningmastery.com/a-gentle-introduction-to-pytorch-tensors/) — Practical tutorial on memory-efficient buffer allocation.
 
-### Scenario 2: Wrong product in a “linear layer”
+### Topic 6 — Direct Tensor Creation from Shape Tuples
+* **Video Tutorials:**
+  1. [StatQuest: Generating Random Numbers and Distributions in PyTorch](https://www.youtube.com/watch?v=8nn1O9YO76A) — `torch.rand` vs `torch.randn` (Uniform vs Normal).
+  2. [Daniel Bourke: PyTorch Fundamental Tensor Shapes](https://www.youtube.com/watch?v=Z_ikDlimN6A) — Direct shape allocation for image batches and weights.
+  3. [PyTorch Official: Tensor Basics for Beginners](https://www.youtube.com/watch?v=r7QDUPb2dCM) — Code walkthrough of `rand`, `ones`, and `zeros`.
+* **Articles & Documentation:**
+  1. [PyTorch Documentation: `torch.rand`](https://pytorch.org/docs/stable/generated/torch.rand.html) — Uniform distribution $\mathcal{U}[0, 1)$ parameterization.
+  2. [PyTorch Documentation: `torch.zeros`](https://pytorch.org/docs/stable/generated/torch.zeros.html) — Zero-buffer allocation.
+  3. [PyTorch Documentation: `torch.ones`](https://pytorch.org/docs/stable/generated/torch.ones.html) — One-buffer allocation.
 
-**Context:** Someone writes `h = x * W` for a 128-dim hidden layer (`x` is 32×128, `W` is 128×64).  
-**Challenge:** Shape error or silent wrong 32×128 if they broadcast.  
-**Questions:**  
-1. Which product did this lecture say a forward pass **is**?  
-2. Write the legal `@` using `.T` if needed.
+### Topic 7 — Tensor Attributes & Hardware Inspection
+* **Video Tutorials:**
+  1. [DeepLizard: PyTorch on GPUs — CUDA & Device Management](https://www.youtube.com/watch?v=8nn1O9YO76A) — Moving tensors to CUDA and inspecting `.device`.
+  2. [Patrick Loeber: PyTorch CUDA & GPU Setup](https://www.youtube.com/watch?v=EMXFZB8FVUA) — Handling `.to(device)` memory migrations cleanly.
+  3. [Aladdin Persson: PyTorch Tensor Indexing, Slicing & Reshaping](https://www.youtube.com/watch?v=k6ZoKz9M6mU) — In-depth tutorial on tensor slicing syntax.
+* **Articles & Documentation:**
+  1. [PyTorch Documentation: Tensor Attributes](https://pytorch.org/docs/stable/tensor_attributes.html) — Specification of `torch.dtype`, `torch.device`, and `torch.layout`.
+  2. [PyTorch Documentation: CUDA Semantics](https://pytorch.org/docs/stable/notes/cuda.html) — Explains asynchronous CUDA execution and PCIe transfers.
+  3. [PyTorch Documentation: Tensor Views and Slicing](https://pytorch.org/docs/stable/tensor_view.html) — How slicing creates non-contiguous tensor views.
 
-<details>
-<summary>Show solution sketch</summary>
+### Topic 8 — Tensor Concatenation Across Dimensions
+* **Video Tutorials:**
+  1. [DeepLizard: PyTorch Concatenation and Stacking Explained](https://www.youtube.com/watch?v=k6ZoKz9M6mU) — Visual diagram comparing `torch.cat` vs `torch.stack`.
+  2. [Aladdin Persson: PyTorch Tensor Reshaping & Combining](https://www.youtube.com/watch?v=k6ZoKz9M6mU) — Step-by-step examples of `dim=0` vs `dim=1`.
+  3. [Daniel Bourke: Combining Tensors in PyTorch](https://www.youtube.com/watch?v=Z_ikDlimN6A) — Practical batching of image features.
+* **Articles & Documentation:**
+  1. [PyTorch Documentation: `torch.cat`](https://pytorch.org/docs/stable/generated/torch.cat.html) — Concatenation along existing dimensions.
+  2. [PyTorch Documentation: `torch.stack`](https://pytorch.org/docs/stable/generated/torch.stack.html) — Stacking along new axes.
+  3. [PyTorch Discussion Forum: Difference Between `torch.cat` and `torch.stack`](https://discuss.pytorch.org/t/what-is-the-difference-between-torch-stack-and-torch-cat/21494) — Official community deep-dive on dimension expansion.
 
-- Topic 9: forward pass ≈ **matmul**, inner dims match: `(32×128) @ (128×64) → (32×64)`.
-- `*` is Topic 10 (same shape / conv). Use `x @ W`, not `x * W`.
+### Topic 9 — Matrix Multiplication Three Equivalent APIs
+* **Video Tutorials:**
+  1. [3Blue1Brown: Linear Combinations, Span, and Matrix Multiplication](https://www.youtube.com/watch?v=k7RM-ot2NWY) — The geometric intuition behind linear transformations.
+  2. [StatQuest: Matrix Multiplication Explained Clearly](https://www.youtube.com/watch?v=2spTnAiQg4M) — Dot products, row-by-column multiplication, and shape rules.
+  3. [Aladdin Persson: PyTorch Matrix Multiplication Operations](https://www.youtube.com/watch?v=k6ZoKz9M6mU) — Comparing `@`, `matmul`, and batch matmul `bmm`.
+* **Articles & Documentation:**
+  1. [PyTorch Documentation: `torch.matmul`](https://pytorch.org/docs/stable/generated/torch.matmul.html) — Complete broadcasting and high-dimensional matmul rules.
+  2. [PyTorch Documentation: `torch.Tensor.T`](https://pytorch.org/docs/stable/generated/torch.Tensor.T.html) — Transposition mechanics.
+  3. [Khan Academy: Multiplying Matrices](https://www.khanacademy.org/math/precalculus/x9e81a4f98381481:matrices/x9e81a4f98381481:multiplying-matrices-by-matrices/v/multiplying-matrices) — Foundational linear algebra tutorial.
 
-</details>
-
-### Scenario 3: Concatenate batch vs features
-
-**Context:** Three 4×4 feature maps. Product wants them **side by side** as 4×12.  
-**Challenge:** Intern used `dim=0` and shipped 12×4.  
-**Questions:**  
-1. Which `dim` is “more columns”?  
-2. What cousin of `cat` did the official page name?
-
-<details>
-<summary>Show solution sketch</summary>
-
-- Topic 8: `torch.cat([A,A,A], dim=1)` → 4×12. `dim=0` → 12×4.
-- `torch.stack` adds a **new** axis (not drilled, but named on screen).
-
-</details>
-
-### Scenario 4: Build a zeros buffer like an existing batch
-
-**Context:** You have `x_data` (integer 2×2) and need a **float** noise tensor of the **same shape**.  
-**Challenge:** `torch.rand(x_data)` is the wrong call.  
-**Questions:**  
-1. Template API vs shape-tuple API?  
-2. How do you override dtype?
-
-<details>
-<summary>Show solution sketch</summary>
-
-- Topic 5: `torch.rand_like(x_data, dtype=torch.float)`.
-- Topic 6 alternative: `torch.rand(x_data.shape)`.
-
-</details>
+### Topic 10 — Element-Wise (Hadamard) Multiplication
+* **Video Tutorials:**
+  1. [3Blue1Brown: Convolutions and Image Filtering](https://www.youtube.com/watch?v=8rrHTtUzyZA) — How element-wise filter multiplication powers computer vision.
+  2. [StatQuest: Hadamard Product vs Matrix Multiply](https://www.youtube.com/watch?v=2spTnAiQg4M) — Direct side-by-side calculation comparison.
+  3. [Stanford CS231n: Convolution Layer Forward Pass](https://www.youtube.com/watch?v=bNb2fEVKeEo) — Step-by-step breakdown of spatial element-wise kernel products.
+* **Articles & Documentation:**
+  1. [PyTorch Documentation: `torch.mul`](https://pytorch.org/docs/stable/generated/torch.mul.html) — Element-wise multiplication API.
+  2. [Stanford CS231n: Convolutional Layers Mechanics](https://cs231n.github.io/convolutional-networks/#conv) — How element-wise products form the core of feature maps.
+  3. [Wolfram MathWorld: Hadamard Product](https://mathworld.wolfram.com/HadamardProduct.html) — Formal mathematical definition and algebraic properties.
 
 ---
 
-## Sources
+## Sources & Production Notes
 
-- Video: [rHnrALMCyIQ](https://www.youtube.com/watch?v=rHnrALMCyIQ&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=3) · IIT Madras BS · ~28:43 · **audio+screen = PyTorch tensors**
-- Official notebook shown: [tensor_tutorial.html](https://pytorch.org/tutorials/beginner/basics/tensor_tutorial.html)
-- Timed captions: `raw/captions.en.timed.txt` (ASR matches this coding session)
-- Boards: `screenshots/composites/ch01-…`–`ch10-…` (unique per topic)
+* **Primary Recording:** [W1_L3 on the IITM Playlist](https://www.youtube.com/watch?v=rHnrALMCyIQ&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=3) · IIT Madras BS Degree Programme · Runtime: 28:43
+* **Official PyTorch Notebook Demonstrated:** [PyTorch Tensors Tutorial (Google Colab)](https://pytorch.org/tutorials/beginner/basics/tensor_tutorial.html)
+* **Timed Audio Captions:** `raw/captions.en.timed.txt` (ASR transcripts matching this coding session)
+* **Composite Screenshot Panels:** `./screenshots/composites/ch01-...` through `ch10-...` (High-resolution captures per topic MM:SS)
