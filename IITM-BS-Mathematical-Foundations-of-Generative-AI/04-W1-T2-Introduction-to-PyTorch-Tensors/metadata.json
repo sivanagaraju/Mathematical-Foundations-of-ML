@@ -1,0 +1,29 @@
+{
+  "title": "W1_T2: Tutorial 2: Introduction to pytorch: tensors",
+  "video_id": "L5n4rNrLZ_8",
+  "url": "https://www.youtube.com/watch?v=L5n4rNrLZ_8",
+  "duration_seconds": 1106,
+  "channel": "IIT Madras - B.S. Degree Programme",
+  "instructor": "IITM BS tutorial (Chandan); course Prof. Prathosh A. P.",
+  "description": "Welcome to Week 1 Tutorial 2. Recording walks Dataset/DataLoader (Fashion-MNIST + custom Dataset) despite the tensors title.",
+  "playlist_index": 6,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 8,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "course_short": "IITM-BS-MFGAI",
+  "topics": [
+    "Tensors then Dataset sheet",
+    "Torchvision catalogs; Fashion-MNIST",
+    "Imports Dataset datasets ToTensor plt",
+    "FashionMNIST train/test root download",
+    "Plots; lucky vs custom data",
+    "Custom folder plus CSV",
+    "CustomImageDataset class",
+    "DataLoader batch 64 shuffle"
+  ]
+}

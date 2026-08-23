@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · W1_L3 PyTorch tensors</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · W1_L3 PyTorch tensors</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q1", "part": "prerequisites", "tag": "Warm-up · list", "anchor": "PREREQUISITES.md#p1-list", "prompt": "After `data = [[1, 2], [3, 4]]` and `x = torch.tensor(data)`, what is still true?", "options": [{"key": "A", "text": "type(data) is Tensor and the numbers changed"}, {"key": "B", "text": "type(data) is still list; x holds the same numbers as a Tensor"}, {"key": "C", "text": "data is deleted"}, {"key": "D", "text": "x lives on GPU automatically"}], "answer": "B", "whyCorrect": "He stresses values are unmodified; only the container type of the result is Tensor. data remains a list.", "whyOthers": {"A": "data stays a list.", "C": "data is still in memory.", "D": "Demo device was cpu."}, "diagram": "  list data ──torch.tensor──► Tensor x", "useLater": "Topic 4."}, {"id": "q2", "part": "prerequisites", "tag": "Warm-up · shape", "anchor": "PREREQUISITES.md#p2-shape", "prompt": "`torch.ones((2, 3))` contains how many entries?", "options": [{"key": "A", "text": "2"}, {"key": "B", "text": "3"}, {"key": "C", "text": "5"}, {"key": "D", "text": "6"}], "answer": "D", "whyCorrect": "2 rows × 3 columns = 6 ones. That is the board’s (2, 3) example.", "whyOthers": {"A": "Rows only.", "B": "Columns only.", "C": "2+3 is not how shape works."}, "diagram": "  (2, 3) → 2×3 = 6", "useLater": "Topic 6."}, {"id": "q3", "part": "prerequisites", "tag": "Warm-up · matmul rule", "anchor": "PREREQUISITES.md#p6-matmul", "prompt": "When is A @ B legal?", "options": [{"key": "A", "text": "When A’s columns equal B’s rows (A is M×N, B is N×P)"}, {"key": "B", "text": "When A and B have identical shape only"}, {"key": "C", "text": "Always, PyTorch broadcasts any pair"}, {"key": "D", "text": "Only if both are 4×4"}], "answer": "A", "whyCorrect": "Whiteboard: M×N times N×P. Inner N must match.", "whyOthers": {"B": "That is the * (element-wise) rule.", "C": "Illegal shapes error.", "D": "4×4 is a special case, not the law."}, "diagram": "  (M×N)(N×P)=(M×P)", "useLater": "Topic 9."}, {"id": "q4", "part": "prerequisites", "tag": "Warm-up · Hadamard", "anchor": "PREREQUISITES.md#p8-hadamard", "prompt": "Element-wise multiply (`*`) requires…", "options": [{"key": "A", "text": "Inner dimensions to match, shapes may differ"}, {"key": "B", "text": "A GPU"}, {"key": "C", "text": "The same shape; each pair of entries multiplies"}, {"key": "D", "text": "A transpose"}], "answer": "C", "whyCorrect": "Board: A and B should be of same size. C_ij = A_ij × B_ij. Used in convolutions.", "whyOthers": {"A": "That is matmul.", "B": "Works on CPU.", "D": "Transpose is for making matmul legal."}, "diagram": "  *  same shape\n  @  inner dims", "useLater": "Topic 10."}, {"id": "q5", "part": "prerequisites", "tag": "Warm-up · Colab", "anchor": "PREREQUISITES.md#p4-colab", "prompt": "In this tutorial, pressing play on a cell runs the code…", "options": [{"key": "A", "text": "On a Google Colab VM (first click may wait to connect)"}, {"key": "B", "text": "Only on your laptop GPU"}, {"key": "C", "text": "Only after you pip-install torch locally"}, {"key": "D", "text": "In a text cell"}], "answer": "A", "whyCorrect": "He: device is a Google server chunk; first run establishes the connection; packages are preinstalled.", "whyOthers": {"B": "Demo printed device cpu; not ‘your GPU’.", "C": "Colab already has torch.", "D": "Text cells do not run code."}, "diagram": "  browser ▶ Colab ▶ Google VM", "useLater": "Topics 1–2."}, {"id": "q6", "part": "notes", "tag": "Master map", "anchor": "NOTES.md#executive-summary--architecture-of-this-lecture", "prompt": "What is this 29-minute recording actually teaching (despite the YouTube title)?", "options": [{"key": "A", "text": "KL / reverse-KL / Jensen–Shannon as f-divergences"}, {"key": "B", "text": "Variational divergence minimization saddle point"}, {"key": "C", "text": "PyTorch tensors on Colab: create, inspect, cat, @ vs *"}, {"key": "D", "text": "Training a GAN end-to-end"}], "answer": "C", "whyCorrect": "Audio and screen are the official tensor tutorial. Title/description say f-divergence; the package follows the video.", "whyOthers": {"A": "That would be the labeled W1_L3 math lecture; this file isn’t it.", "B": "That is W1_L4’s title.", "D": "He never trains a net here."}, "diagram": "  YouTube title: f-div\n  Actual board: pytorch.org Tensors", "useLater": "Read the mismatch banner before blaming the notes."}, {"id": "q7", "part": "notes", "tag": "API · create", "anchor": "NOTES.md#topic-4-tensor-from-a-list-and-from-numpy-0941–1234", "prompt": "How do you wrap a NumPy array `np_array` as a tensor?", "options": [{"key": "A", "text": "torch.tensor(np_array) is the only legal way"}, {"key": "B", "text": "np_array.torch()"}, {"key": "C", "text": "torch.ones_like(np_array)"}, {"key": "D", "text": "torch.from_numpy(np_array)"}], "answer": "D", "whyCorrect": "Screen: x_np = torch.from_numpy(np_array). Lists use torch.tensor(data).", "whyOthers": {"A": "Works sometimes but he teaches from_numpy for ndarrays.", "B": "Not an API.", "C": "ones_like needs a tensor template."}, "diagram": "  ndarray ──from_numpy──► Tensor", "useLater": "Topic 4."}, {"id": "q8", "part": "notes", "tag": "Trap · cat dim", "anchor": "NOTES.md#topic-8-concatenate-dim0-vs-dim1-1754–2043", "prompt": "`torch.cat([A, A, A], dim=1)` for 4×4 A gives…", "options": [{"key": "A", "text": "12×4 (stacked rows)"}, {"key": "B", "text": "4×4 still"}, {"key": "C", "text": "4×12 (side by side, more columns)"}, {"key": "D", "text": "A 3-D tensor 3×4×4"}], "answer": "C", "whyCorrect": "dim=1 concatenates columns: 4 rows × 12 columns. dim=0 would be 12×4. stack would add a new axis.", "whyOthers": {"A": "That is dim=0.", "B": "Three copies were joined.", "D": "That is closer to stack."}, "diagram": "  dim=1 → wider\n  dim=0 → taller", "useLater": "Topic 8."}, {"id": "q9", "part": "notes", "tag": "Connect · three APIs", "anchor": "NOTES.md#topic-9-matrix-multiply-three-ways-2043–2502", "prompt": "On the official notebook, `tensor @ tensor.T`, `tensor.matmul(tensor.T)`, and `torch.matmul(..., out=y3)` …", "options": [{"key": "A", "text": "Are three different mathematical products"}, {"key": "B", "text": "Are three APIs for the same matmul (y1, y2, y3 same value)"}, {"key": "C", "text": "Only @ works on GPU"}, {"key": "D", "text": "Are element-wise products"}], "answer": "B", "whyCorrect": "Comment on screen: y1, y2, y3 will have the same value.", "whyOthers": {"A": "Same linear algebra.", "C": "Device is independent of API.", "D": "Element-wise is * / mul."}, "diagram": "  @  ≡  .matmul  ≡  torch.matmul", "useLater": "Topic 9."}, {"id": "q10", "part": "notes", "tag": "Contrast · * vs @", "anchor": "NOTES.md#topic-10-element-wise-product-2502–2843", "prompt": "He says element-wise multiply is core to convolutions. The PyTorch spell is…", "options": [{"key": "A", "text": "`tensor * tensor` or `tensor.mul(tensor)` with the same shape"}, {"key": "B", "text": "`tensor @ tensor`"}, {"key": "C", "text": "`torch.cat`"}, {"key": "D", "text": "`tensor.T`"}], "answer": "A", "whyCorrect": "z1 = tensor * tensor; z2 = tensor.mul(tensor). Same size required. matmul is a different product.", "whyOthers": {"B": "Linear layer, not Hadamard.", "C": "Join, not multiply.", "D": "Transpose."}, "diagram": "  *  Hadamard (conv)\n  @  matmul (linear)", "useLater": "Topic 10 recap."}, {"id": "q11", "part": "notes", "tag": "Apply · device", "anchor": "NOTES.md#topic-7-shape-dtype-device-1629–1754", "prompt": "The printed `tensor.device` in this demo was `cpu`. That means…", "options": [{"key": "A", "text": "Colab is broken"}, {"key": "B", "text": "Tensors cannot use GPU"}, {"key": "C", "text": "He has not moved the tensor to an accelerator yet (default is CPU)"}, {"key": "D", "text": "dtype is integer"}], "answer": "C", "whyCorrect": "He says he is not using GPU yet; CPU always exists. .to(accelerator) is postponed.", "whyOthers": {"A": "Normal default.", "B": "The whole point of tensors is they CAN.", "D": "device ≠ dtype."}, "diagram": "  default: cpu\n  later: .to(accelerator)", "useLater": "Don’t panic at cpu in print."}, {"id": "q12", "part": "notes", "tag": "Worked · ones_like", "anchor": "NOTES.md#topic-5-ones_like--rand_like-1234–1500", "prompt": "`torch.ones_like(x_data)` does what?", "options": [{"key": "A", "text": "Adds one to every entry of x_data in place"}, {"key": "B", "text": "Creates a new tensor, same shape (and properties) as x_data, filled with ones"}, {"key": "C", "text": "Always makes a 1-D vector of ones"}, {"key": "D", "text": "Fails unless x_data is on GPU"}], "answer": "B", "whyCorrect": "Template copy: steal shape (and properties unless overridden).", "whyOthers": {"A": "Not in-place add.", "C": "Shape follows x_data.", "D": "Works on CPU."}, "diagram": "  x_data ──ones_like──► same shape, all 1", "useLater": "Topic 5 vs Topic 6 (shape tuple)."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

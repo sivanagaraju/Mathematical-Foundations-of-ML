@@ -1,0 +1,31 @@
+{
+  "title": "W1_L2: Introduction & problem setting | generative AI basics explained",
+  "video_id": "HUunmwZfGzc",
+  "url": "https://www.youtube.com/watch?v=HUunmwZfGzc",
+  "duration_seconds": 3512,
+  "channel": "IIT Madras - B.S. Degree Programme",
+  "instructor": "Prof. Prathosh A P",
+  "description": "Week 1 Lecture 2: mathematical problem of generative modeling — IID data from unknown p_x, estimate and sample via G_theta and a divergence.",
+  "playlist_index": 2,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "course_short": "IITM-BS-MFGAI",
+  "topics": [
+    "Conditional generators in the wild",
+    "Data as IID samples from unknown p_x",
+    "Images as high-D vectors",
+    "Vector RV; IID across samples not pixels",
+    "Estimate p_x and learn to sample",
+    "Parametric family p_theta as a deep net",
+    "Divergence and argmin (unknown p_x trap)",
+    "Sampling engine z to G_theta(z)",
+    "Train G_theta-star then sample from near p_x",
+    "Four open questions and recap"
+  ]
+}

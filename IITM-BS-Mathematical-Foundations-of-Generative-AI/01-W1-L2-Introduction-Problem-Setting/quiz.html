@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · W1_L2 Introduction & problem setting</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · W1_L2 Introduction & problem setting</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q1", "part": "prerequisites", "tag": "Warm-up · RV", "anchor": "PREREQUISITES.md#p1-rv", "prompt": "You stored one JPEG of a cat. In this course’s language, that JPEG is…", "options": [{"key": "A", "text": "The random variable X itself"}, {"key": "B", "text": "One instantiation (sample) of a random variable X"}, {"key": "C", "text": "The unknown law p_x"}, {"key": "D", "text": "The sample space Ω"}], "answer": "B", "whyCorrect": "A JPEG is one realized vector. X is the rule that turns a hidden scene into pixels; p_x is the law of those vectors; Ω is the hidden set of scenes.", "whyOthers": {"A": "X is the labeling rule, not one file.", "C": "p_x is unknown and not stored as a JPEG.", "D": "Ω is the hidden outcome set, not a pixel array."}, "diagram": "  hidden scene ω\n       │  X (RV)\n       ▼\n  JPEG = x = X(ω)   ← one instantiation", "useLater": "Topic 4: x_i are instantiations of a D-dimensional RV."}, {"id": "q2", "part": "prerequisites", "tag": "Warm-up · density", "anchor": "PREREQUISITES.md#p2-density", "prompt": "A uniform density on [0, 0.5] has height 2. What is the probability of the whole interval?", "options": [{"key": "A", "text": "2, because height is probability"}, {"key": "B", "text": "0.5"}, {"key": "C", "text": "0"}, {"key": "D", "text": "1 (height × length = 2 × 0.5)"}], "answer": "D", "whyCorrect": "Density is a height. Probability of a region is (approximately) height × volume. 2 × 0.5 = 1, as a density must integrate to 1.", "whyOthers": {"A": "Height can exceed 1; it is not a probability.", "B": "That is the length of the interval, not the probability.", "C": "A continuous point has probability 0; a whole interval here has probability 1."}, "diagram": "  height 2 on [0, 0.5]\n  area = 2 × 0.5 = 1  = probability", "useLater": "The lecture mixes ‘distribution’ and ‘density’ in speech; keep this pocket distinction."}, {"id": "q3", "part": "prerequisites", "tag": "Warm-up · IID trap", "anchor": "PREREQUISITES.md#p3-iid", "prompt": "IID for a photo dataset means…", "options": [{"key": "A", "text": "Photos are independent draws from one shared unknown law; pixels inside one photo need not be independent"}, {"key": "B", "text": "Every pixel is independent of every other pixel"}, {"key": "C", "text": "Each photo comes from a different unknown law"}, {"key": "D", "text": "The number of photos n equals the dimension D"}], "answer": "A", "whyCorrect": "IID is across samples (photo ⟂ photo) and identical law p_x. Dependence inside one image is allowed.", "whyOthers": {"B": "This is the lecture’s explicit trap.", "C": "Identically distributed means one shared p_x.", "D": "n is count of files; D is length of one vector."}, "diagram": "  YES:  photo_1 ⟂ photo_2  ~ same p_x\n  NO:   pixel_1 ⟂ pixel_1000  inside one photo", "useLater": "Topic 4 spends minutes on this trap."}, {"id": "q4", "part": "prerequisites", "tag": "Warm-up · flatten", "anchor": "PREREQUISITES.md#p4-vectors", "prompt": "A 400×400 RGB image, stacked with each pixel-channel as one coordinate, has dimension D equal to…", "options": [{"key": "A", "text": "400"}, {"key": "B", "text": "1200"}, {"key": "C", "text": "480,000"}, {"key": "D", "text": "3"}], "answer": "C", "whyCorrect": "D = 400 × 400 × 3 = 480,000 — the board’s worked example.", "whyOthers": {"A": "That is one side length, not D.", "B": "400×3 ignores the other spatial side.", "D": "Three is the channel count, not D."}, "diagram": "  400 × 400 × 3 = 480000", "useLater": "Topic 3 writes this number under the image cube."}, {"id": "q5", "part": "prerequisites", "tag": "Warm-up · transform", "anchor": "PREREQUISITES.md#p7-transform", "prompt": "z is drawn from a known Gaussian. A fixed net G_θ maps z to x̂. The law of x̂…", "options": [{"key": "A", "text": "Must equal the Gaussian law of z"}, {"key": "B", "text": "Depends on G_θ (a deterministic map of a RV is still random, with a new law)"}, {"key": "C", "text": "Does not exist unless we write a density formula first"}, {"key": "D", "text": "Is always p_x before any training"}], "answer": "B", "whyCorrect": "A deterministic function of a random variable is random; its law depends on the function. That law is p_θ, not automatically p_x.", "whyOthers": {"A": "The whole point of G_θ is to change the law.", "C": "You can sample x̂ by running G_θ even without a closed-form density.", "D": "p_θ matches p_x only after (successful) training."}, "diagram": "  z ~ N(0,I) --G_θ--> x̂ ~ p_θ  (depends on G_θ)", "useLater": "Topics 8–9: this is the sampling engine."}, {"id": "q6", "part": "notes", "tag": "Master map", "anchor": "NOTES.md#executive-summary--architecture-of-this-lecture", "prompt": "On the master map, the whole-video job of generative modeling is…", "options": [{"key": "A", "text": "Estimate p(y|x) for labels y"}, {"key": "B", "text": "Memorize D and replay it"}, {"key": "C", "text": "Given IID samples from unknown p_x, estimate p_x AND learn to sample"}, {"key": "D", "text": "Minimize classification error on a held-out set only"}], "answer": "C", "whyCorrect": "The PROBLEM box is two-fold: estimate the unknown law and produce new draws. Discriminative work can stop at p(y|x).", "whyOthers": {"A": "That is the discriminative contrast on the same board.", "B": "Topic 10: replaying D is not sampling the underlying law.", "D": "Held-out classification is not this lecture’s job."}, "diagram": "  D ~ p_x unknown\n    ├─ estimate p_x\n    └─ sample new x  (not copies of D)", "useLater": "If this slogan sticks, the 3-step recipe has a purpose."}, {"id": "q7", "part": "notes", "tag": "Contrast · gen vs disc", "anchor": "NOTES.md#topic-5--estimate-p_x-and-learn-to-sample-1645–1947", "prompt": "How does a discriminative model differ from the generative job on this board?", "options": [{"key": "A", "text": "It typically estimates p(y|x) and need not learn to sample from p_x"}, {"key": "B", "text": "It must sample new x but never estimates any law"}, {"key": "C", "text": "It forbids neural nets"}, {"key": "D", "text": "It requires pixel-wise independence"}], "answer": "A", "whyCorrect": "He contrasts p(y|x) (no required sampler of x) with estimate-and-sample.", "whyOthers": {"B": "Discriminative models do estimate a conditional; they skip sampling x.", "C": "Architecture is not the contrast.", "D": "Pixel independence is a different trap (Topic 4)."}, "diagram": "  disc: p(y|x)     gen: p_x + sampler", "useLater": "Topic 5 fork stays for the whole course."}, {"id": "q8", "part": "notes", "tag": "Worked · D", "anchor": "NOTES.md#topic-3--images-as-high-d-vectors-0654–0922", "prompt": "On the board, r=400, c=400, 3 RGB channels. D is…", "options": [{"key": "A", "text": "800"}, {"key": "B", "text": "400"}, {"key": "C", "text": "1,000 (the example n)"}, {"key": "D", "text": "480,000"}], "answer": "D", "whyCorrect": "400×400×3 = 480,000. n=1000 appears later as a count of images, not D.", "whyOthers": {"A": "400+400 is not stacking.", "B": "One spatial side.", "C": "n is the number of files, not dimensionality."}, "diagram": "  400 × 400 × 3 = 480000", "useLater": "High-D is the default, not a special case."}, {"id": "q9", "part": "notes", "tag": "Trap · IID pixels", "anchor": "NOTES.md#topic-4--vector-random-variable-iid-across-samples-not-pixels-0922–1645", "prompt": "The instructor says x_1 ⟂ x_2 for two images. Which reading is the trap he blocks?", "options": [{"key": "A", "text": "The two photos were captured independently from one p_x"}, {"key": "B", "text": "Pixel 1 and pixel 1000 inside one photo are independent"}, {"key": "C", "text": "Both photos are instantiations of a D-dimensional RV"}, {"key": "D", "text": "IID includes identically distributed"}], "answer": "B", "whyCorrect": "He spends a long stretch: IID is across samples, not across dimensions of one sample.", "whyOthers": {"A": "This is the intended reading.", "C": "True: vector-valued RV of size D.", "D": "True: identical law p_x."}, "diagram": "  across images: YES\n  inside one image: NOT claimed", "useLater": "Misreading IID wrecks later likelihood factorizations."}, {"id": "q10", "part": "notes", "tag": "Definition · model", "anchor": "NOTES.md#topic-6--parametric-family-p_theta-as-a-deep-net-1947–2419", "prompt": "In this course, when he says “model” he means…", "options": [{"key": "A", "text": "The parametric family p_θ (typically a deep net) assumed for p_x"}, {"key": "B", "text": "ChatGPT the product"}, {"key": "C", "text": "The optimizer (SGD/Adam)"}, {"key": "D", "text": "The dataset D"}], "answer": "A", "whyCorrect": "He flags it as his slang: model = p_θ, represented by a DNN via universal approximation.", "whyOthers": {"B": "Apps are examples, not the definition of model.", "C": "The optimizer is recipe step (iii) / Q4.", "D": "D is data, not the family."}, "diagram": "  model  :=  p_θ  (DNN weights = θ)", "useLater": "Every later family (GAN, VAE, diffusion) is a choice of this p_θ."}, {"id": "q11", "part": "notes", "tag": "Connect · recipe to engine", "anchor": "NOTES.md#topic-9--train-g_thetastar-then-sample-from-near-p_x-3626–4754", "prompt": "After θ* = argmin d(p_x ‖ p_θ), how do you get a new sample?", "options": [{"key": "A", "text": "Pick a random training file from D"}, {"key": "B", "text": "Sample z ~ N(0,I) and set x_new = G_{θ*}(z)"}, {"key": "C", "text": "Average all x_i in D"}, {"key": "D", "text": "Draw a label y from p(y|x)"}], "answer": "B", "whyCorrect": "Unlimited Gaussian draws through the trained net produce draws from p_{θ*} ≈ p_x, not copies of D.", "whyOthers": {"A": "Topic 10: replaying D is not sampling the law.", "C": "The mean is one vector, not a draw from p_x.", "D": "That is discriminative."}, "diagram": "  z ~ N(0,I) --G_θ*--> x_new ≈ p_x", "useLater": "This is the TRAIN then SAMPLE strip on the master map."}, {"id": "q12", "part": "notes", "tag": "Edge · d properties", "anchor": "NOTES.md#topic-9--train-g_thetastar-then-sample-from-near-p_x-3626–4754", "prompt": "For the divergences he will use, d(p_x ‖ p_θ) = 0 if and only if…", "options": [{"key": "A", "text": "θ is Gaussian"}, {"key": "B", "text": "n is infinite"}, {"key": "C", "text": "D is small"}, {"key": "D", "text": "The two distributions match (and d ≥ 0 always)"}], "answer": "D", "whyCorrect": "Board: D ≥ 0, and D = 0 iff p_x = p_θ.", "whyOthers": {"A": "Gaussian is the law of z, not a condition for d=0.", "B": "Sample size is not the iff condition.", "C": "Dimension is unrelated to this property."}, "diagram": "  d ≥ 0\n  d = 0  ⇔  p_θ = p_x", "useLater": "Q2 later: not every score is a metric; this non-negativity is required."}, {"id": "q13", "part": "notes", "tag": "Trade-off · four questions", "anchor": "NOTES.md#topic-10--four-open-questions-and-recap-4754–5832", "prompt": "Why is “just plug p_x and p_θ into the formula for d” blocked at the end of this lecture?", "options": [{"key": "A", "text": "Neural nets cannot represent densities"}, {"key": "B", "text": "We have samples from both laws (D and G_θ(z)) but typically neither density formula"}, {"key": "C", "text": "Divergence is always infinite in high dimension"}, {"key": "D", "text": "IID forbids using more than one sample"}], "answer": "B", "whyCorrect": "Q1: we know neither p_x nor (often) p_θ as functions. We do have two clouds of samples. The rest of the course computes d from those clouds.", "whyOthers": {"A": "UAT is why nets are used as p_θ / G_θ.", "C": "Not claimed here.", "D": "IID is about independence, not banning n>1."}, "diagram": "  have: samples from p_x and from p_θ\n  lack: formulas for p_x, p_θ\n  Q1: compute d from the two clouds", "useLater": "Next modules: f-divergence and variational divergence minimization."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

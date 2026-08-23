@@ -1,0 +1,10 @@
+{
+  "title": "W1_T1: Tutorial 1: Forward pass & backpropagation",
+  "video_id": "VxRIqenOoQw",
+  "url": "https://www.youtube.com/watch?v=VxRIqenOoQw",
+  "duration_seconds": 2570,
+  "channel": "IIT Madras - B.S. Degree Programme",
+  "description": "Welcome to Week 1 Tutorial 1 on the course \"Generative AI\" by Prof. Prathosh A P.\nFull Course: https://study.iitm.ac.in/ds/course_pages/BSDA5002.html \n\nVideo Overview\nThis tutorial provides a foundational understanding of Multi-Layer Perceptrons (MLPs) and their role in supervised learning. We'll cover the basic MLP structure, delve into the forward pass with detailed calculations, and explore the concept of backpropagation using gradient descent to minimize error. This session assumes basic knowledge of MLPs and regression tasks.\n\nAbout IIT Madras' online Bachelor of Science programme\nIIT Madras offers four-year BS programmes that aim to provide quality education to all, irrespective of age, educational background, or location. The BS programme has multiple levels, which provide flexibili",
+  "playlist_index": 5,
+  "chapter_count": 0
+}

@@ -1,0 +1,31 @@
+{
+  "title": "W1_L3: PyTorch tensors (YouTube title: F-divergence)",
+  "video_id": "rHnrALMCyIQ",
+  "url": "https://www.youtube.com/watch?v=rHnrALMCyIQ",
+  "duration_seconds": 1723,
+  "channel": "IIT Madras - B.S. Degree Programme",
+  "instructor": "IIT Madras BS (tutorial)",
+  "description": "Playlist metadata says f-divergence; the 28:43 recording is the official PyTorch tensor tutorial on Google Colab.",
+  "playlist_index": 3,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "course_short": "IITM-BS-MFGAI",
+  "topics": [
+    "Colab GPU, prereqs, CS231n",
+    "Official tutorials and Colab notebook",
+    "What a tensor is",
+    "Tensor from list and NumPy",
+    "ones_like / rand_like",
+    "Create from shape",
+    "shape, dtype, device",
+    "Concatenate dim 0 vs 1",
+    "Matrix multiply three ways",
+    "Element-wise product"
+  ]
+}

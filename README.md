@@ -28,9 +28,9 @@ Different recording from the NPTEL folder above. Same instructor (Prof. Prathosh
 
 | Folder | What it is |
 |--------|------------|
-| [`IITM-BS-Mathematical-Foundations-of-Generative-AI/`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md) | Course map + full playlist catalog (title, link, summary) · [YouTube playlist](https://www.youtube.com/playlist?list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu) |
+| [`IITM-BS-Mathematical-Foundations-of-Generative-AI/`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md) | Course map + catalog · packages: [W1_L2](./IITM-BS-Mathematical-Foundations-of-Generative-AI/01-W1-L2-Introduction-Problem-Setting/), [W1_L4 $f$-div](./IITM-BS-Mathematical-Foundations-of-Generative-AI/03-W1-L4-Variational-Divergence-Minimization/), [W1_T2](./IITM-BS-Mathematical-Foundations-of-Generative-AI/04-W1-T2-Introduction-to-PyTorch-Tensors/) · [playlist](https://www.youtube.com/playlist?list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu) |
 
-Start at [`NOTES.md`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md) (catalog). First full lecture package: [`01-W1-L2-Introduction-Problem-Setting/`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/01-W1-L2-Introduction-Problem-Setting/).
+Start at [`NOTES.md`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md) (catalog). Lecture packages: [`01-W1-L2-Introduction-Problem-Setting/`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/01-W1-L2-Introduction-Problem-Setting/), [`02-W1-L3-F-Divergence/`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/02-W1-L3-F-Divergence/) (playlist title says F-divergence; **recording is PyTorch tensors**).
 
 ## Skill
 

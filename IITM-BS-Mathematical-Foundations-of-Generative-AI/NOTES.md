@@ -6,7 +6,16 @@ IIT Madras B.S. Degree Programme · Course **BSDA5002** · Prof. Prathosh A P (E
 **Channel:** IIT Madras — B.S. Degree Programme  
 **Size:** 73 videos · ~32.3 hours · last updated 5 May 2026
 
-This file is the **course map + catalog**. It is not a per-lecture study package. Per-video `PREREQUISITES.md` / `NOTES.md` / quiz files live under the NPTEL sibling folder [`../Mathematical-Foundation-for-GenerativeAI/`](../Mathematical-Foundation-for-GenerativeAI/) and can be added here lecture-by-lecture later.
+This file is the **course map + catalog**. Per-lecture study packages (`PREREQUISITES.md` / `NOTES.md` / quiz) are added here as we build them.
+
+| Playlist # | Video | Study package |
+|------------|-------|----------------|
+| 2 | W1_L2 Introduction & problem setting | [`01-W1-L2-Introduction-Problem-Setting/`](./01-W1-L2-Introduction-Problem-Setting/) |
+| 3 | W1_L3 (YouTube title: F-divergence; **recording is PyTorch tensors**) | [`02-W1-L3-F-Divergence/`](./02-W1-L3-F-Divergence/) |
+| 4 | W1_L4 Variational divergence minimization | [`03-W1-L4-Variational-Divergence-Minimization/`](./03-W1-L4-Variational-Divergence-Minimization/) |
+| 6 | W1_T2 Introduction to pytorch: tensors *(recording: Dataset / DataLoader)* | [`04-W1-T2-Introduction-to-PyTorch-Tensors/`](./04-W1-T2-Introduction-to-PyTorch-Tensors/) |
+
+Same instructor, similar math, **different recording** from NPTEL / IISc ([`../Mathematical-Foundation-for-GenerativeAI/`](../Mathematical-Foundation-for-GenerativeAI/)).
 
 Same instructor, similar math, **different recording**: IIT Madras BS (this playlist) vs NPTEL / IISc.
 
@@ -152,9 +161,9 @@ Summaries are from official titles + the published week syllabus. They are not s
 | 1 | W1_L1: Course outline deep generative models | 9:33 | [watch](https://www.youtube.com/watch?v=skWhn8W9P_Y&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=1) | Roadmap of the 12-week course: GANs, VAEs, diffusion, autoregressive models, LLMs, RL alignment, SSMs. |
 | 2 | W1_L2: Introduction & problem setting \| generative AI basics explained | 58:32 | [watch](https://www.youtube.com/watch?v=HUunmwZfGzc&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=2) | Casts generative AI as: given data, estimate a density $p_x$ **and** sample from it. This is the problem the rest of the course solves. |
 | 3 | W1_L3: F-divergence \| variational divergence minimization in generative models | 28:44 | [watch](https://www.youtube.com/watch?v=rHnrALMCyIQ&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=3) | $f$-divergence as the distance $d(p,p_\theta)$ used to train generators. KL, reverse-KL, JS; they are not metrics. |
-| 4 | W1_L4: Variational divergence minimization | 26:09 | [watch](https://www.youtube.com/watch?v=nfZQYopzv20&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=4) | Turns $f$-divergence into a tractable min–max game via the convex conjugate: a critic $T(x)$ lower-bounds the divergence. |
+| 4 | W1_L4: Variational divergence minimization | 26:09 | [watch](https://www.youtube.com/watch?v=nfZQYopzv20&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=4) | Names $f$-divergence (KL / JS / TV). The conjugate / critic algorithm is **next** (W2_L5). Package: [`03-W1-L4-…`](./03-W1-L4-Variational-Divergence-Minimization/). |
 | 5 | W1_T1: Tutorial 1: Forward pass & backpropagation | 42:50 | [watch](https://www.youtube.com/watch?v=VxRIqenOoQw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=5) | Neural-net forward pass and backprop from scratch so later PyTorch tutorials are not black boxes. |
-| 6 | W1_T2: Tutorial 2: Introduction to pytorch: tensors | 18:26 | [watch](https://www.youtube.com/watch?v=L5n4rNrLZ_8&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=6) | PyTorch tensors, shapes, devices, and basic ops. |
+| 6 | W1_T2: Tutorial 2: Introduction to pytorch: tensors | 18:26 | [watch](https://www.youtube.com/watch?v=L5n4rNrLZ_8&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=6) | Title says tensors; recording is Dataset/DataLoader. Package: [`04-W1-T2-…`](./04-W1-T2-Introduction-to-PyTorch-Tensors/). |
 | 7 | W1_T3: Tutorial 3: Introduction to pytorch: datasets & dataloaders | 30:44 | [watch](https://www.youtube.com/watch?v=c2gN3TK3U74&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=7) | `Dataset` / `DataLoader` so training loops can stream minibatches. |
 | 8 | W1_T4: Tutorial 4: Introduction to pytorch: model building | 44:06 | [watch](https://www.youtube.com/watch?v=h1hEddM0aVE&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=8) | `nn.Module`, autograd, and a first trainable model. |
 

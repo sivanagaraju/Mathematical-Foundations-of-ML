@@ -1,0 +1,30 @@
+{
+  "title": "W1_L4: Variational divergence minimization",
+  "video_id": "nfZQYopzv20",
+  "url": "https://www.youtube.com/watch?v=nfZQYopzv20",
+  "duration_seconds": 1568,
+  "channel": "IIT Madras - B.S. Degree Programme",
+  "instructor": "Prof. Prathosh A. P. (IISc / IITM BS)",
+  "description": "Week 1 Lecture 4: recap of estimate+sample and push-forward; f-divergence (convex f, f(1)=0); KL, JS, TV. Variational algorithm and GAN next.",
+  "playlist_index": 4,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 9,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "course_short": "IITM-BS-MFGAI",
+  "topics": [
+    "Recap estimate sample 3-step recipe",
+    "Push-forward samples not the law",
+    "Four questions VDM is same recipe",
+    "f-divergence definition",
+    "D_f nonnegative zero iff equal",
+    "KL is f of u log u",
+    "Forward KL not reverse KL",
+    "JS and TV different f different properties",
+    "Next any-f algorithm then GAN"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "title": "W1_T3: Tutorial 3: Introduction to pytorch: datasets & dataloaders",
+  "video_id": "c2gN3TK3U74",
+  "url": "https://www.youtube.com/watch?v=c2gN3TK3U74",
+  "duration_seconds": 1844,
+  "channel": "IIT Madras - B.S. Degree Programme",
+  "description": "Welcome to Week 1 Tutorial 3 on the course \"Generative AI\" by Prof. Prathosh A P.\nFull Course: https://study.iitm.ac.in/ds/course_pages/BSDA5002.html \n\nVideo Overview\nLearn how to prepare your data for PyTorch models.This lecture covers loading and transforming data into tensors, the fundamental format for neural networks. We'll explore built-in PyTorch datasets like FashionMNIST and, more importantly, dive into creating custom datasets for when your data isn't readily available. Discover how to create data loaders for efficient batch processing and shuffling, crucial for training your models effectively. This tutorial is a practical guide to managing and preparing your data for successful deep learning projects.\n\nAbout IIT Madras' online Bachelor of Science programme\nIIT Madras offers fou",
+  "playlist_index": 7,
+  "chapter_count": 0
+}
