@@ -1,0 +1,30 @@
+{
+  "title": "Lec 05 Generative Adversarial Networks (GANs)",
+  "video_id": "5uqga82bDNA",
+  "url": "https://www.youtube.com/watch?v=5uqga82bDNA",
+  "duration_seconds": 3484,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A. P. (IISc / NPTEL)",
+  "description": "Vanilla GAN, Deep Convolutional GAN (DCGAN), Conditional GAN",
+  "playlist_index": 5,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Recap VDM saddle finite NN bound",
+    "Choose f last activation Lego",
+    "GAN f not JSD sigmoid D",
+    "Alternate batches sample averages",
+    "Freeze pass counts not 1:1",
+    "Classifier-guided story 2D counterexample",
+    "Likelihood adversarial LSGAN",
+    "DCGAN transpose conv",
+    "Conditional concat discard D",
+    "StyleGAN demo next WGAN"
+  ]
+}

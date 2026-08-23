@@ -12,9 +12,19 @@ Parent course of this repo. Prof. Prathosh A P · IISc · **106108841** · 89 vi
 
 Start at [`NOTES.md`](./NOTES.md). Numbered folders below (`02-Lec01-…`) are per-lecture study packages for a subset of that playlist.
 
+## NPTEL — Mathematical Foundations of Generative AI
+
+Sequel to the MFML course. Same instructor. Course **106108004**. Playlist still growing (21 videos uploaded; YouTube lists newest first).
+
+| Folder | What it is |
+|--------|------------|
+| [`Mathematical-Foundation-for-GenerativeAI/NOTES.md`](./Mathematical-Foundation-for-GenerativeAI/NOTES.md) | Course map + full playlist catalog (learning order, links, summaries, existing packages) · [YouTube playlist](https://www.youtube.com/playlist?list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK) |
+
+Start at that [`NOTES.md`](./Mathematical-Foundation-for-GenerativeAI/NOTES.md). Numbered folders inside it (`14-Lec01-…`) are per-lecture study packages.
+
 ## IIT Madras BS — Mathematical Foundations of Generative AI
 
-Different recording from the NPTEL folder below. Same instructor (Prof. Prathosh A P). Course **BSDA5002**. 73 videos.
+Different recording from the NPTEL folder above. Same instructor (Prof. Prathosh A P). Course **BSDA5002**. 73 videos.
 
 | Folder | What it is |
 |--------|------------|
@@ -63,7 +73,8 @@ Law: `~/.grok/skills/youtube-lecture-tutor/`
 | [`Mathematical-Foundation-for-GenerativeAI/25-Lec03-f-Divergence-Examples/`](./Mathematical-Foundation-for-GenerativeAI/25-Lec03-f-Divergence-Examples/) | [Lec 03: f-Divergence and Examples](https://www.youtube.com/watch?v=LR9UQXY_IU8) | math_technical | estimate+sample · G_θ · f-div (not a metric) · KL/rev/JSD · modes vs junk |
 | [`Mathematical-Foundation-for-GenerativeAI/26-Tutorial11-f-Divergence-Examples/`](./Mathematical-Foundation-for-GenerativeAI/26-Tutorial11-f-Divergence-Examples/) | [Tutorial 11: f-Divergence and Examples](https://www.youtube.com/watch?v=GjxuVZeMSfE) | math_technical | P≪Q · Jensen proofs · KL/−log/TV/JSD · KL fails symmetry & triangle (0.368/1.758) |
 | [`Mathematical-Foundation-for-GenerativeAI/27-Lec04-Variational-Divergence-Minimization/`](./Mathematical-Foundation-for-GenerativeAI/27-Lec04-Variational-Divergence-Minimization/) | [Lec 04 Variational Divergence Minimization (VDM)](https://www.youtube.com/watch?v=4vtL3NhCkgg) | math_technical | two clouds · f* unzip · T(x) lower bound · min_θ max_w saddle |
-| [`Mathematical-Foundation-for-GenerativeAI/27-Lec04-Variational-Divergence-Minimization/`](./Mathematical-Foundation-for-GenerativeAI/27-Lec04-Variational-Divergence-Minimization/) | [Lec 04: Variational Divergence Minimization (VDM)](https://www.youtube.com/watch?v=4vtL3NhCkgg) | math_technical | two clouds · conjugate · T(x) bound · min_θ max_w saddle |
+| [`Mathematical-Foundation-for-GenerativeAI/28-Lec05-Generative-Adversarial-Networks/`](./Mathematical-Foundation-for-GenerativeAI/28-Lec05-Generative-Adversarial-Networks/) | [Lec 05 Generative Adversarial Networks (GANs)](https://www.youtube.com/watch?v=5uqga82bDNA) | math_technical | GAN = one f of VDM · not JSD · alternate freeze · cGAN concat · StyleGAN |
+| [`Mathematical-Foundation-for-GenerativeAI/29-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/`](./Mathematical-Foundation-for-GenerativeAI/29-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/) | [Tutorial 12: Vanilla GAN, DCGAN, Conditional GAN](https://www.youtube.com/watch?v=dBcURX7GrwE) | code_tutorial | MLP/cGAN/DCGAN · detach · non-sat G · FID 92.93/104/21.5 |
 
 ## Study one package
 

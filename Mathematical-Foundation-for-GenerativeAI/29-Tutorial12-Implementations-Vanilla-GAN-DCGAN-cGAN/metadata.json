@@ -1,0 +1,30 @@
+{
+  "title": "Tutorial 12 : Implementations of Vanilla GAN, DCGAN and Conditional GAN",
+  "video_id": "dBcURX7GrwE",
+  "url": "https://www.youtube.com/watch?v=dBcURX7GrwE",
+  "duration_seconds": 4713,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc (tutorial; GAN implementations in PyTorch/Colab)",
+  "description": "PyTorch Implementation of Vanilla GAN, Deep Convolutional GAN (DCGAN), Conditional GAN",
+  "playlist_index": 12,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "topics": [
+    "VDM saddle and three nets",
+    "FID Colab MNIST tanh range",
+    "MLP G and D BCEWithLogits",
+    "D step detach sign flip",
+    "Non-saturating G loss",
+    "Sample vanilla start cGAN",
+    "cGAN embeddings MLP",
+    "DCGAN conv transpose",
+    "Conditional DCGAN two-channel",
+    "FID scores noise probe notebook"
+  ]
+}
