@@ -18,96 +18,132 @@
 8. [Topic 8 — Probability measure P & axioms](#topic-8-probability-measure-p--axioms-3832–4458) (38:32–44:58)
 9. [Topic 9 — Triplet & surrogates](#topic-9-triplet--surrogates-4458–5401) (44:58–54:01)
 10. [Topic 10 — RV, CDF, estimate P_X](#topic-10-rv-cdf-estimate-px-5401–7052) (54:01–70:52)
-11. [External references (package index)](#external-references-package-index)
+11. [External references](#external-references)
 12. [Sources](#sources)
 
 ---
 
 ## Executive Summary — architecture of this lecture
 
-Job: install the probabilistic stack under generative AI. Method: motivate first-principles math, contrast physics with non-measurable labels, build RE → Ω → events → P → surrogates → random variable X → distribution $P_X$. Fork: **deterministic physics** for measurable dynamics; **probabilistic data** when structure is perceptual — generative modeling then **estimates $P_X$**.
+A generative model has one job: look at many examples of a thing (faces, emails, sentences) and learn their **pattern** well enough to make a *new* example of the same kind. This lecture installs the math language for that job. Physics can predict a thrown ball; it cannot score “this email is spam” or “this photo looks real,” so we use repeated data and probability instead. The stack is: random experiment, sample space, events, probability, then a measurement function $X$ whose distribution we estimate. Estimating that distribution is what later VAEs, GANs, and transformers are all doing.
 
-**Worldview arc:** from GenAI black boxes **to** “estimate the law of measurements after casting systems as random experiments.”
+**Worldview arc:** from “a chatbot is a black box I prompt” **to** “generation means estimate the law of the files we stored.”
+
+**Hour at a glance (whole video).** The first third is *why*. Generative AI is everywhere (GPT, Gemini, Claude). This course will not only teach you to *use* those systems; it will derive the math under them, on a board. He names the later families (mixture models, VAEs, diffusion, GANs, transformers / LLMs, state-space models, flows, then RLHF / DPO) so you know the semester map — one shared language, many machines. He then blocks the naive path: if the target is a human judgment (spam, “who is in the photo,” tumor on an X-ray), you cannot write a Newton equation. What has worked is collecting **many observations**.
+
+The rest of the hour is *the language*. A **random experiment** is a process you can run more than once. Its **sample space** Ω is the set of every outcome that could happen (two sides of a coin, or every possible face photo). An **event** is a subset you care about (“even face,” “smiling”). A **measure** reports the size of a subset; a **probability** $P$ is a measure that stays between 0 and 1, gives the whole of Ω the score 1, and adds on events that cannot happen together. Those three objects — Ω, the menu of events F, and $P$ — are the **probability triplet**. In real projects you almost never know Ω or $P$. You only have **surrogates**: pixel files, token files. A **random variable** $X$ is the function that turns an abstract outcome into that file. The pattern of the files is $P_X$. The closing sentence of the lecture is the course goal: **estimate $P_X$**. Draw a new file from that estimate, and you have generated.
 
 ### System context
 
 ```
   ╔══════════════════════════════════╗
-  ║ Outside: GPT, Gemini, Claude…    ║
-  ║ Outside: PyTorch lab track       ║
+  ║ Apps you already use             ║
+  ║ GPT, Gemini, Claude, image gens  ║
+  ║ Labs later: PyTorch (TA)         ║
   ╚══════════════╤═══════════════════╝
                  │ this lecture (~71 min)
+                 │  “what are those apps estimating?”
                  ▼
-        ┌────────────────────┐
-        │ Prob stack for GenAI│
-        └────────────────────┘
+        ┌────────────────────────────┐
+        │ Probability stack for GenAI│
+        └────────────────────────────┘
 ```
 
 ### Main blueprint
 
 ```
-  Mission: math first principles for generative models
+  WANT: a new example that looks like the old ones
          │
          ▼
-  Roadmap: VAE/GMM · diffusion · GAN · AR/LLM · SSM · flows · RLHF/DPO
+  later engines (names only today)
+  VAE / GMM · diffusion · GAN · transformers
+  SSM · flows · RLHF / DPO
          │
-         ├─ physics path ──X──► blocked for non-measurable labels
-         │
+         ├─ write a physics formula?  ──X──►  blocked
+         │   (spam / face / tumor are not a thrown ball)
          ▼
-  repeated observations (data path that works)
-         │
+  collect many examples
+         │  math name:
          ▼
-  Random experiment → sample space Ω
-         │ subsets
+  random experiment  →  Ω = all possible outcomes
+         │  questions about outcomes = events
          ▼
-  events F  +  measure-as-size idea
-         │
-         ▼
-  P: F→[0,1]  (axioms ≥0, P(Ω)=1, disjoint add)
-         │
-         ▼
-  triplet (Ω, F, P)   [often unknown in practice]
+  P scores each event  (between 0 and 1; whole Ω = 1;
+                         add when two events cannot both happen)
          │
          ▼
-  surrogates → RV X: Ω→R^d
+  triplet (Ω, events, P)     we usually do *not* know these
+         │  what we *do* have:
+         ▼
+  files on disk = measurements X
          │
          ▼
-  P_X / CDF via inverse image
+  pattern of the files = P_X
          │
          ▼
-  estimate P_X  ← generative modeling goal
+  ESTIMATE P_X  then  draw a new file   =  generate
 ```
 
 ### Scenario walkthrough
 
-1. Want GenAI under the hood.
-2. See model families ahead.
-3. Spam / person-in-image not pure physics.
-4. Collect many observations.
-5. Cast as RE with Ω; put P on events.
-6. Observe only X (pixels/tokens).
-7. Estimate law of X to generate.
+Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
+
+**Story:** you want a machine that can draw a **new face photo** that looks like it came from the same studio as your training pictures. (A chatbot is the same shape: new text instead of a new photo.)
+
+1. **Why this course?** Prompting a finished app is not enough. You need to know *what number the machine is estimating*. That is the MISSION box.
+
+2. **Why the name-list (VAE, GAN, diffusion, transformers)?** Those are later *machines* for the same job. Today they are only a map of neighborhoods. Do not try to learn their equations yet. One job, many later tools. That is the ROADMAP box.
+
+3. **Why not just write a physics formula for “a realistic face”?** Because a face (or “is this spam?”, or “is there a tumor?”) is not a rigid body flying from A to B. There is no Newton equation for “looks like a real person.” The physics path is blocked. That is the FORK.
+
+4. **So what do people actually do?** They collect **many** real photos. No closed-form law — a pile of observations. That is the DATA box.
+
+5. **How does math talk about “a pile of photos”?** Treat “take a studio photo” as a **random experiment**. The set of every photo that *could* have come out is the **sample space** Ω. One training picture is one outcome. That is RE → Ω.
+
+6. **How do you say “smiling faces are common”?** You do not score a vibe. You pick a **subset** of Ω (an **event**) and give it a **probability** $P$. That is events + $P$.
+
+7. **Do you ever list Ω?** Almost never. You only have **files on disk** — pixel arrays. Those files are **measurements** $X(\omega)$ of the abstract outcome. That is the surrogate / random-variable box.
+
+8. **What is left to learn?** The **law of those files**, written $P_X$. If you estimate $P_X$ well, you can **draw a new file** $X'$ that looks like another studio photo. That draw *is* generation. That is the GOAL box at the bottom of the map.
+
+```
+  want a new face photo
+         │  (not: write Newton’s law of “looks real”)
+         ▼
+  pile of real photos          ← repeated observations
+         │  cast as
+         ▼
+  experiment “take a photo” → Ω = all possible photos
+         │  we only store
+         ▼
+  files X = pixel arrays
+         │  estimate
+         ▼
+  law P_X  →  sample a new file   =  generate
+```
+
+Same chain for spam text or an X-ray: pile of examples → experiment + Ω → files $X$ → estimate $P_X$ → sample. The later families (Topic 2) are just different engines for the last two arrows.
 
 ### Failure / contrast path
 
 ```
-  Physics-only for spam/tumor labels   ──X──► non-measurable gap
-  Treat RV as lone random number       ──X──► miss Ω→R^d
-  Assume we know Ω and P always        ──X──► ignore surrogates
-  Skip estimating distribution         ──X──► no GenAI math goal
+  “I’ll write a physics law of spam / faces”     ──X──►  no instrument measures that
+  “X is just a random number”                    ──X──►  you lost the domain Ω
+  “We always know Ω and P”                       ──X──►  real projects start from files
+  “Generation is prompting, not a distribution”  ──X──►  no math goal for the course
 ```
 
 ### STOP / out of scope
 
-Full σ-algebra theory; densities/KL; training any specific GenAI model this lecture.
+He does **not** train a GAN or a transformer today. He does not do densities, KL, or full measure theory. Those come later. Today ends when you can say the goal: estimate $P_X$.
 
 ### Load-bearing claims (closed-book)
 
-- Course = first-principles math for generative AI.
-- Physics blocked for abstract labels → probability + repeated data.
-- RE → Ω → F → P (triplet).
-- RV $X:\Omega\to\mathbb{R}^d$; $P_X(x)=P(X^{-1}((-\infty,x]))$.
-- Goal: **estimate** the distribution of measurements.
+- This course derives generative AI from math first principles, not from demos.
+- If the target is a human judgment, physics is blocked → collect data and use probability.
+- Three objects: sample space Ω, events, probability $P$ (the triplet).
+- A random variable is a **function** from outcomes to numbers / files, not a lone number.
+- Generation = **estimate** the distribution $P_X$ of those files, then sample.
 
 **Speaker / course:** NPTEL IISc · MF Generative AI · Lec 01.
 
@@ -127,15 +163,15 @@ Full σ-algebra theory; densities/KL; training any specific GenAI model this lec
 
 ### What he is establishing
 
-Welcome to NPTEL **Mathematical Foundations of Generative AI**. Generative AI has changed science and engineering; systems you use daily (GPTs, Gemini, Claude, …) rest on training paradigms that made last decade’s science fiction real.
+Welcome to NPTEL **Mathematical Foundations of Generative AI**. The last few years made a new kind of software feel ordinary: you type a sentence and a model writes, draws, or talks back. Systems you already use — GPT-style chatbots, Gemini, Claude, and their cousins — sit on training ideas that, a decade ago, still sounded like science fiction.
 
-Plenty of content teaches **using** off-the-shelf models. This course aims deeper: understand **under the hood** and invent new algorithms by thinking from **mathematical first principles**.
+Most of the internet teaches you to **use** those systems. Click here, paste a prompt, call an API. That is a fine skill. It is not this course. The instructor’s job is to get you **under the hood**: why the training objective looks the way it does, what is being estimated, and how you would invent a *new* algorithm instead of only consuming someone else’s.
 
-Plan: foundational tools; **probabilistic models** lens; general recipe; classes of generative models. Style: start from first principles and **write every equation** on the board.
+The method is **mathematical first principles**. He will rebuild the tools, look at the world through **probabilistic models**, write a general recipe, then walk families of generative models. Every equation that matters is supposed to appear on the board, not stay hidden inside a library.
 
-If you only collect demo notebooks, you stay a consumer of models. Instead: learn the math that designers use.
+If you only collect demo notebooks, you stay a consumer. The trap is to treat “I can run a Colab” as understanding. The useful move is to learn the math that designers use when they change an objective or prove that a sampler is legal.
 
-You can now state the course mission. Still missing: which model families appear later.
+You can now state the course mission in one sentence: first-principles math so you can design generative models, not only run them. Still missing: which families the semester will actually visit.
 
 ### Analogy for this topic only
 
@@ -163,15 +199,6 @@ In lecture words: math foundations for generative AI; not only shelf models.
 
 Which families of generative models will the course cover, and how will code labs run?
 
-### References for this topic
-
-
-| Resource                                                                                                                                                                           | Type  | Why it helps                                                   |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- | ---------------------------------------------------------------- |
-| [3Blue1Brown — Neural networks](https://www.youtube.com/watch?v=aircAruvnKk)                                                                                                      | video | Continuous high-d “measurements” mindset behind modern GenAI |
-| [The Math of Generative AI — learning a data distribution](https://dangattringer.github.io/docs/notes/ai-specializations/image-generation/probabilistic-mathematical-foundations) | notes | States the core job: learn the data distribution               |
-| [Coveo — Complete guide to generative models](https://www.coveo.com/blog/generative-models/)                                                                                      | blog  | Big-picture survey of GenAI model types                        |
-
 ---
 
 ## Topic 2: Model families roadmap (05:52–11:32)
@@ -188,26 +215,23 @@ Which families of generative models will the course cover, and how will code lab
 
 ### What he is establishing
 
-TA **Chandan** covers **programmatic / implementation** details (e.g. **PyTorch** on Python) so math becomes runnable code.
+A teaching assistant, **Chandan**, will run the **implementation** track. When a derivation is on the board, the lab will try to make it runnable — **PyTorch** on Python is the named stack. The math lecture and the code lecture are two views of the same objects, not two different courses.
 
-**Families planned (names only today):**
+Today he only **names** the families you will meet later. Do not expect an equation for any of them in this hour.
 
+**Variational / latent-variable** models: the classical **Gaussian mixture model (GMM)** and **variational autoencoders (VAEs)** and their cousins. You pretend there is a hidden cause, then learn how that cause produces the data you see.
 
-| Family                        | Lecture mentions                        |
-| ------------------------------- | ----------------------------------------- |
-| Variational / latent variable | classical**GMM**; **VAEs** + variations |
-| Diffusion                     | **DDPMs** / denoising diffusion         |
-| Adversarial                   | **GANs** (early buzz-creating family)   |
-| Autoregressive                | **transformers** → **LLMs**            |
-| State-space                   | **SSM**                                 |
-| Flows                         | **normalizing flows**                   |
-| Alignment                     | later**RLHF**, **DPO**                  |
+**Diffusion / denoising diffusion probabilistic models (DDPMs):** start from noise and walk backwards, step by step, until a sample looks like data.
 
-Everything sits inside **probabilistic machine learning** — one backbone, many families.
+**Generative adversarial networks (GANs):** the family that created the first big public buzz. A generator tries to fool a discriminator.
 
-If you treat the course as “only transformers,” you miss the shared probabilistic language across GMM, diffusion, GAN, and flows. Instead: one stack, many realizations.
+**Autoregressive** models: **transformers** that grew into **large language models (LLMs)**. Predict the next token given the past.
 
-You can now list the model zoo and lab track. Still missing: background expectations.
+Then **state-space models (SSM)**, **normalizing flows** (invertible maps that keep a density), and later **alignment** tools — **reinforcement learning from human feedback (RLHF)** and **direct preference optimization (DPO)**.
+
+Every name sits inside **one** subject: **probabilistic machine learning**. One backbone, many engineering families. The trap is to treat the course as “only transformers.” Then GMM, diffusion, GAN, and flows look like unrelated fads. The right reading is: same stack, different machines.
+
+You can now list the zoo and know there is a PyTorch lab track. Still missing: what background he expects you to bring.
 
 ### Analogy for this topic only
 
@@ -237,15 +261,6 @@ In lecture words: VAE, diffusion, GAN, AR/LLM, SSM, flows, RLHF/DPO.
 
 What background should students bring before those families?
 
-### References for this topic
-
-
-| Resource                                                                                                                                             | Type | Why it helps                               |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ | -------------------------------------------- |
-| [Towards Data Science — VAEs, GANs, Diffusion](https://towardsdatascience.com/generating-images-using-vaes-gans-and-diffusion-models-48963ddeb2b2/) | blog | Side-by-side intro to three major families |
-| [Coveo — Five generative AI models](https://www.coveo.com/blog/generative-models/)                                                                  | blog | GAN, VAE, AR, flows, transformers overview |
-| [Ayan Das — Diffusion probabilistic models](https://ayandas.me/blogs/2021-12-04-diffusion-prob-models.html)                                         | blog | Diffusion in the GenAI landscape           |
-
 ---
 
 ## Topic 3: Background & probabilistic frame (11:32–13:59)
@@ -262,19 +277,21 @@ What background should students bring before those families?
 
 ### What he is establishing
 
-**Strongly recommend** probability theory — algorithms are treated probabilistically throughout. Helpful: classical ML (linear models, regression, neural nets, **kernels**) and basic **PyTorch** for labs. Even so, he **rebuilds foundations from the ground**.
+He **strongly recommends** probability theory. Not as a polite suggestion. Every algorithm later is treated as a probabilistic object: a law, a likelihood, an expectation, a sampler. If those words are still fog, the rest of the semester will feel like symbol soup.
 
-**Probabilistic ML (definition he opens):** model the system you care about using ideas from probability theory — the next hour makes that concrete.
+Also helpful, but second: classical machine learning — linear models, regression, neural nets, **kernels** — and enough **PyTorch** to follow the labs. He still **rebuilds foundations from the ground**. You are not assumed to arrive already fluent in measure-theoretic probability.
 
-If you skip probability prep, later likelihoods and VAEs will feel like symbol soup. Instead: keep a parallel probability review open.
+**Probabilistic machine learning**, in the sentence he opens: model the system you care about using ideas from probability theory. The next hour makes that concrete. Language, images, and spam filters are all “systems under uncertainty.” Probability is the language he will use to talk about them.
 
-You can now self-check prep. Still missing: *when* physics fails.
+The trap is to skip the probability review because “I already trained a net.” Training a net does not install sample space, events, or a random variable as a function. Keep a parallel review open (Khan Academy or StatQuest if you want a second teacher — names only here; the end of these notes lists the few that are actually worth the time).
+
+You can now self-check prep. Still missing: *when* ordinary physics fails and this language becomes necessary.
 
 ### Analogy for this topic only
 
-Long hike toolkit: probability = water bottle; PyTorch = boots for the lab trail.
+Imagine a long hike. Probability is the water bottle — you will be thirsty without it. Classical ML is a map of trails you have already walked. PyTorch is the boots for the lab days.
 
-**If you lack probability, what should you do?** Acquire it in parallel — he strongly recommends it.
+**If you lack probability, what should you do?** Do not wait for a later lecture to “absorb it.” Acquire it in parallel. Skipping it because you have trained a net is the wrong move; the net never taught you Ω.
 
 In lecture words: probability + classical ML + PyTorch basics.
 
@@ -292,15 +309,6 @@ In lecture words: probability + classical ML + PyTorch basics.
 
 When does physics modeling fail, forcing a probabilistic path?
 
-### References for this topic
-
-
-| Resource                                                                                                                   | Type   | Why it helps                     |
-| ---------------------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------- |
-| [Organic Chemistry Tutor — Probability overview](https://www.youtube.com/watch?v=SkidyDQuupA)                             | video  | Sample space & basic probability |
-| [PyTorch official tutorials](https://pytorch.org/tutorials/)                                                               | docs   | Implementation track he mentions |
-| [Khan Academy — Random variables](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) | course | Parallel probability warm-up     |
-
 ---
 
 ## Topic 4: Physics vs non-measurable structure (13:59–20:03)
@@ -317,25 +325,24 @@ When does physics modeling fail, forcing a probabilistic path?
 
 ### What he is establishing
 
-ML wants to understand systems under **uncertainty** (e.g. language as a system). Classic science path: known **physics/math** fully specifies the system — e.g. rigid body trajectory from A to B.
+Machine learning wants to understand systems under **uncertainty**. Language is his running example: there is no small closed-form law that tells you the next English sentence the way Newton tells you where a thrown rock goes.
 
-Many ML targets are **not instrument-measurable**: person present in image?, spam?, tumor on X-ray — **perceptual / abstract**. Deterministic physics cannot fully specify those targets.
+The classic science path still works when the thing you care about is **instrument-measurable**. A rigid body going from A to B has mass, forces, and an ordinary differential equation. You write the equation; you do not need a million labeled throws.
 
-Then we need a **probabilistic** way to model uncertainty and non-measurable structure.
+Many of the targets this course cares about are **not** like that. “Is this email spam?” “Is this person in the photograph?” “Does this X-ray show a tumor?” Those are **perceptual / abstract** questions. A scale and a ruler do not answer them. Deterministic physics cannot fully specify the target, because the target is a human judgment sitting on top of pixels or tokens.
 
-**Concrete contrast:**
+Then you need a **probabilistic** way to talk about uncertainty and non-measurable structure. That is the fork of the lecture.
 
+| Target | Measurable with instruments? |
+|--------|------------------------------|
+| Mass, position of a rigid body | yes → physics ODEs |
+| “Is this email spam?” | no → abstract / perceptual |
+| “Is person X in the photo?” | no (semantic, not raw sensor) |
+| “Tumor?” on X-ray | label is a judgment, not a kilogram |
 
-| Target                         | Measurable with instruments?  |
-| -------------------------------- | ------------------------------- |
-| Mass, position of a rigid body | yes → physics ODEs           |
-| “Is this email spam?”        | no → abstract/perceptual     |
-| “Is person X in the photo?”  | no (semantic, not raw sensor) |
-| “Tumor?” on X-ray            | label is perceptual judgment  |
+If you force pure physics on spam, you hit the semantic gap and stall. The useful move is: admit the label is not a meter reading, then collect data (next topic).
 
-If you force pure physics on spam, you hit the semantic gap. Instead: probability + data (next topic).
-
-You can now state the fork. Still missing: the method that works — repeated observations.
+You can now state the fork in English. Still missing: the method that has actually worked.
 
 ### Analogy for this topic only
 
@@ -358,15 +365,6 @@ In lecture words: non-measurable structure; probabilistic modeling.
 
 What concrete method replaces closed-form physics when labels are abstract?
 
-### References for this topic
-
-
-| Resource                                                                                           | Type        | Why it helps                       |
-| ---------------------------------------------------------------------------------------------------- | ------------- | ------------------------------------ |
-| [MFML Lec 01 FA package — physics vs stats](../02-Lec01-Overview-Function-Approximation/NOTES.md) | notes       | Same fork in related NPTEL series  |
-| [Seeing Theory — Basic probability](https://seeingtheory.brown.edu/)                              | interactive | Builds intuition before formal Ω  |
-| [StatQuest — Machine Learning Fundamentals](https://www.youtube.com/watch?v=Gv9_4yMHFhI)          | video       | Why ML uses data under uncertainty |
-
 ---
 
 ## Topic 5: Repeated observations (20:03–23:32)
@@ -383,21 +381,17 @@ What concrete method replaces closed-form physics when labels are abstract?
 
 ### What he is establishing
 
-When physics cannot fully specify the system, the method that has **worked** is **repeated observations**.
+When physics cannot fully specify the system, the method that has **worked** is painfully simple to say and expensive to do: **repeated observations**.
 
-Examples he walks:
+He walks the same idea three times so it sticks. To classify text as spam, you collect many emails already labeled spam or not spam. To find an object in an image, you collect many images with labels. When the thing you care about is tied to variables no instrument measures cleanly, you do what you do with a die: **roll many times and write down what happened**.
 
-- Classify text as spam: collect many emails labeled spam / not spam.
-- Object in image: collect many images with labels.
-- Interest in a quantity tied to non-measurable variables: like rolling a die many times and recording outcomes.
+Today’s generative-AI landscape is that idea at enormous scale. Nobody wrote a closed-form physics of “English meaning.” People stored huge corpora — text, images, audio — and learned patterns from the record.
 
-Today’s **GenAI landscape** rests on this idea at massive scale: enormous observation corpora instead of closed-form semantic physics.
+The die is not a toy aside. It is the method: if you cannot measure the hidden cause, you record the visible outcomes often enough that a law of those outcomes becomes visible.
 
-**Dice analogy:** when variables are not instrument-measurable, roll many times and learn from the frequency/pattern of observations.
+If you refuse to collect data and demand a pure equation for “spam,” you stall. Design the observation protocol instead, and later model the law of what you see.
 
-If you refuse to collect data and demand pure equations for “spam,” you stall. Instead: design the observation protocol and model the law of what you see.
-
-You can now state the data path. Still missing: formal probability objects (RE, Ω, …).
+You can now state the data path in English. Still missing: the formal names for “an experiment we can run many times” and “the set of all outcomes.”
 
 ### Analogy for this topic only
 
@@ -426,14 +420,6 @@ In lecture words: repeated observations; dice analogy.
 
 How do we formalize “an experiment we can run many times” and its set of outcomes?
 
-### References for this topic
-
-
-| Resource                                                                                                | Type        | Why it helps                                     |
-| --------------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------- |
-| [Organic Chemistry Tutor — Sample space & probability](https://www.youtube.com/watch?v=SkidyDQuupA)    | video       | Discrete outcomes and counting experiments       |
-| [Seeing Theory — Frequentist probability](https://seeingtheory.brown.edu/basic-probability/index.html) | interactive | Long-run frequency intuition                     |
-| [StatQuest — Histograms / distributions](https://www.youtube.com/watch?v=qBigTkBLU6g)                  | video       | From many observations to a distribution picture |
 
 ---
 
@@ -453,24 +439,21 @@ How do we formalize “an experiment we can run many times” and its set of out
 
 ### What he is establishing
 
-Probabilistic ML models systems with **probability theory**. Start with a **random experiment (RE)** — coin toss, email process, imaging, … The practitioner **chooses** how to cast the system.
+Probabilistic machine learning models systems with **probability theory**. The first object is not a neural net. It is a **random experiment (RE)**: a process you are willing to treat as having uncertain outcomes. A coin toss is an RE. So is “a person writes an email.” So is “a clinic takes an X-ray.” The practitioner **chooses** the casting. Nature does not hand you the name of the experiment.
 
-Assumption: the experiment can be conducted **multiple times**. Outcomes are collected in a set: the **sample space Ω** — all possible outcomes.
+The working assumption is that the experiment can be run **more than once**. Each run produces one **outcome**. Collect every outcome that could happen. That set is the **sample space Ω**.
 
-**Examples:**
+| Random experiment | Sample space Ω |
+|-------------------|----------------|
+| Coin | $\{H,T\}$ |
+| Die | $\{1,\ldots,6\}$ |
+| Face photography | all possible face images (enormous) |
 
+A coin Ω is two letters. A face-studio Ω is a menu nobody can print. Both are the same *kind* of object: the set of allowed results.
 
-| RE               | Ω                       |
-| ------------------ | -------------------------- |
-| Coin             | $\{H,T\}$                |
-| Die              | $\{1,\ldots,6\}$         |
-| Face photography | all possible face images |
+He is careful about the word **randomness**. It is **not** defined here as a clean physics primitive. Philosophers can argue all night about what “random” means. The operational math object is Ω — the list of outcomes of the experiment you chose. If you stay in the philosophy, you never get to modeling.
 
-“Randomness” is **not** cleanly defined as a pure physics primitive here; the **operational math object is Ω**.
-
-If you argue endlessly about “what randomness means,” you never get to modeling. Instead: fix Ω as the set of outcomes of the RE you chose.
-
-You can now define RE and Ω with examples. Still missing: sizing subsets of Ω.
+You can now define RE and Ω with examples, and you know Ω can be huge. Still missing: how we talk about the *size* of a subset of Ω.
 
 ### Analogy for this topic only
 
@@ -496,14 +479,6 @@ In lecture words: random experiment; sample space Ω; randomness not formalized.
 
 How do we measure the “size” or likelihood of subsets of Ω?
 
-### References for this topic
-
-
-| Resource                                                                               | Type        | Why it helps                   |
-| ---------------------------------------------------------------------------------------- | ------------- | -------------------------------- |
-| [Organic Chemistry Tutor — Sample space](https://www.youtube.com/watch?v=SkidyDQuupA) | video       | Building Ω with tree diagrams |
-| [Seeing Theory — Set theory / probability](https://seeingtheory.brown.edu/)           | interactive | Sets of outcomes               |
-| [MFML Lec 02 — RE→Ω package](../03-Lec02-Recap-Probability-Theory-Part1/NOTES.md)   | notes       | Deeper parallel treatment      |
 
 ---
 
@@ -521,17 +496,17 @@ How do we measure the “size” or likelihood of subsets of Ω?
 
 ### What he is establishing
 
-Ω alone is not enough. We need a **measure** on subsets of Ω — a function that assigns non-negative “size.”
+Ω alone is not enough. “All possible emails” does not yet tell you how likely spam is. You need a way to assign a **size** to subsets of Ω. That size-assigning function is a **measure**.
 
-**Analogy he uses:** on the real line, length (Lebesgue-style) sizes intervals: $m([a,b])=b-a$. A measure maps subsets → non-negative reals.
+His picture is the real line. Length (Lebesgue-style) sizes an interval: $m([a,b])=b-a$. Length does not invent the interval. It reports a number. A measure on Ω does the same job for subsets: map a subset to a non-negative real.
 
-**Events:** subsets of Ω we treat as admissible questions. The **event space F** is the collection of those subsets. Any subset of Ω that is in F is an event.
+Which subsets are we allowed to ask about? Those are **events**. “Even face on a die” is the subset $\{2,4,6\}$. “Something happened” is the whole of Ω. “Impossible” is the empty set. The collection of allowed events is the **event space F**. For tonight you may read F as the menu of yes/no questions that get a size. Infinite sample spaces need extra hygiene; he does not demand a full σ-algebra course in this hour.
 
-We will put a probability measure on F (next topic) the way length sits on intervals of R — but with extra axioms so sizes become probabilities.
+Next we will put a *probability* measure on F — length’s cousin, with extra rules so the sizes behave like chances.
 
-If you only list Ω and never size its subsets, you cannot talk about likelihood of “spam-like outcomes.” Instead: events + measure.
+If you only list Ω and never size its subsets, you cannot say “spam-like outcomes are rare.” Events plus a measure are the missing piece.
 
-You can now say “measure = size of subsets.” Still missing: the axioms of P.
+You can now say, in English, “a measure reports the size of a subset.” Still missing: the three axioms that make that size a **probability**.
 
 ### Analogy for this topic only
 
@@ -558,14 +533,6 @@ In lecture words: measure sizes subsets; events are subsets of Ω.
 
 What specific axioms make a measure a **probability** measure?
 
-### References for this topic
-
-
-| Resource                                                                                              | Type   | Why it helps                               |
-| ------------------------------------------------------------------------------------------------------- | -------- | -------------------------------------------- |
-| [Bright Side of Math — Probability measures intro](https://www.youtube.com/watch?v=DxEbvbGUp_g)      | video  | Distribution ideas after measure intuition |
-| [Khan Academy — Probability basic concepts](https://www.khanacademy.org/math/statistics-probability) | course | Events and basic rules                     |
-| [MFML Lec 02 — Why measure](../03-Lec02-Recap-Probability-Theory-Part1/NOTES.md)                     | notes  | Related NPTEL treatment of measures        |
 
 ---
 
@@ -583,21 +550,21 @@ What specific axioms make a measure a **probability** measure?
 
 ### What he is establishing
 
-Define **P** mapping events into $[0,1]$.
+**P** is a function from events into $[0,1]$. You hand P a legal question (“even face?”) and it hands back a number between zero and one.
 
-**Axioms:**
+Three axioms are the whole contract tonight:
 
-1. $P(A)\ge 0$ for every event $A$
-2. $P(\Omega)=1$
-3. If $A\cap B=\emptyset$, then $P(A\cup B)=P(A)+P(B)$
+1. **Non-negativity.** $P(A)\ge 0$ for every event $A$. A chance is never a negative length.
+2. **Normalization.** $P(\Omega)=1$. “Something happens” is certain. The whole pie is one.
+3. **Disjoint additivity.** If $A$ and $B$ cannot both occur ($A\cap B=\emptyset$), then $P(A\cup B)=P(A)+P(B)$. Non-overlapping slices add.
 
-**Micro — fair die:** $P(\{6\})=1/6$; even faces $1/2$; even ∪ {1} = $2/3$ because disjoint.
+**Fair die, each face $1/6$.** $P(\{6\})=1/6$. Even faces $\{2,4,6\}$ get $1/2$. Even union $\{1\}$ gets $2/3$ because those two events share no face. Even union “at least 5” is *not* $1/2+1/3$, because they share $\{6\}$. The axiom is not “always add.” It is “add when they cannot happen together.”
 
-**Interpretation is ours:** mathematically P is a function obeying axioms. We *read* high P as high likelihood / low uncertainty; $P=1$ as certain; null event extreme; disjoint unions add likelihoods of mutually exclusive outcomes.
+Mathematically P is only a function that obeys the axioms. The *reading* — high P means likely, $P=1$ means certain, $P=0$ means the event is null — is our interpretation. The math does not force the weather-forecast story; we choose it because it is useful.
 
-If you confuse “P = count of outcomes,” you only get uniform counting measure. Instead: axioms first, interpretation second.
+The trap is “P is the count of outcomes.” That is only the uniform special case $|A|/|\Omega|$. A loaded die is a different P on the same Ω. Axioms first, interpretation second.
 
-You can now state P’s axioms with a die micro. Still missing: packing into a triplet and practice constraints.
+You can now write the three axioms and compute a disjoint union on a die. Still missing: packing Ω, F, and P into one package, and admitting that in practice we often see neither Ω nor P.
 
 ### Analogy for this topic only
 
@@ -625,14 +592,6 @@ In lecture words: P≥0; P(Ω)=1; disjoint additivity; interpretation of uncerta
 
 What triple do we land on, and what do we actually observe in the real world?
 
-### References for this topic
-
-
-| Resource                                                                                    | Type        | Why it helps                   |
-| --------------------------------------------------------------------------------------------- | ------------- | -------------------------------- |
-| [Organic Chemistry Tutor — Probability rules](https://www.youtube.com/watch?v=SkidyDQuupA) | video       | Basic probability calculations |
-| [Seeing Theory — Probability](https://seeingtheory.brown.edu/basic-probability/index.html) | interactive | Visual P on events             |
-| [StatQuest — Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4)       | video       | Careful language around P      |
 
 ---
 
@@ -652,28 +611,27 @@ What triple do we land on, and what do we actually observe in the real world?
 
 ### What he is establishing
 
-Landed on the **probability triplet** $(\Omega,\mathcal{F},P)$. All ML here assumes a RE with outcomes in Ω and measure P.
+The lecture lands on one package: the **probability triplet** $(\Omega,\mathcal{F},P)$. Sample space, legal events, probability scores. Every model in this course *assumes* there is a random experiment whose outcomes live in Ω and whose chances are scored by P.
 
-**Generative question:** can we **emulate** the system (generate like it)?
+The **generative** question is then natural: if we understand that experiment well enough, can we **emulate** it? Can we produce new outcomes that look as if the same experiment ran again?
 
-**Practice problems:**
+Practice is ruder than the definition.
 
-1. We often **do not know** Ω.
-2. We often **do not know** P.
+1. We often **do not know** Ω. Nobody lists every possible X-ray that nature could produce.
+2. We often **do not know** P. Nobody hands you the true chance of each clinical outcome.
 
-What we get are **surrogates / measurements**:
+What we actually get are **surrogates / measurements** — sensor-facing stand-ins for the abstract outcome.
 
+| Abstract process | What we store |
+|------------------|---------------|
+| A person gets an X-ray | a pixel array on disk |
+| Someone writes spam | Unicode / tokens |
 
-| Abstract process    | What we store       |
-| --------------------- | --------------------- |
-| Person gets X-ray   | pixel array on disk |
-| Someone writes spam | Unicode / tokens    |
+The file on disk is not “the true outcome of nature’s experiment.” It is what the sensor wrote down. We still need a mathematical object that maps the abstract Ω into those numbers. That object is the **random variable** of the next topic.
 
-Not the “true” abstract outcome of nature’s experiment — a **sensor-facing surrogate**. Need a mathematical object that maps abstract Ω into numbers (next topic: random variable).
+The trap is to pretend every project starts with a printed Ω and a known P. That ignores how ML actually starts: a folder of files. The right move is: keep the triplet underneath as the modeling assumption, and treat the files as surrogates of that experiment.
 
-If you assume Ω and P are known lists in every project, you ignore how ML actually starts — from files of measurements. Instead: triplet underneath; surrogates in practice.
-
-You can now state triplet + surrogate gap. Still missing: RV and distribution estimation goal.
+You can now say the three pieces of the triplet and name the surrogate gap. Still missing: the function that produces the files, and the distribution we will estimate.
 
 ### Analogy for this topic only
 
@@ -700,14 +658,6 @@ In lecture words: triplet; unknown Ω,P; surrogates.
 
 What function turns Ω into $\mathbb{R}^d$ measurements, and what do we estimate?
 
-### References for this topic
-
-
-| Resource                                                                                                                                                                | Type  | Why it helps                       |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------ |
-| [MFML Lec 06 — X-ray as sample](../07-Lec06-XRay-Sample-From-Distribution/NOTES.md)                                                                                    | notes | Same X-ray surrogate story         |
-| [3Blue1Brown — Essence of linear algebra (vectors)](https://www.youtube.com/watch?v=fNk_zzaMoSs)                                                                       | video | Measurements live in vector spaces |
-| [The Math of Generative AI — data distribution](https://dangattringer.github.io/docs/notes/ai-specializations/image-generation/probabilistic-mathematical-foundations) | notes | Generation as learning data laws   |
 
 ---
 
@@ -727,40 +677,33 @@ What function turns Ω into $\mathbb{R}^d$ measurements, and what do we estimate
 
 ### What he is establishing
 
-A **random variable** is a **function**
+A **random variable** is a **function**, not a lonely random number floating in space.
 
 $$
 X:\Omega\to\mathbb{R}^{d}
-
 $$
 
-Students often treat a random variable as a lone random number with no domain. The careful picture is: domain Ω, codomain $\mathbb{R}^d$ — the **measurement map** (pixels, encoded text, features).
+The domain is the sample space — abstract outcomes. The codomain is numeric space — pixels, encoded text, audio samples, any measurement a computer can store. $X(\omega)$ is the file you would write down if outcome $\omega$ occurred.
 
-Why invent it? Regardless of abstract RE, computers store **real numbers**. $X$ is the interface.
+The trap is “X is a random integer” — that sentence has no domain. The right picture is: **X is the measurement map**. The camera is X. The JPEG is $X(\omega)$. Many different abstract scenes can produce similar JPEGs; that is still a function.
 
-Start from triplet $(\Omega,\mathcal{F},P)$, define $X$ on Ω. Structure on Ω is **pushed** to real space: sets on R get probability via **inverse images**.
+Why invent it? The abstract experiment is not what GPUs eat. Computers store **real numbers**. $X$ is the interface between the triplet and the disk.
 
-**Distribution function (CDF, 1D sketch):**
+Start from $(\Omega,\mathcal{F},P)$ and define $X$ on Ω. Structure on Ω is **pushed** onto real space. A set $B$ of numbers gets probability by asking: which abstract outcomes produce a measurement inside $B$? That set of outcomes is the **inverse image** $X^{-1}(B)$. Then $P$ scores it.
+
+**Distribution function (CDF, one-dimensional sketch):**
 
 $$
 P_X(x)=P(X\le x)=P\big(X^{-1}((-\infty,x])\big)
-
 $$
 
+Capital $X$ is the function. Small $x$ is a threshold on the number line. $X\le x$ means “the measurement landed at or below this threshold.” The inverse image turns that statement back into an event on Ω. $P$ scores the event.
 
-| Symbol                | Meaning                           |
-| ----------------------- | ----------------------------------- |
-| Capital$X$            | the RV (function)                 |
-| Small$x$              | threshold in$\mathbb{R}$          |
-| $X^{-1}((-\infty,x])$ | outcomes mapping to values$\le x$ |
+**Die micro.** Let $X$ be the face value. Then $P_X(4)=P(X\le 4)=P(\{1,2,3,4\})=4/6$. $P_X(6)=1$. Those are not mysterious new objects. They are $P$ applied to inverse images.
 
-**Micro:** die faces as RV; $P_X(4)=P(\text{face}\le 4)=4/6$.
+In practice $P_X$ is **not gifted**. We *assume* the framework sits under the system. The closing line of the lecture is the course goal: **estimate the underlying probability distribution** of the measurements. If you estimate that law well, you can draw new measurements that look as if the same experiment ran again. That is generation. The families from Topic 2 — VAE, diffusion, GAN, transformers — are later machines for doing this estimation and sampling job.
 
-In practice $P_X$ is **not gifted**. We **assume** this framework under the system. **Goal of modeling / generative AI (closing line):** **estimate the underlying probability distribution function**. Estimating that law of measurements is what makes generation possible.
-
-If you estimate $P_X$ well, you can sample new measurements that look like they came from the same process — the generative problem. Families from Topic 2 are later implementations of this estimation/sampling job.
-
-You can now connect RV → CDF → GenAI estimation goal. The lecture ends on that goal statement.
+You can now walk RE → Ω → P → X → $P_X$ → estimate. The lecture stops on that goal. The rest of the course builds the machines.
 
 ### Analogy for this topic only
 
@@ -791,34 +734,26 @@ In lecture words: RV is a function; CDF via inverse image; estimate the distribu
 
 Next lectures deepen probability tools and derive generative model families on this stack.
 
-### References for this topic
-
-
-| Resource                                                                                       | Type  | Why it helps                           |
-| ------------------------------------------------------------------------------------------------ | ------- | ---------------------------------------- |
-| [RiskByNumbers — PMF, PDF, CDF visual](https://www.youtube.com/watch?v=yRbfLlTmPE8)           | video | Clear CDF/PDF intuition                |
-| [Bright Side of Math — CDF of a random variable](https://www.youtube.com/watch?v=DxEbvbGUp_g) | video | Distribution of a real-valued RV       |
-| [MFML Lec 03 — RV definition](../04-Lec03-Recap-Probability-Theory-Part2/NOTES.md)            | notes | $X:\Omega\to\mathbb{R}^d$ deep package |
 
 ---
 
 ## External references
 
-Per-topic **References for this topic** tables (2–3 each) are the primary study links. Package-level map:
+Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this lecture still closed.
 
+**If the mission still feels abstract (Topic 1).** Grant Sanderson’s [3Blue1Brown — But what is a neural network?](https://www.youtube.com/watch?v=aircAruvnKk) is the standard visual for “a machine eats numbers and writes numbers.” That is the measurement mindset this course needs before any GAN or transformer.
 
-| Resource                                                                                                                                                                | Matches lecture… | Why it helps                      |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----------------------------------- |
-| [3Blue1Brown — Neural networks](https://www.youtube.com/watch?v=aircAruvnKk)                                                                                           | Topics 1, 9–10   | High-d continuous measurements    |
-| [The Math of Generative AI — data distribution](https://dangattringer.github.io/docs/notes/ai-specializations/image-generation/probabilistic-mathematical-foundations) | Topics 1, 9–10   | Generation = learn a distribution |
-| [Towards Data Science — VAEs, GANs, Diffusion](https://towardsdatascience.com/generating-images-using-vaes-gans-and-diffusion-models-48963ddeb2b2/)                    | Topic 2           | Model-family overview             |
-| [Organic Chemistry Tutor — Probability](https://www.youtube.com/watch?v=SkidyDQuupA)                                                                                   | Topics 3, 6–8    | Sample space & basic P            |
-| [Seeing Theory](https://seeingtheory.brown.edu/)                                                                                                                        | Topics 4–8       | Interactive probability           |
-| [RiskByNumbers — PMF/PDF/CDF](https://www.youtube.com/watch?v=yRbfLlTmPE8)                                                                                             | Topic 10          | CDF visual                        |
-| [MFML Lec 02–03 packages](../03-Lec02-Recap-Probability-Theory-Part1/NOTES.md)                                                                                         | Topics 6–10      | Parallel RE→RV depth             |
-| [PyTorch tutorials](https://pytorch.org/tutorials/)                                                                                                                     | Topics 2–3       | Implementation track              |
+**If the family names are just a list (Topic 2).** Lilian Weng’s [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/) is the blog most people in ML have actually read for this zoo: why you need a *distance between distributions*, then GAN and related ideas in one place. Skip marketing “top 5 GenAI models” posts.
 
-Also: each topic section above has its own 2–3 video/blog links.
+**If “why data, not physics?” is still fuzzy (Topics 3–5).** Josh Starmer’s [StatQuest — Machine Learning Fundamentals](https://www.youtube.com/watch?v=Gv9_4yMHFhI) is the popular, slow English version of “we learn from repeated examples under uncertainty.”
+
+**If Ω, events, and P still blur (Topics 6–8).** Two classroom standards: [Khan Academy’s random-variables unit](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) and Brown’s [Seeing Theory](https://seeing-theory.brown.edu/). Those two beat a dozen SEO probability articles.
+
+**If you mix up “probability” and “likelihood” (Topic 8).** StatQuest’s [Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4) is the short, famous clarification.
+
+**If “X is a function, $P_X$ is what we estimate” (Topics 9–10).** After these notes, the same-series [MFML probability recap](../03-Lec02-Recap-Probability-Theory-Part1/NOTES.md) is the next careful treatment of RE → Ω → RV. For the lab track he named, use the [official PyTorch tutorials](https://pytorch.org/tutorials/), not a random Colab.
+
+**How to use.** Probability fog → Khan or Seeing Theory *before* Topic 6. Family names → Lilian Weng *after* Topic 2. Do not open ten tabs. One famous teacher per stuck idea.
 
 ---
 

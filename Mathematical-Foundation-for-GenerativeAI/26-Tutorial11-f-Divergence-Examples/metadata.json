@@ -1,0 +1,30 @@
+{
+  "title": "Tutorial 11 – f-Divergence and Examples",
+  "video_id": "GjxuVZeMSfE",
+  "url": "https://www.youtube.com/watch?v=GjxuVZeMSfE",
+  "duration_seconds": 2889,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "NPTEL IISc (tutorial; complements Prof. Pratush Lec 03)",
+  "description": "KL Divergence, Reverse KL and JSD, Distance Metrics",
+  "playlist_index": 1,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Redefine f-divergence",
+    "Likelihood ratio and f of one",
+    "Jensen nonnegativity",
+    "Zero iff densities equal",
+    "KL and MLE",
+    "Reverse KL minus log",
+    "Total variation",
+    "JSD and GAN zoo",
+    "Metric axioms symmetry fails",
+    "Triangle fails TV homework"
+  ]
+}

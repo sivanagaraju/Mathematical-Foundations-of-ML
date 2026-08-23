@@ -84,6 +84,8 @@ A **random variable** is the same shape of idea: domain = outcomes in Ω, “add
 - Sets can be finite (coin) or huge (all possible face photos).  
 - Functions do not “add randomness” by themselves — they only map. Randomness lives in *which* outcome occurs; the map $X$ just labels it with numbers.
 
+If functions still feel shaky: any standard high-school “function as a rule, one output per input” lesson is enough. You do not need a blog pile.
+
 ### Mini-check
 
 1. Is $\{2,4\}$ a subset of $\{1,2,3,4,5,6\}$?  
@@ -139,6 +141,8 @@ You never need a deep philosophy of “randomness” to use the menu — you nee
 
 - The lecture explicitly says **randomness is not cleanly defined as pure physics** here.  
 - The **working math object is Ω**, not a mystical “random essence.”
+
+If you want to *see* a sample space instead of only reading it: Brown University’s **Seeing Theory** (basic probability page) lets you watch outcomes pile up. Khan Academy’s probability unit is the other classroom standard. Both names are in the NOTES external list at the end — do not open ten other tabs.
 
 ### Mini-check
 
@@ -202,6 +206,8 @@ A **measure** maps subsets to non-negative sizes.
 
 - “Size” is not always “number of elements.” Length of $[0,1]$ is 1 even though there are infinitely many points.  
 - Probability will add the rules $P(\Omega)=1$ and values in $[0,1]$.
+
+Same two second teachers as §2 if “event = subset” has not clicked: Seeing Theory and Khan. The ruler analogy above is already the lecture’s idea — a video is optional.
 
 ### Mini-check
 
@@ -270,6 +276,8 @@ $P(\text{even}\cup\{\ge 5\})=P(\{2,4,5,6\})=4/6$, **not** $1/2+1/3$.
 
 - $P=1$ means “certain as an event,” not “interesting.” “Something happens” has $P(\Omega)=1$ and zero surprise (later entropy lectures).  
 - Uniform counting ($|A|/|\Omega|$) is only one special $P$, not the only possible $P$.
+
+If the words “probability” and “likelihood” start swapping in your head, Josh Starmer’s **StatQuest** short on that pair is the popular fix. One video, not a search page of articles.
 
 ### Mini-check
 
@@ -423,6 +431,8 @@ Let $X(\omega)=$ face value $\in\{1,2,3,4,5,6\}$, uniform.
 **Estimate** $P_X$ (or a density of $X$ later) from many observed measurements.  
 If you have a good estimate of the law of measurements, you can **sample new measurements** that look like they came from the same process — that is generation.
 
+Khan Academy’s **random variables** unit is the usual next stop if “function, not a floating number” still slips. Stay there until $X$ versus $x$ is automatic.
+
 ### Mini-check
 
 1. Why is “X is a random integer” incomplete?  
@@ -475,6 +485,8 @@ You *can* collect huge text corpora and model the statistics of tokens — the p
 
 - The lecture is not anti-physics. Physics is perfect when it applies.  
 - The claim is: many ML/GenAI goals leave the pure-physics path, so probability + data is the workable route.
+
+StatQuest’s **Machine Learning Fundamentals** is the well-known English version of “we learn from many examples because we cannot write the law.” Enough for this fork.
 
 ### Mini-check
 
@@ -546,6 +558,8 @@ Same shape as generative AI: learn law of measurements, sample new ones.
 - **Generative** modeling focuses on the law of $x$ itself (or joint laws) so new $x$ can be drawn.  
 - This intro lecture ends at: estimate the distribution of measurements.
 
+For the *names* of later families (VAE, GAN, diffusion), Lilian Weng’s **From GAN to WGAN** is the blog the field actually points beginners at. For “what is a net made of numbers,” 3Blue1Brown’s neural-network video. That is the whole extra reading list for this warm-up.
+
 ### Mini-check
 
 1. In the pipeline, what do we usually observe: Ω or $X$?  
@@ -565,6 +579,8 @@ Same shape as generative AI: learn law of measurements, sample new ones.
 7. What is a surrogate measurement in the X-ray story?
 
 ---
+
+**Second teachers (names only here).** Khan Academy, Seeing Theory, StatQuest, 3Blue1Brown, Lilian Weng. The actual pointers live at the end of [NOTES.md](./NOTES.md#external-references) — six well-known items, not a link dump.
 
 Ready → [NOTES.md](./NOTES.md).  
 Quiz: [quiz.html](./quiz.html).

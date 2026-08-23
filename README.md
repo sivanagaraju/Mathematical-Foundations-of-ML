@@ -41,6 +41,7 @@ Law: `~/.grok/skills/youtube-lecture-tutor/`
 | [`Mathematical-Foundation-for-GenerativeAI/23-Tutorial09-Review-Basic-Probability-3/`](./Mathematical-Foundation-for-GenerativeAI/23-Tutorial09-Review-Basic-Probability-3/) | [Tutorial 9: Review of Basic Probability 3](https://www.youtube.com/watch?v=eDSb3yObtB8) | math_technical | joints·marginals·conditionals·mixed/GMM·IID·Jacobian |
 | [`Mathematical-Foundation-for-GenerativeAI/24-Tutorial10-Review-Machine-Learning-1/`](./Mathematical-Foundation-for-GenerativeAI/24-Tutorial10-Review-Machine-Learning-1/) | [Tutorial 10: Review of Machine Learning 1](https://www.youtube.com/watch?v=wjSKM1xFoSU) | math_technical | sign-censored Normal MLE · Φ⁻¹ · two-exp EM · Q · closed M-step |
 | [`Mathematical-Foundation-for-GenerativeAI/25-Lec03-f-Divergence-Examples/`](./Mathematical-Foundation-for-GenerativeAI/25-Lec03-f-Divergence-Examples/) | [Lec 03: f-Divergence and Examples](https://www.youtube.com/watch?v=LR9UQXY_IU8) | math_technical | estimate+sample · G_θ · f-div (not a metric) · KL/rev/JSD · modes vs junk |
+| [`Mathematical-Foundation-for-GenerativeAI/26-Tutorial11-f-Divergence-Examples/`](./Mathematical-Foundation-for-GenerativeAI/26-Tutorial11-f-Divergence-Examples/) | [Tutorial 11: f-Divergence and Examples](https://www.youtube.com/watch?v=GjxuVZeMSfE) | math_technical | P≪Q · Jensen proofs · KL/−log/TV/JSD · KL fails symmetry & triangle (0.368/1.758) |
 
 ## Study one package
 
