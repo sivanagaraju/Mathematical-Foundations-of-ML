@@ -1,0 +1,29 @@
+{
+  "title": "Lec 18 Wasserstein GAN (WGAN)",
+  "video_id": "1neDqqgaXhE",
+  "url": "https://www.youtube.com/watch?v=1neDqqgaXhE",
+  "duration_seconds": 2688,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A. P. (IISc / NPTEL)",
+  "description": "Wasserstein GAN (WGAN), Manifold Hypothesis, 1-Lipschitz constraint\nhttps://drive.google.com/file/d/1Kebb00VehPBMyleuw2ubp2qbvrBqyvZZ/view",
+  "playlist_index": 3,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 9,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Agenda still a saddle Hessian stop on surrogates",
+    "Manifold hypothesis thread paper MNIST coin-toss",
+    "Perfect discriminator saturation D_f independent of theta",
+    "Two Diracs KL JSD max out",
+    "Wasserstein min over couplings",
+    "Transport plan is a joint table",
+    "Earth-mover work W_2 proportional to theta",
+    "Kantorovich-Rubinstein dual WGAN minmax",
+    "Weight 2-norm 1 more stable than naive GAN"
+  ]
+}

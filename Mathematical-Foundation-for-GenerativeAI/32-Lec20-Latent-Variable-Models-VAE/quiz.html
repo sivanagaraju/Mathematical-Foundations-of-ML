@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · Lec 20 LVM and VAE intro</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · Lec 20 LVM and VAE intro</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q1", "part": "prerequisites", "tag": "Definition · observed vs latent", "prompt": "In this lecture’s language, what is latent z relative to the dataset?", "options": [{"key": "A", "text": "A column already stored next to every JPEG"}, {"key": "B", "text": "A hidden variable the model invents; you never get z samples in the file"}, {"key": "C", "text": "The FID Inception layer index"}, {"key": "D", "text": "The entropy of p_x"}], "answer": "B", "whyCorrect": "Observed x is on disk. Latent z is unobserved and typically jointly learned with θ.", "whyOthers": {"A": "If z were stored, it would not be latent.", "C": "FID was last class.", "D": "Entropy is H(p_x), dropped from KL."}, "diagram": "  x seen     z hidden\n  p(x) = marginal of p(x,z)", "useLater": "Topic 1 definition.", "anchor": "PREREQUISITES.md#p1-observed-latent"}, {"id": "q2", "part": "prerequisites", "tag": "Compare · discrete vs continuous z", "prompt": "What does a discrete z in {1..M} give you after inference, versus a continuous z in R^K?", "options": [{"key": "A", "text": "Both are always named MNIST thickness sliders"}, {"key": "B", "text": "Discrete z is a GAN generator; continuous z is a discriminator"}, {"key": "C", "text": "Discrete z groups data into M piles (clustering); continuous z is a K-vector feature / embedding"}, {"key": "D", "text": "Discrete z forbids images in R^D"}], "answer": "C", "whyCorrect": "He names GMM/k-means as discrete-z LVMs. Continuous z_i is a feature; interpretability is optional/open.", "whyOthers": {"A": "Interpretable dims are an open problem.", "B": "Wrong family.", "D": "x can still be an image in both cases."}, "diagram": "  z=1..M → M buckets\n  z in R^K → knobs / embedding", "useLater": "Topics 2–3.", "anchor": "PREREQUISITES.md#p3-discrete-continuous"}, {"id": "q3", "part": "prerequisites", "tag": "Worked · Jensen", "prompt": "Y is 2 or 8 with equal chance. Compare log E[Y] and E[log Y] (natural log).", "options": [{"key": "A", "text": "They are equal because log is linear"}, {"key": "B", "text": "log E[Y] = log 5 > E[log Y] = log 4; log concave ⇒ lower bound"}, {"key": "C", "text": "E[log Y] is larger; that is why ELBO is an upper bound"}, {"key": "D", "text": "Neither exists because Y is discrete"}], "answer": "B", "whyCorrect": "Average is 5; logs average to log 4. Jensen for concave log: log E ≥ E log. ELBO is a lower bound.", "whyOthers": {"A": "Log is nonlinear/concave.", "C": "Flips the inequality and the bound type.", "D": "Discrete Y is fine."}, "diagram": "  log(average) ≥ average(log)\n  evidence        ELBO", "useLater": "Topics 6–7.", "anchor": "PREREQUISITES.md#p6-jensen"}, {"id": "q4", "part": "prerequisites", "tag": "Definition · GMM die", "prompt": "How does he describe sampling from a Gaussian mixture?", "options": [{"key": "A", "text": "Roll an M-face die (α), then draw x from that component’s Gaussian"}, {"key": "B", "text": "Backprop through ε ~ N(0,I) (reparameterization) — this hour"}, {"key": "C", "text": "Run a GAN critic on pixels"}, {"key": "D", "text": "Minimize FID on Inception embeddings"}], "answer": "A", "whyCorrect": "Discrete z = die. Then p(x|z=j)=N(μ_j,Σ_j). That is why GMM is a generative LVM.", "whyOthers": {"B": "Reparam is next class.", "C": "Adversarial block is closed.", "D": "Last class."}, "diagram": "  z ~ α_j   then   x ~ N(μ_z, Σ_z)", "useLater": "Topics 8–10 sampling job.", "anchor": "PREREQUISITES.md#p7-gmm-die"}, {"id": "q5", "part": "prerequisites", "tag": "Compare · two NN styles", "prompt": "How does a VAE-style net (this lecture) represent q(z|x), versus a GAN generator?", "options": [{"key": "A", "text": "Both must output a JPEG sample"}, {"key": "B", "text": "VAE q-net outputs parameters of a named family (e.g. Gaussian μ,σ); GAN G outputs a sample of x̂"}, {"key": "C", "text": "VAE q-net is a discriminator logit"}, {"key": "D", "text": "Neither uses a parametric family"}], "answer": "B", "whyCorrect": "Two ways: emit samples (classifier, GAN G) or emit parameters. Naive VAE: mean and variance of q.", "whyOthers": {"A": "He distinguishes the two styles.", "C": "That is D from the GAN block.", "D": "VAE assumes a parametric form so the net can output its parameters."}, "diagram": "  GAN G: sample x̂\n  VAE q: (μ, σ) then z ~ N", "useLater": "Topic 10; reparam next.", "anchor": "PREREQUISITES.md#p8-nn-two-ways"}, {"id": "q6", "part": "notes", "tag": "Map · whole lecture", "prompt": "Which chain is this lecture’s architecture?", "options": [{"key": "A", "text": "Train a DCGAN, then report FID, then stop"}, {"key": "B", "text": "Code the reparameterization trick in PyTorch for 25 epochs"}, {"key": "C", "text": "Replace KL by Wasserstein and 1-Lipschitz clip"}, {"key": "D", "text": "Define p_θ(x) as a marginal over hidden z; ELBO over θ and q; EM if p(z|x) tractable, VAE/AEVB if not"}], "answer": "D", "whyCorrect": "Job is estimate+sample with a hidden z. Method is ELBO. Fork is EM vs VAE. Code is next class.", "whyOthers": {"A": "GAN/FID were previous lectures.", "B": "He deferred reparam.", "C": "WGAN was Lec 18."}, "diagram": "  p(x)=∫p(x,z) → ELBO → EM | VAE", "useLater": "Executive Summary approach card.", "anchor": "NOTES.md#executive-summary--architecture-of-this-lecture"}, {"id": "q7", "part": "notes", "tag": "Definition · LVM", "prompt": "What is the definition of a latent variable model here?", "options": [{"key": "A", "text": "p_θ(x) is the marginal of a joint between observed x and hidden z (sum or integral)"}, {"key": "B", "text": "p_θ(x) is a GAN critic score"}, {"key": "C", "text": "z is stored in the dataset as a label column"}, {"key": "D", "text": "p_θ(x) must be a single Gaussian with no mixing"}], "answer": "A", "whyCorrect": "That is the opening definition. Discrete → sum; continuous → integral; z jointly learned with θ.", "whyOthers": {"B": "Adversarial block closed.", "C": "Then z would not be latent.", "D": "GMM is a mix of several Gaussians."}, "diagram": "  p_θ(x) = ∫ p_θ(x,z) dz", "useLater": "Topic 1.", "anchor": "NOTES.md#topic-1-lvm-family-and-definition-0003–0255"}, {"id": "q8", "part": "notes", "tag": "Trap · EM likelihood", "prompt": "What does he ask you to prove about EM’s effect on the likelihood?", "options": [{"key": "A", "text": "It always strictly increases every iteration"}, {"key": "B", "text": "It never decreases (equality allowed), so EM can saturate / plateau"}, {"key": "C", "text": "It equals FID"}, {"key": "D", "text": "It is undefined for GMM"}], "answer": "B", "whyCorrect": "He stresses never-decrease, not always-increase. Saturation is a known mixture issue in high dimension.", "whyOthers": {"A": "The equality case is the trap he names.", "C": "FID is evaluation, last class.", "D": "GMM is the running EM example."}, "diagram": "  L_{t+1} ≥ L_t   (may be equal)", "useLater": "Topic 9 homework 1.", "anchor": "NOTES.md#topic-9-em-when-vae-starts-3410–4353"}, {"id": "q9", "part": "notes", "tag": "Worked · q-star", "prompt": "For fixed θ, which q maximizes the ELBO (homework 2)?", "options": [{"key": "A", "text": "Uniform on z, always"}, {"key": "B", "text": "A Dirac at z=0"}, {"key": "C", "text": "q*(z|x) = p_θ(z|x), the model posterior (tight when bound = likelihood)"}, {"key": "D", "text": "The GAN discriminator D(x)"}], "answer": "C", "whyCorrect": "Ask which q makes ELBO equal the likelihood; that q is the model posterior. Then Bayes computes it if tractable.", "whyOthers": {"A": "Only if the model posterior is uniform.", "B": "That is the k-means limit, not the ELBO maximizer in general.", "D": "Wrong object."}, "diagram": "  q* = p_θ(z|x)  via Bayes", "useLater": "Topic 9; VAE when this formula is missing.", "anchor": "NOTES.md#topic-9-em-when-vae-starts-3410–4353"}, {"id": "q10", "part": "notes", "tag": "Connect · Topic 3 to Topic 10", "prompt": "How do the native LVM arrows (Topic 3) show up as the three jobs (Topic 10)?", "options": [{"key": "A", "text": "Encoder is discarded; only GAN sampling remains"}, {"key": "B", "text": "Only clustering is required; sampling is forbidden"}, {"key": "C", "text": "They are unrelated slogans"}, {"key": "D", "text": "Decoder path = sample z then x; encoder path = q(z|x) as clustering or embedding"}], "answer": "D", "whyCorrect": "By construction both ways exist. Job 2 is the decoder sampler. Job 3 is posterior inference (discrete cluster / continuous embed).", "whyOthers": {"A": "That was the GAN gap last class.", "B": "He insists generation is required.", "C": "The hour is one architecture."}, "diagram": "  z~p(z) → x~p(x|z)     sample\n  x → q(z|x)             infer", "useLater": "Topics 3 and 10.", "anchor": "NOTES.md#topic-10-three-jobs-two-nn-styles-stop-4353–5524"}, {"id": "q11", "part": "notes", "tag": "Definition · two-term ELBO", "prompt": "After writing p(x,z)=p(x|z)p(z), what two-term ELBO does he call the VAE/DDPM loss?", "options": [{"key": "A", "text": "E_q[log p_θ(x|z)] − KL(q(z|x) || p(z))"}, {"key": "B", "text": "E log D + E log(1−D)"}, {"key": "C", "text": "W2 of two Inception Gaussians"}, {"key": "D", "text": "||x − G(z)|| only, with no KL"}], "answer": "A", "whyCorrect": "Expected log conditional data likelihood minus KL of variational posterior to the latent prior.", "whyOthers": {"B": "GAN value, previous block.", "C": "FID.", "D": "Drops the KL term he derived from log(a/c)."}, "diagram": "  J = recon-like term − KL(q || prior)", "useLater": "Topic 10; VAE train next class.", "anchor": "NOTES.md#topic-10-three-jobs-two-nn-styles-stop-4353–5524"}, {"id": "q12", "part": "notes", "tag": "Edge · paper title", "prompt": "What does he say the VAE paper is titled, and why does that matter?", "options": [{"key": "A", "text": "“Variational Autoencoders” — because it is only an autoencoder with noise"}, {"key": "B", "text": "“ELBO surgery” — the only paper to read"}, {"key": "C", "text": "Auto-Encoding Variational Bayes — intro: LVMs whose posterior is intractable, so EM does not apply"}, {"key": "D", "text": "“WGAN-GP” — Lipschitz critic"}], "answer": "C", "whyCorrect": "He tells you to read the introduction for the intractable-q sentence. Title is AEVB, not VAE.", "whyOthers": {"A": "He explicitly says that is not the title.", "B": "ELBO surgery is a pun he mentioned earlier, different paper.", "D": "Wrong lecture."}, "diagram": "  intractable p_θ(z|x)  →  AEVB / VAE", "useLater": "Topic 9; Kingma & Welling in External references.", "anchor": "NOTES.md#topic-9-em-when-vae-starts-3410–4353"}, {"id": "q13", "part": "notes", "tag": "Trade-off · next class", "prompt": "Why does he stop before implementing a VAE on a computer?", "options": [{"key": "A", "text": "VAEs cannot be implemented"}, {"key": "B", "text": "The ELBO expectation is under a q that is itself being optimized; that needs the reparameterization trick next time"}, {"key": "C", "text": "PyTorch autograd cannot differentiate Gaussians ever"}, {"key": "D", "text": "He already coded it in Tutorial 12"}], "answer": "B", "whyCorrect": "Naive sample averages under a moving q are nontrivial. Reparam = differentiate through sampling. Then an instantiation like the GAN hour.", "whyOthers": {"A": "Next class is exactly the implementation.", "C": "Reparam exists so you can.", "D": "Tutorial 12 was GANs."}, "diagram": "  E_{z~q_φ}[·]  with φ moving  →  reparam next", "useLater": "Next NPTEL VAE implementation lecture.", "anchor": "NOTES.md#topic-10-three-jobs-two-nn-styles-stop-4353–5524"}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

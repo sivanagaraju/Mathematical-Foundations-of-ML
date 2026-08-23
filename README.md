@@ -30,7 +30,7 @@ Different recording from the NPTEL folder above. Same instructor (Prof. Prathosh
 |--------|------------|
 | [`IITM-BS-Mathematical-Foundations-of-Generative-AI/`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md) | Course map + full playlist catalog (title, link, summary) · [YouTube playlist](https://www.youtube.com/playlist?list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu) |
 
-Start at [`NOTES.md`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md). This is a course catalog, not a per-lecture study package.
+Start at [`NOTES.md`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md) (catalog). First full lecture package: [`01-W1-L2-Introduction-Problem-Setting/`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/01-W1-L2-Introduction-Problem-Setting/).
 
 ## Skill
 
@@ -75,6 +75,9 @@ Law: `~/.grok/skills/youtube-lecture-tutor/`
 | [`Mathematical-Foundation-for-GenerativeAI/27-Lec04-Variational-Divergence-Minimization/`](./Mathematical-Foundation-for-GenerativeAI/27-Lec04-Variational-Divergence-Minimization/) | [Lec 04 Variational Divergence Minimization (VDM)](https://www.youtube.com/watch?v=4vtL3NhCkgg) | math_technical | two clouds · f* unzip · T(x) lower bound · min_θ max_w saddle |
 | [`Mathematical-Foundation-for-GenerativeAI/28-Lec05-Generative-Adversarial-Networks/`](./Mathematical-Foundation-for-GenerativeAI/28-Lec05-Generative-Adversarial-Networks/) | [Lec 05 Generative Adversarial Networks (GANs)](https://www.youtube.com/watch?v=5uqga82bDNA) | math_technical | GAN = one f of VDM · not JSD · alternate freeze · cGAN concat · StyleGAN |
 | [`Mathematical-Foundation-for-GenerativeAI/29-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/`](./Mathematical-Foundation-for-GenerativeAI/29-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/) | [Tutorial 12: Vanilla GAN, DCGAN, Conditional GAN](https://www.youtube.com/watch?v=dBcURX7GrwE) | code_tutorial | MLP/cGAN/DCGAN · detach · non-sat G · FID 92.93/104/21.5 |
+| [`Mathematical-Foundation-for-GenerativeAI/30-Lec18-Wasserstein-GAN/`](./Mathematical-Foundation-for-GenerativeAI/30-Lec18-Wasserstein-GAN/) | [Lec 18 Wasserstein GAN (WGAN)](https://www.youtube.com/watch?v=1neDqqgaXhE) | math_technical | OT / earth-mover · manifold hyp · KR dual · \|W\|_2=1 · more stable than naive GAN |
+| [`Mathematical-Foundation-for-GenerativeAI/31-Lec19-Inversion-GANs-FID/`](./Mathematical-Foundation-for-GenerativeAI/31-Lec19-Inversion-GANs-FID/) | [Lec 19 Inversion with GANs and FID](https://www.youtube.com/watch?v=zw2DUzD0TLE) | math_technical | BiGAN/ALI tuple D · invert E then G · FID = W2 of Inception Gaussians |
+| [`Mathematical-Foundation-for-GenerativeAI/32-Lec20-Latent-Variable-Models-VAE/`](./Mathematical-Foundation-for-GenerativeAI/32-Lec20-Latent-Variable-Models-VAE/) | [Lec 20 LVM and VAE intro](https://www.youtube.com/watch?v=4djE9goJtKs) | math_technical | p(x)=∫p(x,z) · ELBO · EM vs AEVB · reparam next class |
 
 ## Study one package
 

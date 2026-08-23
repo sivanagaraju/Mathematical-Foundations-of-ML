@@ -1,0 +1,30 @@
+{
+  "title": "Lec 19 Inversion with GANs and FID",
+  "video_id": "zw2DUzD0TLE",
+  "url": "https://www.youtube.com/watch?v=zw2DUzD0TLE",
+  "duration_seconds": 1692,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A. P. (NPTEL IISc)",
+  "description": "Inversion with GANs, Bi-Directional GANs and FID Score\nhttps://drive.google.com/file/d/1Kebb00VehPBMyleuw2ubp2qbvrBqyvZZ/view",
+  "playlist_index": 13,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "topics": [
+    "Sampler, manifold, K much less than D",
+    "Inverse as representation / embedding",
+    "Why embeddings: cluster, retrieve, edit",
+    "Latent traversal",
+    "Inversion; GAN is decoder-only",
+    "BiGAN and ALI concurrent papers",
+    "Tuple discriminator and joints",
+    "Encode then sample; algebra homework",
+    "FID = Wasserstein-2 of Inception Gaussians",
+    "FID caveats, adversarial agents, next LVMs"
+  ]
+}

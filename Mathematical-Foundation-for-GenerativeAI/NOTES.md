@@ -146,8 +146,13 @@ Suggested first watch: **Lec 02** (problem formulation, 64 min), then **Lec 03â€
 | 14 | Lec 03 f-Divergence and Examples | [`25-Lec03-f-Divergence-Examples/`](./25-Lec03-f-Divergence-Examples/) |
 | 15 | Tutorial 11 â€“ f-Divergence and Examples | [`26-Tutorial11-f-Divergence-Examples/`](./26-Tutorial11-f-Divergence-Examples/) |
 | 16 | Lec 04 Variational Divergence Minimization (VDM) | [`27-Lec04-Variational-Divergence-Minimization/`](./27-Lec04-Variational-Divergence-Minimization/) |
+| 17 | Lec 05 Generative Adversarial Networks (GANs) | [`28-Lec05-Generative-Adversarial-Networks/`](./28-Lec05-Generative-Adversarial-Networks/) |
+| 18 | Tutorial 12 : Vanilla GAN, DCGAN, Conditional GAN | [`29-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/`](./29-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/) |
+| 19 | Lec 18 Wasserstein GAN (WGAN) | [`30-Lec18-Wasserstein-GAN/`](./30-Lec18-Wasserstein-GAN/) |
+| 20 | Lec 19 Inversion with GANs and FID | [`31-Lec19-Inversion-GANs-FID/`](./31-Lec19-Inversion-GANs-FID/) |
+| 21 | Lec 20 Latent Variable Models and VAE intro | [`32-Lec20-Latent-Variable-Models-VAE/`](./32-Lec20-Latent-Variable-Models-VAE/) |
 
-No package yet: course Intro, Tutorial 1, Lec 18, Lec 19, Lec 20.
+No package yet: course Intro, Tutorial 1.
 
 PDFs in [`Notes/`](./Notes/): `NPTEL-Tutorials.pdf`, `Review-Probability.pdf`.
 
@@ -198,10 +203,10 @@ Links keep the playlist id. `index` is the **YouTube slot** (newest-first list),
 | Learn | YT # | Video | Duration | Link | Summary | Package |
 |-------|------|--------|----------|------|---------|---------|
 | 17 | 5 | Lec 05 Generative Adversarial Networks (GANs) | 58:04 | [watch](https://www.youtube.com/watch?v=5uqga82bDNA&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=5) | GAN as VDM with a JS-style $f$. Generator $G(z)$, discriminator as density-ratio. | [28](./28-Lec05-Generative-Adversarial-Networks/) |
-| 18 | 4 | Tutorial 12 : Implementations of Vanilla GAN, DCGAN and Conditional GAN | 1:18:34 | [watch](https://www.youtube.com/watch?v=dBcURX7GrwE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=4) | Three GAN families in PyTorch: vanilla, conv (DCGAN), class-conditional. | |
-| 19 | 3 | Lec 18 Wasserstein GAN (WGAN) | 44:48 | [watch](https://www.youtube.com/watch?v=1neDqqgaXhE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=3) | Earth-mover / $W_1$; Lipschitz critic; why JS saturates and WGAN does not. | |
-| 20 | 2 | Lec 19 Inversion with GANs and FID | 28:12 | [watch](https://www.youtube.com/watch?v=zw2DUzD0TLE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=2) | Find $z$ with $G(z)\approx x$. FID as a sample-quality score when likelihood is missing. | |
-| 21 | 1 | Lec 20 Latent Variable Models and Introduction to Variational Autoencoder (VAE) | 55:25 | [watch](https://www.youtube.com/watch?v=4djE9goJtKs&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=1) | Hidden $z$; incomplete likelihood; ELBO; VAE = amortized $q_\phi(z\|x)$ + decoder. **Current last lecture.** | |
+| 18 | 4 | Tutorial 12 : Implementations of Vanilla GAN, DCGAN and Conditional GAN | 1:18:34 | [watch](https://www.youtube.com/watch?v=dBcURX7GrwE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=4) | Three GAN families in PyTorch: vanilla, conv (DCGAN), class-conditional. | [29](./29-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/) |
+| 19 | 3 | Lec 18 Wasserstein GAN (WGAN) | 44:48 | [watch](https://www.youtube.com/watch?v=1neDqqgaXhE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=3) | Earth-mover / $W_2$; 1-Lipschitz critic; why $f$-div saturates and WGAN does not. | [30](./30-Lec18-Wasserstein-GAN/) |
+| 20 | 2 | Lec 19 Inversion with GANs and FID | 28:12 | [watch](https://www.youtube.com/watch?v=zw2DUzD0TLE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=2) | Find $z$ with $G(z)\approx x$ via BiGAN/ALI tuples. FID = $W_2$ of Inception Gaussians. | [31](./31-Lec19-Inversion-GANs-FID/) |
+| 21 | 1 | Lec 20 Latent Variable Models and Introduction to Variational Autoencoder (VAE) | 55:25 | [watch](https://www.youtube.com/watch?v=4djE9goJtKs&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=1) | Hidden $z$; incomplete likelihood; ELBO; EM vs VAE when posterior intractable. **Current last lecture.** | [32](./32-Lec20-Latent-Variable-Models-VAE/) |
 
 ---
 

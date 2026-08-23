@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · Lec 18 Wasserstein GAN (WGAN)</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · Lec 18 Wasserstein GAN (WGAN)</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q1", "part": "prerequisites", "tag": "Warm-up · saddle", "anchor": "PREREQUISITES.md#p1-saddle", "prompt": "In the WGAN (and last hour’s GAN) saddle, who does what to the shared score J?", "options": [{"key": "A", "text": "Both nets minimize J until it hits a global bowl."}, {"key": "B", "text": "The critic maximizes J; the sampler minimizes the same J."}, {"key": "C", "text": "The sampler maximizes J; the critic is frozen forever."}, {"key": "D", "text": "Changing f-div to Wasserstein removes the saddle, so both nets minimize."}], "answer": "B", "whyCorrect": "The problem is min_θ max_w of one shared J. Critic climbs; sampler sits. Wasserstein changes the yardstick, not the saddle shape — that is why it is still called a GAN.", "whyOthers": {"A": "Ordinary training hunts minima. This family seeks a saddle; a billion-parameter Hessian almost never is a global bowl.", "C": "The sampler minimizes, it does not maximize. The critic is not frozen forever — you alternate.", "D": "He is explicit: the final problem is again a minmax, hence still WGAN."}, "diagram": "  max_w (critic T)\n        ▲\n min_θ ─┼─  same J\n        ▼", "useLater": "Topic 1 (still a saddle) and Topic 8 (KR dual is still minmax)."}, {"id": "q2", "part": "prerequisites", "tag": "Warm-up · support", "anchor": "PREREQUISITES.md#p2-support", "prompt": "Two Dirac spikes sit at 0 and at 3. What is true of their supports?", "options": [{"key": "A", "text": "Both supports are all of R, because densities can be written on the whole line."}, {"key": "B", "text": "The supports are {0,3} together, so they are perfectly aligned."}, {"key": "C", "text": "The supports are {0} and {3}; they are not aligned, and a threshold between them is a perfect classifier."}, {"key": "D", "text": "Support means ambient dimension, so both live in R^1 and are aligned."}], "answer": "C", "whyCorrect": "Support is where mass actually sits. Spikes at 0 and 3 occupy different points — not aligned. A fence between them classifies every point right.", "whyOthers": {"A": "You can write a formula on all of R; the die still never lands on π. Support ≠ the domain you wrote the density on.", "B": "Perfect alignment needs a bijection of the two support sets as he uses the phrase. {0} and {3} are different sets.", "D": "Ambient dimension is the room (R or R^d). Support is the patch of grass that has sand."}, "diagram": "  ambient R     ................\n  p_x           * at 0\n  p_θ                 * at 3\n                |fence|  100% D", "useLater": "Topics 3–4: perfect D and two-Dirac max-out."}, {"id": "q3", "part": "prerequisites", "tag": "Warm-up · manifold", "anchor": "PREREQUISITES.md#p3-manifold", "prompt": "He calls a manifold a lower-dimensional “subspace,” then corrects himself. What is the working picture?", "options": [{"key": "A", "text": "A linear subspace of R^d (closed under addition and scaling)."}, {"key": "B", "text": "A proved theorem that MNIST spans a 10-dimensional linear space."}, {"key": "C", "text": "The ambient space {0,1}^784 itself, because that is already discrete."}, {"key": "D", "text": "A lower-dimensional sheet in a vector space (a curvy thread in R^3 is 1-D); not a linear subspace. The hypothesis is a conjecture without a proof."}], "answer": "D", "whyCorrect": "Thread = 1-manifold in R^3, paper = 2-manifold, neither is a linear subspace. Hypothesis = conjecture without a proof. MNIST occupies a tiny sheet of {0,1}^784.", "whyOthers": {"A": "He says it does not satisfy vector-space properties. A bent thread is still 1-D.", "B": "He will not prove the hypothesis here. MNIST’s effective dimension is not derived as a theorem.", "C": "{0,1}^784 is the ambient room of the coin-toss experiment, not the occupied sheet."}, "diagram": "  R^3:  thread ~~~~  (1-D sheet, curved)\n        paper [  ]  (2-D sheet)\n  {0,1}^784: random grids huge; MNIST a wisp", "useLater": "Topic 2 board: 28×28 coin-toss and {0,1}^784."}, {"id": "q4", "part": "prerequisites", "tag": "Warm-up · coupling", "anchor": "PREREQUISITES.md#p6-coupling", "prompt": "A transport plan between two discrete piles is a table π. What must the row sums equal?", "options": [{"key": "A", "text": "The destination pile q (column law)."}, {"key": "B", "text": "The source pile p (the law whose mass you are moving)."}, {"key": "C", "text": "1 in every cell, because every route ships everything."}, {"key": "D", "text": "Nothing — any nonnegative table is a plan."}], "answer": "B", "whyCorrect": "Row sums recover the source law p_x; column sums recover the destination p_x̂. That summing-over-the-margin is why it is called marginalization. Infinitely many tables can share those totals.", "whyOthers": {"A": "Destination totals are the column sums, not the rows.", "C": "Entries are percentages of mass in [0,1]; they are not all 1.", "D": "The table must have the two laws as margins, and total mass 1."}, "diagram": "         dest1  dest2 | row = p\n  src1    π11    π12  | p(src1)\n  src2    π21    π22  | p(src2)\n  col     q1     q2", "useLater": "Topics 5–6: Π is joints with those margins; table = plan."}, {"id": "q5", "part": "prerequisites", "tag": "Warm-up · Lipschitz", "anchor": "PREREQUISITES.md#p8-lipschitz", "prompt": "A function T is 1-Lipschitz, as used in the Kantorovich–Rubinstein dual, when:", "options": [{"key": "A", "text": "|T(x1)−T(x2)| / ||x1−x2|| ≤ 1 for all distinct x1, x2 (derivatives bounded)."}, {"key": "B", "text": "T is any neural net whose last activation is a sigmoid, as in vanilla GAN."}, {"key": "C", "text": "T equals f*, the Fenchel conjugate from last hour’s VDM bound."}, {"key": "D", "text": "T is linear with slope 3, because steeper critics separate better."}], "answer": "A", "whyCorrect": "1-Lipschitz = slope at most 1. Dual: W = max of E T − E T over those T. No f* in this dual. Practice: ||W||_2 = 1 after each step so the critic stays legal.", "whyOthers": {"B": "Sigmoid last layer was last hour’s GAN f. This hour’s constraint is on slope, not on landing in (0,1).", "C": "He stresses there is no f* here — simply the difference of two expectations of T.", "D": "Slope 3 is illegal for this dual. T(x)=3x is the micro-example of a banned critic."}, "diagram": "  W = max_{T 1-Lip} ( E_{p_x} T − E_{p_θ} T )\n  |T(x1)−T(x2)| / ||x1−x2||  ≤  1", "useLater": "Topics 8–9: KR dual and weight-norm enforcement."}, {"id": "q6", "part": "notes", "tag": "Master map", "anchor": "NOTES.md#executive-summary--architecture-of-this-lecture", "prompt": "Whole-video job of Lec 18, in one map. Which chain is the architecture?", "options": [{"key": "A", "text": "Keep last hour’s f; only code a DCGAN; inversion and FID are derived this sitting."}, {"key": "B", "text": "Prove Kantorovich–Rubinstein from scratch, then drop the saddle entirely."}, {"key": "C", "text": "Diagnose why f-div/GAN saturates (manifold → perfect D → D_f ⊥ θ) → swap in Wasserstein as least-work OT → train the KR dual over 1-Lipschitz T (still minmax = WGAN) by ||W||_2=1 after each step. Inversion/FID are STOP."}, {"key": "D", "text": "Replace the generator with an autoregressive LM; Wasserstein is only a regularizer on tokens."}], "answer": "C", "whyCorrect": "That is the blueprint: saturation diagnosis, new yardstick, dual, weight-norm, honest STOP. Sampler framework unchanged; only the distance and the 1-Lipschitz constraint changed.", "whyOthers": {"A": "DCGAN was last hour / Tutorial 12. Inversion and FID were promised and not delivered.", "B": "He does not prove KR; he sends you to the paper. The problem remains a saddle.", "D": "He said ChatGPT is not this paradigm (last hour). This sitting is still z through G_θ."}, "diagram": "  f-div saturates ──X──► W = min_π E[||x−x̂||]\n                      │ KR dual, T 1-Lip\n                      ▼ min_θ max_w = WGAN\n                      ||W||_2=1 after each step\n                      STOP: invert G, FID", "useLater": "If this is mushy, re-read the Executive Summary method card before any topic."}, {"id": "q7", "part": "notes", "tag": "Topic 1 · Hessian", "anchor": "NOTES.md#topic-1-agenda-still-a-saddle-hessian-stop-on-surrogates-0002–0833", "prompt": "Why does he say there is “nothing called a global minimum” for these nets, and what do you stop on?", "options": [{"key": "A", "text": "Because the two GAN losses both decrease smoothly; stop when they hit zero."}, {"key": "B", "text": "Because a maximum only needs a negative-semidefinite Hessian; stop on training loss."}, {"key": "C", "text": "Because 0.99^billion is tiny: a definite Hessian (all eigenvalue signs the same) is almost impossible in a billion-parameter space, and a saddle is worse. Stop on a surrogate of sample quality — the two losses will not both decrease."}, {"key": "D", "text": "Because OT removes saddles; stop when W hits a closed form."}], "answer": "C", "whyCorrect": "Bernoulli model of eigenvalue signs; maxima need negative definite (not merely NSD). Surrogate metrics, not the loss landscape. For GAN, T is a max and G is a min on the same J.", "whyOthers": {"A": "He is explicit: you will not see both losses decreasing. That is not the objective.", "B": "He corrects: maxima need negative definite, not NSD. Do not stop on the loss.", "D": "OT is a new family; the final problem is still a saddle (WGAN)."}, "diagram": "  P(all n signs same) = p^n\n  p=0.99, n~10^9  =>  tiny\n  stop on SURROGATE, not the two losses", "useLater": "He calls the Hessian story vague; Topic 2 is the systematic reason."}, {"id": "q8", "part": "notes", "tag": "Topic 3 · saturation", "anchor": "NOTES.md#topic-3-perfect-discriminator-saturation-is-d_f--θ-1413–1808", "prompt": "Supports of p_x and p_θ are not perfectly aligned (no bijection of support sets). What follows, and what does saturation mean?", "options": [{"key": "A", "text": "A perfect D (100% accuracy) exists; GAN saturates meaning D_f(p_x || p_θ) becomes independent of θ, so G has no signal."}, {"key": "B", "text": "Training automatically uses 1:1 updates, which is a theorem not a hyperparameter."}, {"key": "C", "text": "f-div becomes a metric and G is guaranteed to match p_x."}, {"key": "D", "text": "Wasserstein also maxes out, which is why inversion is taught this hour."}], "answer": "A", "whyCorrect": "Perfect-discriminator theorem + saturation = D_f independent of θ. Homework: prove 100% D ⇒ f-div ⊥ θ. Last hour’s 5:1 is a hyperparameter to dodge a perfect D.", "whyOthers": {"B": "Previous class was not 1:1 on purpose (e.g. 5:1 G more, D less) — a hyperparameter.", "C": "f-div is not a metric (Lec 03). A perfect D is the failure mode, not a guarantee of matching.", "D": "W does not saturate (Topic 7 fact). Inversion is next class."}, "diagram": "  not aligned => ∃ 100% D => D_f ⟂ θ => G stuck\n  dodge: 5:1  (hyperparameter)\n  board: ‘softer’ metric = W / OT", "useLater": "Topic 4 makes this visible with two Diracs."}, {"id": "q9", "part": "notes", "tag": "Topic 4 · two Diracs", "anchor": "NOTES.md#topic-4-two-diracs-kljsd-max-out-1808–2131", "prompt": "Two 1-D Diracs, gap θ ≠ 0. What happens to KL / JSD, and what question does he want a new metric to answer?", "options": [{"key": "A", "text": "KL / JSD grow linearly with θ, so f-div already quantifies the gap."}, {"key": "B", "text": "They are undefined unless the spikes overlap; overlap is guaranteed by the manifold hypothesis."}, {"key": "C", "text": "They equal log 2 for every θ; he proves this algebra in class."}, {"key": "D", "text": "KL / JSD (and most practical f-divs) max out, independent of θ, as long as the spikes do not overlap. A threshold between them is a perfect D for any such θ. Want a metric that QUANTIFIES how far the supports are."}], "answer": "D", "whyCorrect": "Perfect classifier = threshold. Max-out independent of θ. Exercise: show algebraically that practical f-divs max out (not ground in class). Spoken clash ‘max out’ vs ‘0 or −∞’ — both recorded; do not invent log 2.", "whyOthers": {"A": "That growth is the Wasserstein homework (W_2 ∝ |θ|), not f-div.", "B": "The construction is that they do not overlap. Manifold hyp makes misalignment likely, not overlap.", "C": "He does not grind a log-2 value. Homework is qualitative max-out."}, "diagram": "  p_x *  |← θ →|  * p_θ\n  threshold | = 100% D for any θ≠0\n  KL/JSD: maxed  (independent of θ)", "useLater": "Topic 7 homework: W_2 ∝ |θ| on this same pair."}, {"id": "q10", "part": "notes", "tag": "Topic 5 · W definition", "anchor": "NOTES.md#topic-5-wasserstein--min-over-couplings-2131–2651", "prompt": "On the board, Wasserstein between p_x and p_x̂ is which object?", "options": [{"key": "A", "text": "The minimizer π* (the best table), then you throw away the cost."}, {"key": "B", "text": "The minimum — not the minimizer — of E_π[||x−x̂||_2] over joints π whose marginals are the two constituent laws."}, {"key": "C", "text": "An unconstrained min over all joints, including those that do not recover p_x and p_x̂."}, {"key": "D", "text": "KL(p_x || p_x̂) written with a 2-norm for convenience."}], "answer": "B", "whyCorrect": "He stresses minimum, not minimizer. Search space Π is not open: margins of π are the two laws. 2-norm on the board is W_2; p-norm gives W_p.", "whyOthers": {"A": "W is the value of the opt (the least average distance), not the argmin table.", "C": "He repeats: not unconstrained joints. Marginals must be the constituent laws.", "D": "This is a different family from f-div / KL."}, "diagram": "  W = min_{π ∈ Π} E_π[ ||x−x̂||_2 ]\n  ∫π dx = p_x̂ ,  ∫π d x̂ = p_x", "useLater": "Topics 6–7: the table is π; the min of average work is this W."}, {"id": "q11", "part": "notes", "tag": "Topic 6 · plan = joint", "anchor": "NOTES.md#topic-6-transport-plan-is-a-joint-table-2651–3200", "prompt": "Every redistribution of p_x into p_x̂ can be written as a table. Which slogan is on the board, and is optimality already in this box?", "options": [{"key": "A", "text": "There is exactly one table; it is already the optimal transport map of Monge."}, {"key": "B", "text": "The table is a conditional p(x̂|x) only; joints are not used."}, {"key": "C", "text": "Every redistribution scheme is a joint distribution and is called a transport plan. Infinitely many such tables. Optimality is not yet — we only named the scheme. Cell work = mass × distance (earth-mover)."}, {"key": "D", "text": "Row sums can be anything as long as each cell is a probability."}], "answer": "C", "whyCorrect": "Table = joint = transport scheme = transport plan. Margins recover the two PMFs (marginalization, literally). Infinitely many. Work of a cell starts here; min over plans is Topic 7.", "whyOthers": {"A": "He asked the class: one scheme or many? Answer: multiple / infinitely many. Optimality later.", "B": "He is explicit: the table is a joint. Vice versa, every joint with those margins is a scheme.", "D": "Entries in [0,1], total mass 1, row/col sums = the two laws."}, "diagram": "  table π(x_i, x̂_j) = mass moved\n  row/col sums = the two PMFs\n  work_cell = π · ||x−x̂||", "useLater": "Topic 7 averages work and minimizes it."}, {"id": "q12", "part": "notes", "tag": "Topic 7 · W ∝ |θ|", "anchor": "NOTES.md#topic-7-earth-mover-work-w_2-propto-θ-3200–3641", "prompt": "Why is Wasserstein a good divergence here, and what is the two-Dirac homework?", "options": [{"key": "A", "text": "Because it ignores distance once piles do not overlap, like JSD."}, {"key": "B", "text": "Because we average work over all plans, including expensive ones."}, {"key": "C", "text": "Because W saturates in high dimension even if it works in 1-D."}, {"key": "D", "text": "W is the least average work among plans with the right margins — closer laws, smaller least work. Homework: two-Dirac W_2 is proportional to |θ| (unlike f-div, which maxes out). Fact: W does not saturate when supports misalign, even in high dim."}], "answer": "D", "whyCorrect": "Earth-mover = moving dirt. Average work = E_π[||x−x̂||]. Min over Π is W. We do not care about high-effort plans. Homework W_2 ∝ |θ|. Board fact: no saturation when supports miss.", "whyOthers": {"A": "That is the f-div failure mode this metric is built to avoid.", "B": "Only the least-work plan is W. Expensive plans are ignored.", "C": "He states the opposite fact in high dimension."}, "diagram": "  W = min_π E_π[||x−x̂||]\n  two Diracs: W_2 ∝ |θ|\n  fact: W does not saturate", "useLater": "Topic 8: you still cannot list πs — use the dual."}, {"id": "q13", "part": "notes", "tag": "Topics 8–9 · dual + practice", "anchor": "NOTES.md#topic-8-kantorovich–rubinstein-dual-wgan-minmax-3641–4028", "prompt": "How does this hour actually train, and what extra constraint is on the critic?", "options": [{"key": "A", "text": "Keep enumerating couplings π; the critic is an unconstrained sigmoid D as in vanilla GAN."}, {"key": "B", "text": "Sampler unchanged. KR dual (not proved): W = max over 1-Lipschitz T of E_{p_x} T − E_{p_θ} T, no f*. Outer min_θ of that max is still a saddle (WGAN). Enforce 1-Lipschitz by ||W||_2 = 1 at all layers after each gradient step. More stable than naive GAN. Inversion/FID not this sitting."}, {"key": "C", "text": "Replace T by f* as in VDM; spectral norm and gradient penalty are what he writes on the board."}, {"key": "D", "text": "He proves KR in class and then trains an autoregressive critic."}], "answer": "B", "whyCorrect": "Framework unchanged; only the distance. Dual has no f*. T here = 1-Lipschitz functions. Weight 2-norm = 1 after each step (sigmoids, as spoken). Conclusion on the board: more stable than naive-GAN. Papers: original GAN + f-GAN (exams). STOP inversion/FID.", "whyOthers": {"A": "The whole point of the dual is not to enumerate π. Critic must be 1-Lipschitz, not last-hour’s unconstrained D.", "C": "No f*. He did not write spectral norm or WGAN-GP; those are later papers. He said 2-norm = 1.", "D": "Proof not given; read the original paper. Critic is a net on x, not an AR model."}, "diagram": "  W = max_{Lip T ≤ 1} (E T − E T)\n  θ*,w* = argmin_θ max (…)\n  after each step: ||W||_2 = 1\n  STOP: invert G, FID", "useLater": "Next sitting is Lec 19 inversion + FID. Tutorial 12 already coded vanilla/DC/cGAN, not this weight-norm rule."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

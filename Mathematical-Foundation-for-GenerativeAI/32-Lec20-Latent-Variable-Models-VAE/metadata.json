@@ -1,0 +1,30 @@
+{
+  "title": "Lec 20 Latent Variable Models and Introduction to Variational Autoencoder (VAE)",
+  "video_id": "4djE9goJtKs",
+  "url": "https://www.youtube.com/watch?v=4djE9goJtKs",
+  "duration_seconds": 3324,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A. P. (NPTEL IISc)",
+  "description": "Latent Variable Models, GMMs, Variational Autoencoder (VAE)\nhttps://drive.google.com/file/d/1Kebb00VehPBMyleuw2ubp2qbvrBqyvZZ/view",
+  "playlist_index": 21,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "topics": [
+    "LVM family and definition p(x)=marginal of joint",
+    "Discrete z clustering; continuous z features",
+    "Embedding; encoder and decoder by construction",
+    "Min KL equals max MLE; drop entropy",
+    "Incomplete likelihood; latent posterior q(z|x)",
+    "Log of expectation; Jensen lower bound",
+    "ELBO; variational posterior",
+    "Boxed ELBO max; GMM die and Gaussians",
+    "EM; q*=p(z|x); Auto-Encoding Variational Bayes",
+    "Three jobs; two NN styles; reparam next class"
+  ]
+}
