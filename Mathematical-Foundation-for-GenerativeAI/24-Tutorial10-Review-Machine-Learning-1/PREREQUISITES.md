@@ -454,5 +454,7 @@ Each name is “probably Club A (80%) / Club B (20%).” You re-estimate each cl
 
 ---
 
-Ready → [NOTES.md](./NOTES.md) (start at **Executive Summary**).  
-Quiz later: [quiz.html](./quiz.html) Part A = this file.
+**Second teachers (names only here).** StatQuest, Khan Academy, Seeing Theory, Do & Batzoglou. The actual pointers live at the end of [NOTES.md](./NOTES.md#external-references) — a handful of well-known items, not a link dump.
+
+Ready → [NOTES.md](./NOTES.md).  
+Quiz: [quiz.html](./quiz.html).

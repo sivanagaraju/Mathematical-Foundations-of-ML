@@ -386,5 +386,7 @@ The wall socket is `in_features`. Your country needs a different number of pins 
 
 ---
 
+**Second teachers (names only here).** CS231n, official PyTorch, FastAI, torchvision. The actual pointers live at the end of [NOTES.md](./NOTES.md#external-references) — a few well-known items, not a link dump.
+
 Ready → [NOTES.md](./NOTES.md).  
 Quiz: [quiz.html](./quiz.html) Part A = this file.

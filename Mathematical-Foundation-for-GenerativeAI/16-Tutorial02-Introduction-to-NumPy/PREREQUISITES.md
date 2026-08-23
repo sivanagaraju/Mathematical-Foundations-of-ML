@@ -300,6 +300,8 @@ Bias is a one-line stamp. Broadcasting presses that stamp onto every row of the 
 - Not all shapes broadcast; incompatible sizes raise `ValueError`.
 - Mental check: walk axes from the right; each pair must match or one side is 1.
 
+If this still blurs, the official NumPy broadcasting guide is the one page to open. Pointers live at the end of NOTES.
+
 ### Mini-check
 
 1. Can you add shape `(3, 1)` to `(3, 4)`?
@@ -427,6 +429,8 @@ Output size (no pad, stride 1): $H - k + 1$ on each side.
 - MSE is for regression-style targets; CE/BCE for classification with probabilities.
 - Always print `.shape` after each layer when debugging.
 
+If softmax or “$-\log p_{\mathrm{true}}$” still slips, StatQuest’s SoftMax and Cross Entropy shorts are the popular fix.
+
 ### Mini-check
 
 1. Softmax outputs must sum to what?
@@ -449,6 +453,8 @@ Output size (no pad, stride 1): $H - k + 1$ on each side.
 **Peek:** (1) `np.zeros((3,4))` (2) `(2,5)` (3) elementwise vs matmul (4) 784 (5) `[0,0,4]` (6) `[1,0,0]` (7) `3×3`.
 
 ---
+
+**Second teachers (names only here).** Official NumPy docs, 3Blue1Brown, StatQuest, CS231n. The actual pointers live at the end of [NOTES.md](./NOTES.md#external-references) — a short famous list, not a link dump.
 
 Ready → [NOTES.md](./NOTES.md) (start at **Executive Summary**).
 Quiz: [quiz.html](./quiz.html) Part A = this file.

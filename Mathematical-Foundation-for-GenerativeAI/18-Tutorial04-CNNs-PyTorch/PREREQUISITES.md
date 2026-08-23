@@ -426,5 +426,7 @@ Training is open-book practice with a red pen (gradients). Evaluation is a **clo
 
 ---
 
+**Second teachers (names only here).** CS231n, 3Blue1Brown, StatQuest, official PyTorch. The actual pointers live at the end of [NOTES.md](./NOTES.md#external-references) — a few well-known items, not a link dump.
+
 Ready → [NOTES.md](./NOTES.md) (start at **Executive Summary**).  
 Quiz: [quiz.html](./quiz.html) Part A = this file.

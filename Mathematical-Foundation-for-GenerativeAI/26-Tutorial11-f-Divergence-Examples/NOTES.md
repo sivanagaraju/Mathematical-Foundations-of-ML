@@ -27,9 +27,13 @@
 
 ## Executive Summary — architecture of this lecture
 
-This tutorial **proves** what Lec 03 assigned. It rewrites $f$-divergence as $\mathbb{E}_Q[f(R)]$ with $R=p/q$ (legal once $P\ll Q$), uses **Jensen** to get $D_f\ge 0$ and (if $f$ is strictly convex at $1$) $D_f=0$ iff $p=q$. It then plugs four springs $f$ to recover **KL**, **reverse KL** ($f=-\log u$), **TV**, and **JSD**. Finally it checks the **four metric axioms** on KL with Bernoulli numbers: symmetry and triangle **fail**.
+This tutorial **proves** what Lecture 03 assigned as homework. It rewrites $f$-divergence as $\mathbb{E}_Q[f(R)]$ with $R=p/q$, which is legal once $P$ is absolutely continuous with respect to $Q$ — not because we assume $P=Q$. Jensen plus $f(1)=0$ gives $D_f\ge 0$; if $f$ is strictly convex at $1$, then $D_f=0$ if and only if $p=q$. Four springs recover KL ($u\log u$), reverse KL ($f=-\log u$), total variation, and Jensen–Shannon. Two Bernoulli coins then kill the slogan “KL is a metric”: symmetry fails ($0.368\neq 0.511$) and the triangle fails ($1.758>0.879$). Total variation’s four tickets are homework; there is no code on this tablet.
 
 **Worldview arc:** from “$f$-divergence slogan” **to** “a Jensen proof plus a numerical takedown of KL-as-distance.”
+
+**Hour at a glance (whole video).** He writes $D_f(P\|Q)=\int q\,f(p/q)\,dx$ again, then spends the first third on why that ratio is even allowed. The red line is $P\ll Q$ (absolute continuity): whenever $Q$ gives a set mass zero, $P$ must too. That licenses $R=p/q$. It is **not** the sentence “assume $P=Q$” — identity already forces $R\equiv 1$ and $D_f=0$. Because $f$ is convex, Jensen says $\mathbb{E}_Q[f(R)]\ge f(\mathbb{E}[R])$. The inner expectation is $1$ (the $q$ cancels, $\int p=1$), and $f(1)=0$, so $D_f\ge 0$. If $f$ is strictly convex at $1$, equality needs $R$ constant $Q$-almost surely, hence $R=1$, hence $p=q$. Those are the two homework properties.
+
+Then he swaps springs. $f(u)=u\log u$ is KL (and min-KL is MLE). This TA writes $f(u)=-\log u$ for reverse KL — Lecture 03 left $\log u$ as an exercise; watch the sign. $\tfrac12|u-1|$ is total variation. JSD expands to the average of two KLs to the midpoint $M=(P+Q)/2$. Last third: is KL a metric? Four tickets. Non-negativity and identity already hold. Symmetry dies on $P=(0.9,0.1)$, $Q=(0.5,0.5)$: $0.368\neq 0.511$. Triangle dies on $p=(0.1,0.9)$, fair $q$, $r=(0.9,0.1)$: $1.758>0.879$. TV’s four tickets are your homework. Chalkboard arithmetic only — do not invent Python.
 
 ### System context
 
@@ -78,39 +82,58 @@ This tutorial **proves** what Lec 03 assigned. It rewrites $f$-divergence as $\m
   └ · · · · · · · ┘
 ```
 
-### Scenario
+### Scenario walkthrough
+
+Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
+
+**Story:** two coins, $P=(0.9,0.1)$ and $Q=(0.5,0.5)$, plus a third $r=(0.9,0.1)$ opposite a $p=(0.1,0.9)$. You will prove $D_f\ge 0$, $=0$ only when the hills match, and that **KL is not a metric**.
+
+1. **What is $D_f$?** $\int q\,f(p/q)\,dx$. Weight $q$, spring $f$, reading $p/q$. That is the DEF.
+
+2. **May you even form $p/q$?** Only if $P\ll Q$ (absolute continuity): $Q$'s blank streets cannot hide $P$'s cathedral. That is **not** “assume $P=Q$” — identity already forces $D_f=0$. That is the LICENSE.
+
+3. **Why $f(1)=0$?** Matched hills give $R=1$. The spring must read zero there, or “drive $D$ to zero” is impossible.
+
+4. **Why $D_f\ge 0$?** $D_f=\mathbb{E}_Q[f(R)]\ge f(\mathbb{E}[R])$ (Jensen). $\mathbb{E}[R]=1$, so the right side is $f(1)=0$. That is NONNEG.
+
+5. **When is it zero?** If $f$ is strictly convex at $1$, equality needs $R$ constant $Q$-a.s., hence $R=1$, hence $p=q$. That is IDENTITY.
+
+6. **Which springs?** $u\log u$ → KL (also MLE). This TA writes $f=-\log u$ → reverse KL. $\tfrac12|u-1|$ → TV. JSD = average of two KLs to the midpoint. That is the children.
+
+7. **Is KL a metric?** Ticket (3) symmetry: $0.368\neq 0.511$ on the two coins. Ticket (4) triangle: $1.758>0.879$ from $p$ to $r$ via fair. Both fail. TV’s four tickets are homework. No Python — chalkboard only.
 
 ```
   two coins  P=(0.9,0.1)  Q=(0.5,0.5)
   KL(P∥Q)≈0.368    KL(Q∥P)≈0.511     ← not symmetric
-  add R=(0.9,0.1) opposite of p=(0.1,0.9)
-  KL(p,r)≈1.758  >  0.368+0.511      ← not a triangle
+  add r=(0.9,0.1) opposite of p=(0.1,0.9)
+  KL(p,r)≈1.758  >  0.368+0.511=0.879   ← not a triangle
 ```
 
-### Failure path
+### Failure / contrast path
 
 ```
-  call KL a distance          ──X──►  fails (3) and (4)
+  call KL a distance          ──X──►  fails symmetry and triangle
   skip f(1)=0                 ──X──►  Jensen does not hit 0
   assume P=Q to define p/q    ──X──►  that is identity, not the license
-  use log u for reverse KL    ──X──►  this TA writes −log u
+  use +log u for reverse KL   ──X──►  this TA writes −log u
   invent Python               ──X──►  no code on this tablet
 ```
 
-### STOP
+### STOP / out of scope
 
 - Variational estimation of $D$ from samples (next lectures).
 - Full proof that TV *is* a metric (homework).
 - What a GAN is (promised later).
 
-### Load-bearing claims
+### Load-bearing claims (closed-book)
 
-- $P\ll Q$ licenses $R=p/q$; $P=Q$ is stronger and already forces $D_f=0$.
+- $P\ll Q$ licenses $R=p/q$. $P=Q$ is stronger and already forces $D_f=0$ — do not swap those jobs.
 - $D_f=\mathbb{E}_Q[f(p/q)]$.
 - Jensen + $\mathbb{E}[R]=1$ + $f(1)=0$ ⇒ $D_f\ge 0$.
-- Strict convexity at $1$ ⇒ $D_f=0$ iff $p=q$.
+- Strict convexity at $1$ ⇒ $D_f=0$ if and only if $p=q$.
 - $u\log u$ → KL; $-\log u$ → reverse KL; $\tfrac12|u-1|$ → TV; JSD = average of two KLs to the midpoint.
 - KL fails symmetry ($0.368\neq 0.511$) and triangle ($1.758>0.879$).
+- Chalkboard numbers only. No invented Python.
 
 ---
 
@@ -703,6 +726,37 @@ Proofs and numbers are on the desk. Next weeks: the algorithms that *use* these 
 
 ## External references
 
+Two layers, **both kept**.
+
+1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
+2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+
+### Start here — high-signal companions
+
+Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this tutorial still closed. Chalkboard only — no Colab.
+
+**If the parent lecture is still foggy (Topics 1, 8).** Start from this course’s [Lec 03 — f-Divergence](../25-Lec03-f-Divergence-Examples/NOTES.md). Same integral, same children; this hour is the algebra. Lilian Weng’s [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/) is the field’s usual written menu of those scores.
+
+**If $P\ll Q$ is still “assume $P=Q$” (Topic 2).** Cofiber’s [Radon–Nikodym derivative](https://www.youtube.com/watch?v=sPcXyZB1bkM) is the standard visual for “a density $p/q$ exists only after absolute continuity.” The red line licenses the *division*; identity is a later theorem.
+
+**If Jensen or “$=0$ only when $p=q$” will not close (Topics 3–4).** Taboga’s [Statlect — Jensen](https://www.statlect.com/fundamentals-of-probability/Jensen-inequality) is the written three-line form on the tablet. Francis Bach’s [Revisiting Jensen](https://francisbach.com/jensen-inequality/) is the equality case: strictly convex ⇒ constant almost surely.
+
+**If min-KL still does not sound like MLE (Topic 5).** Josh Starmer’s [StatQuest — Maximum Likelihood, clearly explained](https://www.youtube.com/watch?v=XepXtl9YKwc) is the popular version of the “first ML proof” he says you should already own.
+
+**If the two directions will not stay apart (Topics 6, 9).** Roger Grosse’s [CSC321 KL notes](https://www.cs.toronto.edu/~rgrosse/courses/csc321_2018/readings/L05%20KL%20Divergence.pdf) and Hiroaki Hayashi’s [forward vs reverse KL](https://hiroakih.me/kl-divergence.html) sliders are the two pages people actually finish. Drag $q$ until $0.368$ and $0.511$ stop looking like a rounding error.
+
+**If TV is only a V-shaped $f$ (Topic 7).** Todd Kemp’s [Total variation](https://www.youtube.com/watch?v=2Lpg7AITvnU) is the classroom video for $\mathrm{TV}=\tfrac12\int|p-q|$ — the identity after $q$ cancels.
+
+**If JSD is only a name (Topic 8).** [NannyML — Jensen–Shannon distance](https://www.youtube.com/watch?v=YBjfT9hIUus) is the well-known video for “average of two KLs to the midpoint.”
+
+**If the four tickets or the triangle still blur (Topics 9–10).** Dr. Bevin Maultsby’s [Metric spaces](https://www.youtube.com/watch?v=oz-LycQIL8g) is the same four axioms he lists. Brown’s [Seeing Theory — probability distributions](https://seeing-theory.brown.edu/probability-distributions/index.html) lets you drag two-point masses before you recompute $0.368$, $0.511$, and $1.758$ by hand.
+
+**How to use.** License $P\ll Q$ is taught in these notes (Topic 2) — do not replace it with “assume $P=Q$.” Two sins → Grosse or Hiroaki *after* Topic 6. Numbers → Seeing Theory, then redo the three KLs yourself before the TV homework. One famous teacher per stuck idea.
+
+---
+
+### Full topic map — previous list plus new entries
+
 Two or three companions **per topic**, listed **only here** (not under each topic). Mix of **video** and **blog/notes**. No Wikipedia (he mentioned wiki for Jensen; we point to teaching pages instead).
 
 | Resource | Type | Matches lecture… | Why it helps |
@@ -741,6 +795,7 @@ Two or three companions **per topic**, listed **only here** (not under each topi
 **How to use:** Topics 2–4 with Cofiber + Tutorial 8 + Francis Bach (license, Jensen, equality). After Topic 5, Jake Tae or StatQuest MLE. After Topic 6, Hiroaki’s sliders. After Topic 8, NannyML or Lospinoso. After Topic 10, recompute the three Bernoulli KLs yourself before the TV homework. No Colab — the tablet has no code.
 
 ---
+
 
 ## Sources
 

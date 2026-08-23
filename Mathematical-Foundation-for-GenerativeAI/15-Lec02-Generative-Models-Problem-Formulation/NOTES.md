@@ -26,11 +26,13 @@
 
 ## Executive Summary — architecture of this lecture
 
-Job: formulate generative modeling as a probability problem.  
-Method: push inaccessible $(\Omega,\mathcal{F},P)$ through $X:\Omega\to\mathbb{R}^d$, treat every data point as a vector, and **estimate** unknown $p_x$ from dataset $D$.  
-Fork: GenAI also requires **sampling** (simulate the experiment) via model $p_\theta$ and training $\theta^\star=\arg\min_\theta d(p_x,p_\theta)$.
+A generative model still has one job: look at many examples of a thing (faces, emails, sentences) and learn their **pattern** well enough to make a *new* example of the same kind. Last lecture named the math objects. This one writes the actual problem. Nature runs a random experiment we almost never open; we only store **files** — pixel lists, word lists — as vectors in $\mathbb{R}^d$. All machine learning is trying to estimate the unknown pattern of those files. Generative AI adds one extra demand: after you estimate that pattern, you must also **draw a brand-new file** that was never in the pile.
 
-**Worldview arc:** from abstract triplet + “RV is a function” **to** “given $D\sim p_x$, estimate $p_x$ and learn to sample.”
+**Worldview arc:** from abstract triplet + “a random variable is a function” **to** “given $D\sim p_x$, estimate $p_x$ and learn to sample.”
+
+**Hour at a glance (whole video).** The first half is *what we actually hold*. He recaps the **probability triplet** — sample space Ω (every outcome that could happen), the menu of events F, and probability $P$ — then repeats the hard fact: practitioners almost never see that triplet. A **random variable** $X$ is the function that turns a hidden outcome into a list of numbers. An image is just such a list: stack a $100\times 200$ grid into one point in $\mathbb{R}^{20000}$. A word can be a one-hot list (a 1 in one dictionary slot, 0 elsewhere). A speech window is another list. The algorithms later will not care which modality you started from — they see vectors. Those vectors live in the **range** of $X$: they are camera/microphone outputs, not the hidden world. If you knew the law of those outputs, written $p_X$ or $p_x$, you could answer every uncertainty question about the system. That is why the goal shifts from “estimate abstract $P$” to “estimate $p_x$ from files.”
+
+The rest of the hour is *the problem you will train*. Data is the raw material (“the new oil”). A **dataset** $D=\{x_1,\ldots,x_n\}$ is $n$ vectors treated as draws from unknown $p_x$. The sacrosanct job of all machine learning — linear models, nets, language models — is: **given $D$, estimate $p_x$**. Discriminative work can stop there (classify an X-ray). **Generative AI** also needs **sampling**: simulate the random experiment without the real Ω, so you can mint a new photo or sentence. You cannot skip the law and “just sample.” The engineering recipe is the same as high-school curve fitting: assume a parametric family $p_\theta$ (today often a neural net), score how far it sits from truth with a **divergence** $d(p_x,p_\theta)$ (Kullback–Leibler, Jensen–Shannon, $f$-divergences), **train** by $\theta^\star=\arg\min_\theta d$, then sample from the fit. The open knot — how to compute $d$ when you never observe true $p_x$ — is next lectures.
 
 ### System context
 
@@ -55,10 +57,12 @@ Fork: GenAI also requires **sampling** (simulate the experiment) via model $p_\t
 
 ```
   Nature: RE  →  (Ω, F, P)     [inaccessible in practice]
+         random experiment → sample space, events, probability
                     │
-                    │  X : Ω → R^d   (RV = function)
+                    │  X : Ω → R^d   (RV = function / sensor)
                     ▼
   Surrogate:  (R^d, Borel σ-algebra, p_x)
+              files live here; p_x = law of the files
                     │
                     │  images / text / speech → vectors
                     ▼
@@ -76,6 +80,7 @@ Fork: GenAI also requires **sampling** (simulate the experiment) via model $p_\t
           └─────────┬─────────┘
                     ▼
   Recipe:  assume p_θ  →  d(p_x ∥ p_θ)  →  θ* = argmin_θ d
+           (model family)   (how far?)      (train)
                     │
                     ▼
   then sample from p_θ*   (open: how to compute d without p_x)
@@ -83,38 +88,67 @@ Fork: GenAI also requires **sampling** (simulate the experiment) via model $p_\t
 
 ### Scenario walkthrough
 
-1. Camera RE: abstract “what was in front of the lens” lives in $\Omega$.
-2. Sensor implements $X$: $100\times 200$ pixels stack to one point in $\mathbb{R}^{20000}$.
-3. Collect $n$ photos $\Rightarrow$ dataset $D$ of range members; write $x_i\sim p_x$.
-4. Central job: estimate unknown $p_x$ so uncertainty questions become answerable.
-5. GenAI: also learn to **draw new images** that were never in $D$ (sample / simulate RE).
-6. Engineering path: pick a model family $p_\theta$ (often a neural net), define a divergence, train by minimizing it, then sample from the fit.
+Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
+
+**Story:** you want a machine that can look at a pile of **studio face photos** and then draw a **new** face that looks like it came from the same studio. (A chatbot is the same shape: new sentences instead of a new photo.)
+
+1. **Why not just write down “nature”?** The full random experiment — who walked in, the lighting, the pose — lives in Ω. You never get that list. That is the inaccessible-triplet box.
+
+2. **So what do you actually store?** The camera is the random variable $X$. It turns the hidden scene into a $100\times 200$ grid, stacked into one vector in $\mathbb{R}^{20000}$. Text and speech get the same treatment: each is a vector of some length $d$. That is IMAGE / TEXT / SPEECH → $\mathbb{R}^d$.
+
+3. **Where do the training files live?** In the **range** of $X$. Each photo is $X(\omega)$ for some unknown $\omega$. You keep files, not souls. That is the RANGE box.
+
+4. **What is the pile formally?** $n$ photos $D=\{x_1,\ldots,x_n\}$, written $x_i\sim p_x$ — draws from an unknown law of studio pictures. Data is the raw material. That is the DATA / “oil” box.
+
+5. **What is the one job of machine learning?** Estimate that unknown law $p_x$. If you knew it, you could score “how typical is this lighting?” the way a known coin law scores “ten heads.” Linear models, nets, and language models are all after that law. That is the ML-CORE box.
+
+6. **What extra demand is generative AI?** Classification can stop after estimation (this X-ray: diseased or not). Generation must **sample**: simulate “take a studio photo” without the real studio, so a new file appears that was never in $D$. You still need a law — implicit or explicit — before you can sample. That is SAMPLE + GENAI.
+
+7. **How do you actually fit the law?** Same as fitting a line to points: assume a family $p_\theta$ (often a neural net), pick a divergence that scores “how far is my family from truth,” train by minimizing that score, then draw from the fit. You never plug true $p_x$ into the formula — that knot is later. That is the RECIPE box.
+
+```
+  want a new studio face
+         │  (not: list Ω of every possible person)
+         ▼
+  camera files X  =  stacked pixel vectors
+         │  n of them
+         ▼
+  dataset D ∼ unknown p_x
+         │  estimate the law
+         ▼
+  fit p_θ by min d(p_x, p_θ)
+         │  then
+         ▼
+  sample a new file   =  generate
+```
+
+Same chain for new sentences or new code: pile of vectors → estimate $p_x$ → also sample. Diffusion, VAEs, GANs, and transformers are later engines for those last two arrows.
 
 ### Failure / contrast path
 
 ```
-  Work on abstract Ω without measurements     ──X──► no computable objects
-  Keep images as 2D arrays only               ──X──► leave the R^d worldview
-  Treat data as “just numbers,” no range(X)   ──X──► lose implicit (Ω, P)
-  Estimate nothing, “just sample”             ──X──► lecture: you still need a law
-  Plug true p_x into d with no algorithm      ──X──► you never observe p_x
-  Discriminative stop after estimate only     ──X──► fine for classify; not GenAI
+  “I’ll work on abstract Ω with no files”           ──X──► nothing a computer can hold
+  “An image is only a 2-D grid, not a vector”       ──X──► you left the R^d worldview
+  “Data is just numbers; no map X underneath”       ──X──► you lost why probability applies
+  “I’ll just sample; skip estimating the law”       ──X──► lecture: you still need a law
+  “Plug true p_x into d on the board”               ──X──► you never observe p_x
+  “Estimate only, then stop”                        ──X──► fine for classify; not GenAI
 ```
 
 ### STOP / out of scope
 
-Concrete VAE / diffusion / AR training loops; how each family evaluates $d$ from samples alone; optimizer details; full measure-theoretic $\sigma$-algebra proofs (assumed from Lec 01 / tutorials).
+He does **not** train a VAE, a diffusion model, or an autoregressive net today. He does not show how each family evaluates $d$ from samples alone, or pick an optimizer. Full measure-theory proofs stay in Lec 01 / the tutorials. Today ends when you can state the problem: estimate $p_x$ **and** learn to sample.
 
 ### Load-bearing claims (closed-book)
 
-- Practitioners work with the **surrogate** $(\mathbb{R}^d,$ Borel, $p_x)$, not $(\Omega,\mathcal{F},P)$.
-- Every data point is a **vector in $\mathbb{R}^d$** (modality chooses $d$) and a **range member of $X$**.
-- Knowing $P$ (equivalently $p_x$ on the range) **completely quantifies** system uncertainty.
-- **All ML** (discriminative and generative) aims to **estimate the unknown distribution** from data.
-- Dataset $D=\{x_i\in\mathbb{R}^d\}$ with $x_i\sim p_x$; points are **realizations** of $X$ from $n$ RE runs.
-- **GenAI** = given $D$, **estimate $p_x$ and learn to sample** (simulate RE without real $\Omega$).
-- Recipe: model $p_\theta$ + divergence $d(p_x,p_\theta)$ + train $\theta^\star=\arg\min_\theta d$, then sample.
-- Open knobs: choice of $p_\theta$, optimizer, and **how to compute $d$ without access to $p_x$**.
+- Practitioners work with the **surrogate** (vectors in $\mathbb{R}^d$ + their law $p_x$), not the hidden triplet $(\Omega,\mathcal{F},P)$.
+- Every data point is a **vector** (the modality only chooses $d$) and a **range member** of $X$.
+- Knowing $P$ — equivalently $p_x$ on the files — **completely quantifies** the system’s uncertainty.
+- **All ML** (discriminative and generative) aims to **estimate that unknown law** from data.
+- A dataset is $n$ **realizations** of $X$: $D=\{x_i\}$ with $x_i\sim p_x$.
+- **GenAI** = given $D$, **estimate $p_x$ and learn to sample** (simulate the experiment without real Ω).
+- Recipe: assume a model $p_\theta$, score $d(p_x,p_\theta)$, train $\theta^\star=\arg\min_\theta d$, then sample.
+- Still open: which $p_\theta$, which optimizer, and **how to compute $d$ without access to $p_x$**.
 
 **Speaker / course:** NPTEL IISc · Mathematical Foundations of Generative AI · Lec 02.
 
@@ -831,6 +865,31 @@ Next lectures open the knobs: variational / divergence-minimization algorithms t
 
 ## External references
 
+Two layers, **both kept**.
+
+1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
+2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+
+### Start here — high-signal companions
+
+Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this lecture still closed.
+
+**If last lecture’s triplet still blurs (Topics 1, 4).** Replay the same-series [Lec 01 Introduction](../14-Lec01-MFGAI-Introduction/NOTES.md). For “$X$ is a function, not a floating number,” Khan Academy’s [random-variables unit](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) is the usual classroom stop.
+
+**If “one photo = one point in $\mathbb{R}^{20000}$” still feels fake (Topics 2–3).** Grant Sanderson’s [3Blue1Brown — Vectors, what even are they?](https://www.youtube.com/watch?v=fNk_zzaMoSs) is the standard visual of a coordinate space. For the one-hot token picture, Josh Starmer’s [StatQuest — One-Hot encoding](https://www.youtube.com/watch?v=589nCGeWG1w).
+
+**If “the law answers every uncertainty question” is still fog (Topics 5–7).** Two classroom standards: StatQuest’s [Main ideas behind probability distributions](https://www.youtube.com/watch?v=oI3hZJqXJuc) and Brown’s [Seeing Theory](https://seeing-theory.brown.edu/). Those two beat a dozen SEO probability articles.
+
+**If estimate vs sample still mix (Topic 8).** Lilian Weng’s [What are diffusion models?](https://lilianweng.github.io/posts/2021-07-11-diffusion-models/) is the blog the field actually points at for one modern family that still does both: learn a law, then draw new files.
+
+**If “divergence” is just a word (Topics 9–10).** ritvikmath’s [The KL Divergence](https://www.youtube.com/watch?v=q0AkK8aYbLY) is the popular algebra for $d(p\parallel q)$ (this is **not** a StatQuest video — same idea, different teacher). The instructor’s homework — refresh probability — is again Khan’s [random-variables hub](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library). Next lecture in this series, [Lec 03 — f-Divergence](../25-Lec03-f-Divergence-Examples/NOTES.md), is where $d$ becomes a family of springs.
+
+**How to use.** Probability fog → Khan or Seeing Theory *before* Topic 5. Vectors → 3Blue1Brown *after* Topic 2. Recipe score → StatQuest KL *after* Topic 9. Do not open ten tabs. One famous teacher per stuck idea.
+
+---
+
+### Full topic map — previous list plus new entries
+
 **How to use:** finish the NOTES chain first. When one map box still feels thin, open **only that topic’s group** below (about 2–3 companions each: video + blog/notes). All links live **here** — not inside topic bodies.
 
 Links are study companions for *this* lecture’s claims. Prefer free videos and teaching notes; skip Wikipedia dumps.
@@ -923,6 +982,7 @@ Links are study companions for *this* lecture’s claims. Prefer free videos and
 | [PREREQUISITES.md (this package)](./PREREQUISITES.md) | Warm-up | Dense beginner definitions used by every topic above |
 
 ---
+
 
 ## Sources
 

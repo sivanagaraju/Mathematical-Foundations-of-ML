@@ -739,6 +739,13 @@ Next lectures deepen probability tools and derive generative model families on t
 
 ## External references
 
+Two layers, **both kept**.
+
+1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
+2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+
+### Start here — high-signal companions
+
 Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this lecture still closed.
 
 **If the mission still feels abstract (Topic 1).** Grant Sanderson’s [3Blue1Brown — But what is a neural network?](https://www.youtube.com/watch?v=aircAruvnKk) is the standard visual for “a machine eats numbers and writes numbers.” That is the measurement mindset this course needs before any GAN or transformer.
@@ -747,15 +754,35 @@ Only a few **widely used** companions — the ones people actually finish. Not a
 
 **If “why data, not physics?” is still fuzzy (Topics 3–5).** Josh Starmer’s [StatQuest — Machine Learning Fundamentals](https://www.youtube.com/watch?v=Gv9_4yMHFhI) is the popular, slow English version of “we learn from repeated examples under uncertainty.”
 
-**If Ω, events, and P still blur (Topics 6–8).** Two classroom standards: [Khan Academy’s random-variables unit](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) and Brown’s [Seeing Theory](https://seeing-theory.brown.edu/). Those two beat a dozen SEO probability articles.
+**If Ω, events, and the three axioms of $P$ still blur (Topics 6–8).** Two classroom standards: [Khan Academy’s probability unit](https://www.khanacademy.org/math/statistics-probability/probability-library) (sample space, events, add when disjoint) and Brown’s [Seeing Theory](https://seeing-theory.brown.edu/). Those two beat a dozen SEO probability articles. Khan’s [random-variables unit](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) is the next page, for Topic 10.
 
 **If you mix up “probability” and “likelihood” (Topic 8).** StatQuest’s [Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4) is the short, famous clarification.
 
-**If “X is a function, $P_X$ is what we estimate” (Topics 9–10).** After these notes, the same-series [MFML probability recap](../03-Lec02-Recap-Probability-Theory-Part1/NOTES.md) is the next careful treatment of RE → Ω → RV. For the lab track he named, use the [official PyTorch tutorials](https://pytorch.org/tutorials/), not a random Colab.
+**If “X is a function, $P_X$ is what we estimate” (Topics 9–10).** After these notes, the same-series [Tutorial 7 — probability recap](../21-Tutorial07-Review-Basic-Probability-1/NOTES.md) is the careful RE → Ω → RV treatment *inside this course*. For the lab track he named (not this hour’s math), use the [official PyTorch tutorials](https://pytorch.org/tutorials/), not a random Colab.
 
 **How to use.** Probability fog → Khan or Seeing Theory *before* Topic 6. Family names → Lilian Weng *after* Topic 2. Do not open ten tabs. One famous teacher per stuck idea.
 
 ---
+
+### Full topic map — previous list plus new entries
+
+| Resource | Matches lecture… | Why it helps |
+|----------|------------------|--------------|
+| [3Blue1Brown — Neural networks](https://www.youtube.com/watch?v=aircAruvnKk) | Topics 1, 9–10 | High-d continuous measurements |
+| [Lilian Weng — From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/) | Topic 2 | Family names as one score-between-laws story |
+| [Towards Data Science — VAEs, GANs, Diffusion](https://towardsdatascience.com/generating-images-using-vaes-gans-and-diffusion-models-48963ddeb2b2/) | Topic 2 | Side-by-side intro to three families |
+| [StatQuest — Machine Learning Fundamentals](https://www.youtube.com/watch?v=Gv9_4yMHFhI) | Topics 3–5 | Why we learn from repeated examples |
+| [Organic Chemistry Tutor — Probability](https://www.youtube.com/watch?v=SkidyDQuupA) | Topics 3, 6–8 | Sample space and basic $P$ |
+| [Khan Academy — Probability](https://www.khanacademy.org/math/statistics-probability/probability-library) | Topics 6–8 | Events and the three axioms |
+| [Seeing Theory](https://seeing-theory.brown.edu/) | Topics 4–8 | Interactive probability |
+| [StatQuest — Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4) | Topic 8 | $P$ is not $L$ |
+| [Khan Academy — Random variables](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) | Topics 9–10 | $X$ as a function |
+| [RiskByNumbers — PMF, PDF, CDF](https://www.youtube.com/watch?v=yRbfLlTmPE8) | Topic 10 | CDF visual |
+| [Tutorial 7 — probability recap](../21-Tutorial07-Review-Basic-Probability-1/NOTES.md) | Topics 6–10 | Same-course RE → RV |
+| [PyTorch tutorials](https://pytorch.org/tutorials/) | Topics 2–3 | Lab track he named |
+
+---
+
 
 ## Sources
 

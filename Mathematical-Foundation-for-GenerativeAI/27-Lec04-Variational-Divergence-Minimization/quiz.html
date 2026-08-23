@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · Lec 04 Variational Divergence Minimization</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · Lec 04 Variational Divergence Minimization</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q1", "part": "prerequisites", "tag": "Definition · two clouds", "prompt": "What is a sample of p_θ in this lecture’s world?", "options": [{"key": "A", "text": "A closed-form formula for p_θ that we type into the integral"}, {"key": "B", "text": "Pushing Gaussian Z through a deterministic net G_θ"}, {"key": "C", "text": "The dataset D itself (those are already fakes)"}, {"key": "D", "text": "The neural net rolling dice on every forward pass"}], "answer": "B", "whyCorrect": "All chance lives in Z. G_θ is a fixed map: same z, same x̂. The fake cloud is {G_θ(z_j)}.", "whyOthers": {"A": "The whole hour exists because we do not have that formula.", "C": "D is the cloud of p_x, not p_θ.", "D": "The net is deterministic; randomness is not inside G_θ."}, "diagram": "  z ~ N(0,I) --deterministic--> G_θ --> x̂ ~ p_θ\n  dataset D = samples of p_x", "useLater": "Topic 1 two clouds; Topic 8 Monte-Carlo of the two Es.", "anchor": "PREREQUISITES.md#p1-clouds"}, {"id": "q2", "part": "prerequisites", "tag": "Definition · expectation", "prompt": "What is an expectation E_p[h(X)]? It means", "options": [{"key": "A", "text": "The sample average (1/n) Σ h(x_i), by definition"}, {"key": "B", "text": "The density height p(x) at one point"}, {"key": "C", "text": "The integral of (function × density): ∫ h(x) p(x) dx"}, {"key": "D", "text": "Always a number in [0, 1]"}], "answer": "C", "whyCorrect": "That is the definition he uses: an integral of (function × density) is an expectation. A fair die’s mean 3.5 is the same idea as a sum.", "whyOthers": {"A": "The sample average is an estimate of E, not E itself (statistician’s trap).", "B": "Height is p(x), not the integral against h.", "D": "E[X] for a die is 3.5; expectations need not be probabilities."}, "diagram": "  E_p[h] = ∫ h(x) p(x) dx\n  die: (1+…+6)/6 = 3.5", "useLater": "Topics 2–3: rewrite D_f as Es, then LLN.", "anchor": "PREREQUISITES.md#p2-expect"}, {"id": "q3", "part": "prerequisites", "tag": "Compare · average vs E", "prompt": "How does a statistician treat the sample average versus the expectation?", "options": [{"key": "A", "text": "Different objects: the average is a random estimate of a fixed E"}, {"key": "B", "text": "The same object once n ≥ 10"}, {"key": "C", "text": "The same object if the net is deterministic"}, {"key": "D", "text": "Unrelated: averages never estimate expectations"}], "answer": "A", "whyCorrect": "Ten die rolls averaging 3.3 estimate the mean 3.5; they do not become 3.5. LLN says the estimate approaches E as n → ∞, given IID draws from the same law.", "whyOthers": {"B": "He would not even assign 10k as ‘large’ today; n is not a magic small cutoff.", "C": "Determinism of G_θ is a different fact (where randomness lives).", "D": "The whole rewrite-then-LLN pattern is that averages DO estimate Es."}, "diagram": "  TRUE:     E[h] = 3.5     (fixed)\n  n=10:     average = 3.3  (random estimate)", "useLater": "Topic 3 boxed LLN with ≃, not identity.", "anchor": "PREREQUISITES.md#p3-lln"}, {"id": "q4", "part": "prerequisites", "tag": "Worked · LOTUS", "prompt": "Compute E[h(X)] by LOTUS: X uniform on {1,2,3} and h(x)=x². Fair-die style, E[h] equals", "options": [{"key": "A", "text": "You cannot compute it without first sampling the squares as a new experiment"}, {"key": "B", "text": "2, the midpoint of 1 and 3"}, {"key": "C", "text": "9, because h(3)=9 is the largest value"}, {"key": "D", "text": "(1+4+9)/3 = 14/3, averaging h on the original x-list"}], "answer": "D", "whyCorrect": "LOTUS: E[h(X)] = ∫ h(x) p_x(x) dx. Walk the original x’s and average the temperatures. You do not build the law of the squares first.", "whyOthers": {"A": "That is the freeze LOTUS kills: you do NOT need samples of h(X) as a new law.", "B": "That ignores h(x)=x².", "C": "An expectation is an average, not a max."}, "diagram": "  x: 1  2  3\n  h: 1  4  9\n  E[h] = 14/3", "useLater": "Topic 3 homework: prove LOTUS so data x_i suffice for E_{p_x}[T].", "anchor": "PREREQUISITES.md#p4-lotus"}, {"id": "q5", "part": "prerequisites", "tag": "Definition · convex cup", "prompt": "f(u)=u² on R, points u=0 and u=2. At the midpoint u=1, the cup sits", "options": [{"key": "A", "text": "Above the chord: f(1)=1 > chord height 2"}, {"key": "B", "text": "On a hill, so f is concave and illegal for f-divergence"}, {"key": "C", "text": "Below the chord: f(1)=1 ≤ (0+4)/2 = 2"}, {"key": "D", "text": "Nowhere — a parabola is not convex"}], "answer": "C", "whyCorrect": "Convex means the graph never sits above its chords. f(1)=1, chord midpoint = 2, and 1 ≤ 2.", "whyOthers": {"A": "The inequality is reversed; 1 is not greater than 2.", "B": "u² is the textbook cup; −u² would be the hill.", "D": "u² is the standard strictly convex example."}, "diagram": "  f(0)=0, f(2)=4, chord mid=2\n  f(1)=1  sits BELOW the chord", "useLater": "Topics 5–6: conjugate is defined for a convex f.", "anchor": "PREREQUISITES.md#p5-convex"}, {"id": "q6", "part": "notes", "tag": "Map · whole-video point", "prompt": "The master map / point of this whole lecture, in one path, is", "options": [{"key": "A", "text": "Write a Python training loop that freezes G_θ and trains T_w for 50 epochs"}, {"key": "B", "text": "Two clouds → rewrite D_f as (a bound on) two expectations → Fenchel unzip of the density ratio → sup over functions T → min_θ max_w saddle"}, {"key": "C", "text": "Plug the two closed-form densities into ∫ p_θ f(p_x/p_θ) dx and stop"}, {"key": "D", "text": "Start a conditional sampler from Gaussian Z and call that prompt engineering"}], "answer": "B", "whyCorrect": "That is the master blueprint: files not formulas; conjugate peels the ratio; restricted T gives a lower bound of two Es; two nets share a saddle. Implementation is next sitting.", "whyOthers": {"A": "No training loop today; homework is only to brush backprop.", "C": "We have neither density. That integral is the JOB, not the method.", "D": "Conditionals start from samples of Y (the prompt), not from N(0,I). That is Topic 4, not the hour’s spine."}, "diagram": "  two clouds → E (or bound-then-E)\n       → f* unzips ratio → T(x) → lower bound\n       → min_θ max_w J(θ,w)", "useLater": "Closed-book recitation of the Executive Summary map.", "anchor": "NOTES.md#executive-summary--architecture-of-this-lecture"}, {"id": "q7", "part": "notes", "tag": "Trap · naive rewrite", "prompt": "Writing D_f = E_{p_θ}[f(p_x/p_θ)] and stopping is a trap because", "options": [{"key": "A", "text": "Expectations are illegal in this course"}, {"key": "B", "text": "f is not convex"}, {"key": "C", "text": "The two clouds are the same file"}, {"key": "D", "text": "It still needs the unknown density ratio inside f — it begs the question"}], "answer": "D", "whyCorrect": "You can name that integral an expectation under p_θ, but the argument of f is still p_x/p_θ, and you know neither density. The conjugate exists to unzip that argument.", "whyOthers": {"A": "The whole hour is about turning integrals into Es.", "B": "f is convex; that is why a conjugate exists.", "C": "Data cloud ≠ fake cloud; that is not this trap."}, "diagram": "  NAIVE:  D_f = E_{p_θ}[ f(ratio) ]\n          ratio still locked inside f", "useLater": "Topic 5: conjugate disentangles argument from function.", "anchor": "NOTES.md#topic-5-convex-conjugate-2430–3012"}, {"id": "q8", "part": "notes", "tag": "Definition · Fenchel conjugate", "prompt": "The Fenchel conjugate he writes is", "options": [{"key": "A", "text": "f*(t) = sup_u {u t − f(u)}, a supremum (the peak may not be attained)"}, {"key": "B", "text": "f*(t) = f(t) by definition, so unzip is free"}, {"key": "C", "text": "f*(t) = inf_u {u t + f(u)}, because we minimize D_f"}, {"key": "D", "text": "f*(t) = p_x(t)/p_θ(t), the density ratio"}], "answer": "A", "whyCorrect": "Board definition. t is the slope; u varies; pick the highest line. He writes max in parentheses only because students may not know supremum.", "whyOthers": {"B": "Homework is (f*)* = f, not f* = f.", "C": "It is a sup of ut − f(u), not an inf of a plus.", "D": "The ratio is dummy u, not the conjugate."}, "diagram": "  f*(t) = sup_u {u t − f(u)}\n  t = slope; pick the highest line", "useLater": "Topic 6: plug (f*)* = f so f(u) = sup_t {t u − f*(t)}.", "anchor": "NOTES.md#topic-5-convex-conjugate-2430–3012"}, {"id": "q9", "part": "notes", "tag": "Contrast · scalar t vs T(x)", "prompt": "You cannot pull a scalar sup_t out of ∫ dx unchanged because", "options": [{"key": "A", "text": "t and x are the same variable"}, {"key": "B", "text": "The integral is over t, not over x"}, {"key": "C", "text": "The inner winner depends on x, so the opt must be over functions T: X → dom(f*)"}, {"key": "D", "text": "Supremum and maximum are the same, so nothing changes"}], "answer": "C", "whyCorrect": "Student: the sup is pointwise. Instructor: yes — the inner objective is a function of x. A single t cannot be the inner winner at every x. Capital T is the map.", "whyOthers": {"A": "t is the inner dummy; x is the integration variable.", "B": "The integral is over x; that is why the pulled-out opt is over maps of x.", "D": "He insists on sup because the bound may not be attained; that is a different fact."}, "diagram": "  x=0 best t=2;  x=1 best t=−1\n  one number t cannot do both\n  T(x) can", "useLater": "Topic 7 crux; Topic 8 last activation of T.", "anchor": "NOTES.md#topic-7-supremum-out-a-function-tx-3335–4215"}, {"id": "q10", "part": "notes", "tag": "Trap · min of a lower bound", "prompt": "Why is minimizing a lower bound on D_f a trap when the job is to minimize D_f?", "options": [{"key": "A", "text": "Lower bounds are illegal in convex analysis"}, {"key": "B", "text": "Pushing a floor down need not lower the ceiling — an upper bound would be the nicer object for a min"}, {"key": "C", "text": "The bound is actually an upper bound (board ≥ is a typo)"}, {"key": "D", "text": "There is no problem; equality always holds for any bag T"}], "answer": "B", "whyCorrect": "Student Q he accepts: for a minimization, an upper bound would be nicer. Restricted T undershoots, so board ≥. Community later moved toward exact (no-lower-bound) methods partly for this reason.", "whyOthers": {"A": "Lower bounds are the whole variational story; the issue is the direction vs the job.", "C": "He says a restricted sup can only be less than the target → lower bound.", "D": "Equality only if T contains T*; he writes ≥ because it may miss."}, "diagram": "  WANT: min D_f          (push a ceiling down)\n  HAVE: D_f ≥ variational (a floor)\n  floor ↓  does not force  ceiling ↓", "useLater": "Topic 8 trap; Topic 10 still minimizes the lower bound because that is what we have.", "anchor": "NOTES.md#topic-8-two-expectations-the-gan-looking-bound-4215–4631"}, {"id": "q11", "part": "notes", "tag": "Connect · conjugate to two Es", "prompt": "Which chain links the conjugate (Topic 5) to the two-expectation bound (Topic 8)?", "options": [{"key": "A", "text": "Skip the conjugate; LLN on the naive E_{p_θ}[f(ratio)] is already the bound"}, {"key": "B", "text": "Conjugate turns G_θ into a stochastic net, then you average Z"}, {"key": "C", "text": "Conjugate replaces D_f by KL, then MLE is the two-E bound"}, {"key": "D", "text": "Unzip f(u)=sup_t(tu−f*(t)), set u=p_x/p_θ, pull sup out as a function T, cancel p_θ → E_{p_x}[T] − E_{p_θ}[f*(T)]"}], "answer": "D", "whyCorrect": "That is the algebra spine: Topics 5–8. After p_θ cancels you have two Es on the two laws whose samples you hold.", "whyOthers": {"A": "Naive E still has the ratio inside f (Topic 5 trap).", "B": "G_θ stays deterministic; chance lives in Z (Topic 1).", "C": "He does not replace D_f by KL today; f is a general convex spring."}, "diagram": "  f* unzip → plug u=ratio → sup_t inside ∫\n    → T(x) → p_θ cancels\n    → E_data[T] − E_fakes[f*(T)]", "useLater": "Closed-book: recite the chain without the video.", "anchor": "NOTES.md#topic-6-plug-the-conjugate-into-d_f-3012–3335"}, {"id": "q12", "part": "notes", "tag": "Definition · last activation", "prompt": "Range of T(x) is always", "options": [{"key": "A", "text": "dom(f*), so the last activation of the T-net must land in that domain"}, {"key": "B", "text": "(0,1), because T is a probability"}, {"key": "C", "text": "R^d, same as the data space X"}, {"key": "D", "text": "Whatever ReLU outputs; f* will adapt"}], "answer": "A", "whyCorrect": "Dummy t always lived in dom(f*). Capital T maps X → dom(f*). Choose convex f → that defines f* → that defines the domain → that constrains the T-net head. Concrete f* table is next class.", "whyOthers": {"B": "T is a probe in the conjugate’s domain, not a classifier probability (he rejects that story).", "C": "X is the input of T, not the output.", "D": "Wrong last activation is an illegal probe, not something f* ‘adapts’ to."}, "diagram": "  T : X → dom(f*)\n  last layer of T_w MUST respect that domain", "useLater": "Topic 8 seatbelt; next sitting chooses f* and the head.", "anchor": "NOTES.md#topic-8-two-expectations-the-gan-looking-bound-4215–4631"}, {"id": "q13", "part": "notes", "tag": "So-what · saddle", "prompt": "So what: why is VDM as two nets hard to train — should we prefer a bowl or a saddle?", "options": [{"key": "A", "text": "We only have one net, so there is nothing to train"}, {"key": "B", "text": "We maximize J in both θ and w, so the surface has no critical point"}, {"key": "C", "text": "We deliberately seek a saddle of J(θ,w): max_w and min_θ of the same score"}, {"key": "D", "text": "Backprop is illegal on a generator"}], "answer": "C", "whyCorrect": "θ*,w* = argmin_θ max_w J. Typical opt avoids saddles; here we seek them. Discriminator is just the approximator of T, not a Hollywood character.", "whyOthers": {"A": "Two nets: G_θ sampler and T_w critic.", "B": "Opposite directions, not both max.", "D": "Homework is to brush backprop; it is the workhorse, not banned."}, "diagram": "  J(θ,w) = E_data[T_w] − E_fakes[f*(T_w)]\n  θ*, w* = argmin_θ  max_w  J     ← saddle", "useLater": "Topic 10 STOP: next class implements Es, chooses f*, watches gradient flow.", "anchor": "NOTES.md#topic-10-minmax-saddle-two-nets-next-5241–5853"}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

@@ -28,11 +28,13 @@
 
 ## Executive Summary — architecture of this lecture
 
-**Job:** stop training every vision net from random weights; **reuse ImageNet-pretrained** backbones on a small medical task.  
-**Method:** read classic CNNs (AlexNet/VGG/ResNet), **resize to 224×224×3**, **replace the 1000-way head** with $C$ classes (MRI: 4), load weights via `torchvision.models`, fine-tune, and compare to MLP/CNN from scratch.  
-**Fork:** own head surgery + ImageNet transforms so later generative work can still stand on these “LEGO” modules.
+You no longer train every vision net from random weights. This hour reuses **ImageNet-pretrained** convolutional backbones — AlexNet, VGG, ResNet — as LEGO blocks whose shapes already snap together. Resize a scan to **224×224×3**, swap the 1000-way head for **four MRI classes** (glioma, meningioma, no tumor, pituitary), then **fine-tune** (keep training from those weights). You may **freeze** the backbone and train only the new head, or let more layers move. The payoff is a small medical classifier that beats a from-scratch multilayer perceptron (MLP) and SimpleCNN on the same folders.
 
 **Worldview arc:** from “build nets from scratch” **to** “transfer ImageNet features → fine-tune last layer (and more) on MRI.”
+
+**Hour at a glance (whole video).** The first half is *how the famous vision towers are built, and why 224 and 1000 matter*. Layers are LEGO: you may stack anything if tensor shapes match; good design is a separate question. He rereads LeNet on MNIST, then AlexNet as the ImageNet-era template: input **224×224×3**, flatten, 4096, dropout, 4096, **1000 logits**. For a new 4-class job you change **only the last Linear** and **resize the photo** rather than rewrite every internal layer. VGG is stacks of 3×3 convolutions; ResNet adds **skip connections** ($y=F(x)+x$) so a deeper tower can still train.
+
+The rest of the hour is *transfer onto hospital folders*. ImageNet is huge (~1000 classes × ~1300 images, ~200 GB), so you **download weights**, not retrain the source task. “Start from those weights and keep stepping” is **fine-tuning** — bicycle balance transferring to a motorcycle. The MRI task has four folder labels; MLP (~82%) and SimpleCNN (~90%) are the from-scratch baselines. `torchvision.models` loads AlexNet / VGG19 / ResNet18; train transforms may flip, test transforms only resize and **ImageNet-normalize**. `ImageFolder` reads one folder per class; you replace `classifier[6]` or `model.fc` with `Linear(in_features, 4)`, train about five epochs, and close the PyTorch bootcamp.
 
 ### System context
 
@@ -55,16 +57,16 @@
 ### Main blueprint
 
 ```
-  ImageNet-pretrained backbone
+  ImageNet-pretrained backbone           [weights already trained on ~1000 everyday classes]
   (AlexNet / VGG19 / ResNet18 / ConvNeXt / …)
           │
-          │  keep feature extractor
+          │  keep feature extractor      [optional: freeze these layers]
           ▼
   Replace classifier head: Linear(H, 1000) → Linear(H, C)
-          │
+          │                              [C = 4 for this MRI demo]
           ▼
   Inputs: Resize(224) + ImageNet Normalize
-  Train: optional RandomHorizontalFlip
+  Train: optional RandomHorizontalFlip   [test: no flip]
           │
           ▼
   ImageFolder(train/test by class folders)
@@ -78,25 +80,51 @@
 
 ### Scenario walkthrough
 
-1. Layers as LEGO if shapes match; introduce pretrained goal.  
-2. Read LeNet briefly; walk AlexNet to 1000 logits.  
-3. For 4 classes: change last FC; prefer 224 resize.  
-4. VGG variants and 3×3 stacks.  
-5. ResNet skips and ResNet-18 sketch.  
-6. Bicycle→bike transfer analogy; fine-tune language; ConvNeXt note.  
-7. MRI 4-class task; MLP and SimpleCNN baselines.  
-8. `torchvision.models` weights; train/test transforms.  
-9. `ImageFolder`; replace `classifier[6]` / `fc`.  
-10. Train ~5 epochs; accuracy story; close PyTorch tutorial block.
+Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
+
+**Story:** you have a **small MRI folder set** (four labels: glioma, meningioma, no tumor, pituitary) and you want a classifier **without training ImageNet from scratch**.
+
+1. **Why LEGO first?** Every `nn` layer is a brick. Shapes must match; taste is separate. That rule is what lets you snap a new roof onto a factory-built AlexNet. That is the SETUP box.
+
+2. **What was the factory built for?** LeNet was a small digit plant (28×28×1). AlexNet is the ImageNet-era plant: **224×224×3** in, **1000** shipping labels out. If you do not know those two numbers, the checkpoint is a black box.
+
+3. **What do you change for four MRI classes?** Only the **last Linear**: `1000 → 4`. Prefer **resizing the scan to 224** over rewriting every internal layer. That is the HEAD-SWAP box.
+
+4. **Why learn VGG and ResNet names?** Same snap-on job, different towers. VGG stacks 3×3 convolutions. ResNet adds a **skip** ($y=F(x)+x$) so depth can grow. You will load `vgg19` and `resnet18` the same way you load AlexNet.
+
+5. **What is transfer, in one picture?** You already learned to **balance on a bicycle** (ImageNet edges, textures, parts). On the motorcycle (MRI) you mostly learn the **new controls** — which tumor patterns map to which of four labels. Starting from those weights and **continuing to train** is **fine-tuning**.
+
+6. **Freeze or fine-tune?** You may set `requires_grad=False` on the backbone and train **only** the new head (safer on tiny data), or leave the whole net trainable (the lecture’s main demo). Both start from the same ImageNet weights.
+
+7. **What are you beating?** An MLP (~82%) and SimpleCNN (~90%) trained from scratch on the same scans. Those are the baselines, not the goal.
+
+8. **How do the files enter the net?** Train: Resize(224) → optional `RandomHorizontalFlip` → `ToTensor` → ImageNet mean/std. Test: resize + normalize **only** — no random flip. `ImageFolder` reads `Training/class_name/*.png`.
+
+9. **Where is the head in code?** AlexNet/VGG: `model.classifier[6] = nn.Linear(in_features, 4)`. ResNet: `model.fc = nn.Linear(in_features, 4)`. Then `.to(device)` again so the new brick shares a device.
+
+10. **How do you know it worked?** Same CE + Adam spine, about five epochs. Deeper pretrained models can beat the scratch baselines. That closes the PyTorch tutorial block.
+
+```
+  small MRI folders (4 classes)
+         │  do not retrain ImageNet (~200 GB)
+         ▼
+  load AlexNet / VGG / ResNet weights
+         │  resize scan to 224×224×3
+         ▼
+  swap 1000-way head → Linear(H, 4)
+         │  optional: freeze backbone
+         ▼
+  fine-tune CE + Adam · compare to MLP / CNN   =  transfer learning
+```
 
 ### Failure / contrast path
 
 ```
-  Feed non-224 without rewrite          ──X──► broken internals / useless weights
-  Keep 1000-way head for 4 classes      ──X──► wrong output dim
-  Random flip on test set               ──X──► noisy metrics
-  Custom Dataset when folders suffice   ──X──► wasted code
-  Stack modules with shape mismatch     ──X──► RuntimeError
+  Feed a non-224 image without rewriting the tower   ──X──► broken internals / useless weights
+  Keep the 1000-way head for four MRI classes        ──X──► wrong output size
+  Random-flip the test set                           ──X──► noisy, unrepeatable metrics
+  Write a custom Dataset when folders already exist  ──X──► wasted code (use ImageFolder)
+  Stack modules whose shapes do not match            ──X──► RuntimeError
 ```
 
 ### STOP / out of scope
@@ -105,14 +133,14 @@ Training ImageNet from scratch; full ViT course (flagged for later); generative 
 
 ### Load-bearing claims (closed-book)
 
-- Modules are **LEGO**: shapes must match.  
-- Classic vision nets assume **~224×224×3** and often a **1000-class** head.  
-- **Transfer** = start from pretrained weights; **fine-tune** = keep training them.  
-- Prefer **resize to 224** + **swap last Linear** for new $C$.  
-- **ResNet** = residual / skip connections.  
-- `torchvision.models` + **weights**; train flip, test no flip; **ImageNet normalize**.  
-- **ImageFolder** for folder-per-class data.  
-- Deeper pretrained models can beat MLP/simple CNN on MRI demo.
+- Modules are **LEGO**: you may stack them only when **shapes match**.
+- Classic vision nets assume about **224×224×3** inputs and often a **1000-class** head.
+- **Transfer** means start from pretrained weights; **fine-tune** means keep training them.
+- Prefer **resize to 224** and **swap the last Linear** for your new class count $C$.
+- **ResNet** is residual learning: skip connections add $F(x)+x$.
+- Load with `torchvision.models` **weights**; flip on train only; **ImageNet-normalize** both splits.
+- **ImageFolder** is enough when each class is already a folder.
+- Deeper pretrained models can beat an MLP or SimpleCNN on the MRI demo.
 
 **Speaker / course:** NPTEL IISc · Tutorial 6.
 
@@ -948,6 +976,29 @@ for epoch in range(5):
 
 ## External references
 
+Two layers, **both kept**.
+
+1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
+2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+
+### Start here — high-signal companions
+
+Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this tutorial still closed.
+
+**If freeze versus fine-tune is still fuzzy (Topics 3, 6, 9).** Stanford’s [CS231n — Transfer Learning](https://cs231n.github.io/transfer-learning/) is the classroom note for “when to train only the head.” The official [PyTorch transfer learning tutorial](https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html) is the live notebook: load a backbone, replace the classifier, train.
+
+**If you want the same idea in the FastAI voice (Topics 6–10).** The official [FastAI vision tutorial](https://docs.fast.ai/tutorial.vision.html) is the well-known transfer-learning walk-through (pretrained encoder, new head, fine-tune). Stay on that page; skip “top 10 transfer tips” posts.
+
+**If AlexNet / VGG / ResNet are only names (Topics 2–5).** [CS231n — Convolutional Networks](https://cs231n.github.io/convolutional-networks/) is the architecture chapter that matches the board language (224 input, 1000-way head, stacks, skips).
+
+**If the torchvision API still swaps (`classifier[6]` vs `fc`).** Use the official [finetuning torchvision models](https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html) tutorial and the [torchvision models](https://pytorch.org/vision/stable/models.html) hub — those are the pages the lecture’s `models.alexnet` / `resnet18` calls come from.
+
+**How to use.** Head-swap fog → official PyTorch transfer tutorial *before* Topic 9. Freeze-or-fine-tune fog → CS231n *after* Topic 6. Do not open ten tabs. One famous teacher per stuck idea.
+
+---
+
+### Full topic map — previous list plus new entries
+
 **How to use:** finish the NOTES chain first (video closed if you can). When one map box still feels thin, open **only that topic’s group** below — **2–3 companions each** (prefer **teaching video + blog/notes + official docs**). All links live **here**, not inside topic bodies.
 
 Prefer free teaching channels and official docs. Skip Wikipedia dumps and random SEO posts.
@@ -1042,6 +1093,7 @@ Prefer free teaching channels and official docs. Skip Wikipedia dumps and random
 | [Patrick Loeber — Deep Learning with PyTorch](https://www.youtube.com/watch?v=c36lUUr864M) | Video course | Full stack including transfer |
 
 ---
+
 
 ## Sources
 

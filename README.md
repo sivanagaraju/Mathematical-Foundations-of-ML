@@ -1,6 +1,26 @@
 # Mathematical Foundations — Study Notes
 
-Packages for NPTEL / IISc lectures (generative AI math foundations and related).
+Packages for NPTEL / IISc lectures (generative AI math foundations and related), plus the IIT Madras BS playlist catalog.
+
+## NPTEL — Mathematical Foundations of Machine Learning
+
+Parent course of this repo. Prof. Prathosh A P · IISc · **106108841** · 89 videos · ~46.6 h.
+
+| File | What it is |
+|------|------------|
+| [`NOTES.md`](./NOTES.md) | Course map + full playlist catalog (title, link, summary, existing packages) · [YouTube playlist](https://www.youtube.com/playlist?list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu) |
+
+Start at [`NOTES.md`](./NOTES.md). Numbered folders below (`02-Lec01-…`) are per-lecture study packages for a subset of that playlist.
+
+## IIT Madras BS — Mathematical Foundations of Generative AI
+
+Different recording from the NPTEL folder below. Same instructor (Prof. Prathosh A P). Course **BSDA5002**. 73 videos.
+
+| Folder | What it is |
+|--------|------------|
+| [`IITM-BS-Mathematical-Foundations-of-Generative-AI/`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md) | Course map + full playlist catalog (title, link, summary) · [YouTube playlist](https://www.youtube.com/playlist?list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu) |
+
+Start at [`NOTES.md`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md). This is a course catalog, not a per-lecture study package.
 
 ## Skill
 
@@ -42,6 +62,8 @@ Law: `~/.grok/skills/youtube-lecture-tutor/`
 | [`Mathematical-Foundation-for-GenerativeAI/24-Tutorial10-Review-Machine-Learning-1/`](./Mathematical-Foundation-for-GenerativeAI/24-Tutorial10-Review-Machine-Learning-1/) | [Tutorial 10: Review of Machine Learning 1](https://www.youtube.com/watch?v=wjSKM1xFoSU) | math_technical | sign-censored Normal MLE · Φ⁻¹ · two-exp EM · Q · closed M-step |
 | [`Mathematical-Foundation-for-GenerativeAI/25-Lec03-f-Divergence-Examples/`](./Mathematical-Foundation-for-GenerativeAI/25-Lec03-f-Divergence-Examples/) | [Lec 03: f-Divergence and Examples](https://www.youtube.com/watch?v=LR9UQXY_IU8) | math_technical | estimate+sample · G_θ · f-div (not a metric) · KL/rev/JSD · modes vs junk |
 | [`Mathematical-Foundation-for-GenerativeAI/26-Tutorial11-f-Divergence-Examples/`](./Mathematical-Foundation-for-GenerativeAI/26-Tutorial11-f-Divergence-Examples/) | [Tutorial 11: f-Divergence and Examples](https://www.youtube.com/watch?v=GjxuVZeMSfE) | math_technical | P≪Q · Jensen proofs · KL/−log/TV/JSD · KL fails symmetry & triangle (0.368/1.758) |
+| [`Mathematical-Foundation-for-GenerativeAI/27-Lec04-Variational-Divergence-Minimization/`](./Mathematical-Foundation-for-GenerativeAI/27-Lec04-Variational-Divergence-Minimization/) | [Lec 04 Variational Divergence Minimization (VDM)](https://www.youtube.com/watch?v=4vtL3NhCkgg) | math_technical | two clouds · f* unzip · T(x) lower bound · min_θ max_w saddle |
+| [`Mathematical-Foundation-for-GenerativeAI/27-Lec04-Variational-Divergence-Minimization/`](./Mathematical-Foundation-for-GenerativeAI/27-Lec04-Variational-Divergence-Minimization/) | [Lec 04: Variational Divergence Minimization (VDM)](https://www.youtube.com/watch?v=4vtL3NhCkgg) | math_technical | two clouds · conjugate · T(x) bound · min_θ max_w saddle |
 
 ## Study one package
 

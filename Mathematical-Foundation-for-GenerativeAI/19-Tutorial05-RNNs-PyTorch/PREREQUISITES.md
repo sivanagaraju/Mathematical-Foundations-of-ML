@@ -404,5 +404,7 @@ Whether you train chest or legs, the **circuit order** (warmup → sets → log)
 
 ---
 
+**Second teachers (names only here).** Christopher Olah, StatQuest, Andrej Karpathy, official PyTorch. The actual pointers live at the end of [NOTES.md](./NOTES.md#external-references) — a few well-known items, not a link dump.
+
 Ready → [NOTES.md](./NOTES.md) (start at **Executive Summary**).  
 Quiz: [quiz.html](./quiz.html) Part A = this file.

@@ -297,5 +297,7 @@ The density multiplies by the **absolute** value $1/2$ (orientation can flip; ma
 
 ---
 
+**Second teachers (names only here).** Khan Academy, Seeing Theory, StatQuest, 3Blue1Brown, Statlect. The actual pointers live at the end of [NOTES.md](./NOTES.md#external-references) — a few well-known items, not a link dump.
+
 Ready → [NOTES.md](./NOTES.md).  
 Quiz: [quiz.html](./quiz.html) Part A = this file.

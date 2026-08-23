@@ -334,4 +334,7 @@ This is also why $P\ll Q$ is the right license: $P$ is forbidden from hiding mas
 
 ---
 
-Ready → [NOTES.md](./NOTES.md). Quiz: [quiz.html](./quiz.html) Part A.
+**Second teachers (names only here).** Lilian Weng, StatQuest, Grosse, Hiroaki Hayashi, NannyML, Seeing Theory. The actual pointers live at the end of [NOTES.md](./NOTES.md#external-references) — a handful of well-known items, not a link dump.
+
+Ready → [NOTES.md](./NOTES.md).  
+Quiz: [quiz.html](./quiz.html).

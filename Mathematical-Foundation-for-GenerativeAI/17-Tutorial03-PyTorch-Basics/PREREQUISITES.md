@@ -231,6 +231,8 @@ Every operation prints a line on a **store receipt** (the graph). `backward()` w
 - Use **`torch.no_grad()`** when you update weights manually or run inference so those ops are **not** taped onto the receipt.  
 - `.item()` is for logging a scalar loss; it is not required for `backward`.
 
+If this still blurs, 3Blue1Brown’s gradient-descent video is the popular picture; the official autograd tutorial is the matching code. Pointers live at the end of NOTES.
+
 ### Mini-check
 
 1. What attribute holds dy/dx after `backward`?  
@@ -393,6 +395,8 @@ Logits = raw **judge scores**. Softmax = **prize shares** that sum to 1. CrossEn
 - Binary classification can use 1 logit + BCE **or** 2 logits + CE (the tutorial uses 2 + CE).  
 - Last MLP layer usually has **no** activation when CE is next.
 
+If this still blurs, StatQuest’s Softmax and Cross Entropy shorts, then the official CrossEntropyLoss page.
+
 ### Mini-check
 
 1. Does `CrossEntropyLoss` want probabilities or logits?  
@@ -470,6 +474,8 @@ Public toys (MNIST, Fashion-MNIST, CIFAR-10) often ship ready-made in **torchvis
 **Peek:** (1) `torch.device("cuda" if ...)` (2) autograd graph tracking (3) `train` → zero_grad → forward → backward → step (4) **logits** (5) one sample vs batched iterator (6) loader tensors start on CPU.
 
 ---
+
+**Second teachers (names only here).** Official PyTorch docs, 3Blue1Brown, StatQuest. The actual pointers live at the end of [NOTES.md](./NOTES.md#external-references) — a short famous list, not a link dump.
 
 Ready → [NOTES.md](./NOTES.md) (start at **Executive Summary**).  
 Quiz: [quiz.html](./quiz.html) Part A = this file.

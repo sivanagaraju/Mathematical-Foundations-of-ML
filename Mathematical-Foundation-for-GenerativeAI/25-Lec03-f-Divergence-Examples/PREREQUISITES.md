@@ -317,5 +317,7 @@ Missing a hit song the crowd wants (mode drop) vs playing a song nobody asked fo
 
 ---
 
-Ready → [NOTES.md](./NOTES.md) (start at **Executive Summary**).  
-Quiz later: [quiz.html](./quiz.html) Part A = this file.
+**Second teachers (names only here).** Lilian Weng, StatQuest, Grosse, Hiroaki Hayashi, NannyML, Seeing Theory. The actual pointers live at the end of [NOTES.md](./NOTES.md#external-references) — a handful of well-known items, not a link dump.
+
+Ready → [NOTES.md](./NOTES.md).  
+Quiz: [quiz.html](./quiz.html).

@@ -27,9 +27,13 @@
 
 ## Executive Summary — architecture of this lecture
 
-This lecture restates generative modeling as two jobs: estimate an unknown density $p_x$ from $n$ IID samples, **and** learn to draw new points. It installs a recipe — guess a parametric **model** $p_\theta$, pick a **divergence** $D(p_x\|p_\theta)$, **train** by minimizing $D$ — then shows the hole: we know neither density. The primitive machine is noise $Z\sim\mathcal{N}(0,I)$ through a net $G_\theta$. The first algorithm family is **variational divergence minimization (VDM)** (GANs live here). It starts by defining **$f$-divergence**, which is **not** a metric.
+Generative modeling is two jobs, not one: estimate an unknown density $p_x$ from $n$ IID samples, **and** learn to draw new points. The recipe is guess a parametric model $p_\theta$, pick a divergence $D$, and train by minimizing $D$. The hole is that you know neither density — only a data cloud and, later, a fake cloud. The primitive machine is noise $Z\sim\mathcal{N}(0,I)$ pushed through a net $G_\theta$. The first algorithm family is **variational divergence minimization (VDM)**; it starts by defining **$f$-divergence**, which is **not** a metric. Different springs $f$ recover KL, reverse KL, Jensen–Shannon, and total variation, and they punish different sins: missing a real mode versus inventing junk.
 
 **Worldview arc:** from “estimate $p_x$” **to** “choose an $f$ so $G_\theta$ can match $p_x$ and then sample.”
+
+**Hour at a glance (whole video).** Last course estimated an unknown law. This course adds a second verb: **sample**. Most old estimators (nearest neighbors, a Bayes classifier) do not emit a new $x$; GMMs do emit but do not scale, so he turns to an implicit neural sampler. The three-line recipe is: assume a family $p_\theta$ (the **model**), define a score $D(p_x\|p_\theta)$, minimize it (“training”). You cannot plug two closed-form hills into that integral. What you have is a pile $D\sim p_x$. The second cloud is manufactured by drawing $Z\sim\mathcal{N}(0,I)$ (infinite support) and pushing it through $G_\theta$. Those fake points are **samples from** $p_\theta$, not a printout of $p_\theta$ — MNIST is the same wedge on the data side.
+
+The first named family is VDM (GANs live here). Its $D$ is $f$-divergence, $\int p_\theta\,f(p_x/p_\theta)\,dx$, with $f$ convex, left semi-continuous, and $f(1)=0$. He almost says “distance metric,” then takes the word back: no triangle, so not a metric. Plug $f(u)=u\log u$ and you get forward KL (also MLE). Reverse KL is a *different* $f$ (his exercise is $\log u$; watch the sign). JSD and TV ($\tfrac12|u-1|$) are two more springs, plus chi-square and Hellinger. Forward KL yells if you miss a real mode and barely fines junk; reverse KL kills junk and may drop a mode; JSD averages both pressures. You still cannot evaluate the integral from the two clouds — that is variational calculus, next lecture.
 
 ### System context
 
@@ -100,6 +104,30 @@ This lecture restates generative modeling as two jobs: estimate an unknown densi
 
 ### Scenario walkthrough
 
+Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
+
+**Story:** you want a net $G_\theta$ that can draw new MNIST digits that look like they came from the same pile $D$. You will pick a spring $f$ and train that net by driving $D_f$ down.
+
+1. **Why two jobs?** Estimating $p_x$ from $D$ is last course. Generation also requires a **sample**. That is the GOAL box.
+
+2. **Why a neural sampler?** Nearest neighbors and a Bayes classifier estimate and do not emit. GMMs emit but do not scale. $G_\theta$ will emit. That is the SAMPLER box.
+
+3. **What is the recipe?** Assume a family $p_\theta$, pick a score $D(p_x\|p_\theta)$, minimize it. That is MODEL → D → TRAIN.
+
+4. **What is the hole?** You have neither density. Only the pile $D$, and later fake digits. That is the OBSTACLE.
+
+5. **Where do the fake digits come from?** Draw $Z\sim\mathcal{N}(0,I)$ (infinite support) and push it through $G_\theta$. After training, the same cartoon *is* the sampler. That is the GENERATOR.
+
+6. **Are those fake digits the law $p_\theta$?** No. Two clouds, two missing recipes. MNIST is a jar of cookies, not the bakery card. That is SAMPLES ≠ LAW.
+
+7. **Why not start $Z$ on a short interval?** A continuous net cannot grow support. A Gaussian can be trimmed. That is SUPPORT.
+
+8. **Which score?** $f$-divergence: $\int p_\theta\,f(p_x/p_\theta)\,dx$ with $f$ convex and $f(1)=0$. It is **not** a metric (no triangle). That is VDM / $D_f$.
+
+9. **Which spring $f$?** $u\log u$ is forward KL — cover every digit, maybe ugly hybrids. Reverse KL is a *different* $f$ — clean 3s, drop the 8s. JSD averages both pressures. TV is $\tfrac12|u-1|$. That is the named family.
+
+10. **Can you evaluate the integral today?** No. Next lecture estimates $D_f$ from the two clouds. That is STOP.
+
 ```
   MNIST pile D  (samples of p_x, not p_x)
        │
@@ -108,13 +136,13 @@ This lecture restates generative modeling as two jobs: estimate an unknown densi
        │
        ▼
   want D(p_x ∥ p_θ) small
-       │  pick f
+       │  pick a spring f
        ▼
-  u log u   →  KL   →  cover every digit, maybe ugly hybrids
-  reverse   →  clean 3s, drop the 8s
-  JSD       →  pressure both sins
+  u log u   →  KL        →  cover every digit, maybe ugly hybrids
+  reverse   →  other f   →  clean 3s, drop the 8s
+  JSD       →  both      →  pressure both sins
        │
-       STOP: still cannot evaluate the integral (no p_x, no p_θ)
+  STOP: still cannot evaluate the integral (no p_x, no p_θ)
 ```
 
 ### Failure / contrast path
@@ -124,6 +152,7 @@ This lecture restates generative modeling as two jobs: estimate an unknown densi
   call D_f a metric                 ──X──►  no triangle
   treat p(x) as P({x})              ──X──►  density height ≠ probability
   start Z on a short interval       ──X──►  cannot grow support
+  treat fake digits as knowing p_θ  ──X──►  samples are not the law
   train only with forward KL        ──X──►  junk barely punished
 ```
 
@@ -133,14 +162,14 @@ This lecture restates generative modeling as two jobs: estimate an unknown densi
 - Architectures (CNN / transformer) except in passing.
 - Proofs of $D_f\ge 0$ and $=0$ iff $p_x=p_\theta$ (homework).
 
-### Load-bearing claims
+### Load-bearing claims (closed-book)
 
 - Generative modeling = estimate $p_x$ **and** sample.
-- Model $p_\theta$ is a parametric surrogate (mixture or net).
-- We usually have **samples**, not the densities.
+- The model $p_\theta$ is a parametric surrogate (mixture or net).
+- You usually have **samples**, not the densities.
 - Primitive sampler: $Z\sim\mathcal{N}(0,I)$ through $G_\theta$.
-- $D_f(p_x\|p_\theta)=\int p_\theta\,f(p_x/p_\theta)\,dx$ with $f$ convex, lsc, $f(1)=0$ — **not** a metric.
-- KL is $f(u)=u\log u$; reverse KL is a *different* $f$; JSD mixes their behaviors.
+- $D_f(p_x\|p_\theta)=\int p_\theta\,f(p_x/p_\theta)\,dx$ with $f$ convex, left semi-continuous, $f(1)=0$ — **not** a metric.
+- KL is $f(u)=u\log u$; reverse KL is a *different* $f$; JSD mixes their behaviors; TV is $\tfrac12|u-1|$.
 - Forward KL punishes missing modes; reverse KL punishes junk.
 
 **Speaker / course:** NPTEL IISc, Mathematical Foundations of Generative AI — Lecture 03.
@@ -737,6 +766,35 @@ $f$-divergence is installed, named, and interpreted. The missing algorithm is a 
 
 ## External references
 
+Two layers, **both kept**.
+
+1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
+2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+
+### Start here — high-signal companions
+
+Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this lecture still closed.
+
+**If the two jobs (estimate + sample) are still one blob (Topic 1).** Replay this course’s [Lec 02 — problem formulation](../15-Lec02-Generative-Models-Problem-Formulation/NOTES.md). That hour ends where this one starts: you must *also* draw new $x$.
+
+**If $G_\theta$ is just a black box (Topics 2, 5).** Lilian Weng’s [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/) is the blog most people in ML have actually read for this zoo: implicit $p_\theta$, why you need a *score between distributions*, then GAN and cousins in one place.
+
+**If the $f$-divergence *definition* is still a slogan (Topic 8).** Nowozin, Cseke, Tomioka [f-GAN (arXiv:1606.00709)](https://arxiv.org/abs/1606.00709) is the paper that unifies “change $f$, change the GAN.” Same integral $D_f=\int q\,f(p/q)$ he writes; variational estimation is the *next* lecture.
+
+**If “minimize KL” still sounds new (Topics 3, 9).** Josh Starmer’s [StatQuest — Maximum Likelihood, clearly explained](https://www.youtube.com/watch?v=XepXtl9YKwc) is the slow English for the special case he cites: min forward KL *is* MLE.
+
+**If the two KLs will not stay apart (Topics 9–10).** Two classroom standards: Roger Grosse’s [CSC321 KL notes](https://www.cs.toronto.edu/~rgrosse/courses/csc321_2018/readings/L05%20KL%20Divergence.pdf) (mode-cover vs mode-seek on one page) and Hiroaki Hayashi’s [forward vs reverse KL](https://hiroakih.me/kl-divergence.html) sliders. Drag $q$ and watch the two scores disagree.
+
+**If JSD is only a name (Topics 9–10).** [NannyML — Jensen–Shannon distance](https://www.youtube.com/watch?v=YBjfT9hIUus) is the popular video for “average of two KLs to the midpoint.”
+
+**If “samples are not the law” is still fuzzy (Topics 4, 6, 10).** Brown’s [Seeing Theory](https://seeing-theory.brown.edu/) lets you watch a pile grow without ever handing you the density. That is the MNIST wedge.
+
+**How to use.** Family names and implicit samplers → Lilian Weng *after* Topic 2. Two sins → Grosse or Hiroaki *after* Topic 9. JSD → NannyML *after* Topic 10. Do not open ten tabs. One famous teacher per stuck idea.
+
+---
+
+### Full topic map — previous list plus new entries
+
 Two or three companions **per topic**, listed **only here** (not under each topic). Mix of **video** and **blog/notes**. No Wikipedia.
 
 | Resource | Type | Matches lecture… | Why it helps |
@@ -775,6 +833,7 @@ Two or three companions **per topic**, listed **only here** (not under each topi
 **How to use:** after Topic 5, UAT + Tutorial 9. After Topic 6, stare at MNIST as a *pile*. After Topic 9, StatQuest or ritvikmath + Grosse. After Topic 10, Huszár or JSD video — then stop; variational estimation is the next lecture.
 
 ---
+
 
 ## Sources
 

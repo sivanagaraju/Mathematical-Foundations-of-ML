@@ -28,11 +28,13 @@
 
 ## Executive Summary — architecture of this lecture
 
-**Job:** move from NumPy arrays to a **GPU-capable training stack** — tensors, autograd, modules, data pipeline, and a full MLP loop.  
-**Method:** same shape language as Tutorial 2, plus `device`, `requires_grad` / `backward`, `nn.Module` + `optim`, `Dataset` / `DataLoader`, then CE + accuracy.  
-**Fork:** own the **standard train step** (`zero_grad → forward → loss → backward → step`) so later CNN/RNN lectures only change the architecture, not the plumbing.
+NumPy gave you grids of numbers. **PyTorch** is the same shape language with three extra powers: a grid can sit on a graphics card (a **GPU**), it can remember how it was computed so derivatives come for free (**autograd**), and it can be packaged as a reusable **module**. This hour moves you from one tensor to a full training loop. You pick a **device** once, build tensors, reshape them, run a hand-written linear regression, then replace the hand loop with `nn.Module`, a **Dataset**, a **DataLoader**, and a small multi-layer network. Later CNN and RNN lectures will change the architecture, not this plumbing.
 
 **Worldview arc:** from NumPy-style numeric arrays **to** “PyTorch = tensors on a device + automatic gradients + modules + data loaders + train loop.”
+
+**Hour at a glance (whole video).** The first half is *tensors and free derivatives*. He imports `torch`, `nn`, `optim`, and `F`, prints the version, and picks `device = cuda` if a GPU is available else CPU. A **tensor** is a NumPy-like grid plus `.shape`, `.dtype`, and `.device`. New tensors start on **CPU** until you `.to(device)`. Indexing matches NumPy. **Reshape** / **view** re-lay the same numbers; **unsqueeze** / **squeeze** add or drop size-1 axes; **permute** reorders axes so a photo written height×width×color becomes the channels-first layout many vision layers want. **`@`** is matrix multiply. Mark a tensor `requires_grad=True`, call `backward()` on a scalar, and `.grad` holds the derivative. He checks a polynomial by hand, then trains $ŷ = wx+b$ with mean squared error, a `no_grad` update, and `grad.zero_()` because gradients **add** if you forget to wipe them.
+
+The rest of the hour is *the standard stack*. Every net is a child of **`nn.Module`**: call `super().__init__()`, declare `nn.Linear`, write `forward`. Loss + optimizer hide the arithmetic: **predict → loss → zero_grad → backward → step**. **ReLU**, sigmoid, and tanh squash numbers elementwise. Softmax turns logits into probabilities; **`CrossEntropyLoss` wants the raw logits**, not those probabilities, and wants **integer class indices**. A custom **Dataset** implements `__init__`, `__len__`, `__getitem__` (one sample). A **DataLoader** batches them and can **shuffle** each epoch. He wires a three-layer **MLP** (fully connected → ReLU → …), moves model *and* batches onto the same device, trains with Adam + cross-entropy, and scores **accuracy** with `argmax` along the class axis. Next units: CNNs and RNNs, same train step.
 
 ### System context
 
@@ -100,46 +102,70 @@
 
 ### Scenario walkthrough
 
-1. Import `torch`, `nn`, `optim`, `F`; print version; pick `device` (CUDA if available).
-2. Build tensors from lists and factories; inspect `.shape`, `.dtype`, `.device`; index like NumPy.
-3. Reshape / view; unsqueeze / squeeze; permute HWC → CHW for ImageNet-style images.
-4. Matmul with `@`; move tensors with `.to(device)`; first scalar autograd (`x² + 3x + 1`).
-5. Multi-variable gradient of mean-of-squares; full manual linear regression loop.
-6. Rewrite linreg as `nn.Module` + `nn.Linear` + `MSELoss` + `SGD`.
-7. Multi-feature Linear shapes; activations; softmax; **CrossEntropy wants logits**.
-8. Custom `Dataset` with three required methods; wrap with `DataLoader`.
-9. Understand `shuffle=True`; design a 3-layer MLP skeleton.
-10. Train MLP on toy binary data: CE + Adam, device-aware batches, loss + accuracy.
+Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
+
+**Story:** you have 100 toy points, each with two numbers, labeled 0 or 1 by a simple rule. You want a small PyTorch net that learns the rule — and a loop you can reuse next week on photos and sentences.
+
+1. **Why pick a kitchen first?** Import `torch`, `nn`, `optim`, `F`. Set `device` to CUDA if a GPU is there, else CPU. That is DEVICE. So what? Every later tensor and the model must sit in the *same* kitchen or the run crashes.
+
+2. **What is the cargo?** A **tensor** is a NumPy-like grid with `.shape`, `.dtype`, and `.device`. New ones start on CPU. Index them like last tutorial. That is TENSOR. So what? You now have a grid that can move to the GPU.
+
+3. **How do you restack without inventing numbers?** Reshape a length-12 list into $3\times 4$. Unsqueeze adds an empty batch pocket. Permute turns a height×width×color photo into the channels-first layout vision layers expect. That is SHAPE GYM.
+
+4. **How do derivatives arrive for free?** `@` multiplies matrices. Mark `requires_grad=True`, form $y=x^2+3x+1$, call `backward()`, read `.grad`. Then do the same for $ŷ=wx+b$ with mean squared error, update under `no_grad`, and **wipe** `.grad` each step. That is AUTOGRAD + MANUAL GD. So what? You have seen the math the optimizer will hide.
+
+5. **How do you stop writing $w$ and $b$ by hand?** Subclass `nn.Module`, call `super().__init__()`, declare `nn.Linear`, write `forward`. Train with **predict → loss → zero_grad → backward → step**. That is MODULE + OPTIM.
+
+6. **What about class labels?** ReLU / sigmoid / tanh squash scores. Softmax shares a pot. **Cross-entropy wants the raw logits**, not the already-shared pot, and wants **integer** class ids. That is CE.
+
+7. **How do 100 points become mini-batches?** A **Dataset** answers “how many?” and “give me item $i$.” A **DataLoader** brings 16 at a time and **shuffles** the seating chart each epoch. Last cart may hold fewer than 16. That is DATA PIPELINE.
+
+8. **How do you know it learned?** Wire a three-room MLP ($2\to32\to32\to2$), move model *and* each batch onto `device`, train with Adam + cross-entropy, and score **accuracy** as `argmax` vs the label. Chance starts near 50%; this toy climbs near 100%. That is TRAIN + ACCURACY.
+
+```
+  100 toy points (2 features, label 0/1)
+         │  Dataset + DataLoader(batch=16, shuffle)
+         ▼
+  model on device    +    each batch .to(device)
+         │  FC → ReLU → FC → ReLU → FC  (logits)
+         ▼
+  CrossEntropy(logits, integer labels)
+         │  zero_grad → backward → Adam step
+         ▼
+  accuracy = mean(argmax == label)
+```
+
+Same chain next week for a CNN or RNN: only the Module guts change. Device, loader, CE, and the five-step train loop stay.
 
 ### Failure / contrast path
 
 ```
-  Leave tensors on CPU while model is on CUDA     ──X──► device mismatch crash
-  Feed softmax probs into CrossEntropyLoss        ──X──► double-softmax, bad grads
-  Skip optimizer.zero_grad() / .grad.zero_()      ──X──► gradient accumulation
-  Update params without torch.no_grad() (manual)  ──X──► pollutes the graph
-  view() on non-contiguous tensor                 ──X──► RuntimeError (prefer reshape)
-  Forget last partial batch is smaller            ──X──► surprise shapes
-  Shuffle only features, not shared indices       ──X──► label desync (Dataset fixes this)
-  Softmax on wrong dim for (B, C) logits          ──X──► nonsense probabilities
+  “Model on CUDA, batch still on CPU”              ──X──► device mismatch crash
+  “Softmax first, then CrossEntropyLoss”           ──X──► double-softmax, bad grads
+  “I forgot zero_grad / grad.zero_()”              ──X──► yesterday’s grads add to today’s
+  “I’ll update w without torch.no_grad()”          ──X──► pollutes the graph (manual loop)
+  “view() on a non-contiguous tensor”              ──X──► RuntimeError (prefer reshape)
+  “Every batch has size 16, always”                ──X──► last batch can be smaller
+  “Shuffle X, not the Dataset indices”             ──X──► labels desync (Dataset fixes this)
+  “Softmax / argmax on the wrong dim”              ──X──► nonsense probabilities
 ```
 
 ### STOP / out of scope
 
-CNN and RNN architectures (cliffhanger for next segment); multi-GPU patterns beyond “one device for everything”; custom loss engineering; production torchvision pipelines; distributed training; full hyperparameter search.
+He does **not** build a CNN or RNN today (that is the next segment). No multi-GPU beyond “one device for everything,” no custom loss engineering, no production torchvision pipeline, no distributed training, no hyperparameter search. Today ends when you can run the standard train step on a small MLP.
 
 ### Load-bearing claims (closed-book)
 
-- PyTorch is NumPy’s shape language **plus device, autograd, modules, and data pipeline**.
+- PyTorch is NumPy’s shape language **plus device, autograd, modules, and a data pipeline**.
 - Always know your **`device`** before training; reuse it for `.to(device)` on tensors and models.
-- New tensors default to **CPU** until you move them; all operands in an op must share device.
+- New tensors default to **CPU** until you move them; every operand in an op must share that device.
 - **`requires_grad=True` → `backward()` → `.grad`** is the gradient workhorse.
 - Gradients **accumulate**; clear them each step (`zero_()` / `optimizer.zero_grad()`).
 - Every model is a **child of `nn.Module`** with `super().__init__()`, layers, and `forward`.
 - Standard train step: **predict → loss → zero_grad → backward → step**.
 - **`nn.CrossEntropyLoss` wants raw logits**, not probabilities; targets are **integer class indices**.
 - **`Dataset`** returns one sample; **`DataLoader`** batches (and can shuffle each epoch).
-- Accuracy for classification: **`argmax(logits, dim=1)`** vs labels; count correct / total.
+- Accuracy: **`argmax(logits, dim=1)`** versus labels; count correct / total.
 
 **Speaker / course:** NPTEL IISc · Mathematical Foundations of Generative AI · Tutorial 3.
 
@@ -1356,6 +1382,31 @@ Practice these without the video open.
 
 ## External references
 
+Two layers, **both kept**.
+
+1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
+2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+
+### Start here — high-signal companions
+
+Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this tutorial still closed.
+
+**If tensors, device, or reshape still feel new (Topics 1–3).** The [official PyTorch tensors tutorial](https://pytorch.org/tutorials/beginner/basics/tensorqs_tutorial.html) is the library in its own words. For the install / CUDA wheel, [Get Started locally](https://pytorch.org/get-started/locally/). Prefer `reshape` over `view` unless you know the memory is contiguous — see the [reshape docs](https://pytorch.org/docs/stable/generated/torch.reshape.html).
+
+**If autograd is still magic (Topics 4–5).** The [official autograd tutorial](https://pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html) matches `requires_grad` / `backward` / `.grad`. Grant Sanderson’s [3Blue1Brown — Gradient descent](https://www.youtube.com/watch?v=IHZwWFHWa-w) and [What is backpropagation really doing?](https://www.youtube.com/watch?v=Ilg3gGewQ5U) are the geometry behind the board.
+
+**If `nn.Module` or the train step still blur (Topics 6, 9–10).** Official [Build the Model](https://pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html) and [Optimization loop](https://pytorch.org/tutorials/beginner/basics/optimization_tutorial.html). For “what is a fully connected layer?”, StatQuest’s [Neural Networks Pt. 1](https://www.youtube.com/watch?v=CqOfi41LfDw) and 3Blue1Brown’s [But what is a neural network?](https://www.youtube.com/watch?v=aircAruvnKk).
+
+**If CrossEntropy ate your gradients (Topic 7).** StatQuest’s [Softmax](https://www.youtube.com/watch?v=KpKog-L9veg) and [Cross Entropy](https://www.youtube.com/watch?v=6ArSys5qHAU), then the official [CrossEntropyLoss docs](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html) — **logits in**, integer targets.
+
+**If Dataset / DataLoader still mix (Topics 8–9).** Official [Datasets & DataLoaders](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html). The [Quickstart](https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html) is the same end-to-end loop this hour closes on.
+
+**How to use.** Device / tensor fog → official tensor tutorial *before* Topic 2. Autograd fog → official autograd *before* Topic 5. CE footgun → StatQuest + the CE docs *after* Topic 7. Do not open ten tabs. One famous teacher per stuck idea.
+
+---
+
+### Full topic map — previous list plus new entries
+
 **How to use:** finish the NOTES chain first (video closed if you can). When one map box still feels thin, open **only that topic’s group** below — **2–3 companions each** (prefer **teaching video + blog/notes + official doc**). All links live **here**, not inside topic bodies.
 
 Prefer free, well-known teaching channels and official tutorials. Skip Wikipedia dumps and random SEO posts.
@@ -1451,6 +1502,7 @@ Prefer free, well-known teaching channels and official tutorials. Skip Wikipedia
 | [Tutorial 2 NumPy NOTES](../16-Tutorial02-Introduction-to-NumPy/NOTES.md) | Prior unit | Shape language this lecture extends |
 
 ---
+
 
 ## Sources
 

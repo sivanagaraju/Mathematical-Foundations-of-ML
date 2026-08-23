@@ -28,11 +28,13 @@
 
 ## Executive Summary — architecture of this lecture
 
-**Job:** install continuous-type random variables after last hour’s discrete PMF/CDF.  
-**Method:** define a PDF so $F$ is an integral, stock Unif/Exp/Normal, push $Y=g(X)$, then $E$, LOTUS, Var, and three inequalities.  
-**Fork:** check the same formulas with numpy samples; pairs of RVs wait until next time.
+This hour installs **continuous-type** random variables after last time’s discrete piles. A **probability density function (PDF)** $p$ is a height function whose **area** is probability: the **cumulative distribution function (CDF)** is $F(x)=\int_{-\infty}^x p(t)\,dt$, a single point has probability 0, and $p$ itself may exceed 1. Stock Unif / Exp / Normal, then push $Y=g(X)$ with a monotone change of variables. One number is the center — **expectation**, with **LOTUS** so you average $g(x)$ using $X$’s weights — and another is **variance**, the mean squared deviation. Three inequalities (Markov, Chebyshev, Jensen) are **stated**, not proved; then a numpy notebook checks the same formulas with 100,000 samples. Pairs of random variables wait until next time.
 
 **Worldview arc:** from “discrete $X$ specified by CDF or PMF” **to** “continuous $X$ specified by a PDF + $E$/Var checked in simulation.”
+
+**Hour at a glance (whole video).** Last tutorial specified a discrete $X$ by a CDF or a PMF. Today is the other kind they will use most: **continuous type**. $X$ is continuous type if there exists a **probability density function (PDF)** $p_X$ such that the **cumulative distribution function (CDF)** is the running area $F(x)=\int_{-\infty}^x p(t)\,dt$. An uncountable range does **not** prove a PDF exists (mixed laws exist). Because $F$ has no jump, $P(X=x)=0$ at every point. A PDF must be nonnegative and integrate to 1; unlike a PMF it **may exceed 1** — height is not probability; **area** is. Interval probabilities are areas, and the four versions of $<$ / $\le$ agree. Three named heights: **uniform** (even jam on a finite interval), **exponential** (jam piled at 0 that thins to the right), **Gaussian / Normal** (the “king” they will use constantly — a hill at $\mu$ of width $\sigma$). Often you observe $Y=g(X)$, not $X$. If $g$ is differentiable and $g'$ never changes sign, the **change-of-variable** theorem writes $p_Y$ from $p_X$ and $|dx/dy|$. If $g$ folds (for example $x^2$ on all of $\mathbb{R}$), that theorem is off.
+
+A law still wants a **center** and a **spread**. **Expectation** $E[X]$ is the weighted average (sum $x\,p$ or integral $x\,p\,dx$). **LOTUS** (law of the unconscious statistician) lets you compute $E[g(X)]$ with $X$’s weights without first finding $p_Y$. Linearity holds. **Variance** is the mean squared deviation, also $E[X^2]-\mu^2$, always $\ge 0$; shifting does not change it; scaling by $c$ multiplies it by $c^2$. Three inequalities are **stated** without proofs: **Markov** bounds a tail from a moment; **Chebyshev** is Markov on $|X-\mu|$ and is **distribution-free** (no Gaussian needed); **Jensen** says a convex $g$ satisfies $g(E[X])\le E[g(X)]$. Theory then moves to a Colab: seed 42, 100,000 die rolls, frequencies sit near $1/6$, and a Bayes numeric $1\%/95\%/5\%$. Discrete samplers (indicator, Bernoulli, `choice`, binomial) and continuous histograms (Unif / Normal / Exp, then $Y=aX+b$) close the hour. Next time: pairs.
 
 ### System context
 
@@ -86,25 +88,59 @@
 
 ### Scenario walkthrough
 
-1. Recap discrete; define CRV via PDF.  
-2. Contrast PDF with PMF; interval probabilities are areas.  
-3. Write Unif, Exp, Gaussian formulas.  
-4. Composite $Y=g(X)$; linear CDF; CoV theorem.  
-5. $E$ as weighted average; LOTUS; linearity.  
-6. Variance as mean squared deviation.  
-7. Three inequalities, no proofs.  
-8. Colab: die frequencies + Bayes $1\%/95\%/5\%$.  
-9. Indicator, Bernoulli, choice, binomial samples.  
-10. Unif/Normal/Exp hists; $Y=aX+b$; $E[XY]$; recap.
+Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
+
+**Story:** you model one person’s height (or a hotel bill, or a waiting time) as a single continuous number $X$, and you want a typical value, a spread, and a machine check.
+
+1. **Why a PDF?** Discrete piles cannot sit on a continuum of heights. You need a height function $p$ whose **area** is chance. That is continuous type. The running area is the **cumulative distribution function (CDF)** $F(x)=\int_{-\infty}^x p$.
+
+2. **Why not read $p(x)$ as $P(X=x)$?** A single height has probability 0. The **probability density function (PDF)** may be larger than 1. Chance is the area over an interval.
+
+3. **Why named families?** Uniform / exponential / $N(\mu,\sigma^2)$ are the three they will sample. Height as Normal is two numbers: center $\mu$, width $\sigma$.
+
+4. **Why $Y=g(X)$?** You may record centimeters, or inches, or a bill after tax. If the map is steadily rising or steadily falling, change-of-variable moves the density. If it folds, the simple theorem stops.
+
+5. **Why $E$ and LOTUS?** One number for the typical height. To average a function of height (say a clothing-size map) you keep $X$’s weights — you do not rebuild $p_Y$ first.
+
+6. **Why variance?** Two groups can share a mean and feel different. Variance is mean squared deviation. Shift everyone by 5 cm: spread does not change.
+
+7. **Why inequalities?** Sometimes you only know $E$ or Var and still want a tail speed-limit. **Chebyshev** does not need Normal. **Jensen** needs a convex $g$.
+
+8. **Why numpy?** 100,000 samples make a histogram sit on $p$, and `np.mean` of a mask estimates $P$. They check a die ($P(4)\approx 1/6$), a Bayes numeric $1\%/95\%/5\%$, then Unif / Normal / Exp overlays. Same formulas, a machine check. Pairs wait.
+
+```
+  one continuous measurement X  (height / bill / wait)
+         │  no piles on a continuum
+         ▼
+  PDF p  = height     area = chance     F = running area
+         │  named
+         ▼
+  Unif / Exp / Normal(μ, σ²)
+         │  maybe record Y = g(X)
+         ▼
+  CoV if g′ never flips sign
+         │
+         ▼
+  E[X] typical value     LOTUS for E[g(X)]
+  Var = mean squared deviation
+         │  only E or Var known?
+         ▼
+  Markov / Chebyshev / Jensen   (stated)
+         │  check on a machine
+         ▼
+  1e5 samples  →  hist sits on p
+```
+
+A die is the discrete cousin of the same check: frequencies sit near the theory piles.
 
 ### Failure / contrast path
 
 ```
-  Uncountable range ⇒ continuous type     ──X──► mixed RVs exist
-  p(x)=3 declared illegal                 ──X──► height ≠ probability
-  P(X=x) read as p(x)                     ──X──► point mass that is 0
-  CoV when g′ changes sign                ──X──► theorem off
-  E[XY]=E[X]E[Y] for Y=2X+noise           ──X──► dependence
+  “Uncountable range ⇒ continuous type”     ──X──► mixed laws exist
+  “p(x)=3 is illegal”                       ──X──► height is not probability
+  “P(X=x) is just p(x)”                     ──X──► a point has mass 0
+  CoV when g′ changes sign                  ──X──► theorem off
+  E[XY]=E[X]E[Y] for Y=2X+noise             ──X──► dependence
 ```
 
 ### STOP / out of scope
@@ -113,13 +149,13 @@ Vector-valued RVs; pairs (next tutorial); proofs of Markov/Chebyshev/Jensen.
 
 ### Load-bearing claims (closed-book)
 
-- Continuous type $\Leftrightarrow$ a PDF exists with $F=\int p$.  
-- $P(X=x)=0$; PDF $\ge 0$, integrates to 1, **may exceed 1**.  
-- Unif / Exp / $N(\mu,\sigma^2)$ formulas.  
-- Monotone $g$: change-of-variable for $p_Y$.  
-- $E$ + LOTUS + linearity; $\mathrm{Var}(X)=E[X^2]-\mu^2$.  
-- Chebyshev is distribution-free.  
-- Many i.i.d. samples make histograms sit on $p$.
+- Continuous type means a **probability density function (PDF)** exists with $F=\int p$.
+- $P(X=x)=0$; a PDF is $\ge 0$, integrates to 1, and **may exceed 1**.
+- Unif / Exp / $N(\mu,\sigma^2)$ are the three named heights.
+- For monotone $g$, change-of-variable writes $p_Y$ from $p_X$.
+- Expectation + LOTUS + linearity; $\mathrm{Var}(X)=E[X^2]-\mu^2$.
+- Chebyshev is **distribution-free** (no Gaussian needed).
+- Many **independent and identically distributed (IID)** samples make histograms sit on $p$.
 
 **Speaker / course:** NPTEL IISc · Tutorial 8.
 
@@ -860,6 +896,35 @@ One $X$ is in place. Joint laws of $(X,Y)$ are the next tutorial.
 
 ## External references
 
+Two layers, **both kept**.
+
+1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
+2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+
+### Start here — high-signal companions
+
+Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this tutorial still closed.
+
+The first half is a **chalkboard** recap. The last three topics do open a numpy notebook; that is the only code in the hour.
+
+**If PDF vs PMF still swap (Topics 1–2).** [Khan Academy — probability density functions](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-continuous/v/probability-density-functions) and Brown’s [Seeing Theory — distributions](https://seeing-theory.brown.edu/probability-distributions/index.html) are the classroom pair: height is not chance; area is. Taboga’s [Statlect — legitimate PDFs](https://www.statlect.com/fundamentals-of-probability/legitimate-probability-density-functions) writes the two axioms.
+
+**If the named bells are just formulas (Topic 3).** Josh Starmer’s [StatQuest — the Normal Distribution](https://www.youtube.com/watch?v=rzFX5NWojp0) is the popular English for $\mu$ and $\sigma$. Khan’s [exponential PDF](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/poisson-process/v/exponential-pdf) covers $1-e^{-\lambda x}$.
+
+**If $Y=g(X)$ still feels like a trick (Topic 4).** Grant Sanderson’s [3Blue1Brown — change of variables](https://www.youtube.com/watch?v=okjYP_Uj-KM) is why $\lvert dx/dy\rvert$ appears. Statlect’s [functions of random variables](https://www.statlect.com/fundamentals-of-probability/functions-of-random-variables-and-their-distribution) is the written cousin.
+
+**If $E$, LOTUS, or Var blur (Topics 5–6).** Khan’s [expected value](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/expected-value-lib/v/expected-value) and [variance](https://www.khanacademy.org/math/statistics-probability/summarizing-quantitative-data/variance-standard-deviation-population/v/variance-of-a-population) plus Statlect’s [expected value](https://www.statlect.com/fundamentals-of-probability/expected-value) and [variance](https://www.statlect.com/fundamentals-of-probability/variance). StatQuest’s [standard deviation](https://www.youtube.com/watch?v=SzZ6GpcfoQY) if $\sigma$ vs $\sigma^2$ slips.
+
+**If the three inequalities are slogans only (Topic 7).** Statlect states them the way the board does: [Markov](https://www.statlect.com/fundamentals-of-probability/Markov-inequality), [Chebyshev](https://www.statlect.com/fundamentals-of-probability/Chebyshev-inequality), [Jensen](https://www.statlect.com/fundamentals-of-probability/Jensen-inequality). Chebyshev does not need a Gaussian.
+
+**If the notebook APIs are the stuck bit (Topics 8–10).** The [NumPy Generator docs](https://numpy.org/doc/stable/reference/random/generator.html) match `default_rng` / `integers` on the board. 3Blue1Brown’s [Bayes theorem](https://www.youtube.com/watch?v=HZGCoVF3YvM) is the same flip as the $1\%/95\%/5\%$ numeric.
+
+**How to use.** Height-vs-chance fog → Khan or Seeing Theory *before* Topic 2. Inequalities → Statlect *after* Topic 7. One famous teacher per stuck idea. Do not open ten tabs.
+
+---
+
+### Full topic map — previous list plus new entries
+
 **How to use:** finish the NOTES chain first (video closed if you can). When one map box still feels thin, open **only that topic’s group** — **2–3 companions each** (prefer **teaching video + notes/blog**). All links live **here**, not inside topic bodies.
 
 ### Topic 1 — Continuous type / PDF definition
@@ -951,6 +1016,7 @@ One $X$ is in place. Joint laws of $(X,Y)$ are the next tutorial.
 | [Stat 110 playlist](https://www.youtube.com/playlist?list=PL2SOU6wwxB0uwwH80KTQ6ht66KWxbzTIo) | Video course | Slower proofs of $E$/Var |
 
 ---
+
 
 ## Sources
 

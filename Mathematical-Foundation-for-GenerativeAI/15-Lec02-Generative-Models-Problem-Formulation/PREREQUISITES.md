@@ -119,6 +119,8 @@ Items on a shelf are abstract outcomes. The scanner prints a **numeric barcode s
 - Randomness is *which* $\omega$ occurs; $X$ only **labels** it with numbers.  
 - Once $X$ is fixed, we can talk about the **law of $X$** on $\mathbb{R}^d$.
 
+If “function, not a floating number” still slips, Khan Academy’s random-variables unit is the usual next stop. Pointers live at the end of NOTES.
+
 ### Mini-check
 
 1. Domain of $X$? Codomain?  
@@ -256,6 +258,8 @@ If you own the complete climate probability model for a city, you can answer “
 
 - Estimating $p_x$ is treated as **equivalent** (for the course’s purposes) to understanding the underlying uncertainty once we work on the range side.  
 - Notation: $p_x$ means the unknown true distribution of data vectors $x$.
+
+If this still blurs, Seeing Theory (watch samples pile up) or Khan’s density videos. Names only here — links in NOTES.
 
 ### Mini-check
 
@@ -396,6 +400,8 @@ Scatter of points on paper. Assume “line” → fit slope and intercept. Assum
 - After fitting, **sample from $p_{\theta^\star}$** to generate new data.  
 - Named scores you will meet: KL, Jensen–Shannon, $f$-divergences.
 
+If “divergence” is still just a word, StatQuest’s KL short is the popular English fix.
+
 ### Mini-check
 
 1. What is a “model” in “large language model” per this lecture?  
@@ -416,6 +422,8 @@ Scatter of points on paper. Assume “line” → fit slope and intercept. Assum
 **Peek:** (1) $\Omega\to\mathbb{R}^d$ (2) $20000$ (3) vectors / $p_x$ (4) $p_x$ (5) sample (6) $p_\theta$ / divergence $d$.
 
 ---
+
+**Second teachers (names only here).** Khan Academy, Seeing Theory, 3Blue1Brown, StatQuest, Lilian Weng. The actual pointers live at the end of [NOTES.md](./NOTES.md#external-references) — a short famous list, not a link dump.
 
 Ready → [NOTES.md](./NOTES.md) (start at **Executive Summary**).  
 Quiz later: [quiz.html](./quiz.html) Part A = this file · Part B = NOTES.

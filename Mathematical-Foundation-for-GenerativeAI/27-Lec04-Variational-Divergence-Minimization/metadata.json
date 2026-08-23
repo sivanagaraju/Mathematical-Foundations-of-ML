@@ -1,0 +1,30 @@
+{
+  "title": "Lec 04 Variational Divergence Minimization (VDM)",
+  "video_id": "4vtL3NhCkgg",
+  "url": "https://www.youtube.com/watch?v=4vtL3NhCkgg",
+  "duration_seconds": 3533,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A. P. (IISc / NPTEL)",
+  "description": "Variational Divergence Minimization, Conjugate Function for Convex Function",
+  "playlist_index": 4,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Recap two sample clouds",
+    "Integrals become expectations then LLN",
+    "LOTUS and sample averages",
+    "IID Gaussian Z prompts",
+    "Convex conjugate",
+    "Plug conjugate into D_f",
+    "Supremum out function T",
+    "Two expectations GAN-looking bound",
+    "Why variational",
+    "Minmax saddle two nets next"
+  ]
+}

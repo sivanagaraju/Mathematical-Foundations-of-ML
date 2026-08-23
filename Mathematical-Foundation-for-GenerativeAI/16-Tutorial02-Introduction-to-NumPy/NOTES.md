@@ -27,11 +27,13 @@
 
 ## Executive Summary — architecture of this lecture
 
-**Job:** turn basic Python into a **numeric spine** for neural-network code.  
-**Method:** learn NumPy `ndarray` through the same operations you will later write in PyTorch — create arrays, track shapes, reshape/flatten, broadcast, matmul, linear layers, activations, loss, conv/pool, one-hot, RNN cell, logistic GD.  
-**Fork:** stay fluent in pure NumPy so that when frameworks hide the math, you still own the **shape language**.
+A neural net is a machine that eats **grids of numbers** and writes new grids of numbers. Last tutorial gave you Python lists and loops; those are too slow and too shapeless for that job. **NumPy** (Numerical Python) is the calculator this course uses first: a typed grid called an `ndarray`, plus a **shape** that says how the grid is laid out. Every later layer is the same three moves — change the layout, multiply grids, squash numbers. This hour builds that spine by hand so that when PyTorch hides the math, you still own the shapes.
 
-**Worldview arc:** from Tutorial-1 Python (lists, loops, classes) **to** “everything in DL is tensor shape gymnastics; NumPy is the language of those shapes before PyTorch.”
+**Worldview arc:** from Tutorial-1 Python (lists, loops, classes) **to** “everything in deep learning is tensor shape gymnastics; NumPy is the language of those shapes before PyTorch.”
+
+**Hour at a glance (whole video).** The first half is *the grid and the multiply*. He imports `numpy as np`, turns lists into arrays, and hammers `.shape` as a **tuple** — that is why later people write `(3, 224, 224)` or `(32, 784)`. He fills biases with **zeros** and weights with **normal** draws (`randn`). Then he indexes like a spreadsheet, **reshapes** a length-6 vector into a $2\times 3$ matrix (same numbers, new floor plan), and **flattens** a patch so a fully connected layer can eat it. Same-shape arrays add and multiply **elementwise**; a smaller array can **broadcast** (a bias row stamps every example). The core network op is **matrix multiply** `@` with the inner-dimension rule $(M\times N)\cdot(N\times P)\to(M\times P)$. That is already a **linear layer**: $y = XW + b$. **ReLU** zeros negatives; **sigmoid** squishes a score into $(0,1)$ for binary work.
+
+The rest of the hour is *a tiny net, then pictures and sequences*. **Softmax** turns raw scores (logits) into a probability vector that sums to 1. He stacks Linear → ReLU → Linear → Softmax and reads the class with **argmax**. **Mean squared error** scores regression; **cross-entropy** scores how much probability sat on the true class. Then he slides a $2\times 2$ kernel across a $4\times 4$ image (multiply, sum, step) and **max-pools** to shrink space. Words become integer IDs, then **one-hot** rows. A manual **recurrent** cell (RNN) carries a hidden note across five steps. He builds a tiny binary dataset, **shuffles shared indices** for an 80/20 split, trains **logistic regression** with gradient descent, and debugs an MNIST-like multi-layer net $784\to 128\to 10$ by **printing the shape after every layer**. Next unit: the same ops in PyTorch.
 
 ### System context
 
@@ -91,44 +93,68 @@
 
 ### Scenario walkthrough
 
-1. Import `numpy as np`; build 1D/2D arrays and read `.shape` as a **tuple**.
-2. Prefer biases as zeros and weights as normal draws (`zeros` / `randn`).
-3. Index rows/columns; reshape a length-6 vector into a 2×3 matrix (row-wise fill).
-4. Flatten an image patch for an MLP; add a bias row with **broadcasting**.
-5. Run a manual linear layer `x @ W + b` for one sample and for a batch.
-6. Stack Linear → ReLU → Linear → Softmax; read argmax as the class; score with CE.
-7. Slide a 2×2 kernel on a 4×4 image; max-pool to shrink space.
-8. Build batch one-hot labels; run an RNN cell over a 5-step sequence.
-9. Make a tiny binary dataset; shuffle indices for 80/20 split; define accuracy.
-10. Train logistic regression with GD; debug an MNIST-like MLP by printing shapes after every layer.
+Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
+
+**Story:** you want to score handwritten digits in pure NumPy — 28×28 pictures in, a guess 0–9 out — so that when PyTorch arrives you already know what each layer is *doing*.
+
+1. **Why leave Python lists?** A list of lists has no contract. NumPy gives you a typed grid and a **shape tuple**. That is CREATE + SHAPE. So what? Every later bug is a shape bug; you need a language for the floor plan.
+
+2. **How do you start the knobs?** Biases as **zeros**, weights as **normal** draws. That is INIT. So what? The rest of the hour reuses those two factories.
+
+3. **How does a 28×28 photo become something a linear layer can eat?** Index the grid like a spreadsheet, **reshape** / **flatten** to length 784 (same pixels, new layout). That is RESHAPE. So what? A fully connected layer wants one long row per example.
+
+4. **How do you score one example, then a whole batch, without a Python loop?** $y = XW + b$. The inner dimensions of `@` must match; the bias **broadcasts** across rows. **ReLU** then zeros the negative scores. That is LINEAR + ACT. So what? This *is* a hidden layer.
+
+5. **How do ten raw scores become a guess?** **Softmax** turns logits into a probability vector that sums to 1. **Argmax** is the class. **Cross-entropy** is $-\log$ of the true-class probability (use **MSE** only if the target is a continuous number). That is SOFTMAX + LOSS.
+
+6. **What if the input is a photo, not a flat 784?** Slide a $2\times 2$ kernel: multiply the patch, sum, step. **Max-pool** keeps the strongest number in each tile and shrinks the map. That is CONV + POOL.
+
+7. **What if the input is words?** Map words to IDs, then **one-hot** rows. An **RNN** cell rewrites a hidden note at each step: new word plus old note, then tanh. That is SEQUENCE.
+
+8. **How do you know the net learned?** Build a tiny labeled pile, **shuffle shared indices** so features and labels stay married, hold out 20%, train logistic regression by gradient descent, and **print the shape after every layer** on a $32\times784\to128\to10$ ladder. That is TRAIN + DEBUG.
+
+```
+  28×28 digit photo
+         │  flatten
+         ▼
+  length-784 vector
+         │  XW + b, ReLU, XW + b
+         ▼
+  10 logits  →  softmax  →  guess 0–9
+         │  score with −log p_true
+         ▼
+  print every .shape   (that is how you debug)
+```
+
+Same spine for a tiny convolution on a $4\times 4$ patch or a five-word RNN: grid → shape-legal multiply → squash → score. PyTorch will later hide the loops, not the shapes.
 
 ### Failure / contrast path
 
 ```
-  Nested Python lists for bulk math          ──X──► slow, no shape contract
-  Mix * (elementwise) with @ (matmul)        ──X──► silent wrong math
-  Forget that .shape is always a tuple       ──X──► “why (3, 224, 224)?”
-  Misaligned matmul dims                     ──X──► runtime error (or worse, wrong layer)
-  Softmax without max-subtraction            ──X──► overflow on large logits
-  Shuffle only X, not shared indices         ──X──► labels desync from features
-  Skip shape prints after each layer         ──X──► un-debuggable MLP
+  “I’ll do bulk math with nested Python lists”     ──X──► slow, no shape contract
+  “* and @ are the same multiply”                  ──X──► silent wrong math
+  “Why do people write (3, 224, 224)?”             ──X──► .shape is always a tuple
+  “These matmul sizes look close enough”           ──X──► crash, or a wrong layer
+  “Softmax the raw scores; skip subtracting max”   ──X──► overflow on large logits
+  “Shuffle X, then shuffle y separately”           ──X──► labels desync from features
+  “I’ll inspect the weights; skip printing shapes” ──X──► un-debuggable MLP
 ```
 
 ### STOP / out of scope
 
-Full PyTorch / autograd training frameworks (preview only at the end); optimized `scipy.signal` / cuDNN conv; LSTM/GRU; real MNIST loaders; multi-GPU; production embeddings.
+He does **not** open a full PyTorch / autograd trainer today (preview only at the end). No optimized `scipy` / cuDNN convolution, no LSTM/GRU, no real MNIST download, no multi-GPU, no production embeddings. Today ends when you can track shapes through a small net in pure NumPy.
 
 ### Load-bearing claims (closed-book)
 
 - NumPy is the **numerical-computing** library that makes multi-dimensional arrays (proto-tensors) practical.
-- `.shape` is always a **tuple**; that is why DL shapes are written `(3, 224, 224)` and `(32, 784)`.
+- `.shape` is always a **tuple**; that is why deep-learning shapes are written `(3, 224, 224)` and `(32, 784)`.
 - Init habit: **biases → zeros**, **weights → normal** (or uniform for demos).
-- Reshape/flatten rearrange the same data; **do not invent values**.
-- Broadcasting **expands smaller arrays when possible** (scalar bias, bias row on a batch).
-- Core NN op: **matrix multiply** with rule $(M\times N)\cdot(N\times P)\to(M\times P)$.
-- Linear layer (row/batch layout): $y = XW + b$; activations are elementwise.
-- Softmax turns logits into a probability vector; CE scores the true-class probability.
-- Manual conv = slide, elementwise mult, sum; pool shrinks space without a learned kernel.
+- Reshape and flatten rearrange the same data; they **do not invent values**.
+- Broadcasting **expands smaller arrays when possible** (a scalar, or a bias row on a batch).
+- Core network op: **matrix multiply** with rule $(M\times N)\cdot(N\times P)\to(M\times P)$.
+- Linear layer (row / batch layout): $y = XW + b$; activations are elementwise.
+- Softmax turns logits into a probability vector; cross-entropy scores the true-class probability.
+- Manual conv = slide, elementwise multiply, sum; pool shrinks space **without** a learned kernel.
 - Always **track shapes**; shape bugs dominate practical failures.
 
 **Speaker / course:** NPTEL IISc · Mathematical Foundations of Generative AI · Tutorial 2.
@@ -1568,6 +1594,33 @@ Practice these without the video open.
 
 ## External references
 
+Two layers, **both kept**.
+
+1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
+2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+
+### Start here — high-signal companions
+
+Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this tutorial still closed.
+
+**If arrays and shapes still feel like vocabulary (Topics 1–3).** The [official NumPy beginner tutorial](https://numpy.org/doc/stable/user/absolute_beginners.html) is the library in its own words (`array`, `zeros`, `shape`). For the broadcast / reshape rules used on the board, stay on the official [broadcasting guide](https://numpy.org/doc/stable/user/basics.broadcasting.html).
+
+**If $XW+b$ and “what is a layer?” still blur (Topics 4–5).** Grant Sanderson’s [3Blue1Brown — But what is a neural network?](https://www.youtube.com/watch?v=aircAruvnKk) is the standard visual of affine map + activation. Stanford’s [CS231n linear-classification notes](https://cs231n.github.io/linear-classify/) write the same $XW+b$ shapes this tutorial prints.
+
+**If softmax, argmax, or cross-entropy are just names (Topics 5–6).** Josh Starmer’s [StatQuest — SoftMax](https://www.youtube.com/watch?v=KpKog-L9veg) and [StatQuest — Cross Entropy](https://www.youtube.com/watch?v=6ArSys5qHAU) are the popular English for “prize shares” and $-\log p_{\mathrm{true}}$.
+
+**If the sliding kernel is only a loop (Topic 7).** The same 3Blue1Brown / Welch Labs [convolutions video](https://www.youtube.com/watch?v=KuXjwB4LzSA) is the usual picture of a window that multiplies and sums.
+
+**If the RNN cell is only a `for` loop (Topics 8–9).** Josh Starmer’s [StatQuest — Recurrent Neural Networks](https://www.youtube.com/watch?v=AsNTP8Kwu80) is the same shared-weight unroll this notebook writes by hand. Tutorial 5 later does it in PyTorch.
+
+**If one-hot, logistic, or gradient steps still slip (Topics 8–10).** StatQuest’s [One-Hot encoding](https://www.youtube.com/watch?v=589nCGeWG1w) and [Logistic Regression](https://www.youtube.com/watch?v=yIYKR4sgzI8), plus 3Blue1Brown’s [gradient descent](https://www.youtube.com/watch?v=IHZwWFHWa-w). For the official shuffle used in the 80/20 split, [NumPy `np.random.shuffle`](https://numpy.org/doc/stable/reference/random/generated/numpy.random.shuffle.html).
+
+**How to use.** Shape fog → official NumPy *before* Topic 3. Layer picture → 3Blue1Brown *after* Topic 4. Loss words → StatQuest *after* Topic 6. Do not open ten tabs. One famous teacher per stuck idea.
+
+---
+
+### Full topic map — previous list plus new entries
+
 **How to use:** finish the NOTES chain first. When one map box still feels thin, open **only that topic’s group** below (**~2–3 companions each**: video + docs/blog). All links live **here**, not inside topic bodies.
 
 Prefer free official docs and teaching videos. Skip Wikipedia dumps.
@@ -1661,6 +1714,7 @@ Prefer free official docs and teaching videos. Skip Wikipedia dumps.
 | [Python Data Science Handbook — NumPy](https://jakevdp.github.io/PythonDataScienceHandbook/02.00-introduction-to-numpy.html) | Free book | Full NumPy chapter if you want extra drills |
 
 ---
+
 
 ## Sources
 

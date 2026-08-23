@@ -27,11 +27,13 @@
 
 ## Executive Summary — architecture of this lecture
 
-**Job:** move from one random variable to a **pair** (then a vector) that live on the **same** experiment.  
-**Method:** install a **joint** CDF/PMF/PDF, read **rectangles**, peel **marginals**, slice **conditionals** (including mixed types), then **factor** for independence and **IID**.  
-**Fork:** a monotone vector map $Y=g(X)$ moves the joint density by a **Jacobian**; next hour is $E$, covariance, and the law of large numbers.
+This hour moves from one random variable to a **pair** (then a vector) that live on the **same** random experiment. A **joint** CDF / PMF / PDF answers questions about **both** at once; a rectangle of the plane is four corners of $F$; **marginals** peel one variable (unique from the joint; the converse is false). **Conditionals** slice the joint and re-normalize — a thin band if $Y$ is continuous, a mixture if the types are mixed. A **Gaussian mixture model (GMM)** is that mixture when each component is Normal; **independent and identically distributed (IID)** is the course’s default on a dataset; a monotone vector map moves the joint density by a **Jacobian**. Next hour is expectation of several variables, covariance, and the law of large numbers.
 
 **Worldview arc:** from “one $X$ has $F$, $p$, $E$” **to** “a pair has a joint, unique marginals, conditionals, and (if IID) a product law.”
+
+**Hour at a glance (whole video).** Tutorials 7–8 built one $X$: triplet, **cumulative distribution function (CDF)**, PMF or **probability density function (PDF)**, $E$, Var. Today $X$ and $Y$ are two maps on the **same** $(\Omega,\mathcal{F},P)$. If they sat on different experiments you would not have a pair. The **joint CDF** is $F(x,y)=P(X\le x,Y\le y)$ — “both stickers land south-west of $(x,y)$.” A **rectangle** (cylindrical set) uses four corners: $F_{22}-F_{21}-F_{12}+F_{11}$. $F$ is a valid probability object: zero if either argument is $-\infty$, one at $(+\infty,+\infty)$, nondecreasing and right-continuous in each slot. Two discrete maps store the joint as a **table of piles** (joint PMF): two dice with $X=\max$, $Y=\mathrm{sum}$ group 36 downstairs atoms into cells of $1/36$ or $2/36$. Two continuous maps store a **joint PDF** — height on a region, volume 1. Their running example is $p=2$ on the triangle $0<x<y<1$, and $P(Y>X+0.5)=1/4$. **Marginals** peel: sum a row or integrate the other variable. The joint gives unique margins; many joints share the same margins, so you cannot reconstruct the interior from the edges alone.
+
+A **conditional** is a slice, re-normalized. Discrete: $p(x\mid y)=p(x,y)/p_Y(y)$ when $p_Y(y)>0$. Dice: if the sum is 3, $\max\le 4$ is certain; if there is one head in $n$ tosses, the first-head index is uniform on $\{1,\ldots,n\}$. Continuous $Y$ has $P(Y=y)=0$, so they take a thin band and let the width go to 0; on the triangle, $X\mid Y=y$ is Unif$(0,y)$. **Mixed type** (discrete $Y$, continuous $X$) has no single joint PDF; the marginal of $X$ is a **mixture** $\sum p(x\mid y)P(Y=y)$. If each component is Gaussian, that **is** a **Gaussian mixture model (GMM)**: roll a die for the component, then sample that Normal. A radio that hears 0 V or 5 V plus noise decodes bit 1 iff $x>2.5$ (equal priors, Gaussian noise). **Independence** is factorization for **all** windows, not one lucky cell. A **vector** $X:\Omega\to\mathbb{R}^n$ is just $n$ maps. **Independent and identically distributed (IID)** means independent **and** the same law — the dataset assumption. A map $Y=g(X)$ moves density by the absolute **Jacobian** $|J|$ of the inverse; the board’s sum-and-difference example has $|J|=1/2$. Next: $E$ of many, covariance, the law of large numbers.
 
 ### System context
 
@@ -83,25 +85,56 @@
 
 ### Scenario walkthrough
 
-1. Same $\Omega$; $F$ of a pair; a rectangle.  
-2. Properties of $F$.  
-3. Joint PMF; two dice max and sum.  
-4. Triangle density $p=2$; $P(Y>X+0.5)=1/4$.  
-5. Marginals; one-way uniqueness.  
-6. $X\mid Y$ for dice and “one head ⇒ first-head uniform.”  
-7. Continuous slice via $\Delta\to 0$; $X\mid Y=y\sim\mathrm{Unif}(0,y)$.  
-8. Discrete $Y$, continuous $X$: GMM; decode bit if $x>2.5$.  
-9. Factorization; vector notation.  
-10. IID; $Y_1=X_1+X_2$, $Y_2=X_1-X_2$, $|J|=1/2$.
+Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
+
+**Story:** you roll two dice on one table. $X$ is the **max** face, $Y$ is the **sum**. Same experiment, two stickers.
+
+1. **Why a pair / joint CDF?** Both numbers come from one roll. The joint **cumulative distribution function (CDF)** $F(x,y)$ is “max $\le x$ **and** sum $\le y$.” A window on the plane uses four corners of that running total.
+
+2. **Why a joint PMF table?** Discrete pair $\to$ piles on cells. 36 equally likely downstairs pairs group into upstairs cells of $1/36$ (doubles, $n=2m$) or $2/36$.
+
+3. **Why a joint PDF at all (the triangle)?** When both are continuous, piles become height on a region. Same job: volume over a set is probability. $p=2$ on $0<x<y<1$ is the continuous cousin; $P(Y>X+0.5)=1/4$.
+
+4. **Why marginals?** You may only care about the max, ignoring the sum. Sum the row (or integrate the other variable). You **cannot** go backwards: many interiors share the same margins.
+
+5. **Why conditionals?** You learn the sum is 3. The world shrinks; $\max\le 4$ is now certain. Continuous cousin: a thin band, $X\mid Y=y\sim\mathrm{Unif}(0,y)$.
+
+6. **Why mixed / GMM?** A **bit** (discrete) plus a **voltage** (continuous) is not a joint PDF. The voltage histogram is a mixture. If each piece is a bell, that is a **Gaussian mixture model (GMM)**. Decode 1 iff $x>2.5$.
+
+7. **Why independence / IID?** Two maps are independent only if **every** window factors. **Independent and identically distributed (IID)** is stronger: independent **and** the same law — how the course treats a dataset.
+
+8. **Why a Jacobian?** If you switch to $Y_1=X_1+X_2$, $Y_2=X_1-X_2$, areas stretch. Density is multiplied by $|J|=1/2$. Covariance and the law of large numbers are next hour.
+
+```
+  one table, two dice
+         │  same Ω
+         ▼
+  X = max     Y = sum
+         │  joint F / table of piles
+         ▼
+  rectangle = four corners of F
+         │  peel
+         ▼
+  margins (unique ← joint; not the reverse)
+         │  learn Y = 3
+         ▼
+  slice / re-normalize   =  conditional
+         │  same idea, other types
+         ▼
+  mixed: GMM  (die of bells)     decode x > 2.5
+  IID copies + Y = g(X) by |J|
+```
+
+Two coins are the same shape: one experiment, two stickers, a joint, then peel or slice.
 
 ### Failure / contrast path
 
 ```
-  X,Y on different experiments          ──X──► not a pair
-  One factored window ⇒ independent     ──X──► need ALL events
-  Two margins ⇒ unique joint            ──X──► many joints share margins
-  P(Y=y) for continuous Y without limit ──X──► divide by zero
-  Mixed types called a joint PDF        ──X──► no single p
+  X and Y on different experiments          ──X──► not a pair
+  “One factored window ⇒ independent”       ──X──► need ALL events
+  “Two margins ⇒ unique joint”              ──X──► many joints share margins
+  P(Y=y) for continuous Y without a limit   ──X──► divide by zero
+  Mixed types called a joint PDF            ──X──► no single p
 ```
 
 ### STOP / out of scope
@@ -110,12 +143,12 @@ Expectation of many RVs, covariance, law of large numbers (next tutorial). Full 
 
 ### Load-bearing claims (closed-book)
 
-- Pair: **same** $\Omega$; $F(x,y)=P(X\le x,Y\le y)$; rectangle $=F_{22}-F_{21}-F_{12}+F_{11}$.  
-- Joint PMF/PDF: $\ge 0$ and totals $1$.  
-- Joint **uniquely** gives marginals; converse **false**.  
-- $p(x\mid y)=p(x,y)/p_Y(y)$ (mass or density).  
-- Independence $=$ factorization **for all** windows.  
-- IID $=$ independent + identical.  
+- A pair lives on the **same** $\Omega$; $F(x,y)=P(X\le x,Y\le y)$; a rectangle is $F_{22}-F_{21}-F_{12}+F_{11}$.
+- A joint PMF / PDF is $\ge 0$ and totals $1$.
+- The joint **uniquely** gives marginals; the converse is **false**.
+- $p(x\mid y)=p(x,y)/p_Y(y)$ (mass or density).
+- Independence is factorization **for all** windows.
+- **IID** means independent **and** identically distributed.
 - $p_Y(y)=p_X(h(y))\,|J|$.
 
 **Speaker / course:** NPTEL IISc · Tutorial 9.
@@ -774,6 +807,33 @@ Averages of many coordinates — and how they **co-vary** — are the next tutor
 
 ## External references
 
+Two layers, **both kept**.
+
+1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
+2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+
+### Start here — high-signal companions
+
+Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this tutorial still closed.
+
+This lecture is a **chalkboard recap**. It does **not** open a notebook.
+
+**If a pair still feels like two separate experiments (Topics 1–3).** Brown’s [Seeing Theory — compound probability](https://seeing-theory.brown.edu/compound-probability/index.html) and [Khan Academy’s random-variables unit](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) keep $X$ and $Y$ on one $\Omega$. Taboga’s [Statlect — random vectors](https://www.statlect.com/fundamentals-of-probability/random-vectors) is the written joint / marginal page.
+
+**If joint height vs table piles blur (Topics 3–5).** Khan plus Seeing Theory’s [distributions](https://seeing-theory.brown.edu/probability-distributions/index.html) for “cells vs area.” Statlect’s [factorization of joint PMFs](https://www.statlect.com/fundamentals-of-probability/factorization-of-joint-probability-mass-functions) and [factorization of joint PDFs](https://www.statlect.com/fundamentals-of-probability/factorization-of-joint-probability-density-functions) write the peel.
+
+**If conditionals and Bayes still swap (Topics 6–7).** Grant Sanderson’s [3Blue1Brown — Bayes theorem](https://www.youtube.com/watch?v=HZGCoVF3YvM) is the famous ratio. Statlect’s [conditional probability distributions](https://www.statlect.com/fundamentals-of-probability/conditional-probability-distributions) covers $p(x\mid y)=p(x,y)/p_Y(y)$ for both types.
+
+**If mixed type / GMM is just a name (Topic 8).** Josh Starmer’s [StatQuest — Gaussian Mixture Models](https://www.youtube.com/watch?v=qMTuMa86NzU) is the popular “die of bells.” Same Bayes video as above for the $2.5$ V decoder.
+
+**If independence, IID, or $|J|$ slip (Topics 9–10).** Khan’s [independent events](https://www.khanacademy.org/math/statistics-probability/probability-library/multiplication-rule-independent/v/compound-sample-spaces) plus Seeing Theory’s [independence](https://seeing-theory.brown.edu/compound-probability/index.html#second). Statlect’s [independent random variables](https://www.statlect.com/fundamentals-of-probability/independent-random-variables) and [IID sequence](https://www.statlect.com/glossary/IID-sequence) expand the two words. 3Blue1Brown’s [change of variables](https://www.youtube.com/watch?v=okjYP_Uj-KM) is why $\lvert J\rvert$ multiplies density.
+
+**How to use.** Joint fog → Seeing Theory or Khan *before* Topic 1. GMM name → StatQuest *after* Topic 8. One famous teacher per stuck idea. Do not open ten tabs.
+
+---
+
+### Full topic map — previous list plus new entries
+
 **How to use:** finish NOTES first (video closed if you can). When one map box still feels thin, open **only that topic’s group** — **2–3 companions** (video + notes/blog). All links live **here**, not inside topic bodies.
 
 This lecture is a **chalkboard recap**. It does **not** open a notebook.
@@ -867,6 +927,7 @@ This lecture is a **chalkboard recap**. It does **not** open a notebook.
 | [Stat 110 playlist](https://www.youtube.com/playlist?list=PL2SOU6wwxB0uwwH80KTQ6ht66KWxbzTIo) | Video course | Slower joints / IID |
 
 ---
+
 
 ## Sources
 

@@ -27,9 +27,13 @@
 
 ## Executive Summary — architecture of this lecture
 
-This hour estimates parameters from a notebook that hides numbers (only signs) or hides labels (a mixture). The method is: write the likelihood of *what was recorded*, take the log, differentiate, set it to zero. When a missing switch $Z$ blocks that derivative, use **expectation–maximization (EM)**: invent the switch, take its posterior, maximize the **Q-function**, and loop. The two machines are a sign-censored Normal **maximum likelihood estimate (MLE)** through $\Phi^{-1}$, and a two-exponential mixture with closed updates for $\pi,\beta_1,\beta_2$.
+You sit two incomplete notebooks. The first is a Normal that only wrote plus or minus; the second is a mixture that wrote waiting times but not which kitchen cooked them. For each, write the likelihood of *what was actually recorded*, take the log, differentiate, and set the derivative to zero. The sign-censored Normal reduces to a coin whose bias is a standard-Normal area $\Phi$; invert $\Phi$ to recover the mean. When a hidden switch $Z$ makes the observed density a sum, the log will not split — invent $Z$, take its posterior, maximize the **Q-function**, and loop. That second machine is a two-exponential mixture whose M-step has closed updates for $\pi,\beta_1,\beta_2$.
 
 **Worldview arc:** from first-course MLE / EM as slogans (or `loss.backward()` folklore) **to** likelihood constructed on recorded data, reduced, inverted, or completed by a latent coin.
+
+**Hour at a glance (whole video).** The first half is a Normal $\mathcal{N}(\mu,1)$ whose *values* were never written — only plus or minus, and $m$ of the $n$ draws are minus. You cannot average the missing $x_i$. After standardizing, a minus has probability $\Phi(-\mu)$ and a plus has $\Phi(\mu)$, so the likelihood of the notebook is those areas multiplied. Differentiating $\Phi$ by hand is ugly, so rename $p=\Phi(-\mu)$: the same product is a Bernoulli likelihood (negative = success) and the MLE is $\hat p=m/n$. Then invert: $\hat\mu=-\Phi^{-1}(m/n)=\Phi^{-1}((n-m)/n)$. Many minuses force a negative mean; that is a picture check, not extra theory. MAP is named and left as homework.
+
+The second half is a two-exponential mixture: flip a coin $\pi$, then draw $\mathrm{Exp}(\beta_1)$ or $\mathrm{Exp}(\beta_2)$. The observed density is a *sum*, so $\log f$ has no closed maximizer — that is why EM exists. Invent a latent coin $Z$ so the complete-data density *selects* one kitchen by using $z$ as an exponent. The E-step replaces each missing $z_i$ by its posterior $\gamma_i=P(Z_i=1\mid x_i,\theta^{\mathrm{old}})$ (Bayes). Those $\gamma_i$ go into the **Q-function**, the expected complete log-likelihood. The M-step differentiates $Q$ and gets closed updates: $\pi$ is the mean of the $\gamma$'s, each $\beta$ is a $\gamma$-weighted exponential MLE. Then loop. Handwritten backprop is promised for the next tutorial block, not this one.
 
 ### System context
 
@@ -98,18 +102,39 @@ This hour estimates parameters from a notebook that hides numbers (only signs) o
 
 ### Scenario walkthrough
 
+Walk this **one** exam through the blueprint above. Each step answers “so what?” for the next box.
+
+**Story:** a numerical recap exam. Page 1 is ten Normal draws whose *values* were never written — only plus or minus, and three of the ten are minus. Page 2 is waiting times from two unlabeled exponential kitchens.
+
+1. **Why recap MLE and EM on paper?** Later generative models will need the same two machines sitting on the surface, not sunk inside `loss.backward()`. That is the GOAL box.
+
+2. **Why not average the ten missing numbers?** They were never recorded. The data *are* the signs. That is PROBLEM 1.
+
+3. **How do you score a mean from signs only?** Standardize $\mathcal{N}(\mu,1)$. A minus has probability $\Phi(-\mu)$; a plus has $\Phi(\mu)$. The likelihood of the notebook is those areas multiplied. That is $L(\mu)$.
+
+4. **Why rename $p=\Phi(-\mu)$?** Differentiating $\Phi$ by hand is ugly. The same product is a Bernoulli likelihood (negative = success), so $\hat p=m/n=3/10$. That is REDUCE + MAX.
+
+5. **How do you get back to $\mu$?** Invert: $\hat\mu=-\Phi^{-1}(m/n)=\Phi^{-1}((n-m)/n)$. Three minuses out of ten is a plus-fraction $0.7$, so $\hat\mu>0$. Many minuses would have forced $\hat\mu<0$. That is INVERT + CHECK.
+
+6. **Why is page 2 a different machine?** Every wait $x$ is visible, but the *kitchen* is not. The observed density is a **sum** of two exponentials, so $\log f$ will not split. That is PROBLEM 2.
+
+7. **What do you invent?** A coin $Z$: heads $\Rightarrow\mathrm{Exp}(\beta_1)$, tails $\Rightarrow\mathrm{Exp}(\beta_2)$. Using $z$ as an exponent *selects* one kitchen. That is the complete-data log-likelihood.
+
+8. **You still do not know $Z$.** Replace each $z_i$ by its posterior $\gamma_i=P(Z_i=1\mid x_i,\theta^{\mathrm{old}})$ (Bayes). That is the E-step.
+
+9. **What do you maximize?** The **Q-function**: expected complete log-likelihood, $z_i$ swapped for $\gamma_i$. Differentiate $Q$. The M-step is closed: $\pi$ is the mean of the $\gamma$'s; each $\beta$ is a $\gamma$-weighted exponential MLE. Then loop.
+
 ```
-  10 numbers from N(μ,1), but the page only has  + + − + − + + − + +
-  count m = 3 minuses
-       │
+  page 1:  + + − + − + + − + +     (m = 3 minuses)
+       │  cannot use x̄ — the x_i were never written
        ▼
   each minus costs Φ(-μ); each plus costs Φ(μ)
-       │  rename p = Φ(-μ)  →  coin with 3/10
+       │  rename p = Φ(-μ)
        ▼
-  p̂ = 0.3  →  μ̂ = −Φ⁻¹(0.3) = Φ⁻¹(0.7)   (positive mean; fewer minuses)
+  p̂ = 3/10  →  μ̂ = −Φ⁻¹(0.3) = Φ⁻¹(0.7)   (positive mean; fewer minuses)
 
-  later: waiting times, two clocks, no label
-       │
+  page 2: waiting times, two kitchens, no label
+       │  log of a sum will not split
        ▼
   invent Z → complete log-ℓ → γ_i by Bayes → Q → closed β, π → repeat
 ```
@@ -117,12 +142,12 @@ This hour estimates parameters from a notebook that hides numbers (only signs) o
 ### Failure / contrast path
 
 ```
-  use x̄ on the missing numbers     ──X──►  the x_i were never written
-  maximize the mixture density
-    by one brute derivative        ──X──►  log of a *sum* has no
-                                            closed MLE; that is why EM
-  treat autograd as understanding  ──X──►  next hour wants numerical
-                                            backprop, not loss.backward()
+  average the missing numbers          ──X──►  those x_i were never written
+  maximize the mixture by one
+    brute derivative                   ──X──►  log of a *sum* has no closed
+                                               MLE; that is why EM exists
+  treat autograd as understanding      ──X──►  next hour wants numerical
+                                               backprop, not loss.backward()
 ```
 
 ### STOP / out of scope
@@ -131,16 +156,16 @@ This hour estimates parameters from a notebook that hides numbers (only signs) o
 - No Gaussian mixture, no general EM proof (monotonicity of the observed likelihood).
 - Numerical **backpropagation** is expected background and is the *next* tutorial block, not this one.
 
-### Load-bearing claims
+### Load-bearing claims (closed-book)
 
-- Likelihood is built from **what was recorded**, not from the hidden $x_i$.
-- $P(X<0)=\Phi(-\mu)$ and $P(X>0)=\Phi(\mu)$ after standardizing $\mathcal{N}(\mu,1)$.
-- Signs reduce to a Bernoulli with $p=\Phi(-\mu)$; $\hat p=m/n$; $\hat\mu=-\Phi^{-1}(m/n)=\Phi^{-1}((n-m)/n)$.
-- Many negatives force $\hat\mu<0$ — a sanity check, not extra theory.
+- Build the likelihood from **what was recorded**, not from hidden $x_i$.
+- After standardizing $\mathcal{N}(\mu,1)$, a minus has probability $\Phi(-\mu)$ and a plus has $\Phi(\mu)$.
+- Signs reduce to a Bernoulli with $p=\Phi(-\mu)$; $\hat p=m/n$; invert to $\hat\mu=-\Phi^{-1}(m/n)=\Phi^{-1}((n-m)/n)$.
+- Many negatives force $\hat\mu<0$ — a picture check, not extra theory.
 - A two-exponential mixture is a coin $\pi$ then $\mathrm{Exp}(\beta_1)$ or $\mathrm{Exp}(\beta_2)$.
-- Complete-data density uses $z$ as an exponent that *selects* one component.
+- Complete-data density uses $z$ as an exponent that *selects* one kitchen.
 - E-step: $\gamma_i=P(Z_i=1\mid x_i,\theta^{\mathrm{old}})$ by Bayes.
-- Q replaces each $z_i$ by $\gamma_i$; M-step is weighted exponential MLE, then loop.
+- Q replaces each $z_i$ by $\gamma_i$; the M-step is a weighted exponential MLE, then loop.
 
 **Speaker / course:** Chandan Jayaram, NPTEL IISc, Mathematical Foundations of Generative AI — Tutorial 10.
 
@@ -975,6 +1000,33 @@ Both numerical machines are on the desk: invert $\Phi$ for censored Normals, and
 
 ## External references
 
+Two layers, **both kept**.
+
+1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
+2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+
+### Start here — high-signal companions
+
+Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this tutorial still closed.
+
+**If “likelihood” still sounds like “probability” (Topics 1–4).** Josh Starmer’s [StatQuest — Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4) is the short, famous fix: $L$ scores a *parameter* for data you already saw.
+
+**If the MLE recipe is rusty (Topics 1, 4).** The same channel’s [StatQuest — Maximum Likelihood, clearly explained](https://www.youtube.com/watch?v=XepXtl9YKwc) is the classroom standard: write $L$, take the log, differentiate, set it to zero. That is exactly the coin $\hat p=m/n$ he reduces to.
+
+**If $\Phi$ is still a table, not an area (Topics 3, 5).** [Khan Academy — Introduction to the Normal](https://www.youtube.com/watch?v=hgtMWR3TFnY) plus Brown’s [Seeing Theory — probability distributions](https://seeing-theory.brown.edu/probability-distributions/index.html) beat a dozen “$z$-score cheat sheet” posts. Drag the bell until the left area is $m/n$; that slide *is* $\Phi^{-1}$.
+
+**If the E-step fraction $\gamma_i$ will not sit still (Topic 8).** StatQuest’s [Bayes’ Theorem](https://www.youtube.com/watch?v=9wCnvr7Xw4E) is the popular English for $P(Z\mid x)=P(x\mid Z)P(Z)/P(x)$. That fraction *is* the responsibility.
+
+**If the two kitchens still feel like slogans (Topics 6, 10).** [StatQuest — MLE for the Exponential](https://www.youtube.com/watch?v=p3T-_LMrvBc) recovers $\hat\beta=1/\bar x$ for one clock — the hard-label limit of the M-step. The M-step just *weights* that formula by $\gamma$.
+
+**If “complete data” is still a phrase (Topics 7–9).** Do and Batzoglou’s Nature Biotech primer [What is the EM algorithm?](https://www.nature.com/articles/nbt1406) is the short famous reason we invent pairs $(x,z)$ at all, and why Q is an *expected* complete log-likelihood.
+
+**How to use.** $\Phi$ fog → Khan or Seeing Theory *before* Topic 3. Coin MLE → StatQuest MLE *before* Topic 4. Soft labels → StatQuest Bayes *before* Topic 8. Do not open ten tabs. One famous teacher per stuck idea.
+
+---
+
+### Full topic map — previous list plus new entries
+
 Two or three companions **per topic**, listed **only here** (not under each topic). Mix of **video** and **blog/notes**. Wikipedia omitted. Watch/read after that map box; they do not replace the boards.
 
 | Resource | Type | Matches lecture… | Why it helps |
@@ -1013,6 +1065,7 @@ Two or three companions **per topic**, listed **only here** (not under each topi
 **How to use:** after Topic 5, one invert-normal video + the $\Phi^{-1}$ calculator. After Topic 8, StatQuest Bayes (or 3Blue1Brown) before re-reading $\gamma_i$. After Topic 10, Stephens plus StatQuest exponential MLE — then check that $\pi^{\mathrm{new}}$ and $\beta^{\mathrm{new}}$ match the tablet.
 
 ---
+
 
 ## Sources
 

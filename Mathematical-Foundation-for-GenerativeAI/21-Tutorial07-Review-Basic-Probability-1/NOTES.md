@@ -27,11 +27,13 @@
 
 ## Executive Summary — architecture of this lecture
 
-**Job:** recap the probability objects this course will keep using.
-**Method:** rebuild the triplet $(\Omega,\mathcal{F},P)$, then add conditionals, the total law, Bayes, and independence tests, then map outcomes into $\mathbb{R}$ with a random variable.
-**Fork:** specify a discrete law by a CDF or a PMF. Continuous RVs, expectation, and variance wait for the next tutorial.
+This hour recaps the probability objects the rest of the course will keep using. Start from a **random experiment (RE)** — a procedure you can run again without knowing the result — whose outcomes live in a sample space $\Omega$, whose events $P$ scores, and whose three axioms make $(\Omega,\mathcal{F},P)$ a **probability space**. After you learn that $B$ already happened you reweigh every event; a partition rebuilds $P(A)$; Bayes flips the easy lab number into the number you actually want. Independence is a product test (with total, pairwise, and conditional cousins); a random variable is a function $X:\Omega\to\mathbb{R}$, not a floating number. A **cumulative distribution function (CDF)** $F(x)=P(X\le x)$ specifies the law; a discrete $X$ is equally specified by a **probability mass function (PMF)**. You leave with named discrete families (Bernoulli, indicator, binomial, Poisson, geometric); continuous $X$, expectation, and variance wait until next time.
 
 **Worldview arc:** from “named objects $\Omega$, $\mathcal{F}$, $P$” **to** “discrete $X$ completely specified by a staircase CDF or a mass function.”
+
+**Hour at a glance (whole video).** The first half is the *stage*. A **random experiment (RE)** is a repeatable procedure whose result is not known in advance. Every complete result is an outcome; the bag of all outcomes is the **sample space** $\Omega$; an **event** is a subset; the **event space** $\mathcal{F}$ is the menu of subsets you may score (here they take every subset). **Probability** $P$ assigns each event a number and must stay nonnegative, give the whole of $\Omega$ the score 1, and add on events that cannot happen together. Those three objects are the **probability triplet**. The triplet alone does not update. If you learn that $B$ already happened, **conditional probability** throws away $\Omega\setminus B$ and stretches the leftover so $B$ now has mass 1 — but only if $P(B)>0$. If you instead cut $\Omega$ into disjoint rooms (a **partition**), the **law of total probability** rebuilds $P(A)$ as a weighted mix of the room-wise conditionals. **Bayes** is that mix used backwards: the lab published “positive given disease”; you want “disease given positive.” Independence is not “they feel unrelated”: two events are independent when $P(A\cap B)=P(A)P(B)$. For a list you must say *which* test — **total** (every subcollection factors), **pairwise** (only pairs), or **conditional independence** given $C$ (tests can be independent given the disease and still dependent if you do not know the disease).
+
+The second half leaves the abstract bag. Computation wants **real numbers**, so a **random variable** is a deterministic function $X:\Omega\to\mathbb{R}$ (the slogan: neither random nor a variable). It **pushes** $P$ onto the line as a new measure $P_X$. One working function packages that law: the **cumulative distribution function (CDF)** $F(x)=P(X\le x)$, the running total of mass from $-\infty$ up to $x$. The CDF specifies the law of $X$. About 80% of later course time is continuous and 20% discrete; today they finish the discrete side. A discrete $X$ takes countably many values; its CDF is a **staircase**; each jump is the mass at that point — the **probability mass function (PMF)**. Either the CDF or the PMF completely specifies a discrete law. Named piles close the hour: **Bernoulli**, **indicator** $1_B$, **binomial**, **Poisson**, **geometric**. Next tutorial replaces piles by densities and adds expectation.
 
 ### System context
 
@@ -98,26 +100,56 @@
 
 ### Scenario walkthrough
 
-1. Name $\Omega$, $\mathcal{F}$, $P$ and the three axioms.
-2. Learn $B$ happened → reweigh every event by overlap with $B$.
-3. Cut $\Omega$ into disjoint $B_i$; write $P(A)$ as a weighted mix.
-4. Flip $P(A\mid B)$ when $P(B\mid A)$ is the easy piece.
-5. Test two-event independence by a product.
-6. Separate total, pairwise, and conditional independence (disease tests).
-7. Stick real numbers on outcomes (coin 0/1; hotel price vs calories).
-8. Walk the line: $F(x)=P(X\le x)$.
-9. Discrete $X$: jumps = masses; PMF or CDF specifies the law.
-10. Stock families; next hour is continuous + expectation.
+Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
+
+**Story:** a clinic wants to know whether a rare disease is present after a lab test comes back positive. (A die or a coin is the same shape of objects; they use those for the arithmetic.)
+
+1. **Why a triplet?** “A person walks in” is a **random experiment (RE)**. $\Omega$ is every possible person-state. “Has the disease” and “test is positive” are **events**. $P$ scores them. That is the SETUP box.
+
+2. **Why conditionals?** You hear the test is positive. That is event $B$. You throw away everyone who tested negative and reweigh. That is $P(\text{disease}\mid\text{positive})$.
+
+3. **Why a partition?** You do not know $P(\text{positive})$ directly. Cut the world into disease / no-disease. Mix the two rooms. That is the total law.
+
+4. **Why Bayes?** The lab published the easy number $P(\text{positive}\mid\text{disease})$. You want the flipped number. Cartoon numbers on the board: prior $1\%$, true-positive $99\%$, false-positive $1\%$ $\to$ posterior $1/2$, **not** $99\%$.
+
+5. **Why independence flavors?** Two tests can be **conditionally independent given the disease** and still dependent if you do not know the disease (they share a hidden cause). Pairwise independence of three events is weaker than total independence.
+
+6. **Why a random variable?** “Has disease” as a yes/no sticker is $X:\Omega\to\{0,1\}$. “Test positive” is another sticker $Y$ on the **same** $\Omega$.
+
+7. **Why a CDF / PMF?** Walk the line: $F(x)=P(X\le x)$ is the **cumulative distribution function (CDF)**. For this Bernoulli, $F$ is a two-step staircase and the **probability mass function (PMF)** is the two piles $p$ and $1-p$.
+
+8. **Why named families?** The same piles get names: Bernoulli / indicator for one test, binomial for $n$ independent tests, geometric for “wait until first positive,” Poisson for an uncapped count. That is the catalog. Continuous $X$ is next hour.
+
+```
+  person walks in  =  random experiment
+         │
+         ▼
+  Ω = possible person-states     events: disease, test+
+         │  learn test+
+         ▼
+  reweigh (conditional)  →  mix rooms (total law)
+         │  flip the lab number
+         ▼
+  Bayes: P(disease | test+)   (1% / 99% / 1%  →  1/2)
+         │  stickers on the same Ω
+         ▼
+  X = 1{disease}   Y = 1{test+}
+         │  CDF = running total; PMF = piles
+         ▼
+  Bernoulli / binomial / geometric / Poisson
+```
+
+Same chain for a die or three coins: experiment $\to$ $\Omega$ $\to$ update $\to$ function $X$ $\to$ CDF / PMF $\to$ named piles.
 
 ### Failure / contrast path
 
 ```
-  P(B)=0 then write P(A|B)           ──X──► undefined here
-  Add P(A)+P(B) when A overlaps B    ──X──► double-count
-  Pairwise independent ⇒ total indep ──X──► false
-  Call a RV “a random number”        ──X──► hides Ω → ℝ map
-  Script P vs non-script P_X mixed   ──X──► measure confused with CDF
-  PMF on a continuous RV             ──X──► wrong object
+  “I’ll write P(A|B) even if P(B)=0”              ──X──► undefined here
+  “Just add P(A)+P(B)” when A and B overlap       ──X──► you double-count
+  “Pairwise independent ⇒ totally independent”    ──X──► false
+  “X is just a random number”                     ──X──► you hid the map Ω → ℝ
+  Mixing script P (the measure) with P_X (the CDF)──X──► two different objects
+  “A continuous X has a PMF”                      ──X──► wrong object
 ```
 
 ### STOP / out of scope
@@ -126,13 +158,13 @@ Continuous random variables and densities; expectation and variance; a full meas
 
 ### Load-bearing claims (closed-book)
 
-- $(\Omega,\mathcal{F},P)$ is the **probability space**; $P$ obeys **three axioms**.
-- $P(A\mid B)=P(A\cap B)/P(B)$ only if $B\in\mathcal{F}$ and $P(B)>0$; it is a **new assignment**.
-- **Total law** uses a partition; **Bayes** rewrites the other conditional.
-- Independence $=P(A\cap B)=P(A)P(B)$; several stronger/weaker cousins exist.
-- A **random variable** is a function $X:\Omega\to\mathbb{R}$ and induces $P_X$.
-- **CDF** accumulates; it **specifies** the law of $X$.
-- **Discrete** $X$ has a **PMF**; CDF is a **staircase** whose jumps are the masses.
+- $(\Omega,\mathcal{F},P)$ is the **probability space**; $P$ obeys **three axioms** (nonnegative, whole space $=1$, add on disjoint events).
+- $P(A\mid B)=P(A\cap B)/P(B)$ only if $B$ is a legal event with $P(B)>0$; it is a **new assignment**, not decoration on $P(A)$.
+- The **total law** rebuilds $P(A)$ from a partition; **Bayes** rewrites the other conditional.
+- Independence is the **product test** $P(A\cap B)=P(A)P(B)$; total, pairwise, and conditional cousins are not the same word.
+- A **random variable** is a function $X:\Omega\to\mathbb{R}$ and induces a pushforward $P_X$.
+- The **cumulative distribution function (CDF)** accumulates $P(X\le x)$; it **specifies** the law of $X$.
+- A **discrete** $X$ has a **probability mass function (PMF)**; the CDF is a **staircase** whose jumps are the masses.
 
 **Speaker / course:** NPTEL IISc · Tutorial 7.
 
@@ -883,6 +915,33 @@ The discrete toolkit is in place. Continuous RVs will replace piles by **densiti
 
 ## External references
 
+Two layers, **both kept**.
+
+1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
+2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+
+### Start here — high-signal companions
+
+Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this tutorial still closed.
+
+This lecture is a **chalkboard recap**. It does **not** run Python. Do not look for a hidden Colab; check arithmetic on paper.
+
+**If Ω, events, and $P$ still blur (Topics 1–3).** Two classroom standards: [Khan Academy’s probability unit](https://www.khanacademy.org/math/statistics-probability/probability-library) and Brown’s [Seeing Theory](https://seeing-theory.brown.edu/). Those two beat a dozen SEO probability articles.
+
+**If “given that” and Bayes still swap in your head (Topics 2–4).** Grant Sanderson’s [3Blue1Brown — Bayes theorem](https://www.youtube.com/watch?v=HZGCoVF3YvM) is the famous geometric flip of $P(A\mid B)$. Taboga’s [Statlect — Bayes’ rule](https://www.statlect.com/fundamentals-of-probability/Bayes-rule) is the clean written version of the same formula.
+
+**If you mix up “probability” and “likelihood” (Topics 2–4).** Josh Starmer’s [StatQuest — Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4) is the short, famous clarification.
+
+**If independence is still a vibe (Topics 5–6).** Khan’s [independent events](https://www.khanacademy.org/math/statistics-probability/probability-library/multiplication-rule-independent/v/compound-sample-spaces) plus Seeing Theory’s [independence](https://seeing-theory.brown.edu/compound-probability/index.html#second) keep the product test honest. Statlect’s [independent events](https://www.statlect.com/fundamentals-of-probability/independent-events) writes mutual vs pairwise in one place.
+
+**If “$X$ is a function, $F$ is a running total” (Topics 7–10).** Khan’s [random-variables unit](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) and Seeing Theory’s [distributions](https://seeing-theory.brown.edu/probability-distributions/index.html) are the usual next stop. Statlect’s [random variables](https://www.statlect.com/fundamentals-of-probability/random-variables) is the careful $\Omega\to\mathbb{R}$ page.
+
+**How to use.** Triplet fog → Khan or Seeing Theory *before* Topic 1. Bayes flip → 3Blue1Brown *after* Topic 4. One famous teacher per stuck idea. Do not open ten tabs.
+
+---
+
+### Full topic map — previous list plus new entries
+
 **How to use:** finish the NOTES chain first (video closed if you can). When one map box still feels thin, open **only that topic’s group** — **2–3 companions each** (prefer a **teaching video + notes/blog**). All links live **here**, not inside topic bodies.
 
 This lecture is a **chalkboard recap**. It does **not** run Python. Do not look for a hidden Colab; check arithmetic on paper.
@@ -987,6 +1046,7 @@ This lecture is a **chalkboard recap**. It does **not** run Python. Do not look 
 | [Stat 110 YouTube playlist](https://www.youtube.com/playlist?list=PL2SOU6wwxB0uwwH80KTQ6ht66KWxbzTIo) | Video course    | Same objects, slower proofs    |
 
 ---
+
 
 ## Sources
 
