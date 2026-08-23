@@ -1,12 +1,27 @@
 # W3L8: GANs as Classifier-Guided Generative Sampler
 
-> **Prerequisites first:** Before reading these notes, study [PREREQUISITES.md](./PREREQUISITES.md) for foundational concepts on probability densities, neural samplers, binary cross-entropy, and minimax games.
+> **Video:** [W3L8: GANs as classifier-guided generative sampler](https://www.youtube.com/watch?v=ga8VOW6pPeA&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=13) · **~41:29**  
+> **Prerequisites first:** [PREREQUISITES.md](./PREREQUISITES.md) · **Interactive Quiz:** [quiz.html](./quiz.html)  
+> **Course:** IIT Madras BS **Mathematical Foundations of Generative AI** (BSDA5002) · Prof. Prathosh A P (EECS, IISc Bangalore).
+
+| When the lecture hits… | Warm-up in PREREQUISITES.md |
+|:-----------------------|:----------------------------|
+| Continuous density $p_x$ vs generator $p_\theta$ | [p1-distributions](./PREREQUISITES.md#p1-distributions) |
+| Neural sampler $z \to G_\theta(z)$ | [p2-generative-sampler](./PREREQUISITES.md#p2-generative-sampler) |
+| Binary classifier $D_w(x)$ & decision boundary | [p3-classification-boundary](./PREREQUISITES.md#p3-classification-boundary) |
+| Log-likelihood penalties & BCE | [p4-cross-entropy](./PREREQUISITES.md#p4-cross-entropy) |
+| VDM lower bounds & Fenchel duality | [p5-vdm-duality](./PREREQUISITES.md#p5-vdm-duality) |
+| Minimax games, saddle points & limit cycles | [p6-minimax-games](./PREREQUISITES.md#p6-minimax-games) |
+| Bayes optimal discriminator & JSD | [p7-density-ratio-jsd](./PREREQUISITES.md#p7-density-ratio-jsd) |
+
+**Previous:** [W2_L7 GAN formulation](../09-W2-L7-GAN-Formulation/NOTES.md) · **Tutorial:** [W2_T5 Implementation of GAN](../10-W2-T5-Implementation-of-GAN/NOTES.md) · **Catalog:** [../NOTES.md](../NOTES.md)
 
 ---
 
 ## Table of Contents
 
 - [Executive Summary — architecture of this lecture](#executive-summary--architecture-of-this-lecture)
+- [Algorithmic Blueprint: Minimax Alternating Sampling Procedure](#algorithmic-blueprint-minimax-alternating-sampling-procedure)
 - [Topic 1: From VDM Lower Bounds to Classifier-Guided Sampling (00:00–03:20)](#topic-1-from-vdm-lower-bounds-to-classifier-guided-sampling-00000320)
 - [Topic 2: The Naive Heuristic: Guiding Generation with a Fixed Classifier (03:20–08:37)](#topic-2-the-naive-heuristic-guiding-generation-with-a-fixed-classifier-03200837)
 - [Topic 3: The Logical Trap and the 2D Counter-Example (08:37–14:47)](#topic-3-the-logical-trap-and-the-2d-counter-example-08371447)
@@ -16,6 +31,14 @@
 - [Topic 7: The Unified Value Function J(θ, w) and the VDM Lower-Bound Bridge (28:37–33:05)](#topic-7-the-unified-value-function-jθ-w-and-the-vdm-lower-bound-bridge-28373305)
 - [Topic 8: The Minimax Adversarial Game and JS Specificity (33:05–41:29)](#topic-8-the-minimax-adversarial-game-and-js-specificity-33054129)
 - [External references](#external-references)
+  - [Topic 1 — VDM Lower Bounds to Classifier Guidance](#topic-1--vdm-lower-bounds-to-classifier-guidance)
+  - [Topic 2 — Naive Heuristic & Fixed Classifiers](#topic-2--naive-heuristic--fixed-classifiers)
+  - [Topic 3 — 2D Counter-Example & Converse Fallacy](#topic-3--2d-counter-example--converse-fallacy)
+  - [Topic 4 — Dynamic Co-Evolution & Boundary Herding](#topic-4--dynamic-co-evolution--boundary-herding)
+  - [Topic 5 — Limit Cycles, Oscillations & Mode Collapse](#topic-5--limit-cycles-oscillations--mode-collapse)
+  - [Topic 6 — Binary Cross-Entropy & Maximum Likelihood](#topic-6--binary-cross-entropy--maximum-likelihood)
+  - [Topic 7 — Unified Value Function J(θ, w) & VDM Equivalence](#topic-7--unified-value-function-jθ-w--vdm-equivalence)
+  - [Topic 8 — Minimax Game & JS Divergence Specificity](#topic-8--minimax-game--js-divergence-specificity)
 - [Sources](#sources)
 
 ---
@@ -148,7 +171,69 @@ This lecture establishes the dual interpretation of Generative Adversarial Netwo
 6. **Unified Classification Functional:** The two-player objective $J(\theta, w) = \mathbb{E}_{x \sim p_x}[\log D_w(x)] + \mathbb{E}_{z \sim p_z}[\log(1 - D_w(G_\theta(z)))]$ represents joint real log-likelihood maximization and fake rejection log-likelihood maximization.
 7. **JS Specificity:** The interpretation of the variational witness as a standard $[0, 1]$ binary classifier is unique to the Jensen–Shannon $f$-divergence and fails for general $f$-divergences.
 
-**Course & Instructor:** IIT Madras BS in Data Science (BSDA5002) · Prof. Prathosh A P (EECS, IISc Bangalore).
+---
+
+## Algorithmic Blueprint: Minimax Alternating Sampling Procedure
+
+The board derivations map directly to this mathematical sampling and optimization algorithm:
+
+```python
+# Algorithmic Blueprint: Minimax Alternating Optimization Loop
+# Target: Train G_theta to sample from true distribution p_x
+
+for epoch in range(num_epochs):
+    for step in range(steps_per_epoch):
+        # -------------------------------------------------------------
+        # STEP 1: Discriminator Step (Ascent on J(theta, w))
+        # -------------------------------------------------------------
+        # Sample mini-batch of real data x ~ p_x
+        x_real = sample_batch(dataset_D, batch_size=m)
+        
+        # Sample mini-batch of latent noise z ~ N(0, I)
+        z_noise = sample_gaussian_noise(dimension=k, batch_size=m)
+        
+        # Generate synthetic samples x_fake = G_theta(z)
+        x_fake = G_theta(z_noise)
+        
+        # Compute Discriminator Loss (Binary Cross-Entropy)
+        # J_D = (1/m) * sum(log D_w(x_real)) + (1/m) * sum(log(1 - D_w(x_fake)))
+        loss_D = - (torch.mean(torch.log(D_w(x_real) + 1e-8)) + 
+                    torch.mean(torch.log(1.0 - D_w(x_fake) + 1e-8)))
+        
+        # Update Discriminator parameters w by gradient ascent
+        # w <- w + lr_D * grad_w J(theta, w)
+        optimizer_D.zero_grad()
+        loss_D.backward()
+        optimizer_D.step()
+
+        # -------------------------------------------------------------
+        # STEP 2: Generator Step (Descent on J(theta, w))
+        # -------------------------------------------------------------
+        # Sample fresh latent noise z ~ N(0, I)
+        z_noise_fresh = sample_gaussian_noise(dimension=k, batch_size=m)
+        
+        # Generate new synthetic batch
+        x_fake_fresh = G_theta(z_noise_fresh)
+        
+        # Compute Generator Loss (Inverted Objective)
+        # J_G = (1/m) * sum(log(1 - D_w(G_theta(z))))
+        # Note: Non-saturating heuristic uses -log(D_w(G_theta(z)))
+        loss_G = torch.mean(torch.log(1.0 - D_w(x_fake_fresh) + 1e-8))
+        
+        # Update Generator parameters theta by gradient descent
+        # theta <- theta - lr_G * grad_theta J(theta, w)
+        optimizer_G.zero_grad()
+        loss_G.backward()
+        optimizer_G.step()
+
+# -----------------------------------------------------------------
+# INFERENCE / SAMPLING (Post-Training)
+# -----------------------------------------------------------------
+def generate_novel_samples(num_samples):
+    z = sample_gaussian_noise(dimension=k, batch_size=num_samples)
+    x_novel = G_theta(z) # Draws valid samples from p_theta approx p_x
+    return x_novel
+```
 
 ---
 
@@ -339,27 +424,37 @@ Does the detector passing the cardboard bill mean authentic currency was created
 ### Local picture
 
 ```
-   THE GEOMETRIC ADVERSARIAL CHEAT IN R^2
-   ──────────────────────────────────────
+   THE 2D GEOMETRIC EXPLOIT: HOW A FIXED CLASSIFIER IS CHEATED
+   ────────────────────────────────────────────────────────────
    Feature Coordinates: x = (x₁, x₂) ∈ R²
    
-   Region A [Above D_w1]: Classifier Output = 1 (Real)
-   Region B [Below D_w1]: Classifier Output = 0 (Fake)
+   x₂ ▲
+      │  [REGION A: D_w1(x) = 1 (REAL ACCEPTANCE ZONE)]
+      │
+      │       +  +  +  (Real Data px)               ·  ·  ·  (Cheated Fake p_θ2)
+      │      +   +   +                             ·   ·   ·  <--- D_w1 outputs 1!
+      │       +  +  +                               ·  ·  ·      (100% Error on Fake)
+      │
+   ───┼────────────────────────────────────────────────────────────► x₁
+      │           \
+      │            \  Separating Hyperplane D_w1(x) = 0.5
+      │             \
+      │              \
+      │               \       ·  ·  ·  (Initial Fake p_θ1)
+      │                \     ·   ·   · <--- Generator moves across line: θ1 ──► θ2
+      │                 \     ·  ·  ·
+      │  [REGION B: D_w1(x) = 0 (FAKE REJECTION ZONE)]
 
-   Step 1: Real p_x ∈ Region A   |   Fake p_θ1 ∈ Region B   ===> D_w1 Accuracy = 100%
-   Step 2: Generator updates θ1 ──► θ2
-   Step 3: Fake p_θ2 ∈ Region A (Far from p_x)              ===> D_w1 Accuracy = 0% on fakes
+   Trace Table:
+   ┌──────────────────────┬─────────────────────────┬──────────────────────────────┐
+   │ Generation Stage     │ Classifier D_w1 Output  │ True Manifold Overlap        │
+   ├──────────────────────┼─────────────────────────┼──────────────────────────────┤
+   │ Stage 1 (p_θ1)       │ D_w1(x̂) = 0.0 (Correct) │ 0% (Disjoint Support)        │
+   │ Stage 2 (p_θ2)       │ D_w1(x̂) = 1.0 (FAILED!) │ 0% (STILL COMPLETELY DISJOINT)│
+   │ Convergence (p_θ=px) │ D*(x) = 0.5 (Chance)    │ 100% (Identical Densities)   │
+   └──────────────────────┴─────────────────────────┴──────────────────────────────┘
 
-   Metric Check:
-   ┌──────────────────────┬──────────────────────┬──────────────────────────────┐
-   │ Configuration        │ Classifier Error     │ Distribution Match ||p_x-p_θ||│
-   ├──────────────────────┼──────────────────────┼──────────────────────────────┤
-   │ Initial (p_θ1)       │ 0% (Perfect D)       │ High Error (Distributions far)│
-   │ Cheated (p_θ2)       │ 100% (D Fails!)      │ High Error (Still far apart!) │
-   │ Optimal (p_θ = p_x)  │ 50% (Bayes Chance)   │ Zero Error (Perfect Match)    │
-   └──────────────────────┴──────────────────────┴──────────────────────────────┘
-
-   Notice: D_w1 failing at p_θ2 produces zero distribution overlap!
+   Notice: D_w1 failing at p_θ2 produces ZERO distribution overlap!
 ```
 
 ### Bridge
@@ -413,30 +508,24 @@ What happens if the mouse finds two rocks and runs between them in a circle? It 
 ### Local picture
 
 ```
-   THE DYNAMIC CO-EVOLUTIONARY LOOP
-   ────────────────────────────────
+   THE DYNAMIC BOUNDARY HERDING SEQUENCE
+   ─────────────────────────────────────
    
-   ┌────────────────────────────────────────────────────────┐
-   │                                                        │
-   │   1. Generator produces samples p_θk                   │
-   │      │                                                 │
-   │      ▼                                                 │
-   │   2. Discriminator updates w: D_wk separates px, p_θk  │
-   │      │                                                 │
-   │      ▼                                                 │
-   │   3. Generator updates θ: p_θ(k+1) fools D_wk          │
-   │      │                                                 │
-   │      ▼                                                 │
-   │   4. Are distributions identical? (p_θ = px?)          │
-   │         │                                              │
-   │         ├─ NO  ──► Repeat from Step 2 (Chase continues)│
-   │         │                                              │
-   │         └─ YES ──► D*(x) = 0.5 Everywhere (Equilibrium)│
-   │                                                        │
-   └────────────────────────────────────────────────────────┘
+   x₂ ▲
+      │     (Stage 1)              (Stage 2)              (Stage 3: Equilibrium)
+      │     D_w1 separates         D_w2 re-separates      p_θ covers px
+      │
+      │      px   │   p_θ2          px   \   p_θ2           px ≡ p_θ
+      │     (+)   │   (·)          (+)    \  (·)           ( + · + )
+      │           │ D_w1                   \ D_w2          ( · + · )
+      │     ──────┼──────          ─────────\────         ───────────
+      │           │                          \            D*(x) = 0.5
+      │      p_θ1 │                           \ p_θ3      Everywhere!
+      │      (·)  │                           (·)
+      └────────────────────────────────────────────────────────────────────────► x₁
 
-   Notice: The generator is progressively boxed in until the only surviving
-   strategy is exact distribution matching.
+   Notice: The discriminator acts as a moving cattle fence, boxing the generator
+   in until its only possible survival move is exact distribution matching.
 ```
 
 ### Bridge
@@ -491,20 +580,35 @@ Why do the teams never reach a balanced strategy? Because each team optimizes pu
 ### Local picture
 
 ```
-   VDM BOUND DISCONNECT & SADDLE-POINT DRIFT
-   ─────────────────────────────────────────
-   Divergence Value
+   ROTATIONAL LIMIT CYCLES & SADDLE POINT PHASE PORTRAIT
+   ──────────────────────────────────────────────────────
+   Parameter Space: (θ, w) ∈ R²
+   
+   Discriminator Weights w
         ▲
-        │    True Divergence D_f(p_x ║ p_θ)  [Remains High / Unchanged!]
-        │    ═══════════════════════════════════════════════════════════
-        │
-        │    Loose Lower Bound J(θ, w)       [Artificially Decreases!]
-        │    ───────\               /───────
-        │            \             /
-        │             \___________/  <--- Generator exploits weak critic!
-        └─────────────────────────────────────────────────────────────► Iterations
+        │                 ┌───────►───────┐
+        │                 │               │
+        │                 ▲   (Orbit)     ▼
+        │                 │               │
+        │                 │    (0, 0)     │
+   ─────┼─────────────────┼─── Saddle ────┼─────────────────► Generator Weights θ
+        │                 │     Point     │
+        │                 ▲               ▼
+        │                 │               │
+        │                 └───────◄───────┘
+        │            Closed Periodic Limit Cycle
+        └───────────────────────────────────────────────────
 
-   Notice: Minimizing a loose lower bound does not minimize the true divergence!
+   VDM Bound Disconnect:
+   ┌──────────────────────┬──────────────────────┬──────────────────────────────┐
+   │ Training Metric      │ Numerical Behavior   │ Mathematical Reality         │
+   ├──────────────────────┼──────────────────────┼──────────────────────────────┤
+   │ True JSD D_f(px║p_θ) │ Constant / High      │ Distributions never overlap  │
+   │ Lower Bound J(θ, w)  │ Oscillates & Drops   │ Generator exploits weak D    │
+   └──────────────────────┴──────────────────────┴──────────────────────────────┘
+
+   Notice: In non-convex minimax games, simultaneous gradient descent-ascent
+   produces rotational orbits around saddle points rather than inward convergence.
 ```
 
 ### Bridge
@@ -630,21 +734,17 @@ Why is this equivalence profound? Because it proves that an intuitive design rul
 ### Local picture
 
 ```
-   THE BRIDGE: CLASSIFICATION LOSS ≡ VDM FENCHEL BOUND
-   ───────────────────────────────────────────────────
+   THE MATHEMATICAL BRIDGE: SUPERVISED LOSS ≡ VDM FENCHEL DUAL
+   ────────────────────────────────────────────────────────────
    
-   Supervised Classification Loss           Variational Divergence Bound
-   (Binary Cross-Entropy)                   (Fenchel Conjugate with JS f-div)
-   
-   E_px[log D_w(x)]                 <===>   E_px[T(x)]  with T(x) = log D_w(x)
-          +                                       -
-   E_pθ[log(1 - D_w(x̂))]            <===>   E_pθ[f*(T(x̂))] with f*(t) = -log(1 - e^t)
-          ║                                       ║
-          ▼                                       ▼
-   ┌─────────────────────────────────────────────────────────────┐
-   │                    J(θ, w) = VDM Lower Bound                │
-   │  Maximizing over w computes the exact JS Divergence!        │
-   └─────────────────────────────────────────────────────────────┘
+   Component                 Binary Classification (BCE)       VDM Fenchel Conjugate (JSD)
+   ────────────────────────────────────────────────────────────────────────────────────────
+   Witness Function          T(x) = log D_w(x)                 T: X ──► (-inf, 0)
+   Real Data Term            E_px [log D_w(x)]                 E_px [T(x)]
+   Fenchel Dual Operator     f*(t) = -log(1 - e^t)             Convex Conjugate of JS f(u)
+   Fake Data Term            E_pθ [log(1 - D_w(x̂))]            - E_pθ [f*(T(x̂))]
+   Unified Functional        J(θ, w)                           Variational Lower Bound
+   Optimal Witness           w* = argmax_w J(θ, w)             Tightest Bound = 2·JSD - 2log2
 
    Notice: The discriminator parameter w acts as the variational witness
    that tightens the lower bound onto the true Jensen-Shannon divergence.
@@ -697,17 +797,16 @@ Why does the safe designer win only when the safe is indistinguishable from soli
 ### Local picture
 
 ```
-   THE COMPLETE GAN / VDM TAXONOMY
-   ───────────────────────────────
+   THE COMPLETE f-DIVERGENCE & GAN TAXONOMY
+   ────────────────────────────────────────
    
-   f-Divergence Family D_f(px ║ p_θ)
-   ├── Forward KL (f(u) = u log u)       ──► Witness T(x) ∈ R (Unbounded Score)
-   ├── Reverse KL (f(u) = -log u)        ──► Witness T(x) ∈ R (Unbounded Score)
-   ├── Pearson χ² (f(u) = (u-1)²)        ──► Witness T(x) ∈ R (Quadratic Witness)
-   └── Jensen-Shannon Divergence         ──► Witness T(x) = log D_w(x)
-                                             └──► D_w: X ──► [0, 1]
-                                                  └──► BINARY CLASSIFIER GAN!
-                                                       min_θ max_w J(θ, w)
+   f-Divergence Type       f(u) Generator              Witness T(x) Range     Classifier Interpretation?
+   ─────────────────────────────────────────────────────────────────────────────────────────────
+   Forward KL Divergence   u log u                     T(x) ∈ (-inf, +inf)    NO (Unbounded Score)
+   Reverse KL Divergence   -log u                      T(x) ∈ (-inf, +inf)    NO (Unbounded Score)
+   Pearson χ² Divergence   (u - 1)²                    T(x) ∈ (-inf, +inf)    NO (Quadratic Witness)
+   Jensen-Shannon Div      u log u - (u+1)log((u+1)/2) T(x) = log D_w(x)      YES! Dw: X ──► [0, 1]
+                                                                              (STANDARD BINARY GAN!)
 
    Notice: The binary classification interpretation is a special structural property
    of the Jensen-Shannon divergence, not a universal property of all f-divergences.
@@ -721,16 +820,71 @@ This completes the dual formulation of GANs as classifier-guided generative samp
 
 ## External references
 
-The following external resources provide deep theoretical, mathematical, and practical study companions for the concepts introduced in this lecture:
+The following external resources provide deep theoretical, mathematical, and practical study companions, curated specifically for each subtopic in this lecture:
 
-| Resource | Matches Lecture Topic | Why it Helps |
+### Topic 1 — VDM Lower Bounds to Classifier Guidance
+
+| Kind | Resource | Why it Helps |
 | :--- | :--- | :--- |
-| [Goodfellow et al. (2014) — Generative Adversarial Nets](https://arxiv.org/abs/1406.2661) | **Topics 6, 7, 8** (Formulation & Minimax Game) | The foundational paper introducing the minimax game $\min_G \max_D V(D, G)$, the optimal discriminator proof $D^*(x) = \frac{p_{\text{data}}}{p_{\text{data}} + p_g}$, and the reduction to Jensen–Shannon divergence. |
-| [Nowozin et al. (2016) — f-GAN: Training Generative Neural Samplers via VDM](https://arxiv.org/abs/1606.00709) | **Topics 1, 7, 8** (VDM Bridge & JS Specificity) | The seminal NIPS 2016 paper proving that GANs are a special case of Variational Divergence Minimization and analyzing general $f$-divergence witness functions. |
-| [Stanford CS236: Deep Generative Models — GAN Notes (Ermon & Grover)](https://deepgenerativemodels.github.io/notes/gans/) | **Topics 2, 6, 7** (Classifier Guidance & Density Ratio) | Stanford course notes explaining likelihood-free learning, density ratio estimation, and the binary cross-entropy derivation of GAN loss functions. |
-| [Berkeley CS294-158: Deep Unsupervised Learning — GAN Lecture (Abbeel)](https://sites.google.com/view/berkeley-cs294-158-sp20/home) | **Topics 3, 4, 5** (2D Counter-Example & Limit Cycles) | UC Berkeley graduate lecture deep-diving into adversarial optimization dynamics, rotational limit cycles, mode collapse, and stability challenges. |
-| [MIT 6.S191: Introduction to Deep Learning — Generative Models (Amini)](http://introtodeeplearning.com/) | **Topics 2, 4, 8** (Two-Player Game & Feedback Loops) | MIT lecture providing clear visual and architectural explanations of the generator-discriminator feedback loop and game-theoretic training. |
-| [Goodfellow (2016) — NIPS Tutorial on Generative Adversarial Networks](https://arxiv.org/abs/1701.00160) | **Topics 3, 5, 8** (Adversarial Training & Pitfalls) | Comprehensive 57-page tutorial detailing why static discriminators fail, gradient saturation mechanics, non-saturating heuristics ($\max \log D$), and mode collapse. |
+| **Paper** | [Nowozin et al. (2016) — f-GAN: Training Generative Neural Samplers via VDM](https://arxiv.org/abs/1606.00709) | The seminal NIPS paper deriving variational lower bounds via Fenchel convex conjugates across the entire $f$-divergence family. |
+| **Blog** | [Lilian Weng — From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/) | Clear walkthrough explaining how sample expectations circumvent unknown $p_x(x)$ formulas without numerical integration. |
+| **Notes** | [Stanford CS236: Deep Generative Models — GAN / f-GAN Notes (Ermon & Grover)](https://deepgenerativemodels.github.io/notes/gans/) | Stanford graduate course notes formalizing variational divergence bounds and implicit neural samplers. |
+
+### Topic 2 — Naive Heuristic & Fixed Classifiers
+
+| Kind | Resource | Why it Helps |
+| :--- | :--- | :--- |
+| **Video** | [MIT 6.S191 — Deep Generative Models (Alexander Amini)](https://www.youtube.com/watch?v=yT4a2Tq03iE) | Visual lecture on setting up binary classification between real data and generative pushforwards. |
+| **Notes** | [Stanford CS236 — Likelihood-Free Learning](https://deepgenerativemodels.github.io/notes/gans/) | Mathematical framing of why standard maximum likelihood fails when density evaluations are intractable. |
+| **Blog** | [Ferenc Huszár — An Alternative Interpretation of GANs](https://www.inference.vc/an-alternative-interpretation-of-gans/) | Insightful analysis connecting density ratio estimation directly to binary classifier decision boundaries. |
+
+### Topic 3 — 2D Counter-Example & Converse Fallacy
+
+| Kind | Resource | Why it Helps |
+| :--- | :--- | :--- |
+| **Video** | [Berkeley CS294-158: Deep Unsupervised Learning — GANs (Pieter Abbeel)](https://www.youtube.com/watch?v=myGAe_F_t9A) | UC Berkeley graduate lecture detailing 2D toy geometries where static discriminators are completely tricked without distribution convergence. |
+| **Paper** | [Ian Goodfellow (2016) — NIPS Tutorial on Generative Adversarial Networks](https://arxiv.org/abs/1701.00160) | Section 3 breaks down why static classifiers fail and why dynamic game-theoretic feedback is mandatory. |
+| **Blog** | [Distill.pub — Deconvolution, Checkerboards & GAN Optimization](https://distill.pub/2016/deconv-checkerboard/) | Interactive visual essays exploring geometric pathologies in neural network decision spaces. |
+
+### Topic 4 — Dynamic Co-Evolution & Boundary Herding
+
+| Kind | Resource | Why it Helps |
+| :--- | :--- | :--- |
+| **Video** | [Stanford CS231n — Generative Models (Serena Yeung)](https://www.youtube.com/watch?v=5WoItGTWV54) | Step-by-step visual animation of rotating decision boundaries iteratively herding synthetic sample clouds. |
+| **Tutorial** | [PyTorch Official — Deep Convolutional GAN (DCGAN) Tutorial](https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html) | Concrete implementation demonstrating alternating discriminator ascent and generator descent batches. |
+| **Notes** | [MIT 6.7960: Deep Learning — Generative Models (Phillip Isola)](https://ocw.mit.edu/courses/6-7960-deep-learning-fall-2024/) | Game-theoretic formulation of two networks co-evolving across high-dimensional feature spaces. |
+
+### Topic 5 — Limit Cycles, Oscillations & Mode Collapse
+
+| Kind | Resource | Why it Helps |
+| :--- | :--- | :--- |
+| **Video** | [Cornell CS 6785: Advanced Machine Learning — Minimax & GAN Dynamics](https://www.youtube.com/watch?v=Ml15crPldBk) | In-depth derivation of non-convex saddle-point dynamics, rotational vector fields, and mode dropping. |
+| **Paper** | [Mescheder et al. (2018) — Which Training Methods for GANs do actually Converge?](https://arxiv.org/abs/1801.04406) | Landmark paper analyzing the Jacobian eigenvalues around GAN equilibrium points and proving why vanilla gradient descent-ascent enters periodic orbits. |
+| **Blog** | [Lilian Weng — GAN Instabilities & Mode Collapse](https://lilianweng.github.io/posts/2017-08-20-gan/) | Comprehensive reference cataloging mode collapse symptoms, gradient vanishing mechanics, and stabilization techniques. |
+
+### Topic 6 — Binary Cross-Entropy & Maximum Likelihood
+
+| Kind | Resource | Why it Helps |
+| :--- | :--- | :--- |
+| **Video** | [3Blue1Brown — Gradient descent and how neural networks learn](https://www.youtube.com/watch?v=IHZwWFHWa-w) | Visual calculus intuition behind logarithmic loss curves, cross-entropy penalties, and backpropagation gradients. |
+| **Notes** | [Stanford CS229: Machine Learning — Supervised Learning & Logistic Loss](https://cs229.stanford.edu/notes2022fall/main_notes.pdf) | Mathematical derivation of Bernoulli log-likelihood maximization and symmetric binary cross-entropy. |
+| **Book / Blog** | [Michael Nielsen — Neural Networks and Deep Learning (Cross-Entropy Chapter)](http://neuralnetworksanddeeplearning.com/chap3.html) | Rigorous pedagogical explanation of why quadratic cost saturates and how cross-entropy maintains steep gradient signals. |
+
+### Topic 7 — Unified Value Function J(θ, w) & VDM Equivalence
+
+| Kind | Resource | Why it Helps |
+| :--- | :--- | :--- |
+| **Paper** | [Ian Goodfellow et al. (2014) — Generative Adversarial Nets](https://arxiv.org/abs/1406.2661) | The foundational GAN paper deriving $V(D, G)$ and proving that optimal discriminator evaluation directly yields the Jensen–Shannon divergence. |
+| **Book** | [David Foster — Generative Deep Learning (Chapter 4: GANs)](https://www.oreilly.com/library/view/generative-deep-learning/9781098134174/) | Practical step-by-step textbook bridging mathematical value functionals to working PyTorch/TensorFlow architectures. |
+| **Blog** | [Arthur Juliani — Generative Adversarial Networks: Mathematical Walkthrough](https://towardsdatascience.com/generative-adversarial-networks-gans-89ef35a60b69) | Clear mathematical walkthrough of the combined binary cross-entropy loss function. |
+
+### Topic 8 — Minimax Game & JS Divergence Specificity
+
+| Kind | Resource | Why it Helps |
+| :--- | :--- | :--- |
+| **Video** | [MIT 6.S191 — Lecture 4: Deep Generative Modeling](https://www.youtube.com/watch?v=rZDXUapS7Mo) | Visual and game-theoretic analysis of zero-sum saddle points, equilibria, and the modern generative landscape. |
+| **Paper** | [Arjovsky et al. (2017) — Towards Principled Methods for Training Generative Adversarial Networks](https://arxiv.org/abs/1701.04862) | Theoretical analysis proving why JS divergence causes gradient vanishing on low-dimensional manifolds, laying the mathematical groundwork for Wasserstein GANs. |
+| **Notes** | [Stanford CS236: Lecture 7 — Generative Adversarial Networks](https://deepgenerativemodels.github.io/notes/gans/) | Formal proof showing why only Jensen–Shannon divergence yields a $[0, 1]$ binary classifier witness function. |
 
 ---
 
