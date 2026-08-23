@@ -1,0 +1,31 @@
+{
+  "title": "W1_T4: Tutorial 4: Introduction to pytorch: model building",
+  "video_id": "h1hEddM0aVE",
+  "url": "https://www.youtube.com/watch?v=h1hEddM0aVE",
+  "duration_seconds": 2646,
+  "channel": "IIT Madras - B.S. Degree Programme",
+  "instructor": "IITM BS tutorial (Chandan); course Prof. Prathosh A. P.",
+  "description": "Week 1 Tutorial 4: MLP on Fashion-MNIST (nn.Module, train/test loops, save/load); CNN knobs preview; next GANs.",
+  "playlist_index": 8,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "course_short": "IITM-BS-MFGAI",
+  "topics": [
+    "Data ready; MLP vs CNN vs ViT",
+    "Imports and Colab CUDA",
+    "NeuralNetwork flatten 784 to 10",
+    "Sequential Linear Wx+b",
+    "ReLU stack logits softmax",
+    "to(device) dummy predict",
+    "SGD Adam CE hyperparameters",
+    "train_loop four steps",
+    "test_loop accuracy curves",
+    "Save load CNN recap GANs"
+  ]
+}

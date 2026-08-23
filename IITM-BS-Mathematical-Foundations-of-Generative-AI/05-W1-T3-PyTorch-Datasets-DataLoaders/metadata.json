@@ -4,7 +4,27 @@
   "url": "https://www.youtube.com/watch?v=c2gN3TK3U74",
   "duration_seconds": 1844,
   "channel": "IIT Madras - B.S. Degree Programme",
-  "description": "Welcome to Week 1 Tutorial 3 on the course \"Generative AI\" by Prof. Prathosh A P.\nFull Course: https://study.iitm.ac.in/ds/course_pages/BSDA5002.html \n\nVideo Overview\nLearn how to prepare your data for PyTorch models.This lecture covers loading and transforming data into tensors, the fundamental format for neural networks. We'll explore built-in PyTorch datasets like FashionMNIST and, more importantly, dive into creating custom datasets for when your data isn't readily available. Discover how to create data loaders for efficient batch processing and shuffling, crucial for training your models effectively. This tutorial is a practical guide to managing and preparing your data for successful deep learning projects.\n\nAbout IIT Madras' online Bachelor of Science programme\nIIT Madras offers fou",
+  "instructor": "Prof. Prathosh A. P. (IISc / IITM BS)",
+  "description": "YouTube title: datasets & dataloaders. Spoken sitting: realization of variational divergence minimization — two nets, lower bound, min_θ max_w saddle, adversarial names, GAN as next instance. No PyTorch Dataset API on this tape.",
   "playlist_index": 7,
-  "chapter_count": 0
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 9,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "course_short": "IITM-BS-MFGAI",
+  "topics": [
+    "Recap IID G_θ min D_f",
+    "Samples only f-div LLN conjugate bound",
+    "Bound as max_T two expectations",
+    "Min lower bound nested minmax",
+    "Parameterize T as net T_w",
+    "Two-net implementation diagram",
+    "Saddle point on purpose",
+    "Adversarial opposite objectives",
+    "GAN generator discriminator critic"
+  ]
 }

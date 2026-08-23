@@ -8,9 +8,9 @@
 **Course:** IIT Madras B.S. · **BSDA5002** · Prof. Prathosh A. P. · tutorial live-code (Chandan)  
 **Previous in this playlist:** [W1_L2 problem setting](../01-W1-L2-Introduction-Problem-Setting/NOTES.md) · W1_T1 forward/backprop · [W1_L3 tensors Colab](../02-W1-L3-F-Divergence/NOTES.md) (actual tensor algebra)
 
-**Honest title note:** YouTube says **tensors**. The 18-minute notebook he actually opens is **Dataset and DataLoaders** (Fashion-MNIST + `CustomImageDataset`). These notes follow the **speech and the Colab**, not the title.
+**Honest title note:** YouTube says **tensors**. The ~18-minute notebook he actually opens is **Datasets & DataLoaders** (Fashion-MNIST + `CustomImageDataset`). These notes follow the **speech and the Colab**, not the title. The tape is a short lab, not a 60-minute chalk talk — warm-up + this article + quiz + the companions below are the hour.
 
-**Boards:** unique 2×2 composites from the recording (Colab + handwritten `img_dir` / `D={d1,d2,…}`). Code matches the cells he walks (`FashionMNIST`, `ToTensor`, `iloc`, `DataLoader(batch_size=64)`). Newer PyTorch docs renamed `read_image` → `decode_image`; he still types **`read_image`**.
+**Boards:** unique 2×2 composites from the recording (Colab + handwritten `img_dir` / $D=\{d_1,d_2,\ldots\}$). Some panes in Topics 3–4 look alike because the camera stays on one cell; read the caption for which corner to stare at. Code matches the cells he walks (`FashionMNIST`, `ToTensor`, `iloc`, `DataLoader(batch_size=64)`). Newer PyTorch docs renamed `read_image` → `decode_image`; he still types **`read_image`**.
 
 | When he hits… | Warm-up |
 |---------------|---------|
@@ -43,7 +43,7 @@
 
 ## Executive Summary — architecture of this lecture
 
-Weight updates need **tensors in batches of 64**. This sheet installs a **Dataset** (one `(image, label)`) then a **DataLoader** (batch + shuffle). Lucky path: **Fashion-MNIST** constructors. Unlucky path: folder + CSV + `CustomImageDataset`. After $D_1,\ldots,D_k$, **data is ready**; the model is next.
+Weight updates need **tensors in batches of 64**. This sheet installs a **Dataset** that yields one `(image, label)`, then a **DataLoader** that stacks 64 of those pairs and optionally shuffles. If torchvision already has the files, call **`FashionMNIST`**. If the files are custom or confidential, build **folder + two-column CSV + `CustomImageDataset`**. After $D=\{d_1,\ldots,d_k\}$, **data is ready**; the model is the next sheet.
 
 **Worldview arc:** from “convert files to tensors” **to** “iterate shuffled batches of `(x, y)`.”
 
@@ -306,7 +306,7 @@ This is **IMPORTS**. [Dataset vs the download package vs ToTensor](./PREREQUISIT
 
 ![Topic 3 — import torch, Dataset, datasets, ToTensor, plt](./screenshots/composites/ch03-topic-03-imports-dataset-transforms-plt-panel1of1.png)
 
-Caption: cursor on the five import lines. Capital **D** on `Dataset`; `datasets` (plural) downloads; `ToTensor` turns an image matrix into a tensor; `plt` only to look. The markdown above the cell already names `root`, `train`, `download`, `transform`.
+Caption: four near-duplicate panes of **the same cell** — watch the cursor hop `Dataset` → `datasets` → `ToTensor` → `plt`. Capital **D** on `Dataset`; `datasets` (plural) downloads. Markdown above the cell already names `root`, `train`, `download`, `transform`.
 
 ### What he is establishing
 
@@ -589,7 +589,7 @@ This is **CLASS**. Child of [`Dataset`](./PREREQUISITES.md#p5-dunder); [`iloc`](
 
 ![Topic 7 — CustomImageDataset __init__, __len__, __getitem__ with iloc](./screenshots/composites/ch07-topic-07-customimagedataset-class-panel1of1.png)
 
-Caption: “these two methods should be there… almost as it is.” `__init__` stores CSV, folder, both transforms. `__len__` → `len(self.img_labels)`. `__getitem__`: `join` + `iloc[idx, 0]` + `read_image` + `iloc[idx, 1]` + optional transforms + `return image, label`.
+Caption: prefer the **top-right** pane if the bottom-left is mid-scroll. “These two methods should be there… almost as it is.” `__init__` stores CSV, folder, both transforms. `__len__` → `len(self.img_labels)`. `__getitem__`: `join` + `iloc[idx, 0]` + `read_image` + `iloc[idx, 1]` + optional transforms + `return image, label`.
 
 ### What he is establishing
 
@@ -817,8 +817,8 @@ This recording is **~18 min**, not a 60-minute lab. Extra links are second passe
 | **5 · lucky vs custom** | video | [Aladdin Persson — custom Datasets for images](https://www.youtube.com/watch?v=ZoZHd0Zm3RY) | When torchvision is not enough — folder of your own photos. |
 | **5 · lucky vs custom** | notes | [Learn PyTorch — 04 Custom datasets](https://www.learnpytorch.io/04_pytorch_custom_datasets/) | Lucky ImageFolder vs writing your own `Dataset`. |
 | **5 · lucky vs custom** | docs | [Creating a Custom Dataset](https://docs.pytorch.org/tutorials/beginner/basics/data_tutorial.html#creating-a-custom-dataset-for-your-files) | Same fork: repo vs wrapper. |
-| **6 · folder + CSV** | docs | [pandas.read_csv](https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html) | Why he imports pandas for the annotation file. |
-| **6 · folder + CSV** | docs | [os.path.join](https://docs.python.org/3/library/os.path.html#os.path.join) | Folder + relative path → full path. |
+| **6 · folder + CSV** | video | [pandas `.iloc` (Ryan & Matt)](https://www.youtube.com/watch?v=LI2w1xLyr3w) | Row `idx`, column `0` vs `1` — the packing-list trap. |
+| **6 · folder + CSV** | docs | [pandas.DataFrame.iloc](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.iloc.html) | Integer-location indexing he narrates as “idx 1”. |
 | **6 · folder + CSV** | notes | [Sasank — Writing custom datasets (legacy tutorial)](https://docs.pytorch.org/tutorials/beginner/data_loading_tutorial.html) | CSV + `iloc` + `join` on a folder of files. |
 | **7 · CustomImageDataset** | docs | [`torch.utils.data.Dataset`](https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.Dataset) | Parent protocol DataLoader calls. |
 | **7 · CustomImageDataset** | blog | [Dare Data — PyTorch custom data](https://blog.daredata.engineering/pytorch-introduction-using-custom-data-2/) | Subclass + CSV + `next(iter(...))` in one post. |

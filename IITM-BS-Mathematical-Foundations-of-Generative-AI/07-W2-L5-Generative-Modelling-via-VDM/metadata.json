@@ -1,0 +1,31 @@
+{
+  "title": "W2_L5: Generative modelling via variational divergence minimization",
+  "video_id": "stZC0Zk5KYo",
+  "url": "https://www.youtube.com/watch?v=stZC0Zk5KYo",
+  "duration_seconds": 3293,
+  "channel": "IIT Madras - B.S. Degree Programme",
+  "instructor": "IITM BS tutorial (Chandan); course Prof. Prathosh A. P.",
+  "description": "YouTube title is VDM. Recording is Tutorial 1: MLP forward pass, MSE, chain-rule backprop, Python-style batch/epoch loop.",
+  "playlist_index": 9,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "mixed",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "course_short": "IITM-BS-MFGAI",
+  "topics": [
+    "Supervised setup D f loss",
+    "Football; forward vs backprop",
+    "MLP 2-2-1; activation names",
+    "Weight indices dest source layer",
+    "Forward pass sigmoid ReLU",
+    "theta and MSE",
+    "Gradient descent learning rate",
+    "Chain path w111 numeric",
+    "Five-factor product",
+    "Batch epoch Python loop"
+  ]
+}

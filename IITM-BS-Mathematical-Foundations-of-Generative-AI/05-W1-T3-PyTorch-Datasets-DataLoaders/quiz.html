@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · W1_T3 VDM realization</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · W1_T3 VDM realization</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q1", "part": "prerequisites", "tag": "Warm-up · pile vs law", "anchor": "PREREQUISITES.md#p1-px", "prompt": "You hold 60,000 MNIST files. What is p_x?", "options": [{"key": "A", "text": "The 60,000 files themselves — the dataset is the law."}, {"key": "B", "text": "The unknown rule that produced those files; the files are IID samples, not the law."}, {"key": "C", "text": "The trained generator G_θ."}, {"key": "D", "text": "The pixel histogram of a single image."}], "answer": "B", "whyCorrect": "p_x is unknown. D is n IID draws from it. The pile is not the formula.", "whyOthers": {"A": "That confuses samples with the law.", "C": "G_θ imposes a candidate p_θ, not the true p_x.", "D": "One image is one draw, not the population law."}, "diagram": "  unknown p_x  --IID draws-->  x1 … xn  (all you see)", "useLater": "Topic 1 board: D ~ iid p_x (unknown)."}, {"id": "q2", "part": "prerequisites", "tag": "Warm-up · push-forward", "anchor": "PREREQUISITES.md#p2-push", "prompt": "In z → G_θ(z) → x̂, where does the randomness live?", "options": [{"key": "A", "text": "Inside G_θ — the net is a random function."}, {"key": "B", "text": "Nowhere; the whole map is deterministic, including z."}, {"key": "C", "text": "In z, which is drawn from a known easy law (here N(0,I)). G_θ is a learnable deterministic function."}, {"key": "D", "text": "In p_x — you sample z from the dataset."}], "answer": "C", "whyCorrect": "He draws z from a unit/standard Gaussian you know how to sample, then a deterministic net. Chance is in z; p_θ depends on θ.", "whyOthers": {"A": "He calls G a learnable deterministic function.", "B": "z is random; G is not.", "D": "z is not a data file; data files estimate p_x, not the latent."}, "diagram": "  z ~ N(0,I)  -->  [G_θ]  -->  x̂ ~ p_θ", "useLater": "Topics 1 and 6: the G triangle."}, {"id": "q3", "part": "prerequisites", "tag": "Warm-up · LLN", "anchor": "PREREQUISITES.md#p4-lln", "prompt": "The law of large numbers lets you replace which object by a sample average?", "options": [{"key": "A", "text": "An expectation / integral of a function h against a density v, using IID draws from v."}, {"key": "B", "text": "The unknown density v itself — the histogram is v."}, {"key": "C", "text": "The Fenchel conjugate f*."}, {"key": "D", "text": "The dataset size n, which must equal the dimension d."}], "answer": "A", "whyCorrect": "∫ h(x) v(x) dx = E_v[h]. IID averages of h estimate that. You still need an h you can evaluate.", "whyOthers": {"B": "A histogram is not the density formula; LLN estimates integrals, not v(x) at every x.", "C": "f* comes from convex analysis, not from LLN.", "D": "n and d are unrelated in that way."}, "diagram": "  ∫ h v  =  E_v[h]  ≈  (1/n) Σ h(xi),  xi ~ v", "useLater": "Topic 2: why the bound’s two expectations are computable from two files."}, {"id": "q4", "part": "prerequisites", "tag": "Warm-up · floor", "anchor": "PREREQUISITES.md#p5-bound", "prompt": "True height of a building is 40 m. You only know a lower bound B = 12 m. You push B down to 1 m. Did you minimize the height?", "options": [{"key": "A", "text": "Yes — any lower bound is equal to the quantity once you optimize it."}, {"key": "B", "text": "Yes, because 1 < 12 so the building must have shrunk."}, {"key": "C", "text": "No, but you did maximize the bound, which is the same as minimizing D_f."}, {"key": "D", "text": "No. Minimizing a floor does not minimize the roof. That is this sitting’s red ≈."}], "answer": "D", "whyCorrect": "D_f ≥ bound always. argmin of the bound is not equivalent to argmin of D_f. He underlines ≈ in red.", "whyOthers": {"A": "A bound is not an equality unless T* is attained and the variational gap is zero.", "B": "The building (D_f) need not move when you shove the mat.", "C": "They minimize the bound over θ (after maximizing over T). That is still not min D_f."}, "diagram": "  roof D_f\n  floor max_T (E T − E f*(T))\n  min floor  ≠  min roof", "useLater": "Topic 4: limitation of the method."}, {"id": "q5", "part": "prerequisites", "tag": "Warm-up · saddle", "anchor": "PREREQUISITES.md#p8-saddle", "prompt": "At a min_θ max_w saddle of J, if you step away in the θ direction, what happens to J?", "options": [{"key": "A", "text": "J decreases — θ is a maximizer."}, {"key": "B", "text": "J increases — θ* is a minimizer, so leaving it goes up."}, {"key": "C", "text": "J stays exactly constant — that is what saddle means."}, {"key": "D", "text": "J always goes to −∞; saddles are local minima."}], "answer": "B", "whyCorrect": "He draws: move in θ and J increases; move in w and J decreases. That matches min_θ max_w.", "whyOthers": {"A": "That would be max over θ. The generator mins J.", "C": "A directional derivative can be zero at the point and still curve up/down off-axis.", "D": "Ordinary training avoids saddles because they are not local mins. Here they seek one."}, "diagram": "  J ↑ along θ (min)    J ↓ along w (max)    * = saddle", "useLater": "Topic 7 board caption: increases around θ*, decreases around w*."}, {"id": "q6", "part": "notes", "tag": "Master map / whole-video architecture", "anchor": "NOTES.md#executive-summary--architecture-of-this-lecture", "prompt": "On the master map of this lecture, what system does the sitting actually install? (YouTube title says Dataset / DataLoader.)", "options": [{"key": "A", "text": "Fashion-MNIST, CustomImageDataset, and DataLoader(batch_size=64)."}, {"key": "B", "text": "Only the definition of f-divergence (KL, JS, TV) — algorithm next week."}, {"key": "C", "text": "How to use last hour’s lower bound as two nets T_w and G_θ, a min_θ max_w saddle, and the GAN names. No PyTorch Dataset API."}, {"key": "D", "text": "A complete vanilla-GAN training loop with BCE loss."}], "answer": "C", "whyCorrect": "The pad is Realization of VDM: bound → T_w → saddle → generator/critic. Dataset code is a different tape (W1_T2). Vanilla GAN f is promised, not derived.", "whyOthers": {"A": "That is W1_T2’s Colab, not this 31-minute chalk sitting.", "B": "W1_L4 named D_f. This sitting uses the bound.", "D": "He stops before the concrete f and any loop."}, "diagram": "  last hour: floor\n  this hour: two nets + saddle + names\n  STOP: GAN f, Dataset API", "useLater": "Executive Summary STOP box."}, {"id": "q7", "part": "notes", "tag": "Trap · red ≈", "anchor": "NOTES.md#topic-4--min-lower-bound-neq-min-d_f-nested-min-max-1207–1540", "prompt": "Why is θ* ≈ argmin_θ [lower bound] not the same problem as θ* = argmin_θ D_f?", "options": [{"key": "A", "text": "Minimizing a lower bound does not mean you minimized the actual function. Densities and high-d integrals make D_f itself unusable; the floor is the best they can do."}, {"key": "B", "text": "Because max and min always commute, so the ≈ is only cosmetic."}, {"key": "C", "text": "Because f* is an upper bound, not a lower bound."}, {"key": "D", "text": "Because they sample z from p_x instead of N(0,I)."}], "answer": "A", "whyCorrect": "He underlines ≈ in red and calls it a limitation of the method. D_f is intractable; they optimize the floor.", "whyOthers": {"B": "Min and max do not make the two problems equivalent; he says they are not.", "C": "The board is D_f ≥ max_T (…); a lower bound.", "D": "z is still Gaussian; that is not the gap."}, "diagram": "  argmin D_f   ≠   argmin [max_T (E T − E f* T)]", "useLater": "Topic 4 establishing + method card step 2."}, {"id": "q8", "part": "notes", "tag": "Numerical / worked · two-E bound", "anchor": "NOTES.md#topic-3--realization-bound-as-max_t-of-two-expectations-0813–1207", "prompt": "Compute the board’s lower bound: D_f(p_x || p_θ) is at least which expression?", "options": [{"key": "A", "text": "E_{p_θ}[T] − E_{p_x}[f*(T)]  (piles swapped)."}, {"key": "B", "text": "max_{T ∈ 𝒯} ( E_{p_x}[T(x)] − E_{p_θ}[f*(T(x))] ), with max standing in for sup if the sup is attained."}, {"key": "C", "text": "∫ p_x(x) log p_θ(x) dx  (plain log-likelihood)."}, {"key": "D", "text": "||θ||_2  (weight decay)."}], "answer": "B", "whyCorrect": "He writes that line after replacing sup by max, assuming the sup can be reached. First E is on reals; second on fakes with f*.", "whyOthers": {"A": "Piles reversed — a near-miss from the board.", "C": "That is not the variational bound on D_f.", "D": "No regularization term appears this hour."}, "diagram": "  D_f  ≥  max_T ( E_real T  −  E_fake f*(T) )", "useLater": "Topics 3–6: this expression becomes J(θ,w)."}, {"id": "q9", "part": "notes", "tag": "Connect topics · T_w from Topic 4 to Topic 5", "anchor": "NOTES.md#topic-5--represent-mathcalt-by-a-net-t_w-1540–1850", "prompt": "Connect Topic 4 to Topic 5: why does a second neural net T_w appear?", "options": [{"key": "A", "text": "To sample z; G_θ cannot sample."}, {"key": "B", "text": "To store the dataset as an embedding table."}, {"key": "C", "text": "Because PyTorch requires two nn.Modules in every tutorial."}, {"key": "D", "text": "The inner max is over a function class 𝒯, which cannot be searched analytically. In practice they represent 𝒯 by a net T_w (universal function approximators), so the problem is min_θ max_w of one J."}], "answer": "D", "whyCorrect": "Topics 4→5: nested max_T, then ‘represent 𝒯 via neural networks T_w’.", "whyOthers": {"A": "Sampling z is easy; G_θ is the sampler in data space.", "B": "No embedding table on this pad.", "C": "No PyTorch this sitting; the second net is the variational T."}, "diagram": "  max_T ∈ 𝒯  -->  max_w of T_w   (same J)", "useLater": "Topic 6: T_w eats x; G_θ eats z."}, {"id": "q10", "part": "notes", "tag": "Compare and contrast · saddle vs ordinary min", "anchor": "NOTES.md#topic-7--saddle-point-on-purpose-2237–2659", "prompt": "How does this sitting’s optimization differ from the usual ‘avoid saddles’ advice?", "options": [{"key": "A", "text": "It is ordinary ERM; saddles are a bug if the learning rate is large."}, {"key": "B", "text": "They maximize over both θ and w, so the point is a peak, not a saddle."}, {"key": "C", "text": "VDM seeks a saddle on purpose (J increases in θ, decreases in w). Ordinary non-convex training treats saddles as not-an-optimum. Finding one is hard; landscapes can have many."}, {"key": "D", "text": "They only minimize w; θ is frozen forever after initialization."}], "answer": "C", "whyCorrect": "He calls it a rare problem where they deliberately seek a saddle, and warns it is difficult with multiple saddles.", "whyOthers": {"A": "He contrasts this with the usual avoid-saddle guideline.", "B": "θ is min, w is max — that is the saddle, not a joint max.", "D": "Both are trained; opposite verbs."}, "diagram": "  ordinary: flee saddles\n  this hour: walk to a saddle on purpose", "useLater": "Topic 8: same geometry named adversarial."}, {"id": "q11", "part": "notes", "tag": "Connect topics · saddle to adversarial", "anchor": "NOTES.md#topic-8--adversarial-opposite-verbs-on-one-j-2659–2858", "prompt": "Why does he call this an adversarial problem (and the blueprint of an adversarial network)?", "options": [{"key": "A", "text": "Because θ-net minimizes J and w-net maximizes the same J — each tries to undo the other. Any saddle-point problem can be called adversarial optimization."}, {"key": "B", "text": "Because T_w is already proven to be a binary classifier on this board."}, {"key": "C", "text": "Because G_θ attacks the dataset with adversarial examples."}, {"key": "D", "text": "Because two different losses are added: a reconstruction loss plus a GAN loss."}], "answer": "A", "whyCorrect": "Opposite verbs on one objective. He says this diagram is the blueprint; GAN is the next instance.", "whyOthers": {"B": "Classifier reading is promised for one later f, not shown.", "C": "Wrong sense of ‘adversarial’ (security attacks).", "D": "One J, not two glued losses."}, "diagram": "  θ min J   vs   w max J    →  adversaries", "useLater": "Topic 9 labels: generator vs critic."}, {"id": "q12", "part": "notes", "tag": "Trade-off / so-what · critic vs discriminator names", "anchor": "NOTES.md#topic-9--gan-names-generator-discriminator-critic-2858–3044", "prompt": "When would you call T_w a critic rather than a discriminator? What is already justified this hour vs what is deferred?", "options": [{"key": "A", "text": "Both names are fully derived: T_w is a classifier for every f."}, {"key": "B", "text": "Critic is justified now: T_w exactly constructs the bound the generator optimizes. Discriminator-as-classifier is one later instantiation. GAN is this VDM with a particular f. No Dataset API on this tape."}, {"key": "C", "text": "Critic means Wasserstein Lipschitz constraint, already proved here."}, {"key": "D", "text": "Discriminator is the generator; the names are swapped on the pad."}], "answer": "B", "whyCorrect": "He says critic because it creates the bound; discriminator because in one instantiation it boils down to a classification network ‘which we will see.’ GAN = particular instance of VDM. YouTube Dataset title is not delivered.", "whyOthers": {"A": "He explicitly defers the classifier reading.", "C": "WGAN Lipschitz is a later lecture; not this pad.", "D": "G is generator; T_w is the other net."}, "diagram": "  G = generator\n  T_w = critic (bound) / discriminator (later classifier)\n  STOP: f, loop, DataLoader", "useLater": "Next sitting on this series: pick an f and instantiate GAN."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>
