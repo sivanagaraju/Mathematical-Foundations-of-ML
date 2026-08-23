@@ -9,21 +9,22 @@ IIT Madras B.S. Degree Programme · Course **BSDA5002** · Prof. Prathosh A P (E
 This file is the **course map + catalog**. Per-lecture study packages (`PREREQUISITES.md` / `NOTES.md` / quiz) are added here as we build them.
 
 
-| Playlist # | Video                                                                     | Study package                                                                                      |
-| ------------ | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| 2          | W1_L2 Introduction & problem setting                                      | [`01-W1-L2-Introduction-Problem-Setting/`](./01-W1-L2-Introduction-Problem-Setting/)               |
-| 3          | W1_L3 (YouTube title: F-divergence;**recording is PyTorch tensors**)      | [`02-W1-L3-F-Divergence/`](./02-W1-L3-F-Divergence/)                                               |
-| 4          | W1_L4 Variational divergence minimization                                 | [`03-W1-L4-Variational-Divergence-Minimization/`](./03-W1-L4-Variational-Divergence-Minimization/) |
-| 6          | W1_T2 Introduction to pytorch: tensors*(recording: Dataset / DataLoader)* | [`04-W1-T2-Introduction-to-PyTorch-Tensors/`](./04-W1-T2-Introduction-to-PyTorch-Tensors/)         |
-| 9          | W2_L5 (YouTube title: VDM; **recording is MLP forward/backprop**)         | [`07-W2-L5-Generative-Modelling-via-VDM/`](./07-W2-L5-Generative-Modelling-via-VDM/)               |
+| Playlist # | Video                                                                     | Study package                                                                                                        |
+| ------------ | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| 2          | W1_L2 Introduction & problem setting                                      | [`01-W1-L2-Introduction-Problem-Setting/`](./01-W1-L2-Introduction-Problem-Setting/)                                 |
+| 3          | W1_L3 (YouTube title: F-divergence;**recording is PyTorch tensors**)      | [`02-W1-L3-F-Divergence/`](./02-W1-L3-F-Divergence/)                                                                 |
+| 4          | W1_L4 Variational divergence minimization                                 | [`03-W1-L4-Variational-Divergence-Minimization/`](./03-W1-L4-Variational-Divergence-Minimization/)                   |
+| 6          | W1_T2 Introduction to pytorch: tensors*(recording: Dataset / DataLoader)* | [`04-W1-T2-Introduction-to-PyTorch-Tensors/`](./04-W1-T2-Introduction-to-PyTorch-Tensors/)                           |
+| 9          | W2_L5 (YouTube title: VDM;**recording is MLP forward/backprop**)          | [`07-W2-L5-Generative-Modelling-via-VDM/`](./07-W2-L5-Generative-Modelling-via-VDM/)                                 |
 | 10         | W2_L6 Generative adversarial networks: introduction                       | [`08-W2-L6-Generative-Adversarial-Networks-Introduction/`](./08-W2-L6-Generative-Adversarial-Networks-Introduction/) |
-| 11         | W2_L7 Generative adversarial networks: formulation                        | [`09-W2-L7-GAN-Formulation/`](./09-W2-L7-GAN-Formulation/)                                         |
-| 7          | W1_T3 datasets & dataloaders*(recording: VDM two-net saddle)*             | [`05-W1-T3-PyTorch-Datasets-DataLoaders/`](./05-W1-T3-PyTorch-Datasets-DataLoaders/)               |
-| 8          | W1_T4 Introduction to pytorch: model building                             | [`06-W1-T4-Introduction-to-PyTorch-Model-Building/`](./06-W1-T4-Introduction-to-PyTorch-Model-Building/) |
-| 9          | W2_L5 VDM *(check recording)*                                             | [`07-W2-L5-Generative-Modelling-via-VDM/`](./07-W2-L5-Generative-Modelling-via-VDM/)               |
-| 10         | W2_L6 GAN introduction *(chalk: one $f$, two-log $J$)*                    | [`08-W2-L6-Generative-Adversarial-Networks-Introduction/`](./08-W2-L6-Generative-Adversarial-Networks-Introduction/) |
-| 11         | W2_L7 GAN formulation *(D ascent / G descent / freeze)*                   | [`09-W2-L7-GAN-Formulation/`](./09-W2-L7-GAN-Formulation/)                                         |
-| 12         | W2_T5 Tutorial: Implementation of GAN *(vanilla MNIST Colab)*             | [`10-W2-T5-Implementation-of-GAN/`](./10-W2-T5-Implementation-of-GAN/)                             |
+| 11         | W2_L7 Generative adversarial networks: formulation                        | [`09-W2-L7-GAN-Formulation/`](./09-W2-L7-GAN-Formulation/)                                                           |
+| 7          | W1_T3 datasets & dataloaders*(recording: VDM two-net saddle)*             | [`05-W1-T3-PyTorch-Datasets-DataLoaders/`](./05-W1-T3-PyTorch-Datasets-DataLoaders/)                                 |
+| 8          | W1_T4 Introduction to pytorch: model building                             | [`06-W1-T4-Introduction-to-PyTorch-Model-Building/`](./06-W1-T4-Introduction-to-PyTorch-Model-Building/)             |
+| 9          | W2_L5 VDM*(check recording)*                                              | [`07-W2-L5-Generative-Modelling-via-VDM/`](./07-W2-L5-Generative-Modelling-via-VDM/)                                 |
+| 10         | W2_L6 GAN introduction*(chalk: one $f$, two-log $J$)*                     | [`08-W2-L6-Generative-Adversarial-Networks-Introduction/`](./08-W2-L6-Generative-Adversarial-Networks-Introduction/) |
+| 11         | W2_L7 GAN formulation*(D ascent / G descent / freeze)*                    | [`09-W2-L7-GAN-Formulation/`](./09-W2-L7-GAN-Formulation/)                                                           |
+| 12         | W2_T5 Tutorial: Implementation of GAN*(vanilla MNIST Colab)*              | [`10-W2-T5-Implementation-of-GAN/`](./10-W2-T5-Implementation-of-GAN/)                                               |
+| 13         | W3_L8 GANs as classifier-guided generative sampler                         | [`11-W3-L8-GANs-as-Classifier-Guided-Generative-Sampler/`](./11-W3-L8-GANs-as-Classifier-Guided-Generative-Sampler/) |
 
 Same instructor, similar math, **different recording** from NPTEL / IISc ([`../Mathematical-Foundation-for-GenerativeAI/`](../Mathematical-Foundation-for-GenerativeAI/)).
 
@@ -199,7 +200,7 @@ Summaries are from official titles + the published week syllabus. They are not s
 
 | #  | Video                                              | Duration | Link                                                                                                  | Summary                                                                                                        |
 | ---- | ---------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| 13 | W3L8: GANs as classifier-guided generative sampler | 41:29    | [watch](https://www.youtube.com/watch?v=ga8VOW6pPeA&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=13) | Reads the discriminator as a density-ratio estimator that**guides** the generator’s samples.                  |
+| 13 | W3L8: GANs as classifier-guided generative sampler | 41:29    | [watch](https://www.youtube.com/watch?v=ga8VOW6pPeA&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=13) | Reads the discriminator as a density-ratio estimator that **guides** the generator’s samples. Package: [`11-W3-L8-…`](./11-W3-L8-GANs-as-Classifier-Guided-Generative-Sampler/). |
 | 14 | W3L9: Deep Convolution GANs and Conditional GANs   | 21:26    | [watch](https://www.youtube.com/watch?v=CFymHrr5iQw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=14) | DCGAN (conv generator/discriminator) and cGAN (class-conditional generation).                                  |
 | 15 | W3T6: Tutorial: Implementation of DC-GAN           | 27:33    | [watch](https://www.youtube.com/watch?v=4-o6d8EyxCU&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=15) | DCGAN implementation ([notebook](https://github.com/Chandan-IISc/IITM_GenAI/blob/main/IITM_DGM_DC_GAN.ipynb)). |
 
@@ -342,7 +343,7 @@ These belong conceptually with week 9; YouTube lists them after week 10.
 11. W2_L6: Generative adversarial networks: introduction → https://www.youtube.com/watch?v=EHhURRwMEPo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=10
 12. W2_L7: Generative adversarial networks: formulation → https://www.youtube.com/watch?v=pLD5Q5cS4kI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=11
 13. W2_T5: Tutorial: Implementation of generative adversarial network → https://www.youtube.com/watch?v=iOb8vmlJd8o&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=12
-14. 
+14. PENDING --
 15. W3L8: GANs as classifier-guided generative sampler → https://www.youtube.com/watch?v=ga8VOW6pPeA&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=13
 16. 
 17. W3L9: Deep Convolution GANs and Conditional GANs → https://www.youtube.com/watch?v=CFymHrr5iQw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=14

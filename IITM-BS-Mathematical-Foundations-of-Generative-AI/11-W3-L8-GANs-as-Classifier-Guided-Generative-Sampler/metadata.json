@@ -1,0 +1,27 @@
+{
+  "title": "W3L8: GANs as classifier-guided generative sampler",
+  "video_id": "ga8VOW6pPeA",
+  "url": "https://www.youtube.com/watch?v=ga8VOW6pPeA&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=13",
+  "duration_seconds": 2489,
+  "channel": "IIT Madras - B.S. Degree Programme",
+  "instructor": "Prof. Prathosh A P (IISc Bangalore)",
+  "playlist_index": 13,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 8,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "From VDM to Classifier-Guided Sampling",
+    "Guiding Generation with a Fixed Classifier",
+    "The Logical Trap and the 2D Counter-Example",
+    "Dynamic Co-Evolution of Generator and Classifier",
+    "Oscillations Limit Cycles and Mode Collapse",
+    "Classifier Objectives Real Likelihood and Fake Rejection",
+    "Unified Value Function and VDM Lower-Bound Bridge",
+    "The Minimax Adversarial Game and JS Specificity"
+  ]
+}

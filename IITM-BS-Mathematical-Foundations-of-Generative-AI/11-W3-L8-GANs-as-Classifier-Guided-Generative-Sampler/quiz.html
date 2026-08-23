@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · W3L8: GANs as classifier-guided generative sampler</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · W3L8: GANs as classifier-guided generative sampler</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q1", "part": "prerequisites", "tag": "Definition / map · Probability Landscapes", "anchor": "PREREQUISITES.md#p1-distributions", "prompt": "What does a high value of a continuous probability density function $p_x(x)$ at a specific point $x \\in \\mathbb{R}^d$ signify?", "options": [{"key": "A", "text": "The exact probability of drawing that specific coordinate $x$ is equal to $p_x(x)$."}, {"key": "B", "text": "The region immediately surrounding $x$ has a high concentration of probability mass, meaning real samples cluster densely there."}, {"key": "C", "text": "The feature space coordinate $x$ is guaranteed to be a discrete categorical label."}, {"key": "D", "text": "The generator network $G_\\theta$ will always produce $x$ regardless of the input noise vector $z$."}], "answer": "B", "whyCorrect": "In continuous probability theory, the probability at any exact single point is zero ($P(X = x) = 0$), but the density function $p_x(x)$ represents local mass concentration per unit volume. High density means samples cluster tightly around that coordinate in feature space.", "whyOthers": {"A": "In continuous spaces, point probability $P(X=x)=0$; density $p_x(x)$ is probability per unit volume and can even exceed 1.", "C": "Density functions describe continuous random vectors in $\\mathbb{R}^d$, not discrete categorical distributions.", "D": "The generator is a continuous mapping $G_\\theta(z)$ driven by random noise, not a constant function producing a single point."}, "diagram": "  px(x) ▲\n        │        /═══\\\n        │       /     \\      <--- High density = Dense sample cluster\n        │  ────/       \\────\n        └─────────────────────► x", "useLater": "Topic 2 uses this concept to define real and synthetic data distributions as point clouds in $\\mathbb{R}^d$."}, {"id": "q2", "part": "prerequisites", "tag": "Definition / map · Decision Boundaries", "anchor": "PREREQUISITES.md#p3-classification-boundary", "prompt": "For a binary classifier $D_w: \\mathbb{R}^d \\to [0, 1]$ mapping inputs to posterior probabilities, what geometric object is defined by the set of all points where $D_w(x) = 0.5$?", "options": [{"key": "A", "text": "The decision boundary (hyperplane or hypersurface) separating the real-acceptance region from the fake-rejection region."}, {"key": "B", "text": "The mode of the target distribution $p_x$ where data density is maximized."}, {"key": "C", "text": "The convex hull containing all generator noise vectors $z \\sim \\mathcal{N}(0, I)$."}, {"key": "D", "text": "The global minimum of the generator loss function where training terminates."}], "answer": "A", "whyCorrect": "The level set $D_w(x) = 0.5$ represents the decision threshold where the classifier is completely uncertain between Class 1 (Real) and Class 0 (Fake). Geometrically, this hypersurface partitions the feature space into two opposing classification half-spaces.", "whyOthers": {"B": "The decision boundary is a property of the discriminator's weights $w$, not the mode of $p_x$.", "C": "Noise vectors $z$ live in latent space $\\mathbb{R}^k$, whereas the decision boundary lives in data space $\\mathbb{R}^d$.", "D": "A classifier boundary is not a generator loss minimum; training depends on the gradient field along the boundary."}, "diagram": "  Class 1 [Real: Dw > 0.5]  ───┐\n  ═══════════════════════════   ├── Boundary: Dw(x) = 0.5\n  Class 0 [Fake: Dw < 0.5]  ───┘", "useLater": "Topic 3 shows how a generator exploits fixed decision boundaries by shifting clusters across the $D_w(x)=0.5$ boundary."}, {"id": "q3", "part": "prerequisites", "tag": "Worked / numerical · Log-Likelihood Penalties", "anchor": "PREREQUISITES.md#p4-cross-entropy", "prompt": "If a discriminator evaluates a genuine training image $x \\sim p_x$ and mistakenly outputs $D_w(x) = 0.01$, what is the resulting loss penalty under the real log-likelihood objective $\\log D_w(x)$?", "options": [{"key": "A", "text": "$-0.010$, representing an almost negligible loss penalty."}, {"key": "B", "text": "$0.000$, because the logarithm of any positive fraction is zero."}, {"key": "C", "text": "$-4.605$, representing a massive negative log-likelihood penalty that triggers large corrective gradients."}, {"key": "D", "text": "$+4.605$, which rewards the classifier for high uncertainty."}], "answer": "C", "whyCorrect": "Evaluating $\\ln(0.01) \\approx -4.605$. Maximizing log-likelihood means that confident wrong predictions (evaluating a true image as $0.01$ instead of $1.0$) incur huge penalties, driving aggressive parameter updates.", "whyOthers": {"A": "$-0.010$ corresponds to $\\ln(0.99)$, which is the loss for a highly accurate prediction, not a severe mistake.", "B": "$\\ln(u) < 0$ for all $u \\in (0, 1)$; it is never zero for fractions.", "D": "The logarithm of $0.01$ is negative ($-4.605$), not positive."}, "diagram": "  Dw(x) = 0.99 ──► log(0.99) = -0.010 (Tiny penalty)\n  Dw(x) = 0.01 ──► log(0.01) = -4.605 (Massive penalty!)", "useLater": "Topic 6 formalizes the real and fake likelihood objectives using this exact logarithmic penalty structure."}, {"id": "q4", "part": "prerequisites", "tag": "Worked / numerical · Bayes Optimal Discriminator", "anchor": "PREREQUISITES.md#p7-density-ratio-jsd", "prompt": "Given true density $p_x(x)$ and generated density $p_\\theta(x)$ with equal prior probabilities, what is the exact mathematical form of the Bayes optimal discriminator $D^*(x)$?", "options": [{"key": "A", "text": "$D^*(x) = \\frac{p_x(x)}{p_\\theta(x)}$"}, {"key": "B", "text": "$D^*(x) = p_x(x) - p_\\theta(x)$"}, {"key": "C", "text": "$D^*(x) = \\log p_x(x) + \\log p_\\theta(x)$"}, {"key": "D", "text": "$D^*(x) = \\frac{p_x(x)}{p_x(x) + p_\\theta(x)}$"}], "answer": "D", "whyCorrect": "By Bayes' theorem, the posterior probability of a sample $x$ originating from the real class given equal priors $P(Y=1) = P(Y=0) = 0.5$ is $P(Y=1 \\mid x) = \\frac{p_x(x) P(Y=1)}{p_x(x) P(Y=1) + p_\\theta(x) P(Y=0)} = \\frac{p_x(x)}{p_x(x) + p_\\theta(x)}$.", "whyOthers": {"A": "$\\frac{p_x(x)}{p_\\theta(x)}$ is the raw density ratio $r(x)$, which can range from $0$ to $\\infty$, whereas $D^*(x)$ is a probability in $[0, 1]$.", "B": "The difference $p_x(x) - p_\\theta(x)$ is not a valid posterior probability.", "C": "Log densities do not compute posterior class probabilities."}, "diagram": "  D*(x) = px(x) / [px(x) + p_θ(x)]\n  When px(x) = p_θ(x) ===> D*(x) = px / (2px) = 1/2 (Chance accuracy!)", "useLater": "Topic 7 and 8 use this formula to prove that optimal discriminator evaluation yields the Jensen–Shannon divergence."}, {"id": "q5", "part": "notes", "tag": "Connect topics · Master Architecture", "anchor": "NOTES.md#executive-summary--architecture-of-this-lecture", "prompt": "How does the master architecture connect Variational Divergence Minimization (VDM) to the classifier-guided sampling paradigm?", "options": [{"key": "A", "text": "By proving that optimizing the binary cross-entropy loss of a discriminator is mathematically identical to constructing a variational Fenchel lower bound on the Jensen–Shannon divergence."}, {"key": "B", "text": "By replacing all continuous neural networks with discrete nearest-neighbor lookup tables."}, {"key": "C", "text": "By requiring the generator to be trained with supervised class labels before training the discriminator."}, {"key": "D", "text": "By proving that generator gradients are identical for all choices of convex $f$-divergences."}], "answer": "A", "whyCorrect": "The central synthesis of the lecture connects two perspectives: the Fenchel lower bound on Jensen–Shannon divergence derived in VDM is algebraically identical to the two-player binary cross-entropy minimax game.", "whyOthers": {"B": "The architecture relies on deep continuous differentiable neural networks, not lookup tables.", "C": "GANs are completely unsupervised with respect to data classes; labels 1 and 0 are generated internally.", "D": "Topic 8 proves that the binary cross-entropy formulation is unique to Jensen–Shannon divergence and does not hold for general $f$-divergences."}, "diagram": "  Convex Dual VDM Bound  <=========>  Dynamic Classifier Guidance\n  min_θ max_w J(θ, w)    <=========>  Discriminator herds Generator", "useLater": "This master map architecture underpins all 8 topics in the lecture notes."}, {"id": "q6", "part": "notes", "tag": "Edge / trap · Converse Fallacy & 2D Cheat", "anchor": "NOTES.md#topic-3-the-logical-trap-and-the-2d-counter-example-08371447", "prompt": "Why does the failure of a fixed classifier $D_{w_1}$ NOT imply that the generator distribution $p_\\theta$ matches the true data distribution $p_x$?", "options": [{"key": "A", "text": "Because a classifier's accuracy cannot be measured when dealing with synthetic data."}, {"key": "B", "text": "Because neural networks cannot represent linear hyperplanes in two dimensions."}, {"key": "C", "text": "Because the generator can trivially trick a fixed classifier by shifting its cluster across the decision boundary into an empty part of the real acceptance region without overlapping $p_x$."}, {"key": "D", "text": "Because $p_x$ and $p_\\theta$ always have identical support by definition."}], "answer": "C", "whyCorrect": "As proven by the 2D counter-example, a fixed decision boundary leaves entire half-spaces labeled as 'real'. The generator optimizer merely translates the fake cluster $p_{\\theta_1} \\to p_{\\theta_2}$ across the boundary into the positive region, achieving $100\\%$ classifier failure with zero distribution overlap.", "whyOthers": {"A": "Classifier accuracy on synthetic data is trivially computed by checking predictions against label 0.", "B": "Neural networks easily represent linear hyperplanes (a single perceptron layer is a linear hyperplane).", "D": "In general, $p_x$ and $p_\\theta$ start with completely disjoint supports in high-dimensional space."}, "diagram": "  (+) px (Real Cluster)       (·) p_θ2 (Cheated Fake Cluster)\n  ───────────────────────────────────────────────────────────── [D_w1 Boundary]\n  (·) p_θ1 (Initial Fake)\n  Notice: D_w1 accepts p_θ2 as real, but p_θ2 is nowhere near px!", "useLater": "Topic 4 introduces dynamic co-evolution specifically to eliminate this static cheat."}, {"id": "q7", "part": "notes", "tag": "Compare & contrast · Static vs Dynamic Updates", "anchor": "NOTES.md#topic-4-dynamic-co-evolution-jointly-updating-generator-and-classifier-14471947", "prompt": "How does dynamic co-evolution resolve the blind-spot exploit of a fixed classifier?", "options": [{"key": "A", "text": "By retraining the classifier on the new fake distribution $p_{\\theta_2}$ and $p_x$, drawing a new boundary $D_{w_2}$ that eliminates the previous cheat location."}, {"key": "B", "text": "By fixing the generator weights and training the discriminator until its loss reaches zero."}, {"key": "C", "text": "By replacing the neural network with a fixed deterministic nearest-neighbor lookup table."}, {"key": "D", "text": "By increasing the learning rate of the generator to infinity."}], "answer": "A", "whyCorrect": "Every time the generator moves to cheat the current classifier, the classifier is updated ($D_{w_1} \\to D_{w_2} \\to D_{w_3}$), continuously closing empty acceptance regions and herding the generator until the only surviving escape route is true distribution matching.", "whyOthers": {"B": "Fixing the generator prevents it from learning; both networks must update iteratively.", "C": "Nearest-neighbor lookup tables do not generalize in high dimensions and cannot guide parametric generators.", "D": "Infinite learning rates cause immediate numerical overflow and catastrophic divergence."}, "diagram": "  p_θ1 ──(fool D_w1)──► p_θ2 ──(update D_w2)──► p_θ3 ──(herded)──► p_θ = px", "useLater": "Topic 5 discusses how this dynamic chase can encounter rotational instabilities."}, {"id": "q8", "part": "notes", "tag": "Trade-off / so-what · Limit Cycles & Mode Collapse", "anchor": "NOTES.md#topic-5-oscillations-limit-cycles-and-mode-collapse-in-the-joint-game-19472304", "prompt": "In the context of alternating min-max game dynamics, what causes rotational limit cycles and mode collapse in vanilla GANs?", "options": [{"key": "A", "text": "The discriminator becomes perfectly optimal at step zero, leaving no gradient for the generator."}, {"key": "B", "text": "The generator drops modes to exploit local discriminator weaknesses, causing the parameters to orbit periodically ($p_{\\theta_1} \\leftrightarrow p_{\\theta_2}$) without converging to the data manifold."}, {"key": "C", "text": "The source noise distribution $z \\sim \\mathcal{N}(0, I)$ has non-zero variance."}, {"key": "D", "text": "The Jensen–Shannon divergence is symmetric."}], "answer": "B", "whyCorrect": "In non-convex minimax games, alternating gradient updates often enter closed periodic orbits where the generator bounces between isolated mode pockets while the discriminator alternates its boundaries, failing to settle into the true multimodal distribution.", "whyOthers": {"A": "If the discriminator were globally optimal everywhere, gradients might vanish, but limit cycles arise specifically from non-convergent simultaneous updates.", "C": "Gaussian noise variance is necessary for stochastic sampling and is not the root cause of game-theoretic limit cycles.", "D": "The symmetry of JS divergence is a mathematical asset, not the cause of rotational gradient dynamics."}, "diagram": "  Limit Cycle:  p_θ1 ──► p_θ2 ──► p_θ1 ──► p_θ2 (Infinite Orbit around Saddle)", "useLater": "This instability motivates Wasserstein GANs and architectural constraints in future weeks."}, {"id": "q9", "part": "notes", "tag": "Connect topics · VDM & Cross-Entropy Equivalence", "anchor": "NOTES.md#topic-7-the-unified-value-function-jθ-w-and-the-vdm-lower-bound-bridge-28373305", "prompt": "Which $f$-divergence in the Variational Divergence Minimization (VDM) framework corresponds exactly to the binary cross-entropy value function $J(\\theta, w) = \\mathbb{E}_{p_x}[\\log D_w(x)] + \\mathbb{E}_{p_\\theta}[\\log(1 - D_w(\\hat{x}))]$?", "options": [{"key": "A", "text": "Forward Kullback–Leibler divergence ($f(u) = u \\log u$)"}, {"key": "B", "text": "Pearson $\\chi^2$ divergence ($f(u) = (u-1)^2$)"}, {"key": "C", "text": "Jensen–Shannon divergence ($f(u) = u \\log u - (u+1)\\log((u+1)/2)$)"}, {"key": "D", "text": "Total Variation distance ($f(u) = \\frac{1}{2}|u-1|$)"}], "answer": "C", "whyCorrect": "The Fenchel conjugate of the Jensen–Shannon generator function is $f^*(t) = -\\log(1 - e^t)$. Substituting $T(x) = \\log D_w(x)$ into the VDM lower bound produces the exact binary cross-entropy GAN objective function.", "whyOthers": {"A": "Forward KL yields an unbounded exponential witness term $\\mathbb{E}[-e^{T(x)-1}]$, not binary logistic cross-entropy.", "B": "Pearson $\\chi^2$ yields a quadratic witness term $\\frac{1}{4}T(x)^2 + T(x)$.", "D": "Total Variation yields a constrained linear witness bounded in $[-1/2, 1/2]$."}, "diagram": "  JS f-divergence Fenchel Dual  <=====>  J(θ, w) = E_px[log D] + E_pθ[log(1-D)]", "useLater": "Topic 8 emphasizes that the classifier interpretation is unique to the Jensen–Shannon divergence."}, {"id": "q10", "part": "notes", "tag": "Definition / map · Minimax Problem Inversion", "anchor": "NOTES.md#topic-8-the-minimax-adversarial-game-and-js-specificity-33054129", "prompt": "How does the generator network mathematically enforce the failure of the discriminator in the zero-sum GAN formulation?", "options": [{"key": "A", "text": "By freezing its weights and optimizing the source noise variance."}, {"key": "B", "text": "By inverting the optimization problem, seeking parameters $\\theta$ that minimize the exact same value function $J(\\theta, w)$ that the discriminator maximizes."}, {"key": "C", "text": "By maximizing the real data log-likelihood $\\mathbb{E}_{x \\sim p_x}[\\log D_w(x)]$."}, {"key": "D", "text": "By setting the discriminator outputs to zero across all training examples."}], "answer": "B", "whyCorrect": "In the zero-sum formulation, the generator inverts the classifier's objective: while $D_w$ attempts to maximize $J(\\theta, w)$, the generator $G_\\theta$ solves $\\min_\\theta J(\\theta, w) = \\min_\\theta \\mathbb{E}_{z \\sim p_z}[\\log(1 - D_w(G_\\theta(z)))]$, creating the minimax saddle-point game $\\min_\\theta \\max_w J(\\theta, w)$.", "whyOthers": {"A": "The generator updates its internal synaptic weights $\\theta$, not the noise variance.", "C": "The real data term $\\mathbb{E}_{p_x}[\\log D_w(x)]$ is independent of $\\theta$ and has zero generator gradient.", "D": "The generator cannot directly override discriminator outputs; it can only adjust its generated samples $G_\\theta(z)$."}, "diagram": "  Discriminator: max_w J(θ, w)  (Find differences)\n  Generator:     min_θ J(θ, w)  (Fool discriminator)\n  ===> Minimax:  min_θ max_w J(θ, w)", "useLater": "This minimax formulation is the foundational value function analyzed in all subsequent GAN architectures."}, {"id": "q11", "part": "notes", "tag": "Trade-off / so-what · Specificity of Classifier Witness", "anchor": "NOTES.md#topic-8-the-minimax-adversarial-game-and-js-specificity-33054129", "prompt": "Why is the interpretation of the auxiliary network as a $[0, 1]$ probabilistic binary classifier NOT generally applicable to other $f$-divergences like Kullback–Leibler?", "options": [{"key": "A", "text": "Because other $f$-divergences require discrete categorical inputs rather than continuous vectors."}, {"key": "B", "text": "Because for general $f$-divergences, the optimal variational witness $T^*(x)$ is an unbounded real function that does not represent class posterior probabilities or decompose into binary cross-entropy."}, {"key": "C", "text": "Because Kullback–Leibler divergence is only defined when $p_x = p_\\theta$ everywhere."}, {"key": "D", "text": "Because other $f$-divergences cannot be parameterized by deep neural networks."}], "answer": "B", "whyCorrect": "As highlighted in the lecture, the witness function $T(x)$ in VDM is generally an arbitrary real-valued function ($T: \\mathcal{X} \\to \\mathbb{R}$). Only for the specific algebraic structure of the Jensen–Shannon divergence does $T(x)$ map to the log-odds of a $[0, 1]$ binary classifier ($T(x) = \\log D(x)$).", "whyOthers": {"A": "All $f$-divergences are fully defined over continuous probability densities in $\\mathbb{R}^d$.", "C": "KL divergence is defined for all pairs of distributions where $p_x \\ll p_\\theta$; it equals zero when $p_x = p_\\theta$.", "D": "Any differentiable witness function $T(x)$ can be parameterized by deep neural networks (as demonstrated by f-GANs)."}, "diagram": "  General f-Divergences  ──► Witness T(x) ∈ R  (Unbounded score, NOT a classifier)\n  Jensen-Shannon Div     ──► Witness T(x) = log D(x) with D(x) ∈ [0, 1] (CLASSIFIER!)", "useLater": "This distinguishes standard GANs from general f-GAN and energy-based models."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>
