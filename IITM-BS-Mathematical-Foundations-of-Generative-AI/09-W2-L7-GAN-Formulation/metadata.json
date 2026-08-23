@@ -1,0 +1,31 @@
+{
+  "title": "W2_L7: Generative adversarial networks: formulation",
+  "video_id": "pLD5Q5cS4kI",
+  "url": "https://www.youtube.com/watch?v=pLD5Q5cS4kI",
+  "duration_seconds": 2120,
+  "channel": "IIT Madras - B.S. Degree Programme",
+  "instructor": "Prof. Prathosh A. P. (IISc / IITM BS)",
+  "description": "Week 2 Lecture 7: GAN training in practice — J_GAN, batch averages, D ascent vs G descent, freeze, no real data for G, k:1, stop by sample quality.",
+  "playlist_index": 11,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "mixed",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "course_short": "IITM-BS-MFGAI",
+  "topics": [
+    "Two nets; n IID; architecture-agnostic",
+    "D=sigmoid; J_GAN; alternate",
+    "Batch averages; D plus-step",
+    "G min; xhat=G(z); drop first term",
+    "Freeze; ascent vs descent",
+    "Train D: real batch, frozen G",
+    "Train G: no real; grads through D",
+    "k:1; no stopping formula",
+    "VDM special case; why it works",
+    "Recap; next classifier/inference"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "title": "W2_T5: Tutorial: Tutorial: implementation of generative adversarial network",
+  "video_id": "iOb8vmlJd8o",
+  "url": "https://www.youtube.com/watch?v=iOb8vmlJd8o",
+  "duration_seconds": 2466,
+  "channel": "IIT Madras - B.S. Degree Programme",
+  "instructor": "IITM BS tutorial (Chandan); course Prof. Prathosh A. P.",
+  "description": "Week 2 Tutorial 5: vanilla GAN on MNIST in PyTorch (two MLPs, two Adams, BCE, detach, three k-step modes, 50-epoch grids).",
+  "playlist_index": 12,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "course_short": "IITM-BS-MFGAI",
+  "topics": [
+    "Vanilla GAN on MNIST why small",
+    "Two MLPs z dim 100 image dim 784",
+    "Loss J batches xhat = G(z)",
+    "D ascent freeze G two BCE terms",
+    "G descent drop term 1 trick ones",
+    "Colab imports Normalize MNIST 128",
+    "Generator Tanh Discriminator LeakyReLU Sigmoid",
+    "Two Adams BCE fixed noise",
+    "train_gan detach modes",
+    "50-epoch grids CNN exercise next flavor"
+  ]
+}

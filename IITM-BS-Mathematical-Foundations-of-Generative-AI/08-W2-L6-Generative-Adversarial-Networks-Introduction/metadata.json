@@ -1,0 +1,30 @@
+{
+  "title": "W2_L6: Generative adversarial networks: introduction",
+  "video_id": "EHhURRwMEPo",
+  "url": "https://www.youtube.com/watch?v=EHhURRwMEPo",
+  "duration_seconds": 1333,
+  "channel": "IIT Madras - B.S. Degree Programme",
+  "instructor": "Prof. Prathosh A. P. (IISc / IITM BS)",
+  "description": "GAN as one f inside VDM: T=σ_f∘V_w, JS-like f, f* on R_-, J_GAN two-log with D=sigmoid(V). No code; implement next.",
+  "playlist_index": 10,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 9,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "course_short": "IITM-BS-MFGAI",
+  "topics": [
+    "T maps to dom(f*)",
+    "T_w = sigma_f(V_w) linear last",
+    "Rewrite J with composition",
+    "GAN is VDM; JS-like f",
+    "f-star and sigma_f",
+    "J_GAN and sigmoid D",
+    "Architecture G V sigmoid",
+    "One D net; (0,1) not R_minus",
+    "J is the bound; practice next"
+  ]
+}
