@@ -33,26 +33,30 @@ Same instructor, similar math, **different recording**: IIT Madras BS (this play
 
 ## Table of Contents
 
-1. [What the course is for](#what-the-course-is-for)
-2. [Architecture of the whole course](#architecture-of-the-whole-course)
-3. [How the 12 weeks fit](#how-the-12-weeks-fit)
-4. [Playlist catalog](#playlist-catalog)
-   - [Week 1 — Introduction to probabilistic deep generative modelling](#week-1--introduction-to-probabilistic-deep-generative-modelling)
-   - [Week 2 — Variational divergence minimization → GANs](#week-2--variational-divergence-minimization--gans)
-   - [Week 3 — GANs part 1](#week-3--gans-part-1)
-   - [Week 4 — WGANs, inversion, evaluation](#week-4--wgans-inversion-evaluation)
-   - [Week 5 — Latent-variable models and VAE](#week-5--latent-variable-models-and-vae)
-   - [Week 6 — Training VAEs, β-VAE, VQ-VAE](#week-6--training-vaes-β-vae-vq-vae)
-   - [Week 7 — DDPM formulation](#week-7--ddpm-formulation)
-   - [Week 8 — DDPM ELBO, training, inference](#week-8--ddpm-elbo-training-inference)
-   - [Week 9 — Score-based, guided, latent, DDIM](#week-9--score-based-guided-latent-ddim)
-   - [Week 10 — Autoregressive models and Transformers](#week-10--autoregressive-models-and-transformers)
-   - [Week 9 tutorials (playlist order)](#week-9-tutorials-playlist-order)
-   - [Week 11 — RL for language models](#week-11--rl-for-language-models)
-   - [Week 12 — Reward modelling, DPO, SSMs](#week-12--reward-modelling-dpo-ssms)
-5. [Compact title → URL list](#compact-title--url-list)
-6. [External resources](#external-resources)
-7. [Sources](#sources)
+- [Mathematical Foundations of Generative AI](#mathematical-foundations-of-generative-ai)
+  - [Table of Contents](#table-of-contents)
+  - [What the course is for](#what-the-course-is-for)
+  - [Architecture of the whole course](#architecture-of-the-whole-course)
+    - [Four engines, then alignment](#four-engines-then-alignment)
+    - [What each engine *cannot* skip](#what-each-engine-cannot-skip)
+  - [How the 12 weeks fit](#how-the-12-weeks-fit)
+  - [Playlist catalog](#playlist-catalog)
+    - [Week 1 — Introduction to probabilistic deep generative modelling](#week-1--introduction-to-probabilistic-deep-generative-modelling)
+    - [Week 2 — Variational divergence minimization → GANs](#week-2--variational-divergence-minimization--gans)
+    - [Week 3 — GANs part 1](#week-3--gans-part-1)
+    - [Week 4 — WGANs, inversion, evaluation](#week-4--wgans-inversion-evaluation)
+    - [Week 5 — Latent-variable models and VAE](#week-5--latent-variable-models-and-vae)
+    - [Week 6 — Training VAEs, β-VAE, VQ-VAE](#week-6--training-vaes-β-vae-vq-vae)
+    - [Week 7 — DDPM formulation](#week-7--ddpm-formulation)
+    - [Week 8 — DDPM ELBO, training, inference](#week-8--ddpm-elbo-training-inference)
+    - [Week 9 — Score-based, guided, latent, DDIM](#week-9--score-based-guided-latent-ddim)
+    - [Week 10 — Autoregressive models and Transformers](#week-10--autoregressive-models-and-transformers)
+    - [Week 9 tutorials (playlist order)](#week-9-tutorials-playlist-order)
+    - [Week 11 — RL for language models](#week-11--rl-for-language-models)
+    - [Week 12 — Reward modelling, DPO, SSMs](#week-12--reward-modelling-dpo-ssms)
+  - [Compact title → URL list](#compact-title--url-list)
+  - [External resources](#external-resources)
+  - [Sources](#sources)
 
 ---
 
@@ -186,9 +190,9 @@ Summaries are from official titles + the published week syllabus. They are not s
 | #  | Video                                                               | Duration | Link                                                                                                  | Summary                                                                                                               |
 | ---- | --------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | 9  | W2_L5: Generative modelling via variational divergence minimization | 54:54    | [watch](https://www.youtube.com/watch?v=stZC0Zk5KYo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=9)  | Completes VDM: generator$G_\theta$ vs critic, saddle-point training, and how this is the parent of GANs.              |
-| 10 | W2_L6: Generative adversarial networks: introduction                | 22:13    | [watch](https://www.youtube.com/watch?v=EHhURRwMEPo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=10) | GAN as one $f$ inside VDM: $T=\sigma_f\circ V$, two-log $J$ with $D=\mathrm{sigmoid}(V)$. No code. Package: [`08-W2-L6-…`](./08-W2-L6-Generative-Adversarial-Networks-Introduction/). |
-| 11 | W2_L7: Generative adversarial networks: formulation                 | 35:20    | [watch](https://www.youtube.com/watch?v=pLD5Q5cS4kI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=11) | $J_{\mathrm{GAN}}$, D ascent / G descent, freeze, no reals on G. Package: [`09-W2-L7-…`](./09-W2-L7-GAN-Formulation/). |
-| 12 | W2_T5: Tutorial: Implementation of generative adversarial network   | 41:07    | [watch](https://www.youtube.com/watch?v=iOb8vmlJd8o&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=12) | Vanilla GAN in PyTorch: two MLPs, two Adams, BCE, `.detach()`, three modes, 50-epoch grids. Package: [`10-W2-T5-…`](./10-W2-T5-Implementation-of-GAN/). Notebook: [IITM_DGM_Vanilla_GAN.ipynb](https://github.com/Chandan-IISc/IITM_GenAI/blob/main/IITM_DGM_Vanilla_GAN.ipynb). |
+| 10 | W2_L6: Generative adversarial networks: introduction                | 22:13    | [watch](https://www.youtube.com/watch?v=EHhURRwMEPo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=10) | GAN idea: a generator fools a discriminator; samples come from$G(z)$ with no explicit density.                        |
+| 11 | W2_L7: Generative adversarial networks: formulation                 | 35:20    | [watch](https://www.youtube.com/watch?v=pLD5Q5cS4kI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=11) | Original GAN value function and its link to Jensen–Shannon divergence.                                               |
+| 12 | W2_T5: Tutorial: Implementation of generative adversarial network   | 41:07    | [watch](https://www.youtube.com/watch?v=iOb8vmlJd8o&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=12) | Vanilla GAN in PyTorch ([notebook](https://github.com/Chandan-IISc/IITM_GenAI/blob/main/IITM_DGM_Vanilla_GAN.ipynb)). |
 
 ### Week 3 — GANs part 1
 
@@ -333,72 +337,74 @@ These belong conceptually with week 9; YouTube lists them after week 10.
 6. W1_T2: Tutorial 2: Introduction to pytorch: tensors → https://www.youtube.com/watch?v=L5n4rNrLZ_8&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=6
 7. W1_T3: Tutorial 3: Introduction to pytorch: datasets & dataloaders → https://www.youtube.com/watch?v=c2gN3TK3U74&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=7
 8. W1_T4: Tutorial 4: Introduction to pytorch: model building → https://www.youtube.com/watch?v=h1hEddM0aVE&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=8
-9. 
-10. W2_L5: Generative modelling via variational divergence minimization → https://www.youtube.com/watch?v=stZC0Zk5KYo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=9
-11. W2_L6: Generative adversarial networks: introduction (chalk: VDM → two-log $J$) → https://www.youtube.com/watch?v=EHhURRwMEPo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=10
+9. W2_L5: Generative modelling via variational divergence minimization → https://www.youtube.com/watch?v=stZC0Zk5KYo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=9
+10. 
+11. W2_L6: Generative adversarial networks: introduction → https://www.youtube.com/watch?v=EHhURRwMEPo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=10
 12. W2_L7: Generative adversarial networks: formulation → https://www.youtube.com/watch?v=pLD5Q5cS4kI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=11
 13. W2_T5: Tutorial: Implementation of generative adversarial network → https://www.youtube.com/watch?v=iOb8vmlJd8o&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=12
-14. W3L8: GANs as classifier-guided generative sampler → https://www.youtube.com/watch?v=ga8VOW6pPeA&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=13
-15. W3L9: Deep Convolution GANs and Conditional GANs → https://www.youtube.com/watch?v=CFymHrr5iQw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=14
-16. W3T6: Tutorial: Implementation of DC-GAN → https://www.youtube.com/watch?v=4-o6d8EyxCU&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=15
-17. W4L10: Saturation of GAN training → https://www.youtube.com/watch?v=2RMeQ5YxIxI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=16
-18. W4L11: Wasserstein GANs → https://www.youtube.com/watch?v=_IBfVkrvqAI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=17
-19. W4L12: Inversion with GANs → https://www.youtube.com/watch?v=S84MmiEr-6o&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=18
-20. W4L13: Bi-directional GANs → https://www.youtube.com/watch?v=9av__QKR_xk&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=19
-21. W4L14: GAN inversion via latent regression → https://www.youtube.com/watch?v=gkMIerCn8n0&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=20
-22. W4L15: Domain Adversarial Networks → https://www.youtube.com/watch?v=rWk04R1VH8Q&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=21
-23. W4L16: Evaluation of Generative Models → https://www.youtube.com/watch?v=5Mchnh2xedI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=22
-24. W4T7: Tutorial: Implementation of Bi-GAN → https://www.youtube.com/watch?v=eH9skKyqjJM&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=23
-25. W4T8: Tutorial: Implementation of UDA → https://www.youtube.com/watch?v=kD708wpM14c&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=24
-26. W4T9: Tutorial: Implementation of WGAN → https://www.youtube.com/watch?v=ZApQpSKjazs&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=25
-27. W5L17: Introduction to latent variable models → https://www.youtube.com/watch?v=UAnp6yU8K0A&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=26
-28. W5L18: Evidence Lower Bound (ELBO) → https://www.youtube.com/watch?v=d9fDDUcQqq4&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=27
-29. W5L19: Gaussian Mixture Models: Expectation-Maximization Algorithm → https://www.youtube.com/watch?v=zUJNypPc-Vo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=28
-30. W5L20: Variational Autoencoder (VAE) → https://www.youtube.com/watch?v=RN3_gkjlYoA&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=29
-31. W5T10: Proof of Jensen's inequality → https://www.youtube.com/watch?v=br7oydgTero&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=30
-32. W5T11: GMM → https://www.youtube.com/watch?v=VB0E_tzwuxI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=31
-33. W6L21: Training VAE: Reparameterization methods → https://www.youtube.com/watch?v=blh_AnhwIpw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=32
-34. W6L22: Training VAE → https://www.youtube.com/watch?v=dAQVTNnRrEg&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=33
-35. W6L23: Inference with a trained VAE → https://www.youtube.com/watch?v=x85aw6DXX0w&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=34
-36. W6L24: Beta-VAE → https://www.youtube.com/watch?v=6ZBvXaVgAGA&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=35
-37. W6L25: Vector Quantized VAE (VQ-VAE) → https://www.youtube.com/watch?v=8UbwFtDJEG0&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=36
-38. W6T12: Implementation of VAE → https://www.youtube.com/watch?v=ZJh_Jv0hxZM&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=37
-39. W6T13: Implementation of VQ-VAE → https://www.youtube.com/watch?v=o2Nc6_kcgEw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=38
-40. W7L26: Denoising Diffusion Probabilistic Models (DDPMs) → https://www.youtube.com/watch?v=N0OOnTKMYJE&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=39
-41. W7L27: DDPM: Formulation → https://www.youtube.com/watch?v=P8AiIW0Gg0s&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=40
-42. W7T14: U-Net → https://www.youtube.com/watch?v=-sOaKgKAmaM&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=41
-43. W8L28: ELBO for DDPM : Part 1 → https://www.youtube.com/watch?v=AnWitwNPnN4&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=42
-44. W8L29: ELBO for DDPM : Part 2 → https://www.youtube.com/watch?v=wPx64rVy2c4&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=43
-45. W8L30: Optimization of DDPM loss → https://www.youtube.com/watch?v=yzU0ueuABLw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=44
-46. W8L31: ELBO Equivalence → https://www.youtube.com/watch?v=j-xrjqvSKhU&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=45
-47. W8L32: Training of DDPM → https://www.youtube.com/watch?v=47TD4eSLVMI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=46
-48. W8L33: Inference in DDPM → https://www.youtube.com/watch?v=0p7T-3WiPnQ&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=47
-49. W8T15: Implementation of DDPM → https://www.youtube.com/watch?v=au-7zLxcP1k&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=48
-50. W8T16: Proofs → https://www.youtube.com/watch?v=rNxtbFa8J-s&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=49
-51. W9L34: alternate interpretations of DDPMs → https://www.youtube.com/watch?v=30fSjB8oGN0&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=50
-52. W9L35: DDPMs as score-predictors → https://www.youtube.com/watch?v=2Sp0BqAWWXY&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=51
-53. W9L36: Guided Diffusion Models → https://www.youtube.com/watch?v=kJCgO7rwo3Y&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=52
-54. W9L37: Latent Diffusion Models → https://www.youtube.com/watch?v=qkinkLtwSyc&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=53
-55. W9L38: Denoising Diffusion Implicit Models (DDIMs) → https://www.youtube.com/watch?v=qiMJBB8chzI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=54
-56. W9L39: Inference in DDIM → https://www.youtube.com/watch?v=3KQWN9SS7L0&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=55
-57. W10L40: Auto-Regressive Models → https://www.youtube.com/watch?v=PtDFqdTbQUY&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=56
-58. W10L41: Attention Mechanism → https://www.youtube.com/watch?v=LoO0zQvmArE&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=57
-59. W10L42: Transformers for Auto-Regressive Models → https://www.youtube.com/watch?v=uOb-dRc8yrA&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=58
-60. W10L43: Transformers architecture → https://www.youtube.com/watch?v=NAWe0F0PmRU&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=59
-61. W10L44: Transformers: Skip Connections and Normalization → https://www.youtube.com/watch?v=ZtGkl72SZPo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=60
-62. W10L45: Transformers: Position Embeddings → https://www.youtube.com/watch?v=_k1vd1DaMzQ&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=61
-63. W10L46: Transformers: Training and Inference → https://www.youtube.com/watch?v=RJmTsB7mnUk&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=62
-64. W9T17: Implementation of DDPM Noise estimation → https://www.youtube.com/watch?v=cmMm8Jgm3hI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=63
-65. W9T18: Implementation of DDIM → https://www.youtube.com/watch?v=kT-PCHIayS0&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=64
-66. W9T19: Implementation of Guided DDPM → https://www.youtube.com/watch?v=BKqUPihkNmY&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=65
-67. W11L47: An overview of Reinforcement Learning → https://www.youtube.com/watch?v=4NZ6DLFF2DY&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=66
-68. W11L48: Policy Gradient Theorem → https://www.youtube.com/watch?v=5FOz4agFl4M&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=67
-69. W11L49: Expressing an AR-LM as RL policy → https://www.youtube.com/watch?v=Y2KZ_zDGhKw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=68
-70. W11L50: Proximal Policy Optimization (PPO) → https://www.youtube.com/watch?v=mvANXESrhqc&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=69
-71. W11L51: Trust Region Policy Optimization (TRPO) → https://www.youtube.com/watch?v=9MJkL3XiCsk&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=70
-72. W12L52: Reward-Modelling → https://www.youtube.com/watch?v=kCwdMhKO0x8&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=71
-73. W12L53: Direct Preference Optimization (DPO) → https://www.youtube.com/watch?v=P4Tm0FURBFU&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=72
-74. W12L54: State-space-Models → https://www.youtube.com/watch?v=A7iAmVr0QE4&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=73
+14. 
+15. W3L8: GANs as classifier-guided generative sampler → https://www.youtube.com/watch?v=ga8VOW6pPeA&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=13
+16. 
+17. W3L9: Deep Convolution GANs and Conditional GANs → https://www.youtube.com/watch?v=CFymHrr5iQw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=14
+18. W3T6: Tutorial: Implementation of DC-GAN → https://www.youtube.com/watch?v=4-o6d8EyxCU&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=15
+19. W4L10: Saturation of GAN training → https://www.youtube.com/watch?v=2RMeQ5YxIxI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=16
+20. W4L11: Wasserstein GANs → https://www.youtube.com/watch?v=_IBfVkrvqAI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=17
+21. W4L12: Inversion with GANs → https://www.youtube.com/watch?v=S84MmiEr-6o&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=18
+22. W4L13: Bi-directional GANs → https://www.youtube.com/watch?v=9av__QKR_xk&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=19
+23. W4L14: GAN inversion via latent regression → https://www.youtube.com/watch?v=gkMIerCn8n0&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=20
+24. W4L15: Domain Adversarial Networks → https://www.youtube.com/watch?v=rWk04R1VH8Q&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=21
+25. W4L16: Evaluation of Generative Models → https://www.youtube.com/watch?v=5Mchnh2xedI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=22
+26. W4T7: Tutorial: Implementation of Bi-GAN → https://www.youtube.com/watch?v=eH9skKyqjJM&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=23
+27. W4T8: Tutorial: Implementation of UDA → https://www.youtube.com/watch?v=kD708wpM14c&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=24
+28. W4T9: Tutorial: Implementation of WGAN → https://www.youtube.com/watch?v=ZApQpSKjazs&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=25
+29. W5L17: Introduction to latent variable models → https://www.youtube.com/watch?v=UAnp6yU8K0A&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=26
+30. W5L18: Evidence Lower Bound (ELBO) → https://www.youtube.com/watch?v=d9fDDUcQqq4&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=27
+31. W5L19: Gaussian Mixture Models: Expectation-Maximization Algorithm → https://www.youtube.com/watch?v=zUJNypPc-Vo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=28
+32. W5L20: Variational Autoencoder (VAE) → https://www.youtube.com/watch?v=RN3_gkjlYoA&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=29
+33. W5T10: Proof of Jensen's inequality → https://www.youtube.com/watch?v=br7oydgTero&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=30
+34. W5T11: GMM → https://www.youtube.com/watch?v=VB0E_tzwuxI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=31
+35. W6L21: Training VAE: Reparameterization methods → https://www.youtube.com/watch?v=blh_AnhwIpw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=32
+36. W6L22: Training VAE → https://www.youtube.com/watch?v=dAQVTNnRrEg&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=33
+37. W6L23: Inference with a trained VAE → https://www.youtube.com/watch?v=x85aw6DXX0w&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=34
+38. W6L24: Beta-VAE → https://www.youtube.com/watch?v=6ZBvXaVgAGA&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=35
+39. W6L25: Vector Quantized VAE (VQ-VAE) → https://www.youtube.com/watch?v=8UbwFtDJEG0&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=36
+40. W6T12: Implementation of VAE → https://www.youtube.com/watch?v=ZJh_Jv0hxZM&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=37
+41. W6T13: Implementation of VQ-VAE → https://www.youtube.com/watch?v=o2Nc6_kcgEw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=38
+42. W7L26: Denoising Diffusion Probabilistic Models (DDPMs) → https://www.youtube.com/watch?v=N0OOnTKMYJE&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=39
+43. W7L27: DDPM: Formulation → https://www.youtube.com/watch?v=P8AiIW0Gg0s&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=40
+44. W7T14: U-Net → https://www.youtube.com/watch?v=-sOaKgKAmaM&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=41
+45. W8L28: ELBO for DDPM : Part 1 → https://www.youtube.com/watch?v=AnWitwNPnN4&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=42
+46. W8L29: ELBO for DDPM : Part 2 → https://www.youtube.com/watch?v=wPx64rVy2c4&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=43
+47. W8L30: Optimization of DDPM loss → https://www.youtube.com/watch?v=yzU0ueuABLw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=44
+48. W8L31: ELBO Equivalence → https://www.youtube.com/watch?v=j-xrjqvSKhU&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=45
+49. W8L32: Training of DDPM → https://www.youtube.com/watch?v=47TD4eSLVMI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=46
+50. W8L33: Inference in DDPM → https://www.youtube.com/watch?v=0p7T-3WiPnQ&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=47
+51. W8T15: Implementation of DDPM → https://www.youtube.com/watch?v=au-7zLxcP1k&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=48
+52. W8T16: Proofs → https://www.youtube.com/watch?v=rNxtbFa8J-s&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=49
+53. W9L34: alternate interpretations of DDPMs → https://www.youtube.com/watch?v=30fSjB8oGN0&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=50
+54. W9L35: DDPMs as score-predictors → https://www.youtube.com/watch?v=2Sp0BqAWWXY&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=51
+55. W9L36: Guided Diffusion Models → https://www.youtube.com/watch?v=kJCgO7rwo3Y&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=52
+56. W9L37: Latent Diffusion Models → https://www.youtube.com/watch?v=qkinkLtwSyc&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=53
+57. W9L38: Denoising Diffusion Implicit Models (DDIMs) → https://www.youtube.com/watch?v=qiMJBB8chzI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=54
+58. W9L39: Inference in DDIM → https://www.youtube.com/watch?v=3KQWN9SS7L0&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=55
+59. W10L40: Auto-Regressive Models → https://www.youtube.com/watch?v=PtDFqdTbQUY&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=56
+60. W10L41: Attention Mechanism → https://www.youtube.com/watch?v=LoO0zQvmArE&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=57
+61. W10L42: Transformers for Auto-Regressive Models → https://www.youtube.com/watch?v=uOb-dRc8yrA&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=58
+62. W10L43: Transformers architecture → https://www.youtube.com/watch?v=NAWe0F0PmRU&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=59
+63. W10L44: Transformers: Skip Connections and Normalization → https://www.youtube.com/watch?v=ZtGkl72SZPo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=60
+64. W10L45: Transformers: Position Embeddings → https://www.youtube.com/watch?v=_k1vd1DaMzQ&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=61
+65. W10L46: Transformers: Training and Inference → https://www.youtube.com/watch?v=RJmTsB7mnUk&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=62
+66. W9T17: Implementation of DDPM Noise estimation → https://www.youtube.com/watch?v=cmMm8Jgm3hI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=63
+67. W9T18: Implementation of DDIM → https://www.youtube.com/watch?v=kT-PCHIayS0&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=64
+68. W9T19: Implementation of Guided DDPM → https://www.youtube.com/watch?v=BKqUPihkNmY&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=65
+69. W11L47: An overview of Reinforcement Learning → https://www.youtube.com/watch?v=4NZ6DLFF2DY&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=66
+70. W11L48: Policy Gradient Theorem → https://www.youtube.com/watch?v=5FOz4agFl4M&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=67
+71. W11L49: Expressing an AR-LM as RL policy → https://www.youtube.com/watch?v=Y2KZ_zDGhKw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=68
+72. W11L50: Proximal Policy Optimization (PPO) → https://www.youtube.com/watch?v=mvANXESrhqc&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=69
+73. W11L51: Trust Region Policy Optimization (TRPO) → https://www.youtube.com/watch?v=9MJkL3XiCsk&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=70
+74. W12L52: Reward-Modelling → https://www.youtube.com/watch?v=kCwdMhKO0x8&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=71
+75. W12L53: Direct Preference Optimization (DPO) → https://www.youtube.com/watch?v=P4Tm0FURBFU&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=72
+76. W12L54: State-space-Models → https://www.youtube.com/watch?v=A7iAmVr0QE4&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=73
 
 ---
 
