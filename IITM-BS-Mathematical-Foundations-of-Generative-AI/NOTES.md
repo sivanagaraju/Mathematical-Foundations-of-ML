@@ -15,9 +15,6 @@ This file is the **course map + catalog**. Per-lecture study packages (`PREREQUI
 | 3          | W1_L3 (YouTube title: F-divergence;**recording is PyTorch tensors**)      | [`02-W1-L3-F-Divergence/`](./02-W1-L3-F-Divergence/)                                               |
 | 4          | W1_L4 Variational divergence minimization                                 | [`03-W1-L4-Variational-Divergence-Minimization/`](./03-W1-L4-Variational-Divergence-Minimization/) |
 | 6          | W1_T2 Introduction to pytorch: tensors*(recording: Dataset / DataLoader)* | [`04-W1-T2-Introduction-to-PyTorch-Tensors/`](./04-W1-T2-Introduction-to-PyTorch-Tensors/)         |
-| 7          | W1_T3 datasets & dataloaders*(recording: VDM two-net saddle / GAN names)* | [`05-W1-T3-PyTorch-Datasets-DataLoaders/`](./05-W1-T3-PyTorch-Datasets-DataLoaders/)               |
-| 8          | W1_T4 Introduction to pytorch: model building                             | [`06-W1-T4-Introduction-to-PyTorch-Model-Building/`](./06-W1-T4-Introduction-to-PyTorch-Model-Building/) |
-| 9          | W2_L5 VDM *(recording: MLP forward / backprop tutorial)*                  | [`07-W2-L5-Generative-Modelling-via-VDM/`](./07-W2-L5-Generative-Modelling-via-VDM/) |
 
 Same instructor, similar math, **different recording** from NPTEL / IISc ([`../Mathematical-Foundation-for-GenerativeAI/`](../Mathematical-Foundation-for-GenerativeAI/)).
 
@@ -171,7 +168,7 @@ Summaries are from official titles + the published week syllabus. They are not s
 | 4 | W1_L4: Variational divergence minimization                                     | 26:09    | [watch](https://www.youtube.com/watch?v=nfZQYopzv20&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=4) | Names$f$-divergence (KL / JS / TV). The conjugate / critic algorithm is **next** (W2_L5). Package: [`03-W1-L4-…`](./03-W1-L4-Variational-Divergence-Minimization/). |
 | 5 | W1_T1: Tutorial 1: Forward pass & backpropagation                              | 42:50    | [watch](https://www.youtube.com/watch?v=VxRIqenOoQw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=5) | Neural-net forward pass and backprop from scratch so later PyTorch tutorials are not black boxes.                                                                    |
 | 6 | W1_T2: Tutorial 2: Introduction to pytorch: tensors                            | 18:26    | [watch](https://www.youtube.com/watch?v=L5n4rNrLZ_8&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=6) | Title says tensors; recording is Dataset/DataLoader. Package:[`04-W1-T2-…`](./04-W1-T2-Introduction-to-PyTorch-Tensors/).                                           |
-| 7 | W1_T3: Tutorial 3: Introduction to pytorch: datasets & dataloaders             | 30:44    | [watch](https://www.youtube.com/watch?v=c2gN3TK3U74&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=7) | Title says Dataset/DataLoader; **recording** is VDM realization (two nets, saddle, GAN names). Package: [`05-W1-T3-…`](./05-W1-T3-PyTorch-Datasets-DataLoaders/). |
+| 7 | W1_T3: Tutorial 3: Introduction to pytorch: datasets & dataloaders             | 30:44    | [watch](https://www.youtube.com/watch?v=c2gN3TK3U74&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=7) | `Dataset` / `DataLoader` so training loops can stream minibatches.                                                                                                   |
 | 8 | W1_T4: Tutorial 4: Introduction to pytorch: model building                     | 44:06    | [watch](https://www.youtube.com/watch?v=h1hEddM0aVE&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=8) | `nn.Module`, autograd, and a first trainable model.                                                                                                                  |
 
 ### Week 2 — Variational divergence minimization → GANs
@@ -179,7 +176,7 @@ Summaries are from official titles + the published week syllabus. They are not s
 
 | #  | Video                                                               | Duration | Link                                                                                                  | Summary                                                                                                               |
 | ---- | --------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| 9  | W2_L5: Generative modelling via variational divergence minimization | 54:54    | [watch](https://www.youtube.com/watch?v=stZC0Zk5KYo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=9)  | Title is VDM; **recording** is Tutorial 1 (2–2–1 MLP, MSE, chain-rule backprop, Python batch/epoch loop). Package: [`07-W2-L5-…`](./07-W2-L5-Generative-Modelling-via-VDM/). |
+| 9  | W2_L5: Generative modelling via variational divergence minimization | 54:54    | [watch](https://www.youtube.com/watch?v=stZC0Zk5KYo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=9)  | Completes VDM: generator$G_\theta$ vs critic, saddle-point training, and how this is the parent of GANs.              |
 | 10 | W2_L6: Generative adversarial networks: introduction                | 22:13    | [watch](https://www.youtube.com/watch?v=EHhURRwMEPo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=10) | GAN idea: a generator fools a discriminator; samples come from$G(z)$ with no explicit density.                        |
 | 11 | W2_L7: Generative adversarial networks: formulation                 | 35:20    | [watch](https://www.youtube.com/watch?v=pLD5Q5cS4kI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=11) | Original GAN value function and its link to Jensen–Shannon divergence.                                               |
 | 12 | W2_T5: Tutorial: Implementation of generative adversarial network   | 41:07    | [watch](https://www.youtube.com/watch?v=iOb8vmlJd8o&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=12) | Vanilla GAN in PyTorch ([notebook](https://github.com/Chandan-IISc/IITM_GenAI/blob/main/IITM_DGM_Vanilla_GAN.ipynb)). |
@@ -325,9 +322,9 @@ These belong conceptually with week 9; YouTube lists them after week 10.
 4. W1_L4: Variational divergence minimization → https://www.youtube.com/watch?v=nfZQYopzv20&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=4
 5. W1_T1: Tutorial 1: Forward pass & backpropagation → https://www.youtube.com/watch?v=VxRIqenOoQw&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=5
 6. W1_T2: Tutorial 2: Introduction to pytorch: tensors → https://www.youtube.com/watch?v=L5n4rNrLZ_8&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=6
-7. W1_T3: Tutorial 3: Introduction to pytorch: datasets & dataloaders (recording: VDM two-net saddle) → https://www.youtube.com/watch?v=c2gN3TK3U74&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=7
-8. 
-9. W1_T4: Tutorial 4: Introduction to pytorch: model building → https://www.youtube.com/watch?v=h1hEddM0aVE&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=8
+7. W1_T3: Tutorial 3: Introduction to pytorch: datasets & dataloaders → https://www.youtube.com/watch?v=c2gN3TK3U74&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=7
+8. W1_T4: Tutorial 4: Introduction to pytorch: model building → https://www.youtube.com/watch?v=h1hEddM0aVE&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=8
+9. 
 10. W2_L5: Generative modelling via variational divergence minimization → https://www.youtube.com/watch?v=stZC0Zk5KYo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=9
 11. W2_L6: Generative adversarial networks: introduction → https://www.youtube.com/watch?v=EHhURRwMEPo&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=10
 12. W2_L7: Generative adversarial networks: formulation → https://www.youtube.com/watch?v=pLD5Q5cS4kI&list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu&index=11
