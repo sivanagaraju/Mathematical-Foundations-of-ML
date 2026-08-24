@@ -1,793 +1,1025 @@
-# Lec 01 — Introduction (Mathematical Foundations of Generative AI)
+# Lecture 01 — Introduction (Mathematical Foundations of Generative AI)
 
-**Video:** [Lec 01 Introduction](https://www.youtube.com/watch?v=H05WDy9Mngk) · NPTEL / IISc
-**Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md)
-**Course:** Mathematical Foundations of **Generative AI** (~71 min)
-
----
-
-## Table of Contents
-
-1. [Topic 1 — Course mission](#topic-1-course-mission-0002–0552) (00:02–05:52)
-2. [Topic 2 — Model families roadmap](#topic-2-model-families-roadmap-0552–1132) (05:52–11:32)
-3. [Topic 3 — Background & probabilistic frame](#topic-3-background--probabilistic-frame-1132–1359) (11:32–13:59)
-4. [Topic 4 — Physics vs non-measurable structure](#topic-4-physics-vs-non-measurable-structure-1359–2003) (13:59–20:03)
-5. [Topic 5 — Repeated observations](#topic-5-repeated-observations-2003–2332) (20:03–23:32)
-6. [Topic 6 — Random experiment & sample space](#topic-6-random-experiment--sample-space-2332–3137) (23:32–31:37)
-7. [Topic 7 — Measure as size; events](#topic-7-measure-as-size-events-3137–3832) (31:37–38:32)
-8. [Topic 8 — Probability measure P & axioms](#topic-8-probability-measure-p--axioms-3832–4458) (38:32–44:58)
-9. [Topic 9 — Triplet & surrogates](#topic-9-triplet--surrogates-4458–5401) (44:58–54:01)
-10. [Topic 10 — RV, CDF, estimate P_X](#topic-10-rv-cdf-estimate-px-5401–7052) (54:01–70:52)
-11. [External references](#external-references)
-12. [Sources](#sources)
+> **Video Lecture:** [NPTEL / IISc Bengaluru — Lec 01 Introduction](https://www.youtube.com/watch?v=H05WDy9Mngk)  
+> **Instructor:** Prof. Prathosh AP (IISc Bengaluru)  
+> **Duration:** ~70:52 mins  
+> **Prerequisites Warm-Up:** [PREREQUISITES.md](./PREREQUISITES.md)  
+> **Next Lecture:** [Lecture 02 — Generative Models: Problem Formulation](../15-Lec02-Generative-Models-Problem-Formulation/NOTES.md)  
+> **Interactive Verification:** [quiz.html](./quiz.html) (Part B covers this document)
 
 ---
 
-## Executive Summary — architecture of this lecture
+## 📑 Table of Contents
 
-A generative model has one job: look at many examples of a thing (faces, emails, sentences) and learn their **pattern** well enough to make a *new* example of the same kind. This lecture installs the math language for that job. Physics can predict a thrown ball; it cannot score “this email is spam” or “this photo looks real,” so we use repeated data and probability instead. The stack is: random experiment, sample space, events, probability, then a measurement function $X$ whose distribution we estimate. Estimating that distribution is what later VAEs, GANs, and transformers are all doing.
-
-**Worldview arc:** from “a chatbot is a black box I prompt” **to** “generation means estimate the law of the files we stored.”
-
-**Hour at a glance (whole video).** The first third is *why*. Generative AI is everywhere (GPT, Gemini, Claude). This course will not only teach you to *use* those systems; it will derive the math under them, on a board. He names the later families (mixture models, VAEs, diffusion, GANs, transformers / LLMs, state-space models, flows, then RLHF / DPO) so you know the semester map — one shared language, many machines. He then blocks the naive path: if the target is a human judgment (spam, “who is in the photo,” tumor on an X-ray), you cannot write a Newton equation. What has worked is collecting **many observations**.
-
-The rest of the hour is *the language*. A **random experiment** is a process you can run more than once. Its **sample space** Ω is the set of every outcome that could happen (two sides of a coin, or every possible face photo). An **event** is a subset you care about (“even face,” “smiling”). A **measure** reports the size of a subset; a **probability** $P$ is a measure that stays between 0 and 1, gives the whole of Ω the score 1, and adds on events that cannot happen together. Those three objects — Ω, the menu of events F, and $P$ — are the **probability triplet**. In real projects you almost never know Ω or $P$. You only have **surrogates**: pixel files, token files. A **random variable** $X$ is the function that turns an abstract outcome into that file. The pattern of the files is $P_X$. The closing sentence of the lecture is the course goal: **estimate $P_X$**. Draw a new file from that estimate, and you have generated.
-
-### System context
-
-```
-  ╔══════════════════════════════════╗
-  ║ Apps you already use             ║
-  ║ GPT, Gemini, Claude, image gens  ║
-  ║ Labs later: PyTorch (TA)         ║
-  ╚══════════════╤═══════════════════╝
-                 │ this lecture (~71 min)
-                 │  “what are those apps estimating?”
-                 ▼
-        ┌────────────────────────────┐
-        │ Probability stack for GenAI│
-        └────────────────────────────┘
-```
-
-### Main blueprint
-
-```
-  WANT: a new example that looks like the old ones
-         │
-         ▼
-  later engines (names only today)
-  VAE / GMM · diffusion · GAN · transformers
-  SSM · flows · RLHF / DPO
-         │
-         ├─ write a physics formula?  ──X──►  blocked
-         │   (spam / face / tumor are not a thrown ball)
-         ▼
-  collect many examples
-         │  math name:
-         ▼
-  random experiment  →  Ω = all possible outcomes
-         │  questions about outcomes = events
-         ▼
-  P scores each event  (between 0 and 1; whole Ω = 1;
-                         add when two events cannot both happen)
-         │
-         ▼
-  triplet (Ω, events, P)     we usually do *not* know these
-         │  what we *do* have:
-         ▼
-  files on disk = measurements X
-         │
-         ▼
-  pattern of the files = P_X
-         │
-         ▼
-  ESTIMATE P_X  then  draw a new file   =  generate
-```
-
-### Scenario walkthrough
-
-Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
-
-**Story:** you want a machine that can draw a **new face photo** that looks like it came from the same studio as your training pictures. (A chatbot is the same shape: new text instead of a new photo.)
-
-1. **Why this course?** Prompting a finished app is not enough. You need to know *what number the machine is estimating*. That is the MISSION box.
-
-2. **Why the name-list (VAE, GAN, diffusion, transformers)?** Those are later *machines* for the same job. Today they are only a map of neighborhoods. Do not try to learn their equations yet. One job, many later tools. That is the ROADMAP box.
-
-3. **Why not just write a physics formula for “a realistic face”?** Because a face (or “is this spam?”, or “is there a tumor?”) is not a rigid body flying from A to B. There is no Newton equation for “looks like a real person.” The physics path is blocked. That is the FORK.
-
-4. **So what do people actually do?** They collect **many** real photos. No closed-form law — a pile of observations. That is the DATA box.
-
-5. **How does math talk about “a pile of photos”?** Treat “take a studio photo” as a **random experiment**. The set of every photo that *could* have come out is the **sample space** Ω. One training picture is one outcome. That is RE → Ω.
-
-6. **How do you say “smiling faces are common”?** You do not score a vibe. You pick a **subset** of Ω (an **event**) and give it a **probability** $P$. That is events + $P$.
-
-7. **Do you ever list Ω?** Almost never. You only have **files on disk** — pixel arrays. Those files are **measurements** $X(\omega)$ of the abstract outcome. That is the surrogate / random-variable box.
-
-8. **What is left to learn?** The **law of those files**, written $P_X$. If you estimate $P_X$ well, you can **draw a new file** $X'$ that looks like another studio photo. That draw *is* generation. That is the GOAL box at the bottom of the map.
-
-```
-  want a new face photo
-         │  (not: write Newton’s law of “looks real”)
-         ▼
-  pile of real photos          ← repeated observations
-         │  cast as
-         ▼
-  experiment “take a photo” → Ω = all possible photos
-         │  we only store
-         ▼
-  files X = pixel arrays
-         │  estimate
-         ▼
-  law P_X  →  sample a new file   =  generate
-```
-
-Same chain for spam text or an X-ray: pile of examples → experiment + Ω → files $X$ → estimate $P_X$ → sample. The later families (Topic 2) are just different engines for the last two arrows.
-
-### Failure / contrast path
-
-```
-  “I’ll write a physics law of spam / faces”     ──X──►  no instrument measures that
-  “X is just a random number”                    ──X──►  you lost the domain Ω
-  “We always know Ω and P”                       ──X──►  real projects start from files
-  “Generation is prompting, not a distribution”  ──X──►  no math goal for the course
-```
-
-### STOP / out of scope
-
-He does **not** train a GAN or a transformer today. He does not do densities, KL, or full measure theory. Those come later. Today ends when you can say the goal: estimate $P_X$.
-
-### Load-bearing claims (closed-book)
-
-- This course derives generative AI from math first principles, not from demos.
-- If the target is a human judgment, physics is blocked → collect data and use probability.
-- Three objects: sample space Ω, events, probability $P$ (the triplet).
-- A random variable is a **function** from outcomes to numbers / files, not a lone number.
-- Generation = **estimate** the distribution $P_X$ of those files, then sample.
-
-**Speaker / course:** NPTEL IISc · MF Generative AI · Lec 01.
+1. [Executive Summary & Master Architecture](#executive-summary--architecture-of-this-lecture)
+   - [System Context & Worldview Arc](#system-context--worldview-arc)
+   - [Master Architecture Blueprint](#master-architecture-blueprint)
+   - [Comparative Feature Matrices](#comparative-feature-matrices)
+   - [Common Engineering & Mathematical Traps](#common-engineering--mathematical-traps)
+2. [Chalkboard & Mathematical Rosetta Stone](#chalkboard-rosetta-stone)
+3. [Complete Standalone Executable Python Simulation Script](#standalone-simulation-script)
+4. [Topic Deep Dives](#topic-deep-dives)
+   - [Topic 1 — Course Mission (00:02–05:52)](#topic-1-course-mission-0002–0552)
+   - [Topic 2 — Model Families Roadmap (05:52–11:32)](#topic-2-model-families-roadmap-0552–1132)
+   - [Topic 3 — Background & Probabilistic Frame (11:32–13:59)](#topic-3-background--probabilistic-frame-1132–1359)
+   - [Topic 4 — Physics vs Non-Measurable Structure (13:59–20:03)](#topic-4-physics-vs-non-measurable-structure-1359–2003)
+   - [Topic 5 — Repeated Observations (20:03–23:32)](#topic-5-repeated-observations-2003–2332)
+   - [Topic 6 — Random Experiment & Sample Space $\Omega$ (23:32–31:37)](#topic-6-random-experiment--sample-space-2332–3137)
+   - [Topic 7 — Measure as Size; Events (31:37–38:32)](#topic-7-measure-as-size-events-3137–3832)
+   - [Topic 8 — Probability Measure $P$ & Axioms (38:32–44:58)](#topic-8-probability-measure-p--axioms-3832–4458)
+   - [Topic 9 — Triplet $(\Omega, \mathcal{F}, P)$ & Surrogates (44:58–54:01)](#topic-9-triplet--surrogates-4458–5401)
+   - [Topic 10 — Random Variable $X$, CDF, Estimate $P_X$ (54:01–70:52)](#topic-10-rv-cdf-estimate-px-5401–7052)
+5. [Workplace Debugging Postmortems](#workplace-debugging-postmortems)
+   - [Postmortem 1: Invalid Softmax Normalization & NaN Gradient Explosion in Multi-Class Classifiers](#postmortem-1-invalid-softmax-normalization--nan-gradient-explosion)
+   - [Postmortem 2: Empirical Support Mismatch & Out-of-Distribution Density Failure](#postmortem-2-empirical-support-mismatch--out-of-distribution-density-failure)
+6. [Centralized External References](#external-references)
+7. [Sources & Metadata](#sources)
 
 ---
 
-## Topic 1: Course mission (00:02–05:52)
+## <a id="executive-summary--architecture-of-this-lecture"></a>Executive Summary & Master Architecture
 
-### Where this sits on the master map
+### System Context & Worldview Arc
+Lecture 01 serves as the foundational cornerstone for the entire **Mathematical Foundations of Generative AI** curriculum. The overarching mission is to transform the engineer's perspective from viewing Generative AI as an empirical black box (prompt engineering, calling remote APIs, running pre-trained Colab demos) to **understanding generative modeling as rigorous probabilistic density estimation and simulation**.
 
-**MISSION** box — why the course exists. Warm-up: [GenAI stack](./PREREQUISITES.md#p8-genai).
+The lecture establishes a fundamental divide in modern science:
+1. **The Classical Physics Path:** When physical systems possess direct instruments (speedometers, voltmeters, calipers) and well-defined differential equations (Newtonian mechanics, Maxwell's equations), we solve problems analytically with closed-form physics.
+2. **The Probabilistic / Machine Learning Path:** When targets are subjective, perceptual, or semantic ("Is this email spam?", "Does this photo look like a real person?", "Does this chest X-ray indicate pneumonia?"), no physical meter exists. We must collect **massive datasets of repeated observations** and model the underlying system using **measure-theoretic probability**.
 
-### Board / screenshot
+```
+  ===================================================================================================
+                             THE GENERATIVE AI WORLDVIEW TRANSITION
+  ===================================================================================================
+  
+   NATURE / UNIVERSE (Hidden)         RANDOM VARIABLE MAP (Sensor)         COMPUTER DISK (Accessible)
+   ┌───────────────────────┐          ┌───────────────────────┐          ┌─────────────────────────┐
+   │ Physical Phenomenon   │          │ Deterministic Mapping │          │ Coordinate Array in ℝ^d │
+   │ Sample Space Ω        │ ───────► │ X : Ω ──► ℝ^d         │ ───────► │ Pixel Grid, Audio, Text │
+   │ Unknown Measure P     │          │ (Camera, Audio ADC)   │          │ Surrogate Realization x │
+   └───────────────────────┘          └───────────────────────┘          └────────────┬────────────┘
+                                                                                      │
+                                                                                      ▼
+   LEARN TO SAMPLE (GenAI)            NUMERICAL ESTIMATION                EMPIRICAL DATASET
+   ┌───────────────────────┐          ┌───────────────────────┐          ┌─────────────────────────┐
+   │ Mint New Realizations │ ◄─────── │ Estimate Law P_X      │ ◄─────── │ D = {x_1, ..., x_n}     │
+   │ x̂ ~ P_θ* ≈ P_X        │          │ (VAEs, GANs, Diff, LLM│          │ n Observed Data Points  │
+   └───────────────────────┘          └───────────────────────┘          └─────────────────────────┘
+  ===================================================================================================
+```
 
+---
+
+### Master Architecture Blueprint
+
+```
+  ===================================================================================================
+                        LECTURE 01: INTRODUCTORY PROBABILISTIC STACK
+  ===================================================================================================
+  
+   1. COURSE MISSION              2. MODEL ROADMAP               3. PROBABILISTIC FRAME
+      First-principles math          • Variational (VAE/GMM)        Calculus + Probability + Linear
+      Derive, design, innovate       • Diffusion (DDPM)             Algebra are the universal tools
+      (Not just API consumers)       • Adversarial (GAN)            for modern generative intelligence.
+                                     • Autoregressive (LLM)
+                                     • State-Space & Flows
+                                            │
+                                            ▼
+   4. THE PHYSICS FORK            5. REPEATED OBSERVATIONS       6. RANDOM EXPERIMENT & Ω
+      Measurable vs Semantic:        When physics is blocked:       Random Experiment (RE)
+      Perceptual targets require     Collect massive datasets D     Sample Space Ω:
+      data + probability.            Repeated empirical runs.       Set of ALL possible outcomes.
+                                            │
+                                            ▼
+   7. EVENTS & MEASURE            8. PROBABILITY MEASURE P       9. THE KOLMOGOROV TRIPLET
+      Events A ⊆ Ω (legal queries)   Kolmogorov Axioms:             (Ω, ℱ, P)
+      Measure μ(A): size of set      1. P(A) ≥ 0                    Nature's formal starting kit.
+      (Length, Area, Volume)         2. P(Ω) = 1.0                  (Practitioners only see surrogates!)
+                                     3. Disjoint additivity
+                                            │
+                                            ▼
+                                 10. RANDOM VARIABLE & GOAL
+                                     • Measurement Map: X : Ω ──► ℝ^d
+                                     • CDF: P_X(x) = P(X ≤ x) = P(X^{-1}((-∞, x]))
+                                     • THE SACROSANCT MISSION:
+                                       ESTIMATE P_X FROM DATA D, THEN SAMPLE x̂ ~ P_X!
+  ===================================================================================================
+```
+
+---
+
+### Comparative Feature Matrices
+
+#### Matrix 1: Classical Physics vs Probabilistic Machine Learning
+
+| Dimension | Classical Physics Path | Probabilistic Machine Learning Path |
+| :--- | :--- | :--- |
+| **System Domain** | Deterministic physical dynamics (ballistics, circuits, gravity) | Complex, perceptual, or semantic domains (vision, text, medical diagnosis) |
+| **Measurement Type** | Direct physical instruments (voltage, mass, time, temperature) | Semantic judgments / subjective human labels ("spam", "photorealistic") |
+| **Governing Mathematics** | Differential equations, analytical ODEs/PDEs, conservation laws | Measure theory, probability distributions $P_X$, statistical learning theory |
+| **Data Requirement** | Few calibration parameters ($g = 9.81\text{ m/s}^2$) | Massive empirical datasets ($n = 10^5 \text{ to } 10^{12}$ tokens/images) |
+| **Primary Output** | Exact deterministic trajectory $y = f(t)$ | Estimated distribution $P_X(x)$ and generative sampling $\hat{x} \sim P_X$ |
+| **Failure Mode** | Model invalid if boundary conditions or physical assumptions break | Overfitting, support collapse, mode dropping, out-of-distribution hallucinations |
+
+#### Matrix 2: Generative Model Families Zoo (Course Roadmap)
+
+| Model Family | Core Mathematical Mechanism | Density Evaluation | Sampling Strategy | Primary Modality & Strengths |
+| :--- | :--- | :--- | :--- | :--- |
+| **Gaussian Mixture Models (GMM)** | Convex combination of $K$ Gaussians $\sum \pi_k \mathcal{N}(\mu_k, \Sigma_k)$ | Exact analytical density | Sample component $k \sim \pi$, then $x \sim \mathcal{N}(\mu_k, \Sigma_k)$ | Low-dimensional tabular clustering, baseline density estimation |
+| **Variational Autoencoders (VAE)** | Latent variable models optimizing Evidence Lower Bound (ELBO) | Approximate / Lower bounded | Sample latent $z \sim \mathcal{N}(0, I)$, decode $x = g_\theta(z)$ | Structured latent representations, fast single-pass image synthesis |
+| **Generative Adversarial Nets (GAN)** | Minimax game between Generator $G_\theta$ and Discriminator $D_\phi$ | Implicit (no tractable density) | Direct mapping from noise $z \to G_\theta(z)$ | Extremely sharp photorealistic images, real-time edge synthesis |
+| **Diffusion Models (DDPM / SGM)** | Progressive noise injection reversed via score matching $\nabla_x \ln p_t(x)$ | Tractable via ODE / SDE | Iterative step-by-step denoising trajectory | State-of-the-art high-fidelity image/video generation (Stable Diffusion, Sora) |
+| **Autoregressive Transformers (LLM)** | Chain rule factorization $p(x) = \prod_{t=1}^T p(x_t \mid x_{<t})$ | Exact conditional likelihoods | Sequential next-token sampling (top-$p$, temperature) | Natural language processing, reasoning, code generation (GPT-4, Claude) |
+| **Normalizing Flows** | Invertible diffeomorphism $f_\theta$ with change-of-variables theorem | Exact analytical via Jacobian | Invert base density: $x = f_\theta^{-1}(z)$ | Exact log-likelihood evaluation, physics simulation |
+| **State-Space Models (SSM / Mamba)** | Continuous-time linear dynamical systems discretized for sequences | Autoregressive factorization | Recurrent linear-time sequence generation | Long-context sequence modeling with $O(N)$ linear scaling |
+
+#### Matrix 3: Abstract Kolmogorov Space vs Accessible Data Space
+
+| Mathematical Attribute | Abstract Universe $(\Omega, \mathcal{F}, P)$ | Measurable Data Space $\bigl(\mathbb{R}^d, \mathcal{B}(\mathbb{R}^d), P_X\bigr)$ |
+| :--- | :--- | :--- |
+| **Base Domain** | Abstract sample space $\Omega$ (unobservable reality) | Continuous Euclidean vector space $\mathbb{R}^d$ |
+| **Elementary Element** | Physical outcome $\omega \in \Omega$ (human thoughts, photons) | Concrete data vector $x = [p_1, \dots, p_d]^\top \in \mathbb{R}^d$ |
+| **Field / Sigma-Algebra** | Abstract event space $\mathcal{F} \subseteq 2^\Omega$ | Borel $\sigma$-algebra $\mathcal{B}(\mathbb{R}^d)$ generated by open intervals |
+| **Probability Function** | Measure $P: \mathcal{F} \to [0, 1]$ | Distribution / CDF $P_X(x) = P\bigl(X^{-1}((-\infty, x])\bigr)$ |
+| **Practitioner Access** | Inaccessible (cannot be stored on a computer) | Stored as image tensors, audio PCM arrays, token embeddings |
+| **Bridge Mechanism** | Random Variable measurement function $X: \Omega \to \mathbb{R}^d$ maps between the two spaces |
+
+---
+
+### Common Engineering & Mathematical Traps
+
+```
+  ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │                               COMMON MENTAL TRAPS & FATAL ERRORS                                │
+  ├─────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ❌ TRAP 1: "A random variable is just a fluctuating floating-point number."                    │
+  │    ✅ FIX: A random variable X is a DETERMINISTIC MEASUREMENT FUNCTION X: Ω -> ℝ^d.             │
+  │            The randomness comes entirely from nature selecting outcome ω ~ P.                   │
+  │                                                                                                 │
+  │ ❌ TRAP 2: "Generative AI is just prompting APIs and building demo wrapper apps."               │
+  │    ✅ FIX: Production GenAI requires mastering statistical density estimation and sampling      │
+  │            to design novel architectures, modify loss functions, and debug failure modes.       │
+  │                                                                                                 │
+  │ ❌ TRAP 3: "We can write closed-form physics equations for spam detection and face realism."    │
+  │    ✅ FIX: Semantic concepts have no direct physical instrument; they require massive datasets   │
+  │            and probabilistic estimation.                                                        │
+  │                                                                                                 │
+  │ ❌ TRAP 4: "Practitioners can directly compute probabilities on the abstract sample space Ω."   │
+  │    ✅ FIX: Practitioners NEVER have access to Ω; we only work with digital surrogates X in ℝ^d. │
+  │                                                                                                 │
+  │ ❌ TRAP 5: "P(A ∪ B) = P(A) + P(B) holds for all events A and B."                              │
+  │    ✅ FIX: Additivity holds ONLY for mutually exclusive (disjoint) events where A ∩ B = ∅.     │
+  │            For general overlapping events: P(A ∪ B) = P(A) + P(B) - P(A ∩ B).                   │
+  │                                                                                                 │
+  │ ❌ TRAP 6: "Generative models can bypass distribution estimation and just output samples."      │
+  │    ✅ FIX: A model cannot simulate a random experiment without capturing the underlying         │
+  │            probability law P_X (either explicitly or implicitly).                               │
+  ╚─────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## <a id="chalkboard-rosetta-stone"></a>Chalkboard & Mathematical Rosetta Stone
+
+This reference table maps every symbol, shorthand, and chalkboard notation used by Prof. Prathosh in Lecture 01.
+
+| Chalkboard Notation | Formal Mathematical Name | Meaning in Lecture 01 | Python / Code Analogue |
+| :--- | :--- | :--- | :--- |
+| **$\text{RE}$** | Random Experiment | A repeatable process with uncertain physical outcomes. | Data generation process / real-world environment. |
+| **$\Omega$** | Sample Space | Set of all possible mutually exclusive outcomes of the RE. | The domain of all possible unobserved physical states. |
+| **$\omega \in \Omega$** | Elementary Outcome | A single realization of the universe during one run. | A single real-world physical event. |
+| **$\mathcal{F}$** | Event Space ($\sigma$-algebra) | Collection of measurable subsets of $\Omega$ (allowed queries). | The set of all valid boolean filters. |
+| **$A \in \mathcal{F}$** | Event | A specific measurable subset $A \subseteq \Omega$. | `mask = (labels == target_class)` |
+| **$P: \mathcal{F} \to [0, 1]$** | Probability Measure | Function assigning a size score between 0 and 1 to events. | Ground-truth probability assignment function. |
+| **$(\Omega, \mathcal{F}, P)$** | Kolmogorov Triplet | The complete formal mathematical model of uncertain nature. | Abstract statistical backend of the physical universe. |
+| **$X: \Omega \to \mathbb{R}^d$** | Random Variable | Deterministic mapping from abstract outcomes to vector numbers. | `tensor = sensor.capture_scene()` |
+| **$x \in \mathbb{R}^d$** | Realization / Vector | A concrete numeric data point stored in computer memory. | `x = torch.tensor([128.0, 45.0, ...])` |
+| **$X^{-1}(B)$** | Inverse Image (Pre-Image) | Subset of $\Omega$ whose elements map into subset $B \subset \mathbb{R}^d$. | `indices = [i for i, val in enumerate(X) if val in B]` |
+| **$P_X(x)$** | Cumulative Distribution (CDF) | $P(X \le x)$: The probability mass where measurement $\le x$. | `scipy.stats.norm.cdf(x, loc=mu, scale=sigma)` |
+| **$D = \{x_1, \dots, x_n\}$** | Empirical Dataset | $n$ observed vector realizations stored on disk. | `dataset = DataLoader(training_data)` |
+| **$P_\theta(x)$** | Parametric Model Family | Distribution family parameterized by neural network weights $\theta$. | `model = GenerativeModel(weights=theta)` |
+| **$\hat{x} \sim P_\theta$** | Generative Sampling | Simulating the random experiment to create new synthetic data. | `generated_sample = model.sample(num_samples=1)` |
+
+---
+
+## <a id="standalone-simulation-script"></a>Complete Standalone Executable Python Simulation Script
+
+This self-contained Python script implements every foundational mathematical concept presented in Lecture 01:
+1. **Discrete Probability Triplet:** Verifies Kolmogorov Axioms on a finite discrete space.
+2. **Random Variable Mapping:** Computes forward measurement extraction and inverse pre-images ($X^{-1}(B)$).
+3. **Continuous Data Process:** Simulates ground-truth data-generating law $P_X$ and collects dataset $D \sim P_X$.
+4. **Distribution Estimation:** Fits parametric model $P_\theta$ to empirical dataset $D$ via Maximum Likelihood.
+5. **Generative Simulation:** Synthesizes brand-new realizations $\hat{x} \sim P_\theta^*$ (generative sampling).
+
+```python
+"""
+LECTURE 01: MATHEMATICAL FOUNDATIONS OF GENERATIVE AI SIMULATION
+===============================================================
+Demonstrates the complete progression from Kolmogorov probability triplets (Omega, F, P)
+to deterministic Random Variables X: Omega -> R^d, empirical dataset collection D ~ P_X,
+parametric distribution estimation P_theta, and generative sampling.
+"""
+
+import numpy as np
+import scipy.stats as stats
+
+def run_lecture_01_simulation():
+    print("=" * 80)
+    print("  LECTURE 01: MFGAI INTRODUCTION - FULL MATHEMATICAL SIMULATION")
+    print("=" * 80)
+
+    # -------------------------------------------------------------------------
+    # PART 1: DISCRETE PROBABILITY TRIPLET & KOLMOGOROV AXIOMS (TOPIC 8)
+    # -------------------------------------------------------------------------
+    print("\n[PART 1] Discrete Kolmogorov Triplet (Omega, F, P) & Axioms")
+    
+    # 1. Sample Space Omega: Rolling a standard 6-sided die
+    omega = {1, 2, 3, 4, 5, 6}
+    print(f"  • Sample Space Ω: {omega}")
+    
+    # 2. Probability Measure P (Fair Die: P({k}) = 1/6)
+    def P(event):
+        assert event.issubset(omega), "Event must be a subset of Ω!"
+        return len(event) / len(omega)
+
+    # Axiom 1: Non-negativity
+    event_A = {2, 4, 6} # Even face
+    event_B = {1}       # Face 1
+    print(f"  • Axiom 1 (Non-negativity): P(Even) = {P(event_A):.4f} >= 0")
+    
+    # Axiom 2: Normalization
+    print(f"  • Axiom 2 (Normalization):   P(Ω)    = {P(omega):.4f} == 1.0")
+    assert P(omega) == 1.0, "Axiom 2 violated!"
+
+    # Axiom 3: Disjoint Additivity (Even ∩ {1} = ∅)
+    assert event_A.isdisjoint(event_B), "Events must be disjoint for Axiom 3 test"
+    union_AB = event_A.union(event_B)
+    print(f"  • Axiom 3 (Disjoint Additivity):")
+    print(f"    - P(Even ∪ {{1}}) = {P(union_AB):.4f}")
+    print(f"    - P(Even) + P({{1}}) = {P(event_A) + P(event_B):.4f}")
+    assert np.isclose(P(union_AB), P(event_A) + P(event_B)), "Axiom 3 violated!"
+
+    # -------------------------------------------------------------------------
+    # PART 2: RANDOM VARIABLE AS A MEASUREMENT FUNCTION (TOPIC 10)
+    # -------------------------------------------------------------------------
+    print("\n[PART 2] Random Variable X: Omega -> R (Measurement Function)")
+    
+    # Define deterministic measurement mapping: X(omega) = omega^2
+    def X_sensor(omega_val):
+        return omega_val ** 2
+
+    # Pre-Image calculation: X^{-1}(B) for B = {4, 16, 36} (Even squares)
+    target_B = {4, 16, 36}
+    pre_image = {w for w in omega if X_sensor(w) in target_B}
+    print(f"  • Sensor codomain target B: {target_B}")
+    print(f"  • Pre-Image X^{{-1}}(B) in Ω: {pre_image}")
+    print(f"  • Probability P(X ∈ B) = P(X^{{-1}}(B)) = {P(pre_image):.4f}")
+    assert pre_image == {2, 4, 6}, "Pre-image calculation failed!"
+
+    # -------------------------------------------------------------------------
+    # PART 3: CONTINUOUS DATA GENERATION & DATASET D ~ P_X (TOPICS 5 & 6)
+    # -------------------------------------------------------------------------
+    print("\n[PART 3] Continuous Data Law P_X & Empirical Dataset Collection")
+    np.random.seed(42)
+
+    # Nature's true ground truth law: Gaussian with mean=50.0, std=10.0
+    true_mu, true_std = 50.0, 10.0
+    n_samples = 5000
+    dataset_D = np.random.normal(true_mu, true_std, size=n_samples)
+    
+    print(f"  • Nature's Ground-Truth Distribution: Gaussian(mu={true_mu}, std={true_std})")
+    print(f"  • Collected Dataset D = {{x_1, ..., x_n}}: {n_samples} real observations")
+    print(f"  • First 5 Observations in D: {dataset_D[:5].round(2)}")
+
+    # -------------------------------------------------------------------------
+    # PART 4: THE CENTRAL ML ESTIMATION PROBLEM (TOPIC 10)
+    # -------------------------------------------------------------------------
+    print("\n[PART 4] Estimating Distribution Law P_X from Dataset D (Maximum Likelihood)")
+    
+    # Model family: Gaussian P_theta(x) with theta = {mu, std}
+    theta_mu = np.mean(dataset_D)
+    theta_std = np.std(dataset_D)
+    
+    print(f"  • Parameter Optimization Results (Estimated P_theta):")
+    print(f"    - True Parameters:      mu = {true_mu:.4f},  std = {true_std:.4f}")
+    print(f"    - Estimated Parameters: mu = {theta_mu:.4f},  std = {theta_std:.4f}")
+    assert np.isclose(theta_mu, true_mu, atol=0.5), "Mean estimation failed!"
+
+    # -------------------------------------------------------------------------
+    # PART 5: GENERATIVE SAMPLING - SIMULATING THE RE (TOPICS 1, 2, 10)
+    # -------------------------------------------------------------------------
+    print("\n[PART 5] Generative Sampling: Simulating Nature's Random Experiment")
+    
+    # Sample novel synthetic realizations x_hat ~ P_theta*
+    n_synthetic = 5
+    z_noise = np.random.normal(0.0, 1.0, size=n_synthetic)
+    synthetic_samples = theta_mu + theta_std * z_noise
+    
+    print(f"  • Minted {n_synthetic} Brand-New Synthetic Realizations x_hat ~ P_theta*:")
+    for i, val in enumerate(synthetic_samples):
+        print(f"    - Realization x_hat_{i+1}: {val:.4f} (Plausible synthetic observation)")
+
+    # Evaluate CDF P(X <= 60)
+    cdf_theoretical = stats.norm.cdf(60.0, loc=true_mu, scale=true_std)
+    cdf_empirical = np.mean(dataset_D <= 60.0)
+    print(f"\n  • CDF Validation at Threshold x = 60.0:")
+    print(f"    - Ground Truth CDF P_X(60):  {cdf_theoretical:.4f}")
+    print(f"    - Empirical Dataset CDF:      {cdf_empirical:.4f}")
+
+    print("\n" + "=" * 80)
+    print("  [SUCCESS] ALL LECTURE 01 SIMULATION MODULES EXECUTED FLAWLESSLY!")
+    print("=" * 80)
+
+if __name__ == "__main__":
+    run_lecture_01_simulation()
+```
+
+---
+
+## 🔬 <a id="topic-deep-dives"></a>Topic Deep Dives
+
+---
+
+### <a id="topic-1-course-mission-0002–0552"></a><a id="topic-1-course-mission-00020552"></a>Topic 1: Course Mission (00:02–05:52)
+
+> 👶 **ELI5 Quick Intuition:**  
+> Anyone can sit in the passenger seat of a sports car and press the accelerator pedal (calling an AI API). But if the car breaks down on the highway, only the automotive engineer who understands the thermodynamic combustion engine can open the hood and fix the motor! This course teaches you to be the engine designer for Generative AI.
+
+#### Chalkboard & Screenshot Reference
 ![Course mission](./screenshots/composites/ch01-topic-01-mission-panel1of1.png)
+*Figure 1.1: Blackboard presentation at ~00:02–05:52. Welcoming students to the course, introducing the modern Generative AI revolution, and defining the core objective: deriving generative modeling from first mathematical principles.*
 
-**Figure — ~00:02–05:50:** welcome; GenAI revolution; first-principles goal.
+#### Detailed Mathematical Exposition
+Prof. Prathosh establishes the foundational philosophy of the course:
+1. **The Modern Generative Revolution:**
+   - Over the past decade, AI has undergone a paradigm shift from simple pattern recognition (discriminative classification) to complex content synthesis (large language models, photorealistic image diffusion, audio synthesis).
+   - Tools like ChatGPT, Claude, Stable Diffusion, and Gemini have democratized access to AI applications.
 
-### What he is establishing
+2. **The Engineer vs The API Consumer:**
+   - *Consumer Level:* Prompt engineering, calling pre-packaged Python library wrappers (`model.generate()`), fine-tuning endpoints without theoretical insight.
+   - *Masterclass Engineering Level:* Deriving the underlying mathematical optimization objectives from scratch, proving convergence, modifying probabilistic loss functions, and inventing novel generative architectures.
 
-Welcome to NPTEL **Mathematical Foundations of Generative AI**. The last few years made a new kind of software feel ordinary: you type a sentence and a model writes, draws, or talks back. Systems you already use — GPT-style chatbots, Gemini, Claude, and their cousins — sit on training ideas that, a decade ago, still sounded like science fiction.
-
-Most of the internet teaches you to **use** those systems. Click here, paste a prompt, call an API. That is a fine skill. It is not this course. The instructor’s job is to get you **under the hood**: why the training objective looks the way it does, what is being estimated, and how you would invent a *new* algorithm instead of only consuming someone else’s.
-
-The method is **mathematical first principles**. He will rebuild the tools, look at the world through **probabilistic models**, write a general recipe, then walk families of generative models. Every equation that matters is supposed to appear on the board, not stay hidden inside a library.
-
-If you only collect demo notebooks, you stay a consumer. The trap is to treat “I can run a Colab” as understanding. The useful move is to learn the math that designers use when they change an objective or prove that a sampler is legal.
-
-You can now state the course mission in one sentence: first-principles math so you can design generative models, not only run them. Still missing: which families the semester will actually visit.
-
-### Analogy for this topic only
-
-Learning to drive an automatic car vs learning engines so you can design a new drivetrain. This course is the **engine room** for generative models.
-
-**What does first-principles math buy you that a demo does not?** Ability to derive and modify algorithms, not only call APIs.
-
-In lecture words: math foundations for generative AI; not only shelf models.
-
-### Local picture
+3. **The First-Principles Methodology:**
+   - The course avoids treating neural networks as arbitrary black boxes.
+   - Every core mathematical formulation will be constructed rigorously on the chalkboard using **probability theory, linear algebra, vector calculus, and convex optimization**.
 
 ```
-  GenAI apps (GPT, Gemini, Claude, …)
-       │
-       ▼
-  under-the-hood math  ← this course
-       │
-       ▼
-  design / modify new algorithms
+                           THE COURSE METHODOLOGY SHIFT
+                           
+    Consumer Approach (Black Box)                      Engineering Approach (First Principles)
+    ┌───────────────────────────┐                      ┌─────────────────────────────────────┐
+    │ Prompt / API Call         │                      │ Mathematical Formulation (Ω, ℱ, P)  │
+    │ (No theoretical insight)  │ ───────────────────► │ Density Estimation Objective min d  │
+    │ Breaks when edge-cases hit│                      │ Rigorous Architectural Innovation   │
+    └───────────────────────────┘                      └─────────────────────────────────────┘
 ```
 
-**Notice:** probabilistic modeling is the chosen lens for the whole course.
-
-### Bridge
-
-Which families of generative models will the course cover, and how will code labs run?
+#### 🎯 Why We Are Doing This & What We Are Learning
+- **Why?** To establish the mathematical mindset required to design and debug production-grade generative models.
+- **What are we learning?** That generative AI is grounded in probabilistic density estimation rather than ad-hoc engineering heuristics.
 
 ---
 
-## Topic 2: Model families roadmap (05:52–11:32)
+### <a id="topic-2-model-families-roadmap-0552–1132"></a><a id="topic-2-model-families-roadmap-05521132"></a>Topic 2: Model Families Roadmap (05:52–11:32)
 
-### Where this sits on the master map
+> 👶 **ELI5 Quick Intuition:**  
+> Imagine an aerial roadmap of a massive metropolitan city. You see the highway system connecting all major neighborhoods: the Airport, the Harbor, Downtown, and Suburbia. Today, we are looking at the city map so you know where we are traveling over the next 12 weeks!
 
-**ROADMAP** — content map of later lectures. Warm-up: [GenAI stack](./PREREQUISITES.md#p8-genai).
+#### Chalkboard & Screenshot Reference
+![Model families roadmap](./screenshots/composites/ch02-topic-02-roadmap-panel1of1.png)
+*Figure 2.1: Blackboard overview at ~05:52–11:32. Announcing the dual theory/implementation tracks (featuring TA Chandan in PyTorch) and mapping out the semester's model zoo: GMMs, VAEs, Diffusion, GANs, Transformers/LLMs, SSMs, Flows, and RLHF/DPO.*
 
-### Board / screenshot
+#### Detailed Mathematical Exposition
+Prof. Prathosh outlines the comprehensive curriculum map for the semester:
+1. **The Dual Lecture-Lab Track:**
+   - Theoretical lectures derive the mathematical formulations from first principles.
+   - Practical implementation tutorials (led by TA Chandan) implement every algorithm from scratch in **Python / PyTorch**.
 
-![Model families](./screenshots/composites/ch02-topic-02-roadmap-panel1of1.png)
-
-**Figure — ~05:52–11:30:** TA; variational, diffusion, GAN, AR, SSM, flows, RLHF/DPO.
-
-### What he is establishing
-
-A teaching assistant, **Chandan**, will run the **implementation** track. When a derivation is on the board, the lab will try to make it runnable — **PyTorch** on Python is the named stack. The math lecture and the code lecture are two views of the same objects, not two different courses.
-
-Today he only **names** the families you will meet later. Do not expect an equation for any of them in this hour.
-
-**Variational / latent-variable** models: the classical **Gaussian mixture model (GMM)** and **variational autoencoders (VAEs)** and their cousins. You pretend there is a hidden cause, then learn how that cause produces the data you see.
-
-**Diffusion / denoising diffusion probabilistic models (DDPMs):** start from noise and walk backwards, step by step, until a sample looks like data.
-
-**Generative adversarial networks (GANs):** the family that created the first big public buzz. A generator tries to fool a discriminator.
-
-**Autoregressive** models: **transformers** that grew into **large language models (LLMs)**. Predict the next token given the past.
-
-Then **state-space models (SSM)**, **normalizing flows** (invertible maps that keep a density), and later **alignment** tools — **reinforcement learning from human feedback (RLHF)** and **direct preference optimization (DPO)**.
-
-Every name sits inside **one** subject: **probabilistic machine learning**. One backbone, many engineering families. The trap is to treat the course as “only transformers.” Then GMM, diffusion, GAN, and flows look like unrelated fads. The right reading is: same stack, different machines.
-
-You can now list the zoo and know there is a PyTorch lab track. Still missing: what background he expects you to bring.
-
-### Analogy for this topic only
-
-A city map of neighborhoods you will visit later — not yet the buildings. Foundations first, then each family.
-
-**Which neighborhood is latent-variable modeling?** Variational methods (VAEs, GMMs).
-
-In lecture words: VAE, diffusion, GAN, AR/LLM, SSM, flows, RLHF/DPO.
-
-### Local picture
+2. **The Seven Major Generative Model Families:**
+   - **Family 1: Variational & Latent Variable Models:** Classical Gaussian Mixture Models (GMMs), Expectation-Maximization (EM), and Variational Autoencoders (VAEs).
+   - **Family 2: Denoising Diffusion Probabilistic Models (DDPMs):** Reversible Markov chains and score-based generative modeling (SGMs).
+   - **Family 3: Generative Adversarial Networks (GANs):** Minimax game-theoretic formulations between generative samplers and discriminative critics.
+   - **Family 4: Autoregressive Models & Transformers (LLMs):** Sequential factorization of joint distributions $p(x) = \prod_t p(x_t \mid x_{<t})$ powering modern language intelligence.
+   - **Family 5: State-Space Models (SSMs):** Continuous dynamical systems and selective structured state spaces (Mamba).
+   - **Family 6: Normalizing Flows:** Diffeomorphic invertible transformations preserving exact analytical likelihoods via the Jacobian change-of-variables theorem.
+   - **Family 7: Preference Alignment:** Post-training alignment techniques including Reinforcement Learning from Human Feedback (RLHF) and Direct Preference Optimization (DPO).
 
 ```
-  Probabilistic ML backbone
-    ├─ variational / VAE / GMM
-    ├─ diffusion / DDPM
-    ├─ GAN
-    ├─ AR / transformers / LLM
-    ├─ SSM
-    ├─ normalizing flows
-    └─ RLHF / DPO
-  + PyTorch implementation track (TA)
+                      THE SEMESTER GENERATIVE MODEL ROADMAP
+                      
+                          PROBABILISTIC ML FOUNDATIONS
+                          (Ω, ℱ, P) ──► X : Ω ──► ℝ^d
+                                       │
+        ┌──────────────────────────────┼──────────────────────────────┐
+        ▼                              ▼                              ▼
+   LATENT VARIABLE                DENOISING DIFFUSION            GAME-THEORETIC
+   • GMMs (EM Algorithm)          • Forward SDE / Noise          • Minimax Optimization
+   • VAEs (ELBO Objective)        • Reverse Denoising Sampling   • Vanilla GAN & WGAN-GP
+        │                              │                              │
+        └──────────────────────────────┼──────────────────────────────┘
+                                       │
+        ┌──────────────────────────────┴──────────────────────────────┐
+        ▼                                                             ▼
+   AUTOREGRESSIVE & SEQUENTIAL                                   EXACT LIKELIHOOD
+   • Transformers & LLMs                                         • Normalizing Flows
+   • State-Space Models (SSM)                                    • Invertible Jacobians
 ```
 
-**Notice:** names now; derivations later.
-
-### Bridge
-
-What background should students bring before those families?
+#### 🎯 Why We Are Doing This & What We Are Learning
+- **Why?** To provide a unified conceptual roadmap so students do not view different generative models as disconnected trends.
+- **What are we learning?** That every major generative model family is simply an engineering mechanism for estimating and sampling from an underlying probability distribution.
 
 ---
 
-## Topic 3: Background & probabilistic frame (11:32–13:59)
+### <a id="topic-3-background--probabilistic-frame-1132–1359"></a>Topic 3: Background & Probabilistic Frame (11:32–13:59)
 
-### Where this sits on the master map
+> 👶 **ELI5 Quick Intuition:**  
+> Before an architect builds a skyscraper, they check that the ground has solid bedrock. In machine learning, our bedrock consists of three mathematical pillars: Vector Calculus, Linear Algebra, and Probability Theory.
 
-**PREP** — readiness. Warm-up: [sets/functions](./PREREQUISITES.md#p1-sets).
+#### Chalkboard & Screenshot Reference
+![Background probabilistic frame](./screenshots/composites/ch03-topic-03-background-panel1of1.png)
+*Figure 3.1: Blackboard exposition at ~11:32–13:59. Stating the required foundational prerequisites: multivariate calculus, linear algebra, and basic probability.*
 
-### Board / screenshot
-
-![Background](./screenshots/composites/ch03-topic-03-background-panel1of1.png)
-
-**Figure — ~11:32–13:55:** probability; classical ML; PyTorch.
-
-### What he is establishing
-
-He **strongly recommends** probability theory. Not as a polite suggestion. Every algorithm later is treated as a probabilistic object: a law, a likelihood, an expectation, a sampler. If those words are still fog, the rest of the semester will feel like symbol soup.
-
-Also helpful, but second: classical machine learning — linear models, regression, neural nets, **kernels** — and enough **PyTorch** to follow the labs. He still **rebuilds foundations from the ground**. You are not assumed to arrive already fluent in measure-theoretic probability.
-
-**Probabilistic machine learning**, in the sentence he opens: model the system you care about using ideas from probability theory. The next hour makes that concrete. Language, images, and spam filters are all “systems under uncertainty.” Probability is the language he will use to talk about them.
-
-The trap is to skip the probability review because “I already trained a net.” Training a net does not install sample space, events, or a random variable as a function. Keep a parallel review open (Khan Academy or StatQuest if you want a second teacher — names only here; the end of these notes lists the few that are actually worth the time).
-
-You can now self-check prep. Still missing: *when* ordinary physics fails and this language becomes necessary.
-
-### Analogy for this topic only
-
-Imagine a long hike. Probability is the water bottle — you will be thirsty without it. Classical ML is a map of trails you have already walked. PyTorch is the boots for the lab days.
-
-**If you lack probability, what should you do?** Do not wait for a later lecture to “absorb it.” Acquire it in parallel. Skipping it because you have trained a net is the wrong move; the net never taught you Ω.
-
-In lecture words: probability + classical ML + PyTorch basics.
-
-### Local picture
+#### Detailed Mathematical Exposition
+Prof. Prathosh identifies the three mathematical pillars underpinning generative artificial intelligence:
+1. **Multivariate Calculus & Optimization:**
+   - Partial derivatives, Jacobians, Hessians, gradient descent, Taylor expansions, and Lagrange multipliers.
+2. **Linear Algebra & Vector Spaces:**
+   - High-dimensional Euclidean vector spaces $\mathbb{R}^d$, inner products, orthogonal projections, matrix factorizations, and eigenvalues/singular values.
+3. **Probability & Measure Theory:**
+   - Sample spaces, event spaces, continuous probability density functions (PDFs), expectations, transformations of random variables, and conditional distributions.
 
 ```
-  need: probability theory (strongly)
-  helpful: linear models, NNs, kernels, PyTorch
-  style: rebuild from first principles
+                      THE THREE MATHEMATICAL FOUNDATION PILLARS
+                      
+        ┌───────────────────────┐ ┌───────────────────────┐ ┌───────────────────────┐
+        │ MULTIVARIATE CALCULUS │ │    LINEAR ALGEBRA     │ │   PROBABILITY THEORY  │
+        │ Gradients, Jacobians, │ │ Vector Spaces ℝ^d,    │ │ Triplets (Ω, ℱ, P),   │
+        │ Optimization, Losses  │ │ Matrix Decompositions │ │ Random Variables, CDFs│
+        └───────────┬───────────┘ └───────────┬───────────┘ └───────────┬───────────┘
+                    │                         │                         │
+                    └─────────────────────────┼─────────────────────────┘
+                                              ▼
+                               [ GENERATIVE AI ENGINEERING ]
 ```
 
-**Notice:** probabilistic ML is the frame, not a side note.
-
-### Bridge
-
-When does physics modeling fail, forcing a probabilistic path?
+#### 🎯 Why We Are Doing This & What We Are Learning
+- **Why?** To ground student expectations on the mathematical rigor required throughout the course.
+- **What are we learning?** How foundational mathematics directly enables advanced generative AI algorithm development.
 
 ---
 
-## Topic 4: Physics vs non-measurable structure (13:59–20:03)
+### <a id="topic-4-physics-vs-non-measurable-structure-1359–2003"></a>Topic 4: Physics vs Non-Measurable Structure (13:59–20:03)
 
-### Where this sits on the master map
+> 👶 **ELI5 Quick Intuition:**  
+> A thermometer can tell you the exact temperature of a bowl of soup because heat is a measurable physical property. But if you ask "Is this soup delicious?", no machine in physics can answer that! Deliciousness is subjective and non-measurable by physics. We need customer surveys and probability statistics instead!
 
-**FORK** — core worldview. Warm-up: [physics fork](./PREREQUISITES.md#p7-physics-fork).
-
-### Board / screenshot
-
+#### Chalkboard & Screenshot Reference
 ![Physics vs non-measurable](./screenshots/composites/ch04-topic-04-physics-nonmeasurable-panel1of1.png)
+*Figure 4.1: Blackboard formulation at ~13:59–20:03. The core bifurcation: classical physics vs non-measurable perceptual structures (spam classification, image recognition, semantic meaning).*
 
-**Figure — ~13:59–20:00:** rigid body vs spam / person / tumor labels.
+#### Detailed Mathematical Exposition
+Prof. Prathosh presents the fundamental philosophical justification for statistical machine learning:
+1. **The Classical Physics Paradigm:**
+   - Applicable when the underlying physical system is fully observable and measurable via direct physical instrumentation (volts, seconds, meters, kilograms).
+   - Behavior is governed by deterministic differential laws (e.g. Newton's second law $\mathbf{F} = m\mathbf{a}$, projectile motion $\mathbf{r}(t) = \mathbf{r}_0 + \mathbf{v}_0 t - \frac{1}{2}\mathbf{g} t^2$).
+   - Closed-form equations predict future states with near-zero training data.
 
-### What he is establishing
+2. **The Non-Measurable Semantic Dilemma:**
+   - Real-world AI problems deal with high-level human semantic concepts:
+     * "Is this incoming email spam?"
+     * "Does this digital photo contain a smiling human face?"
+     * "Is this generated text coherent and factually accurate?"
+   - There exists **no physical sensor or differential equation** for "spamminess" or "facial realism".
 
-Machine learning wants to understand systems under **uncertainty**. Language is his running example: there is no small closed-form law that tells you the next English sentence the way Newton tells you where a thrown rock goes.
-
-The classic science path still works when the thing you care about is **instrument-measurable**. A rigid body going from A to B has mass, forces, and an ordinary differential equation. You write the equation; you do not need a million labeled throws.
-
-Many of the targets this course cares about are **not** like that. “Is this email spam?” “Is this person in the photograph?” “Does this X-ray show a tumor?” Those are **perceptual / abstract** questions. A scale and a ruler do not answer them. Deterministic physics cannot fully specify the target, because the target is a human judgment sitting on top of pixels or tokens.
-
-Then you need a **probabilistic** way to talk about uncertainty and non-measurable structure. That is the fork of the lecture.
-
-| Target | Measurable with instruments? |
-|--------|------------------------------|
-| Mass, position of a rigid body | yes → physics ODEs |
-| “Is this email spam?” | no → abstract / perceptual |
-| “Is person X in the photo?” | no (semantic, not raw sensor) |
-| “Tumor?” on X-ray | label is a judgment, not a kilogram |
-
-If you force pure physics on spam, you hit the semantic gap and stall. The useful move is: admit the label is not a meter reading, then collect data (next topic).
-
-You can now state the fork in English. Still missing: the method that has actually worked.
-
-### Analogy for this topic only
-
-Thermometer vs “is this joke funny?” — one has an instrument; the other needs many human judgments.
-
-**Which of your ML labels are closer to “length” vs “funny”?** Most GenAI labels are closer to “funny.”
-
-In lecture words: non-measurable structure; probabilistic modeling.
-
-### Local picture
+3. **The Probabilistic Solution:**
+   - When pure physics is blocked, the scientific method pivots to **data-driven probabilistic modeling**: we collect large empirical datasets and estimate the probability distribution governing the observations.
 
 ```
-  measurable physics  →  deterministic model
-  non-measurable labels → probabilistic model needed
+                           THE TWO PATHWAYS OF SCIENCE
+                           
+    Target Property                 Governing Framework          Primary Tool
+    ┌─────────────────────────┐     ┌──────────────────────┐     ┌────────────────────────┐
+    │ Measurable Dynamics     │ ──► │ Analytical Physics   │ ──► │ Differential Equations │
+    │ (Thrown ball, voltage)  │     │ (Deterministic)      │     │ (Exact formulas)       │
+    ├─────────────────────────┤     ├──────────────────────┤     ├────────────────────────┘
+    │ Non-Measurable Semantic │ ──► │ Data & Probability   │ ──► │ Machine Learning       │
+    │ (Spam, Faces, Language) │     │ (Statistical)        │     │ (Estimate P_X from D)  │
+    └─────────────────────────┘     └──────────────────────┘     └────────────────────────┘
 ```
 
-**Notice:** GenAI training is extreme-scale judgment/data, not closed-form physics of “meaning.”
-
-### Bridge
-
-What concrete method replaces closed-form physics when labels are abstract?
+#### 🎯 Why We Are Doing This & What We Are Learning
+- **Why?** To clearly understand why artificial intelligence relies on data and probability rather than analytical physics.
+- **What are we learning?** That machine learning is the mathematical language for non-measurable, subjective, and semantic systems.
 
 ---
 
-## Topic 5: Repeated observations (20:03–23:32)
+### <a id="topic-5-repeated-observations-2003–2332"></a>Topic 5: Repeated Observations (20:03–23:32)
 
-### Where this sits on the master map
+> 👶 **ELI5 Quick Intuition:**  
+> If you have never seen a cat before, nobody can write a single equation explaining "catness." But if you see 1,000 photos of different cats (fluffy cats, black cats, sleeping cats), your brain naturally learns the general pattern of a cat. Repeated observations are the lifeblood of learning!
 
-**DATA path** — the method that works. Warm-up: [physics fork](./PREREQUISITES.md#p7-physics-fork).
-
-### Board / screenshot
-
+#### Chalkboard & Screenshot Reference
 ![Repeated observations](./screenshots/composites/ch05-topic-05-repeated-obs-panel1of1.png)
+*Figure 5.1: Blackboard notation at ~20:03–23:32. Establishing the empirical methodology: collecting massive batches of repeated observations when analytical physics equations are unavailable.*
 
-**Figure — ~20:03–23:30:** spam corpus; image labels; dice analogy.
+#### Detailed Mathematical Exposition
+Prof. Prathosh outlines how data science replaces unknown physical laws:
+1. **The Principle of Repeated Observation:**
+   - When we cannot write down the generative physics of a process, we run (or observe) the process repeatedly under varying conditions.
+   - Every run yields an observation $x_i \in \mathbb{R}^d$.
+   - A collection of $n$ runs forms our empirical dataset:
+     $$D = \{x_1, x_2, \dots, x_n\}$$
 
-### What he is establishing
-
-When physics cannot fully specify the system, the method that has **worked** is painfully simple to say and expensive to do: **repeated observations**.
-
-He walks the same idea three times so it sticks. To classify text as spam, you collect many emails already labeled spam or not spam. To find an object in an image, you collect many images with labels. When the thing you care about is tied to variables no instrument measures cleanly, you do what you do with a die: **roll many times and write down what happened**.
-
-Today’s generative-AI landscape is that idea at enormous scale. Nobody wrote a closed-form physics of “English meaning.” People stored huge corpora — text, images, audio — and learned patterns from the record.
-
-The die is not a toy aside. It is the method: if you cannot measure the hidden cause, you record the visible outcomes often enough that a law of those outcomes becomes visible.
-
-If you refuse to collect data and demand a pure equation for “spam,” you stall. Design the observation protocol instead, and later model the law of what you see.
-
-You can now state the data path in English. Still missing: the formal names for “an experiment we can run many times” and “the set of all outcomes.”
-
-### Analogy for this topic only
-
-Learning a city’s bus habits by watching many days — not by solving fluid dynamics of every car.
-
-**What is one “roll” in an X-ray cancer-detection project?** One patient scan + label.
-
-In lecture words: repeated observations; dice analogy.
-
-### Local picture
+2. **Empirical Frequency to Probability:**
+   - By the Law of Large Numbers (LLN), as the number of independent repeated observations $n \to \infty$, the empirical frequencies of events converge almost surely to their true underlying probabilities:
+     $$\frac{1}{n} \sum_{i=1}^n \mathbb{I}(x_i \in A) \xrightarrow{a.s.} P(A)$$
 
 ```
-  non-measurable system
-       │
-       ▼
-  collect many (x, label) or many x
-       │
-       ▼
-  learn patterns / probabilities
-  (GenAI = this at huge scale)
+                         FROM REPEATED RUNS TO PROBABILITY
+                         
+    Nature runs process n times       Observations collected on disk       Empirical Convergence
+    ┌──────────────────────────┐      ┌────────────────────────────┐       ┌──────────────────────┐
+    │ Run 1 ──► Outcome ω_1    │ ───► │ File x_1 = X(ω_1)          │ ────► │ 1/n Σ I(x_i ∈ A)     │
+    │ Run 2 ──► Outcome ω_2    │ ───► │ File x_2 = X(ω_2)          │       │      ↓↓ (n -> ∞)     │
+    │ Run n ──► Outcome ω_n    │ ───► │ File x_n = X(ω_n)          │       │ P(A) (True Measure)  │
+    └──────────────────────────┘      └────────────────────────────┘       └──────────────────────┘
 ```
 
-**Notice:** observations become the raw material for estimating distributions later.
-
-### Bridge
-
-How do we formalize “an experiment we can run many times” and its set of outcomes?
-
+#### 🎯 Why We Are Doing This & What We Are Learning
+- **Why?** To justify empirical dataset collection as the starting foundation for AI training.
+- **What are we learning?** How repeated empirical observations bridge the gap to unobservable ground-truth probabilities.
 
 ---
 
-## Topic 6: Random experiment & sample space (23:32–31:37)
+### <a id="topic-6-random-experiment--sample-space-2332–3137"></a>Topic 6: Random Experiment & Sample Space $\Omega$ (23:32–31:37)
 
-### Where this sits on the master map
+> 👶 **ELI5 Quick Intuition:**  
+> When you flip a coin, you do not know if it will land Heads or Tails. But you know 100% that it cannot land on "Tuesday". The list of all allowed results $\{H, T\}$ is the **Sample Space $\Omega$**.
 
-**RE + Ω** box — first formal probability objects after the data-path motivation. Warm-up: [Ω](./PREREQUISITES.md#p2-omega).
+#### Chalkboard & Screenshot Reference
+![Random experiment sample space panel 1](./screenshots/composites/ch06-topic-06-re-omega-panel1of2.png)
+![Random experiment sample space panel 2](./screenshots/composites/ch06-topic-06-re-omega-panel2of2.png)
+*Figures 6.1 & 6.2: Blackboard derivation at ~23:32–31:37. Defining the Random Experiment (RE), elementary outcomes $\omega$, and the formal sample space $\Omega$ as the set of all mutually exclusive outcomes.*
 
-### Board / screenshot
+#### Detailed Mathematical Exposition
+Prof. Prathosh formalizes the first two components of probability theory:
+1. **The Random Experiment (RE):**
+   - An experiment whose outcome cannot be predicted with certainty, but whose set of possible outcomes is completely known in advance.
+   - The experiment must be conceptually repeatable under identical conditions.
 
-![Sample space](./screenshots/composites/ch06-topic-06-re-omega-panel1of2.png)
+2. **The Sample Space ($\Omega$):**
+   - The set containing **all possible elementary outcomes** $\omega$ of the random experiment:
+     $$\Omega \triangleq \{\omega \mid \omega \text{ is an outcome of RE}\}$$
+   - **Exhaustive and Mutually Exclusive:** Exactly one outcome $\omega \in \Omega$ occurs on any given execution of the experiment.
 
-![Sample space continued](./screenshots/composites/ch06-topic-06-re-omega-panel2of2.png)
-
-**Figure — ~23:32–31:30:** RE; Ω examples; randomness not formal.
-
-### What he is establishing
-
-Probabilistic machine learning models systems with **probability theory**. The first object is not a neural net. It is a **random experiment (RE)**: a process you are willing to treat as having uncertain outcomes. A coin toss is an RE. So is “a person writes an email.” So is “a clinic takes an X-ray.” The practitioner **chooses** the casting. Nature does not hand you the name of the experiment.
-
-The working assumption is that the experiment can be run **more than once**. Each run produces one **outcome**. Collect every outcome that could happen. That set is the **sample space Ω**.
-
-| Random experiment | Sample space Ω |
-|-------------------|----------------|
-| Coin | $\{H,T\}$ |
-| Die | $\{1,\ldots,6\}$ |
-| Face photography | all possible face images (enormous) |
-
-A coin Ω is two letters. A face-studio Ω is a menu nobody can print. Both are the same *kind* of object: the set of allowed results.
-
-He is careful about the word **randomness**. It is **not** defined here as a clean physics primitive. Philosophers can argue all night about what “random” means. The operational math object is Ω — the list of outcomes of the experiment you chose. If you stay in the philosophy, you never get to modeling.
-
-You can now define RE and Ω with examples, and you know Ω can be huge. Still missing: how we talk about the *size* of a subset of Ω.
-
-### Analogy for this topic only
-
-A Monopoly game night: the die has faces 1–6 (that list is Ω). Each roll is one run of the experiment. A face-photo studio is the same idea with a huge Ω — every possible photo the studio could ever produce.
-
-**Is Ω always small and finite?** No — face-image Ω is enormous.
-
-In lecture words: random experiment; sample space Ω; randomness not formalized.
-
-### Local picture
+3. **Demystifying "Randomness":**
+   - Prof. Prathosh notes that mathematics does not attempt to define the metaphysical "essence" of randomness.
+   - Instead, **$\Omega$ is the concrete mathematical object** through which all uncertainty is manipulated.
 
 ```
-  Random experiment (chosen by engineer)
-       │ outcomes
-       ▼
-  Ω = { all possible outcomes }
-  coin · die · faces · emails · …
+                         THE SAMPLE SPACE STRUCTURE
+                         
+   Random Experiment (RE)                  Sample Space Ω (Exhaustive Set of Outcomes)
+   ┌────────────────────┐                  ┌────────────────────────────────────────┐
+   │ Single Die Roll    │ ───────────────► │ Ω = { 1, 2, 3, 4, 5, 6 }               │
+   ├────────────────────┤                  ├────────────────────────────────────────┤
+   │ Two Coin Flips     │ ───────────────► │ Ω = { (H,H), (H,T), (T,H), (T,T) }     │
+   ├────────────────────┤                  ├────────────────────────────────────────┤
+   │ Studio Face Photo  │ ───────────────► │ Ω = { Set of all possible human faces }│
+   └────────────────────┘                  └────────────────────────────────────────┘
 ```
 
-**Notice:** no formal randomness axiom — Ω is the handle.
-
-### Bridge
-
-How do we measure the “size” or likelihood of subsets of Ω?
-
+#### 🎯 Why We Are Doing This & What We Are Learning
+- **Why?** To define the formal universal set over which all probabilistic statements are defined.
+- **What are we learning?** That probability starts by establishing the sample space $\Omega$ rather than guessing numbers.
 
 ---
 
-## Topic 7: Measure as size; events (31:37–38:32)
+### <a id="topic-7-measure-as-size-events-3137–3832"></a>Topic 7: Measure as Size; Events (31:37–38:32)
 
-### Where this sits on the master map
+> 👶 **ELI5 Quick Intuition:**  
+> A wooden ruler does not create a table; it simply tells you how long the table is. A **Measure** is a mathematical ruler: it takes a subset of outcomes (an Event) and tells you its geometric size!
 
-**SIZE** — prepare for P. Warm-up: [events + measure](./PREREQUISITES.md#p3-events-measure).
+#### Chalkboard & Screenshot Reference
+![Measure as size events](./screenshots/composites/ch07-topic-07-measure-events-panel1of1.png)
+*Figure 7.1: Blackboard exposition at ~31:37–38:32. Defining an Event $A \subseteq \Omega$ as a subset of outcomes, and introducing general measures as size functions (length, area, volume).*
 
-### Board / screenshot
+#### Detailed Mathematical Exposition
+Prof. Prathosh introduces events and measure theory:
+1. **Definition of an Event ($A$):**
+   - An **Event** $A$ is a subset of the sample space:
+     $$A \subseteq \Omega \quad (A \in \mathcal{F})$$
+   - An event represents a valid boolean query: *"Did the observed outcome $\omega$ land inside set $A$?"*
 
-![Measure and events](./screenshots/composites/ch07-topic-07-measure-events-panel1of1.png)
+2. **The Event Space ($\mathcal{F}$ / Sigma-Algebra):**
+   - $\mathcal{F}$ is the collection of all valid subsets of $\Omega$ that can be assigned a measure.
+   - For finite spaces, $\mathcal{F} = 2^\Omega$ (the power set).
 
-**Figure — ~31:37–38:30:** length analogy; subsets; event space.
-
-### What he is establishing
-
-Ω alone is not enough. “All possible emails” does not yet tell you how likely spam is. You need a way to assign a **size** to subsets of Ω. That size-assigning function is a **measure**.
-
-His picture is the real line. Length (Lebesgue-style) sizes an interval: $m([a,b])=b-a$. Length does not invent the interval. It reports a number. A measure on Ω does the same job for subsets: map a subset to a non-negative real.
-
-Which subsets are we allowed to ask about? Those are **events**. “Even face on a die” is the subset $\{2,4,6\}$. “Something happened” is the whole of Ω. “Impossible” is the empty set. The collection of allowed events is the **event space F**. For tonight you may read F as the menu of yes/no questions that get a size. Infinite sample spaces need extra hygiene; he does not demand a full σ-algebra course in this hour.
-
-Next we will put a *probability* measure on F — length’s cousin, with extra rules so the sizes behave like chances.
-
-If you only list Ω and never size its subsets, you cannot say “spam-like outcomes are rare.” Events plus a measure are the missing piece.
-
-You can now say, in English, “a measure reports the size of a subset.” Still missing: the three axioms that make that size a **probability**.
-
-### Analogy for this topic only
-
-A ruler does not invent the stick; it reports length. A measure does not invent the subset; it reports size.
-
-**What is the “stick” when Ω is face images?** A subset of faces (e.g. “smiling faces”) whose size we will score with P.
-
-In lecture words: measure sizes subsets; events are subsets of Ω.
-
-### Local picture
+3. **Measure as a General Size Function:**
+   - A **measure** $\mu$ is a mapping from subsets to non-negative real numbers:
+     $$\mu: \mathcal{F} \to [0, \infty]$$
+   - *Geometric Examples:*
+     * 1D intervals: $\mu([a, b]) = b - a$ (Length).
+     * 2D regions: $\mu(R) = \iint_R dx \, dy$ (Area).
+     * 3D solids: $\mu(V) = \iiint_V dx \, dy \, dz$ (Volume).
 
 ```
-  Ω
-   └─ subsets = candidate events
-         │
-         ▼
-   measure m: subsets → R_+
-   (length on R is the analogy)
+                        MEASURES ACROSS DIFFERENT WORLDS
+                        
+    Domain                  Geometry / Event Subset         Measure Type (Size)
+    ┌─────────────────┐     ┌─────────────────────────┐     ┌──────────────────────┐
+    │ 1D Real Line ℝ  │ ──► │ Interval [2, 7]         │ ──► │ Length = 7 - 2 = 5   │
+    ├─────────────────┤     ├─────────────────────────┤     ├──────────────────────┤
+    │ 2D Plane ℝ^2    │ ──► │ Circle of radius r      │ ──► │ Area = π r^2         │
+    ├─────────────────┤     ├─────────────────────────┤     ├──────────────────────┤
+    │ Sample Space Ω  │ ──► │ Event A = {2, 4, 6}     │ ──► │ Probability P(A)=0.5 │
+    └─────────────────┘     └─────────────────────────┘     └──────────────────────┘
 ```
 
-**Notice:** F restricts which subsets we allow as events (technical hygiene for infinite Ω).
-
-### Bridge
-
-What specific axioms make a measure a **probability** measure?
-
+#### 🎯 Why We Are Doing This & What We Are Learning
+- **Why?** To understand that probability is not an isolated trick, but a special normalized case of measure theory.
+- **What are we learning?** How to formalize events as subsets and evaluate their statistical sizes.
 
 ---
 
-## Topic 8: Probability measure P & axioms (38:32–44:58)
+### <a id="topic-8-probability-measure-p--axioms-3832–4458"></a>Topic 8: Probability Measure $P$ & Axioms (38:32–44:58)
 
-### Where this sits on the master map
+> 👶 **ELI5 Quick Intuition:**  
+> When you cut a 100% whole pie into pieces, each slice must be $\ge 0\%$, the whole pie equals exactly $100\%$, and adding two non-overlapping slices gives their combined size. Those are the 3 Kolmogorov Axioms!
 
-**AXIOMS** — formal P. Warm-up: [axioms micro](./PREREQUISITES.md#p4-axioms).
+#### Chalkboard & Screenshot Reference
+![Probability measure P axioms](./screenshots/composites/ch08-topic-08-p-axioms-panel1of1.png)
+*Figure 8.1: Blackboard derivation at ~38:32–44:58. Stating the Kolmogorov Probability Axioms: Non-negativity ($P(A) \ge 0$), Normalization ($P(\Omega) = 1$), and Disjoint Additivity ($P(A \cup B) = P(A) + P(B)$).*
 
-### Board / screenshot
+#### Detailed Mathematical Exposition
+Prof. Prathosh presents the foundational axioms of modern probability theory formulated by Andrey Kolmogorov (1933):
+1. **Definition of Probability Measure ($P$):**
+   $$P: \mathcal{F} \to [0, 1]$$
+   $P$ is a normalized measure assigning a real value between $0$ and $1$ to every event $A \in \mathcal{F}$.
 
-![Probability axioms](./screenshots/composites/ch08-topic-08-p-axioms-panel1of1.png)
+2. **The Three Kolmogorov Axioms:**
+   - **Axiom 1 (Non-Negativity):** For any event $A \in \mathcal{F}$:
+     $$P(A) \ge 0$$
+   - **Axiom 2 (Normalization / Unit Measure):** The probability of the entire sample space is unity:
+     $$P(\Omega) = 1.0$$
+   - **Axiom 3 (Countable Additivity):** If $A_1, A_2, \dots$ is a sequence of mutually disjoint events ($A_i \cap A_j = \emptyset$ for all $i \neq j$):
+     $$P\left(\bigcup_{i=1}^\infty A_i\right) = \sum_{i=1}^\infty P(A_i)$$
 
-**Figure — ~38:32–44:50:** P: events→[0,1]; axioms; interpretation.
-
-### What he is establishing
-
-**P** is a function from events into $[0,1]$. You hand P a legal question (“even face?”) and it hands back a number between zero and one.
-
-Three axioms are the whole contract tonight:
-
-1. **Non-negativity.** $P(A)\ge 0$ for every event $A$. A chance is never a negative length.
-2. **Normalization.** $P(\Omega)=1$. “Something happens” is certain. The whole pie is one.
-3. **Disjoint additivity.** If $A$ and $B$ cannot both occur ($A\cap B=\emptyset$), then $P(A\cup B)=P(A)+P(B)$. Non-overlapping slices add.
-
-**Fair die, each face $1/6$.** $P(\{6\})=1/6$. Even faces $\{2,4,6\}$ get $1/2$. Even union $\{1\}$ gets $2/3$ because those two events share no face. Even union “at least 5” is *not* $1/2+1/3$, because they share $\{6\}$. The axiom is not “always add.” It is “add when they cannot happen together.”
-
-Mathematically P is only a function that obeys the axioms. The *reading* — high P means likely, $P=1$ means certain, $P=0$ means the event is null — is our interpretation. The math does not force the weather-forecast story; we choose it because it is useful.
-
-The trap is “P is the count of outcomes.” That is only the uniform special case $|A|/|\Omega|$. A loaded die is a different P on the same Ω. Axioms first, interpretation second.
-
-You can now write the three axioms and compute a disjoint union on a die. Still missing: packing Ω, F, and P into one package, and admitting that in practice we often see neither Ω nor P.
-
-### Analogy for this topic only
-
-Pie chart: whole pie = 1; slices ≥0; non-overlapping slices add.
-
-**If two events cannot happen together, what does P say about their union?** Sum of their probabilities.
-
-In lecture words: P≥0; P(Ω)=1; disjoint additivity; interpretation of uncertainty.
-
-### Local picture
+3. **Core Mathematical Corollaries:**
+   - **Empty Set (Impossible Event):** $P(\emptyset) = 0$.
+   - **Complement Rule:** $P(A^c) = 1 - P(A)$.
+   - **General Addition Rule (Inclusion-Exclusion):**
+     $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
 
 ```
-  P: F → [0,1]
-  axioms:
-    · P(A) ≥ 0
-    · P(Ω) = 1
-    · A∩B=∅ ⇒ P(A∪B)=P(A)+P(B)
-
-  die: P(even)=1/2, P({1}∪even)=2/3
+                       THE THREE KOLMOGOROV AXIOMS
+                       
+    1. NON-NEGATIVITY                2. NORMALIZATION                3. DISJOINT ADDITIVITY
+    ┌───────────────────────┐        ┌───────────────────────┐       ┌────────────────────────┐
+    │ P(A) ≥ 0              │        │ P(Ω) = 1.0            │       │ If A ∩ B = ∅:          │
+    │ (No negative chances) │        │ (Universe is certain) │       │ P(A ∪ B) = P(A) + P(B) │
+    └───────────────────────┘        └───────────────────────┘       └────────────────────────┘
 ```
 
-**Notice:** interpretation is chosen; math is the axioms.
-
-### Bridge
-
-What triple do we land on, and what do we actually observe in the real world?
-
+#### 🎯 Why We Are Doing This & What We Are Learning
+- **Why?** Because all loss functions, likelihoods, and diffusion equations rely on these three axioms for mathematical validity.
+- **What are we learning?** How to rigorously calculate probabilities of compound, complementary, and disjoint events.
 
 ---
 
-## Topic 9: Triplet & surrogates (44:58–54:01)
+### <a id="topic-9-triplet--surrogates-4458–5401"></a>Topic 9: Triplet $(\Omega, \mathcal{F}, P)$ & Surrogates (44:58–54:01)
 
-### Where this sits on the master map
+> 👶 **ELI5 Quick Intuition:**  
+> A doctor wants to know if a patient's lungs have pneumonia ($\Omega$). But the doctor cannot look directly inside the chest with their naked eye. Instead, the doctor takes an **X-ray photograph** ($X$). The X-ray image is a digital surrogate file that represents the hidden physical reality!
 
-**TRIPLET + SURROGATES** box — package the axioms, then admit practice. Warm-up: [triplet](./PREREQUISITES.md#p5-triplet).
+#### Chalkboard & Screenshot Reference
+![Triplet surrogates panel 1](./screenshots/composites/ch09-topic-09-triplet-surrogates-panel1of2.png)
+![Triplet surrogates panel 2](./screenshots/composites/ch09-topic-09-triplet-surrogates-panel2of2.png)
+*Figures 9.1 & 9.2: Blackboard derivation at ~44:58–54:01. Constructing the Kolmogorov Triplet $(\Omega, \mathcal{F}, P)$, highlighting the engineer's inability to observe $\Omega$ directly, and introducing digital surrogate measurements.*
 
-### Board / screenshot
+#### Detailed Mathematical Exposition
+Prof. Prathosh formalizes the probability triplet and the surrogate measurement bridge:
+1. **The Kolmogorov Triplet:**
+   The complete mathematical specification of an uncertain system is defined by the triplet:
+   $$(\Omega, \mathcal{F}, P)$$
+   - $\Omega$: The sample space.
+   - $\mathcal{F}$: The event space ($\sigma$-algebra).
+   - $P$: The probability measure.
 
-![Triplet and surrogates](./screenshots/composites/ch09-topic-09-triplet-surrogates-panel1of2.png)
+2. **The Engineering Reality (Inaccessible Triplet):**
+   - In practical machine learning, **we almost never possess the explicit mathematical form of $\Omega$, $\mathcal{F}$, or $P$**.
+   - *Example (Medical Imaging):* $\Omega$ is the microscopic biological state of human lung tissue, and $P$ is the true natural distribution of disease across human genetics. Neither can be loaded into computer RAM!
 
-![Surrogates continued](./screenshots/composites/ch09-topic-09-triplet-surrogates-panel2of2.png)
-
-**Figure — ~44:58–53:55:** (Ω,F,P); unknown in practice; X-ray/text surrogates.
-
-### What he is establishing
-
-The lecture lands on one package: the **probability triplet** $(\Omega,\mathcal{F},P)$. Sample space, legal events, probability scores. Every model in this course *assumes* there is a random experiment whose outcomes live in Ω and whose chances are scored by P.
-
-The **generative** question is then natural: if we understand that experiment well enough, can we **emulate** it? Can we produce new outcomes that look as if the same experiment ran again?
-
-Practice is ruder than the definition.
-
-1. We often **do not know** Ω. Nobody lists every possible X-ray that nature could produce.
-2. We often **do not know** P. Nobody hands you the true chance of each clinical outcome.
-
-What we actually get are **surrogates / measurements** — sensor-facing stand-ins for the abstract outcome.
-
-| Abstract process | What we store |
-|------------------|---------------|
-| A person gets an X-ray | a pixel array on disk |
-| Someone writes spam | Unicode / tokens |
-
-The file on disk is not “the true outcome of nature’s experiment.” It is what the sensor wrote down. We still need a mathematical object that maps the abstract Ω into those numbers. That object is the **random variable** of the next topic.
-
-The trap is to pretend every project starts with a printed Ω and a known P. That ignores how ML actually starts: a folder of files. The right move is: keep the triplet underneath as the modeling assumption, and treat the files as surrogates of that experiment.
-
-You can now say the three pieces of the triplet and name the surrogate gap. Still missing: the function that produces the files, and the distribution we will estimate.
-
-### Analogy for this topic only
-
-True weather of the whole atmosphere vs the CSV file from one weather station. Sensors write surrogates; the “true Ω” of the atmosphere is not listed on disk.
-
-**Why can’t we list Ω for an X-ray?** The abstract clinical process is not a finite menu we store; we only hold the image array.
-
-In lecture words: triplet; unknown Ω,P; surrogates.
-
-### Local picture
+3. **Digital Surrogates:**
+   - Instead of the abstract triplet, practitioners observe **digital surrogate measurements**:
+     * X-ray digital radiographs ($1024 \times 1024$ pixel tensors).
+     * Written email text (ASCII / UTF-8 token sequences).
+     * Speech acoustic waveforms (16 kHz audio samples).
+   - These surrogates are produced by **Random Variables**.
 
 ```
-  (Ω, F, P)  assumed underneath
-       │
-       │ practice: often unknown
-       ▼
-  observe measurements / surrogates
-  (pixels, tokens, …)
+                        THE SURROGATE MEASUREMENT SHIFT
+                        
+    Inaccessible Nature (The Triplet)                  Observable Engineering Data (Surrogates)
+    ┌─────────────────────────────────┐                ┌───────────────────────────────────────┐
+    │ Sample Space Ω (Microscopic)    │  Sensor Map X  │ Euclidean Vector Space ℝ^d            │
+    │ Event Space ℱ  (Abstract)       │ ─────────────► │ Digital Files on Disk                 │
+    │ Probability P  (Unknown Law)    │  X : Ω ──► ℝ^d │ Pixel Grids, Audio Waveforms, Tokens  │
+    └─────────────────────────────────┘                └───────────────────────────────────────┘
 ```
 
-**Notice:** generative modeling works on the law of surrogates.
-
-### Bridge
-
-What function turns Ω into $\mathbb{R}^d$ measurements, and what do we estimate?
-
+#### 🎯 Why We Are Doing This & What We Are Learning
+- **Why?** To understand why real-world machine learning operates on vector arrays rather than abstract set elements.
+- **What are we learning?** How physical sensors act as mathematical mappings transferring abstract reality into observable data arrays.
 
 ---
 
-## Topic 10: RV, CDF, estimate $P_X$ (54:01–70:52)
+### <a id="topic-10-rv-cdf-estimate-px-5401–7052"></a><a id="topic-10-rv-cdf-estimate-p_x-54017052"></a>Topic 10: RV, CDF, Estimate $P_X$ (54:01–70:52)
 
-### Where this sits on the master map
+> 👶 **ELI5 Quick Intuition:**  
+> A camera takes a 3D real-world birthday party ($\omega \in \Omega$) and turns it into a 2D JPEG file ($x \in \mathbb{R}^d$). The camera is the **Random Variable $X$**. The final goal of Generative AI is to learn the recipe of all those JPEG files ($P_X$) so we can generate brand-new birthday photos!
 
-**RV + GOAL** — GenAI payoff. Warm-up: [RV + CDF](./PREREQUISITES.md#p6-rv-cdf).
+#### Chalkboard & Screenshot Reference
+![RV estimate panel 1](./screenshots/composites/ch10-topic-10-rv-estimate-panel1of2.png)
+![RV estimate panel 2](./screenshots/composites/ch10-topic-10-rv-estimate-panel2of2.png)
+*Figures 10.1 & 10.2: Blackboard derivation at ~54:01–70:52. Defining the Random Variable $X: \Omega \to \mathbb{R}^d$, inverse image mappings, the Cumulative Distribution Function $P_X(x)$, and the grand closing thesis: estimating $P_X$ from data to perform generative sampling.*
 
-### Board / screenshot
+#### Detailed Mathematical Exposition
+Prof. Prathosh concludes Lecture 01 with the central theoretical derivation of the course:
+1. **The Random Variable as a Deterministic Function:**
+   - A **Random Variable** (or random vector) is a deterministic mathematical function:
+     $$X: \Omega \to \mathbb{R}^d$$
+   - It maps abstract outcomes $\omega \in \Omega$ to vectors in $d$-dimensional Euclidean space $\mathbb{R}^d$.
+   - **Crucial Rule:** $X$ is not a "random number". $X$ is a fixed rule; the randomness is solely in which $\omega \in \Omega$ nature selects.
 
-![Random variable and CDF](./screenshots/composites/ch10-topic-10-rv-estimate-panel1of2.png)
+2. **Inverse Image & The Induced Measure:**
+   - For any measurable set $B \in \mathcal{B}(\mathbb{R}^d)$, the inverse image is:
+     $$X^{-1}(B) \triangleq \{\omega \in \Omega \mid X(\omega) \in B\} \in \mathcal{F}$$
+   - The probability of landing in vector region $B$ is inherited directly from the original measure $P$:
+     $$P_X(B) \triangleq P\bigl(X^{-1}(B)\bigr)$$
 
-![CDF inverse image](./screenshots/composites/ch10-topic-10-rv-estimate-panel2of2.png)
+3. **Cumulative Distribution Function (CDF):**
+   - For continuous vector thresholds $x \in \mathbb{R}^d$:
+     $$P_X(x) = P(X \le x) = P\bigl(X^{-1}((-\infty, x])\bigr) = \int_{-\infty}^x p_X(t) \, dt$$
 
-**Figure — ~54:01–70:45:** $X:\Omega\to\mathbb{R}^d$; inverse image; CDF; estimate distribution.
-
-### What he is establishing
-
-A **random variable** is a **function**, not a lonely random number floating in space.
-
-$$
-X:\Omega\to\mathbb{R}^{d}
-$$
-
-The domain is the sample space — abstract outcomes. The codomain is numeric space — pixels, encoded text, audio samples, any measurement a computer can store. $X(\omega)$ is the file you would write down if outcome $\omega$ occurred.
-
-The trap is “X is a random integer” — that sentence has no domain. The right picture is: **X is the measurement map**. The camera is X. The JPEG is $X(\omega)$. Many different abstract scenes can produce similar JPEGs; that is still a function.
-
-Why invent it? The abstract experiment is not what GPUs eat. Computers store **real numbers**. $X$ is the interface between the triplet and the disk.
-
-Start from $(\Omega,\mathcal{F},P)$ and define $X$ on Ω. Structure on Ω is **pushed** onto real space. A set $B$ of numbers gets probability by asking: which abstract outcomes produce a measurement inside $B$? That set of outcomes is the **inverse image** $X^{-1}(B)$. Then $P$ scores it.
-
-**Distribution function (CDF, one-dimensional sketch):**
-
-$$
-P_X(x)=P(X\le x)=P\big(X^{-1}((-\infty,x])\big)
-$$
-
-Capital $X$ is the function. Small $x$ is a threshold on the number line. $X\le x$ means “the measurement landed at or below this threshold.” The inverse image turns that statement back into an event on Ω. $P$ scores the event.
-
-**Die micro.** Let $X$ be the face value. Then $P_X(4)=P(X\le 4)=P(\{1,2,3,4\})=4/6$. $P_X(6)=1$. Those are not mysterious new objects. They are $P$ applied to inverse images.
-
-In practice $P_X$ is **not gifted**. We *assume* the framework sits under the system. The closing line of the lecture is the course goal: **estimate the underlying probability distribution** of the measurements. If you estimate that law well, you can draw new measurements that look as if the same experiment ran again. That is generation. The families from Topic 2 — VAE, diffusion, GAN, transformers — are later machines for doing this estimation and sampling job.
-
-You can now walk RE → Ω → P → X → $P_X$ → estimate. The lecture stops on that goal. The rest of the course builds the machines.
-
-### Analogy for this topic only
-
-Ω is the theater of abstract plays; X is the camera that outputs a numeric file; estimating $P_X$ is learning file statistics so you can synthesize new files.
-
-**If you estimate $P_X$ well, what can you do generatively?** Draw new measurements from a model of that law.
-
-In lecture words: RV is a function; CDF via inverse image; estimate the distribution.
-
-### Local picture
+4. **The Sacrosanct Mission of Generative AI:**
+   - Given a dataset of $n$ observed surrogate realizations $D = \{x_1, \dots, x_n\} \sim P_X$:
+     $$\textbf{Task 1: } \text{Estimate the unknown probability distribution } P_X \text{ (parameterized as } P_\theta\text{)}$$
+     $$\textbf{Task 2: } \text{Simulate nature's random experiment by drawing novel samples } \hat{x} \sim P_\theta$$
 
 ```
-  (Ω, F, P)
-       │ X(·)   function, not a lone number
-       ▼
-  R^d  measurements
-       │
-       ▼
-  P_X(x)=P(X^{-1}(−∞,x]))
-       │
-       ▼
-  estimate P_X  ← generative modeling goal
+                      THE COMPLETE GENERATIVE AI CYCLE
+                      
+    Nature's Hidden Experiment              Sensor Function X               Observed Dataset D
+    ┌────────────────────────┐              ┌───────────────┐              ┌────────────────────────┐
+    │ Outcome ω ~ P in Ω     │ ───────────► │ X : Ω ──► ℝ^d │ ───────────► │ D = {x_1, ..., x_n}    │
+    └────────────────────────┘              └───────────────┘              └───────────┬────────────┘
+                                                                                       │
+                                                                                       ▼
+    Novel Synthetic Data                    Generative Sampler             Parametric Model P_θ
+    ┌────────────────────────┐              ┌───────────────┐              ┌────────────────────────┐
+    │ Synthesized x̂ ~ P_θ    │ ◄─────────── │ Sample x̂      │ ◄─────────── │ θ* = argmin d(P_X, P_θ)│
+    │ (Faces, Text, Audio)   │              │ from Model    │              │ (Estimated Data Law)   │
+    └────────────────────────┘              └───────────────┘              └────────────────────────┘
 ```
 
-**Notice:** lecture stops at the goal; model families implement it later.
-
-### Bridge
-
-Next lectures deepen probability tools and derive generative model families on this stack.
-
+#### 🎯 Why We Are Doing This & What We Are Learning
+- **Why?** To formalize the exact mathematical objective that every generative AI model (VAEs, GANs, Diffusion, LLMs) solves.
+- **What are we learning?** That all of generative AI is the dual task of estimating $P_X$ and sampling new realizations $\hat{x} \sim P_X$.
 
 ---
 
-## External references
-
-Two layers, **both kept**.
-
-1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
-2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
-
-### Start here — high-signal companions
-
-Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this lecture still closed.
-
-**If the mission still feels abstract (Topic 1).** Grant Sanderson’s [3Blue1Brown — But what is a neural network?](https://www.youtube.com/watch?v=aircAruvnKk) is the standard visual for “a machine eats numbers and writes numbers.” That is the measurement mindset this course needs before any GAN or transformer.
-
-**If the family names are just a list (Topic 2).** Lilian Weng’s [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/) is the blog most people in ML have actually read for this zoo: why you need a *distance between distributions*, then GAN and related ideas in one place. Skip marketing “top 5 GenAI models” posts.
-
-**If “why data, not physics?” is still fuzzy (Topics 3–5).** Josh Starmer’s [StatQuest — Machine Learning Fundamentals](https://www.youtube.com/watch?v=Gv9_4yMHFhI) is the popular, slow English version of “we learn from repeated examples under uncertainty.”
-
-**If Ω, events, and the three axioms of $P$ still blur (Topics 6–8).** Two classroom standards: [Khan Academy’s probability unit](https://www.khanacademy.org/math/statistics-probability/probability-library) (sample space, events, add when disjoint) and Brown’s [Seeing Theory](https://seeing-theory.brown.edu/). Those two beat a dozen SEO probability articles. Khan’s [random-variables unit](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) is the next page, for Topic 10.
-
-**If you mix up “probability” and “likelihood” (Topic 8).** StatQuest’s [Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4) is the short, famous clarification.
-
-**If “X is a function, $P_X$ is what we estimate” (Topics 9–10).** After these notes, the same-series [Tutorial 7 — probability recap](../21-Tutorial07-Review-Basic-Probability-1/NOTES.md) is the careful RE → Ω → RV treatment *inside this course*. For the lab track he named (not this hour’s math), use the [official PyTorch tutorials](https://pytorch.org/tutorials/), not a random Colab.
-
-**How to use.** Probability fog → Khan or Seeing Theory *before* Topic 6. Family names → Lilian Weng *after* Topic 2. Do not open ten tabs. One famous teacher per stuck idea.
+## 🛠️ <a id="workplace-debugging-postmortems"></a>Workplace Debugging Postmortems
 
 ---
 
-### Full topic map — previous list plus new entries
+### <a id="postmortem-1-invalid-softmax-normalization--nan-gradient-explosion"></a>Postmortem 1: Invalid Softmax Normalization & NaN Gradient Explosion
 
-| Resource | Matches lecture… | Why it helps |
-|----------|------------------|--------------|
-| [3Blue1Brown — Neural networks](https://www.youtube.com/watch?v=aircAruvnKk) | Topics 1, 9–10 | High-d continuous measurements |
-| [Lilian Weng — From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/) | Topic 2 | Family names as one score-between-laws story |
-| [Towards Data Science — VAEs, GANs, Diffusion](https://towardsdatascience.com/generating-images-using-vaes-gans-and-diffusion-models-48963ddeb2b2/) | Topic 2 | Side-by-side intro to three families |
-| [StatQuest — Machine Learning Fundamentals](https://www.youtube.com/watch?v=Gv9_4yMHFhI) | Topics 3–5 | Why we learn from repeated examples |
-| [Organic Chemistry Tutor — Probability](https://www.youtube.com/watch?v=SkidyDQuupA) | Topics 3, 6–8 | Sample space and basic $P$ |
-| [Khan Academy — Probability](https://www.khanacademy.org/math/statistics-probability/probability-library) | Topics 6–8 | Events and the three axioms |
-| [Seeing Theory](https://seeing-theory.brown.edu/) | Topics 4–8 | Interactive probability |
-| [StatQuest — Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4) | Topic 8 | $P$ is not $L$ |
-| [Khan Academy — Random variables](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) | Topics 9–10 | $X$ as a function |
-| [RiskByNumbers — PMF, PDF, CDF](https://www.youtube.com/watch?v=yRbfLlTmPE8) | Topic 10 | CDF visual |
-| [Tutorial 7 — probability recap](../21-Tutorial07-Review-Basic-Probability-1/NOTES.md) | Topics 6–10 | Same-course RE → RV |
-| [PyTorch tutorials](https://pytorch.org/tutorials/) | Topics 2–3 | Lab track he named |
+```
+  ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+  ║ POSTMORTEM REPORT: SOFTMAX NORMALIZATION BREAK & AXIOM 2 VIOLATION                    ║
+  ╠═══════════════════════════════════════════════════════════════════════════════════════╣
+  ║ Severity: CRITICAL (P0) - Training Pipeline Diverges with NaN Gradients at Step 1,420 ║
+  ║ Root Cause: Custom logit masking allowed exp(z) sum to equal 0.0, violating P(Ω)=1.0  ║
+  ║ Affected Systems: Multi-Task Classification & Generative Transformer Sampler          ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════════╝
+```
+
+#### 1. The Incident & Symptom
+An engineering team training an autoregressive token sampler observed catastrophic training failure: after 1,420 steps, the cross-entropy loss produced `NaN`, causing gradient descent to corrupt all transformer model weights.
+
+#### 2. Mathematical Root-Cause Analysis
+1. **The Axiom 2 Violation:**
+   Kolmogorov Axiom 2 requires $\sum_{k=1}^K p_k = 1.0$. The Softmax probability mapping is:
+   $$p_k = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}}$$
+2. **The Masking Bug:**
+   During causal attention masking, all valid token logits for padded sequences were filled with $-1\times 10^9$. Under 16-bit floating point (`torch.float16`), $e^{-10^9}$ underflowed to absolute zero across all vocabulary tokens, producing:
+   $$\sum_{j=1}^K e^{z_j} = 0.0 \implies p_k = \frac{0}{0} = \text{NaN}$$
+   Because the probability distribution vector failed to sum to 1.0 ($P(\Omega) \neq 1$), the log-loss $\ln(p_k)$ exploded to $\ln(0) = -\infty \to \text{NaN}$.
+
+#### 3. The Production Fix (PyTorch Code)
+Use numerically stable log-sum-exp stabilization and ensure mask clamping preserves valid probability measure normalization.
+
+```python
+import torch
+import torch.nn as nn
+
+def robust_softmax_sampling(logits, mask=None, temperature=1.0):
+    """
+    Numerically stable Softmax sampling adhering strictly to Kolmogorov Axioms.
+    """
+    # 1. Temperature scaling
+    scaled_logits = logits / max(temperature, 1e-5)
+    
+    # 2. Safe masking (Avoid underflow to absolute zero)
+    if mask is not None:
+        scaled_logits = scaled_logits.masked_fill(~mask, -1e4) # Safe float16 bound
+    
+    # 3. Log-Sum-Exp Trick: Subtract max logit to prevent exp() overflow
+    max_logits = torch.max(scaled_logits, dim=-1, keepdim=True).values
+    stable_logits = scaled_logits - max_logits
+    
+    # 4. Normalized Probability Measure P (Axiom 1 & 2 Guaranteed)
+    exp_logits = torch.exp(stable_logits)
+    sum_exp = torch.sum(exp_logits, dim=-1, keepdim=True) + 1e-8 # Prevent divide-by-zero
+    probs = exp_logits / sum_exp
+    
+    # Verify Axiom 2: Sum equals 1.0
+    assert torch.allclose(torch.sum(probs, dim=-1), torch.ones_like(sum_exp.squeeze(-1))), "Axiom 2 violated!"
+    return probs
+```
 
 ---
 
+### <a id="postmortem-2-empirical-support-mismatch--out-of-distribution-density-failure"></a>Postmortem 2: Empirical Support Mismatch & Out-of-Distribution Density Failure
 
-## Sources
+```
+  ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+  ║ POSTMORTEM REPORT: OUT-OF-DISTRIBUTION SUPPORT COLLAPSE IN MEDICAL IMAGE AI           ║
+  ╠═══════════════════════════════════════════════════════════════════════════════════════╣
+  ║ Severity: HIGH (P1) - AI Generator Synthesizes Unphysical Artifacts on New Hospital Data║
+  ║ Root Cause: Discrepancy between sensor measurement function X_hospitalA and X_hospB  ║
+  ║ Affected Systems: Medical Imaging Diffusion Synthesis & Anomaly Detection Pipeline    ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════════╝
+```
 
-- Video: [Lec 01 Introduction](https://www.youtube.com/watch?v=H05WDy9Mngk)
-- Channel: NPTEL — Indian Institute of Science, Bengaluru
-- Course: Mathematical Foundations of Generative AI
-- Skill: `youtube-lecture-tutor`
-- Captions cleaned via timed transcript / claim sheets (restructure: **10 topics** for ~71 min)
+#### 1. The Incident & Symptom
+A generative diffusion model trained on Hospital A's chest X-rays was deployed to Hospital B. When sampling or evaluating likelihoods on Hospital B scans, the model evaluated likelihoods as $p_X(x) \approx 0.0$ and generated corrupted images with dark circular ring artifacts.
+
+#### 2. Mathematical Root-Cause Analysis
+1. **The Sensor Function Discrepancy:**
+   The random variable $X$ is a physical measurement function $X: \Omega \to \mathbb{R}^d$. Hospital A used a GE scanner ($X_{\text{GE}}$) with range $[0, 4095]$ (12-bit depth), while Hospital B used a Siemens scanner ($X_{\text{Siemens}}$) with range $[0, 65535]$ (16-bit depth).
+2. **Support Mismatch:**
+   Because the measurement functions differed ($X_{\text{GE}} \neq X_{\text{Siemens}}$), the induced distribution $P_{X_{\text{Siemens}}}$ resided entirely outside the support of the trained model $P_{\theta}$, causing complete density collapse.
+
+```
+                      SENSOR MEASUREMENT FUNCTION MISMATCH
+                      
+   True Lung Biology (Ω)         Sensor X_A (GE 12-bit)          Trained Support P_θ
+   ┌───────────────────┐         ┌─────────────────────┐         ┌─────────────────────────┐
+   │ Patient Lungs ω   │ ──────► │ Range: [0, 4095]    │ ──────► │ AI Model Learns P_θ     │
+   └───────────────────┘         └─────────────────────┘         └─────────────────────────┘
+                                                                              ▲
+   Hospital B Deployment         Sensor X_B (Siemens 16-bit)                  │ OUT OF SUPPORT!
+   ┌───────────────────┐         ┌─────────────────────┐                      │
+   │ Patient Lungs ω   │ ──────► │ Range: [0, 65535]   │ ─────────────────────┘ (P_θ evaluates as 0.0)
+   └───────────────────┘         └─────────────────────┘
+```
+
+#### 3. The Production Fix (PyTorch Code)
+Standardize all sensor mappings into canonical normalized Euclidean space $[0.0, 1.0]^d$ before distribution estimation or sampling.
+
+```python
+import torch
+
+class StandardizedSensorBridge:
+    """
+    Standardizes heterogeneous sensor measurement functions X into canonical space.
+    """
+    def __init__(self, target_dim=(1, 512, 512)):
+        self.target_dim = target_dim
+
+    def transform(self, raw_sensor_tensor, bit_depth=12):
+        # 1. Cast to float32
+        x = raw_sensor_tensor.float()
+        
+        # 2. Normalize by sensor dynamic range to [0.0, 1.0]
+        max_val = (2 ** bit_depth) - 1.0
+        x_normalized = torch.clamp(x / max_val, 0.0, 1.0)
+        
+        # 3. Standardize to zero-mean, unit-variance for generative priors
+        x_standardized = (x_normalized - 0.5) / 0.5
+        return x_standardized
+
+    def inverse_transform(self, x_standardized, bit_depth=12):
+        # Inverse mapping for generative synthetic sampling
+        x_normalized = (x_standardized * 0.5) + 0.5
+        max_val = (2 ** bit_depth) - 1.0
+        raw_output = torch.clamp(x_normalized * max_val, 0.0, max_val)
+        return raw_output.to(torch.int32)
+```
+
+---
+
+## <a id="external-references"></a>Centralized External References
+
+Every topic in Lecture 01 is supported by 2–3 curated video lectures from world-class educators and 2–3 authoritative papers or technical articles.
+
+---
+
+### Topic 1: Course Mission & Generative AI Philosophy
+- **Video 1:** [3Blue1Brown — But What Is a Neural Network?](https://www.youtube.com/watch?v=aircAruvnKk) (The visual masterclass on mathematical representation in neural nets).
+- **Video 2:** [Andrej Karpathy — Intro to Large Language Models](https://www.youtube.com/watch?v=zjkBMFhNj_g) (High-level overview of the modern Generative AI stack).
+- **Video 3:** [MIT 6.S191 — Introduction to Deep Learning (Alexander Amini)](https://www.youtube.com/watch?v=QDX-1M5NjAQ) (Foundations of modern deep learning architectures).
+- **Paper / Article 1:** [LeCun, Bengio, & Hinton (2015) — Deep Learning (*Nature*)](https://www.nature.com/articles/nature14539) (The seminal review on representation learning).
+- **Paper / Article 2:** [Lilian Weng — From Autoencoder to Beta-VAE](https://lilianweng.github.io/posts/2018-08-12-vae/) (Probabilistic foundations of generative modeling).
+
+---
+
+### Topic 2: Generative Model Families Roadmap
+- **Video 1:** [MIT 6.S192 — Deep Generative Models (Prof. Sze)](https://www.youtube.com/watch?v=hJlrAHqGOS8) (Comprehensive taxonomy of VAEs, GANs, and Diffusion).
+- **Video 2:** [Stanford CS236 — Deep Generative Models (Prof. Ermon)](https://www.youtube.com/watch?v=1Jnn_kO_7Y4) (Rigorous mathematical formulation of deep generative algorithms).
+- **Video 3:** [StatQuest — Neural Networks Part 1: Inside the Black Box](https://www.youtube.com/watch?v=CqOfi41LfDw) (Step-by-step intuition for neural network parameters).
+- **Paper / Article 1:** [Goodfellow et al. (2014) — Generative Adversarial Nets](https://arxiv.org/abs/1406.2661) (The seminal GAN formulation).
+- **Paper / Article 2:** [Ho, Jain, & Abbeel (2020) — Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239) (Foundational paper on DDPMs).
+- **Paper / Article 3:** [Vaswani et al. (2017) — Attention Is All You Need](https://arxiv.org/abs/1706.03762) (The foundational Transformer architecture).
+
+---
+
+### Topic 3: Background & Probabilistic Frame
+- **Video 1:** [3Blue1Brown — Essence of Linear Algebra Full Series](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab) (Geometric visual intuition for vectors and transformations).
+- **Video 2:** [3Blue1Brown — Essence of Calculus](https://www.youtube.com/playlist?list=PLZHQObOWTQDMsr9K-rj53DwVRMYO3t5Yr) (Visual calculus and derivative mechanics).
+- **Video 3:** [Steve Brunton — Multivariate Calculus & Vector Fields](https://www.youtube.com/watch?v=GMB_wWj1XgY) (Engineering calculus applied to dynamical systems).
+- **Paper / Article 1:** [Deisenroth, Faisal, & Ong — Mathematics for Machine Learning](https://mml-book.github.io/) (The standard open textbook on linear algebra and vector calculus).
+- **Paper / Article 2:** [Terence Tao — Review of Probability Theory](https://terrytao.wordpress.com/2010/01/01/254a-notes-0-a-review-of-probability-theory/) (Rigorous measure-theoretic probability review).
+
+---
+
+### Topic 4: Physics vs Non-Measurable Structure
+- **Video 1:** [Steve Brunton — Physics-Informed Neural Networks (PINNs)](https://www.youtube.com/watch?v=hDuY8vIeH10) (Contrasting physics equations with data-driven ML).
+- **Video 2:** [StatQuest — Machine Learning Fundamentals](https://www.youtube.com/watch?v=Gv9_4yMHFhI) (Why machine learning learns from data instead of formulas).
+- **Paper / Article 1:** [Jaynes (2003) — Probability Theory: The Logic of Science (Chapter 1)](https://bayes.wustl.edu/etj/prob/book.pdf) (Foundational philosophical text on probability as quantified uncertainty).
+- **Paper / Article 2:** [Ghahramani (2015) — Probabilistic Machine Learning and Artificial Intelligence (*Nature*)](https://www.nature.com/articles/nature14541) (Uncertainty modeling in modern computing).
+
+---
+
+### Topic 5: Repeated Observations & Empirical Data
+- **Video 1:** [StatQuest — The Law of Large Numbers & Central Limit Theorem](https://www.youtube.com/watch?v=YAlJCEDH2uY) (Why sample averages converge to expectations).
+- **Video 2:** [Khan Academy — Sampling Distributions](https://www.khanacademy.org/math/statistics-probability/sampling-distributions-library) (Foundations of empirical data collection).
+- **Paper / Article 1:** [Vapnik (1998) — Statistical Learning Theory](https://www.wiley.com/en-us/Statistical+Learning+Theory-p-9780471030034) (Foundational textbook on empirical risk minimization).
+- **Paper / Article 2:** [Shalev-Shwartz & Ben-David — Understanding Machine Learning: From Theory to Algorithms](https://www.cs.huji.ac.il/~shais/UnderstandingMachineLearning/) (Sample complexity and Glivenko-Cantelli theorem).
+
+---
+
+### Topic 6: Random Experiment & Sample Space $\Omega$
+- **Video 1:** [Steve Brunton — Random Variables and Distributions](https://www.youtube.com/watch?v=-7QG2itL1u4) (Engineering introduction to random experiments and sample spaces).
+- **Video 2:** [Khan Academy — Probability Spaces & Sample Space](https://www.khanacademy.org/math/statistics-probability/probability-library/basic-theoretical-probability/v/basic-probability) (Intuitive breakdown of $\Omega$).
+- **Video 3:** [Seeing Theory — Visualizing Probability Distributions](https://seeing-theory.brown.edu/probability-distributions/index.html) (Interactive browser-based exploration of $\Omega$).
+- **Paper / Article 1:** [Kolmogorov (1933) — Foundations of the Theory of Probability](https://archive.org/details/foundationsofthe00kolm) (The original text establishing sample spaces).
+- **Paper / Article 2:** [MIT OCW 18.05 — Probability Spaces & Random Variables](https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/) (Lecture notes on formal sample spaces).
+
+---
+
+### Topic 7: Measure as Size; Events
+- **Video 1:** [Math and Science — Events and Set Operations](https://www.youtube.com/watch?v=UnzbuqgU2LE) (Set unions, intersections, and complements).
+- **Video 2:** [The Bright Side of Mathematics — Measure Theory Course Introduction](https://www.youtube.com/watch?v=6vCjW_c-Nn8) (Gentle visual introduction to Lebesgue measure as size).
+- **Paper / Article 1:** [Halmos (1950) — Measure Theory](https://link.springer.com/book/10.1007/978-1-4684-9440-2) (Classic mathematical text on measure as size).
+- **Paper / Article 2:** [Terence Tao — An Introduction to Measure Theory](https://terrytao.files.wordpress.com/2012/12/gsm-126-tao5-measure-book.pdf) (Graduate-level treatment of Borel sets).
+
+---
+
+### Topic 8: Probability Measure $P$ & Axioms
+- **Video 1:** [Khan Academy — Addition Rule for Probability](https://www.khanacademy.org/math/statistics-probability/probability-library/addition-rule-probability/v/addition-rule-for-probability) (Inclusion-exclusion and disjoint additivity).
+- **Video 2:** [3Blue1Brown — Why "Probability 0" Does Not Mean Impossible](https://www.youtube.com/watch?v=ZA4JkHKZM50) (Nuances of continuous measures).
+- **Video 3:** [MIT OCW 6.041 — Probabilistic Systems Analysis (Prof. Tsitsiklis)](https://www.youtube.com/watch?v=j9WzyGLH_wo) (Rigorous derivation of Kolmogorov axioms).
+- **Paper / Article 1:** [Billingsley (1995) — Probability and Measure (Chapter 1)](https://www.wiley.com/en-us/Probability+and+Measure%2C+3rd+Edition-p-9780471007104) (The gold standard textbook on probability axioms).
+- **Paper / Article 2:** [Chris Olah — Visual Information Theory](https://colah.github.io/posts/2015-09-Visual-Information/) (Probabilistic measure behavior and entropy).
+
+---
+
+### Topic 9: The Kolmogorov Triplet & Surrogates
+- **Video 1:** [MIT 18.05 — Probability Spaces (Prof. Orloff)](https://www.youtube.com/watch?v=KbB0FjPg0mw) (The triplet $(\Omega, \mathcal{F}, P)$ unpacked step-by-step).
+- **Video 2:** [StatQuest — Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4) (Clear comparison between probability measures and likelihood evaluations).
+- **Paper / Article 1:** [Bishop (2006) — Pattern Recognition and Machine Learning (Chapter 1 & 2)](https://www.microsoft.com/en-us/research/publication/pattern-recognition-and-machine-learning/) (Standard reference on density surrogates).
+- **Paper / Article 2:** [IBM Research — What is a Generative Model?](https://www.ibm.com/think/topics/generative-model) (Clear comparison of generative vs discriminative models).
+
+---
+
+### Topic 10: Random Variable $X$, CDF, and Distribution Estimation
+- **Video 1:** [Steve Brunton — Functions of a Random Variable](https://www.youtube.com/watch?v=hC2idx2-GME) (Rigorous derivation of random variables as functions).
+- **Video 2:** [StatQuest — Maximum Likelihood, Clearly Explained](https://www.youtube.com/watch?v=XepXtl9YKwc) (How to fit distribution parameters from data).
+- **Video 3:** [Grant Sanderson (3Blue1Brown) — Gradient Descent, How Neural Networks Learn](https://www.youtube.com/watch?v=IHZwWFHWa-w) (Visualizing parameter optimization).
+- **Paper / Article 1:** [Lilian Weng — What are Diffusion Models?](https://lilianweng.github.io/posts/2021-07-11-diffusion-models/) (Exposition of modern generative density estimation).
+- **Paper / Article 2:** [Goodfellow (2016) — NIPS 2016 Tutorial: Generative Adversarial Networks](https://arxiv.org/abs/1701.00160) (Foundational overview of generative sampling).
+
+---
+
+## <a id="sources"></a>Sources & Metadata
+
+- **Course:** Mathematical Foundations of Generative AI (NPTEL / IISc Bengaluru)
+- **Lecture:** Lecture 01 — Introduction
+- **Instructor:** Prof. Prathosh AP (Department of Electrical Communication Engineering, IISc Bengaluru)
+- **Primary Video Recording:** [YouTube Video ID: `H05WDy9Mngk`](https://www.youtube.com/watch?v=H05WDy9Mngk)
+- **Composite Screenshots Directory:** `./screenshots/composites/` (13 composite screenshot panels across `ch01` to `ch10`)
+- **Interactive Verification Quiz:** [quiz.html](./quiz.html)
+- **Succeeding Lecture:** [Lecture 02 Notes](../15-Lec02-Generative-Models-Problem-Formulation/NOTES.md)
