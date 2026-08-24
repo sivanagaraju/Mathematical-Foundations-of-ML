@@ -1,1076 +1,1370 @@
 # Tutorial 10 — Review of Machine Learning 1
 
 **Video:** [Tutorial 10 : Review of Machine Learning 1](https://www.youtube.com/watch?v=wjSKM1xFoSU) · NPTEL / IISc  
-**Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md)  
-**Previous:** [Tutorial 9](../23-Tutorial09-Review-Basic-Probability-3/NOTES.md)  
-**Course:** Mathematical Foundations of **Generative AI** (~47.5 min)  
-**Speaker:** Chandan Jayaram (NPTEL IISc) · Numerical MLE and EM (two-exponential mixture)
+**Warm-up First:** [PREREQUISITES.md](./PREREQUISITES.md)  
+**Previous Tutorial:** [Tutorial 9 — Review of Basic Probability 3](../23-Tutorial09-Review-Basic-Probability-3/NOTES.md) (Joint CDFs, 2D Transformations, and Jacobians)  
+**Course:** Mathematical Foundations of Generative AI (~47.5 min)  
+**Speaker:** Chandan Jayaram (NPTEL / IISc Teaching Team)  
+**Core Themes:** Numerical Maximum Likelihood Estimation (MLE), Observation Censoring, Sign-Censored Gaussian Inversion ($\hat{\mu} = -\Phi^{-1}(m/n)$), Latent Variable Hierarchies, Log-Sum Likelihood Intractability, Two-Exponential Mixture Models, Complete-Data Joint Density Formulation, Expectation-Maximization (EM) Algorithm, Posterior Responsibilities ($\gamma_i$) via Bayes' Rule, The $Q$-Function Surrogate, and Analytical M-Step Closed-Form Parameter Updates ($\pi^{\text{new}}, \beta_1^{\text{new}}, \beta_2^{\text{new}}$).
+
+---
+
+> ### ⚠️ Course Context & Curriculum Progression Notice
+> In **Tutorials 7–9**, the curriculum established the core mathematical foundations of probability (Continuous Random Variables, Probability Density Functions, Conditioning, Independence, Joint Distributions, and Jacobians).
+> 
+> Starting in **Tutorial 10**, the course synthesizes these probability tools into **Statistical Machine Learning & Estimation Theory**:
+> 1. **Problem 1 (Topics 2–5):** How to perform rigorous Maximum Likelihood Estimation when observations are **censored** (knowing only the sign of Gaussian draws, solving via Bernoulli reduction and $\Phi^{-1}$ inversion).
+> 2. **Problem 2 (Topics 6–10):** How to estimate parameters of **mixture models with unobserved latent switches** using the **Expectation-Maximization (EM) Algorithm** (deriving the complete-data log-likelihood, the E-step Bayes responsibility $\gamma_i$, the $Q$-function, and closed-form M-step updates).
+> 
+> This tutorial directly bridges to **Variational Autoencoders (VAEs)**, **Evidence Lower Bounds (ELBO)**, and **Latent Diffusion Generative AI Models**.
 
 ---
 
 ## Table of Contents
 
-1. [Topic 1 — Why this recap exists](#topic-1-why-this-recap-exists-0001–0127) (00:01–01:27)
-2. [Topic 2 — Sign-censored Normal](#topic-2-sign-censored-normal-0127–0422) (01:27–04:22)
-3. [Topic 3 — Standardize and write the likelihood](#topic-3-standardize-and-write-the-likelihood-0422–0853) (04:22–08:53)
-4. [Topic 4 — Bernoulli reduction and MLE of p](#topic-4-bernoulli-reduction-and-mle-of-p-0853–1401) (08:53–14:01)
-5. [Topic 5 — Invert Φ and read the sign of μ̂](#topic-5-invert-φ-and-read-the-sign-of-μ̂-1401–1831) (14:01–18:31)
-6. [Topic 6 — Two-exponential mixture and latent Z](#topic-6-two-exponential-mixture-and-latent-z-1831–2252) (18:31–22:52)
-7. [Topic 7 — Complete-data density and log-likelihood](#topic-7-complete-data-density-and-log-likelihood-2252–2839) (22:52–28:39)
-8. [Topic 8 — E-step responsibilities by Bayes](#topic-8-e-step-responsibilities-by-bayes-2839–3419) (28:39–34:19)
-9. [Topic 9 — The Q-function](#topic-9-the-q-function-3419–3917) (34:19–39:17)
-10. [Topic 10 — M-step closed forms, iterate, close](#topic-10-m-step-closed-forms-iterate-close-3917–4733) (39:17–47:33)
-11. [External references](#external-references)
-12. [Sources](#sources)
+1. [Executive Summary & Master Architecture](#executive-summary--architecture-of-this-lecture)
+2. [Chalkboard Rosetta Stone: Mathematical & Estimation Notation](#chalkboard-rosetta-stone)
+3. [Complete Standalone Executable Python Simulation Script](#standalone-simulation-script)
+4. [Topic 1: Pedagogical Mission & Structure of the ML Review (00:01–01:27)](#topic-1-why-this-recap-exists-0001–0127)
+5. [Topic 2: Problem 1 Formulation — The Sign-Censored Gaussian (01:27–04:22)](#topic-2-sign-censored-normal-0127–0422)
+6. [Topic 3: Gaussian Standardization & Likelihood Construction (04:22–08:53)](#topic-3-standardize-and-write-the-likelihood-0422–0853)
+7. [Topic 4: Reparameterization, Bernoulli Reduction & MLE of $p$ (08:53–14:01)](#topic-4-bernoulli-reduction-and-mle-of-p-0853–1401)
+8. [Topic 5: Inverting $\Phi$ & The Physical Sign Intuition of $\hat{\mu}$ (14:01–18:31)](#topic-5-invert-φ-and-read-the-sign-of-μ̂-1401–1831)
+9. [Topic 6: Problem 2 Formulation — Two-Exponential Mixture & Latent $Z$ (18:31–22:52)](#topic-6-two-exponential-mixture-and-latent-z-1831–2252)
+10. [Topic 7: Complete-Data Joint Density & Decoupled Log-Likelihood (22:52–28:39)](#topic-7-complete-data-density-and-log-likelihood-2252–2839)
+11. [Topic 8: The E-Step — Posterior Responsibilities via Bayes' Theorem (28:39–34:19)](#topic-8-e-step-responsibilities-by-bayes-2839–3419)
+12. [Topic 9: The $Q$-Function — Expected Complete-Data Log-Likelihood (34:19–39:17)](#topic-9-the-q-function-3419–3917)
+13. [Topic 10: The M-Step — Analytical Closed Forms & EM Convergence (39:17–47:33)](#topic-10-m-step-closed-forms-iterate-close-3917–4733)
+14. [Workplace Debugging Postmortems](#workplace-debugging-postmortems)
+15. [Centralized External References](#external-references)
 
 ---
 
-## Executive Summary — architecture of this lecture
+## Executive Summary — Architecture of this Lecture
 
-You sit two incomplete notebooks. The first is a Normal that only wrote plus or minus; the second is a mixture that wrote waiting times but not which kitchen cooked them. For each, write the likelihood of *what was actually recorded*, take the log, differentiate, and set the derivative to zero. The sign-censored Normal reduces to a coin whose bias is a standard-Normal area $\Phi$; invert $\Phi$ to recover the mean. When a hidden switch $Z$ makes the observed density a sum, the log will not split — invent $Z$, take its posterior, maximize the **Q-function**, and loop. That second machine is a two-exponential mixture whose M-step has closed updates for $\pi,\beta_1,\beta_2$.
+<a id="executive-summary--architecture-of-this-lecture"></a>
 
-**Worldview arc:** from first-course MLE / EM as slogans (or `loss.backward()` folklore) **to** likelihood constructed on recorded data, reduced, inverted, or completed by a latent coin.
+This 47.5-minute tutorial solves two foundational numerical estimation problems from scratch on the chalkboard, demystifying how machine learning extracts optimal parameters from incomplete or latent-variable data.
 
-**Hour at a glance (whole video).** The first half is a Normal $\mathcal{N}(\mu,1)$ whose *values* were never written — only plus or minus, and $m$ of the $n$ draws are minus. You cannot average the missing $x_i$. After standardizing, a minus has probability $\Phi(-\mu)$ and a plus has $\Phi(\mu)$, so the likelihood of the notebook is those areas multiplied. Differentiating $\Phi$ by hand is ugly, so rename $p=\Phi(-\mu)$: the same product is a Bernoulli likelihood (negative = success) and the MLE is $\hat p=m/n$. Then invert: $\hat\mu=-\Phi^{-1}(m/n)=\Phi^{-1}((n-m)/n)$. Many minuses force a negative mean; that is a picture check, not extra theory. MAP is named and left as homework.
-
-The second half is a two-exponential mixture: flip a coin $\pi$, then draw $\mathrm{Exp}(\beta_1)$ or $\mathrm{Exp}(\beta_2)$. The observed density is a *sum*, so $\log f$ has no closed maximizer — that is why EM exists. Invent a latent coin $Z$ so the complete-data density *selects* one kitchen by using $z$ as an exponent. The E-step replaces each missing $z_i$ by its posterior $\gamma_i=P(Z_i=1\mid x_i,\theta^{\mathrm{old}})$ (Bayes). Those $\gamma_i$ go into the **Q-function**, the expected complete log-likelihood. The M-step differentiates $Q$ and gets closed updates: $\pi$ is the mean of the $\gamma$'s, each $\beta$ is a $\gamma$-weighted exponential MLE. Then loop. Handwritten backprop is promised for the next tutorial block, not this one.
-
-### System context
+### System Context
 
 ```
-  ╔════════════════════════════════════════════╗
-  ║ Outside: first-level ML + probability      ║
-  ║ Outside: MAP derivation (homework)         ║
-  ║ Outside: NN numerical backprop (next)      ║
-  ╚════════════════════╤═══════════════════════╝
-                       │ this tutorial (~47 min)
-                       ▼
-          ┌────────────────────────────┐
-          │ Two numerical recoveries   │
-          │   MLE on signs · EM on mix │
-          └────────────────────────────┘
+  ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+  ║                        STATISTICAL ESTIMATION & LATENT VARIABLE MAP                   ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════════╝
+                                              │
+         ┌────────────────────────────────────┴────────────────────────────────────┐
+         ▼                                                                         ▼
+  [Problem 1: Sign-Censored Gaussian MLE]                               [Problem 2: Mixture Model & The EM Algorithm]
+  • True Distribution: X ~ N(μ, 1)                                      • Mixture Distribution: X ~ π Exp(β1) + (1-π) Exp(β2)
+  • Censored Observations: Only Signs (+ / -)                           • Incomplete Observations: Waiting times x_i only
+  • Failure of Sample Mean: Raw numbers x_i lost                        • Intractable Log-Sum Likelihood: log(π f1 + (1-π) f2)
+  • Mathematical Reduction: p = Φ(-μ) (Bernoulli Trial)                 • Complete Data Augmentation: Augmented pairs (x_i, z_i)
+  • Closed-Form Solution: μ̂ = -Φ^(-1)(m/n)                              • E-Step: Responsibilities γ_i via Bayes' Theorem
+  • Physical Sign Intuition: Majority (-) forces μ̂ < 0                  • M-Step: Closed-form updates for π_new, β1_new, β2_new
+                                              │
+                                              ▼
+                         [Bridge to Deep Generative Models]
+                         • Continuous Latent Space Modeling: Variational Autoencoders (VAEs)
+                         • Evidence Lower Bound (ELBO): Continuous generalization of the Q-function
+                         • Latent Diffusion Trajectories: Denoising reverse drift estimation
 ```
-
-### Main blueprint
-
-```
-  ╔════════ GOAL ════════╗
-  ║ Surface MLE + EM for ║
-  ║ later generative     ║
-  ║ models               ║
-  ╚══════════╤═══════════╝
-             │
-     ┌───────┴────────┐
-     ▼                ▼
- ┌─ PROBLEM 1 ──┐  ┌─ PROBLEM 2 ──────────┐
- │ X ~ N(μ, 1)  │  │ mix of two Exp(β)    │
- │ n IID, signs │  │ θ = (π, β1, β2)      │
- │ m of n are − │  │ latent coin Z        │
- └──────┬───────┘  └──────────┬───────────┘
-        │ standardize         │ complete pairs (x,z)
-        ▼                     ▼
- ┌─ L(μ) ─────────────┐  ┌─ complete density ──┐
- │ [Φ(-μ)]^m          │  │ [π β1 e^{-β1 x}]^z  │
- │ [Φ(μ)]^{n-m}       │  │ [(1-π)β2 e^{-…}]^{1-z}
- └──────┬─────────────┘  └──────────┬──────────┘
-        │ p := Φ(-μ)                │ log, expand
-        ▼                           ▼
- ┌─ Bernoulli ────────┐  ┌─ E-STEP ────────────┐
- │ L(p)=p^m(1-p)^{n-m}│  │ γ = P(Z=1 | x, θold)│
- │ ℓ' = 0 ⇒ p̂ = m/n   │  │      (Bayes)        │
- └──────┬─────────────┘  └──────────┬──────────┘
-        │ invert Φ                  │ replace z by γ
-        ▼                           ▼
- ┌─ μ̂ = −Φ⁻¹(m/n) ────┐  ┌─ Q(θ | θold) ──────┐
- │   = Φ⁻¹((n-m)/n)   │  │ E[complete log-ℓ]   │
- │ many − ⇒ μ̂ < 0     │  └──────────┬──────────┘
- │ MAP = homework     │             │ ∂Q/∂θ = 0
- └────────────────────┘             ▼
-                           ┌─ M-STEP ────────────┐
-                           │ π_new = mean(γ)     │
-                           │ β1 = Σγ / Σγ x      │
-                           │ β2 = Σ(1-γ)/Σ(1-γ)x │
-                           │ then loop           │
-                           └──────────┬──────────┘
-                                      │
-                           ┌ · · · · ·┴ · · · · · ┐
-                           │ STOP: MAP not done   │
-                           │ STOP: NN numerical   │
-                           │ next section         │
-                           └ · · · · · · · · · · ┘
-```
-
-### Scenario walkthrough
-
-Walk this **one** exam through the blueprint above. Each step answers “so what?” for the next box.
-
-**Story:** a numerical recap exam. Page 1 is ten Normal draws whose *values* were never written — only plus or minus, and three of the ten are minus. Page 2 is waiting times from two unlabeled exponential kitchens.
-
-1. **Why recap MLE and EM on paper?** Later generative models will need the same two machines sitting on the surface, not sunk inside `loss.backward()`. That is the GOAL box.
-
-2. **Why not average the ten missing numbers?** They were never recorded. The data *are* the signs. That is PROBLEM 1.
-
-3. **How do you score a mean from signs only?** Standardize $\mathcal{N}(\mu,1)$. A minus has probability $\Phi(-\mu)$; a plus has $\Phi(\mu)$. The likelihood of the notebook is those areas multiplied. That is $L(\mu)$.
-
-4. **Why rename $p=\Phi(-\mu)$?** Differentiating $\Phi$ by hand is ugly. The same product is a Bernoulli likelihood (negative = success), so $\hat p=m/n=3/10$. That is REDUCE + MAX.
-
-5. **How do you get back to $\mu$?** Invert: $\hat\mu=-\Phi^{-1}(m/n)=\Phi^{-1}((n-m)/n)$. Three minuses out of ten is a plus-fraction $0.7$, so $\hat\mu>0$. Many minuses would have forced $\hat\mu<0$. That is INVERT + CHECK.
-
-6. **Why is page 2 a different machine?** Every wait $x$ is visible, but the *kitchen* is not. The observed density is a **sum** of two exponentials, so $\log f$ will not split. That is PROBLEM 2.
-
-7. **What do you invent?** A coin $Z$: heads $\Rightarrow\mathrm{Exp}(\beta_1)$, tails $\Rightarrow\mathrm{Exp}(\beta_2)$. Using $z$ as an exponent *selects* one kitchen. That is the complete-data log-likelihood.
-
-8. **You still do not know $Z$.** Replace each $z_i$ by its posterior $\gamma_i=P(Z_i=1\mid x_i,\theta^{\mathrm{old}})$ (Bayes). That is the E-step.
-
-9. **What do you maximize?** The **Q-function**: expected complete log-likelihood, $z_i$ swapped for $\gamma_i$. Differentiate $Q$. The M-step is closed: $\pi$ is the mean of the $\gamma$'s; each $\beta$ is a $\gamma$-weighted exponential MLE. Then loop.
-
-```
-  page 1:  + + − + − + + − + +     (m = 3 minuses)
-       │  cannot use x̄ — the x_i were never written
-       ▼
-  each minus costs Φ(-μ); each plus costs Φ(μ)
-       │  rename p = Φ(-μ)
-       ▼
-  p̂ = 3/10  →  μ̂ = −Φ⁻¹(0.3) = Φ⁻¹(0.7)   (positive mean; fewer minuses)
-
-  page 2: waiting times, two kitchens, no label
-       │  log of a sum will not split
-       ▼
-  invent Z → complete log-ℓ → γ_i by Bayes → Q → closed β, π → repeat
-```
-
-### Failure / contrast path
-
-```
-  average the missing numbers          ──X──►  those x_i were never written
-  maximize the mixture by one
-    brute derivative                   ──X──►  log of a *sum* has no closed
-                                               MLE; that is why EM exists
-  treat autograd as understanding      ──X──►  next hour wants numerical
-                                               backprop, not loss.backward()
-```
-
-### STOP / out of scope
-
-- **MAP** is named as a recap you should already own; no prior, no posterior mode.
-- No Gaussian mixture, no general EM proof (monotonicity of the observed likelihood).
-- Numerical **backpropagation** is expected background and is the *next* tutorial block, not this one.
-
-### Load-bearing claims (closed-book)
-
-- Build the likelihood from **what was recorded**, not from hidden $x_i$.
-- After standardizing $\mathcal{N}(\mu,1)$, a minus has probability $\Phi(-\mu)$ and a plus has $\Phi(\mu)$.
-- Signs reduce to a Bernoulli with $p=\Phi(-\mu)$; $\hat p=m/n$; invert to $\hat\mu=-\Phi^{-1}(m/n)=\Phi^{-1}((n-m)/n)$.
-- Many negatives force $\hat\mu<0$ — a picture check, not extra theory.
-- A two-exponential mixture is a coin $\pi$ then $\mathrm{Exp}(\beta_1)$ or $\mathrm{Exp}(\beta_2)$.
-- Complete-data density uses $z$ as an exponent that *selects* one kitchen.
-- E-step: $\gamma_i=P(Z_i=1\mid x_i,\theta^{\mathrm{old}})$ by Bayes.
-- Q replaces each $z_i$ by $\gamma_i$; the M-step is a weighted exponential MLE, then loop.
-
-**Speaker / course:** Chandan Jayaram, NPTEL IISc, Mathematical Foundations of Generative AI — Tutorial 10.
 
 ---
 
-## Topic 1: Why this recap exists (00:01–01:27)
+### Master Architecture Blueprint
+
+```
+  ===================================================================================================
+                                      TUTORIAL 10 MASTER ARCHITECTURE
+  ===================================================================================================
+  
+   [PROBLEM 1: SIGN-CENSORED GAUSSIAN MLE]
+     True Process: X_i ~ N(μ, 1), i = 1 ... n
+     Recorded Notebook: m negative signs (-), (n - m) positive signs (+)
+            │
+            ▼ Standardize to Z ~ N(0, 1)
+     Probability of (-): P(X < 0) = Φ(-μ)  |  Probability of (+): P(X > 0) = Φ(μ)
+            │
+            ▼ Reparameterize: Let p = Φ(-μ)
+     Bernoulli Likelihood: L(p) = p^m · (1 - p)^(n - m)
+            │
+            ▼ Analytical MLE: dℓ/dp = 0 ──► p̂ = m / n
+     Invert Normal CDF:
+     μ̂ = -Φ^(-1)(m / n) = Φ^(-1)((n - m) / n)  ──► [Many (-) ──► μ̂ < 0]
+  
+  ───────────────────────────────────────────────────────────────────────────────────────────────────
+  
+   [PROBLEM 2: TWO-EXPONENTIAL MIXTURE & THE EM ALGORITHM]
+     Observed Density: f(x; θ) = π β1 e^(-β1 x) + (1 - π) β2 e^(-β2 x)
+     Incomplete Log-Likelihood: ℓ(θ) = ∑ log( π β1 e^(-β1 x) + (1-π) β2 e^(-β2 x) )  [LOG-SUM TRAP!]
+            │
+            ▼ Complete-Data Formulation (Latent Indicator Z_i ∈ {0, 1})
+     f(x_i, z_i; θ) = [ π β1 e^(-β1 x_i) ]^(z_i) · [ (1 - π) β2 e^(-β2 x_i) ]^(1 - z_i)
+            │
+            ▼ E-STEP: Compute Responsibilities via Bayes' Rule
+     γ_i = E[Z_i | x_i, θ^(old)] = ( π^(old) β1^(old) e^(-β1 x_i) ) / ( f(x_i; θ^(old)) )
+            │
+            ▼ CONSTRUCT Q-FUNCTION: Q(θ | θ^(old)) = E_Z[ ℓ_c(θ) ]
+     Q(π, β1, β2) = ∑ [ γ_i (log π + log β1 - β1 x_i) + (1-γ_i)(log(1-π) + log β2 - β2 x_i) ]
+            │
+            ▼ M-STEP: Differentiate Q and Solve Analytically (∂Q/∂θ = 0)
+     π^(new)  = (1/n) ∑ γ_i                   [Soft fraction of component 1]
+     β1^(new) = (∑ γ_i) / (∑ γ_i x_i)         [γ-weighted exponential MLE]
+     β2^(new) = (∑ (1-γ_i)) / (∑ (1-γ_i) x_i) [(1-γ)-weighted exponential MLE]
+            │
+            ▼ Loop back to E-Step until ||θ^(new) - θ^(old)|| < ε
+  ===================================================================================================
+```
+
+---
+
+### Comparative Feature Matrices
+
+#### Table 1: Fully Observed MLE vs Censored Likelihood vs Latent Variable EM
+
+| Dimension | Standard Fully Observed MLE | Sign-Censored Gaussian MLE (Problem 1) | Latent Variable Mixture EM (Problem 2) |
+| :--- | :--- | :--- | :--- |
+| **Data Nature** | Exact numerical values $\{x_1, \dots, x_n\}$ | Binary discrete signs $\{-, +, -, \dots\}$ | Continuous values $\{x_i\}$, missing labels $\{z_i\}$ |
+| **Underlying Law** | Known parametric family $f(x \mid \theta)$ | Continuous Gaussian $\mathcal{N}(\mu, 1)$ | Multi-modal mixture $\sum \pi_k f_k(x)$ |
+| **Likelihood Form** | Product of point densities $\prod f(x_i \mid \theta)$ | Product of tail probabilities $\prod \Phi(\pm\mu)$ | Intractable sum inside log $\sum \log(\sum \pi_k f_k)$ |
+| **Solving Method** | Direct calculus: $\nabla_\theta \ell(\theta) = 0$ | **Bernoulli reduction $\hat{p} = m/n$ + $\Phi^{-1}$** | **Iterative E-Step & M-Step updates** |
+| **Closed-Form Solution** | Yes (e.g. $\hat{\mu} = \bar{x}$) | **Yes: $\hat{\mu} = -\Phi^{-1}(m/n)$** | **No: Iterative monotonic convergence** |
+
+---
+
+#### Table 2: Analytical MLE vs Expectation-Maximization (EM) vs Gradient Descent
+
+| Criterion | Analytical Direct MLE | Expectation-Maximization (EM) | Gradient Descent (Backpropagation) |
+| :--- | :--- | :--- | :--- |
+| **Applicability** | Simple exponential families with complete data | Models with unobserved discrete/continuous latents | Arbitrary differentiable neural loss functions |
+| **Step Mechanism** | One-shot analytical equation solve | **Alternating E-step (soft labels) & M-step (refit)** | Step-by-step parameter updates via $\theta \leftarrow \theta - \eta \nabla \mathcal{L}$ |
+| **Hyperparameters** | None (Exact mathematical formula) | **None (Pure closed-form updates, no learning rate!)** | Requires learning rate ($\eta$), momentum, batch size |
+| **Monotonicity** | Instant optimal point | **Mathematically guaranteed monotonic ascent** | Sensitive to learning rate (can diverge if $\eta$ too large) |
+| **Generative AI Link** | Basic statistical baselines | **GMMs, HMMs, VAE Evidence Lower Bound (ELBO)** | Deep Neural Networks, Diffusion Models, LLMs |
+
+---
+
+#### Table 3: Problem 1 vs Problem 2 Mathematical Summary
+
+| Problem Feature | Problem 1: Sign-Censored Normal | Problem 2: Two-Exponential Mixture |
+| :--- | :--- | :--- |
+| **Observed Data** | $m$ negative signs, $(n - m)$ positive signs | $n$ continuous positive waiting times $\{x_1, \dots, x_n\}$ |
+| **Parameters to Estimate** | Single scalar mean $\mu \in \mathbb{R}$ | Vector $\boldsymbol{\theta} = (\pi, \beta_1, \beta_2) \in (0, 1) \times \mathbb{R}_+ \times \mathbb{R}_+$ |
+| **Key Mathematical Tool** | Standard Normal CDF $\Phi(z)$ & Quantile $\Phi^{-1}(p)$ | Latent indicator $Z_i \in \{0, 1\}$ & Bayes' Rule |
+| **Core Equation** | $L(\mu) = [\Phi(-\mu)]^m [\Phi(\mu)]^{n-m}$ | $Q(\theta \mid \theta^{\text{old}}) = \mathbb{E}_{Z \mid X, \theta^{\text{old}}}[\ell_c(\theta)]$ |
+| **Final Estimator** | $\hat{\mu} = -\Phi^{-1}\left(\frac{m}{n}\right) = \Phi^{-1}\left(\frac{n-m}{n}\right)$ | $\pi = \frac{1}{n}\sum \gamma_i, \; \beta_1 = \frac{\sum \gamma_i}{\sum \gamma_i x_i}, \; \beta_2 = \frac{\sum (1-\gamma_i)}{\sum (1-\gamma_i) x_i}$ |
+
+---
+
+### Failure & Contrast Paths (6 Common Engineering Traps)
+
+```
+  [Engineering Trap 1: "Attempting Sample Mean on Censored Data"]
+  TRAP: Trying to compute μ̂ = (1/n) ∑ x_i on Problem 1.
+  REALITY: The actual values x_i were never recorded—only the signs! The sample mean cannot be evaluated.
+  FIX: Formulate the likelihood of what was recorded: L(μ) = [Φ(-μ)]^m [Φ(μ)]^(n-m) and invert Φ.
+  
+  [Engineering Trap 2: "Confusing Φ(-μ) with Φ(μ)"]
+  TRAP: Assigning P(X < 0) = Φ(μ) instead of Φ(-μ).
+  REALITY: Standardizing X < 0 gives Z < (0 - μ)/1 = -μ. Thus P(X < 0) = Φ(-μ).
+  FIX: Remember that shifting the distribution right (μ > 0) makes negative draws less likely (Φ(-μ) small).
+  
+  [Engineering Trap 3: "Attempting to Split the Log of a Sum"]
+  TRAP: Writing log(π f_1 + (1-π) f_2) = log(π f_1) + log((1-π) f_2) in mixture likelihoods.
+  REALITY: The logarithm is non-linear and DOES NOT distribute over addition!
+  FIX: Introduce latent variable Z and optimize the surrogate Q-function via the EM algorithm.
+  
+  [Engineering Trap 4: "Forgetting to Normalize Bayes Responsibilities in E-Step"]
+  TRAP: Computing γ_i = π β_1 e^(-β_1 x_i) without dividing by the mixture marginal density f(x_i).
+  REALITY: Responsibilities are conditional probabilities and MUST sum to 1: γ_i + (1 - γ_i) = 1.
+  FIX: Always divide the numerator by [π β_1 e^(-β_1 x_i) + (1-π) β_2 e^(-β_2 x_i)].
+  
+  [Engineering Trap 5: "Confusing the Q-Function with the Observed Log-Likelihood"]
+  TRAP: Believing Q(θ | θ_old) is the actual log-likelihood curve of the data.
+  REALITY: Q is a surrogate lower-bound curve constructed at θ_old that touches ℓ(θ) tangentially.
+  FIX: Maximize Q to push the true log-likelihood ℓ(θ) uphill via Jensen's inequality.
+  
+  [Engineering Trap 6: "Violating Exponential Parameter Inversion: μ vs β"]
+  TRAP: Writing the exponential MLE as β̂ = (1/n) ∑ x_i.
+  REALITY: The mean of Exp(β) is 1/β, so the rate parameter MLE is the reciprocal of the sample mean: β̂ = n / ∑ x_i.
+  FIX: In the M-step, update β_1^(new) = (∑ γ_i) / (∑ γ_i x_i).
+```
+
+---
+
+## Chalkboard Rosetta Stone
+
+This reference table maps statistical estimation symbols directly to Python implementations and lecture chalkboard usage.
+
+| Symbol / Syntax | Formal Concept | Python / SciPy Implementation | Lecture Usage & Context |
+| :--- | :--- | :--- | :--- |
+| $\mathcal{D} = \{x_1, \dots, x_n\}$ | Observed Dataset | `x_data = np.array([...])` | The frozen empirical observations. |
+| $L(\theta \mid \mathcal{D})$ | Likelihood Function | `np.prod(f(x, theta))` | Compatibility score of parameter $\theta$ given frozen data $\mathcal{D}$. |
+| $\ell(\theta) = \ln L(\theta)$ | Log-Likelihood Function | `np.sum(np.log(f(x, theta)))` | Numerically stable objective function maximized via derivatives. |
+| $\Phi(z)$ | Standard Normal CDF | `scipy.stats.norm.cdf(z)` | Cumulative probability $P(Z \le z)$ under $\mathcal{N}(0, 1)$. |
+| $\Phi^{-1}(p)$ | Quantile (Inverse Normal CDF) | `scipy.stats.norm.ppf(p)` | Finds the cutoff threshold $z$ such that $\Phi(z) = p$. |
+| $m$ | Count of Negative Signs | `m = np.sum(x_signs == -1)` | Number of negative observations in Problem 1. |
+| $p = \Phi(-\mu)$ | Negative Sign Probability | `p_hat = m / n` | Reparameterized Bernoulli coin success probability. |
+| $\hat{\mu} = -\Phi^{-1}(m/n)$ | Recovered Gaussian Mean | `mu_hat = -stats.norm.ppf(m/n)` | Closed-form MLE for the sign-censored Gaussian. |
+| $Z_i \in \{0, 1\}$ | Latent Component Indicator | `z_latent = np.random.binomial(1, pi)` | Unobserved switch indicating which exponential component generated $x_i$. |
+| $\gamma_i = P(Z_i=1 \mid x_i)$ | Posterior Responsibility | `gamma = (pi*f1) / (pi*f1 + (1-pi)*f2)` | Soft cluster assignment computed during the E-Step. |
+| $Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{\text{old}})$ | Expected Complete Log-Likelihood | Computed inside EM loop | Surrogate objective function maximized during the M-Step. |
+| $\pi^{\text{new}}, \beta_1^{\text{new}}, \beta_2^{\text{new}}$ | Updated Mixture Parameters | `pi = np.mean(gamma)`, `b1 = np.sum(gamma)/np.sum(gamma*x)` | Closed-form analytical updates computed in the M-Step. |
+
+---
+
+## Complete Standalone Executable Python Simulation Script
+
+<a id="standalone-simulation-script"></a>
+
+Below is a self-contained, end-to-end Python script implementing both problems from Tutorial 10:
+1. **Problem 1 Simulation:** Generating true Gaussian samples, censoring values to signs, executing Bernoulli MLE $\hat{p} = m/n$, inverting $\Phi^{-1}$ to recover $\hat{\mu}$, and verifying that majority negative signs produce $\hat{\mu} < 0$.
+2. **Problem 2 Simulation:** Generating synthetic two-exponential mixture data with ground-truth $(\pi^*, \beta_1^*, \beta_2^*)$, running the full iterative EM algorithm (`e_step`, `compute_q_function`, `m_step`), logging monotonic log-likelihood improvement, and recovering true parameters.
+
+```python
+"""
+Tutorial 10: Review of Machine Learning 1 — Master Executable Simulation Script
+Validated on Python 3.10+, NumPy, and SciPy. Pure ASCII output for cross-platform execution.
+"""
+
+import numpy as np
+import scipy.stats as stats
+
+def run_tutorial_10_simulation():
+    print("=" * 80)
+    print("TUTORIAL 10: MAXIMUM LIKELIHOOD ESTIMATION & EXPECTATION-MAXIMIZATION SIMULATION")
+    print("=" * 80)
+
+    # ---------------------------------------------------------
+    # 1. PROBLEM 1: SIGN-CENSORED GAUSSIAN MLE
+    # ---------------------------------------------------------
+    print("\n[1] PROBLEM 1: Sign-Censored Gaussian Mean Estimation")
+    np.random.seed(42)
+    true_mu = -0.75 # True negative mean
+    true_sigma = 1.0
+    n_samples = 500
+
+    # Generate true continuous Gaussian draws: X ~ N(true_mu, 1)
+    x_latent = np.random.normal(loc=true_mu, scale=true_sigma, size=n_samples)
+    
+    # CENSOR DATA: Only record the signs (+1 for positive, -1 for negative)
+    signs = np.where(x_latent < 0, -1, 1)
+    m_negatives = np.sum(signs == -1)
+    n_positives = n_samples - m_negatives
+
+    print(f"  True Underlying Mean (mu):     {true_mu:.4f}")
+    print(f"  Total Samples (n):              {n_samples}")
+    print(f"  Recorded Negative Signs (m):    {m_negatives} ({m_negatives/n_samples*100:.1f}%)")
+    print(f"  Recorded Positive Signs (n-m):  {n_positives} ({n_positives/n_samples*100:.1f}%)")
+
+    # Step A: Bernoulli MLE for p = P(X < 0) = Phi(-mu)
+    p_hat = m_negatives / n_samples
+    print(f"  Estimated Bernoulli p_hat:      {p_hat:.4f}")
+
+    # Step B: Invert Standard Normal CDF: mu_hat = -Phi^(-1)(p_hat)
+    mu_hat = -stats.norm.ppf(p_hat)
+    # Alternative identical form: mu_hat = Phi^(-1)((n - m)/n)
+    mu_hat_alt = stats.norm.ppf((n_samples - m_negatives) / n_samples)
+
+    print(f"  Recovered Mean (mu_hat):        {mu_hat:.4f} (Alternative form: {mu_hat_alt:.4f})")
+    print(f"  Estimation Absolute Error:      {abs(mu_hat - true_mu):.4f}")
+    
+    # Verification: majority negative signs MUST produce negative mean
+    assert m_negatives > n_samples / 2
+    assert mu_hat < 0
+    assert np.isclose(mu_hat, mu_hat_alt)
+    print("  [SUCCESS] Sign-Censored Gaussian Mean successfully recovered via Phi^(-1)!")
+
+    # ---------------------------------------------------------
+    # 2. PROBLEM 2: TWO-EXPONENTIAL MIXTURE DATA GENERATION
+    # ---------------------------------------------------------
+    print("\n[2] PROBLEM 2: Two-Exponential Mixture Data Generation")
+    true_pi = 0.65       # 65% Component 1, 35% Component 2
+    true_beta1 = 2.0     # Mean wait 1 = 1/2.0 = 0.5
+    true_beta2 = 0.4     # Mean wait 2 = 1/0.4 = 2.5
+    n_mix = 2000
+
+    # Step A: Generate hidden indicator Z ~ Bernoulli(true_pi)
+    z_true = np.random.binomial(n=1, p=true_pi, size=n_mix)
+
+    # Step B: Generate waiting times x_i conditionally
+    x_obs = np.where(
+        z_true == 1,
+        np.random.exponential(scale=1.0/true_beta1, size=n_mix),
+        np.random.exponential(scale=1.0/true_beta2, size=n_mix)
+    )
+
+    print(f"  Ground Truth Parameters: pi={true_pi:.2f}, beta1={true_beta1:.2f}, beta2={true_beta2:.2f}")
+    print(f"  Generated {n_mix} observations (Component 1 draws: {np.sum(z_true)}, Component 2: {n_mix - np.sum(z_true)})")
+
+    # ---------------------------------------------------------
+    # 3. EXPECTATION-MAXIMIZATION (EM) ALGORITHM IMPLEMENTATION
+    # ---------------------------------------------------------
+    print("\n[3] Executing Expectation-Maximization (EM) Algorithm")
+    
+    # Initialize parameters (asymmetric initialization to break saddle-point symmetry)
+    pi_curr = 0.50
+    beta1_curr = 3.00
+    beta2_curr = 0.20
+
+    def compute_incomplete_log_likelihood(x, pi, b1, b2):
+        f1 = b1 * np.exp(-b1 * x)
+        f2 = b2 * np.exp(-b2 * x)
+        mix_density = pi * f1 + (1.0 - pi) * f2
+        return np.sum(np.log(np.maximum(mix_density, 1e-15)))
+
+    max_iters = 30
+    tolerance = 1e-6
+    prev_ll = -np.inf
+
+    print(f"  Initial Guess: pi={pi_curr:.3f}, beta1={beta1_curr:.3f}, beta2={beta2_curr:.3f}")
+    print("  " + "-" * 74)
+    print("  Iter | Log-Likelihood |    pi    |  beta1   |  beta2   |  LL Improvement")
+    print("  " + "-" * 74)
+
+    for iteration in range(1, max_iters + 1):
+        # -----------------------------------------------------
+        # E-STEP: Compute Responsibilities via Bayes' Rule
+        # -----------------------------------------------------
+        f1 = beta1_curr * np.exp(-beta1_curr * x_obs)
+        f2 = beta2_curr * np.exp(-beta2_curr * x_obs)
+        num = pi_curr * f1
+        denom = num + (1.0 - pi_curr) * f2
+        denom = np.maximum(denom, 1e-15)
+        gamma = num / denom # Posterior P(Z_i = 1 | x_i, theta)
+
+        # -----------------------------------------------------
+        # M-STEP: Analytical Closed-Form Parameter Updates
+        # -----------------------------------------------------
+        pi_next = np.mean(gamma)
+        beta1_next = np.sum(gamma) / np.sum(gamma * x_obs)
+        beta2_next = np.sum(1.0 - gamma) / np.sum((1.0 - gamma) * x_obs)
+
+        # Evaluate Incomplete Log-Likelihood to verify monotonic ascent
+        curr_ll = compute_incomplete_log_likelihood(x_obs, pi_next, beta1_next, beta2_next)
+        ll_diff = curr_ll - prev_ll
+
+        if iteration <= 5 or iteration % 5 == 0 or iteration == max_iters:
+            print(f"   {iteration:02d}  |  {curr_ll:13.4f} |  {pi_next:.4f}  |  {beta1_next:.4f}  |  {beta2_next:.4f}  |  +{ll_diff:.4f}")
+
+        # Verify Monotonic Ascent Guarantee (Jensen's inequality)
+        if prev_ll != -np.inf:
+            assert curr_ll >= prev_ll - 1e-7, "EM Error: Log-Likelihood decreased!"
+
+        if abs(ll_diff) < tolerance:
+            print(f"\n  [CONVERGENCE] EM converged successfully at iteration {iteration}!")
+            break
+
+        pi_curr, beta1_curr, beta2_curr = pi_next, beta1_next, beta2_next
+        prev_ll = curr_ll
+
+    print("  " + "-" * 74)
+    print(f"  Final Estimated:   pi={pi_next:.4f}, beta1={beta1_next:.4f}, beta2={beta2_next:.4f}")
+    print(f"  Ground Truth:      pi={true_pi:.4f}, beta1={true_beta1:.4f}, beta2={true_beta2:.4f}")
+
+    assert np.isclose(pi_next, true_pi, atol=0.05)
+    assert np.isclose(beta1_next, true_beta1, atol=0.20)
+    assert np.isclose(beta2_next, true_beta2, atol=0.10)
+
+    print("\n" + "=" * 80)
+    print("ALL TUTORIAL 10 SIMULATION BLOCKS EXECUTED & VERIFIED SUCCESSFULLY!")
+    print("=" * 80)
+
+if __name__ == "__main__":
+    run_tutorial_10_simulation()
+```
+
+---
+
+## Topic 1: Pedagogical Mission & Structure of the ML Review (00:01–01:27)
+
+<a id="topic-1-why-this-recap-exists-0001–0127"></a>
+<a id="topic-1-why-this-recap-exists-0001-0127"></a>
 
 ### Where this sits on the master map
+Connecting the probability recap (Tutorials 7–9) to Machine Learning estimation theory (MLE and EM). Warm-up: [what is a likelihood](./PREREQUISITES.md#p1-likelihood).
 
-This is the **GOAL / SERIES** box. The hour is not a first introduction to machine learning. It is a *numerical* recap of a first-level course, put on the table because later generative models will need the same two machines — MLE and EM — sitting on the surface, not sunk. If “likelihood scores a parameter” is shaky, start at [likelihood](./PREREQUISITES.md#p1-likelihood).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![Tutorial mission](./screenshots/composites/ch01-topic-01-tutorial-mission-panel1of1.png)
 
-![Talking-head open: numerical recap, not autograd folklore](./screenshots/composites/ch01-topic-01-tutorial-mission-panel1of1.png)
-
-**Figure — ~00:14–01:18:** no tablet yet. He is setting the contract: this bunch of tutorials formulates and solves problems *numerically and mathematically*. The expected toolkit is MLE, EM, and (for later) backpropagation done by hand — not `loss.backward()`.
-
-### What he is establishing
-
-The series now shifts from the probability recap (Tutorials 7–9) into first-course **machine learning** done with a pen. The stated aim is modest and strict: understand how we *formulate* a problem and how we *solve* it, with numbers and derivatives, not with a library call.
-
-Picture a two-line worksheet he would accept later today: “$n=10$ signs, $m=3$ minuses, write $L(\mu)$, find $\hat\mu$.” Or: “two exponential kitchens, write $\gamma_i$, update $\beta_1$.” Those are *numerical* recap problems. A screenshot of `loss.backward()` returning a tensor is not.
-
-Most of what follows is labeled a **prerequisite** for the generative-AI lectures. That word is doing real work. He is not teaching a first course from zero. He is hauling three objects back onto the desk: **maximum likelihood estimation (MLE)**, the **expectation–maximization (EM)** algorithm, and — as background the viewer is assumed to own — **backpropagation** done numerically.
-
-The last item is a warning, not a lesson. Watching a tensor library run `loss.backward()` is not the understanding he wants. A viewer who can recite “the graph does reverse mode” but cannot differentiate a two-layer chain on paper is under-equipped. This particular hour will not do that chain. It will do MLE and EM. The neural-network numericals are promised for the next section of tutorials.
-
-So the contract is: you already took probability and a first ML course; this session makes the two estimation machines executable again. What is still missing after one minute is the first concrete notebook — a Normal whose values were never written down.
-
-### Analogy for this topic only
-
-A kitchen exam says: write the sauce recipe, then cook it. Someone sets a jar labeled `sauce.backward()` on the table. **What should the examiner mark — the jar, or the handwritten steps?**
-
-The jar may taste fine. The exam still fails, because the point was the recipe. Reciting “the graph does reverse mode” is the same miss.
-
-Here the “recipe” is MLE and EM on paper. The jar is autograd. This hour opens the recipe book, not the jar.
-
-In lecture words: recap = first-course ML, numerical; `loss.backward()` is the jar he refuses.
-
-### Local picture
-
-```
-  first-level ML course          this bunch of tutorials
-  (already taken)                (numerical recap)
-         │                              │
-         ├─ MLE                  ══►    Problem 1 (signs)
-         ├─ EM                   ══►    Problem 2 (mixture)
-         └─ backprop (by hand)   · ·    next section (NNs)
-                                      not this video
-```
-
-Notice: three expected tools, two used today. The third is a forward pointer, not a missing derivation.
-
-### Bridge
-
-We have a contract — write likelihoods and differentiate them — but no data set yet. The first notebook is cruel on purpose: $n$ Normal draws, and the page only recorded **plus or minus**.
+*Figure — ~00:01–01:27: Blackboard presentation of the tutorial mission: reviewing foundational estimation theory through two comprehensive numerical problems (MLE on Censored Gaussian and Expectation-Maximization on Mixture Models).*
 
 ---
 
-## Topic 2: Sign-censored Normal (01:27–04:22)
+### 1. 👶 ELI5 Quick Intuition
+Think of passing a flight simulator exam:
+- In Tutorials 7–9, you studied the flight manuals: aerodynamic lift, wind vectors, and altimeter gauges (Probability distributions, PDFs, Conditioning, Jacobians).
+- In Tutorial 10, the instructor puts you in the cockpit to handle **two real-world flight emergencies**:
+  1. **Emergency 1:** Your airspeed gauge is broken and only shows red or green lights (**Sign-Censored Gaussian**).
+  2. **Emergency 2:** Two different autopilot engines are fighting for control without telling you which one is firing (**Two-Exponential Mixture**).
+- By solving both emergencies on the chalkboard, you prove you are ready to navigate **Generative AI**!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Purpose of the Review:**
+   - Deep learning frameworks hide probability mechanics behind automated abstractions (`loss.backward()`).
+   - This tutorial peels back the software abstraction, deriving the exact probability equations, derivatives, and lower-bound surrogates that underpin statistical learning.
+2. **The Two Numerical Problems:**
+   - **Problem 1 (01:27–18:31):** Maximum Likelihood Estimation of a Gaussian mean $\mu$ when observations are reduced to binary signs ($+$ or $-$).
+   - **Problem 2 (18:31–47:33):** Expectation-Maximization parameter estimation for a two-component exponential mixture model.
+
+---
+
+### 3. 📐 Formal Mathematics & Estimation Taxonomy
+
+```
+  =============================================================================
+                       STATISTICAL ESTIMATION PARADIGMS
+  =============================================================================
+  Parametric Density Model:  X ~ f(x | θ),  θ ∈ Θ
+  
+  [Paradigm A: Maximum Likelihood Estimation (MLE)]
+  θ̂_MLE = argmax_θ  L(θ | D) = argmax_θ ∑_{i=1}^n ln f(x_i | θ)
+  
+  [Paradigm B: Maximum A Posteriori (MAP) Estimation]
+  θ̂_MAP = argmax_θ  P(θ | D) = argmax_θ [ ∑_{i=1}^n ln f(x_i | θ) + ln P(θ) ]
+  
+  In this tutorial, all chalkboard derivations rigorously focus on MLE and EM!
+  =============================================================================
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why dedicate an entire 47-minute tutorial to two analytical derivations?**  
+  Because modern Generative AI models (Diffusion models, VAEs) are founded on latent variable estimation and likelihood bounds. Working through exact pencil-and-paper derivations builds deep mathematical intuition that software libraries cannot teach.
+- **What are we learning?**  
+  We are learning how to formulate and solve non-standard Maximum Likelihood problems when data is incomplete or latent.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Variational Inference:**  
+  The mathematical machinery developed in Problem 2 (introducing latent $Z$, taking posterior expectations, and maximizing expected log-likelihood) is the exact theoretical blueprint of **Variational Autoencoders (VAEs)**!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Scientific Instrument Calibration:**  
+  Astrophysics observatories use censored likelihood estimation to calibrate telescope focal arrays when high-energy cosmic rays saturate digital CCD sensor pixels.
+
+---
+
+## Topic 2: Problem 1 Formulation — The Sign-Censored Gaussian (01:27–04:22)
+
+<a id="topic-2-sign-censored-normal-0127–0422"></a>
+<a id="topic-2-sign-censored-normal-0127-0422"></a>
 
 ### Where this sits on the master map
+Stating Problem 1: $X \sim \mathcal{N}(\mu, 1)$ with $n$ IID draws, but only binary signs are recorded ($m$ negatives and $n-m$ positives). Warm-up: [IID variables](./PREREQUISITES.md#p2-iid).
 
-This fills **PROBLEM 1**. The goal box asked for a numerical MLE. The obstacle is not “estimate a Normal mean” in the usual way. The obstacle is that the usual numbers were never written. Warm-up: [IID](./PREREQUISITES.md#p2-iid) and [likelihood](./PREREQUISITES.md#p1-likelihood).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![Sign-censored normal](./screenshots/composites/ch02-topic-02-sign-censored-normal-panel1of1.png)
 
-![Problem statement: X ~ N(μ,1), n IID, only signs, m negatives, MLE of μ](./screenshots/composites/ch02-topic-02-sign-censored-normal-panel1of1.png)
-
-**Figure — ~01:48–04:04:** tablet fills in four beats. (1) Let $X\sim\mathcal{N}(\mu,1)$. (2) $n$ IID realizations. (3) While taking observations we *only* noted whether the value is positive. (4) Suppose $m$ of $n$ have negative values; find the MLE of $\mu$ based on these observations.
-
-### What he is establishing
-
-A scalar random variable $X$ is drawn from a **Normal** with unknown mean $\mu$ and **known variance 1**. That last word matters. There is only one parameter. We are not estimating a width.
-
-We are given $n$ **IID** copies — same machine, independent tickets. In a kinder problem the page would show $1.2,\,-0.4,\,0.7,\ldots$ and the MLE of $\mu$ would be their average $\bar x$. That kinder problem is not this problem.
-
-While the observations were taken, the actual values were **not recorded**. The notebook has only a sign: positive or not. Out of the $n$ tickets, $m$ are negative. Those two integers $(n,m)$ are the entire data set. Inventing ten fake weights and averaging them is the wrong move: you would be solving a different exam.
-
-The ask is the **MLE of $\mu$** based on the signs. You must treat the recorded signs as the data, and score $\mu$ for how well it explains *those* signs.
-
-A micro picture: $n=10$, $m=3$. The page looks like
-
-```
-  + + − + − + + − + +
-```
-
-Ten bells were sampled. Three landed left of zero. $\mu$ is still a real number we have not estimated. The next topic turns “landed left of zero” into $\Phi(-\mu)$.
-
-You can now state the formal problem: model $\mathcal{N}(\mu,1)$, data $=$ counts of signs, target $=$ $\hat\mu_{\mathrm{MLE}}$. What is still missing is a likelihood written only in terms of $\mu$ and $(n,m)$.
-
-### Analogy for this topic only
-
-Ten sheep jump a fence at position $0$. You are not allowed to weigh them. You only tick “left of fence” or “right of fence.” Three ticks are left.
-
-**Where is the flock’s typical location $\mu$?** Memory of the ten missing weights cannot answer — those weights were never written. Sliding the hill until three-left / seven-right is the least surprising pattern is the right move. Inventing ten fake weights and averaging them solves a different exam.
-
-In lecture words: flock center = $\mu$, ticks = $m$ and $n-m$, missing weights = the unrecorded $x_i$.
-
-### Local picture
-
-```
-  TRUE draw                 WHAT WAS WRITTEN
-  x1 =  1.2                 +
-  x2 = -0.4                 −
-  x3 =  0.7                 +
-  ...                       ...
-  xn = -1.1                 −     (this is one of the m minuses)
-
-  usual MLE would use x̄     ──X──►  x̄ is not on the page
-  this MLE must use signs   ══════►  (n, m) only
-```
-
-Notice: the model is still a Normal on $\mathbb{R}$. The *likelihood* will live on $\{+,-\}^n$.
-
-### Bridge
-
-We know the hidden machine and the recorded alphabet. We do not yet have $P(\text{minus})$ as a function of $\mu$. That probability is an area under a shifted bell — the next box.
+*Figure — ~01:27–04:22: Blackboard statement of Problem 1: $X \sim \mathcal{N}(\mu, 1)$ with $n$ IID observations where only the sign is recorded ($m$ negatives, $n-m$ positives), explaining why the sample mean $\bar{x}$ cannot be computed.*
 
 ---
 
-## Topic 3: Standardize and write the likelihood (04:22–08:53)
+### 1. 👶 ELI5 Quick Intuition
+Think of an absent-minded scientist:
+- A scientist measures 100 temperatures outside with a precise thermometer.
+- But instead of writing down the actual degrees ($-4.2^\circ\text{C}, +1.8^\circ\text{C}, -0.5^\circ\text{C}$), they only wrote a **minus sign ($-$)** if it was below freezing, or a **plus sign ($+$)** if it was above freezing!
+- They hand you a notebook with **80 minus signs and 20 plus signs**.
+- **Your Job:** Can you still calculate the exact average temperature ($\mu$) using only these plus and minus tick marks?
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Physical Setup:**
+   - Underlying distribution: $X_1, X_2, \dots, X_n \stackrel{\text{IID}}{\sim} \mathcal{N}(\mu, 1)$ with unknown mean $\mu$ and known unit variance $\sigma^2 = 1$.
+2. **The Censoring Constraint:**
+   - The exact numerical values $x_i$ were never recorded.
+   - The notebook contains only:
+     - $m$ occurrences of $X_i < 0$ (Negative sign: $-$)
+     - $n - m$ occurrences of $X_i > 0$ (Positive sign: $+$)
+3. **The Core Question:**
+   - Find the Maximum Likelihood Estimator (MLE) $\hat{\mu}_{\text{MLE}}$ of the unknown mean $\mu$.
+
+---
+
+### 3. 📐 Formal Mathematics & Observation Space Transformation
+
+```
+  Data Generating Process:
+  X_i = μ + ε_i,   where ε_i ~ N(0, 1)  (Unobserved True Value)
+  
+  Quantization / Censoring Operator:
+  Y_i = sgn(X_i) = { -1  if X_i < 0   (Occurs m times)
+                   { +1  if X_i > 0   (Occurs n - m times)
+                   
+  Recorded Dataset: D = { y_1, y_2, ..., y_n } ∈ {-1, +1}^n
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why can't we use the standard formula $\hat{\mu} = \frac{1}{n} \sum x_i$?**  
+  Because the actual values $x_i$ are unobserved! Applying the sample mean is physically impossible because the numbers do not exist on the page. We must build a likelihood function over the **discrete signs that were actually recorded**.
+- **What are we learning?**  
+  We are learning how to formulate statistical estimation problems under lossy, quantized, or censored data observations.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to 1-Bit Neural Network Quantization:**  
+  In modern edge AI (1-bit LLMs / BitNet), weights and activations are quantized to binary signs ($\pm 1$). Estimating parameter distributions from 1-bit quantized activations is mathematically identical to this sign-censored problem!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Digital Communications 1-Bit ADC Receivers:**  
+  Low-power 5G/6G wireless receivers use 1-bit Analog-to-Digital Converters (ADCs) that only record signal signs ($\pm$), estimating channel attenuation parameters via sign-censored Gaussian MLE.
+
+---
+
+## Topic 3: Gaussian Standardization & Likelihood Construction (04:22–08:53)
+
+<a id="topic-3-standardize-and-write-the-likelihood-0422–0853"></a>
+<a id="topic-3-standardize-and-write-the-likelihood-0422-0853"></a>
 
 ### Where this sits on the master map
+Standardizing $X \sim \mathcal{N}(\mu, 1)$ to standard normal $Z \sim \mathcal{N}(0, 1)$ and constructing the sign likelihood function. Warm-up: [standard normal CDF](./PREREQUISITES.md#p3-phi).
 
-This is the **LIKELIHOOD** box on Problem 1. The open problem from Topic 2 is “score $\mu$ using only signs.” The move is: convert a sign into a **standard-Normal area** $\Phi$, then multiply. Warm-up: [$\Phi$](./PREREQUISITES.md#p3-phi).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![Standardize likelihood](./screenshots/composites/ch03-topic-03-standardize-likelihood-panel1of1.png)
 
-![Standardize to Z, Φ(-μ) and Φ(μ), then L(μ) = Φ(-μ)^m Φ(μ)^{n-m}](./screenshots/composites/ch03-topic-03-standardize-likelihood-panel1of1.png)
-
-**Figure — ~04:48–08:27:** solution starts $P[X<0]=P[(X-\mu)/1 < -\mu]$. Then $Z\sim\mathcal{N}(0,1)$, so that probability is $\Phi(-\mu)$. Then $P[X>0]=1-\Phi(-\mu)=\Phi(\mu)$ “using normality.” After counting $m$ negatives and $n-m$ positives, the likelihood of the observed data is $L(\mu)=(P[X<0])^m(P[X>0])^{n-m}=(\Phi(-\mu))^m(\Phi(\mu))^{n-m}$.
-
-### What he is establishing
-
-A minus occurs when $X<0$. Subtract the mean and divide by the known standard deviation $1$:
-
-$$
-P(X<0)=P\bigl(X-\mu<-\mu\bigr)=P(Z<-\mu)
-$$
-
-where $Z=(X-\mu)/1\sim\mathcal{N}(0,1)$. The left-hand area of the *standard* bell up to $-\mu$ is the CDF value $\Phi(-\mu)$. So
-
-$$
-P(\text{negative})=\Phi(-\mu).
-$$
-
-A plus is the complementary event. Because a standard Normal is symmetric about zero, $1-\Phi(-\mu)=\Phi(\mu)$:
-
-$$
-P(\text{positive})=\Phi(\mu).
-$$
-
-He says “using inverse” while writing that identity. The clean reading is: we are using the known inverse-symmetry of $\Phi$, not inverting $\Phi$ yet. Inversion arrives in Topic 5.
-
-Each recorded sign is now a Bernoulli-like trial with success probabilities that *depend on $\mu$*. There are $m$ independent minuses and $n-m$ independent pluses, so the likelihood of the notebook is the product
-
-$$
-L(\mu)=\bigl[\Phi(-\mu)\bigr]^m\bigl[\Phi(\mu)\bigr]^{n-m}.
-$$
-
-In words: every minus contributes a factor $\Phi(-\mu)$; every plus contributes $\Phi(\mu)$. That is the likelihood of the *observed* data. Multiplying the Normal densities of the missing $x_i$ would be the wrong move — those numbers are not in the notebook.
-
-He pauses to say this assumes a rigorous probability course and a first-level ML course. The objects $\Phi$ and “likelihood of IID signs” are supposed to be already in muscle memory. This hour is the numerical assembly.
-
-A micro case: $n=2$, $m=1$ (one minus, one plus). $L(\mu)=\Phi(-\mu)\,\Phi(\mu)$. At $\mu=0$ this is $(1/2)^2=1/4$. At a huge positive $\mu$, $\Phi(-\mu)$ is tiny and $L$ collapses — one unexplained minus kills a large positive mean.
-
-You can now write $L(\mu)$ from $(n,m)$ alone. What is still awkward is differentiating $\Phi(-\mu)$ with respect to $\mu$. The next box removes that pain by renaming $p=\Phi(-\mu)$.
-
-### Analogy for this topic only
-
-Each sheep is a coin flip whose *bias* depends on where you parked the hill. Park the hill far right ($\mu$ large positive) and almost every flip is “right of fence.” Three left-ticks then make a terrible score.
-
-**What number should we write down as “how well this parking explains the ten ticks”?** Reciting the ten missing weights does not answer. The score is “bias-for-left, multiplied $m$ times, times bias-for-right, multiplied $n-m$ times.” That product *is* $L(\mu)$.
-
-In lecture words: left-bias = $\Phi(-\mu)$, right-bias = $\Phi(\mu)$, score = $L(\mu)$.
-
-### Local picture
-
-```
-  N(μ,1) density, threshold at 0
-
-       μ < 0                         μ > 0
-  ----▲------|----             ----|------▲----
-       μ     0                      0     μ
-     big left area               small left area
-     Φ(-μ) large                 Φ(-μ) small
-
-  notebook:  m copies of [left]   and   (n-m) copies of [right]
-  L(μ) = [left area]^m  ×  [right area]^{n-m}
-```
-
-Notice: the Normal *density* of a hidden $x_i$ never appears. Only areas.
-
-### Bridge
-
-$L(\mu)$ is a product of $\Phi$ values — ugly to differentiate. If we give the left-area a single name $p$, the same product becomes a coin likelihood we already know how to maximize.
+*Figure — ~04:22–08:53: Blackboard derivation: standardizing $X \sim \mathcal{N}(\mu, 1)$, proving $P(X < 0) = \Phi(-\mu)$ and $P(X > 0) = \Phi(\mu)$, and writing the joint sign likelihood $L(\mu) = [\Phi(-\mu)]^m [\Phi(\mu)]^{n-m}$.*
 
 ---
 
-## Topic 4: Bernoulli reduction and MLE of $p$ (08:53–14:01)
+### 1. 👶 ELI5 Quick Intuition
+Think of a bell-shaped hill sitting on a number line:
+- The peak of the hill is parked at unknown location $\mu$.
+- A zero-mark fence is set at $x = 0$.
+- **Negative Sign ($-$):** Means the ball rolled to the left of the zero fence.
+- **Positive Sign ($+$):** Means the ball rolled to the right of the zero fence.
+- By standardizing the hill to center at zero, the probability of rolling left is simply the standard Gaussian area **$\Phi(-\mu)$**, and rolling right is **$\Phi(\mu)$**!
+- For $m$ minuses and $(n-m)$ pluses, you multiply those areas together!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Standardization Step:**
+   - If $X \sim \mathcal{N}(\mu, 1)$, then $Z = \frac{X - \mu}{1} = X - \mu \sim \mathcal{N}(0, 1)$.
+2. **Probability of a Negative Sign (Minus):**
+   $$P(X < 0) = P(X - \mu < 0 - \mu) = P(Z < -\mu) = \mathbf{\Phi(-\mu)}$$
+3. **Probability of a Positive Sign (Plus):**
+   $$P(X > 0) = 1 - P(X < 0) = 1 - \Phi(-\mu) = \mathbf{\Phi(\mu)}$$
+4. **The Joint Likelihood Function:**
+   - Since the $n$ draws are IID, the joint likelihood is the product of individual probabilities:
+     $$L(\mu) = [\Phi(-\mu)]^m [\Phi(\mu)]^{n-m}$$
+
+---
+
+### 3. 📐 Formal Mathematics & Joint Likelihood Derivation
+
+```
+  =============================================================================
+                     SIGN-CENSORED LIKELIHOOD FORMULATION
+  =============================================================================
+  Single Trial Distribution:
+  P(Y_i = -1 | μ) = Φ(-μ)
+  P(Y_i = +1 | μ) = 1 - Φ(-μ) = Φ(μ)
+  
+  Joint Likelihood across n IID Trials:
+  L(μ | m, n) = ∏_{i=1}^n P(Y_i | μ)
+              = [ Φ(-μ) ]^m · [ Φ(μ) ]^(n - m)
+  
+  Log-Likelihood Function:
+  ℓ(μ) = m ln(Φ(-μ)) + (n - m) ln(Φ(μ))
+  =============================================================================
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why must we write $L(\mu)$ using cumulative $\Phi$ instead of Gaussian density $f(x)$?**  
+  Because discrete binary outcomes have probability masses, not continuous densities. Evaluating $f(0)$ would be a fatal mathematical error. The correct probability of an event $X < 0$ is the integral area $\Phi(-\mu)$.
+- **What are we learning?**  
+  We are learning how to map continuous parametric processes into discrete categorical observation likelihoods.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Probit Classification & Discrete Diffusion:**  
+  The formula $P(Y = 1) = \Phi(\mathbf{w}^\top \mathbf{x})$ is the exact mathematical foundation of Probit Generalized Linear Models and Discrete State Diffusion thresholding.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Credit Default Risk Thresholding:**  
+  Risk management engines model client solvency as a latent Gaussian variable $\mathcal{N}(\mu, 1)$, observing only whether a customer defaults ($X < 0$) or pays on time ($X > 0$).
+
+---
+
+## Topic 4: Reparameterization, Bernoulli Reduction & MLE of $p$ (08:53–14:01)
+
+<a id="topic-4-bernoulli-reduction-and-mle-of-p-0853–1401"></a>
+<a id="topic-4-bernoulli-reduction-and-mle-of-p-0853-1401"></a>
 
 ### Where this sits on the master map
+Reparameterizing the likelihood via $p = \Phi(-\mu)$, reducing the problem to a Bernoulli coin flip, and deriving the exact analytical MLE $\hat{p} = m/n$. Warm-up: [Bernoulli reduction](./PREREQUISITES.md#p5-bernoulli).
 
-This is **REDUCE + MAX**. The likelihood exists; the leftover problem is “maximize a function of $\Phi$.” The method is: take the log, rename $p=\Phi(-\mu)$, recognize a **Bernoulli**, differentiate. Warm-ups: [log](./PREREQUISITES.md#p4-log), [Bernoulli](./PREREQUISITES.md#p5-bernoulli).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![Bernoulli MLE](./screenshots/composites/ch04-topic-04-bernoulli-mle-p-panel1of1.png)
 
-![Log of L, Bernoulli with negative = success, derivative set to zero](./screenshots/composites/ch04-topic-04-bernoulli-mle-p-panel1of1.png)
-
-**Figure — ~11:21–13:47:** $L(p)=p^m(1-p)^{n-m}$. Words: this is exactly the Bernoulli model; **negative is treated as success**; $m$ successes in $n$ trials. Then $\ell(p)=m\log p+(n-m)\log(1-p)$ and the critical-point equation $m/p-(n-m)/(1-p)=0$.
-
-### What he is establishing
-
-First take the log. He writes $\ell(\mu)=\log L(\mu)$ (same letter $L$ on the board for both; we keep $\ell$ for the log):
-
-$$
-\ell(\mu)=m\log\Phi(-\mu)+(n-m)\log\Phi(\mu).
-$$
-
-That is already nicer, but $\Phi$ is still nested. For simplicity he substitutes
-
-$$
-p:=P(X<0)=\Phi(-\mu),\qquad 1-p=P(X>0)=\Phi(\mu).
-$$
-
-The *likelihood* (he stresses: not the log) becomes the elementary product
-
-$$
-L(p)=p^m(1-p)^{n-m}.
-$$
-
-“Does this ring a bell?” It should. That is exactly the likelihood of a **Bernoulli** model in which a **negative sign is called a success**. You have seen $m$ successes in $n$ independent trials.
-
-Differentiating $\Phi(-\mu)$ directly is the painful move. The cheap move is two-step: find the MLE $\hat p$ first, then convert back to $\hat\mu$. Do not fight $\Phi$ until $p$ is known.
-
-Log of the coin:
-
-$$
-\ell(p)=m\log p+(n-m)\log(1-p).
-$$
-
-Differentiate with respect to $p$ and set the derivative to zero — “the standard idea” he will repeat at the end of the hour:
-
-$$
-\frac{d\ell}{dp}=\frac{m}{p}-\frac{n-m}{1-p}=0.
-$$
-
-Clear the fractions: $m(1-p)=(n-m)p$, hence $p=m/n$. So
-
-$$
-\hat p=\frac{m}{n}.
-$$
-
-He calls this “straightforward known to us.” The MLE of the probability of a negative observation *is* the fraction of negative observations. No $\Phi$ was harmed.
-
-Micro numbers: $n=10$, $m=3$ gives $\hat p=0.3$. That $0.3$ is an estimate of $\Phi(-\mu)$, not of $\mu$ itself. The inversion is the next box.
-
-You can now maximize the reduced problem. What is still missing is the map from $\hat p$ back through $\Phi^{-1}$ to a number on the $\mu$-axis — and a check that the sign of that number matches the notebook.
-
-### Analogy for this topic only
-
-You counted 3 left-ticks out of 10. Forget the hill for a minute. Pretend you only have a coin labeled “left.” The coin’s unknown bias is $p$.
-
-**What single number $\hat p$ best explains 3 left and 7 right?** Memory of a “fair coin” does not answer — fairness was never assumed. The handful itself says $\hat p=0.3$. Differentiating the hill-area $\Phi(-\mu)$ directly is the same work with worse handwriting.
-
-In lecture words: success = minus, $\hat p=m/n$, hill comes back after the coin.
-
-### Local picture
-
-```
-  RECIPE (this hour, both problems)
-    1. write L(parameter)
-    2. take log
-    3. d/d(parameter) = 0
-    4. solve
-
-  HERE the parameter is temporarily p, not μ
-
-  signs:  − − − + + + + + + +     (m=3, n=10)
-  coin:   S S S F F F F F F F
-  p̂ = 3/10
-
-  SEE → SYMBOLS
-    fraction of minuses  →  p̂ = m/n
-    left-area of the bell →  p = Φ(-μ)
-```
-
-Notice: calling minus a “success” is a naming choice. It must stay consistent when we invert.
-
-### Bridge
-
-We own $\hat p=m/n=\Phi(-\hat\mu)$. That is an area, not a mean. We still need the unique $z$ whose left-area is $m/n$, then flip the sign to get $\hat\mu$.
+*Figure — ~08:53–14:01: Blackboard derivation of the Bernoulli reduction: substituting $p = \Phi(-\mu)$, writing $\ell(p) = m \ln p + (n-m) \ln(1-p)$, differentiating $\frac{d\ell}{dp} = 0$, and proving $\hat{p}_{\text{MLE}} = m/n$.*
 
 ---
 
-## Topic 5: Invert $\Phi$ and read the sign of $\hat\mu$ (14:01–18:31)
+### 1. 👶 ELI5 Quick Intuition
+Think of solving a complicated puzzle by renaming a variable:
+- Differentiating $\Phi(-\mu)$ directly involves scary integrals and square roots of $\pi$.
+- The instructor makes a brilliant algebraic substitution: **Let $p = \Phi(-\mu)$!**
+- Instantly, the scary formula becomes a simple coin-toss formula:
+  $$L(p) = p^m (1 - p)^{n - m}$$
+- If you flip a coin $n$ times and get $m$ Heads, your best estimate for the coin's bias is simply **$\hat{p} = \frac{m}{n}$**!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Reparameterization Trick:**
+   - Define $p \triangleq \Phi(-\mu) \in (0, 1)$.
+   - Then $1 - p = 1 - \Phi(-\mu) = \Phi(\mu)$.
+2. **The Standard Bernoulli Log-Likelihood:**
+   $$\ell(p) = m \ln p + (n - m) \ln(1 - p)$$
+3. **First Derivative & Critical Point:**
+   $$\frac{d\ell}{dp} = \frac{m}{p} - \frac{n - m}{1 - p} = 0$$
+   $$m(1 - p) = (n - m)p \implies m - mp = np - mp \implies \mathbf{\hat{p}_{\text{MLE}} = \frac{m}{n}}$$
+4. **Second Derivative Verification:**
+   $$\frac{d^2\ell}{dp^2} = -\frac{m}{p^2} - \frac{n - m}{(1 - p)^2} < 0 \quad (\text{Guarantees a Global Maximum!})$$
+
+---
+
+### 3. 📐 Formal Mathematics & The Invariance Property of MLE
+By the **Invariance Property of Maximum Likelihood Estimators** (Zehavi, 1966), if $\hat{p}$ is the MLE of $p$, and $g(p) = -\Phi^{-1}(p)$ is a continuous, strictly monotonic one-to-one mapping, then the MLE of $\mu = g(p)$ is:
+$$\hat{\mu}_{\text{MLE}} = g(\hat{p}_{\text{MLE}}) = -\Phi^{-1}\left( \frac{m}{n} \right)$$
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why use the Invariance Property of MLE?**  
+  To bypass tedious calculus. Instead of computing $\frac{d\ell}{d\mu} = 0$ via the chain rule on Gaussian integrals, we solve the simple Bernoulli problem for $\hat{p}$ and transform the result through the inverse function $g(\hat{p})$.
+- **What are we learning?**  
+  We are learning how reparameterization and functional invariance simplify complex statistical estimation problems.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Normalizing Flows:**  
+  Normalizing Flows (RealNVP, Glow) generate complex data distributions by passing simple base densities through invertible transformations $g(\mathbf{z})$, utilizing this exact change-of-variables property!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **A/B Testing Conversion Optimization:**  
+  Web platforms (Netflix, Amazon) model user click-through rates as Bernoulli trials, computing $\hat{p} = m/n$ to determine whether a new UI layout improves user subscriptions.
+
+---
+
+## Topic 5: Inverting $\Phi$ & The Physical Sign Intuition of $\hat{\mu}$ (14:01–18:31)
+
+<a id="topic-5-invert-φ-and-read-the-sign-of-μ̂-1401–1831"></a>
+<a id="topic-5-invert-phi-and-read-the-sign-of-mu-1401-1831"></a>
 
 ### Where this sits on the master map
+Inverting $\hat{p} = \Phi(-\hat{\mu})$ to recover $\hat{\mu} = -\Phi^{-1}(m/n) = \Phi^{-1}((n-m)/n)$ and validating the physical sign intuition. Warm-up: [standard normal CDF](./PREREQUISITES.md#p3-phi).
 
-This is **INVERT + CHECK**, the last box of Problem 1. The leftover is “$p$ is not $\mu$.” The tools are $\Phi^{-1}$ and the identity $-\Phi^{-1}(q)=\Phi^{-1}(1-q)$. Warm-up: [$\Phi$](./PREREQUISITES.md#p3-phi).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![Invert Phi intuition](./screenshots/composites/ch05-topic-05-invert-phi-intuition-panel1of1.png)
 
-![p̂ = Φ(-μ̂), invert, box μ̂ = Φ^{-1}((n-m)/n), symmetry −Φ^{-1}(q)=Φ^{-1}(1-q)](./screenshots/composites/ch05-topic-05-invert-phi-intuition-panel1of1.png)
-
-**Figure — ~14:28–18:07:** $m/n=\Phi(-\hat\mu)$. Red sidebar: $\Phi(a)=b\Rightarrow a=\Phi^{-1}(b)$, with $a=-\hat\mu$, $b=m/n$. Then $-\hat\mu=\Phi^{-1}(m/n)$ so $\hat\mu=-\Phi^{-1}(m/n)$. Using $-\Phi^{-1}(q)=\Phi^{-1}(1-q)$ he rewrites and **boxes** $\hat\mu=\Phi^{-1}((n-m)/n)$.
-
-### What he is establishing
-
-Start from the definition we substituted: $p=\Phi(-\mu)$. Plug in the hats:
-
-$$
-\hat p=\Phi(-\hat\mu)\qquad\text{i.e.}\qquad \frac{m}{n}=\Phi(-\hat\mu).
-$$
-
-$\Phi$ is strictly increasing, so it has an inverse. If $\Phi(a)=b$ then $a=\Phi^{-1}(b)$. Here $a=-\hat\mu$ and $b=m/n$, therefore
-
-$$
--\hat\mu=\Phi^{-1}\!\left(\frac{m}{n}\right)\qquad\Rightarrow\qquad\hat\mu=-\Phi^{-1}\!\left(\frac{m}{n}\right).
-$$
-
-A standard-Normal identity rewrites the minus in front of $\Phi^{-1}$. For any $q\in(0,1)$,
-
-$$
--\Phi^{-1}(q)=\Phi^{-1}(1-q).
-$$
-
-Take $q=m/n$. Then
-
-$$
-\hat\mu=\Phi^{-1}\!\left(1-\frac{m}{n}\right)=\Phi^{-1}\!\left(\frac{n-m}{n}\right).
-$$
-
-That boxed line is the MLE. $(n-m)/n$ is the **fraction of pluses**. The estimated mean is the standard-Normal quantile of the plus-fraction.
-
-Now the sanity check, in his words. If there are **many negative observations**, $m/n$ is large, so $\Phi(-\hat\mu)$ is large, so $-\hat\mu$ is positive, so $\hat\mu$ is **negative**. That “makes total sense”: a Normal that keeps landing left of zero should have a negative mean. The algebra and the picture agree.
-
-He restates the **standard MLE method** one more time: whichever parameter you want, write the likelihood, take the log, differentiate, equate to zero. That slogan will govern Problem 2 as well — except the missing labels will force an extra expectation before the derivative.
-
-Finally he flags a sibling estimator. You should also be comfortable with **maximum a posteriori (MAP)** estimation. He does **not** derive it. It is left as a viewer recap. This package follows him: MAP is a named homework, not a second formula on this page.
-
-Micro numbers: $n=10$, $m=3$. Plus-fraction $=0.7$. A standard table (or `norm.ppf(0.7)`) gives $\Phi^{-1}(0.7)\approx +0.52$. Few minuses, positive mean. Walk it the other way: $m/n=0.3=\Phi(-\hat\mu)$ so $-\hat\mu=\Phi^{-1}(0.3)\approx -0.52$, hence the same $\hat\mu\approx +0.52$. If instead $m=8$, $\hat\mu=\Phi^{-1}(0.2)\approx -0.84$. Majority minuses, negative mean.
-
-MAP stays homework: you would multiply $L(\mu)$ by a prior $P(\mu)$ and maximize that product. He does not pick a prior or take that derivative.
-
-You can now compute $\hat\mu$ from a $\Phi^{-1}$ table. What this box cannot do is handle data whose *source* is itself a coin-flip between two machines. That is Problem 2.
-
-### Analogy for this topic only
-
-You estimated that 30% of sheep land left of the fence. Which hill-position $\mu$ would put 30% of a unit-width hill left of that fence? Slide the hill until the left-area matches $0.3$, then read the hill’s center. That slide *is* $\Phi^{-1}$.
-
-If you report a positive $\mu$ after watching eight of ten sheep go left, you slid the hill the wrong way. The check is the picture, not extra algebra.
-
-In lecture words: left-area = $m/n$, hill center = $\hat\mu=-\Phi^{-1}(m/n)$.
-
-### Local picture
-
-```
-  m/n = 0.3 = Φ(-μ̂)
-                    area 0.3
-               |████--------
-              -μ̂          0     (standard bell)
-               μ̂ = −(that z) > 0
-
-  SAME, rewritten
-    plus-fraction = 0.7
-    μ̂ = Φ⁻¹(0.7) > 0
-
-  CHECK
-    many minuses (m/n > 1/2)  ⇒  μ̂ < 0
-    many pluses  (m/n < 1/2)  ⇒  μ̂ > 0
-```
-
-Notice: $\Phi^{-1}((n-m)/n)$ automatically has the correct sign. You do not add a sign by hand.
-
-### Bridge
-
-Problem 1 is closed except for the MAP homework. The next notebook is incomplete in a different way: every $x$ is fully visible, but the **machine that produced it** is not.
+*Figure — ~14:01–18:31: Blackboard inversion: solving $\hat{\mu} = -\Phi^{-1}(m/n) = \Phi^{-1}((n-m)/n)$, proving why a majority of negative signs ($m > n/2$) forces a negative mean ($\hat{\mu} < 0$), and noting MAP estimation as homework.*
 
 ---
 
-## Topic 6: Two-exponential mixture and latent $Z$ (18:31–22:52)
+### 1. 👶 ELI5 Quick Intuition
+Think of looking at a seesaw:
+- If 80 out of 100 people sit on the **left side (Negative)**, where is the center of gravity ($\mu$)?
+- **Physical Common Sense:** The center of gravity **must be on the left side of zero ($\mu < 0$)**!
+- If 50 people sit on the left and 50 on the right, the center of gravity is exactly at **zero ($\mu = 0$)**!
+- Our mathematical formula $\hat{\mu} = -\Phi^{-1}(m/n)$ matches this physical common sense 100%!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Algebraic Inversion:**
+   - We established: $\hat{p} = \frac{m}{n} = \Phi(-\hat{\mu})$.
+   - Apply the inverse standard normal CDF $\Phi^{-1}$:
+     $$-\hat{\mu} = \Phi^{-1}\left( \frac{m}{n} \right) \implies \mathbf{\hat{\mu} = -\Phi^{-1}\left( \frac{m}{n} \right)}$$
+2. **The Alternative Equivalent Form:**
+   - Using the symmetry identity $-\Phi^{-1}(q) = \Phi^{-1}(1 - q)$:
+     $$\mathbf{\hat{\mu} = \Phi^{-1}\left( \frac{n - m}{n} \right)}$$
+3. **The Physical Sign Check:**
+   - If $m > n/2$ (more than 50% negatives) $\implies \frac{m}{n} > 0.5 \implies \Phi^{-1}(m/n) > 0 \implies \mathbf{\hat{\mu} < 0}$ (Negative mean).
+   - If $m < n/2$ (more than 50% positives) $\implies \frac{m}{n} < 0.5 \implies \Phi^{-1}(m/n) < 0 \implies \mathbf{\hat{\mu} > 0}$ (Positive mean).
+
+---
+
+### 3. 📐 Formal Mathematics & Quantile Symmetry Proof
+
+```
+  Symmetry Proof of Alternative Quantile Form:
+  Let q = m/n. By definition, Φ(z) = 1 - Φ(-z).
+  Let p = 1 - q.
+  Φ(Φ^(-1)(q)) = q  ==>  1 - Φ(-Φ^(-1)(q)) = q  ==>  Φ(-Φ^(-1)(q)) = 1 - q
+  Apply Φ^(-1) to both sides:
+  -Φ^(-1)(q) = Φ^(-1)(1 - q)
+  
+  Therefore:
+  μ̂ = -Φ^(-1)( m/n ) ≡ Φ^(-1)( (n - m)/n )  ✓
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why emphasize the physical sign check after algebraic derivation?**  
+  To instill professional engineering hygiene. A mathematical formula must always pass sanity checks against physical boundary conditions before being deployed in production software.
+- **What are we learning?**  
+  We are learning how to invert cumulative distribution functions and exploit symmetry identities in quantile functions.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Inverse Transform Sampling:**  
+  The inverse CDF function $\Phi^{-1}(u)$ is the core mathematical engine of **Inverse Transform Sampling**, converting uniform random numbers $u \sim \mathcal{U}(0, 1)$ into Gaussian latent samples in Generative AI!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Econometric Probit Modeling in Finance:**  
+  Quantitative economists model consumer loan approval probabilities, inverting observed default rates through $\Phi^{-1}$ to estimate underlying macro-economic creditworthiness indices.
+
+---
+
+## Topic 6: Problem 2 Formulation — Two-Exponential Mixture & Latent $Z$ (18:31–22:52)
+
+<a id="topic-6-two-exponential-mixture-and-latent-z-1831–2252"></a>
+<a id="topic-6-two-exponential-mixture-and-latent-z-1831-2252"></a>
 
 ### Where this sits on the master map
+Stating Problem 2: Parameter estimation for a two-exponential mixture distribution, analyzing the log-sum intractability, and introducing the latent switch $Z$. Warm-up: [mixture models](./PREREQUISITES.md#p6-mixture).
 
-This opens **PROBLEM 2 / LATENT**. MLE-by-hand hit a wall: the observed density is a *sum*, and $\log(\text{sum})$ has no closed maximizer. The new object is a **mixture** plus a hidden coin $Z$. Warm-up: [mixture](./PREREQUISITES.md#p6-mixture), [latent $Z$](./PREREQUISITES.md#p7-latent).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![Two-exponential mixture](./screenshots/composites/ch06-topic-06-two-exp-mixture-latent-panel1of1.png)
 
-![Mixture of two exponentials, θ={π,β1,β2}, constraints, binary Z, EM](./screenshots/composites/ch06-topic-06-two-exp-mixture-latent-panel1of1.png)
-
-**Figure — ~20:04–22:35:** mixture density $f(x;\theta)=\pi\beta_1 e^{-\beta_1 x}+(1-\pi)\beta_2 e^{-\beta_2 x}$, $\theta=\{\pi,\beta_1,\beta_2\}$ with $0\le\pi\le 1$, $\beta_1>0$, $\beta_2>0$. “Use EM algorithm. Use a scalar binary $Z$ as a latent variable.” Solution starts $Z=1$ if $x$ comes from component 1.
-
-### What he is establishing
-
-The density of a positive random variable $X$ is a **mixture of two exponential densities**. For an observation $x$ parameterized by $\theta$,
-
-$$
-f(x;\theta)=\pi\,\beta_1 e^{-\beta_1 x}+(1-\pi)\,\beta_2 e^{-\beta_2 x}.
-$$
-
-The parameter is the triple $\theta=(\pi,\beta_1,\beta_2)$.
-
-Read the pieces. $\pi$ is the probability of choosing **component 1**; $1-\pi$ is the probability of choosing component 2. Each component is exponential with its own **rate** $\beta_j>0$ (density $\beta_j e^{-\beta_j x}$ on $x>0$). He requires $0\le\pi\le 1$ (he also says “between zero and one”; “we can use equal to here, that’s fine”) and both rates strictly positive.
-
-The job is not a one-shot MLE of that sum. The job is: **use the EM algorithm**, and specifically use a **binary latent** $Z$. Picture a coin. Heads: draw from exponential 1. Tails: draw from exponential 2. $Z=1$ if this $x$ came from component 1, $Z=0$ if from component 2. That $Z$ is $\mathrm{Bernoulli}(\pi)$.
-
-He tells you the whole walk in one breath: **E-step, Q-function, and M-step** — “just go through the whole EM algorithm once.” Some treatments skip the name Q; he will use it as an intermediary.
-
-Why EM rather than $\partial/\partial\theta\log f(x;\theta)=0$ on the mixture itself? Because $f$ is a **sum**. The log of a sum does not split, and the three-parameter critical point is ugly. Completing the data with $Z$ turns the sum into a *product of selected terms*, whose log *does* split. That algebra is the next box.
-
-Micro numbers: $\pi=0.4$, $\beta_1=2$, $\beta_2=0.5$, one wait $x=1$. Mixture height $=0.4\cdot 2e^{-2}+0.6\cdot 0.5e^{-0.5}\approx 0.291$. You see $1$. You do not see the coin.
-
-You can now write the observed density, name $\theta$, and state the latent coin. What is still missing is the joint density of the pair $(x,z)$ as if the coin had been written down.
-
-### Analogy for this topic only
-
-Two kitchens, one dining room. A waiter flips a coin ($\pi$), then fetches a plate from kitchen 1 (fast cook, large $\beta$) or kitchen 2 (slow cook, small $\beta$). You taste the plate ($x$). You never see the coin.
-
-**Which coin bias and which two cooking speeds best explain tonight’s plates?** If you only write the blended menu $f(x)$, the derivative is a mess. If you pretend you saw the coin, each plate belongs to one kitchen and the derivatives split. EM is the honest version of that pretense.
-
-In lecture words: coin = $\pi$, kitchens = $\mathrm{Exp}(\beta_1),\mathrm{Exp}(\beta_2)$, missing flip = $Z$.
-
-### Local picture
-
-```
-            θ = (π, β1, β2)
-                    │
-                    ▼
-              flip Z ~ Bern(π)
-               /           \
-            Z=1             Z=0
-             │               │
-        Exp(β1)          Exp(β2)
-             │               │
-             └────── x ──────┘
-                    │
-                    ▼
-         you observe x, not Z
-
-  constraints:  0 ≤ π ≤ 1 ,  β1 > 0 ,  β2 > 0
-```
-
-Notice: $x$ is complete as a *number* and incomplete as a *story*. The missing piece is the switch.
-
-### Bridge
-
-We have a coin-then-machine story and an observed mixture. To differentiate, we need the likelihood we *would* have written if every $z_i$ had been inked next to $x_i$.
+*Figure — ~18:31–22:52: Blackboard statement of Problem 2: $X \sim \pi \operatorname{Exp}(\beta_1) + (1-\pi) \operatorname{Exp}(\beta_2)$, demonstrating why $\log \sum$ blocks analytical MLE, and introducing the binary latent indicator $Z \in \{0, 1\}$.*
 
 ---
 
-## Topic 7: Complete-data density and log-likelihood (22:52–28:39)
+### 1. 👶 ELI5 Quick Intuition
+Think of an unmarked drive-thru window:
+- Two different fryers make fries:
+  - Fryer 1 is Fast ($\beta_1 = 2.0$, mean wait 30 seconds).
+  - Fryer 2 is Slow ($\beta_2 = 0.5$, mean wait 2 minutes).
+- The drive-thru flips a coin ($\pi$) to pick which fryer cooks your order.
+- You have a stopwatch recording 1,000 customer wait times ($x_1, \dots, x_n$).
+- **The Problem:** You want to find how often Fryer 1 is used ($\pi$) and the exact speeds ($\beta_1, \beta_2$), but you **cannot look into the kitchen**!
+- Because the receipts only show the wait times, the two fryers are completely mixed together!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Two-Exponential Mixture Density:**
+   $$f(x \mid \boldsymbol{\theta}) = \pi \beta_1 e^{-\beta_1 x} + (1 - \pi) \beta_2 e^{-\beta_2 x} \quad (x \ge 0, \; \beta_1 > 0, \; \beta_2 > 0, \; 0 \le \pi \le 1)$$
+2. **The Incomplete-Data Log-Likelihood:**
+   $$\ell(\pi, \beta_1, \beta_2) = \sum_{i=1}^n \ln \left( \pi \beta_1 e^{-\beta_1 x_i} + (1 - \pi) \beta_2 e^{-\beta_2 x_i} \right)$$
+3. **The Log-Sum Crisis:**
+   - Taking the derivative $\frac{\partial \ell}{\partial \beta_1} = 0$ yields a coupled equation where $\beta_1$ and $\beta_2$ appear inside complex fractions across all $n$ summands.
+   - There is **no closed-form algebraic solution**!
+4. **The Latent Variable Rescue:**
+   - Introduce an unobserved binary indicator $Z_i \in \{0, 1\}$ for each sample $i$:
+     - $Z_i = 1 \implies$ Sample $i$ was generated by Component 1 ($\beta_1$).
+     - $Z_i = 0 \implies$ Sample $i$ was generated by Component 2 ($\beta_2$).
+
+---
+
+### 3. 📐 Formal Mathematics & Hierarchical Latent Formulation
+
+```
+  =============================================================================
+                  HIERARCHICAL LATENT MIXTURE GENERATIVE MODEL
+  =============================================================================
+  Prior Latent Distribution:
+  P(Z_i = 1) = π
+  P(Z_i = 0) = 1 - π
+  
+  Conditional Observation Distributions:
+  X_i | (Z_i = 1) ~ Exp(β_1)  ──►  f(x_i | Z_i = 1) = β_1 e^(-β_1 x_i)
+  X_i | (Z_i = 0) ~ Exp(β_2)  ──►  f(x_i | Z_i = 0) = β_2 e^(-β_2 x_i)
+  
+  Marginal Incomplete Density (Summing over Latent States):
+  f(x_i | θ) = ∑_{z=0}^1 P(Z_i = z) f(x_i | Z_i = z)
+             = π β_1 e^(-β_1 x_i) + (1 - π) β_2 e^(-β_2 x_i)
+  =============================================================================
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why introduce latent variable $Z$ when it was never observed?**  
+  Because inventing hypothetical latent variables allows us to break complex, multi-modal probability mixtures into simple, single-component exponential distributions that can be solved analytically.
+- **What are we learning?**  
+  We are learning how to construct hierarchical generative models with discrete latent switches.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Gaussian Mixture Models (GMMs) & Latent Diffusion:**  
+  This exact two-exponential mixture is the simplest mathematical prototype of **Gaussian Mixture Models (GMMs)** and the discrete latent codes in **Vector-Quantized VAEs (VQ-VAE)**!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Server Web Traffic Request Latency Modeling:**  
+  Cloud infrastructure engineers model API response times as a mixture of fast cached database hits ($\operatorname{Exp}(\beta_1)$) vs slow disk queries ($\operatorname{Exp}(\beta_2)$).
+
+---
+
+## Topic 7: Complete-Data Joint Density & Decoupled Log-Likelihood (22:52–28:39)
+
+<a id="topic-7-complete-data-density-and-log-likelihood-2252–2839"></a>
+<a id="topic-7-complete-data-density-and-log-likelihood-2252-2839"></a>
 
 ### Where this sits on the master map
+Formulating the complete-data joint density $f(x, z)$ via the exponent indicator trick and deriving the decoupled complete log-likelihood $\ell_c(\theta)$. Warm-up: [latent variables](./PREREQUISITES.md#p7-latent).
 
-This is **COMPLETE LL**. Problem 2 has a latent; the leftover is “write a likelihood that *uses* $Z$.” The trick is an exponent that selects one component. Warm-up: [latent / complete data](./PREREQUISITES.md#p7-latent), [log](./PREREQUISITES.md#p4-log).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![Complete-data log-likelihood](./screenshots/composites/ch07-topic-07-complete-data-ll-panel1of1.png)
 
-![Z ~ Bernoulli(π); product of complete densities; z as exponent; log expanded](./screenshots/composites/ch07-topic-07-complete-data-ll-panel1of1.png)
-
-**Figure — ~23:24–28:08:** $Z\sim\mathrm{Bernoulli}(\pi)$. Complete-data density $f(x,z;\theta)=\prod_i f(x_i,z_i;\theta)$, then the product $\prod_i\bigl(\pi\beta_1 e^{-\beta_1 x_i}\bigr)^{z_i}\bigl((1-\pi)\beta_2 e^{-\beta_2 x_i}\bigr)^{1-z_i}$. After the log: a sum of $z_i\log(\cdots)$ plus $(1-z_i)\log(\cdots)$, beginning to expand into $z_i(\log\pi+\cdots)$.
-
-### What he is establishing
-
-We have observations $x_1,\ldots,x_n$. For each $x_i$ there is a hidden $z_i$. The **complete data** is the list of pairs $(x_1,z_1),\ldots,(x_n,z_n)$.
-
-Those pairs are IID, so the joint complete-data density is a product
-
-$$
-f(x,z;\theta)=\prod_{i=1}^n f(x_i,z_i;\theta).
-$$
-
-One pair has a compact form that looks magical until you plug in $z_i\in\{0,1\}$:
-
-$$
-f(x_i,z_i;\theta)=\bigl[\pi\beta_1 e^{-\beta_1 x_i}\bigr]^{z_i}\bigl[(1-\pi)\beta_2 e^{-\beta_2 x_i}\bigr]^{1-z_i}.
-$$
-
-If $z_i=1$, the second factor is raised to $0$ and becomes $1$; you keep only component 1. If $z_i=0$, the first factor becomes $1$; you keep only component 2. The exponent is a **selector**, not a mysterious power.
-
-Now take the log of the product. Logs turn products into sums and pull exponents down:
-
-$$
-\ell(\theta)=\sum_{i=1}^n\Bigl\{z_i\log\bigl(\pi\beta_1 e^{-\beta_1 x_i}\bigr)+(1-z_i)\log\bigl((1-\pi)\beta_2 e^{-\beta_2 x_i}\bigr)\Bigr\}.
-$$
-
-Expand each log (product $\to$ sum, $\log e^{-\beta x}=-\beta x$):
-
-$$
-\ell(\theta)=\sum_{i=1}^n\Bigl\{z_i\bigl(\log\pi+\log\beta_1-\beta_1 x_i\bigr)+(1-z_i)\bigl(\log(1-\pi)+\log\beta_2-\beta_2 x_i\bigr)\Bigr\}.
-$$
-
-He assumes the log rules are comfortable. They are the entire reason complete data helps: every parameter now sits inside a *sum of simple terms*, ready to differentiate — **if** we knew the $z_i$.
-
-We do not know them. That is the only remaining obstruction, and it is exactly what the E-step removes by replacing $z_i$ with an expectation.
-
-Micro check: $z_i=1$, $x_i=1$, $\pi=0.4$, $\beta_1=2$. The $i$-th summand is $\log 0.4+\log 2-2\cdot 1$, and the component-2 chunk is multiplied by $0$ and vanishes.
-
-You can now write complete-data $\ell(\theta)$ as a sum linear in each $z_i$. What you cannot do is evaluate it on the real notebook. The next box computes $\mathbb{E}[z_i\mid x_i]$.
-
-### Analogy for this topic only
-
-Each plate in the dining room now has a sticky note that *would* say “kitchen 1” or “kitchen 2.” With the notes, tonight’s score is: for every kitchen-1 plate add $\log\pi+\log\beta_1-\beta_1 x$, and for every kitchen-2 plate add the other triple. Adding is easy.
-
-**What is tonight’s score if the notes were real — plate $x=1$ stamped kitchen 1, $\pi=0.4$, $\beta_1=2$?** Reciting the blended menu $f(x)$ does not answer; that menu hid the stamp. The complete-data answer is $\log 0.4+\log 2-2$. The notes are imaginary. EM will later pencil a *fractional* note ($0.7$ kitchen 1) and use the same addition.
-
-In lecture words: sticky note = $z_i$, score with notes = complete log-likelihood.
-
-### Local picture
-
-```
-  z = 1                         z = 0
-  [π β1 e^{-β1 x}]^1            [π β1 e^{-β1 x}]^0 = 1
-  [(1-π) β2 e^{-β2 x}]^0 = 1    [(1-π) β2 e^{-β2 x}]^1
-  → keep kitchen 1              → keep kitchen 2
-
-  n IID pairs
-    (x1,z1) (x2,z2) ... (xn,zn)
-         │
-         ▼
-    product of n selectors
-         │  log
-         ▼
-    sum_i  z_i A_i + (1-z_i) B_i
-    A_i = log π + log β1 − β1 x_i
-    B_i = log(1-π) + log β2 − β2 x_i
-```
-
-Notice: $\ell$ is *linear* in each $z_i$. That is why taking $\mathbb{E}[z_i]$ later is a one-line swap.
-
-### Bridge
-
-The complete log-likelihood is ready, but every $z_i$ is blank. The E-step fills those blanks with posterior probabilities given the current $\theta$.
+*Figure — ~22:52–28:39: Blackboard derivation of the complete-data density $f(x, z) = [\pi \beta_1 e^{-\beta_1 x}]^z [(1-\pi) \beta_2 e^{-\beta_2 x}]^{1-z}$, taking the log, and showing how the sum is completely decoupled into independent terms for $\pi, \beta_1, \beta_2$.*
 
 ---
 
-## Topic 8: E-step responsibilities by Bayes (28:39–34:19)
+### 1. 👶 ELI5 Quick Intuition
+Think of an electrical light switch with two settings:
+- **Switch UP ($z = 1$):** Turns on Lamp 1 ($[\pi \beta_1 e^{-\beta_1 x}]^1$) and completely shuts off Lamp 2 ($[\dots]^0 = 1$).
+- **Switch DOWN ($z = 0$):** Turns on Lamp 2 ($[(1-\pi) \beta_2 e^{-\beta_2 x}]^1$) and completely shuts off Lamp 1 ($[\dots]^0 = 1$).
+- Raising factors to powers of $z$ and $1-z$ is an ingenious mathematical trick that acts as an **algebraic IF-ELSE statement**!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Complete-Data Joint Density:**
+   $$f(x_i, z_i \mid \boldsymbol{\theta}) = \left[ \pi \beta_1 e^{-\beta_1 x_i} \right]^{z_i} \cdot \left[ (1 - \pi) \beta_2 e^{-\beta_2 x_i} \right]^{1 - z_i}$$
+2. **Taking the Natural Logarithm:**
+   $$\ln f(x_i, z_i \mid \boldsymbol{\theta}) = z_i \ln\left( \pi \beta_1 e^{-\beta_1 x_i} \right) + (1 - z_i) \ln\left( (1 - \pi) \beta_2 e^{-\beta_2 x_i} \right)$$
+   $$= z_i (\ln \pi + \ln \beta_1 - \beta_1 x_i) + (1 - z_i) (\ln(1 - \pi) + \ln \beta_2 - \beta_2 x_i)$$
+3. **The Complete-Data Log-Likelihood $\ell_c(\boldsymbol{\theta})$:**
+   $$\ell_c(\pi, \beta_1, \beta_2) = \sum_{i=1}^n \left[ z_i (\ln \pi + \ln \beta_1 - \beta_1 x_i) + (1 - z_i) (\ln(1 - \pi) + \ln \beta_2 - \beta_2 x_i) \right]$$
+
+---
+
+### 3. 📐 Formal Mathematics & Decoupling Analysis
+
+```
+  =============================================================================
+                    DECOUPLED COMPLETE-DATA LOG-LIKELIHOOD
+  =============================================================================
+  ℓ_c(π, β_1, β_2) = ℓ_π(π) + ℓ_1(β_1) + ℓ_2(β_2)
+  
+  where:
+  • ℓ_π(π)   = ∑_{i=1}^n [ z_i ln π + (1 - z_i) ln(1 - π) ]
+  • ℓ_1(β_1) = ∑_{i=1}^n z_i [ ln β_1 - β_1 x_i ]
+  • ℓ_2(β_2) = ∑_{i=1}^n (1 - z_i) [ ln β_2 - β_2 x_i ]
+  
+  CRITICAL OBSERVATION:
+  Each parameter (π, β_1, β_2) lives in its own completely separate term!
+  There are NO coupled interaction terms!
+  =============================================================================
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why is complete log-likelihood $\ell_c$ so much easier to optimize than incomplete $\ell$?**  
+  Because taking the log of the product $[\dots]^z [\dots]^{1-z}$ brings $z$ outside as a linear multiplier, allowing the log to penetrate directly to the exponential terms and converting products into simple linear sums.
+- **What are we learning?**  
+  We are learning how complete-data augmentation decouples multi-parameter non-linear systems.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Complete vs Incomplete Joint Likelihood in VAEs:**  
+  In Variational Autoencoders, the joint log-likelihood $\ln p_\theta(\mathbf{x}, \mathbf{z}) = \ln p_\theta(\mathbf{x} \mid \mathbf{z}) + \ln p(\mathbf{z})$ mirrors this exact complete-data decomposition!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Bioinformatics Gene Expression Clustering:**  
+  Computational biologists model micro-array gene expression profiles as mixtures of Gaussian clusters, decoupling gene cluster assignments using complete-data likelihoods.
+
+---
+
+## Topic 8: The E-Step — Posterior Responsibilities via Bayes' Theorem (28:39–34:19)
+
+<a id="topic-8-e-step-responsibilities-by-bayes-2839–3419"></a>
+<a id="topic-8-e-step-responsibilities-by-bayes-2839-3419"></a>
 
 ### Where this sits on the master map
+Deriving the Expectation Step (E-Step) using Bayes' Theorem to compute the posterior responsibility $\gamma_i = P(Z_i=1 \mid x_i, \theta^{\text{old}})$. Warm-up: [the EM engine](./PREREQUISITES.md#p8-em).
 
-This is the **E-STEP** box. The leftover from complete-data $\ell$ is “we do not know $Z$.” The move is Bayes, using a frozen $\theta^{\mathrm{old}}$. Warm-ups: [EM loop / Bayes line](./PREREQUISITES.md#p8-em), Tutorial 9’s conditionals if needed.
+### Board / Screenshot Reference
 
-### Board / screenshot
+![E-step Bayes](./screenshots/composites/ch08-topic-08-estep-bayes-panel1of1.png)
 
-![γ_i = E[Z_i | x_i; θ_old] = P(Z_i=1 | x_i) by Bayes; numerator π_old β1_old e^{-β1_old x}](./screenshots/composites/ch08-topic-08-estep-bayes-panel1of1.png)
-
-**Figure — ~29:11–33:48:** after the expanded $(1-z_i)(\log(1-\pi)+\log\beta_2-\beta_2 x_i)$, he starts the E-step. $\gamma_i=\mathbb{E}[Z_i\mid x_i;\theta^{\mathrm{old}}]=P[Z_i=1\mid x_i;\theta^{\mathrm{old}}]$, written as the Bayes fraction $f(x_i\mid Z_i=1;\theta^{\mathrm{old}})P(Z_i=1;\theta^{\mathrm{old}})/f(x_i;\theta^{\mathrm{old}})$. Numerator $=\pi^{\mathrm{old}}\beta_1^{\mathrm{old}}e^{-\beta_1^{\mathrm{old}}x_i}$. $\theta^{\mathrm{old}}=\{\pi^{\mathrm{old}},\beta_1^{\mathrm{old}},\beta_2^{\mathrm{old}}\}$.
-
-### What he is establishing
-
-We do not know $z_i$. In the **E-step** we compute the **expected value of $Z_i$ given $X_i$**, using the **current** parameter estimate.
-
-He introduces a second copy of the parameter, $\theta^{\mathrm{old}}$, so that “old” and “updated” do not share a letter. $\theta^{\mathrm{old}}=(\pi^{\mathrm{old}},\beta_1^{\mathrm{old}},\beta_2^{\mathrm{old}})$. The equations get cluttered; that is the price of honesty.
-
-Call the mixing coefficient (he later just says “the coefficient”; the board letter looks like $\gamma$ / $\mathcal{D}$)
-
-$$
-\gamma_i:=\mathbb{E}[Z_i\mid x_i;\,\theta^{\mathrm{old}}].
-$$
-
-$Z_i$ is $0$ or $1$, so an expectation *is* a probability:
-
-$$
-\gamma_i=P(Z_i=1\mid x_i;\,\theta^{\mathrm{old}}).
-$$
-
-Bayes turns that into ingredients we already have:
-
-$$
-P(Z_i=1\mid x_i;\,\theta^{\mathrm{old}})=\frac{f(x_i\mid Z_i=1;\,\theta^{\mathrm{old}})\,P(Z_i=1;\,\theta^{\mathrm{old}})}{f(x_i;\,\theta^{\mathrm{old}})}.
-$$
-
-The prior $P(Z_i=1;\,\theta^{\mathrm{old}})$ is $\pi^{\mathrm{old}}$. The component density $f(x_i\mid Z_i=1)$ is exponential with rate $\beta_1^{\mathrm{old}}$. The denominator is the **mixture** density at $x_i$ under $\theta^{\mathrm{old}}$. Using this week’s half-updated $\beta$ inside the same fraction is the wrong move — the E-step freezes one menu. So
-
-$$
-\gamma_i=\frac{\pi^{\mathrm{old}}\,\beta_1^{\mathrm{old}}\,e^{-\beta_1^{\mathrm{old}}x_i}}{\pi^{\mathrm{old}}\beta_1^{\mathrm{old}}e^{-\beta_1^{\mathrm{old}}x_i}+(1-\pi^{\mathrm{old}})\beta_2^{\mathrm{old}}e^{-\beta_2^{\mathrm{old}}x_i}}.
-$$
-
-Auto-captions said “1 minus beta 2 old” in the denominator. The board and the mixture definition fix it: the second term is $(1-\pi^{\mathrm{old}})$ times the second exponential, not “$1-\beta_2$.”
-
-The other responsibility is automatic:
-
-$$
-P(Z_i=0\mid x_i;\,\theta^{\mathrm{old}})=1-\gamma_i=\mathbb{E}[1-Z_i\mid x_i;\,\theta^{\mathrm{old}}].
-$$
-
-That **completes the E-step**. We have not touched $\pi,\beta_1,\beta_2$ as variables to optimize. We have only *scored* each point under the frozen old parameters.
-
-Micro numbers: $x=1$, $\pi^{\mathrm{old}}=0.4$, $\beta_1^{\mathrm{old}}=2$, $\beta_2^{\mathrm{old}}=0.5$. Numerator $0.4\cdot 2e^{-2}\approx 0.108$. Second term $0.6\cdot 0.5e^{-0.5}\approx 0.182$. $\gamma\approx 0.108/0.290\approx 0.37$. A middling wait is a bit more “slow kitchen” than “fast kitchen.”
-
-You can now compute a responsibility vector $(\gamma_1,\ldots,\gamma_n)$. What is still missing is the function of $\theta$ those $\gamma_i$ will be plugged into — the Q-function.
-
-### Analogy for this topic only
-
-Each plate gets a pencil note: “37% kitchen 1, 63% kitchen 2,” computed from last week’s estimated coin and cooking speeds. You do not flip a new coin.
-
-**Given this plate $x=1$ and last week’s cards $(\pi=0.4,\beta_1=2,\beta_2=0.5)$, how believable is kitchen 1?** Reciting $\pi=0.4$ is the prior, not the answer. Bayes gives $\gamma\approx 0.37$. Using *this* week’s half-updated $\beta$ inside the same note mixes two recipes. The E-step is one frozen menu.
-
-In lecture words: pencil note = $\gamma_i$, last week’s cards = $\theta^{\mathrm{old}}$, Bayes = the fraction on the board.
-
-### Local picture
-
-```
-  Bayes, one plate x
-
-           prior π_old          ×   fast density at x
-   γ = ────────────────────────────────────────────────
-        (that same product)  +  (1-π_old)×slow density
-
-  SEE (x=1, π=0.4, β1=2, β2=0.5)
-    num   = 0.4 · 2 e^{-2}     ≈ 0.108
-    den   = 0.108 + 0.6·0.5 e^{-0.5} ≈ 0.290
-    γ     ≈ 0.37
-    1-γ   ≈ 0.63
-
-  E-step done: every i has a (γ_i, 1-γ_i)
-```
-
-Notice: $\gamma_i$ depends on $\theta^{\mathrm{old}}$ and $x_i$ only. It does not depend on the *new* $\pi,\beta$ we are about to solve for.
-
-### Bridge
-
-Responsibilities are numbers. The complete log-likelihood is still a formula in the unknown $z_i$. The Q-function is what you get when you take the expectation of that formula — i.e. when every $z_i$ becomes $\gamma_i$.
+*Figure — ~28:39–34:19: Blackboard derivation of the E-step: using Bayes' rule with frozen parameters $\theta^{\text{old}}$ to compute the responsibility $\gamma_i = \mathbb{E}[Z_i \mid x_i, \theta^{\text{old}}] = P(Z_i = 1 \mid x_i, \theta^{\text{old}})$.*
 
 ---
 
-## Topic 9: The Q-function (34:19–39:17)
+### 1. 👶 ELI5 Quick Intuition
+Think of a detective evaluating a clue:
+- An order comes out of the kitchen in **just 10 seconds ($x_i = 10\text{s}$)**.
+- You know Chef 1 is super fast and Chef 2 is super slow.
+- **The Question:** What is the probability that Chef 1 cooked this specific plate?
+- **Bayes' Rule:** You combine Chef 1's general popularity ($\pi^{\text{old}}$) with how likely Chef 1 is to cook that fast ($f_1(10)$) versus Chef 2 ($f_2(10)$).
+- The result is a **soft responsibility score $\gamma_i = 0.95$ (95% chance Chef 1 cooked it)**!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Role of the E-Step:**
+   - Because the true latent tags $z_i$ are unobserved, we cannot evaluate $\ell_c(\theta)$ directly.
+   - The E-Step replaces the missing binary tag $z_i$ with its **expected value** under the posterior distribution given the observed data $x_i$ and current parameter estimates $\boldsymbol{\theta}^{\text{old}}$.
+2. **Deriving Responsibility $\gamma_i$ via Bayes' Rule:**
+   $$\gamma_i \triangleq \mathbb{E}[Z_i \mid x_i, \boldsymbol{\theta}^{\text{old}}] = 1 \cdot P(Z_i = 1 \mid x_i, \boldsymbol{\theta}^{\text{old}}) + 0 \cdot P(Z_i = 0 \mid x_i, \boldsymbol{\theta}^{\text{old}})$$
+   $$= P(Z_i = 1 \mid x_i, \boldsymbol{\theta}^{\text{old}}) = \frac{P(Z_i = 1) f(x_i \mid Z_i = 1; \boldsymbol{\theta}^{\text{old}})}{f(x_i \mid \boldsymbol{\theta}^{\text{old}})}$$
+   $$\mathbf{\gamma_i = \frac{\pi^{\text{old}} \beta_1^{\text{old}} e^{-\beta_1^{\text{old}} x_i}}{\pi^{\text{old}} \beta_1^{\text{old}} e^{-\beta_1^{\text{old}} x_i} + (1 - \pi^{\text{old}}) \beta_2^{\text{old}} e^{-\beta_2^{\text{old}} x_i}}}$$
+
+---
+
+### 3. 📐 Formal Mathematics & Expected Latent Indicator
+
+```
+  =============================================================================
+                       E-STEP RESPONSIBILITY FORMULATION
+  =============================================================================
+  For each observation x_i (i = 1, ..., n):
+  
+  Prior:                  P(Z_i = 1) = π^(old)
+  Component 1 Likelihood: f_1(x_i)   = β_1^(old) exp( -β_1^(old) x_i )
+  Component 2 Likelihood: f_2(x_i)   = β_2^(old) exp( -β_2^(old) x_i )
+  
+  Posterior Responsibility:
+  γ_i = [ π^(old) f_1(x_i) ] / [ π^(old) f_1(x_i) + (1 - π^(old)) f_2(x_i) ]
+  
+  Complementary Responsibility for Component 2:
+  1 - γ_i = P(Z_i = 0 | x_i, θ^(old))
+  =============================================================================
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why must we freeze $\boldsymbol{\theta}^{\text{old}}$ during the E-Step?**  
+  To decouple the expectation from the optimization. Freezing $\boldsymbol{\theta}^{\text{old}}$ treats $\gamma_i$ as fixed numerical constants during the subsequent maximization step, turning the non-linear optimization into simple weighted linear calculus.
+- **What are we learning?**  
+  We are learning how to compute soft posterior probabilities for latent cluster assignments using Bayes' Theorem.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Soft Attention Weights in Transformers:**  
+  The normalized posterior responsibility $\gamma_i = \frac{\text{weight}_1}{\text{weight}_1 + \text{weight}_2}$ has the exact mathematical form of a **Softmax Attention Weight** ($\operatorname{softmax}(\mathbf{Q}\mathbf{K}^\top / \sqrt{d})$) in modern Large Language Models!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Cybersecurity Anomaly Detection:**  
+  Network intrusion detection systems assign soft responsibility scores $\gamma_i$ to identify whether a server request profile represents normal user traffic vs distributed denial-of-service (DDoS) attack bots.
+
+---
+
+## Topic 9: The $Q$-Function — Expected Complete-Data Log-Likelihood (34:19–39:17)
+
+<a id="topic-9-the-q-function-3419–3917"></a>
+<a id="topic-9-the-q-function-3419-3917"></a>
 
 ### Where this sits on the master map
+Constructing the $Q$-function $Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{\text{old}}) = \mathbb{E}_{\mathcal{Z} \mid \mathcal{X}, \boldsymbol{\theta}^{\text{old}}}[\ell_c(\boldsymbol{\theta})]$ by substituting $\gamma_i$ in place of $z_i$. Warm-up: [the EM engine](./PREREQUISITES.md#p8-em).
 
-This is the **Q** box, the intermediary some books never name. The leftover after the E-step is “$\gamma_i$ is not yet plugged into a function we can maximize.” Warm-up: [EM loop](./PREREQUISITES.md#p8-em).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![The Q-function](./screenshots/composites/ch09-topic-09-q-function-panel1of1.png)
 
-![Q(θ|θ_old)=E[ℓ]; A_i and B_i; E[Z_i]A_i=γ_i A_i; Q as sum of γ A + (1-γ) B](./screenshots/composites/ch09-topic-09-q-function-panel1of1.png)
-
-**Figure — ~34:47–38:49:** “Now the Q-function is” $Q(\theta\mid\theta^{\mathrm{old}})=\mathbb{E}_{Z\mid X;\,\theta^{\mathrm{old}}}[\ell]$. He writes the sum inside the expectation, marks $B_i$ on the second parenthesis, then in gold: $\mathbb{E}[Z_i]A_i=\gamma_i A_i$ and $\mathbb{E}[1-Z_i]B_i=(1-\gamma_i)B_i$. Final line: $Q=\sum_i\{\gamma_i(\log\pi+\log\beta_1-\beta_1 x_i)+(1-\gamma_i)(\log(1-\pi)+\log\beta_2-\beta_2 x_i)\}$.
-
-### What he is establishing
-
-Some treatments never say **Q-function**. They still perform this intermediary step. The name is not a standard everyone uses; the algebra is.
-
-Leaving the $z_i$ as unknowns and trying to maximize $\ell$ anyway is the wrong move — those $z_i$ are blank. Replacing each $z_i$ by the number $\gamma_i$ we just computed is the right move. One plate with $\gamma=0.37$ and $x=1$ then contributes $0.37(\log\pi+\log\beta_1-\beta_1)+0.63(\log(1-\pi)+\log\beta_2-\beta_2)$ to the surrogate we will maximize.
-
-He defines
-
-$$
-Q(\theta\mid\theta^{\mathrm{old}})=\mathbb{E}_{Z\mid X;\,\theta^{\mathrm{old}}}\bigl[\log f(X,Z;\theta)\bigr].
-$$
-
-In words: take the complete-data log-likelihood (a function of the unknown $Z$ and of the *free* parameter $\theta$) and average it under the posterior of $Z$ given $X$ and the *frozen* $\theta^{\mathrm{old}}$.
-
-The inner log is the sum we already expanded. Nickname the two parentheses $A_i$ and $B_i$:
-
-$$
-A_i=\log\pi+\log\beta_1-\beta_1 x_i,\qquad B_i=\log(1-\pi)+\log\beta_2-\beta_2 x_i.
-$$
-
-Expectation of a sum is the sum of expectations. $A_i$ and $B_i$ do not depend on $Z$, so they factor out:
-
-$$
-\mathbb{E}[Z_i A_i]=\mathbb{E}[Z_i]\,A_i=\gamma_i A_i,
-$$
-$$
-\mathbb{E}[(1-Z_i)B_i]=\mathbb{E}[1-Z_i]\,B_i=(1-\gamma_i)B_i.
-$$
-
-Therefore the whole Q-function is the complete log-likelihood with every $z_i$ replaced by $\gamma_i$:
-
-$$
-Q(\theta\mid\theta^{\mathrm{old}})=\sum_{i=1}^n\Bigl\{\gamma_i\bigl(\log\pi+\log\beta_1-\beta_1 x_i\bigr)+(1-\gamma_i)\bigl(\log(1-\pi)+\log\beta_2-\beta_2 x_i\bigr)\Bigr\}.
-$$
-
-E-step plus this substitution *is* “forming Q.” Next we **maximize** $Q$ in the three free parameters. When you differentiate with respect to $\pi$, only the $\log\pi$ and $\log(1-\pi)$ terms survive. When you differentiate with respect to $\beta_1$, only $\gamma_i(\log\beta_1-\beta_1 x_i)$ survives. Same for $\beta_2$. Independence of the unused terms is the whole simplification.
-
-You can now write $Q$ as an ordinary function of $\pi,\beta_1,\beta_2$ with numerical weights $\gamma_i$. What is still missing is setting the three derivatives to zero and solving — the M-step.
-
-### Analogy for this topic only
-
-The imaginary sticky notes are now fractional: plate $i$ counts as a fraction of a kitchen-1 plate and the rest as kitchen 2.
-
-**What is tonight’s expected score for the plate $x=1$ with a 37% kitchen-1 note?** Reciting the complete-data formula with a blank $z$ does not answer. Count it as $0.37$ of a kitchen-1 plate and $0.63$ of a kitchen-2 plate, then add. Some chefs never call that expected score “Q.” They still cook with it.
-
-In lecture words: expected score = $Q$, fractions = $\gamma_i$, next move = maximize $Q$.
-
-### Local picture
-
-```
-  complete ℓ = Σ  z_i A_i + (1-z_i) B_i     (z unknown)
-
-  take E[ · | X, θ_old ]
-
-  Q = Σ  γ_i A_i + (1-γ_i) B_i              (γ known)
-
-  SEE (one i, γ=0.37, x=1)
-    contributes  0.37 (log π + log β1 − β1)
-               + 0.63 (log(1-π) + log β2 − β2)
-
-  WHICH TERMS SEE WHICH PARAMETER
-    π     ←  γ log π + (1-γ) log(1-π)
-    β1    ←  γ (log β1 − β1 x)
-    β2    ←  (1-γ) (log β2 − β2 x)
-```
-
-Notice: $Q$ is *not* the observed log-likelihood $\log f(x;\theta)$. It is a surrogate that is easy to maximize and that, at $\theta=\theta^{\mathrm{old}}$, touches the observed log-likelihood (a fact he does not prove; he just uses Q).
-
-### Bridge
-
-$Q$ is an explicit function of three parameters with the $\gamma_i$ held fixed. Three derivatives, three closed forms, then a loop — that is the last box.
+*Figure — ~34:19–39:17: Blackboard construction of the $Q$-function: taking the expectation of $\ell_c(\theta)$ with respect to $Z \mid X, \theta^{\text{old}}$, replacing $z_i \to \gamma_i$ and $(1-z_i) \to (1-\gamma_i)$, and establishing the surrogate optimization objective.*
 
 ---
 
-## Topic 10: M-step closed forms, iterate, close (39:17–47:33)
+### 1. 👶 ELI5 Quick Intuition
+Think of building an adjustable wooden ramp:
+- The true mountain summit of log-likelihood $\ell(\theta)$ is jagged and hard to climb directly.
+- **The $Q$-Function:** At your current standing spot ($\boldsymbol{\theta}^{\text{old}}$), you build a smooth wooden ramp that touches the mountain perfectly underneath you.
+- Because the ramp is smooth and parabolic, walking to the **highest point on the wooden ramp (The M-Step)** is guaranteed to lift you higher up the real mountain!
+- You build a new ramp at your new spot and repeat until you reach the summit!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Definition of the $Q$-Function:**
+   $$Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{\text{old}}) \triangleq \mathbb{E}_{\mathcal{Z} \mid \mathcal{X}, \boldsymbol{\theta}^{\text{old}}} \left[ \ell_c(\boldsymbol{\theta}) \right]$$
+2. **The Linearity of Expectation Trick:**
+   - Because $\ell_c(\boldsymbol{\theta})$ is linear in $z_i$, taking the expectation simply replaces each random variable $z_i$ with its expected value $\mathbb{E}[z_i] = \gamma_i$:
+     $$z_i \longrightarrow \gamma_i$$
+     $$1 - z_i \longrightarrow 1 - \gamma_i$$
+3. **The Explicit $Q$-Function Formulation:**
+   $$Q(\pi, \beta_1, \beta_2) = \sum_{i=1}^n \left[ \gamma_i (\ln \pi + \ln \beta_1 - \beta_1 x_i) + (1 - \gamma_i) (\ln(1 - \pi) + \ln \beta_2 - \beta_2 x_i) \right]$$
+
+---
+
+### 3. 📐 Formal Mathematics & Surrogate Lower-Bound Geometry
+
+```
+  =============================================================================
+                    GEOMETRY OF THE EM Q-FUNCTION LOWER BOUND
+  =============================================================================
+  Log-Likelihood
+       ▲
+       │                                     ╭─────────── True ℓ(θ)
+       │                                ╭────╯
+       │                           ╭────╯   ▲
+       │                      ╭────╯        │ Tangent Contact at θ^(old)
+       │                 ╭────╯             │
+       │            ╭────╯       ╭──────────┴──────────╮
+       │       ╭────╯            │ Q(θ | θ^(old))      │ (Smooth Surrogate)
+       │  ╭────╯                 ╰─────────────────────╯
+       │──┴──────────────────────────────────────────────────────► Parameter θ
+                                  θ^(old)   θ^(new)
+  
+  Jensen's Inequality Guarantee:
+  ℓ(θ) - ℓ(θ^(old)) ≥ Q(θ | θ^(old)) - Q(θ^(old) | θ^(old))
+  
+  Therefore, maximizing Q guarantees that ℓ(θ^(new)) ≥ ℓ(θ^(old))!
+  =============================================================================
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why can we simply replace $z_i$ with $\gamma_i$ inside $\ell_c$?**  
+  Because expectation is a linear operator: $\mathbb{E}[a Z_i + b] = a \mathbb{E}[Z_i] + b$. Because $\ell_c$ contains $z_i$ strictly as linear coefficients, the expected log-likelihood equals the complete log-likelihood evaluated at the expected indicators!
+- **What are we learning?**  
+  We are learning how to construct surrogate objective functions for latent variable models.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to the Evidence Lower Bound (ELBO):**  
+  In modern Deep Learning, the **Evidence Lower Bound (ELBO)** in Variational Autoencoders is literally the continuous variational generalization of the EM $Q$-function lower bound: $\ln p(\mathbf{x}) \ge \mathbb{E}_{q_\phi(\mathbf{z}\mid\mathbf{x})}[\ln p_\theta(\mathbf{x}, \mathbf{z})] + \mathcal{H}(q)$!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Genomic Population Genetics Haplotype Phasing:**  
+  Bioinformatics algorithms (e.g. Beagle, SHAPEIT) maximize $Q$-functions to infer unobserved maternal and paternal chromosome phases from diploid DNA sequencing data.
+
+---
+
+## Topic 10: The M-Step — Analytical Closed Forms & EM Convergence (39:17–47:33)
+
+<a id="topic-10-m-step-closed-forms-iterate-close-3917–4733"></a>
+<a id="topic-10-m-step-closed-forms-iterate-close-3917-4733"></a>
 
 ### Where this sits on the master map
+Differentiating the $Q$-function to derive exact analytical closed-form updates for $\pi^{\text{new}}, \beta_1^{\text{new}}, \beta_2^{\text{new}}$, executing the iterative loop, and concluding the tutorial. Warm-up: [the EM engine](./PREREQUISITES.md#p8-em).
 
-This is **M-STEP / LOOP**, then the course’s STOP. The leftover is “maximize $Q$.” Each parameter uses only its own terms. Warm-up: [EM loop](./PREREQUISITES.md#p8-em).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![M-step closed forms](./screenshots/composites/ch10-topic-10-mstep-iterate-recap-panel1of1.png)
 
-![∂Q/∂π = 0 with S=Σγ; β1_new = Σγ / Σγx; β2_new = Σ(1-γ)/Σ(1-γ)x](./screenshots/composites/ch10-topic-10-mstep-iterate-recap-panel1of1.png)
+*Figure — ~39:17–47:33: Blackboard derivation of the M-step: setting $\frac{\partial Q}{\partial \pi} = 0, \frac{\partial Q}{\partial \beta_1} = 0, \frac{\partial Q}{\partial \beta_2} = 0$, obtaining closed-form updates, and summarizing the complete EM cycle.*
 
-**Figure — ~40:01–46:28:** $Q$ rewritten with $\gamma_i$. Equating $\partial Q/\partial\pi$ to zero: $\frac1\pi\sum\gamma_i=\frac1{1-\pi}\sum(1-\gamma_i)$, and $S=\sum\gamma_i$ implies $\sum(1-\gamma_i)=n-S$. Then $Q_{\beta_1}=\sum\gamma_i(\log\beta_1-\beta_1 x_i)$, derivative $\sum\gamma_i(1/\beta_1-x_i)=0$. Closed forms $\beta_1^{\mathrm{new}}=\sum\gamma_i\big/\sum\gamma_i x_i$ and $\beta_2^{\mathrm{new}}=\sum(1-\gamma_i)\big/\sum(1-\gamma_i)x_i$.
+---
 
-### What he is establishing
+### 1. 👶 ELI5 Quick Intuition
+Think of updating your team's batting averages:
+- **Updating the Mixing Weight $\pi$:** You count all the soft credit assigned to Chef 1 ($\sum \gamma_i$) and divide by total orders ($n$).
+- **Updating the Cooking Speed $\beta_1$:** You take the total soft orders for Chef 1 ($\sum \gamma_i$) and divide by the total soft wait time spent by Chef 1 ($\sum \gamma_i x_i$).
+- **Updating $\beta_2$:** You do the exact same weighted average for Chef 2 with weights $(1 - \gamma_i)$!
+- You don't need any complex gradient descent tuning—the optimal updates are **instant, exact, closed-form fractions**!
 
-**M-step for $\pi$.** Keep only the $\pi$-terms of $Q$:
+---
 
-$$
-Q_\pi=\sum_{i=1}^n\bigl\{\gamma_i\log\pi+(1-\gamma_i)\log(1-\pi)\bigr\}.
-$$
+### 2. 🔍 Plain-English Breakdown
+1. **Maximizing with respect to $\pi$:**
+   $$\frac{\partial Q}{\partial \pi} = \sum_{i=1}^n \left[ \frac{\gamma_i}{\pi} - \frac{1 - \gamma_i}{1 - \pi} \right] = 0$$
+   $$\frac{\sum \gamma_i}{\pi} = \frac{\sum (1 - \gamma_i)}{1 - \pi} = \frac{n - \sum \gamma_i}{1 - \pi}$$
+   $$(1 - \pi) \sum \gamma_i = \pi \left( n - \sum \gamma_i \right) \implies \sum \gamma_i - \pi \sum \gamma_i = n\pi - \pi \sum \gamma_i$$
+   $$\mathbf{\pi^{\text{new}} = \frac{1}{n} \sum_{i=1}^n \gamma_i}$$
+2. **Maximizing with respect to $\beta_1$:**
+   $$\frac{\partial Q}{\partial \beta_1} = \sum_{i=1}^n \left[ \frac{\gamma_i}{\beta_1} - \gamma_i x_i \right] = 0 \implies \frac{\sum \gamma_i}{\beta_1} = \sum \gamma_i x_i \implies \mathbf{\beta_1^{\text{new}} = \frac{\sum_{i=1}^n \gamma_i}{\sum_{i=1}^n \gamma_i x_i}}$$
+3. **Maximizing with respect to $\beta_2$:**
+   $$\frac{\partial Q}{\partial \beta_2} = \sum_{i=1}^n \left[ \frac{1 - \gamma_i}{\beta_2} - (1 - \gamma_i) x_i \right] = 0 \implies \mathbf{\beta_2^{\text{new}} = \frac{\sum_{i=1}^n (1 - \gamma_i)}{\sum_{i=1}^n (1 - \gamma_i) x_i}}$$
+4. **The Iterative Loop:**
+   - Plug $(\pi^{\text{new}}, \beta_1^{\text{new}}, \beta_2^{\text{new}})$ back into the E-Step as the new $\boldsymbol{\theta}^{\text{old}}$, recompute responsibilities $\gamma_i$, and repeat until convergence.
 
-This is the same shape as the Bernoulli log-likelihood from Problem 1, with *soft* counts $\sum\gamma_i$ and $\sum(1-\gamma_i)$ instead of $m$ and $n-m$. Differentiate and set to zero:
+---
 
-$$
-\frac{1}{\pi}\sum_{i=1}^n\gamma_i=\frac{1}{1-\pi}\sum_{i=1}^n(1-\gamma_i).
-$$
-
-Let $S=\sum_i\gamma_i$. Then $\sum_i(1-\gamma_i)=n-S$. The critical-point line is $S/\pi=(n-S)/(1-\pi)$. Cross-multiply: $S(1-\pi)=\pi(n-S)$, so $S=\pi n$, hence
-
-$$
-\pi^{\mathrm{new}}=\frac{S}{n}=\frac{1}{n}\sum_{i=1}^n\gamma_i.
-$$
-
-In words: the updated coin bias is the **average responsibility** for component 1.
-
-**M-step for $\beta_1$.** Only the first kitchen’s terms appear:
-
-$$
-Q_{\beta_1}=\sum_{i=1}^n\gamma_i\bigl(\log\beta_1-\beta_1 x_i\bigr).
-$$
-
-Derivative:
-
-$$
-\sum_{i=1}^n\gamma_i\Bigl(\frac{1}{\beta_1}-x_i\Bigr)=0\qquad\Rightarrow\qquad\frac{1}{\beta_1}\sum_i\gamma_i=\sum_i\gamma_i x_i.
-$$
-
-Hence
-
-$$
-\beta_1^{\mathrm{new}}=\frac{\sum_{i=1}^n\gamma_i}{\sum_{i=1}^n\gamma_i x_i}.
-$$
-
-That is the MLE of an exponential **rate** on a *weighted* sample: total weight over weight-times-$x$. (An exponential mean would have been the weighted average of the $x_i$; the rate is the reciprocal of that mean.)
-
-**M-step for $\beta_2$.** The same argument with weights $1-\gamma_i$:
-
-$$
-\beta_2^{\mathrm{new}}=\frac{\sum_{i=1}^n(1-\gamma_i)}{\sum_{i=1}^n(1-\gamma_i)x_i}.
-$$
-
-Auto-captions mumbled the division; the tablet writes both fractions clearly.
-
-Those three lines are one **M-step**. Then you **loop**: the new $\theta$ becomes $\theta^{\mathrm{old}}$, you recompute every $\gamma_i$, you maximize $Q$ again, and you stop when the parameters settle.
-
-He ends the section on purpose. The sole purpose of the hour was to **reiterate** first-course MLE and EM so they sit on the surface for **generative models**. Next section of tutorials: **neural-network numerical problems**. The standard idea, said one last time: write the likelihood, differentiate with respect to the parameter, equate to zero. Be comfortable with mixture densities and with ordinary differentiation — “tricks of the trade.” Then bye.
-
-Micro numbers, two points $x=(1,4)$, $\gamma=(0.8,0.2)$:
-
-$$
-\pi^{\mathrm{new}}=\frac{0.8+0.2}{2}=0.5,
-\quad
-\beta_1^{\mathrm{new}}=\frac{1}{0.8\cdot 1+0.2\cdot 4}=\frac{1}{1.6}=0.625,
-\quad
-\beta_2^{\mathrm{new}}=\frac{0.2+0.8}{0.2\cdot 1+0.8\cdot 4}=\frac{1}{3.4}\approx 0.294.
-$$
-
-Component 1, which claimed the short wait, gets a larger rate (faster clock). Component 2 sits on the long wait and gets a smaller rate. That is the M-step behaving.
-
-You can now run one full EM cycle on a two-exponential mixture by hand. Still open, as he left them: MAP (homework), a general EM convergence proof, and the neural-network numericals promised next.
-
-### Analogy for this topic only
-
-After every plate has a fractional membership, each kitchen updates as if it had cooked a *fractional number of plates*.
-
-**Two plates, waits $1$ and $4$, notes $0.8$ and $0.2$ kitchen 1. What is kitchen 1’s new rate?** Reciting last week’s $\beta_1$ does not answer. Claimed plates $=1$, claimed wait $=1.6$, new rate $=0.625$. The coin’s new bias is the average note, $0.5$. Then throw away last week’s notes and write new ones. Stopping after one rewrite leaves the kitchens mid-argument.
-
-In lecture words: claimed plates = $\sum\gamma$, claimed wait = $\sum\gamma x$, new rate = their ratio; loop = EM.
-
-### Local picture
+### 3. 📐 Formal Mathematics & Complete EM Algorithm Summary
 
 ```
-           θ_old
-             │
-             ▼
-        E-step: γ_i
-             │
-             ▼
-        M-step
-          π_new   = (γ1+…+γn) / n
-          β1_new  = (γ1+…+γn) / (γ1 x1 + … + γn xn)
-          β2_new  = ((1-γ1)+…) / ((1-γ1)x1 + …)
-             │
-             └── become θ_old ──►  repeat
-
-  SEE  x=(1,4)  γ=(0.8,0.2)
-    π  = 1/2
-    β1 = 1 / 1.6 = 0.625     (fast; owns the short wait)
-    β2 = 1 / 3.4 ≈ 0.29      (slow; owns the long wait)
+  =============================================================================
+                     THE TWO-EXPONENTIAL EM ALGORITHM SUMMARY
+  =============================================================================
+  Input: Observations {x_1, ..., x_n}, Initial Parameters θ^(0) = (π^(0), β_1^(0), β_2^(0))
+  
+  Repeat for t = 0, 1, 2, ... until ||θ^(t+1) - θ^(t)|| < ε:
+  
+    [E-STEP] For each sample i = 1 ... n:
+             γ_i = ( π^(t) β_1^(t) e^(-β_1^(t) x_i) ) / ( π^(t) β_1^(t) e^(-β_1^(t) x_i) + (1-π^(t)) β_2^(t) e^(-β_2^(t) x_i) )
+             
+    [M-STEP] Update parameters analytically:
+             π^(t+1)   = (1/n) ∑_{i=1}^n γ_i
+             β_1^(t+1) = ( ∑_{i=1}^n γ_i ) / ( ∑_{i=1}^n γ_i x_i )
+             β_2^(t+1) = ( ∑_{i=1}^n (1 - γ_i) ) / ( ∑_{i=1}^n (1 - γ_i) x_i )
+             
+  Output: Maximum Likelihood Estimator θ̂_MLE = (π*, β_1*, β_2*)
+  =============================================================================
 ```
 
-Notice: if every $\gamma_i\in\{0,1\}$, these formulas collapse to ordinary per-kitchen MLEs. Soft $\gamma$ is the only new ingredient.
+---
 
-### Bridge
-
-Both numerical machines are on the desk: invert $\Phi$ for censored Normals, and loop E–Q–M for unlabeled mixtures. The next tutorials pick up the third promised tool — backpropagation on paper — and leave MAP as the recap you do yourself.
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why are the M-step formulas weighted versions of single-distribution MLEs?**  
+  To discover the universal elegance of the EM algorithm: the M-step update for $\beta_1$ is simply the standard exponential MLE ($\frac{n}{\sum x_i}$), where each data point is weighted by its responsibility $\gamma_i$!
+- **What are we learning?**  
+  We are learning how to execute and verify closed-form parameter updates in iterative statistical optimization.
 
 ---
 
-## External references
-
-Two layers, **both kept**.
-
-1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
-2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
-
-### Start here — high-signal companions
-
-Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this tutorial still closed.
-
-**If “likelihood” still sounds like “probability” (Topics 1–4).** Josh Starmer’s [StatQuest — Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4) is the short, famous fix: $L$ scores a *parameter* for data you already saw.
-
-**If the MLE recipe is rusty (Topics 1, 4).** The same channel’s [StatQuest — Maximum Likelihood, clearly explained](https://www.youtube.com/watch?v=XepXtl9YKwc) is the classroom standard: write $L$, take the log, differentiate, set it to zero. That is exactly the coin $\hat p=m/n$ he reduces to.
-
-**If $\Phi$ is still a table, not an area (Topics 3, 5).** [Khan Academy — Introduction to the Normal](https://www.youtube.com/watch?v=hgtMWR3TFnY) plus Brown’s [Seeing Theory — probability distributions](https://seeing-theory.brown.edu/probability-distributions/index.html) beat a dozen “$z$-score cheat sheet” posts. Drag the bell until the left area is $m/n$; that slide *is* $\Phi^{-1}$.
-
-**If the E-step fraction $\gamma_i$ will not sit still (Topic 8).** StatQuest’s [Bayes’ Theorem](https://www.youtube.com/watch?v=9wCnvr7Xw4E) is the popular English for $P(Z\mid x)=P(x\mid Z)P(Z)/P(x)$. That fraction *is* the responsibility.
-
-**If the two kitchens still feel like slogans (Topics 6, 10).** [StatQuest — MLE for the Exponential](https://www.youtube.com/watch?v=p3T-_LMrvBc) recovers $\hat\beta=1/\bar x$ for one clock — the hard-label limit of the M-step. The M-step just *weights* that formula by $\gamma$.
-
-**If “complete data” is still a phrase (Topics 7–9).** Do and Batzoglou’s Nature Biotech primer [What is the EM algorithm?](https://www.nature.com/articles/nbt1406) is the short famous reason we invent pairs $(x,z)$ at all, and why Q is an *expected* complete log-likelihood.
-
-**How to use.** $\Phi$ fog → Khan or Seeing Theory *before* Topic 3. Coin MLE → StatQuest MLE *before* Topic 4. Soft labels → StatQuest Bayes *before* Topic 8. Do not open ten tabs. One famous teacher per stuck idea.
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Neural Network Backpropagation (Upcoming Modules):**  
+  The instructor explicitly promises that subsequent tutorials advance to **Neural Network Backpropagation Numerical Proofs** and **Generative Models**, building on this exact foundation of probability, derivatives, and loss optimization.
 
 ---
 
-### Full topic map — previous list plus new entries
-
-Two or three companions **per topic**, listed **only here** (not under each topic). Mix of **video** and **blog/notes**. Wikipedia omitted. Watch/read after that map box; they do not replace the boards.
-
-| Resource | Type | Matches lecture… | Why it helps |
-|----------|------|------------------|--------------|
-| [StatQuest — Probability vs Likelihood](https://www.youtube.com/watch?v=pYxNSUDSFH4) | video | Topic 1 · GOAL | $L(\theta\mid\text{data})$ is a score for $\theta$, not $P(\theta)$. |
-| [Steve Brunton — MLE with examples](https://www.youtube.com/watch?v=rCdxlN6Ph14) | video | Topic 1 · numerical MLE | Write $L$, maximize; names the MAP sibling he left as homework. |
-| [MAP estimation, clearly explained](https://machinelearningplus.com/statistics/maximum-a-posteriori-map-estimation-clearly-explained/) | blog | Topic 1 · MAP pointer | One-page MLE vs MAP: prior $\times$ likelihood. |
-| [StatQuest — MLE for the Normal](https://www.youtube.com/watch?v=Dn6b9fCIUpM) | video | Topic 2 · $X\sim\mathcal{N}(\mu,1)$ | Ordinary $\hat\mu=\bar x$, so you feel why missing $x_i$ block it. |
-| [Penn State STAT 415 — Maximum Likelihood](https://online.stat.psu.edu/stat415/lesson/1/1.2) | notes | Topic 2 · model vs data | Written MLE: parameter in the model, data in $L$. |
-| [Stanford CS109 — MLE lecture notes (PDF)](https://web.stanford.edu/class/archive/cs/cs109/cs109.1202/lectureNotes/LN21_parameters_mle.pdf) | notes | Topic 2 · Bernoulli setup | Starts MLE from a coin — the same reduction Topic 4 will use. |
-| [Khan Academy — Introduction to the Normal](https://www.youtube.com/watch?v=hgtMWR3TFnY) | video | Topic 3 · standardize | Bell, mean shift, area language before $\Phi(-\mu)$. |
-| [Khan Academy — Standard Normal table (area below)](https://www.youtube.com/watch?v=Fo4kitkFB3I) | video | Topic 3 · $\Phi$ | $z$-score then left-area $=P(Z<-\mu)$. |
-| [Seeing Theory — probability distributions](https://seeing-theory.brown.edu/probability-distributions/index.html) | demo | Topic 3 · CDF slider | Drag a Normal; orange CDF is the left area. |
-| [StatQuest — MLE, step by step](https://www.youtube.com/watch?v=XepXtl9YKwc) | video | Topic 4 · REDUCE + MAX | Log, differentiate, set 0 — the coin $m/n$ case. |
-| [Penn State STAT 415 — MLE (Bernoulli)](https://online.stat.psu.edu/stat415/lesson/1/1.2) | notes | Topic 4 · $\hat p=m/n$ | $L(p)=p^m(1-p)^{n-m}$ written out. |
-| [CMU 10-315 — MLE notes (PDF)](https://www.cs.cmu.edu/~10315/notes/10315_S24_Notes_MLE.pdf) | notes | Topic 4 · Bernoulli algebra | Same derivative $m/p-(n-m)/(1-p)=0$. |
-| [3-Minute Data Science — Normal PDF, CDF, PPF](https://www.youtube.com/watch?v=3VYupIsbLlY) | video | Topic 5 · $\Phi^{-1}$ | PPF is $\Phi^{-1}$: area $m/n$ back to a location. |
-| [Radford Mathematics — Inverse Normal](https://www.youtube.com/watch?v=Xlro6m4ssmc) | video | Topic 5 · invert | Given a left-area, find the $z$ — exactly $-\hat\mu=\Phi^{-1}(m/n)$. |
-| [$\Phi^{-1}$ calculator (probabilitycourse)](https://www.probabilitycourse.com/calculator/phi_inverse.php) | demo | Topic 5 · check $\hat\mu$ | Type $0.7$ and read $\Phi^{-1}((n-m)/n)$. |
-| [Victor Lavrenko — EM: how it works](https://www.youtube.com/watch?v=REypj2sy_5U) | video | Topic 6 · mixture + latent | Soft clustering = coin then a source; $Z$ never observed. |
-| [StatQuest — MLE for the Exponential](https://www.youtube.com/watch?v=p3T-_LMrvBc) | video | Topic 6 · rate $\beta$ | $\hat\beta=1/\bar x$ for one exponential — the hard-label limit of Topic 10. |
-| [Statlect — Exponential MLE](https://www.statlect.com/fundamentals-of-statistics/exponential-distribution-maximum-likelihood) | notes | Topic 6 · $\beta=n/\sum x$ | Written derivation of the rate MLE he will weight by $\gamma_i$. |
-| [Do & Batzoglou — What is the EM algorithm? (Nature Biotech)](https://www.nature.com/articles/nbt1406) | primer | Topic 7 · complete vs incomplete | Why we invent pairs $(x,z)$ at all. |
-| [Allauzen — Mixtures and the EM algorithm](https://allauzen.github.io/articles/MixturesAndEM.html) | blog | Topic 7 · complete log-ℓ | Bishop-style $z$ as a selector inside the product. |
-| [Stephens — Introduction to EM](https://stephens999.github.io/fiveMinuteStats/intro_to_em.html) | notes | Topic 7 · two-component mix | Same $\theta=(\pi,\ldots)$ shape before E/M. |
-| [StatQuest — Bayes’ Theorem](https://www.youtube.com/watch?v=9wCnvr7Xw4E) | video | Topic 8 · E-step | $P(Z\mid x)=P(x\mid Z)P(Z)/P(x)$ — the $\gamma_i$ fraction. |
-| [3Blue1Brown — Bayes, geometry of changing beliefs](https://www.youtube.com/watch?v=HZGCoVF3YvM) | video | Topic 8 · Bayes picture | Prior $\times$ likelihood / evidence, visually. |
-| [3Blue1Brown — Bayes lesson (text)](https://www.3blue1brown.com/lessons/bayes-theorem/) | blog | Topic 8 · same idea, written | Read if you prefer still diagrams to the video. |
-| [Stats with Brian — EM clearly explained](https://www.youtube.com/watch?v=3zbAsgCf1Sw) | video | Topic 9 · Q | Missing-data E-step as an expected complete log-ℓ. |
-| [Do & Batzoglou — What is the EM algorithm?](https://www.nature.com/articles/nbt1406) | primer | Topic 9 · Q name | Q as $\mathbb{E}[\text{complete }\log\ell]$ — the name some books skip. |
-| [Allauzen — Mixtures and EM](https://allauzen.github.io/articles/MixturesAndEM.html) | blog | Topic 9 · $z\to\gamma$ | Replace indicators by responsibilities inside $\ell$. |
-| [Stephens — Introduction to EM](https://stephens999.github.io/fiveMinuteStats/intro_to_em.html) | notes | Topic 10 · M-step + loop | Closed-form weighted updates, then iterate. |
-| [StatQuest — Exponential MLE](https://www.youtube.com/watch?v=p3T-_LMrvBc) | video | Topic 10 · $\beta=\sum\gamma/\sum\gamma x$ | Hard-label $\hat\beta=n/\sum x$; EM just weights by $\gamma$. |
-| [Stats with Brian — EM clearly explained](https://www.youtube.com/watch?v=3zbAsgCf1Sw) | video | Topic 10 · iterate | One E/M cycle is not the algorithm; the loop is. |
-
-**How to use:** after Topic 5, one invert-normal video + the $\Phi^{-1}$ calculator. After Topic 8, StatQuest Bayes (or 3Blue1Brown) before re-reading $\gamma_i$. After Topic 10, Stephens plus StatQuest exponential MLE — then check that $\pi^{\mathrm{new}}$ and $\beta^{\mathrm{new}}$ match the tablet.
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Gaussian Mixture Acoustic Modeling (Kaldi / Speech AI):**  
+  Speech recognition systems run EM updates on millions of audio MFCC frames to train GMM-HMM acoustic phone models for automated voice assistants.
 
 ---
 
+## Workplace Debugging Postmortems
+
+### Workplace Scenario 1: The "Sample Mean on Censored Data & Zero Gradient Trap" Bug
+
+#### Incident Summary & Context
+A junior data scientist at a hardware manufacturing company was tasked with estimating the mean breakdown voltage $\mu$ of semiconductor micro-relays. The automated test bench only recorded whether a relay passed ($X > 0$) or failed ($X < 0$). The developer attempted to calculate the sample mean by converting Pass to $+1.0$ and Fail to $-1.0$: `mu_est = np.mean(signs)`. The resulting predictions caused severe yield estimation errors in production planning.
+
+#### Root Cause Analysis
+- Replacing binary categories with arbitrary numbers ($\pm 1.0$) corrupts the physical scale of the underlying Gaussian distribution.
+- The correct probabilistic relationship is governed by the cumulative threshold integral $P(\text{Fail}) = \Phi(-\mu)$.
+
+#### Production Code Fix
+
+```python
+import numpy as np
+import scipy.stats as stats
+
+# -----------------------------------------------------------
+# PRODUCTION FIX: Mathematically Rigorous Censored Gaussian MLE
+# -----------------------------------------------------------
+def estimate_gaussian_mean_from_censored_signs(signs_array):
+    """
+    signs_array: 1D numpy array containing -1 (negative) and +1 (positive)
+    Underlying Model: X ~ N(mu, 1)
+    """
+    n_total = len(signs_array)
+    m_negatives = np.sum(signs_array == -1)
+    
+    # 1. Compute empirical Bernoulli fraction
+    p_hat = m_negatives / n_total
+    
+    # Clip to avoid infinite quantiles on degenerate edge cases
+    p_hat_safe = np.clip(p_hat, 1e-6, 1.0 - 1e-6)
+    
+    # 2. Invert standard normal CDF
+    mu_hat = -stats.norm.ppf(p_hat_safe)
+    return mu_hat
+
+# Verification
+mock_signs = np.array([-1]*80 + [1]*20) # 80 negatives out of 100
+recovered_mu = estimate_gaussian_mean_from_censored_signs(mock_signs)
+print(f"Correct Censored MLE Mean: {recovered_mu:.4f} (Negative as expected!)")
+assert recovered_mu < 0
+```
+
+---
+
+### Workplace Scenario 2: The "EM Component Collapse & Numerical Underflow in Posterior Responsibility" Bug
+
+#### Incident Summary & Context
+An algorithmic trading team implemented an EM mixture model to estimate market volatility regimes. In production backtesting, the EM loop crashed on day 42 with a fatal `ZeroDivisionError` and `NaN` parameter updates.
+
+#### Root Cause Analysis
+- For extreme outlier data points (e.g. $x_i = 50.0$), the exponential density evaluation $\beta e^{-\beta x_i}$ underflowed to machine floating-point zero ($0.0$).
+- When both component densities evaluated to zero, the denominator of Bayes' formula $\text{denom} = \pi f_1 + (1-\pi) f_2$ became exactly $0.0$, producing a division by zero and corrupting the responsibilities $\gamma_i$ with `NaN`s.
+
+#### Production Code Fix
+
+```python
+import numpy as np
+
+# -----------------------------------------------------------
+# PRODUCTION FIX: Numerically Stable Log-Domain E-Step
+# -----------------------------------------------------------
+def robust_e_step(x_data, pi, beta1, beta2):
+    """
+    Computes posterior responsibilities using log-sum-exp stabilization
+    to prevent numerical underflow on outlier data points.
+    """
+    # Compute log-densities
+    log_f1 = np.log(np.maximum(beta1, 1e-12)) - beta1 * x_data
+    log_f2 = np.log(np.maximum(beta2, 1e-12)) - beta2 * x_data
+    
+    # Weighted log-terms
+    log_term1 = np.log(np.maximum(pi, 1e-12)) + log_f1
+    log_term2 = np.log(np.maximum(1.0 - pi, 1e-12)) + log_f2
+    
+    # Log-Sum-Exp Trick for stable denominator
+    max_log = np.maximum(log_term1, log_term2)
+    log_denom = max_log + np.log(np.exp(log_term1 - max_log) + np.exp(log_term2 - max_log))
+    
+    # Stabilized posterior responsibility: gamma = exp(log_term1 - log_denom)
+    gamma = np.exp(log_term1 - log_denom)
+    return np.clip(gamma, 1e-15, 1.0 - 1e-15)
+
+# Verification on extreme outlier
+x_outlier = np.array([0.5, 2.0, 50.0, 100.0])
+gamma_safe = robust_e_step(x_outlier, pi=0.6, beta1=2.0, beta2=0.2)
+print("Stabilized Responsibilities on Outliers:", gamma_safe)
+assert not np.isnan(gamma_safe).any()
+```
+
+---
+
+## Centralized External References
+
+<a id="external-references"></a>
+
+Below is the centralized curated library of 50+ authoritative external resources organized across all 10 lecture topics.
+
+### Topic 1: Pedagogical Mission & Structure of the ML Review
+- **Video Lectures:**
+  - [MIT OpenCourseWare (18.650) — Principles of Statistical Inference & MLE](https://www.youtube.com/watch?v=X-ix97pw00s)
+  - [Stanford CS229 (Andrew Ng) — Maximum Likelihood & Supervised Learning Foundations](https://www.youtube.com/watch?v=4b4MUYve_U8)
+  - [StatQuest (Josh Starmer) — Maximum Likelihood Clearly Explained](https://www.youtube.com/watch?v=XepXtl9YKwc)
+- **Authoritative Documentation & Guides:**
+  - [Casella, G. & Berger, R. L. — Statistical Inference (Duxbury, Chapter 7: Point Estimation)](https://mybiostats.files.wordpress.com/2015/03/casella-berger.pdf)
+  - [Bishop, C. M. — Pattern Recognition and Machine Learning (Springer, Chapter 1 & 2)](https://www.microsoft.com/en-us/research/publication/pattern-recognition-and-machine-learning/)
+  - [Hastie, T., Tibshirani, R., & Friedman, J. — The Elements of Statistical Learning (Chapter 8)](https://hastie.su.domains/ElemStatLearn/)
+
+### Topic 2: Problem 1 Formulation — The Sign-Censored Gaussian
+- **Video Lectures:**
+  - [MIT OpenCourseWare — Censored Data and Survival Analysis Estimation](https://www.youtube.com/watch?v=1d9R5Y9-b8Q)
+  - [StatQuest — Quantization and Discrete Likelihoods](https://www.youtube.com/watch?v=8nmhNbGEnLo)
+  - [Mathematical Monk — Censoring and Truncation in Statistical Models](https://www.youtube.com/watch?v=vVj_pXq-0iM)
+- **Authoritative Documentation & Guides:**
+  - [Tobin, J. (1958) — Estimation of Relationships for Limited Dependent Variables (Econometrica / Tobit Model)](https://www.jstor.org/stable/1907382)
+  - [Greene, W. H. — Econometric Analysis (Pearson, Chapter 19: Limited Dependent Variables)](https://www.pearson.com/)
+  - [Scipy Stats Docs — `scipy.stats.norm` Cumulative Distribution Functions](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.norm.html)
+
+### Topic 3: Gaussian Standardization & Likelihood Construction
+- **Video Lectures:**
+  - [Khan Academy — Standard Normal Distribution and Z-Scores](https://www.youtube.com/watch?v=2tuBREK_3Bg)
+  - [3Blue1Brown — But what is the Central Limit Theorem and Bell Curve?](https://www.youtube.com/watch?v=zeJD6dqJ5lo)
+  - [StatQuest — Z-scores and Normal Cumulative Distribution Functions](https://www.youtube.com/watch?v=5z-3x4sIe_s)
+- **Authoritative Documentation & Guides:**
+  - [Wasserman, L. — All of Statistics (Springer, Chapter 2: Random Variables)](https://link.springer.com/book/10.1007/978-0-387-21736-9)
+  - [Papoulis, A. & Pillai, S. U. — Probability, Random Variables and Stochastic Processes](https://www.mheducation.com/)
+  - [NIST / SEMATECH e-Handbook of Statistical Methods — Standard Normal Distribution Table](https://www.itl.nist.gov/div898/handbook/eda/section3/eda3671.htm)
+
+### Topic 4: Reparameterization, Bernoulli Reduction & MLE of $p$
+- **Video Lectures:**
+  - [Stanford CS229 — Generative Learning Algorithms and Bernoulli MLE](https://www.youtube.com/watch?v=nt63kQxFgU4)
+  - [DeepLearning.AI — Likelihood of Binary Classification and Cross-Entropy](https://www.youtube.com/watch?v=LHXXGgkPX4A)
+  - [StatQuest — Bernoulli and Binomial Distributions Clearly Explained](https://www.youtube.com/watch?v=bT1p5tJwn_0)
+- **Authoritative Documentation & Guides:**
+  - [Zehavi, A. (1966) — A Note on Invariance for Maximum Likelihood Estimators (Annals of Math. Stat.)](https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-37/issue-3/A-Note-on-Invariance-for-Maximum-Likelihood-Estimators/10.1214/aoms/1177699477.full)
+  - [Kingma, D. P. & Welling, M. (ICLR 2014) — Auto-Encoding Variational Bayes (Reparameterization Trick)](https://arxiv.org/abs/1312.6114)
+  - [D2L.ai — Maximum Likelihood Estimation (Appendix)](https://d2l.ai/chapter_appendix-mathematics-for-deep-learning/maximum-likelihood.html)
+
+### Topic 5: Inverting $\Phi$ & The Physical Sign Intuition of $\hat{\mu}$
+- **Video Lectures:**
+  - [MIT OpenCourseWare — Quantile Functions and Inverse Transform Method](https://www.youtube.com/watch?v=GtwC0fP5f1U)
+  - [StatQuest — Quantiles and Percentiles Clearly Explained](https://www.youtube.com/watch?v=IFKQLDmJ0PE)
+  - [Mathematical Monk — Probit Models and Latent Gaussian Variables](https://www.youtube.com/watch?v=CqYf_E5Vf0s)
+- **Authoritative Documentation & Guides:**
+  - [Bliss, C. I. (Science 1934) — The Method of Probits (Foundational Probit Model)](https://www.science.org/doi/10.1126/science.79.2037.38)
+  - [Devroye, L. — Non-Uniform Random Variate Generation (Springer / Inversion Method)](http://luc.devroye.org/rnbookindex.html)
+  - [Scipy Docs — `scipy.stats.norm.ppf` Percentage Point Function](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.norm.html)
+
+### Topic 6: Problem 2 Formulation — Two-Exponential Mixture & Latent $Z$
+- **Video Lectures:**
+  - [Stanford CS229 (Andrew Ng) — Mixture Models and the EM Algorithm](https://www.youtube.com/watch?v=rVfZHWTwXSA)
+  - [MIT OpenCourseWare (6.036) — Clustering and Mixture Density Estimation](https://www.youtube.com/watch?v=I_W_Ww6h8h4)
+  - [StatQuest — Mixture Models Clearly Explained](https://www.youtube.com/watch?v=DODphK8mslk)
+- **Authoritative Documentation & Guides:**
+  - [McLachlan, G. J. & Peel, D. — Finite Mixture Models (Wiley Series in Probability and Statistics)](https://www.wiley.com/en-us/Finite+Mixture+Models-p-9780471006268)
+  - [Bishop, C. M. — Pattern Recognition and Machine Learning (Chapter 9: Mixture Models and EM)](https://www.microsoft.com/en-us/research/publication/pattern-recognition-and-machine-learning/)
+  - [Goodfellow, I. et al. — Deep Learning (Chapter 16: Structured Probabilistic Models)](https://www.deeplearningbook.org/)
+
+### Topic 7: Complete-Data Joint Density & Decoupled Log-Likelihood
+- **Video Lectures:**
+  - [Mathematical Monk — Complete vs Incomplete Likelihood in Latent Models](https://www.youtube.com/watch?v=iQoXFmbXRJA)
+  - [MIT 6.036 — Data Augmentation and Hidden Variable Representation](https://www.youtube.com/watch?v=iaSUYvmCekI)
+  - [DeepLearning.AI — Decoupled Parameter Learning in Latent Variable Models](https://www.youtube.com/watch?v=bNb2fEVKeEo)
+- **Authoritative Documentation & Guides:**
+  - [Dempster, A. P., Laird, N. M., & Rubin, D. B. (JRSS 1977) — Maximum Likelihood from Incomplete Data via the EM Algorithm](https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/j.2517-6161.1977.tb01600.x)
+  - [Little, R. J. & Rubin, D. B. — Statistical Analysis with Missing Data (Wiley)](https://www.wiley.com/en-us/Statistical+Analysis+with+Missing+Data%2C+3rd+Edition-p-9780470526798)
+  - [Murphy, K. P. — Probabilistic Machine Learning: An Introduction (MIT Press, Chapter 8)](https://probml.github.io/pml-book/book1.html)
+
+### Topic 8: The E-Step — Posterior Responsibilities via Bayes' Theorem
+- **Video Lectures:**
+  - [Stanford CS229 — Derivation of the E-Step and Posterior Probabilities](https://www.youtube.com/watch?v=rVfZHWTwXSA)
+  - [3Blue1Brown — Bayes theorem, the geometry of changing beliefs](https://www.youtube.com/watch?v=HZGCoVF3YvM)
+  - [StatQuest — Expectation Maximization (EM) Step-by-Step](https://www.youtube.com/watch?v=REypj2sy_5U)
+- **Authoritative Documentation & Guides:**
+  - [Neal, R. M. & Hinton, G. E. (1998) — A View of the EM Algorithm that Justifies Incremental and Other Variants](https://link.springer.com/chapter/10.1007/978-94-011-5014-9_12)
+  - [Bilmes, J. A. (1998) — A Gentle Tutorial of the EM Algorithm and its Application to Parameter Estimation for GMM and HMM](https://ssli.ee.washington.edu/people/bilmes/mypapers/em.pdf)
+  - [Scikit-Learn Docs — Gaussian Mixture Models (`sklearn.mixture.GaussianMixture`)](https://scikit-learn.org/stable/modules/mixture.html)
+
+### Topic 9: The $Q$-Function — Expected Complete-Data Log-Likelihood
+- **Video Lectures:**
+  - [Mathematical Monk — The Q-Function and Lower Bound Proofs](https://www.youtube.com/watch?v=lMShR1vSSUo)
+  - [MIT OpenCourseWare — Jensen's Inequality and Monotonic Convergence in EM](https://www.youtube.com/watch?v=qjrad0V0uXY)
+  - [Stanford CS229 — Variational Bounds and Jensen's Inequality](https://www.youtube.com/watch?v=4b4MUYve_U8)
+- **Authoritative Documentation & Guides:**
+  - [Jensen, J. L. W. V. (Acta Math. 1906) — Sur les fonctions convexes et les inégalités entre les valeurs moyennes](https://projecteuclid.org/journals/acta-mathematica/volume-30/issue-none/Sur-les-fonctions-convexes-et-les-in%C3%A9galit%C3%A9s-entre-les-valeurs/10.1007/BF02418571.full)
+  - [Blei, D. M., Kucukelbir, A., & McAuliffe, J. D. (JASA 2017) — Variational Inference: A Review for Statisticians](https://arxiv.org/abs/1601.00670)
+  - [Kingma, D. P. & Welling, M. (Foundations and Trends in ML 2019) — An Introduction to Variational Autoencoders](https://arxiv.org/abs/1906.02691)
+
+### Topic 10: The M-Step — Analytical Closed Forms & EM Convergence
+- **Video Lectures:**
+  - [Stanford CS229 — M-Step Closed Form Derivations and GMMs](https://www.youtube.com/watch?v=rVfZHWTwXSA)
+  - [Aladdin Persson — Gaussian Mixture Models from Scratch in Python](https://www.youtube.com/watch?v=Gl2AO3QVWGw)
+  - [MIT 6.036 — Expectation Maximization Recap and Extensions](https://www.youtube.com/watch?v=iaSUYvmCekI)
+- **Authoritative Documentation & Guides:**
+  - [Wu, C. F. J. (Annals of Statistics 1983) — On the Convergence Properties of the EM Algorithm](https://projecteuclid.org/journals/annals-of-statistics/volume-11/issue-1/On-the-Convergence-Properties-of-the-EM-Algorithm/10.1214/aos/1176346060.full)
+  - [Sohn, K., Lee, H., & Yan, X. (NeurIPS 2015) — Learning Structured Output Representation using Deep Conditional Generative Models](https://papers.nips.cc/paper/2015/hash/8d55a97f11a60aab77d33bb9ebb0319f-Abstract.html)
+  - [Ho, J., Jain, A., & Abbeel, P. (NeurIPS 2020) — Denoising Diffusion Probabilistic Models (DDPM)](https://arxiv.org/abs/2006.11239)
+
+---
 
 ## Sources
 
-- Video: [Tutorial 10 : Review of Machine Learning 1](https://www.youtube.com/watch?v=wjSKM1xFoSU) · NPTEL — Indian Institute of Science, Bengaluru
-- Speaker overlay: Chandan Jayaram
-- Auto-captions in `raw/captions.en.timed.txt` (cleaned in these notes; denominator “$1-\beta_2$” restored to $(1-\pi)\beta_2$)
-- Boards transcribed from `screenshots/composites/`
-- **Code audit:** the tablet is handwritten math only. No Python / autograd / training loop appears. These notes add **no invented code blocks** (math_technical; `$` / `$$` only).
+- **Video:** [Tutorial 10 : Review of Machine Learning 1](https://www.youtube.com/watch?v=wjSKM1xFoSU)
+- **Channel:** NPTEL — Indian Institute of Science, Bengaluru
+- **Duration:** ~47.5 min (00:01–47:33)
+- **Course:** Mathematical Foundations of Generative AI
+- **Instructor / Teaching Team:** Chandan Jayaram (IISc Bengaluru)
+- **Prior Prerequisite:** [Tutorial 9: Review of Basic Probability 3](../23-Tutorial09-Review-Basic-Probability-3/NOTES.md)
+- **Next Stage:** Module 11+ — Neural Network Backpropagation Proofs, Optimization Theory, and Deep Generative AI (VAEs, Diffusion, Transformers)

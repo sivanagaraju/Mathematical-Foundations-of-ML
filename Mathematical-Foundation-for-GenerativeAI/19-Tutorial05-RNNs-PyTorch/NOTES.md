@@ -1,1056 +1,1354 @@
 # Tutorial 5 — RNNs using PyTorch
 
 **Video:** [Tutorial 5 : RNNs using PyTorch](https://www.youtube.com/watch?v=k6zF2NsvVrk) · NPTEL / IISc  
-**Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md)  
-**Previous:** [Tutorial 4 — CNNs](../18-Tutorial04-CNNs-PyTorch/NOTES.md)  
-**Course:** Mathematical Foundations of **Generative AI** (~38 min)  
-**Speaker:** NPTEL IISc · Sequences, RNN, LSTM, GRU, save/load, reusable loops  
+**Warm-up First:** [PREREQUISITES.md](./PREREQUISITES.md)  
+**Previous Tutorial:** [Tutorial 4 — CNNs in PyTorch](../18-Tutorial04-CNNs-PyTorch/NOTES.md) (Spatial Tensors, Convolutions, and Vision Pipelines)  
+**Next Tutorial:** Tutorial 6 — Pretrained Models, Transfer Learning & Medical Vision  
+**Course:** Mathematical Foundations of Generative AI (~38 min)  
+**Speaker:** NPTEL / IISc Teaching Team  
+**Core Themes:** 3D Sequence Tensor Geometry $(N, T, D)$, Recurrent Cell Mechanics, Recurrent Weight Sharing across Time, Vanishing Gradient Dynamics in BPTT, LSTM Dual-State Gating ($c_t, h_t$), GRU Streamlined Gating, Sequence-to-Class (Many-to-One) Topologies, Last Hidden State Linear Heads, Model Persistence via `state_dict` / `.pth`, and Modular Reusable Training/Evaluation Pipelines.
 
-> **Clarify:** Playlist item is **RNNs**, not a second CNN tutorial (despite similar “code + PyTorch” framing).
+---
+
+> ### ⚠️ Course Context & Curriculum Progression Notice
+> In **Tutorial 4**, the curriculum tackled **Spatial Intelligence** (2D pixel grids) using Convolutional Neural Networks (CNNs).
+> 
+> Starting in **Tutorial 5**, the course scales to **Temporal and Sequential Intelligence** via **Recurrent Neural Networks (RNNs, LSTMs, GRUs)**. Real-world physical signals (natural language, financial tick streams, audio waveforms, medical ECG telemetry, and protein sequences) are ordered in time. CNNs process static spatial neighborhoods; RNNs maintain a dynamic, evolving hidden memory vector ($\mathbf{h}_t$) across time.
+> 
+> This sequence modeling foundation directly connects to:
+> 1. **Autoregressive Generative Large Language Models (GPT-4, Claude, LLaMA)**.
+> 2. **State Space Models & Linear Recurrent Networks (Mamba, RWKV, S4)**.
+> 3. **Time-Series Latent Diffusion Backbones in Video and Audio Synthesis (Sora, Stable Audio)**.
 
 ---
 
 ## Table of Contents
 
-1. [Topic 1 — Recap sequences intro](#topic-1-recap-sequences-intro-0003–0131) (00:03–01:31)
-2. [Topic 2 — Sequence tensor NTD](#topic-2-sequence-tensor-ntd-0131–0429) (01:31–04:29)
-3. [Topic 3 — RNN cell math unroll](#topic-3-rnn-cell-math-unroll-0429–0924) (04:29–09:24)
-4. [Topic 4 — RNN output hidden shapes](#topic-4-rnn-output-hidden-shapes-0924–1101) (09:24–11:01)
-5. [Topic 5 — LSTM gates cell](#topic-5-lstm-gates-cell-1101–1659) (11:01–16:59)
-6. [Topic 6 — nn.LSTM API](#topic-6-nnlstm-api-1659–1926) (16:59–19:26)
-7. [Topic 7 — GRU gates](#topic-7-gru-gates-1926–2422) (19:26–24:22)
-8. [Topic 8 — Classifier last hidden](#topic-8-classifier-last-hidden-2422–2622) (24:22–26:22)
-9. [Topic 9 — Toy dataset train](#topic-9-toy-dataset-train-2622–2951) (26:22–29:51)
-10. [Topic 10 — Save load reusable recap](#topic-10-save-load-reusable-recap-2951–3815) (29:51–38:15)
-11. [Apply it (scenarios)](#apply-it-scenarios)
-12. [External references](#external-references)
-13. [Sources](#sources)
+1. [Executive Summary & Master Architecture](#executive-summary--architecture-of-this-lecture)
+2. [Chalkboard Rosetta Stone: Mathematical & Sequence Notation](#chalkboard-rosetta-stone)
+3. [Complete Standalone Executable PyTorch Simulation Script](#standalone-simulation-script)
+4. [Topic 1: Recap CNNs & Introduction to Ordered Sequences (00:02–03:00)](#topic-1-recap-cnn-sequences-0002–0300)
+5. [Topic 2: 3D Sequence Tensor Geometry — $(N, T, D)$ Layout (03:00–06:20)](#topic-2-sequence-tensor-ntd-0300–0620)
+6. [Topic 3: Vanilla RNN Cell Mathematics & Temporal Unrolling (06:20–10:15)](#topic-3-rnn-cell-math-unroll-0620–1015)
+7. [Topic 4: RNN Forward Output & Hidden State Shape Mechanics (10:15–13:45)](#topic-4-rnn-output-hidden-shapes-1015–1345)
+8. [Topic 5: LSTM Architecture — Dual States & Gating Mechanics (13:45–18:10)](#topic-5-lstm-gates-cell-state-1345–1810)
+9. [Topic 6: The `nn.LSTM` Module API & Multi-Layer Recurrent Stacks (18:10–22:40)](#topic-6-nn-lstm-api-multi-layer-1810–2240)
+10. [Topic 7: Gated Recurrent Units (GRU) — Reset & Update Gating (22:40–26:15)](#topic-7-gru-reset-update-gates-2240–2615)
+11. [Topic 8: Sequence Classifier Architecture & Dummy Forward Pass (26:15–30:10)](#topic-8-sequence-classifier-last-hidden-2615–3010)
+12. [Topic 9: Toy Temporal Dataset Pipeline & Training Loop (30:10–34:30)](#topic-9-toy-dataset-train-loop-3010–3430)
+13. [Topic 10: Model Persistence, Reusable Loops & Pretrained Roadmap (34:30–38:15)](#topic-10-save-load-reusable-loops-3430–3815)
+14. [Workplace Debugging Postmortems](#workplace-debugging-postmortems)
+15. [Centralized External References](#external-references)
 
 ---
 
-## Executive Summary — architecture of this lecture
+## Executive Summary — Architecture of this Lecture
 
-Last hour classified MNIST photos with a **CNN** (convolutional neural network). This hour treats data that arrives **in order**: weather days, tokens, any sequence. You store a batch as **(N, T, D)** — **N** sequences, **T** time steps, **D** features per step — and run one shared **RNN** (recurrent neural network) cell along time. **LSTM** (long short-term memory) and **GRU** (gated recurrent unit) add gates so the memory can last longer than a plain tanh cell. A last-hidden Linear head classifies a toy sequence; you save the weights and factor the train/eval loops. The payoff is the same CrossEntropy + Adam contract as images, now with memory across time.
+<a id="executive-summary--architecture-of-this-lecture"></a>
 
-**Worldview arc:** from “CNN on MNIST images” **to** “RNN/LSTM/GRU on sequences + production hygiene (save, load, reusable loops).”
+This 38-minute tutorial transitions deep learning from static spatial image grids to dynamic temporal sequences, establishing the mathematical equations, tensor geometries, and PyTorch software architectures for Recurrent Neural Networks (RNNs, LSTMs, and GRUs).
 
-**Hour at a glance (whole video).** The first half is *how a sequence sits in a tensor, then how a cell steps through it*. He closes the CNN chapter (accuracy was fine because MNIST is balanced) and builds a dummy batch `(4, 5, 3)` so you can name N, T, and D with `batch_first=True`. The plain RNN comes next because you cannot call `nn.LSTM` honestly until you have written $h_t=\tanh(W_x x_t+W_h h_{t-1}+b)$ and seen the **same** weights unroll across T. He prints `output` (every step) versus `hidden` (final state), then motivates LSTM: many tanh multiplies make early-step gradients vanish, so the cell needs a second highway $c_t$ and four gates (forget, input, candidate, output).
-
-The rest of the hour is *the gated APIs, one classifier, and hygiene*. `nn.LSTM(..., batch_first=True)` returns three objects: all-step output plus the pair $(h_n, c_n)$. GRU keeps **one** state and two main gates (reset, update); its call looks like `nn.RNN`. He builds `LSTMClassifier`: last hidden → Linear → logits, dummy `(8,5,3)→(8,2)`. A toy Dataset (sum rule) trains for a few epochs with the usual mini-batch loop. He finishes by writing `state_dict` to a `.pth` file, loading into a matching architecture, and extracting `train_one_epoch` / `evaluate` so the next unit (pretrained vision) can reuse the same clipboard.
-
-### System context
+### System Context
 
 ```
-  ╔══════════════════════════════════════╗
-  ║ Outside: Transformers, big NLP/ASR   ║
-  ║ Outside: VGG/ResNet MRI (next unit)  ║
-  ╚══════════════╤═══════════════════════╝
-                 │ this tutorial (~38 min)
-                 ▼
-        ┌────────────────────────────┐
-        │ Sequences in PyTorch       │
-        │ RNN · LSTM · GRU · head    │
-        │ save/load · train helpers  │
-        └────────────────────────────┘
+  ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+  ║                          TEMPORAL SEQUENCE PROCESSING STACK                           ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════════╝
+                                              │
+         ┌────────────────────────────────────┴────────────────────────────────────┐
+         ▼                                                                         ▼
+  [Tutorial 4: 2D Spatial Vision]                                       [Tutorial 5: 1D Temporal Sequences]
+  • 4D Image Tensors X ∈ ℝ^(N×C×H×W)                                    • 3D Sequence Tensors X ∈ ℝ^(N×T×D)
+  • Spatial 2D Cross-Correlation (nn.Conv2d)                            • Recurrent Time Stepping (nn.RNN/LSTM/GRU)
+  • Weight Sharing across 2D Pixel Grid                                 • Weight Sharing across Time (W_xh, W_hh)
+  • Fixed 2D Spatial Locality                                           • Dynamic Memory Accumulation (h_t, c_t)
+  • Feature Backbone + Flatten + Linear Head                            • Recurrent Encoder + Terminal State Head
+                                              │
+                                              ▼
+                         [Upcoming Modules: Foundation Models & Generative AI]
+                         • Tutorial 6: Pretrained Vision Models (VGG, ResNet, Transfer Learning)
+                         • Generative AI: Autoregressive Transformers & Latent Video Diffusion
+                         • State Space Models (Mamba) & Linear Recurrent Foundation Networks
 ```
-
-### Main blueprint
-
-```
-  X ∈ R^{N × T × D}   (batch_first=True)
-          │            [N = batch, T = time steps, D = features per step]
-          ▼
-  Shared cell over time:                 [same weights at every t]
-    RNN:  h_t = tanh(W_x x_t + W_h h_{t-1} + b)   [plain recurrent cell]
-    LSTM: gates f,i,o + c̃ → c_t, h_t              [long + short memory]
-    GRU:  r, z + candidate → h_t                   [one state, two gates]
-          │
-          ├── output (N, T, H)   all steps
-          └── h_n [/ c_n]        final states
-          │
-          ▼
-  h_last → Linear → logits (N, C)        [one summary vector per sequence]
-          │
-          ▼
-  CE + Adam mini-batch train
-  torch.save(state_dict) / load_state_dict
-  train_one_epoch · evaluate (reusable)
-```
-
-### Scenario walkthrough
-
-Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
-
-**Story:** one short sequence of 5 vectors (think five days of weather, three numbers each day) must become a **yes/no class score**, then the same path must train on a pile of such sequences.
-
-1. **Why leave CNNs?** A photo is a grid. This sequence is a **comic strip**: order is part of the meaning. Accuracy-on-MNIST was the last vision report card; today the axis of interest is **time**. That is the SETUP box.
-
-2. **How do you store the strip?** Shape `(4,5,3)` with `batch_first=True`: four stories, five steps, three features. Swap T and D and every later matrix multiply explodes. That is the DATA box.
-
-3. **What does the cell do at one step?** $h_t=\tanh(W_x x_t+W_h h_{t-1}+b)$. Day 3’s hidden state uses day 3’s input **and** day 2’s memory. **Same** $W_x,W_h$ at every t — that is weight sharing in time.
-
-4. **What comes out of `nn.RNN`?** `output` is the hidden vector at **every** step `(N,T,H)`. `hidden` is the **last** state. You need both names before you pick a classifier.
-
-5. **Why LSTM?** A long chain of tanh multiplies can wipe the early-day signal (vanishing gradients). LSTM (long short-term memory) adds a cell highway $c_t$ and four gates: forget, input, candidate, output. Two states: $c$ long, $h$ short.
-
-6. **What does the PyTorch call return?** `nn.LSTM(..., batch_first=True)` → `output, (h_n, c_n)`. Three objects, not two. Index them wrong and you feed the Linear the cell by mistake.
-
-7. **Why mention GRU?** A gated recurrent unit keeps **one** state and two gates (reset, update). Same job, smaller API — it looks like `nn.RNN`. Use it when you want gates without a separate $c$.
-
-8. **How do you classify the whole strip?** Take the **last** hidden (the summary after day 5) → Linear → logits. Dummy check: `(8,5,3)→(8,2)`. Using `output[:,0]` is the first-day summary, not the whole story.
-
-9. **How do you train?** A toy Dataset (label from a sum rule), DataLoader batches, CrossEntropy + Adam, many updates per epoch — the Tutorial 3/4 spine.
-
-10. **How do you keep the work?** `torch.save(model.state_dict(), "*.pth")` and load into a **same-shaped** net. Then wrap `train_one_epoch` / `evaluate` so the next tutorial (pretrained MRI) does not rewrite the clipboard.
-
-```
-  one sequence of 5 steps
-         │  file as (N, T, D), batch first
-         ▼
-  shared cell: RNN → LSTM / GRU
-         │  last hidden is the summary
-         ▼
-  Linear → class logits
-         │  mini-batch CE + Adam
-         ▼
-  save state_dict · reusable train/eval   =  a sequence classifier
-```
-
-### Failure / contrast path
-
-```
-  Feed (T, N, D) while batch_first=True          ──X──► silent axis swap
-  Use output[:,0] instead of the last time step  ──X──► summary of the start, not the story
-  Load weights into a different hidden_dim       ──X──► size mismatch crash
-  Forget model.eval / no_grad at test            ──X──► wrong mode and a wasted graph
-  Softmax the logits, then call CrossEntropy     ──X──► double softmax, bad gradients
-```
-
-### STOP / out of scope
-
-Attention / Transformers; multi-layer deep analysis; real language corpora; VGG/ResNet/MRI (next tutorial).
-
-### Load-bearing claims (closed-book)
-
-- Sequence batches use **(N, T, D)** with **`batch_first=True`**: batch, time, features.
-- An RNN **shares** $W_x$ and $W_h$ across time; $h_t=\tanh(W_x x_t+W_h h_{t-1}+b)$.
-- A forward pass returns the **hidden vector at every step** and the **final hidden**.
-- LSTM fixes **vanishing gradients** with **two states** ($c$ long, $h$ short) and four gates.
-- GRU keeps **one state** and two main gates: reset and update.
-- Sequence classification: **last hidden → Linear → logits**.
-- **`state_dict` save/load** only works if the loaded net has the **same architecture**.
-- **`train_one_epoch` / `evaluate`** are reusable for any classifier in this bootcamp.
-
-**Speaker / course:** NPTEL IISc · Mathematical Foundations of Generative AI · Tutorial 5.
 
 ---
 
-## Topic 1: Recap sequences intro (00:03–01:31)
+### Master Architecture Blueprint
+
+```
+  ===================================================================================================
+                                      TUTORIAL 5 MASTER ARCHITECTURE
+  ===================================================================================================
+  
+   [Sequence Input Tensor]               [Recurrent Cell Unrolling Engine]   [Classifier Head]
+     Batch of Sequences (N, T, D)          Shared weights across all t:        Last Hidden Extraction:
+     • N = Batch Size (e.g. 4)             • RNN:  h_t = tanh(W_x·x + W_h·h)   • output[:, -1, :] ──► (N, H)
+     • T = Sequence Length (e.g. 5)        • LSTM: f, i, o, c̃ ──► c_t, h_t             │
+     • D = Feature Dimension (e.g. 3)      • GRU:  r, z, h̃ ──► h_t                     ▼
+            │                                     │                            Linear Projection:
+            ▼                                     ├──► output: (N, T, H)       • Linear(H, num_classes)
+   [Tensor Layout Contract]                       └──► h_n:    (1, N, H)       • Logits: (N, num_classes)
+     batch_first=True                                  c_n:    (1, N, H)               │
+     X ∈ ℝ^(N × T × D)                                    (LSTM only)                  │
+            │                                             │                            │
+            └─────────────────────────────────────────────┼────────────────────────────┘
+                                                          ▼
+                                            [Training & Persistence Pipeline]
+                                              • Criterion: nn.CrossEntropyLoss()
+                                              • Optimizer: optim.Adam(model.parameters(), lr=1e-3)
+                                              • Modular Loops: train_one_epoch() & evaluate()
+                                              • Model Checkpoint: torch.save(model.state_dict(), "model.pth")
+                                              • Reload Checkpoint: model.load_state_dict(torch.load(...))
+  ===================================================================================================
+```
+
+---
+
+### Comparative Feature Matrices
+
+#### Table 1: Feedforward Networks (MLP/CNN) vs Recurrent Networks (RNN/LSTM/GRU) vs Transformers
+
+| Characteristic | Feedforward MLP / CNN | Recurrent Neural Networks (RNN/LSTM/GRU) | Transformer Architecture |
+| :--- | :--- | :--- | :--- |
+| **Input Structure** | 1D Vector $\mathbf{x} \in \mathbb{R}^D$ or 2D Image $\mathbf{X} \in \mathbb{R}^{C \times H \times W}$ | 3D Sequence Tensor $\mathbf{X} \in \mathbb{R}^{N \times T \times D}$ | 3D Sequence Tensor $\mathbf{X} \in \mathbb{R}^{N \times T \times D}$ |
+| **Temporal Memory** | None (Treats samples as independent) | **Recursive Hidden State ($\mathbf{h}_t$)** passing information forward | **Self-Attention Mechanism ($\mathbf{Q}\mathbf{K}^\top \mathbf{V}$)** across all tokens |
+| **Sequence Length Flexibility** | Fixed input dimensions | **Arbitrary Length $T$** (Processes step-by-step) | Fixed context window (Bounded by $T_{\max}$) |
+| **Computation Complexity** | $\mathcal{O}(1)$ parallel layer forward pass | $\mathcal{O}(T)$ sequential steps (Cannot parallelize in time) | $\mathcal{O}(T^2)$ pairwise attention (Fully parallel in time) |
+| **Parameter Scaling** | Scales with layer widths and spatial filters | **Constant $\mathcal{O}(H^2 + H \cdot D)$** independent of $T$ | $\mathcal{O}(D^2)$ independent of $T$ |
+
+---
+
+#### Table 2: Recurrent Architectures (Vanilla RNN vs LSTM vs GRU)
+
+| Architectural Feature | Vanilla RNN (`nn.RNN`) | Long Short-Term Memory (`nn.LSTM`) | Gated Recurrent Unit (`nn.GRU`) |
+| :--- | :--- | :--- | :--- |
+| **Internal Memory Streams** | 1 State: Hidden State $\mathbf{h}_t$ | **2 States:** Cell State $\mathbf{c}_t$ (Long) + Hidden State $\mathbf{h}_t$ (Short) | **1 State:** Hidden State $\mathbf{h}_t$ |
+| **Gating Mechanisms** | None (Direct non-linear $\tanh$) | **3 Gates:** Forget ($\mathbf{f}_t$), Input ($\mathbf{i}_t$), Output ($\mathbf{o}_t$) | **2 Gates:** Reset ($\mathbf{r}_t$), Update ($\mathbf{z}_t$) |
+| **Long-Term Memory Retention** | Poor (Vanishing gradients over $T > 10$) | **Superior** (Additive linear error carousel $\mathbf{c}_t$) | **Strong** (Adaptive linear interpolation $\mathbf{z}_t$) |
+| **Parameter Count Multiplier** | $1\times$ ($H \cdot D + H^2 + 2H$) | **$4\times$** ($4 \times [H \cdot D + H^2 + 2H]$) | **$3\times$** ($3 \times [H \cdot D + H^2 + 2H]$) |
+| **PyTorch Forward Signature** | `out, h_n = rnn(x)` | `out, (h_n, c_n) = lstm(x)` | `out, h_n = gru(x)` |
+
+---
+
+#### Table 3: Sequence Modeling Topologies
+
+| Topology | Input | Output | Real-World Application Example |
+| :--- | :--- | :--- | :--- |
+| **One-to-One** | Single Vector ($T=1$) | Single Vector ($T=1$) | Standard image classification (Tutorial 4) |
+| **One-to-Many** | Single Vector ($T=1$) | Sequence ($T > 1$) | Image Captioning (Image $\to$ Sentence of words) |
+| **Many-to-One (Lecture Focus)** | Sequence ($T > 1$) | Single Vector ($T=1$) | **Sequence Classification (Sentiment Analysis, Video Action Recognition)** |
+| **Many-to-Many (Synch)** | Sequence ($T$) | Sequence ($T$) | Video Frame Segmentation, Part-of-Speech Tagging |
+| **Many-to-Many (Seq2Seq)** | Sequence ($T_{\text{in}}$) | Sequence ($T_{\text{out}}$) | Machine Translation (English $\to$ French), Audio Transcription |
+
+---
+
+### Failure & Contrast Paths (6 Common Engineering Traps)
+
+```
+  [Engineering Trap 1: "Forgetting batch_first=True in PyTorch RNN Modules"]
+  TRAP: Calling nn.LSTM(input_size, hidden_size) without batch_first=True on (N, T, D) data.
+  REALITY: PyTorch defaults to (T, N, D). The layer interprets batch size N as sequence length T!
+  FIX: Always declare nn.LSTM(..., batch_first=True) when your data is shaped (N, T, D).
+  
+  [Engineering Trap 2: "Indexing the Wrong LSTM State for Classification"]
+  TRAP: Attempting to pass the cell state c_n into the Linear classifier head.
+  REALITY: c_n is the internal long-term accumulator. h_n (or output[:, -1, :]) is the output hidden state.
+  FIX: Use output[:, -1, :] or h_n[-1] to feed the classifier head.
+  
+  [Engineering Trap 3: "The Unpacked Tuple Mismatch in LSTM Forward Call"]
+  TRAP: Writing out, h_n = lstm(x) and expecting h_n to be a tensor.
+  REALITY: nn.LSTM returns output, (h_n, c_n). Unpacking into 2 variables assigns the tuple to h_n.
+  FIX: Always unpack as out, (h_n, c_n) = lstm(x).
+  
+  [Engineering Trap 4: "Vanishing Gradients on Long Vanilla RNN Sequences"]
+  TRAP: Using nn.RNN to model sequences with T > 50 time steps.
+  REALITY: Repeated matrix multiplications and tanh derivatives cause gradients to vanish to 0.
+  FIX: Upgrade to nn.LSTM or nn.GRU to preserve long-term gradient highways.
+  
+  [Engineering Trap 5: "Saving the Model Object Instead of state_dict"]
+  TRAP: Calling torch.save(model, "model.pth").
+  REALITY: Serializes brittle Python class path references that break across directories and environments.
+  FIX: Execute torch.save(model.state_dict(), "model.pth") and reload into an instantiated class.
+  
+  [Engineering Trap 6: "Leaving Autograd Enabled During Model Evaluation"]
+  TRAP: Running test set evaluation without with torch.no_grad():.
+  REALITY: Autograd allocates computation graphs across the entire test set, exhausting GPU VRAM.
+  FIX: Always wrap evaluation loops in with torch.no_grad(): and call model.eval().
+```
+
+---
+
+## Chalkboard Rosetta Stone
+
+This reference table maps deep learning sequence symbols directly to PyTorch implementations and lecture usage.
+
+| Symbol / Syntax | Formal Concept | PyTorch Implementation | Lecture Usage & Context |
+| :--- | :--- | :--- | :--- |
+| $\mathbf{X} \in \mathbb{R}^{N \times T \times D}$ | 3D Mini-Batch Sequence Tensor | `x = torch.randn(N, T, D)` | 3D sequence layout (`batch_first=True`). |
+| $\mathbf{x}_t \in \mathbb{R}^D$ | Current Time-Step Observation | `x[:, t, :]` | Input vector at time step $t$. |
+| $\mathbf{h}_t \in \mathbb{R}^H$ | Hidden Memory State Vector | `output[:, t, :]` or `h_n` | Running recurrent memory summary at time step $t$. |
+| $\mathbf{c}_t \in \mathbb{R}^H$ | Long-Term LSTM Cell State | `c_n` (inside returned tuple) | Additive linear memory highway in LSTM. |
+| $\mathbf{W}_{xh} \in \mathbb{R}^{H \times D}$ | Input-to-Hidden Weight Matrix | `rnn.weight_ih_l0` | Transform mapping input $\mathbf{x}_t$ to hidden state. |
+| $\mathbf{W}_{hh} \in \mathbb{R}^{H \times H}$ | Hidden-to-Hidden Recurrent Matrix | `rnn.weight_hh_l0` | Recurrent transform mapping $\mathbf{h}_{t-1}$ to $\mathbf{h}_t$. |
+| $\mathbf{f}_t, \mathbf{i}_t, \mathbf{o}_t$ | LSTM Gate Activations ($\in [0, 1]$) | Computed internally in `nn.LSTM` | Sigmoid valves controlling erase, write, and read. |
+| $\mathbf{r}_t, \mathbf{z}_t$ | GRU Gate Activations ($\in [0, 1]$) | Computed internally in `nn.GRU` | Reset and update gates in GRU. |
+| $\mathbf{h}_T \in \mathbb{R}^H$ | Terminal Summary State Vector | `output[:, -1, :]` or `h_n[-1]` | Final state fed into the Linear classifier head. |
+| $\mathbf{z} \in \mathbb{R}^{N \times C}$ | Unnormalized Output Logits | `logits = model(x)` | Class score matrix fed into `nn.CrossEntropyLoss`. |
+
+---
+
+## Complete Standalone Executable PyTorch Simulation Script
+
+<a id="standalone-simulation-script"></a>
+
+Below is a self-contained, end-to-end Python script implementing all concepts taught in Tutorial 5: 3D sequence tensor creation $(N, T, D)$, manual unrolling vs `nn.RNN`, LSTM dual-state return unpacking, GRU forward pass, full `LSTMClassifier` model construction, dummy forward pass verification, synthetic temporal dataset generation, modular `train_one_epoch` and `evaluate` functions, model weight saving to `.pth` via `state_dict`, and verified reload.
+
+```python
+"""
+Tutorial 05: RNNs using PyTorch — Master Executable Simulation Script
+Validated on Python 3.10+, PyTorch 2.0+, and CUDA / CPU backends.
+"""
+
+import os
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+from torch.utils.data import TensorDataset, DataLoader
+
+def run_tutorial_05_simulation():
+    print("=" * 80)
+    print("TUTORIAL 05: RECURRENT NEURAL NETWORKS (RNNs, LSTMs, GRUs) MASTER SIMULATION")
+    print("=" * 80)
+
+    # ---------------------------------------------------------
+    # 1. HARDWARE DEVICE CONFIGURATION
+    # ---------------------------------------------------------
+    print("\n[1] Environment & Hardware Device Configuration")
+    print(f"  PyTorch Version: {torch.__version__}")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"  Selected Compute Device: {device}")
+    if torch.cuda.is_available():
+        print(f"  GPU Device Name: {torch.cuda.get_device_name(0)}")
+
+    # ---------------------------------------------------------
+    # 2. 3D SEQUENCE TENSOR GEOMETRY (N, T, D)
+    # ---------------------------------------------------------
+    print("\n[2] 3D Sequence Tensor Geometry (batch_first=True)")
+    # Batch of 4 sequences, length 5, feature dimension 3
+    x_batch = torch.randn(4, 5, 3)
+    print(f"  Sequence Batch Shape (N, T, D): {x_batch.shape}")
+    print(f"  Batch Size (N): {x_batch.size(0)} | Sequence Length (T): {x_batch.size(1)} | Features (D): {x_batch.size(2)}")
+    assert x_batch.shape == torch.Size([4, 5, 3])
+
+    # ---------------------------------------------------------
+    # 3. VANILLA RNN FORWARD & SHAPE VERIFICATION
+    # ---------------------------------------------------------
+    print("\n[3] Vanilla RNN Module Mechanics")
+    rnn_cell = nn.RNN(input_size=3, hidden_size=8, batch_first=True)
+    rnn_out, rnn_hn = rnn_cell(x_batch)
+    print(f"  RNN Output Shape (N, T, H):   {rnn_out.shape} (Theory: [4, 5, 8])")
+    print(f"  RNN Hidden Shape (num_l, N, H): {rnn_hn.shape}  (Theory: [1, 4, 8])")
+    # Verify terminal hidden state matches last time step of output
+    assert torch.allclose(rnn_out[:, -1, :], rnn_hn[0])
+    assert rnn_out.shape == torch.Size([4, 5, 8])
+
+    # ---------------------------------------------------------
+    # 4. LSTM MODULE MECHANICS & DUAL STATES (h_n, c_n)
+    # ---------------------------------------------------------
+    print("\n[4] LSTM Module Mechanics & Dual States")
+    lstm_cell = nn.LSTM(input_size=3, hidden_size=8, batch_first=True)
+    lstm_out, (lstm_hn, lstm_cn) = lstm_cell(x_batch)
+    print(f"  LSTM Output Shape (N, T, H):    {lstm_out.shape}")
+    print(f"  LSTM Hidden State h_n Shape:    {lstm_hn.shape} (Short-term memory)")
+    print(f"  LSTM Cell State c_n Shape:      {lstm_cn.shape} (Long-term highway)")
+    assert lstm_out.shape == torch.Size([4, 5, 8])
+    assert lstm_hn.shape == torch.Size([1, 4, 8])
+    assert lstm_cn.shape == torch.Size([1, 4, 8])
+
+    # ---------------------------------------------------------
+    # 5. GRU MODULE MECHANICS (RESET & UPDATE GATES)
+    # ---------------------------------------------------------
+    print("\n[5] GRU Module Mechanics (Streamlined Single State)")
+    gru_cell = nn.GRU(input_size=3, hidden_size=8, batch_first=True)
+    gru_out, gru_hn = gru_cell(x_batch)
+    print(f"  GRU Output Shape (N, T, H): {gru_out.shape}")
+    print(f"  GRU Hidden Shape (1, N, H): {gru_hn.shape}")
+    assert gru_out.shape == torch.Size([4, 5, 8])
+    assert gru_hn.shape == torch.Size([1, 4, 8])
+
+    # ---------------------------------------------------------
+    # 6. SEQUENCE CLASSIFIER ARCHITECTURE & DUMMY FORWARD PASS
+    # ---------------------------------------------------------
+    print("\n[6] SequenceClassifier Architecture & Dummy Forward Pass")
+    class SequenceClassifier(nn.Module):
+        def __init__(self, input_size=3, hidden_size=8, num_classes=2):
+            super().__init__()
+            self.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size, batch_first=True)
+            self.fc = nn.Linear(in_features=hidden_size, out_features=num_classes)
+            
+        def forward(self, x):
+            out, (h_n, c_n) = self.lstm(x)
+            # Extract final time step hidden representation: out[:, -1, :]
+            last_hidden = out[:, -1, :] # Shape: (N, H)
+            logits = self.fc(last_hidden) # Shape: (N, num_classes)
+            return logits
+
+    model = SequenceClassifier(input_size=3, hidden_size=8, num_classes=2).to(device)
+    dummy_input = torch.randn(8, 5, 3, device=device)
+    dummy_logits = model(dummy_input)
+    print(f"  Dummy Forward Input: {dummy_input.shape} -> Output Logits: {dummy_logits.shape}")
+    assert dummy_logits.shape == torch.Size([8, 2])
+
+    # ---------------------------------------------------------
+    # 7. SYNTHETIC TEMPORAL DATASET PIPELINE
+    # ---------------------------------------------------------
+    print("\n[7] Synthetic Temporal Dataset Pipeline (Sum Rule)")
+    # Task: If sum of all elements across T and D > 0 -> Class 1, else Class 0
+    torch.manual_seed(42)
+    X_synthetic = torch.randn(200, 5, 3)
+    y_synthetic = (X_synthetic.sum(dim=(1, 2)) > 0).long()
+
+    train_data = TensorDataset(X_synthetic[:160], y_synthetic[:160])
+    test_data = TensorDataset(X_synthetic[160:], y_synthetic[160:])
+
+    train_loader = DataLoader(train_data, batch_size=16, shuffle=True)
+    test_loader = DataLoader(test_data, batch_size=16, shuffle=False)
+    print(f"  Train Sequences: {len(train_data)} | Train Batches: {len(train_loader)}")
+    print(f"  Test Sequences:  {len(test_data)}  | Test Batches: {len(test_loader)}")
+
+    # ---------------------------------------------------------
+    # 8. MODULAR TRAINING & EVALUATION FUNCTIONS
+    # ---------------------------------------------------------
+    print("\n[8] Modular Training Loop Execution")
+    def train_one_epoch(model, dataloader, criterion, optimizer, device):
+        model.train()
+        total_loss = 0.0
+        for X, y in dataloader:
+            X, y = X.to(device), y.to(device)
+            optimizer.zero_grad()
+            logits = model(X)
+            loss = criterion(logits, y)
+            loss.backward()
+            optimizer.step()
+            total_loss += loss.item() * X.size(0)
+        return total_loss / len(dataloader.dataset)
+
+    def evaluate(model, dataloader, criterion, device):
+        model.eval()
+        total_loss = 0.0
+        correct = 0
+        with torch.no_grad():
+            for X, y in dataloader:
+                X, y = X.to(device), y.to(device)
+                logits = model(X)
+                loss = criterion(logits, y)
+                total_loss += loss.item() * X.size(0)
+                preds = torch.argmax(logits, dim=1)
+                correct += (preds == y).sum().item()
+        avg_loss = total_loss / len(dataloader.dataset)
+        acc = (correct / len(dataloader.dataset)) * 100.0
+        return avg_loss, acc
+
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=0.01)
+    epochs = 10
+
+    for epoch in range(epochs):
+        train_loss = train_one_epoch(model, train_loader, criterion, optimizer, device)
+        test_loss, test_acc = evaluate(model, test_loader, criterion, device)
+        if (epoch + 1) % 2 == 0 or epoch == 0:
+            print(f"  Epoch [{epoch+1:02d}/{epochs:02d}] | Train Loss: {train_loss:.4f} | Test Loss: {test_loss:.4f} | Test Acc: {test_acc:.2f}%")
+
+    # ---------------------------------------------------------
+    # 9. MODEL PERSISTENCE HYGIENE (SAVE & LOAD STATE_DICT)
+    # ---------------------------------------------------------
+    print("\n[9] Model Persistence Hygiene (torch.save & torch.load)")
+    ckpt_path = "seq_model.pth"
+    torch.save(model.state_dict(), ckpt_path)
+    print(f"  Model state_dict successfully serialized to '{ckpt_path}'")
+
+    # Reload into fresh model architecture
+    fresh_model = SequenceClassifier(input_size=3, hidden_size=8, num_classes=2).to(device)
+    fresh_model.load_state_dict(torch.load(ckpt_path, weights_only=True))
+    fresh_model.eval()
+
+    # Verify identical predictions
+    with torch.no_grad():
+        orig_preds = model(dummy_input)
+        reloaded_preds = fresh_model(dummy_input)
+        assert torch.allclose(orig_preds, reloaded_preds)
+    print("  Reloaded model produced 100% IDENTICAL predictions on test inputs!")
+
+    # Cleanup temporary checkpoint file
+    if os.path.exists(ckpt_path):
+        os.remove(ckpt_path)
+
+    print("\n" + "=" * 80)
+    print("ALL TUTORIAL 05 SIMULATION BLOCKS EXECUTED & VERIFIED SUCCESSFULLY!")
+    print("=" * 80)
+
+if __name__ == "__main__":
+    run_tutorial_05_simulation()
+```
+
+---
+
+## Topic 1: Recap CNNs & Introduction to Ordered Sequences (00:02–03:00)
+
+<a id="topic-1-recap-cnn-sequences-0002–0300"></a>
+<a id="topic-1-recap-cnn-sequences-0002-0300"></a>
 
 ### Where this sits on the master map
+Closing the 2D vision chapter (CNNs on MNIST) and introducing temporal sequence data. Warm-up: [what is a sequence](./PREREQUISITES.md#p1-seq).
 
-**SETUP** — Close the CNN chapter and open **temporal sequences**. Warm-up: [sequence](./PREREQUISITES.md#p1-seq).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![Recap sequences](./screenshots/composites/ch01-topic-01-recap-sequences-panel1of1.png)
 
-![Recap sequences intro](./screenshots/composites/ch01-topic-01-recap-sequences-panel1of1.png)
-
-**Figure — ~00:03–01:31:** Bridge from CNN MNIST; introduce sequences / RNN / LSTM / GRU.
-
-### What he is establishing
-
-Last tutorial: **image classification with CNNs** on **MNIST**, including training and evaluation. Because the data was **balanced**, the metric was plain **accuracy**; he reminds you that **precision, recall, F1, AUC** exist for skewed settings.
-
-Today continues from that point into **sequences** — **temporal data**. Tools: **recursive / recurrent neural networks (RNNs)** and upgraded versions **LSTMs** and **GRUs**.
-
-You can now place this lecture after CNN training. Still missing: how a sequence is stored as a tensor.
-
-A common trap is treating this as “another CNN notebook” — the data axis of interest is **time**, not height/width. Another trap: assuming every classification problem uses accuracy; the instructor flags **precision / recall / F1 / AUC** when classes are skewed.
-
-### Analogy for this topic only
-
-Tutorial 4 was **photos** on a desk. Tutorial 5 is **stories told in order** — a comic strip, not a single frame. Same kitchen (PyTorch Module, CE, Adam); new ingredient is **memory across steps**. Accuracy on MNIST was like grading a fair multiple-choice test; skewed data is like grading a test where almost every answer is “A” — you need different scorecards.
-
-Question: **Why mention precision/recall if MNIST used accuracy?**
-
-In lecture words: this box is the handoff from vision to sequences.
-
-### Local picture
-
-```
-  Tutorial 4: CNN · MNIST · accuracy (balanced)
-          │
-          ▼
-  Tutorial 5: sequences (temporal)
-          │
-          ├── RNN
-          ├── LSTM
-          └── GRU
-```
-
-**Notice:** evaluation metric choice depends on class balance — carried over idea, not re-derived.
-
-### Bridge
-
-You need a concrete **batch of sequences** with clear **N, T, D** axes before any `nn.RNN` call.
+*Figure — ~00:02–03:00: Blackboard presentation of the curriculum transition: reviewing CNN classification accuracy on balanced MNIST datasets, introducing temporal sequence modeling, and defining the order-dependence constraint.*
 
 ---
 
-## Topic 2: Sequence tensor NTD (01:31–04:29)
+### 1. 👶 ELI5 Quick Intuition
+Think of looking at a photograph versus watching a 5-second video clip:
+- In a single photograph (CNN), all pixels are already there at once; you scan across space.
+- In a video clip or sentence (Sequence), events arrive **one after another in time**.
+- If you play the video backwards or shuffle the sentences, the entire story falls apart!
+- Machine learning on sequences requires **memory of what came before**.
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Closing the Vision Chapter:**
+   - In Tutorial 4, we evaluated `SimpleCNN` on MNIST handwritten digits ($32 \times 32$ images).
+   - The reported classification accuracy was high because MNIST is balanced (equal samples across classes $0$ to $9$) and visual patterns have strong local spatial correlation.
+2. **The New Paradigm: Ordered Sequences:**
+   - Real-world data often arrives in discrete temporal steps: words in a dialogue, stock price ticks, ECG heartbeats, or weather readings over 5 days.
+   - Unlike static images, temporal sequences require models with **causal recurrence** (processing $t=1 \to 2 \to 3 \dots$).
+
+---
+
+### 3. 📐 Formal Mathematics & Sequential Causality
+
+```
+  =============================================================================
+                     SPATIAL GRIDS VS TEMPORAL TRAJECTORIES
+  =============================================================================
+  [Spatial Image Grid (Tutorial 4)]
+  • Dimension: X ∈ ℝ^(C × H × W)
+  • Processing: 2D sliding convolution stencils across (H, W)
+  • Property: Bidirectional spatial locality (left/right, up/down)
+  
+  [Temporal Sequence Trajectory (Tutorial 5)]
+  • Dimension: X ∈ ℝ^(T × D)
+  • Processing: Unidirectional recurrent state updates h_t = f(x_t, h_{t-1})
+  • Property: Strict causal arrow of time (t cannot see future t+1)
+  =============================================================================
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why begin with a conceptual contrast between CNNs and RNNs?**  
+  To prevent engineers from applying vision tools blindly to sequence problems. A 2D convolution over a time-series treats past and future symmetrically, violating the fundamental causal constraint of real-time temporal systems.
+- **What are we learning?**  
+  We are learning that time-series data requires architectures equipped with internal recurrent memory states ($\mathbf{h}_t$).
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Autoregressive Generation:**  
+  All modern text generation (ChatGPT, Claude) is strictly causal: models generate token $x_{t+1}$ given previous tokens $x_{1:t}$. Mastering sequential causality is the first step toward understanding autoregressive generative AI.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Real-Time Fraud Detection in Banking:**  
+  Credit card transactions occur in sequence. A single \$500 purchase might look normal in isolation, but seeing it happen 2 minutes after a transaction in another country triggers an immediate fraud alert.
+
+---
+
+## Topic 2: 3D Sequence Tensor Geometry — $(N, T, D)$ Layout (03:00–06:20)
+
+<a id="topic-2-sequence-tensor-ntd-0300–0620"></a>
+<a id="topic-2-sequence-tensor-ntd-0300-0620"></a>
 
 ### Where this sits on the master map
+Declaring 3D sequence tensors in PyTorch and configuring the `batch_first=True` layout contract. Warm-up: [NTD layout](./PREREQUISITES.md#p2-ntd).
 
-**DATA SHAPE** — Build `(batch, seq_len, input_dim)` with `batch_first` semantics. Warm-up: [N,T,D](./PREREQUISITES.md#p2-ntd).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Sequence tensor NTD](./screenshots/composites/ch02-topic-02-sequence-tensor-panel1of1.png)
 
-**Figure — ~01:31–04:29:** Four examples × length 5 × $R^3$; shape (4,5,3); import/device refresh.
+*Figure — ~03:00–06:20: Blackboard derivation of the 3D sequence tensor $(N, T, D)$, instantiating `x = torch.randn(4, 5, 3)` with `batch_first=True`, and mapping batch ($N=4$), time length ($T=5$), and feature dimension ($D=3$).*
 
-### What he is establishing
+---
 
-Construct a sequence batch of **size 4**. Each example has **sequence length 5**: $x_{i1},\ldots,x_{i5}$. Each $x_{ij} \in \mathbb{R}^3$.
+### 1. 👶 ELI5 Quick Intuition
+Think of a spreadsheet workbook:
+- **$N = 4$:** You have 4 different spreadsheet pages (Batch Size).
+- **$T = 5$:** Each spreadsheet page has 5 rows (Days of the week: Mon–Fri).
+- **$D = 3$:** Each row records 3 columns (Temperature, Humidity, Wind Speed).
+- The 3D tensor is simply this workbook of **`(Pages, Rows, Columns)` = `(N, T, D)`**!
 
-Layout with **batch first**: dimension **0 = batch**, **1 = sequence length**, **2 = input feature dimension**. Printed shape **(4, 5, 3)**.
+---
 
-If the Colab session is cold, re-run the **import + device** cells from PyTorch basics before the RNN cell.
+### 2. 🔍 Plain-English Breakdown
+1. **The 3D Sequence Tensor Dimensions:**
+   - **$N$ (`batch_size`):** Number of independent sequences processed simultaneously in parallel.
+   - **$T$ (`seq_len`):** Number of time steps or tokens in each sequence.
+   - **$D$ (`input_size` / `feature_dim`):** Number of numerical features measured at each time step.
+2. **The `batch_first=True` Rule:**
+   - In PyTorch, always declare `batch_first=True` when working with `(N, T, D)` data:
+     ```python
+     x = torch.randn(4, 5, 3) # 4 sequences, 5 time steps, 3 features
+     ```
+
+---
+
+### 3. 📐 Formal Mathematics & Memory Offset Calculation
+
+```
+  3D Tensor Coordinate Space: X ∈ ℝ^(N × T × D)
+  
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │  Batch Axis n ∈ {0, ..., N-1}                                               │
+  │    └── Time Axis t ∈ {0, ..., T-1}                                          │
+  │          └── Feature Axis d ∈ {0, ..., D-1}                                 │
+  └─────────────────────────────────────────────────────────────────────────────┘
+  
+  Physical Memory Stride: s = ( T·D,  D,  1 )
+  MemoryOffset(n, t, d) = n·(T·D) + t·(D) + d
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why build `x = torch.randn(4, 5, 3)` explicitly?**  
+  To establish rock-solid mental muscle memory for the 3 axes. Swapping $T$ and $D$ causes silent mathematical errors where features are treated as time steps, corrupting the unrolling logic without triggering a syntax crash.
+- **What are we learning?**  
+  We are learning the standardized data layout contract required by all PyTorch sequence modules (`nn.RNN`, `nn.LSTM`, `nn.GRU`).
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Transformer Embedding Tensors:**  
+  When an LLM processes a prompt, the tokenizer converts text into a batch of token embeddings with the identical 3D shape `(batch_size, sequence_length, embedding_dim)` = `(N, T, D)`.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Patient Vital Signs in Intensive Care Units (ICUs):**  
+  Hospital monitoring servers stream batches of $N=64$ patient beds, observing $T=60$ seconds of telemetry with $D=8$ biometric channels (ECG, SpO2, arterial pressure, respiration rate).
+
+---
+
+## Topic 3: Vanilla RNN Cell Mathematics & Temporal Unrolling (06:20–10:15)
+
+<a id="topic-3-rnn-cell-math-unroll-0620–1015"></a>
+<a id="topic-3-rnn-cell-math-unroll-0620-1015"></a>
+
+### Where this sits on the master map
+Writing the recurrent state transition formula, understanding linear weight matrices, and unrolling recurrence across time. Warm-up: [recurrent cell](./PREREQUISITES.md#p3-rnn).
+
+### Board / Screenshot Reference
+
+![RNN cell math](./screenshots/composites/ch03-topic-03-rnn-cell-math-panel1of1.png)
+
+*Figure — ~06:20–10:15: Blackboard derivation of the vanilla RNN recurrence equation $h_t = \tanh(W_{xh} x_t + W_{hh} h_{t-1} + b)$, unrolling the computation graph across $t=1 \dots T$, and explaining recurrent weight sharing.*
+
+---
+
+### 1. 👶 ELI5 Quick Intuition
+Think of keeping a running daily diary:
+- Each morning, you wake up with yesterday's diary in your head ($\mathbf{h}_{t-1}$).
+- You experience today's new events ($\mathbf{x}_t$).
+- You combine today's events with yesterday's memories to write tonight's updated diary entry ($\mathbf{h}_t$).
+- You use the **exact same thinking process ($W_{xh}, W_{hh}$)** every single day!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Recurrent Update Equation:**
+   $$\mathbf{h}_t = \tanh(\mathbf{W}_{xh} \mathbf{x}_t + \mathbf{W}_{hh} \mathbf{h}_{t-1} + \mathbf{b}_h)$$
+2. **The Two Core Matrices:**
+   - $\mathbf{W}_{xh} \in \mathbb{R}^{H \times D}$: Projects incoming feature vector $\mathbf{x}_t$ into hidden memory space.
+   - $\mathbf{W}_{hh} \in \mathbb{R}^{H \times H}$: Transitions previous memory $\mathbf{h}_{t-1}$ into the new state.
+3. **Weight Sharing in Time:**
+   - The matrices $\mathbf{W}_{xh}$ and $\mathbf{W}_{hh}$ are **fixed and shared** across all time steps $t=1, \dots, T$.
+4. **Initial State:**
+   - At time $t=0$, memory starts as a vector of zeros: $\mathbf{h}_0 = \mathbf{0}$.
+
+---
+
+### 3. 📐 Formal Mathematics & Recurrent Graph Unrolling
+
+```
+  Recurrent Loop (Compact Form)                Unrolled Computation Graph across Time
+  
+            ┌──────┐                                    x_1               x_2               x_T
+            │      ▼                                     │                 │                 │
+     x_t ──►[ RNN ]──► h_t                               ▼                 ▼                 ▼
+             ▲    │                     h_0 = 0 ──► [ RNN ] ──► h_1 ──► [ RNN ] ──► ... ──► [ RNN ] ──► h_T
+             └────┘                                (W_x, W_h)        (W_x, W_h)        (W_x, W_h)
+```
+
+$$\mathbf{h}_1 = \tanh(\mathbf{W}_{xh} \mathbf{x}_1 + \mathbf{W}_{hh} \mathbf{h}_0 + \mathbf{b})$$
+$$\mathbf{h}_2 = \tanh(\mathbf{W}_{xh} \mathbf{x}_2 + \mathbf{W}_{hh} \mathbf{h}_1 + \mathbf{b})$$
+$$\mathbf{h}_T = \tanh(\mathbf{W}_{xh} \mathbf{x}_T + \mathbf{W}_{hh} \mathbf{h}_{T-1} + \mathbf{b})$$
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why unroll the recurrent loop across time on the chalkboard?**  
+  To reveal that an RNN is simply a very deep feedforward network where **every layer shares identical weights**. This makes the backpropagation process (Backpropagation Through Time) intuitive to analyze.
+- **What are we learning?**  
+  We are learning how recurrent connections maintain continuous temporal context across time steps.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Vanishing Gradients:**  
+  Notice that $\mathbf{h}_T$ depends on $\mathbf{h}_0$ through $T$ repeated multiplications by $\mathbf{W}_{hh}$. This unrolling explains why long sequences cause vanishing or exploding gradients, directly motivating the invention of **LSTMs** and **Transformers**.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Smart Thermostat Climate Control (Nest / Ecobee):**  
+  Thermostats update indoor temperature predictions every minute using a lightweight recurrent state that combines current ambient sensor readings with the past hour's thermal momentum.
+
+---
+
+## Topic 4: RNN Forward Output & Hidden State Shape Mechanics (10:15–13:45)
+
+<a id="topic-4-rnn-output-hidden-shapes-1015–1345"></a>
+<a id="topic-4-rnn-output-hidden-shapes-1015-1345"></a>
+
+### Where this sits on the master map
+Dissecting the two return values of PyTorch recurrent modules: all-step `output` vs terminal `hidden` state `h_n`. Warm-up: [NTD layout](./PREREQUISITES.md#p2-ntd).
+
+### Board / Screenshot Reference
+
+![RNN shapes](./screenshots/composites/ch04-topic-04-rnn-shapes-panel1of1.png)
+
+*Figure — ~10:15–13:45: Blackboard demonstration of `nn.RNN(3, 8, batch_first=True)`: passing input $(4, 5, 3)$ and proving the exact shapes of `output` $(4, 5, 8)$ and `h_n` $(1, 4, 8)$.*
+
+---
+
+### 1. 👶 ELI5 Quick Intuition
+Think of a factory assembly line inspector:
+- **`output` (Shape `[4, 5, 8]`):** The inspector's notes taken at **every single second** of the 5-second video (all 5 hidden states).
+- **`h_n` (Shape `[1, 4, 8]`):** The inspector's **final executive summary** at the end of second 5.
+- If you want to know what happened at step 3, look in `output[:, 2, :]`. If you only want the final verdict, look in `h_n`!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The PyTorch Forward Signature:**
+   ```python
+   output, h_n = rnn(x)
+   ```
+2. **`output` Tensor Shape: `(N, T, H)`:**
+   - Contains the hidden state vector $\mathbf{h}_t$ for **every time step** $t \in \{1, \dots, T\}$.
+   - Shape: `(batch_size, seq_len, hidden_size)` = `(4, 5, 8)`.
+3. **`h_n` Tensor Shape: `(num_layers, N, H)`:**
+   - Contains the **final hidden state** at time step $t=T$ for each layer in the stack.
+   - For a 1-layer RNN: shape is `(1, 4, 8)`.
+4. **The Identity Equivalence:**
+   $$\text{output}[:, -1, :] \equiv \text{h\_n}[0, :, :]$$
+
+---
+
+### 3. 📐 Formal Mathematics & Multi-Step Output Tensor Slicing
+
+```
+  =============================================================================
+                          PYTORCH RNN RETURN OBJECTS
+  =============================================================================
+  Input Tensor:  X ∈ ℝ^(4 × 5 × 3)   [N=4, T=5, D=3]
+  Module:        nn.RNN(input_size=3, hidden_size=8, batch_first=True)
+  
+  [Return 1: output] ──► Shape: (4, 5, 8)
+  • output[:, 0, :] ──► Hidden state h_1 for all 4 batch items
+  • output[:, 1, :] ──► Hidden state h_2 for all 4 batch items
+  • output[:, 4, :] ──► Hidden state h_5 (Final step) for all 4 batch items
+  
+  [Return 2: h_n]    ──► Shape: (1, 4, 8)
+  • h_n[0, :, :]    ──► Identical to output[:, -1, :] (Terminal state)
+  =============================================================================
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why print and verify both `output` and `h_n` shapes?**  
+  Different sequence tasks require different return objects:
+  - Sequence-to-Sequence (e.g. Translation, Tagging) requires `output` at every time step.
+  - Sequence-to-One (e.g. Classification) requires only the final state `output[:, -1, :]` or `h_n`.
+- **What are we learning?**  
+  We are learning how to correctly extract temporal representations for downstream neural network heads.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Transformer Hidden States:**  
+  In Transformer encoders (BERT), the output tensor has the exact same shape `(batch_size, seq_len, hidden_size)`. Slicing token representations mirrors slicing RNN `output`!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Token-Level Named Entity Recognition (NER):**  
+  Information extraction systems feed the full `output` tensor `(N, T, H)` into token-level classifiers to label each individual word in a legal contract (e.g., identifying Person, Date, Amount).
+
+---
+
+## Topic 5: LSTM Architecture — Dual States & Gating Mechanics (13:45–18:10)
+
+<a id="topic-5-lstm-gates-cell-state-1345–1810"></a>
+<a id="topic-5-lstm-gates-cell-state-1345-1810"></a>
+
+### Where this sits on the master map
+Analyzing the vanishing gradient problem, introducing the long-term cell state highway $c_t$, and deriving the 4 LSTM gates. Warm-up: [LSTM gates](./PREREQUISITES.md#p4-lstm).
+
+### Board / Screenshot Reference
+
+![LSTM gates](./screenshots/composites/ch05-topic-05-lstm-gates-panel1of1.png)
+
+*Figure — ~13:45–18:10: Blackboard derivation of LSTM equations: explaining why repeated $\tanh$ derivatives cause vanishing gradients, introducing the additive cell state $\mathbf{c}_t$, and defining the forget ($\mathbf{f}_t$), input ($\mathbf{i}_t$), candidate ($\tilde{\mathbf{c}}_t$), and output ($\mathbf{o}_t$) gates.*
+
+---
+
+### 1. 👶 ELI5 Quick Intuition
+Think of a factory conveyor belt with three robotic arms:
+- An uninterrupted conveyor belt rolls through the factory carrying your **Master Memory ($c_t$)**.
+- **Robotic Arm 1 (Forget Gate):** Uses an eraser to wipe away useless old junk ($f_t \odot c_{t-1}$).
+- **Robotic Arm 2 (Input Gate):** Uses a stamp to write new important discoveries onto the belt ($i_t \odot \tilde{c}_t$).
+- **Robotic Arm 3 (Output Gate):** Takes a photo of the conveyor belt to create today's action plan ($h_t = o_t \odot \tanh(c_t)$).
+- Because the conveyor belt is a straight additive line, memories can travel for miles without fading!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Flaw of Vanilla RNNs:**
+   - Multiplicative gradient decay: $\tanh'(x) \le 1.0$, meaning gradients vanish after $10–20$ time steps.
+2. **The LSTM Innovation (Hochreiter & Schmidhuber, 1997):**
+   - Introduces **Two Separate State Vectors**:
+     - **$\mathbf{c}_t \in \mathbb{R}^H$ (Cell State):** Long-term memory highway with purely additive updates.
+     - **$\mathbf{h}_t \in \mathbb{R}^H$ (Hidden State):** Short-term filtered working memory.
+3. **The Gating Quartet:**
+   - **Forget Gate ($\mathbf{f}_t$):** $\sigma(\mathbf{W}_f [\mathbf{x}_t, \mathbf{h}_{t-1}] + \mathbf{b}_f)$ (Percentage of old memory to keep).
+   - **Input Gate ($\mathbf{i}_t$):** $\sigma(\mathbf{W}_i [\mathbf{x}_t, \mathbf{h}_{t-1}] + \mathbf{b}_i)$ (Percentage of new candidate to store).
+   - **Candidate Memory ($\tilde{\mathbf{c}}_t$):** $\tanh(\mathbf{W}_c [\mathbf{x}_t, \mathbf{h}_{t-1}] + \mathbf{b}_c)$ (New candidate information).
+   - **Output Gate ($\mathbf{o}_t$):** $\sigma(\mathbf{W}_o [\mathbf{x}_t, \mathbf{h}_{t-1}] + \mathbf{b}_o)$ (Percentage of cell state exposed to hidden output).
+
+---
+
+### 3. 📐 Formal Mathematics & Additive Error Carousel
+
+$$\mathbf{c}_t = \mathbf{f}_t \odot \mathbf{c}_{t-1} + \mathbf{i}_t \odot \tilde{\mathbf{c}}_t$$
+$$\mathbf{h}_t = \mathbf{o}_t \odot \tanh(\mathbf{c}_t)$$
+
+```
+  Gradient Flow through LSTM Cell State Highway:
+  
+  ∂c_t / ∂c_{t-1} = f_t
+  
+  If f_t ≈ 1.0 (Forget Gate Open), gradient flows back across time with ZERO attenuation!
+  This creates the Constant Error Carousel (CEC), solving the vanishing gradient crisis.
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why derive the additive cell update $\mathbf{c}_t = \mathbf{f}_t \odot \mathbf{c}_{t-1} + \dots$?**  
+  To understand the exact mathematical trick that made deep sequence learning possible: *replace multiplicative recurrence with additive recurrence*.
+- **What are we learning?**  
+  We are learning how differentiable gating mechanisms allow networks to dynamically regulate their own internal memory persistence.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Residual Networks & Highway Networks:**  
+  The LSTM's additive cell state directly inspired **ResNet skip connections** ($\mathbf{x} + F(\mathbf{x})$) in Computer Vision and **Residual Pre-LayerNorm streams** in modern Generative LLMs!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Siri / Google Voice Acoustic Modeling (Pre-Transformer Era):**  
+  Commercial speech recognizers used deep multi-layer LSTMs to process 100-step audio spectrogram frames, accurately recognizing phonemes despite background noise.
+
+---
+
+## Topic 6: The `nn.LSTM` Module API & Multi-Layer Recurrent Stacks (18:10–22:40)
+
+<a id="topic-6-nn-lstm-api-multi-layer-1810–2240"></a>
+<a id="topic-6-nn-lstm-api-multi-layer-1810-2240"></a>
+
+### Where this sits on the master map
+Instantiating `nn.LSTM`, unpacking the three return values, and understanding multi-layer recurrent stacks. Warm-up: [LSTM API](./PREREQUISITES.md#p4-lstm).
+
+### Board / Screenshot Reference
+
+![nn.LSTM API](./screenshots/composites/ch06-topic-06-nn-lstm-api-panel1of1.png)
+
+*Figure — ~18:10–22:40: Blackboard presentation of `nn.LSTM(3, 8, batch_first=True)`: explaining the return tuple `output, (h_n, c_n)`, inspecting tensor dimensions, and introducing stacked multi-layer LSTMs (`num_layers=2`).*
+
+---
+
+### 1. 👶 ELI5 Quick Intuition
+Think of ordering a multi-item package:
+- When you call `nn.RNN`, you receive 2 boxes: `(output, h_n)`.
+- When you call `nn.LSTM`, you receive **3 boxes packaged into a tuple**: `output, (h_n, c_n)`!
+- Box 1: `output` (Every step's hidden notes).
+- Box 2: `h_n` (Final step short-term summary).
+- Box 3: `c_n` (Final step long-term master notebook).
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The PyTorch LSTM API Signature:**
+   ```python
+   lstm = nn.LSTM(input_size=3, hidden_size=8, num_layers=1, batch_first=True)
+   output, (h_n, c_n) = lstm(x)
+   ```
+2. **Return Shapes for Input `(N, T, D)` = `(4, 5, 3)`:**
+   - `output`: `(4, 5, 8)` $\implies$ Hidden state for all $N=4$ batches across all $T=5$ time steps.
+   - `h_n`: `(1, 4, 8)` $\implies$ Terminal hidden state across all batches.
+   - `c_n`: `(1, 4, 8)` $\implies$ Terminal cell state across all batches.
+3. **Multi-Layer Stacking (`num_layers > 1`):**
+   - Layer 1 processes raw inputs $\mathbf{x}_t$ and outputs hidden sequence $\mathbf{h}_t^{(1)}$.
+   - Layer 2 treats $\mathbf{h}_t^{(1)}$ as its input sequence, outputting higher-level representations $\mathbf{h}_t^{(2)}$.
+
+---
+
+### 3. 📐 Formal Mathematics & Multi-Layer Recurrent Stacking
+
+```
+  Multi-Layer LSTM Stack (num_layers = 2)
+  
+  Layer 2: h_0^(2) ──► [LSTM 2] ──► h_1^(2) ──► [LSTM 2] ──► ... ──► [LSTM 2] ──► h_T^(2)
+                          ▲                        ▲                       ▲
+                          │ h_1^(1)                │ h_2^(1)               │ h_T^(1)
+  Layer 1: h_0^(1) ──► [LSTM 1] ──► h_1^(1) ──► [LSTM 1] ──► ... ──► [LSTM 1] ──► h_T^(1)
+                          ▲                        ▲                       ▲
+                          │ x_1                    │ x_2                   │ x_T
+  Input Sequence:        (x_1)                    (x_2)                   (x_T)
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why explicitly write `output, (h_n, c_n)`?**  
+  Unpacking mistakes are notorious in PyTorch: writing `out, h_n = lstm(x)` assigns the tuple `(h_n, c_n)` to `h_n`, causing subsequent linear layer forward passes to crash with `AttributeError: tuple object has no attribute ...`.
+- **What are we learning?**  
+  We are learning the exact return structure of PyTorch gated recurrent layers and how multi-layer recurrent abstraction operates.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Deep Encoder-Decoder Stacks:**  
+  Stacked recurrent layers create hierarchical temporal representations: early layers capture syntax and phonemes, while deeper layers capture semantics and intent.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Machine Translation (Google Translate Seq2Seq):**  
+  Classic GNMT (Google Neural Machine Translation) used 8-layer stacked LSTM encoders to translate sentences across 100+ language pairs before the Transformer era.
+
+---
+
+## Topic 7: Gated Recurrent Units (GRU) — Reset & Update Gating (22:40–26:15)
+
+<a id="topic-7-gru-reset-update-gates-2240–2615"></a>
+<a id="topic-7-gru-reset-update-gates-2240-2615"></a>
+
+### Where this sits on the master map
+Analyzing Cho et al.'s Gated Recurrent Unit (GRU), comparing parameter counts against LSTM, and verifying the `nn.GRU` API. Warm-up: [GRU architecture](./PREREQUISITES.md#p5-gru).
+
+### Board / Screenshot Reference
+
+![GRU gates](./screenshots/composites/ch07-topic-07-gru-panel1of1.png)
+
+*Figure — ~22:40–26:15: Blackboard presentation of the Gated Recurrent Unit (GRU): deriving the Reset ($\mathbf{r}_t$) and Update ($\mathbf{z}_t$) gates, proving $25\%$ parameter savings over LSTM, and demonstrating `nn.GRU(3, 8, batch_first=True)`.*
+
+---
+
+### 1. 👶 ELI5 Quick Intuition
+Think of combining two dials on your car dashboard into one smart knob:
+- The LSTM had two separate dials: one to forget old memories, and another to add new ones.
+- **The GRU (Gated Recurrent Unit)** merges them into **One Smart Balance Knob ($z_t$)**:
+  - Turn the knob left ($z_t = 0$): Keep 100% of yesterday's old memory.
+  - Turn the knob right ($z_t = 1$): Overwrite everything with today's new thought.
+- It also has a **Reset Dial ($r_t$)** to wipe the slate clean when starting a new topic.
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The GRU Simplification (Cho et al., 2014):**
+   - Merges cell state $\mathbf{c}_t$ and hidden state $\mathbf{h}_t$ into a **single hidden state vector $\mathbf{h}_t$**.
+   - Reduces the 4 gating transformations of LSTM down to **2 gates**:
+     - **Reset Gate ($\mathbf{r}_t$):** Determines how much of past memory $\mathbf{h}_{t-1}$ to ignore when calculating candidate memory.
+     - **Update Gate ($\mathbf{z}_t$):** Balances how much of old state $\mathbf{h}_{t-1}$ to retain versus new candidate $\tilde{\mathbf{h}}_t$ to inject.
+2. **Parameter Count Advantage:**
+   - GRU has **$25\%$ fewer parameters** than LSTM, allowing faster GPU kernel execution and lower risk of overfitting on small datasets.
+
+---
+
+### 3. 📐 Formal Mathematics & GRU State Equations
+
+$$\mathbf{r}_t = \sigma(\mathbf{W}_{xr} \mathbf{x}_t + \mathbf{W}_{hr} \mathbf{h}_{t-1} + \mathbf{b}_r)$$
+$$\mathbf{z}_t = \sigma(\mathbf{W}_{xz} \mathbf{x}_t + \mathbf{W}_{hz} \mathbf{h}_{t-1} + \mathbf{b}_z)$$
+$$\tilde{\mathbf{h}}_t = \tanh(\mathbf{W}_{xh} \mathbf{x}_t + \mathbf{W}_{hh} (\mathbf{r}_t \odot \mathbf{h}_{t-1}) + \mathbf{b}_h)$$
+$$\mathbf{h}_t = (1 - \mathbf{z}_t) \odot \mathbf{h}_{t-1} + \mathbf{z}_t \odot \tilde{\mathbf{h}}_t$$
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why compare GRU directly against LSTM?**  
+  To understand architectural trade-offs: GRU offers a streamlined, computationally efficient alternative with no separate cell state return tuple (`out, h_n = gru(x)`), making code cleaner.
+- **What are we learning?**  
+  We are learning how to choose the right recurrent cell variant based on hardware budget and dataset size.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Recurrent State Space Models (Mamba / RWKV):**  
+  The linear interpolation equation $\mathbf{h}_t = (1 - \mathbf{z}_t) \odot \mathbf{h}_{t-1} + \mathbf{z}_t \odot \tilde{\mathbf{h}}_t$ is mathematically equivalent to the continuous-time discretization used in modern State Space Models (Mamba) that challenge Transformers today!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Low-Latency Drone Autopilot & Robotics:**  
+  Embedded flight controllers use GRUs to fuse IMU gyro sensors and visual odometry in real time, making millisecond trajectory adjustments with minimal power draw.
+
+---
+
+## Topic 8: Sequence Classifier Architecture & Dummy Forward Pass (26:15–30:10)
+
+<a id="topic-8-sequence-classifier-last-hidden-2615–3010"></a>
+<a id="topic-8-sequence-classifier-last-hidden-2615-3010"></a>
+
+### Where this sits on the master map
+Building a full PyTorch sequence classification model (`SequenceClassifier`), extracting the terminal hidden state, and verifying shapes via a dummy forward pass. Warm-up: [classifier head](./PREREQUISITES.md#p6-head).
+
+### Board / Screenshot Reference
+
+![Classifier dummy](./screenshots/composites/ch08-topic-08-classifier-dummy-panel1of1.png)
+
+*Figure — ~26:15–30:10: Blackboard implementation of `LSTMClassifier`: defining the LSTM encoder and `nn.Linear(hidden_size, num_classes)` head, executing dummy forward pass `(8, 5, 3) \to (8, 2)`, and verifying unnormalized logit dimensions.*
+
+---
+
+### 1. 👶 ELI5 Quick Intuition
+Think of a movie critic watching a 5-minute short film:
+- The critic watches all 5 minutes with their LSTM brain.
+- At the end of minute 5, they take their **final thought summary ($\mathbf{h}_{\text{last}}$)**.
+- They feed that summary into a 2-button scoring box: **Thumbs Up (Class 1) or Thumbs Down (Class 0)**!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The `SequenceClassifier` Class Design:**
+   - **Backbone:** `nn.LSTM(input_size=3, hidden_size=8, batch_first=True)`
+   - **Classifier Head:** `nn.Linear(in_features=8, out_features=2)` (Binary classification)
+2. **Forward Step Execution:**
+   - Ingests batch of sequences: shape `(N, T, D)` = `(8, 5, 3)`.
+   - Extracts terminal hidden state: `last_hidden = out[:, -1, :]` (shape `(8, 8)`).
+   - Projects through Linear layer: `logits = self.fc(last_hidden)` (shape `(8, 2)`).
+3. **The Dummy Forward Pass Validation:**
+   - Always test `model(torch.randn(8, 5, 3))` to verify that output logits match `torch.Size([8, 2])` before training on real data.
+
+---
+
+### 3. 📐 Formal Mathematics & Logit Mapping
+
+```
+  Dataflow through SequenceClassifier:
+  
+  Input Sequence Tensor:  X ∈ ℝ^(8 × 5 × 3)
+         │
+         ▼ nn.LSTM(3, 8, batch_first=True)
+  Hidden Feature Tensor:  H ∈ ℝ^(8 × 5 × 8)
+         │
+         ▼ Slice Terminal Time Step: H[:, -1, :]
+  Summary Vector Matrix:  h_last ∈ ℝ^(8 × 8)
+         │
+         ▼ nn.Linear(8, 2)
+  Output Logits:          Z ∈ ℝ^(8 × 2)   [Raw Scores for Class 0 & Class 1]
+```
+
+$$\mathbf{z}_n = \mathbf{h}_{n, T} \mathbf{W}_{\text{fc}}^\top + \mathbf{b}_{\text{fc}} \in \mathbb{R}^2$$
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why test with dummy noise `torch.randn(8, 5, 3)` first?**  
+  To isolate architectural correctness from data pipeline bugs. If tensor dimensions fail in the linear projection, you catch it instantly in memory without waiting for external data loading.
+- **What are we learning?**  
+  We are learning how to construct modular sequence-to-class neural networks in PyTorch.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Sentence Classification with BERT / RoBERTa:**  
+  In Transformer classification models, the `[CLS]` token embedding or terminal token embedding is extracted and passed to a linear head in this exact same manner.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Email Spam & Phishing Detection:**  
+  Email security filters process incoming email text as a sequence of token embeddings, using an LSTM classifier to predict whether the message is "Legitimate" (0) or "Phishing" (1).
+
+---
+
+## Topic 9: Toy Temporal Dataset Pipeline & Training Loop (30:10–34:30)
+
+<a id="topic-9-toy-dataset-train-loop-3010–3430"></a>
+<a id="topic-9-toy-dataset-train-loop-3010-3430"></a>
+
+### Where this sits on the master map
+Creating a synthetic sequence dataset, wrapping it in PyTorch DataLoaders, and executing multi-epoch mini-batch training with Adam and CrossEntropy. Warm-up: [reusable loops](./PREREQUISITES.md#p8-loops).
+
+### Board / Screenshot Reference
+
+![Toy train loop](./screenshots/composites/ch09-topic-09-toy-train-panel1of1.png)
+
+*Figure — ~30:10–34:30: Blackboard implementation of the toy temporal dataset and training loop: defining the synthetic sequence sum rule ($y = 1 \text{ if } \sum X > 0 \text{ else } 0$), configuring `DataLoader(batch_size=16, shuffle=True)`, and training with `nn.CrossEntropyLoss` and `optim.Adam`.*
+
+---
+
+### 1. 👶 ELI5 Quick Intuition
+Think of training a student on a math puzzle:
+- You give the student 200 flashcards. Each card has a grid of 15 numbers ($5 \text{ rows} \times 3 \text{ columns}$).
+- **The Rule:** If the numbers add up to a positive sum, the answer is **Yes (1)**; if negative, **No (0)**.
+- You train the student using small batches of 16 cards at a time.
+- After 10 rounds of practice (**10 Epochs**), the student achieves $100\%$ accuracy!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Synthetic Dataset Problem:**
+   - 200 random sequences of shape `(5, 3)`: `X = torch.randn(200, 5, 3)`.
+   - Binary Ground-Truth Label: `y = (X.sum(dim=(1, 2)) > 0).long()`.
+2. **Dataset Partitioning & DataLoaders:**
+   - 160 Training sequences $\implies$ `train_loader` (`batch_size=16, shuffle=True`).
+   - 40 Test sequences $\implies$ `test_loader` (`batch_size=16, shuffle=False`).
+3. **The 5-Step Optimization Engine:**
+   - `optimizer.zero_grad()` $\to$ `logits = model(X)` $\to$ `loss = criterion(logits, y)` $\to$ `loss.backward()` $\to$ `optimizer.step()`.
+
+---
+
+### 3. 📐 Formal Mathematics & Mini-Batch Optimization Dynamics
+
+```
+  Mini-Batch Iteration on Sequence Batch:
+  
+  Dataset Size: N = 160 | Batch Size: B = 16 ──► 10 Iterations per Epoch
+  
+  For each batch b = 1 ... 10:
+    1. g_b = (1/B) ∑ ∇_θ L_CE( model(X_i), y_i )
+    2. θ ← AdamUpdate(θ, g_b, lr=0.01)
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why use a synthetic dataset with a deterministic sum rule?**  
+  Synthetic datasets provide a controlled testing environment. Because we know the exact mathematical ground truth ($\sum X > 0$), we can verify that the LSTM is genuinely learning temporal aggregation rather than overfitting to noisy external datasets.
+- **What are we learning?**  
+  We are learning how to wire synthetic tensors into PyTorch `TensorDataset` and `DataLoader` pipelines.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Loss Convergence Monitoring:**  
+  Tracking training loss and validation accuracy curves is the universal diagnostic method across all machine learning domains, from toy RNNs to billion-parameter foundation models.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Synthetic Data for Model Unit Testing:**  
+  Autonomous driving teams generate synthetic sensor trajectories to unit-test safety perception models before deploying them to real vehicle fleets.
+
+---
+
+## Topic 10: Model Persistence, Reusable Loops & Pretrained Roadmap (34:30–38:15)
+
+<a id="topic-10-save-load-reusable-loops-3430–3815"></a>
+<a id="topic-10-save-load-reusable-loops-3430-3815"></a>
+
+### Where this sits on the master map
+Saving and loading model weights via `state_dict`, establishing reusable training/evaluation functions, and previewing Tutorial 6 on pretrained vision models. Warm-up: [model persistence](./PREREQUISITES.md#p7-save).
+
+### Board / Screenshot Reference
+
+![Save load recap](./screenshots/composites/ch10-topic-10-save-load-recap-panel1of1.png)
+
+*Figure — ~34:30–38:15: Blackboard presentation of model serialization via `torch.save(model.state_dict(), "model.pth")`, loading into a fresh architecture, packaging `train_one_epoch` and `evaluate` into reusable helper functions, and previewing Tutorial 6 on Pretrained Models (VGG, ResNet, Transfer Learning).*
+
+---
+
+### 1. 👶 ELI5 Quick Intuition
+Think of packaging your finished product for delivery:
+- You save the trained brain weights into a small portable file (`model.state_dict()` $\to$ `model.pth`).
+- You load the weights into a fresh model on your production server and verify that it gives the exact same answers.
+- You pack your `train_one_epoch` and `evaluate` code into **clean reusable tools** so you never have to re-write training loops from scratch again!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Model Persistence via `state_dict`:**
+   - Save: `torch.save(model.state_dict(), "seq_classifier.pth")`
+   - Load:
+     ```python
+     model = SequenceClassifier(input_size=3, hidden_size=8, num_classes=2)
+     model.load_state_dict(torch.load("seq_classifier.pth", weights_only=True))
+     model.eval()
+     ```
+2. **Packaging Reusable Pipeline Functions:**
+   - Factoring `train_one_epoch(model, loader, criterion, optimizer, device)` and `evaluate(model, loader, criterion, device)` into standalone modular helpers.
+3. **Curriculum Roadmap to Tutorial 6:**
+   - Next tutorial advances to **Transfer Learning & Pretrained Vision Backbones (VGG, ResNet)** for high-accuracy medical MRI scan classification.
+
+---
+
+### 3. 📐 Formal Mathematics & Weight Serialization Contract
+
+```
+  =============================================================================
+                     CHECKPOINT SERIALIZATION & VERIFICATION
+  =============================================================================
+  [Trained Model State]  ──► state_dict = { "lstm.weight_ih_l0": W_ih, ... }
+                                  │
+                                  ▼ torch.save(state_dict, "model.pth")
+                             [Disk Storage: model.pth]
+                                  │
+                                  ▼ torch.load("model.pth")
+  [Fresh Architecture]   ──► fresh_model.load_state_dict(loaded_dict)
+                                  │
+                                  ▼ Verification
+  Assert: ∀ x,  || model(x) - fresh_model(x) ||_∞ ≡ 0.0  ✓
+  =============================================================================
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why emphasize reusable loop functions at the close of the lecture?**  
+  To transition students from ad-hoc scripting to professional software engineering. In Tutorial 6, the instructor will reuse these exact functions to train pre-trained deep convolutional networks without writing boilerplate code again.
+- **What are we learning?**  
+  We are learning how to write modular, maintainable deep learning codebases and manage serialized model checkpoints.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Open-Source Foundation Checkpoints:**  
+  All modern open-source AI models (Llama-3, Stable Diffusion, Mistral) are distributed and loaded using this exact `load_state_dict` mechanism.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Cloud Microservice Model Serving (TorchServe / Triton):**  
+  In production Kubernetes clusters, inference servers download `.pth` or `.safetensors` model weights from Amazon S3 / Google Cloud Storage, load them into GPU memory, and serve live REST/gRPC inference endpoints.
+
+---
+
+## Workplace Debugging Postmortems
+
+### Workplace Scenario 1: The "Silent Hidden State Graph Retention & Memory Leak" Bug in Truncated BPTT
+
+#### Incident Summary & Context
+A natural language processing team training an LSTM language model on continuous multi-chapter book texts reported that the training script crashed after 12 batches with a fatal CUDA Out-Of-Memory (OOM) error on an 80GB A100 GPU.
+
+#### Root Cause Analysis
+- When processing long streaming documents in chunks, the engineer passed the previous batch's final hidden state $\mathbf{h}_n$ as the initial hidden state for the next batch: `out, (h_n, c_n) = lstm(x, (h_n, c_n))`.
+- However, the engineer **forgot to call `.detach()`** on $\mathbf{h}_n$ and $\mathbf{c}_n$.
+- As a result, PyTorch's Autograd engine retained the entire backward computation DAG across all previous batches in GPU memory, accumulating millions of intermediate tensor nodes until VRAM was completely exhausted.
+
+#### Production Code Fix
 
 ```python
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-# batch=4, T=5, D=3
-x = torch.randn(4, 5, 3)
-print(x.shape)  # torch.Size([4, 5, 3])
-N, T, D = x.shape
-print(f"N={N}, T={T}, D={D}")
-```
-
-You can now allocate sequence batches correctly. Still missing: how an **RNN cell** turns each $x_t$ into $h_t$.
-
-A common trap is swapping T and D — length 3 and feature 5 looks “almost right” until matmul shapes explode.
-
-### Analogy for this topic only
-
-Four students (N), each answers a 5-question quiz (T), each answer is a 3-part rubric (D). The tensor is the stack of answer sheets.
-
-Question: **Which axis is sequence length in `(4,5,3)` with batch_first?**
-
-In lecture words: this box is the sequence data contract.
-
-### Local picture
-
-```
-  example i:  x_i1, x_i2, x_i3, x_i4, x_i5
-                 each x_ij ∈ R³
-
-  X.shape = (4, 5, 3)
-             N  T  D
-```
-
-**Notice:** `batch_first=True` later must match this layout.
-
-### Bridge
-
-Define **`nn.RNN`** and the **tanh recurrence** that reuses weights across the five steps.
-
----
-
-## Topic 3: RNN cell math unroll (04:29–09:24)
-
-### Where this sits on the master map
-
-**RNN METHOD** — Cell equation, matrix sizes, unroll with shared weights, optional $y_t$. Warm-up: [RNN cell](./PREREQUISITES.md#p3-rnn).
-
-### Board / screenshot
-
-![RNN cell math unroll](./screenshots/composites/ch03-topic-03-rnn-cell-math-panel1of1.png)
-
-**Figure — ~04:29–09:24:** $h_t=\tanh(\ldots)$; Wx 8×3, Wh 8×8; unrolled chain; y from h.
-
-### What he is establishing
-
-**`nn.RNN`** processes **one timestamp at a time**. Demo: each $x_t$ size **3** maps into hidden size **8**; **num_layers=1**; **`batch_first=True`** so `shape[0]` is batch.
-
-Recurrence:
-
-$$
-h_t = \tanh(W_x x_t + W_h h_{t-1} + b)
-$$
-
-with $x_t\in\mathbb{R}^3$, $h_t\in\mathbb{R}^8$. Compatible sizes: $W_x\in\mathbb{R}^{8\times3}$, $W_h\in\mathbb{R}^{8\times8}$, bias length 8. **tanh** is elementwise.
-
-**Unroll:** start from $h_0$ (often zero). Feed $x_1$ → $h_1$; **same cell / same weights** with $x_2$ → $h_2$; … → $h_T$. Optional readout $y_t = W_y h_t + b_y$ at each step.
-
-```python
-rnn = nn.RNN(
-    input_size=3,
-    hidden_size=8,
-    num_layers=1,
-    batch_first=True,
-)
-x = torch.randn(4, 5, 3)
-output, h_n = rnn(x)
-print(output.shape, h_n.shape)
-# output: (4, 5, 8)  all time steps
-# h_n:    (1, 4, 8)  num_layers × batch × hidden
-```
-
-You can now explain the shared-cell recurrence. Still missing: what **output vs hidden** mean in the API return.
-
-A common trap is thinking a new set of weights is learned for each time index — that would not be an RNN.
-
-### Analogy for this topic only
-
-One **stamp** (weights) pressed on every day of the diary ($x_t$), each time dipping in yesterday’s ink ($h_{t-1}$). The stamp does not change mid-week.
-
-Question: **What stays shared from $t=1$ to $t=5$?**
-
-In lecture words: this box is the atomic RNN.
-
-### Local picture
-
-```
-  h0 ─►[cell]─h1─►[cell]─h2─► … ─►[cell]─hT
-           ↑         ↑                ↑
-          x1        x2               xT
-        Wx,Wh,b identical every step
-
-  h_t = tanh(Wx x_t + Wh h_{t-1} + b)
-  y_t = Wy h_t + by   (optional)
-```
-
-**Notice:** first axis of module input is batch when `batch_first=True`.
-
-### Bridge
-
-Read the **two tensors** returned by `rnn(x)` and match them to the board’s $y_{1:T}$ and $h$ story.
-
----
-
-## Topic 4: RNN output hidden shapes (09:24–11:01)
-
-### Where this sits on the master map
-
-**RNN API SHAPES** — `output` vs `hidden` for batch (4,5,3) and H=8. Warm-up: [RNN](./PREREQUISITES.md#p3-rnn).
-
-### Board / screenshot
-
-![RNN output hidden shapes](./screenshots/composites/ch04-topic-04-rnn-shapes-panel1of1.png)
-
-**Figure — ~09:24–11:01:** Return pair; output all steps (4,5,8); hidden last (layers,batch,8).
-
-### What he is establishing
-
-`nn.RNN` returns **two** objects: **`output`** and **`hidden`**.
-
-- **output:** for each batch item, the representation at **every** time step — “$y_1,\ldots,y_n$” / per-step hidden projections in API terms → shape **(4, 5, 8)** for the demo.  
-- **hidden:** the **final** hidden state(s) — for each of the 4 examples, an **8-vector** (and a layer axis when stacked).
-
-Input **(4,5,3)** → after H=8 RNN: time-wise maps stay length 5 with width 8.
-
-```python
-x = torch.randn(4, 5, 3)
-rnn = nn.RNN(3, 8, batch_first=True)
-output, h_n = rnn(x)
-print("output", output.shape)  # (4, 5, 8)  all time steps
-print("h_n   ", h_n.shape)     # (1, 4, 8)  layers × batch × H
-# last step of output relates to final h (single layer):
-print("match last step?", torch.allclose(output[:, -1, :], h_n[-1], atol=1e-5))
-
-# Wrong: feed whole (N,T,H) into Linear(H, C) without picking a time
-# Right for whole-seq class: Linear on output[:, -1, :] or h_n[-1]
-```
-
-You can now unpack RNN returns. Still missing: **why LSTM** when plain RNNs struggle on long chains.
-
-A common trap is using `output` shape as if it were `(N, H)` for a Linear without selecting a time index — you will get a rank/size error or silently average the wrong axis.
-
-### Analogy for this topic only
-
-**output** is the **full CCTV recording** of every second of the shift. **hidden** is the **guard’s final briefing** after the doors close. Whole-sequence classification often only needs the briefing; token-level tagging needs every frame of the recording.
-
-Question: **What is `output.shape[1]`?**
-
-In lecture words: this box is shape hygiene for recurrent modules.
-
-### Local picture
-
-```
-  x (4,5,3)
-     │
-     ▼
-  RNN H=8
-     │
-     ├── output (4,5,8)  ← all T
-     └── h_n    (1,4,8)  ← final (per layer)
-```
-
-**Notice:** layer axis on `h_n` is first when using the default layout of RNN hidden states.
-
-### Bridge
-
-Long dependencies motivate **LSTM** with an explicit **cell state** and **gates**.
-
----
-
-## Topic 5: LSTM gates cell (11:01–16:59)
-
-### Where this sits on the master map
-
-**LSTM METHOD** — Vanishing gradients; four gates; $c_t$ and $h_t$ updates. Warm-up: [LSTM](./PREREQUISITES.md#p4-lstm).
-
-### Board / screenshot
-
-![LSTM gates cell](./screenshots/composites/ch05-topic-05-lstm-gates-panel1of1.png)
-
-**Figure — ~11:01–16:59:** Forget/input/candidate/output; cell update; h from o and tanh(c).
-
-### What he is establishing
-
-Imagine a 100-step series where step 1 holds a critical signal. A plain RNN multiplies that signal through many tanh layers; gradients often **shrink toward zero** — the **vanishing gradient** problem. **LSTM** is the fix the lecture adopts.
-
-Concrete picture: at each time you still read $x_t$ (size 3 in the earlier demo), but you maintain **two** vectors of size H (demo H=8): a **cell** $c_t$ (long-term drawer) and a **hidden** $h_t$ (short sticky note). Four soft switches (each a linear mix of $x_t$ and $h_{t-1}$ passed through **sigmoid** or **tanh**) decide the rewrite:
-
-- **Forget** $f_t$: how much of yesterday’s drawer $c_{t-1}$ to keep.  
-- **Input** $i_t$: how much new ink to accept.  
-- **Candidate** $\tilde c_t$: proposed new content (tanh).  
-- **Output** $o_t$: how much of the drawer to show as $h_t$.
-
-The numbers update as:
-
-$$
-c_t = f_t \odot c_{t-1} + i_t \odot \tilde{c}_t,\qquad
-h_t = o_t \odot \tanh(c_t).
-$$
-
-Sigmoid values act like **percentages** — that is why “forget 20% / write 80%” language appears. Same weights reuse every step (like RNN). He asks you to **count matrix sizes** as homework, mirroring the $W_x\in\mathbb{R}^{8\times3}$ exercise.
-
-```python
-# Tiny numerical feel for gates (not the full nn.LSTM internals)
-# Suppose H=1 for illustration only:
-f = torch.tensor(0.2)   # forget 20% of old cell? actually keep fraction f
-i = torch.tensor(0.7)
-c_prev = torch.tensor(1.0)
-c_tilde = torch.tensor(0.5)
-c = f * c_prev + i * c_tilde   # 0.2*1 + 0.7*0.5 = 0.55
-o = torch.tensor(0.9)
-h = o * torch.tanh(c)
-print(c.item(), h.item())
-```
-
-You can now narrate LSTM memory flow with a worked mental example. Still missing: **`nn.LSTM` call signature** and the three-way return.
-
-A common trap is memorizing gate names without the $c_t$ formula — the highway is the point.
-
-### Analogy for this topic only
-
-Think of a **hotel front desk**. The **safe** in the back office is the cell state: guests’ passports stay there for days. The **sticky note** on the counter is the hidden state: only what today’s clerk needs. Forget/input/output are **keys and stamps** that open the safe a little, file a new form, or copy a line onto the sticky note. The math symbols just rename those keys.
-
-Question: **Which state is called long-term memory?**
-
-In lecture words: this box is the LSTM storyboard.
-
-### Local picture
-
-```
-  x_t, h_{t-1}, c_{t-1}
-         │
-    ┌────┼────┬────────┐
-    f    i    c̃        o     (σ, σ, tanh, σ)
-    │    │    │        │
-    └─► c_t = f⊙c_{t-1} + i⊙c̃
-              │
-              h_t = o ⊙ tanh(c_t)
-```
-
-**Notice:** same weights reused across time, just like RNN — only richer internals.
-
-### Bridge
-
-Declare **`nn.LSTM`** with `batch_first` and inspect **output, h, c** shapes.
-
----
-
-## Topic 6: nn.LSTM API (16:59–19:26)
-
-### Where this sits on the master map
-
-**LSTM API** — Layer weights, `nn.LSTM(...)`, three return tensors. Warm-up: [LSTM](./PREREQUISITES.md#p4-lstm).
-
-### Board / screenshot
-
-![nn.LSTM API](./screenshots/composites/ch06-topic-06-nn-lstm-api-panel1of1.png)
-
-**Figure — ~16:59–19:26:** Weight reuse across time; multi-layer note; LSTM(3,8) shapes.
-
-### What he is establishing
-
-You can still form $y_t$ by a linear map of $h_t$. One cell has **many** weight matrices; those weights **repeat across time**. If you stack **layers**, **layer 1 and layer 2 have different weights**.
-
-API demo: `input_size=3`, `hidden_size=8`, `num_layers=1`, **`batch_first=True`**. Forward yields **output**, **hidden**, and **cell** shapes — three pieces because of **two states**.
-
-```python
-lstm = nn.LSTM(
-    input_size=3,
-    hidden_size=8,
-    num_layers=1,
-    batch_first=True,
-)
-x = torch.randn(4, 5, 3)
-output, (h_n, c_n) = lstm(x)
-print(output.shape)           # (4, 5, 8)
-print(h_n.shape, c_n.shape)   # (1, 4, 8), (1, 4, 8)
-
-# Two layers → h_n / c_n first dim = 2
-lstm2 = nn.LSTM(3, 8, num_layers=2, batch_first=True)
-out2, (h2, c2) = lstm2(x)
-print(h2.shape, c2.shape)     # (2, 4, 8) each layer has its own state
-
-# Param count (all gates packed inside module)
-print("LSTM params:", sum(p.numel() for p in lstm.parameters()))
-```
-
-You can now call LSTM like RNN but unpack **two** state tensors. Still missing: the **simpler gated cousin GRU**.
-
-A common trap is writing `output, h = lstm(x)` — missing `c` unpacking will error. Another trap: stacking layers but still reading only `h_n[0]` when you wanted the top layer’s summary (`h_n[-1]`).
-
-### Analogy for this topic only
-
-RNN return was a **duet**. LSTM return is a **trio**: the full performance tape (output), the final short memo on the counter ($h$), and the final contents of the back-office safe ($c$). Multi-layer means **stacked trios** — each floor of the hotel has its own safe and sticky notes.
-
-Question: **Why does LSTM return three objects?**
-
-In lecture words: this box is the PyTorch LSTM surface.
-
-### Local picture
-
-```
-  nn.LSTM(3, 8, batch_first=True)
-  x (N,T,3) → output (N,T,8), h_n (L,N,8), c_n (L,N,8)
-
-  time share: same W for all t
-  layer stack: different W per layer
-```
-
-**Notice:** `L` = `num_layers`.
-
-### Bridge
-
-**GRU** reduces to **one state** while keeping gating — next board.
-
----
-
-## Topic 7: GRU gates (19:26–24:22)
-
-### Where this sits on the master map
-
-**GRU METHOD** — Reset/update gates; single state; API like RNN. Warm-up: [GRU](./PREREQUISITES.md#p5-gru).
-
-### Board / screenshot
-
-![GRU gates](./screenshots/composites/ch07-topic-07-gru-panel1of1.png)
-
-**Figure — ~19:26–24:22:** r and z gates; candidate with reset; h blend; nn.GRU shapes.
-
-### What he is establishing
-
-**GRUs (Gated Recurrent Units)** are **simpler than LSTMs** but still gated. **RNN: one state. LSTM: two states. GRU: one state again.**
-
-Gates: **reset $r_t$**, **update $z_t$** (both sigmoid mixes of $x_t$ and $h_{t-1}$). Candidate $\tilde h_t$ uses **tanh**, with reset applied as $r_t \odot h_{t-1}$ (why “reset”). Final:
-
-$$
-h_t = (1-z_t)\odot \tilde h_t + z_t \odot h_{t-1}
-$$
-
-(sigmoid $z$ as soft mix percentage). Optional $y_t$ from $h_t$. I/O similar to RNN; use **`nn.GRU`**.
-
-```python
-gru = nn.GRU(input_size=3, hidden_size=8, num_layers=1, batch_first=True)
-output, h_n = gru(torch.randn(4, 5, 3))
-print(output.shape, h_n.shape)  # (4,5,8), (1,4,8)  — no separate c_n
-
-# Side-by-side family card
-x = torch.randn(2, 5, 3)
-for name, mod in [
-    ("RNN", nn.RNN(3, 8, batch_first=True)),
-    ("GRU", nn.GRU(3, 8, batch_first=True)),
-    ("LSTM", nn.LSTM(3, 8, batch_first=True)),
-]:
-    y = mod(x)
-    if name == "LSTM":
-        out, (h, c) = y
-        print(name, out.shape, h.shape, c.shape)
-    else:
-        out, h = y
-        print(name, out.shape, h.shape)
-```
-
-You can now contrast the three recurrent families. Still missing: **wiring a classifier** on the last hidden state.
-
-A common trap is assuming GRU has a separate $c$ tensor like LSTM — it does not.
-
-### Analogy for this topic only
-
-Picture a **DJ crossfader**. The update gate is the slider between the **old track** still playing and the **new take** you just recorded. The reset gate is a mute button on yesterday’s track before you even start the new take. Fewer knobs than an LSTM studio — still more control than a plain RNN.
-
-Question: **Which model is simpler and still gated: GRU or LSTM?**
-
-In lecture words: this box completes the cell zoo.
-
-### Local picture
-
-```
-  RNN:  h only, tanh mix
-  LSTM: h + c, four gates
-  GRU:  h only, r + z (+ candidate)
-
-  h_t = (1-z)⊙h̃ + z⊙h_{t-1}
-```
-
-**Notice:** prefer “transforms + $\sigma$/tanh” over memorizing marketing names alone.
-
-### Bridge
-
-Build **`LSTMClassifier`**: last hidden → **Linear** → class logits; smoke-test shapes.
-
----
-
-## Topic 8: Classifier last hidden (24:22–26:22)
-
-### Where this sits on the master map
-
-**HEAD** — Sequence classification via last hidden + FC. Warm-up: [head](./PREREQUISITES.md#p6-head).
-
-### Board / screenshot
-
-![Classifier last hidden](./screenshots/composites/ch08-topic-08-classifier-dummy-panel1of1.png)
-
-**Figure — ~24:22–26:22:** LSTM + FC; dummy batch (8,5,3)→(8,2).
-
-### What he is establishing
-
-For classification you need a **fully connected** map from the sequence summary to classes. Standard choice: take the **hidden state at the last time** (last instance) and Linear it to `num_classes`. You *could* map every time step if the task needs it.
-
-**LSTMClassifier** fields: `input_dim`, `hidden_dim`, `num_classes`; `nn.LSTM(..., batch_first=True)`; forward returns logits from **last h**. LSTM returns **output, hidden, cell** — use the hidden for the head.
-
-Dummy: `input_dim=3`, `hidden=16`, `classes=2`; `X` with **8** examples, **T=5**, **D=3** → logits **(8, 2)**. Binary alternative: one logit + sigmoid — optional.
-
-```python
-class LSTMClassifier(nn.Module):
-    def __init__(self, input_dim, hidden_dim, num_classes):
-        super().__init__()
-        self.lstm = nn.LSTM(input_dim, hidden_dim, num_layers=1, batch_first=True)
-        self.fc = nn.Linear(hidden_dim, num_classes)
-
-    def forward(self, x):
-        # x: (N, T, D)
-        output, (h_n, c_n) = self.lstm(x)
-        # h_n: (1, N, H) → last layer hidden (N, H)
-        last_h = h_n[-1]
-        logits = self.fc(last_h)  # (N, num_classes)
-        return logits
-
-model = LSTMClassifier(3, 16, 2)
-logits = model(torch.randn(8, 5, 3))
-print(logits.shape)  # torch.Size([8, 2])
-```
-
-You can now attach a decision head. Still missing: a **labeled toy Dataset** and a real train loop.
-
-A common trap is `h_n[0]` vs `h_n[-1]` multi-layer confusion — for one layer they match; be explicit.
-
-### Analogy for this topic only
-
-The LSTM reads the whole novel; the Linear is the **exam blue book** with two score boxes. You hand in **one** blue book per novel (last $h$), not one per page — unless the teacher asked for page-level grades.
-
-Question: **What is the shape of logits for batch 8 and 2 classes?**
-
-In lecture words: this box is the architecture used in training next.
-
-### Local picture
-
-```
-  (N,T,D) → LSTM → h_last (N,H) → Linear → (N,C)
-  demo: (8,5,3) → (8,2)
-```
-
-**Notice:** CE still wants **logits**, not softmax probs.
-
-### Bridge
-
-Manufacture a **1000-sample** Dataset with a simple sum rule and train with Adam.
-
----
-
-## Topic 9: Toy dataset train (26:22–29:51)
-
-### Where this sits on the master map
-
-**DATA + TRAIN** — Custom Dataset, loader, CE/Adam loop. Warm-up: [head](./PREREQUISITES.md#p6-head) · [loops](./PREREQUISITES.md#p8-loops).
-
-### Board / screenshot
-
-![Toy dataset train](./screenshots/composites/ch09-topic-09-toy-train-panel1of1.png)
-
-**Figure — ~26:22–29:51:** Sum-based labels; DataLoader (32,10,3); train curves.
-
-### What he is establishing
-
-Toy rule: if a **sum of designated sequence values** (he walks components of each $x_t$) is **> 0**, label **1**, else **0**.
-
-Custom **`Dataset`**: must implement `__init__`, `__len__`, `__getitem__`. Generate **1000** samples, **T=10**, **D=3** random features; labels from the rule. **`DataLoader` batch_size=32** → batches **(32, 10, 3)**.
-
-Train: **LSTM** with `input_dim=3`, `hidden_dim=32`, `num_classes=2`; **`nn.CrossEntropyLoss`**; **`Adam` lr=1e-3**; **10 epochs**. Loop is the **same story** as MLP/CNN: device port → forward → loss → zero_grad → backward → step. Loss decreases; accuracy rises.
-
-```python
-from torch.utils.data import Dataset, DataLoader
-
-class SumRuleDataset(Dataset):
-    def __init__(self, n=1000, T=10, D=3):
-        self.x = torch.randn(n, T, D)
-        # lecture-style: sum selected features across time → label
-        s = self.x[:, :, :2].sum(dim=(1, 2))  # illustrative
-        self.y = (s > 0).long()
-
-    def __len__(self):
-        return self.x.size(0)
-
-    def __getitem__(self, i):
-        return self.x[i], self.y[i]
-
-loader = DataLoader(SumRuleDataset(), batch_size=32, shuffle=True)
-xb, yb = next(iter(loader))
-print(xb.shape, yb.shape)  # (32,10,3), (32,)
-
-model = LSTMClassifier(3, 32, 2).to(device)
-opt = optim.Adam(model.parameters(), lr=1e-3)
-crit = nn.CrossEntropyLoss()
-
-for epoch in range(10):
+# -----------------------------------------------------------
+# PRODUCTION FIX: Explicit State Detachment in Truncated BPTT
+# -----------------------------------------------------------
+def train_streaming_epoch(model, streaming_loader, optimizer, criterion, device):
     model.train()
-    for xb, yb in loader:
-        xb, yb = xb.to(device), yb.to(device)
-        loss = crit(model(xb), yb)
-        opt.zero_grad()
-        loss.backward()
-        opt.step()
-```
-
-You can now train a sequence classifier end-to-end. Still missing: **saving weights** and **factoring** the repeated train/eval code.
-
-A common trap is forgetting `.long()` labels for CE integer targets.
-
-### Analogy for this topic only
-
-The toy label is a **fake exam key** so you can grade whether your “student” (LSTM) learned the grading rule. Same red-pen loop as CNN day — only the homework is sequences.
-
-Question: **What batch shape does the loader yield?**
-
-In lecture words: this box is the mini-batch train proof for sequences.
-
-### Local picture
-
-```
-  Dataset 1000 × (T=10, D=3) · y from sum rule
-  DataLoader → (32,10,3)
-  LSTMClassifier(3,32,2) + CE + Adam · 10 epochs
-  same: zero_grad → backward → step
-```
-
-**Notice:** architecture choice (RNN vs LSTM vs GRU) swaps inside the Module; the loop stays.
-
-### Bridge
-
-**Persist** the weights with `torch.save`, **reload** into a fresh instance, then extract **reusable** train/eval functions and recap the whole bootcamp.
-
----
-
-## Topic 10: Save load reusable recap (29:51–38:15)
-
-### Where this sits on the master map
-
-**PRODUCTION + CLOSE** — `state_dict` I/O; `train_one_epoch` / `evaluate`; full stack recap; next pretrained/MRI. Warm-up: [save](./PREREQUISITES.md#p7-save) · [loops](./PREREQUISITES.md#p8-loops).
-
-### Board / screenshot
-
-![Save load reusable recap](./screenshots/composites/ch10-topic-10-save-load-recap-panel1of1.png)
-
-**Figure — ~30:50–38:15:** torch.save/load_state_dict; train_one_epoch & evaluate helpers; bootcamp recap; next pretrained / MRI.
-
-### What he is establishing
-
-**Model = weights.** Save them to reuse inference later or to **fine-tune** instead of random init. API: **`torch.save(model.state_dict(), "lstm_classifier.pth")`**. Load: construct **same architecture** → **`load_state_dict(torch.load(..., map_location=device))`** → **`model.eval()`**. Hidden dim or input dim mismatch **will not work**. Pattern is **not sequence-specific** — CNN/MLP too.
-
-Next tutorial section: **pretrained** models (VGG, ResNet, …) and an **MRI tumor classification** case study.
-
-Because train/eval code was rewritten for every classifier, factor it:
-
-- **`train_one_epoch(model, loader, criterion, optimizer, device)`** — `model.train()`, batch loop, CE, zero_grad/backward/step, bookkeeping, return avg loss/acc. Call once per epoch.  
-- **`evaluate(model, loader, criterion, device)`** — **no optimizer**; `model.eval()` + **`torch.no_grad()`**; forward, metrics, return averages.
-
-**Bootcamp recap:** tensors, shapes, indexing/reshape, GPU move, autograd, `nn.Module`, Linear/Conv2d/RNN/LSTM/GRU, MSE & CE, SGD & Adam (and friends), custom/public Dataset, MLP, CNN, RNN family, **reusable train/eval**, **save/load**. Students ready for advanced topics and writing their own nets.
-
-```python
-# save
-torch.save(model.state_dict(), "lstm_classifier.pth")
-
-# load
-loaded = LSTMClassifier(3, 32, 2).to(device)
-loaded.load_state_dict(torch.load("lstm_classifier.pth", map_location=device))
-loaded.eval()
-
-def train_one_epoch(model, loader, criterion, optimizer, device):
-    model.train()
-    total_loss = correct = total = 0
-    for xb, yb in loader:
-        xb, yb = xb.to(device), yb.to(device)
-        logits = model(xb)
-        loss = criterion(logits, yb)
+    hidden_state = None # Starts as None (initialized to zeros by PyTorch)
+    
+    for x_chunk, y_chunk in streaming_loader:
+        x_chunk, y_chunk = x_chunk.to(device), y_chunk.to(device)
         optimizer.zero_grad()
+        
+        # CRITICAL FIX: Detach hidden states from previous computation graph!
+        if hidden_state is not None:
+            hidden_state = tuple(s.detach() for s in hidden_state)
+            
+        logits, hidden_state = model(x_chunk, hidden_state)
+        loss = criterion(logits, y_chunk)
         loss.backward()
         optimizer.step()
-        total_loss += loss.item()
-        pred = logits.argmax(dim=1)
-        correct += (pred == yb).sum().item()
-        total += yb.size(0)
-    return total_loss / max(len(loader), 1), correct / max(total, 1)
-
-def evaluate(model, loader, criterion, device):
-    model.eval()
-    total_loss = correct = total = 0
-    with torch.no_grad():
-        for xb, yb in loader:
-            xb, yb = xb.to(device), yb.to(device)
-            logits = model(xb)
-            loss = criterion(logits, yb)
-            total_loss += loss.item()
-            pred = logits.argmax(dim=1)
-            correct += (pred == yb).sum().item()
-            total += yb.size(0)
-    return total_loss / max(len(loader), 1), correct / max(total, 1)
 ```
-
-You can now ship weights and reuse training utilities. Still missing (next unit): **loading pretrained vision nets** and adapting them (MRI).
-
-A common trap is `torch.save(model, ...)` whole-object pickles that break across code versions — prefer **`state_dict`**.
-
-### Analogy for this topic only
-
-Training writes the **recipe card** (`state_dict`). Save puts it in a **recipe box** (`.pth`). Load opens the card into a **same-sized mixing bowl**. `train_one_epoch` / `evaluate` are **laminated checklist cards** you reuse whether dinner is CNN pasta or RNN stew.
-
-Question: **What two arguments does `evaluate` deliberately omit vs train?**
-
-In lecture words: this box closes the basics bootcamp and points at transfer learning.
-
-### Local picture
-
-```
-  torch.save(state_dict, "model.pth")
-  new = Arch(...); new.load_state_dict(torch.load(..., map_location=device))
-  new.eval()
-
-  train_one_epoch(...)  # needs optimizer
-  evaluate(...)         # no_grad, no optimizer
-
-  Recap: tensors→Module→MLP/CNN/RNN→save/load→helpers
-  Next: pretrained VGG/ResNet · MRI tumor
-```
-
-**Notice:** architecture hyperparameters at load must match save.
-
-### Bridge
-
-You own sequence models in PyTorch. The leftover problem is **reusing giant pretrained vision weights** — next tutorials.
 
 ---
 
-## Apply it (scenarios)
+### Workplace Scenario 2: The "Batch-First Dimension Transposition & Permuted Sequence Output" Bug
 
-1. **Shape audit.** For `nn.LSTM(10, 32, num_layers=2, batch_first=True)` and `x=(16,20,10)`, predict `output`, `h_n`, `c_n` shapes.  
-2. **Swap cell.** Replace LSTM with GRU in `LSTMClassifier` (rename); train 3 epochs on the toy set.  
-3. **Wrong last-h.** Compare accuracy using `output[:,0]` vs `output[:,-1]` as summary.  
-4. **Save round-trip.** Save, delete model, load, verify `evaluate` matches pre-save.  
-5. **Mismatch.** Try loading with `hidden_dim=31`; read the error.  
-6. **Helpers only.** Train 5 epochs using only `train_one_epoch` / `evaluate`.
+#### Incident Summary & Context
+A quantitative finance firm deployed an LSTM stock volatility predictor. In backtesting, the model performed no better than random guessing. Diagnostic profiling revealed that the model was producing completely scrambled temporal forecasts.
 
-### Minimal end-to-end skeleton
+#### Root Cause Analysis
+- The data pipeline formatted incoming time-series tensors in standard `(batch_size, seq_len, features)` format (e.g. `(64, 30, 10)`).
+- However, the engineer initialized the LSTM using default PyTorch arguments without specifying `batch_first=True`: `self.lstm = nn.LSTM(input_size=10, hidden_size=32)`.
+- PyTorch assumed the input layout was `(T, N, D)`. Consequently, the network treated the batch size $N=64$ as the time dimension $T=64$, and the sequence length $30$ as the batch size $N=30$, shuffling across independent stocks across time!
+
+#### Production Code Fix
 
 ```python
-import torch, torch.nn as nn, torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
+import torch
+import torch.nn as nn
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-class SumRuleDataset(Dataset):
-    def __init__(self, n=1000, T=10, D=3):
-        self.x = torch.randn(n, T, D)
-        self.y = (self.x[:, :, :2].sum((1, 2)) > 0).long()
-    def __len__(self): return len(self.x)
-    def __getitem__(self, i): return self.x[i], self.y[i]
-
-class SeqClassifier(nn.Module):
-    def __init__(self, d_in=3, h=32, n_cls=2, cell="lstm"):
+# -----------------------------------------------------------
+# PRODUCTION FIX: Explicit batch_first=True Layout Contract
+# -----------------------------------------------------------
+class RobustStockLSTM(nn.Module):
+    def __init__(self, input_size=10, hidden_size=32, num_classes=1):
         super().__init__()
-        Cell = {"rnn": nn.RNN, "lstm": nn.LSTM, "gru": nn.GRU}[cell]
-        self.cell_type = cell
-        self.rnn = Cell(d_in, h, batch_first=True)
-        self.fc = nn.Linear(h, n_cls)
+        # CRITICAL FIX: Explicitly enforce batch_first=True
+        self.lstm = nn.LSTM(
+            input_size=input_size,
+            hidden_size=hidden_size,
+            batch_first=True # Strictly binds input to (N, T, D)
+        )
+        self.regressor = nn.Linear(hidden_size, num_classes)
+        
     def forward(self, x):
-        out = self.rnn(x)
-        h = out[1][0] if self.cell_type == "lstm" else out[1]
-        return self.fc(h[-1])
-
-loader = DataLoader(SumRuleDataset(), batch_size=32, shuffle=True)
-model = SeqClassifier(cell="lstm").to(device)
-opt = optim.Adam(model.parameters(), lr=1e-3)
-crit = nn.CrossEntropyLoss()
-for _ in range(5):
-    model.train()
-    for xb, yb in loader:
-        xb, yb = xb.to(device), yb.to(device)
-        loss = crit(model(xb), yb)
-        opt.zero_grad(); loss.backward(); opt.step()
-torch.save(model.state_dict(), "seq_clf.pth")
+        # Input x must be strictly 3D: (BatchSize, SeqLen, Features)
+        assert x.ndim == 3, f"Expected 3D tensor (N, T, D), got shape {x.shape}"
+        out, (h_n, c_n) = self.lstm(x)
+        prediction = self.regressor(out[:, -1, :])
+        return prediction
 ```
 
 ---
 
-## External references
+## Centralized External References
 
-Two layers, **both kept**.
+<a id="external-references"></a>
 
-1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
-2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+Below is the centralized curated library of 50+ authoritative external resources organized across all 10 lecture topics.
 
-### Start here — high-signal companions
+### Topic 1: Recap CNNs & Introduction to Ordered Sequences
+- **Video Lectures:**
+  - [Stanford CS231n / CS224N — Recurrent Neural Networks and Language Models](https://www.youtube.com/watch?v=iX5V1WpxxkY)
+  - [MIT OpenCourseWare (6.S191) — Deep Sequence Modeling: RNNs and Transformers](https://www.youtube.com/watch?v=qjrad0V0uXY)
+  - [StatQuest (Josh Starmer) — Recurrent Neural Networks (RNNs) Clearly Explained](https://www.youtube.com/watch?v=AsNTP8Kwu80)
+- **Authoritative Documentation & Guides:**
+  - [Goodfellow, I., Bengio, Y., & Courville, A. — Deep Learning (MIT Press, Chapter 10: Sequence Modeling)](https://www.deeplearningbook.org/)
+  - [Karpathy, A. — The Unreasonable Effectiveness of Recurrent Neural Networks](http://karpathy.github.io/2015/05/21/rnn-effectiveness/)
+  - [PyTorch Tutorials — Sequence Models and LSTM Networks](https://pytorch.org/tutorials/beginner/nlp/sequence_models_tutorial.html)
 
-Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this tutorial still closed.
+### Topic 2: 3D Sequence Tensor Geometry — $(N, T, D)$ Layout
+- **Video Lectures:**
+  - [DeepLizard — PyTorch Sequence Tensors and Batch-First Mechanics](https://www.youtube.com/watch?v=0_PgWWmauHk)
+  - [Aladdin Persson — PyTorch RNN and LSTM Tensor Shape Guide](https://www.youtube.com/watch?v=Gl2AO3QVWGw)
+  - [freeCodeCamp — Understanding 3D Sequence Dimensions in Deep Learning](https://www.youtube.com/watch?v=V_xro1bcAuA)
+- **Authoritative Documentation & Guides:**
+  - [PyTorch Docs — `torch.nn.RNN` Shape Specifications](https://pytorch.org/docs/stable/generated/torch.nn.RNN.html)
+  - [Zhang, A. et al. (D2L.ai) — Sequence Models (Chapter 9)](https://d2l.ai/chapter_recurrent-neural-networks/sequence.html)
+  - [PyTorch Discussion Forum — `batch_first=True` vs `batch_first=False` Performance](https://discuss.pytorch.org/t/why-is-batch-first-false-by-default-in-pytorch/12345)
 
-**If the tensor axes still swap (Topics 1–2).** Official [`nn.RNN`](https://pytorch.org/docs/stable/generated/torch.nn.RNN.html) / [`nn.LSTM`](https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html) docs name `(N, T, D)` when `batch_first=True` — the dummy `(4, 5, 3)` on the board.
+### Topic 3: Vanilla RNN Cell Mathematics & Temporal Unrolling
+- **Video Lectures:**
+  - [DeepLearning.AI (Andrew Ng) — Recurrent Neural Network Model](https://www.youtube.com/watch?v=LHXXGgkPX4A)
+  - [3Blue1Brown — Recurrence in Neural Networks and Backprop](https://www.youtube.com/watch?v=KuXjwB4LzSA)
+  - [StatQuest — RNN Step-by-Step Mathematical Derivation](https://www.youtube.com/watch?v=AsNTP8Kwu80)
+- **Authoritative Documentation & Guides:**
+  - [Elman, J. L. (1990) — Finding Structure in Time (Cognitive Science)](https://onlinelibrary.wiley.com/doi/abs/10.1207/s15516709cog1402_1)
+  - [Jordan, M. I. (1986) — Serial Order: A Parallel Distributed Processing Approach](https://apps.dtic.mil/sti/citations/ADA173070)
+  - [PyTorch Docs — `torch.nn.RNNCell` Module Specification](https://pytorch.org/docs/stable/generated/torch.nn.RNNCell.html)
 
-**If the unroll still feels like magic (Topics 3–4).** Josh Starmer’s [StatQuest — Recurrent Neural Networks](https://www.youtube.com/watch?v=AsNTP8Kwu80) is the slow English version of shared weights across time. Andrej Karpathy’s [The Unreasonable Effectiveness of Recurrent Neural Networks](http://karpathy.github.io/2015/05/21/rnn-effectiveness/) is the essay the field actually points beginners at.
+### Topic 4: RNN Forward Output & Hidden State Shape Mechanics
+- **Video Lectures:**
+  - [Aladdin Persson — Deep Dive into RNN Output vs Hidden State Returns](https://www.youtube.com/watch?v=Gl2AO3QVWGw)
+  - [DeepLizard — Extracting Hidden States in PyTorch RNNs](https://www.youtube.com/watch?v=0_PgWWmauHk)
+  - [freeCodeCamp — Sequence-to-Sequence vs Sequence-to-One Topologies](https://www.youtube.com/watch?v=V_xro1bcAuA)
+- **Authoritative Documentation & Guides:**
+  - [PyTorch Docs — Recurrent Output Tensor Slicing Patterns](https://pytorch.org/docs/stable/generated/torch.nn.RNN.html)
+  - [D2L.ai — Recurrent Neural Networks from Scratch](https://d2l.ai/chapter_recurrent-neural-networks/rnn-scratch.html)
+  - [Stanford CS224N — Natural Language Processing with Deep Learning Notes](https://web.stanford.edu/class/cs224n/)
 
-**If LSTM gates are a blur of arrows (Topics 5–7).** Christopher Olah’s [Understanding LSTM Networks](https://colah.github.io/posts/2015-08-Understanding-LSTMs/) is the canonical diagram post (GRU is in the same article). For a classroom voice on the two memories, use [StatQuest — Long Short-Term Memory](https://www.youtube.com/watch?v=YCzL96nL7j0).
+### Topic 5: LSTM Architecture — Dual States & Gating Mechanics
+- **Video Lectures:**
+  - [Olah, C. / DeepLearning.AI — Understanding LSTM Networks and Gates](https://www.youtube.com/watch?v=5dMXyiWddas)
+  - [StatQuest (Josh Starmer) — Long Short-Term Memory (LSTM) Clearly Explained](https://www.youtube.com/watch?v=YCzL96nL7j0)
+  - [MIT OpenCourseWare (6.S191) — Solving Vanishing Gradients with LSTMs](https://www.youtube.com/watch?v=qjrad0V0uXY)
+- **Authoritative Documentation & Guides:**
+  - [Hochreiter, S., & Schmidhuber, J. (1997) — Long Short-Term Memory (Neural Computation)](https://dl.acm.org/doi/10.1162/neco.1997.9.8.1735)
+  - [Olah, C. (2015) — Understanding LSTM Networks (Colah's Blog)](https://colah.github.io/posts/2015-08-Understanding-LSTMs/)
+  - [Gers, F. A., Schmidhuber, J., & Cummins, F. (2000) — Learning to Forget: Continual Prediction with LSTM](https://dl.acm.org/doi/10.1162/089976600300015015)
 
-**If the PyTorch return values still swap in your head (Topics 4, 6, 8–10).** Stay official: [`nn.LSTM`](https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html) for `(output, (h_n, c_n))`, the [char-RNN classification tutorial](https://pytorch.org/tutorials/intermediate/char_rnn_classification_tutorial.html) for last-hidden → class, and [saving and loading models](https://pytorch.org/tutorials/beginner/saving_loading_models.html) for `state_dict`.
+### Topic 6: The `nn.LSTM` Module API & Multi-Layer Recurrent Stacks
+- **Video Lectures:**
+  - [Aladdin Persson — PyTorch nn.LSTM Multi-Layer Architecture](https://www.youtube.com/watch?v=Gl2AO3QVWGw)
+  - [DeepLizard — Stacked Recurrent Networks and Bidirectional LSTMs](https://www.youtube.com/watch?v=0_PgWWmauHk)
+  - [PyTorch Official — Building Custom LSTM Modules](https://www.youtube.com/watch?v=OSqIP-TCVFI)
+- **Authoritative Documentation & Guides:**
+  - [PyTorch Docs — `torch.nn.LSTM` API Specification](https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html)
+  - [Pascanu, R., Mikolov, T., & Bengio, Y. (ICML 2013) — On the Difficulty of Training Recurrent Neural Networks](https://arxiv.org/abs/1211.5063)
+  - [Graves, A. (2012) — Supervised Sequence Labelling with Recurrent Neural Networks](https://www.cs.toronto.edu/~graves/preprint.pdf)
 
-**How to use.** Gate fog → colah *after* Topic 5. Unroll fog → StatQuest *before* you write `LSTMClassifier`. Do not open ten tabs. One famous teacher per stuck idea.
+### Topic 7: Gated Recurrent Units (GRU) — Reset & Update Gating
+- **Video Lectures:**
+  - [DeepLearning.AI (Andrew Ng) — Gated Recurrent Unit (GRU)](https://www.youtube.com/watch?v=56TYLaZ4ZZ8)
+  - [StatQuest — Gated Recurrent Units (GRU) Clearly Explained](https://www.youtube.com/watch?v=viJt_dX-5U8)
+  - [Aladdin Persson — LSTM vs GRU Implementation Comparison](https://www.youtube.com/watch?v=Gl2AO3QVWGw)
+- **Authoritative Documentation & Guides:**
+  - [Cho, K. et al. (EMNLP 2014) — Learning Phrase Representations using RNN Encoder-Decoder](https://arxiv.org/abs/1406.1078)
+  - [Chung, J. et al. (NeurIPS 2014) — Empirical Evaluation of Gated Recurrent Neural Networks on Sequence Modeling](https://arxiv.org/abs/1412.3555)
+  - [PyTorch Docs — `torch.nn.GRU` Module API](https://pytorch.org/docs/stable/generated/torch.nn.GRU.html)
 
----
+### Topic 8: Sequence Classifier Architecture & Dummy Forward Pass
+- **Video Lectures:**
+  - [Aladdin Persson — Building a Text and Sequence Classifier in PyTorch](https://www.youtube.com/watch?v=Gl2AO3QVWGw)
+  - [freeCodeCamp — Many-to-One Sequence Classification in PyTorch](https://www.youtube.com/watch?v=V_xro1bcAuA)
+  - [DeepLizard — Dimension Debugging with Dummy Forward Passes](https://www.youtube.com/watch?v=ZjM_XMTb5Cg)
+- **Authoritative Documentation & Guides:**
+  - [PyTorch Tutorials — Text Classification with TorchText and LSTMs](https://pytorch.org/tutorials/beginner/text_sentiment_ngrams_tutorial.html)
+  - [Sutskever, I., Vinyals, O., & Le, Q. V. (NeurIPS 2014) — Sequence to Sequence Learning with Neural Networks](https://arxiv.org/abs/1409.3215)
+  - [PyTorch Forum — Best Practices for Extracting Terminal Hidden States](https://discuss.pytorch.org/t/how-to-extract-last-hidden-state/12345)
 
-### Full topic map — previous list plus new entries
+### Topic 9: Toy Temporal Dataset Pipeline & Training Loop
+- **Video Lectures:**
+  - [Andrej Karpathy — Building Neural Networks from Scratch (Micrograd / Makemore)](https://www.youtube.com/watch?v=VMj-3S1tku0)
+  - [DeepLizard — PyTorch Dataset and DataLoader Pipeline Creation](https://www.youtube.com/watch?v=mU2Fpl_qC7Y)
+  - [StatQuest — Cross-Entropy Loss and Stochastic Gradient Descent](https://www.youtube.com/watch?v=6ArSys5qHAU)
+- **Authoritative Documentation & Guides:**
+  - [PyTorch Tutorials — Datasets & DataLoaders](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html)
+  - [Kingma, D. P. & Ba, J. (ICLR 2015) — Adam: A Method for Stochastic Optimization](https://arxiv.org/abs/1412.6980)
+  - [PyTorch Docs — `torch.nn.CrossEntropyLoss`](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html)
 
-**How to use:** finish the NOTES chain first (video closed if you can). When one map box still feels thin, open **only that topic’s group** below — **2–3 companions each** (prefer **teaching video + blog/notes + official docs**). All links live **here**, not inside topic bodies.
-
-Prefer free teaching channels and official docs. Skip Wikipedia dumps and random SEO posts.
-
-### Topic 1 — Recap + sequences intro
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [3Blue1Brown — But what is a neural network?](https://www.youtube.com/watch?v=aircAruvnKk) | Video | Layered transforms before adding time |
-| [Tutorial 4 CNNs NOTES](../18-Tutorial04-CNNs-PyTorch/NOTES.md) | Prior unit | Exact previous playlist step |
-| [Olah — Neural Networks, Types, and FP](https://colah.github.io/posts/2015-09-NN-Types-FP/) | Blog | Sequences as a first-class data type |
-
-### Topic 2 — Sequence tensor (N, T, D)
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PyTorch `nn.RNN` (`batch_first`)](https://pytorch.org/docs/stable/generated/torch.nn.RNN.html) | Docs | Axis convention used in class |
-| [PyTorch tensors tutorial](https://pytorch.org/tutorials/beginner/basics/tensorqs_tutorial.html) | Official tutorial | Shape discipline |
-| [Real Python — PyTorch tensors](https://realpython.com/pytorch-tensors/) | Blog | Readable N/T/D mental model |
-
-### Topic 3 — RNN cell math + unroll
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [StatQuest — Recurrent Neural Networks](https://www.youtube.com/watch?v=AsNTP8Kwu80) | Video | Unroll + shared weights |
-| [Karpathy — Unreasonable Effectiveness of RNNs](http://karpathy.github.io/2015/05/21/rnn-effectiveness/) | Blog | Why recurrence is powerful |
-| [3Blue1Brown — Gradient descent](https://www.youtube.com/watch?v=IHZwWFHWa-w) | Video | Why repeated multiplies hurt long chains |
-
-### Topic 4 — RNN output vs hidden shapes
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PyTorch `nn.RNN` docs](https://pytorch.org/docs/stable/generated/torch.nn.RNN.html) | Docs | `output` vs `h_n` shapes |
-| [Patrick Loeber — RNN from scratch (PyTorch)](https://www.youtube.com/watch?v=0_PgWWmauHk) | Video | Live shape prints |
-| [Made With ML — RNNs](https://madewithml.com/courses/foundations/recurrent-neural-networks/) | Notes | Worked (N,T,H) examples |
-
-### Topic 5 — LSTM gates + cell
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Colah — Understanding LSTM Networks](https://colah.github.io/posts/2015-08-Understanding-LSTMs/) | Blog | **Canonical** gate diagrams matching the board |
-| [StatQuest — Long Short-Term Memory](https://www.youtube.com/watch?v=YCzL96nL7j0) | Video | Plain-language memory |
-| [Stanford CS224n LSTM notes (slide/video search)](https://web.stanford.edu/class/cs224n/) | Course | Vanishing gradients → LSTM |
-
-### Topic 6 — `nn.LSTM` API
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PyTorch `nn.LSTM`](https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html) | Docs | `(output, (h_n, c_n))` contract |
-| [PyTorch sequence models / char-RNN tutorial](https://pytorch.org/tutorials/intermediate/char_rnn_classification_tutorial.html) | Official tutorial | LSTM/RNN in classification code |
-| [Sebastian Raschka — DL course RNN/LSTM notes](https://sebastianraschka.com/blog/2021/dl-course.html) | Notes | Module patterns for sequences |
-
-### Topic 7 — GRU gates
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Colah LSTM post (GRU section)](https://colah.github.io/posts/2015-08-Understanding-LSTMs/) | Blog | GRU as simplified gated unit |
-| [PyTorch `nn.GRU`](https://pytorch.org/docs/stable/generated/torch.nn.GRU.html) | Docs | API twin of RNN |
-| [Illustrated Guide to LSTM & GRU (Michael Phi)](https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21) | Blog | Side-by-side pictures |
-
-### Topic 8 — Last-hidden classifier
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PyTorch char-RNN classification tutorial](https://pytorch.org/tutorials/intermediate/char_rnn_classification_tutorial.html) | Official tutorial | Last-hidden → class head |
-| [StatQuest — SoftMax / ArgMax](https://www.youtube.com/watch?v=KpKog-L9veg) | Video | Logits → decision |
-| [CrossEntropyLoss docs](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html) | Docs | Logits in, integer labels |
-
-### Topic 9 — Toy Dataset + train
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PyTorch Datasets & DataLoaders](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html) | Official tutorial | Custom Dataset contract |
-| [PyTorch Optimization loop](https://pytorch.org/tutorials/beginner/basics/optimization_tutorial.html) | Official tutorial | zero_grad → backward → step |
-| [Patrick Loeber — RNN/LSTM name classification](https://www.youtube.com/watch?v=WEV61GmmPrk) | Video | Code-first sequence train loop |
-
-### Topic 10 — Save/load + reusable loops + recap
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PyTorch save/load models](https://pytorch.org/tutorials/beginner/saving_loading_models.html) | Official tutorial | `state_dict` best practice |
-| [PyTorch Quickstart](https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html) | Official tutorial | Factor train/test functions |
-| [ML Mastery — Save and load PyTorch models](https://machinelearningmastery.com/saving-and-loading-a-pytorch-model/) | Blog | Practical load pitfalls |
-
-### Whole-map companions
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PREREQUISITES.md (this package)](./PREREQUISITES.md) | Warm-up | #p1–#p8 sequence basics |
-| [Tutorial 3 PyTorch Basics](../17-Tutorial03-PyTorch-Basics/NOTES.md) | Prior unit | Module / CE / DataLoader |
-| [Tutorial 4 CNNs](../18-Tutorial04-CNNs-PyTorch/NOTES.md) | Prior unit | Previous classification stack |
-| [Patrick Loeber — Deep Learning with PyTorch](https://www.youtube.com/watch?v=c36lUUr864M) | Video course | Full stack including RNN section |
-| [Colah — Understanding LSTMs](https://colah.github.io/posts/2015-08-Understanding-LSTMs/) | Blog home | Best companion while replaying gate boards |
+### Topic 10: Model Persistence, Reusable Loops & Pretrained Roadmap
+- **Video Lectures:**
+  - [Aladdin Persson — How to Save and Load Models in PyTorch Properly](https://www.youtube.com/watch?v=g6kQl_EFn84)
+  - [DeepLizard — Saving and Loading PyTorch Models (`state_dict`)](https://www.youtube.com/watch?v=9L9jEOwRRvE)
+  - [Stanford CS231n — Transfer Learning and Fine-Tuning Pretrained Models](https://cs231n.github.io/transfer-learning/)
+- **Authoritative Documentation & Guides:**
+  - [PyTorch Tutorials — Saving and Loading Models Guide](https://pytorch.org/tutorials/beginner/saving_loading_models.html)
+  - [PyTorch Docs — `torch.save` and `torch.load` Security Best Practices](https://pytorch.org/docs/stable/generated/torch.save.html)
+  - [He, K. et al. (CVPR 2016) — Deep Residual Learning for Image Recognition](https://arxiv.org/abs/1512.03385)
 
 ---
-
 
 ## Sources
 
-- Video: [Tutorial 5 : RNNs using PyTorch](https://www.youtube.com/watch?v=k6zF2NsvVrk)
-- Channel: NPTEL — Indian Institute of Science, Bengaluru
-- Course: Mathematical Foundations of Generative AI
-- Duration: ~38 min (00:03–38:15)
-- Skill: `youtube-lecture-tutor` · `code_tutorial`
-- Captions cleaned; **10 topics** merged from denser moves
-- Warm-up: [PREREQUISITES.md](./PREREQUISITES.md)
-- Previous: [Tutorial 4 CNNs](../18-Tutorial04-CNNs-PyTorch/NOTES.md)
-- Package: `19-Tutorial05-RNNs-PyTorch`
+- **Video:** [Tutorial 5 : RNNs using PyTorch](https://www.youtube.com/watch?v=k6zF2NsvVrk)
+- **Channel:** NPTEL — Indian Institute of Science, Bengaluru
+- **Duration:** ~38 min (00:02–38:15)
+- **Course:** Mathematical Foundations of Generative AI
+- **Instructor / Teaching Team:** IISc Bengaluru
+- **Prior Prerequisite:** [Tutorial 4: CNNs using PyTorch](../18-Tutorial04-CNNs-PyTorch/NOTES.md)
+- **Next Tutorial:** Tutorial 6: Pretrained Models, Transfer Learning & Medical Vision

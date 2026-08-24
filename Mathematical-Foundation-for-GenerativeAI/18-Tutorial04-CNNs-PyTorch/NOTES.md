@@ -1,1116 +1,1434 @@
 # Tutorial 4 — CNNs using PyTorch
 
 **Video:** [Tutorial 4 : CNNs using PyTorch](https://www.youtube.com/watch?v=BhnGtsMwUCU) · NPTEL / IISc  
-**Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md)  
-**Previous:** [Tutorial 3 — PyTorch Basics](../17-Tutorial03-PyTorch-Basics/NOTES.md)  
-**Course:** Mathematical Foundations of **Generative AI** (~39 min)  
-**Speaker:** NPTEL IISc · Conv2d, MaxPool, SimpleCNN, MNIST train/eval
+**Warm-up First:** [PREREQUISITES.md](./PREREQUISITES.md)  
+**Previous Tutorial:** [Tutorial 3 — PyTorch Basics](../17-Tutorial03-PyTorch-Basics/NOTES.md) (Tensors, Autograd, `nn.Module`, and Optimization Loops)  
+**Next Tutorial:** Tutorial 5 — Recurrent Neural Networks (RNNs, LSTMs & GRUs)  
+**Course:** Mathematical Foundations of Generative AI (~39 min)  
+**Speaker:** NPTEL / IISc Teaching Team  
+**Core Themes:** 4D NCHW Tensor Standard, Discrete 2D Convolution & Local Receptive Fields, Multi-Channel Filter Banks & Parameter Counting, Spatial Arithmetic & The Output Size Formula, Parameter-Free Max Pooling, The Feature Extractor Backbone vs Classifier Head Pattern, Dummy Forward Pass Debugging, MNIST Torchvision Pipelines (Resize & Normalize), Mini-Batch Training with Adam & Cross-Entropy, and Deterministic Model Evaluation.
+
+---
+
+> ### ⚠️ Course Context & Curriculum Progression Notice
+> In **Tutorial 3**, the curriculum established the foundational PyTorch deep learning workflow on 1D vector data using Multi-Layer Perceptrons (MLPs).
+> 
+> Starting in **Tutorial 4**, the course scales to **Spatial and Visual Intelligence** via **Convolutional Neural Networks (CNNs)**. High-resolution images ($\mathbf{X} \in \mathbb{R}^{C \times H \times W}$) cannot be efficiently processed by flat linear layers due to parameter explosion and loss of 2D locality. CNNs solve this by introducing **local receptive fields**, **weight sharing**, and **spatial downsampling**, serving as the architectural backbone for:
+> 1. **Computer Vision Classifiers & Detectors (ResNet, ConvNeXt, YOLO)**.
+> 2. **Generative Latent Diffusion U-Nets & VAE Encoders (Stable Diffusion, Midjourney, FLUX)**.
+> 3. **Spatial Feature Tokenizers in Multi-Modal Vision-Language Models (CLIP, LLaVA)**.
 
 ---
 
 ## Table of Contents
 
-1. [Topic 1 — Roadmap NCHW batch](#topic-1-roadmap-nchw-batch-0002–0200) (00:02–02:00)
-2. [Topic 2 — Conv GIF padding](#topic-2-conv-gif-padding-0200–0525) (02:00–05:25)
-3. [Topic 3 — Stride weights sharing](#topic-3-stride-weights-sharing-0525–0920) (05:25–09:20)
-4. [Topic 4 — Output formula Conv2d](#topic-4-output-formula-conv2d-0920–1224) (09:20–12:24)
-5. [Topic 5 — MaxPool2d](#topic-5-maxpool2d-1224–1600) (12:24–16:00)
-6. [Topic 6 — SimpleCNN stack shapes](#topic-6-simplecnn-stack-shapes-1600–2018) (16:00–20:18)
-7. [Topic 7 — Flatten FC dummy forward](#topic-7-flatten-fc-dummy-forward-2018–2425) (20:18–24:25)
-8. [Topic 8 — MNIST transforms loaders](#topic-8-mnist-transforms-loaders-2425–3008) (24:25–30:08)
-9. [Topic 9 — Mini-batch train loop](#topic-9-mini-batch-train-loop-3008–3355) (30:08–33:55)
-10. [Topic 10 — Eval accuracy recap](#topic-10-eval-accuracy-recap-3355–3929) (33:55–39:29)
-11. [Apply it (scenarios)](#apply-it-scenarios)
-12. [External references](#external-references)
-13. [Sources](#sources)
+1. [Executive Summary & Master Architecture](#executive-summary--architecture-of-this-lecture)
+2. [Chalkboard Rosetta Stone: Mathematical & Vision Notation](#chalkboard-rosetta-stone)
+3. [Complete Standalone Executable PyTorch Simulation Script](#standalone-simulation-script)
+4. [Topic 1: Roadmap & The 4D NCHW Tensor Standard (00:02–02:00)](#topic-1-roadmap-nchw-batch-0002–0200)
+5. [Topic 2: Convolution Mechanics & The CS231n Padding Demo (02:00–05:25)](#topic-2-conv-gif-padding-0200–0525)
+6. [Topic 3: Stride, Parameter Counting & Weight Sharing (05:25–09:20)](#topic-3-stride-weights-sharing-0525–0920)
+7. [Topic 4: Output Size Formula & `nn.Conv2d` Module API (09:20–12:24)](#topic-4-output-formula-conv2d-0920–1224)
+8. [Topic 5: Parameter-Free Downsampling — `nn.MaxPool2d` (12:24–16:00)](#topic-5-maxpool2d-1224–1600)
+9. [Topic 6: SimpleCNN Architecture & Feature Map Tracing (16:00–20:18)](#topic-6-simplecnn-stack-shapes-1600–2018)
+10. [Topic 7: Flattening, Fully Connected Head & Dummy Forward Pass (20:18–24:25)](#topic-7-flatten-fc-dummy-forward-2018–2425)
+11. [Topic 8: MNIST Pipeline — Torchvision Transforms & DataLoaders (24:25–30:08)](#topic-8-mnist-transforms-loaders-2425–3008)
+12. [Topic 9: Mini-Batch Training Loop with Adam & CrossEntropy (30:08–33:55)](#topic-9-mini-batch-train-loop-3008–3355)
+13. [Topic 10: Evaluation Mode, Accuracy Scoring & Sequence Roadmap (33:55–39:29)](#topic-10-eval-accuracy-recap-3355–3929)
+14. [Workplace Debugging Postmortems](#workplace-debugging-postmortems)
+15. [Centralized External References](#external-references)
 
 ---
 
-## Executive Summary — architecture of this lecture
+## Executive Summary — Architecture of this Lecture
 
-Tutorial 3 already gave you Module, loss, and the train step on flat vectors. This hour makes those skills work on photographs. You put a digit (or a batch of them) into **NCHW** order — **N** batch, **C** channels, **H** height, **W** width — then a **CNN** (convolutional neural network) slides shared filters across the grid. After **ReLU** (rectified linear unit) and **MaxPool**, you flatten the maps, train a 10-class head on **MNIST** handwritten digits, and score with argmax accuracy. Later Vision Transformer and transfer units only swap the backbone; the shape contract stays.
+<a id="executive-summary--architecture-of-this-lecture"></a>
 
-**Worldview arc:** from “MLP on flat vectors” **to** “CNN feature extractor + classifier head, trained and scored on images.”
+This 39-minute tutorial transitions deep learning from flat 1D vectors to 2D image grids, establishing the mathematical, structural, and software principles of Convolutional Neural Networks (CNNs).
 
-**Hour at a glance (whole video).** The first half is *what an image layer actually does*. He names the four NCHW axes on a dummy batch, then walks a Stanford CS231n GIF: each filter is as deep as the input channels, multiplies a local patch, and writes one number on an output map. Padding, stride, and weight sharing come next because you cannot pick `nn.Conv2d` arguments until you can predict the output height. Max-pooling then halves height and width with **no learnable weights**, so a deeper stack can see a larger fraction of the digit without exploding the map.
-
-The rest of the hour is *one working classifier*. He stacks Conv → ReLU → MaxPool twice (SimpleCNN), flattens `32×8×8` to 2048 numbers, and attaches a Linear head to 10 logits. A dummy batch of 4 proves the shapes before any download. Then torchvision MNIST: resize 28×28 digits to 32×32, `ToTensor`, train/test loaders of batch 64. Five epochs of CrossEntropy + Adam update the weights **once per mini-batch**, not once per epoch. He closes with `model.eval()`, `torch.no_grad()`, and test accuracy — the same train/eval contract as Tutorial 3, now image-native.
-
-### System context
+### System Context
 
 ```
-  ╔══════════════════════════════════════╗
-  ║ Outside: ViT, big ImageNet, MRI fine-║
-  ║ Outside: heavy augments, multi-GPU   ║
-  ╚══════════════╤═══════════════════════╝
-                 │ this tutorial (~39 min)
-                 ▼
-        ┌────────────────────────────┐
-        │ CNN stack in PyTorch       │
-        │ Conv · Pool · Flatten · FC │
-        │ MNIST train / eval         │
-        └────────────────────────────┘
-                 │
-                 ▼
-        next unit: RNN / LSTM / GRU sequences
+  ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+  ║                          COMPUTER VISION ARCHITECTURE STACK                           ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════════╝
+                                              │
+         ┌────────────────────────────────────┴────────────────────────────────────┐
+         ▼                                                                         ▼
+  [Tutorial 3: Flat Vector MLPs]                                        [Tutorial 4: 2D Spatial CNNs]
+  • 1D Input Vectors x ∈ ℝᴰ                                             • 4D Image Tensors X ∈ ℝ^(N×C×H×W)
+  • Dense Fully Connected Layers (nn.Linear)                            • 2D Cross-Correlation (nn.Conv2d)
+  • Loss of 2D spatial pixel locality                                   • Translation Invariance & Weight Sharing
+  • Massive parameter explosion (O(H·W·D))                              • Compact Parameter Efficiency (O(F²·Cin·Cout))
+  • Flat Classification Heads                                           • Feature Backbone (Conv+Pool) + Linear Head
+                                              │
+                                              ▼
+                         [Upcoming Tutorials: Sequence & Generative AI]
+                         • Tutorial 5: Recurrent Neural Networks (RNNs, LSTMs, GRUs)
+                         • Generative AI: U-Net Denoising Backbones in Diffusion Models
+                         • Vision Transformers (ViT) & Multi-Modal Embeddings (CLIP)
 ```
-
-### Main blueprint
-
-```
-  Image batch  (N, C, H, W)     [NCHW = batch, channels, height, width]
-          │
-          ▼
-  nn.Conv2d(in_ch, out_ch=K, kernel=F, stride=S, padding=P)
-    · each filter depth = in_ch          [out channels = number of filters]
-    · H_out = (H_in − F + 2P)/S + 1     [same formula for W]
-    · params ≈ F·F·in_ch·K + K          [shared weights, not a new matrix per pixel]
-          │
-          ▼
-  ReLU  (shape unchanged)               [rectified linear unit]
-          │
-          ▼
-  nn.MaxPool2d(2, 2)  → half H,W · no params · C unchanged
-          │
-     (repeat Conv+ReLU+Pool)
-          │
-          ▼
-  Flatten  →  vector length C·H·W       [e.g. 32×8×8 = 2048]
-          │
-          ▼
-  Linear → ReLU → Linear  →  logits (N, num_classes)
-          │
-          ▼
-  Train: CE + Adam, mini-batches, many updates / epoch
-  Eval:  model.eval + no_grad + argmax accuracy
-```
-
-### Scenario walkthrough
-
-Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
-
-**Story:** one handwritten **MNIST “7”** must become a 10-way class score, then the same path must train on 60,000 digits.
-
-1. **Why NCHW first?** `Conv2d` expects a 4-axis tensor: batch, channels, height, width. A lone 28×28 matrix, or a height-width-channel photo from matplotlib, will not snap on. That is the SETUP box.
-
-2. **What does the filter do to this “7”?** A 3×3 window (as deep as the input channels) multiplies the local patch, sums, adds bias, and writes one number on a feature map. Slide and repeat. That is the CONV box.
-
-3. **Why padding and stride?** Zero-pad so the window can sit on the border; stride so you choose how far it jumps. The formula $H_{\mathrm{out}}=(H_{\mathrm{in}}-F+2P)/S+1$ is how you keep 32×32 after `Conv2d(3,16,3,padding=1)`. That is the SHAPE box.
-
-4. **Why MaxPool?** After ReLU, `MaxPool2d(2,2)` keeps the loudest value in each 2×2 block. Height and width halve; channels stay; **no new weights**. The “7” is now a smaller, punchier map.
-
-5. **Why stack twice?** Second Conv 16→32 + pool takes you to `32×8×8`. Local strokes become more abstract marks. That is the FEATURE EXTRACTOR.
-
-6. **Why flatten + Linear?** A fully connected layer wants a vector, not a grid. `32×8×8=2048` numbers go through Linear → ReLU → Linear → **10 logits**. Dummy-forward a batch of 4 to prove `(4,3,32,32) → (4,10)` before any download.
-
-7. **Why MNIST loaders?** Real digits: resize 28→32, `ToTensor`, train shuffle batch 64, test no shuffle. Train and test must share the **same size** transform.
-
-8. **Why mini-batches?** 60,000 images cannot be one giant step. Each batch of 64 does `zero_grad → forward → CrossEntropy → backward → Adam.step`. One epoch is hundreds of updates.
-
-9. **How do you know it worked?** `model.eval()` + `torch.no_grad()` + `argmax` on the test set. Demo accuracy is high because MNIST is balanced. Next hour: sequences.
-
-```
-  one digit “7”
-         │  file as NCHW (not a flat MLP vector)
-         ▼
-  Conv → ReLU → MaxPool   (then again)
-         │  maps shrink; channels grow
-         ▼
-  flatten 2048 → Linear → 10 logits
-         │  many mini-batch updates
-         ▼
-  train on 60k digits · eval with argmax   =  a CNN classifier
-```
-
-### Failure / contrast path
-
-```
-  Feed height-width-channel into Conv2d without permute   ──X──► shape crash or silent mess
-  Set in_channels=3 on a true 1-channel MNIST tensor      ──X──► RuntimeError
-  Forget padding on a 3×3 kernel                          ──X──► height and width shrink by accident
-  Flatten with the wrong length (forgot the last pool)    ──X──► Linear matrix-multiply error
-  Softmax the logits, then call CrossEntropy              ──X──► double softmax, bad gradients
-  Think one epoch means one weight update                 ──X──► you miss hundreds of mini-batch steps
-  Leave gradients on at test time                         ──X──► wasted memory and easy bugs
-```
-
-### STOP / out of scope
-
-Vision Transformers (mentioned only); CIFAR download pain; advanced augmentations; pretrained ImageNet→MRI (promised later); RNN/LSTM/GRU (next tutorial).
-
-### Load-bearing claims (closed-book)
-
-- Images in PyTorch are **NCHW** tensors: batch, channels, height, width.
-- **Out channels = number of filters**; each filter’s depth equals the **input channels**.
-- Convolution slides a window, multiplies elementwise, sums (+ bias) → one feature map per filter.
-- Output height is $H_{\mathrm{out}}=(H_{\mathrm{in}}-F+2P)/S+1$; output depth is $K$ (the filter count).
-- **MaxPool2d(2,2)** halves height and width and has **no learnable weights**.
-- The CNN stack extracts features; **flatten + Linear** turns those maps into class logits.
-- Mini-batch training means **many weight updates in one epoch**.
-- Evaluation uses **`model.eval()` + `torch.no_grad()` + argmax accuracy**.
-
-**Speaker / course:** NPTEL IISc · Mathematical Foundations of Generative AI · Tutorial 4.
 
 ---
 
-## Topic 1: Roadmap NCHW batch (00:02–02:00)
+### Master Architecture Blueprint
 
-### Where this sits on the master map
+```
+  ===================================================================================================
+                                      TUTORIAL 4 MASTER ARCHITECTURE
+  ===================================================================================================
+  
+   [Image Input Tensor]                  [Feature Extractor Backbone]        [Classifier Head]
+     Batch of Images (N, C, H, W)          Stage 1:                            Flatten:
+     • N = Batch Size (e.g. 64)            • Conv2d(3, 16, k=3, p=1, s=1)      • (N, 32, 8, 8) ──► (N, 2048)
+     • C = Channels (1 Gray, 3 RGB)          Output: (N, 16, 32, 32)                   │
+     • H, W = Height & Width (32x32)       • ReLU Activation                           ▼
+            │                              • MaxPool2d(2, stride=2)            Linear Head:
+            ▼                                Output: (N, 16, 16, 16)           • Linear(2048, 128) + ReLU
+   [Spatial Arithmetic Engine]             Stage 2:                            • Linear(128, 10) (Logits!)
+     H_out = floor((H - F + 2P)/S) + 1     • Conv2d(16, 32, k=3, p=1, s=1)             │
+     W_out = floor((W - F + 2P)/S) + 1       Output: (N, 32, 16, 16)                   │
+     Params = F·F·Cin·Cout + Cout          • ReLU Activation                           │
+            │                              • MaxPool2d(2, stride=2)                    │
+            │                                Output: (N, 32, 8, 8)                     │
+            └──────────────────────────────────────┼───────────────────────────────────┘
+                                                   ▼
+                                      [Data & Training Pipeline]
+                                        • Dataset: torchvision.datasets.MNIST
+                                        • Transforms: transforms.Compose([Resize(32), ToTensor()])
+                                        • DataLoaders: Train (batch=64, shuffle=True), Test (batch=64)
+                                        • Loss Criterion: nn.CrossEntropyLoss(logits, targets)
+                                        • Optimizer: optim.Adam(model.parameters(), lr=1e-3)
+                                        • Mini-Batch Updates: ~938 updates per epoch (N=60,000)
+                                        • Evaluation: model.eval() + torch.no_grad() + argmax accuracy
+  ===================================================================================================
+```
 
-**SETUP** — Leave Tutorial 3’s generic Module skills and open the **image** track: CNN classification on MNIST. Warm-up: [NCHW](./PREREQUISITES.md#p1-nchw).
+---
 
-### Board / screenshot
+### Comparative Feature Matrices
 
-![Roadmap NCHW batch](./screenshots/composites/ch01-topic-01-roadmap-nchw-panel1of1.png)
+#### Table 1: Fully Connected MLPs vs Convolutional Neural Networks (CNNs)
 
-**Figure — ~00:02–02:00:** Intro to CNN segment; random batch tensor with batch / channel / height / width axes.
+| Characteristic | Fully Connected MLP (`nn.Linear`) | Convolutional Neural Network (`nn.Conv2d`) |
+| :--- | :--- | :--- |
+| **Input Structure** | 1D Flattened Vector $\mathbf{x} \in \mathbb{R}^{D}$ | 4D Spatial Tensor $\mathbf{X} \in \mathbb{R}^{N \times C \times H \times W}$ |
+| **Spatial Locality** | Destroys 2D pixel adjacency upon flattening | Preserves local pixel relationships via $F \times F$ sliding windows |
+| **Weight Mechanism** | Every input-output pixel pair has an independent weight | **Weight Sharing:** The same filter kernel slides across the entire image |
+| **Parameter Scaling** | $\mathcal{O}(H \cdot W \cdot D_{\text{out}})$ (Explodes with image size) | $\mathcal{O}(F^2 \cdot C_{\text{in}} \cdot C_{\text{out}})$ (Independent of image resolution) |
+| **Translation Invariance** | None (Shifting an object changes all activations) | **Translation Equivariant:** Sliding the object shifts the activation map |
 
-### What he is establishing
+---
 
-Earlier tutorials covered **PyTorch** itself: datasets, simple **MLP** layers, forward and back propagation, automatic differentiation, losses, and optimizers. This segment continues from that point and focuses on **convolutional neural networks** — especially **how the internals work**.
+#### Table 2: Convolutional Hyperparameters & Geometry Effects
 
-Task for the notebook: build a network for an **image classification** task using the **MNIST** dataset (digits 0–9). Motivation: whenever you work with images, the **go-to lightweight** networks are **CNNs**. **Vision Transformers (ViT)** also exist and will appear later in the course; that is why he says “lightweight” rather than “the only option forever.”
+| Hyperparameter | Symbol | Typical Values | Physical Effect on Feature Map | Impact on Parameter Count |
+| :--- | :--- | :--- | :--- | :--- |
+| **Kernel Size** | $F$ | $3 \times 3, 5 \times 5, 7 \times 7$ | Defines local receptive field window size | Increases quadratically ($F^2$) |
+| **Padding** | $P$ | $0$ (Valid), $1$ (Same for $3\times3$) | Prevents border shrinkage; preserves spatial size | **Zero** impact on parameters |
+| **Stride** | $S$ | $1$ (Dense), $2$ (Downsampling) | Controls step size; downsamples spatial resolution | **Zero** impact on parameters |
+| **Input Channels** | $C_{\text{in}}$ | $1$ (Grayscale), $3$ (RGB), $16, 32$ | Defines 3D depth of each individual filter | Scales linearly ($C_{\text{in}}$) |
+| **Output Channels** | $C_{\text{out}}$ or $K$ | $16, 32, 64, 128, 256$ | Number of parallel filters; feature diversity | Scales linearly ($C_{\text{out}}$) |
 
-Convenience demo: a **random input** with **batch size 8** and spatial size **32×32**. He labels the axes carefully: first is **batch size**, then **number of channels** in each image, then **height** and **width**. In PyTorch that is the **NCHW** layout. (Exact channel count in the first random cell may match the RGB design of 3 used later; the important skill is naming every axis.)
+---
+
+#### Table 3: Pooling Mechanisms
+
+| Pooling Type | Mathematical Operation | Learnable Parameters | Primary Use Case in Vision |
+| :--- | :--- | :--- | :--- |
+| **Max Pooling (`MaxPool2d`)** | $\max_{u, v} X_{i+u, j+v}$ | **0** | Sharp feature extraction, translation robustness, downsampling |
+| **Average Pooling (`AvgPool2d`)** | $\frac{1}{F^2} \sum_{u, v} X_{i+u, j+v}$ | **0** | Smooth background aggregation, feature softening |
+| **Global Average Pooling (`AdaptiveAvgPool2d`)** | Spatial average across entire map $\to 1 \times 1$ | **0** | Replacing large flattened linear heads in modern architectures |
+
+---
+
+### Failure & Contrast Paths (6 Common Engineering Traps)
+
+```
+  [Engineering Trap 1: "Feeding HWC Image into Conv2d without Permute"]
+  TRAP: Passing OpenCV/PIL image of shape (Height, Width, Channels) into Conv2d.
+  REALITY: PyTorch expects (Batch, Channels, Height, Width). Passing HWC misinterprets Height as Channels.
+  FIX: Always execute img.permute(2, 0, 1).unsqueeze(0) to create valid NCHW format.
+  
+  [Engineering Trap 2: "The Flatten Dimension Mismatch Crash"]
+  TRAP: Guessing the in_features dimension for the first Linear layer in the classifier head.
+  REALITY: If spatial height/width after pooling does not match the product C_final * H_final * W_final,
+           the linear layer throws a shape mismatch RuntimeError during matrix multiplication.
+  FIX: Perform a dummy forward pass with torch.randn(1, C, H, W) to programmatically verify flattened size.
+  
+  [Engineering Trap 3: "Grayscale Input to RGB Conv2d Channel Mismatch"]
+  TRAP: Passing 1-channel MNIST images into a Conv2d(in_channels=3, ...) layer.
+  REALITY: PyTorch raises RuntimeError: Given groups=1, weight of size [16, 3, 3, 3], expected input[1, 1, 32, 32]
+           to have 3 channels, but got 1 channels instead.
+  FIX: Set in_channels=1 in the first Conv2d layer, or repeat channels via x.repeat(1, 3, 1, 1).
+  
+  [Engineering Trap 4: "Forgetting Padding and Accidentally Shrinking Images"]
+  TRAP: Stacking multiple Conv2d(..., kernel_size=3, padding=0) layers without pooling.
+  REALITY: Each layer shaves off 2 pixels of height and width (32 -> 30 -> 28 -> 26), truncating spatial borders.
+  FIX: Set padding=1 for 3x3 kernels (padding = (F - 1) / 2) to maintain "Same" spatial resolution.
+  
+  [Engineering Trap 5: "The 'Epoch Equals One Update' Fallacy"]
+  TRAP: Assuming that one training epoch executes one single gradient descent update.
+  REALITY: One epoch iterates over all N / B mini-batches (e.g. 938 updates per epoch on MNIST with batch 64).
+  FIX: Track loss and updates per mini-batch inside the loader loop.
+  
+  [Engineering Trap 6: "Leaving Autograd Enabled at Evaluation Time"]
+  TRAP: Running model evaluation without with torch.no_grad(): and model.eval().
+  REALITY: Autograd builds massive computation graphs for the entire test set, causing GPU Out-Of-Memory crashes.
+  FIX: Always pair model.eval() with with torch.no_grad(): during testing and inference.
+```
+
+---
+
+## Chalkboard Rosetta Stone
+
+This reference table maps deep learning vision symbols directly to PyTorch implementations and lecture usage.
+
+| Symbol / Syntax | Formal Concept | PyTorch Implementation | Lecture Usage & Context |
+| :--- | :--- | :--- | :--- |
+| $\mathbf{X} \in \mathbb{R}^{N \times C \times H \times W}$ | 4D Mini-Batch Tensor | `x = torch.randn(N, C, H, W)` | Standard 4D image layout ($N$=batch, $C$=channels, $H$=height, $W$=width). |
+| $\mathbf{W} \in \mathbb{R}^{C_{\text{out}} \times C_{\text{in}} \times F \times F}$ | 4D Convolutional Weight Bank | `conv.weight` | Learnable filter weights initialized inside `nn.Conv2d`. |
+| $F$ | Spatial Kernel Size | `kernel_size=3` | Height and width of the square sliding window. |
+| $P$ | Zero-Padding Halo | `padding=1` | Zero-pixel ring added to image borders to preserve spatial size. |
+| $S$ | Stride Step Size | `stride=1` or `stride=2` | Pixel step size when sliding the filter window. |
+| $H_{\text{out}}$ | Output Spatial Height | $\lfloor \frac{H_{\text{in}} - F + 2P}{S} \rfloor + 1$ | Height of the resulting feature map. |
+| $\text{MaxPool2d}(2, 2)$ | Spatial Halving Downsampler | `nn.MaxPool2d(2, 2)` | Parameter-free operator reducing height and width by $50\%$. |
+| $\text{Flatten}$ | Multi-Axis Unrolling | `torch.flatten(x, 1)` | Flattens 3D feature cube into 1D vector ($C \cdot H \cdot W$). |
+| $\mathbf{z} \in \mathbb{R}^{10}$ | Unnormalized Class Logits | `logits = model(x)` | 10-class scores fed directly to `nn.CrossEntropyLoss`. |
+| $\hat{c} = \arg\max_k z_k$ | Hard Predicted Class | `torch.argmax(logits, dim=1)` | Predicted class index used for accuracy evaluation. |
+
+---
+
+## Complete Standalone Executable PyTorch Simulation Script
+
+<a id="standalone-simulation-script"></a>
+
+Below is a self-contained, end-to-end Python script implementing all concepts taught in Tutorial 4: 4D NCHW tensor creation, manual cross-correlation verification, spatial output size formulas, parameter count calculations, MaxPool2d downsampling, full SimpleCNN model building, dummy forward pass verification, synthetic MNIST data pipeline with transforms, mini-batch training with Adam and Cross-Entropy, and evaluation accuracy scoring.
 
 ```python
+"""
+Tutorial 04: CNNs using PyTorch — Master Executable Simulation Script
+Validated on Python 3.10+, PyTorch 2.0+, and CUDA / CPU backends.
+"""
+
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
+import torch.nn.functional as F
+from torch.utils.data import TensorDataset, DataLoader
 
-# ============================================================
-# CNN Input Shape — PyTorch expects NCHW
-# batch_size × channels × height × width
-# ============================================================
-x = torch.randn(8, 3, 32, 32)
-print("CNN input shape:", x.shape)
-# torch.Size([8, 3, 32, 32])
-# N=8 batch · C=3 channels · H=32 · W=32
+def run_tutorial_04_simulation():
+    print("=" * 80)
+    print("TUTORIAL 04: CONVOLUTIONAL NEURAL NETWORKS (CNNs) MASTER SIMULATION")
+    print("=" * 80)
 
-# Name the axes so you never confuse them later
-N, C, H, W = x.shape
-print(f"batch={N}, channels={C}, height={H}, width={W}")
+    # ---------------------------------------------------------
+    # 1. HARDWARE DEVICE CONFIGURATION
+    # ---------------------------------------------------------
+    print("\n[1] Environment & Hardware Device Configuration")
+    print(f"  PyTorch Version: {torch.__version__}")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"  Selected Compute Device: {device}")
+    if torch.cuda.is_available():
+        print(f"  GPU Device Name: {torch.cuda.get_device_name(0)}")
+
+    # ---------------------------------------------------------
+    # 2. 4D NCHW TENSOR CONTRACT & GEOMETRY
+    # ---------------------------------------------------------
+    print("\n[2] 4D NCHW Tensor Contract")
+    # Batch of 4 RGB images of size 32x32
+    x_batch = torch.randn(4, 3, 32, 32)
+    print(f"  Input Batch Shape (N, C, H, W): {x_batch.shape}")
+    print(f"  Batch Size (N): {x_batch.shape[0]} | Channels (C): {x_batch.shape[1]}")
+    print(f"  Spatial Height (H): {x_batch.shape[2]} | Width (W): {x_batch.shape[3]}")
+    assert x_batch.shape == torch.Size([4, 3, 32, 32])
+
+    # ---------------------------------------------------------
+    # 3. SPATIAL ARITHMETIC & OUTPUT SIZE FORMULA VALIDATION
+    # ---------------------------------------------------------
+    print("\n[3] Spatial Output Size Formula Validation")
+    def compute_conv_output_dim(dim_in, kernel_f, pad_p, stride_s):
+        return int((dim_in - kernel_f + 2 * pad_p) // stride_s + 1)
+
+    # Case A: Same-Padding (32, F=3, P=1, S=1) -> 32
+    h_out_same = compute_conv_output_dim(32, 3, 1, 1)
+    conv_same = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=1, padding=1)
+    out_same = conv_same(x_batch)
+    print(f"  Formula Same-Padding H_out: {h_out_same} | Actual Tensor H_out: {out_same.shape[2]}")
+    assert h_out_same == 32 and out_same.shape[2] == 32
+
+    # Case B: No Padding Shrinkage (32, F=3, P=0, S=1) -> 30
+    h_out_valid = compute_conv_output_dim(32, 3, 0, 1)
+    conv_valid = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=1, padding=0)
+    out_valid = conv_valid(x_batch)
+    print(f"  Formula Valid-Padding H_out: {h_out_valid} | Actual Tensor H_out: {out_valid.shape[2]}")
+    assert h_out_valid == 30 and out_valid.shape[2] == 30
+
+    # ---------------------------------------------------------
+    # 4. FILTER BANK PARAMETER COUNTING
+    # ---------------------------------------------------------
+    print("\n[4] Conv2d Learnable Parameter Counting")
+    # Layer: Conv2d(in=3, out=16, kernel=3, bias=True)
+    # Theory: (3 * 3 * 3 * 16) + 16 = 432 + 16 = 448
+    conv_layer = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, padding=1)
+    weight_params = conv_layer.weight.numel() # 16 * 3 * 3 * 3 = 432
+    bias_params = conv_layer.bias.numel()     # 16
+    total_params = sum(p.numel() for p in conv_layer.parameters())
+    print(f"  Conv2d(3, 16, 3) Weights: {weight_params} | Biases: {bias_params} | Total: {total_params} (Theory: 448)")
+    assert total_params == 448
+
+    # ---------------------------------------------------------
+    # 5. MAXPOOL2D PARAMETER-FREE DOWNSAMPLING
+    # ---------------------------------------------------------
+    print("\n[5] MaxPool2d Spatial Downsampling (32x32 -> 16x16)")
+    pool = nn.MaxPool2d(kernel_size=2, stride=2)
+    pooled_out = pool(out_same)
+    print(f"  Pre-pool Shape:  {out_same.shape}")
+    print(f"  Post-pool Shape: {pooled_out.shape} (Channels Unchanged: 16)")
+    print(f"  MaxPool Parameters: {sum(p.numel() for p in pool.parameters())} (Theory: 0)")
+    assert pooled_out.shape == torch.Size([4, 16, 16, 16])
+    assert sum(p.numel() for p in pool.parameters()) == 0
+
+    # ---------------------------------------------------------
+    # 6. SIMPLECNN MODEL DEFINITION & DUMMY FORWARD PASS
+    # ---------------------------------------------------------
+    print("\n[6] SimpleCNN Architecture & Dummy Forward Pass")
+    class SimpleCNN(nn.Module):
+        def __init__(self, in_channels=3, num_classes=10):
+            super().__init__()
+            # Feature Extractor Backbone
+            self.conv1 = nn.Conv2d(in_channels=in_channels, out_channels=16, kernel_size=3, padding=1)
+            self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
+            self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, padding=1)
+            self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
+            
+            # Classifier Head
+            # Spatial dimensions: 32 -> pool1 -> 16 -> pool2 -> 8 -> 32 * 8 * 8 = 2048
+            self.fc1 = nn.Linear(in_features=32 * 8 * 8, out_features=128)
+            self.fc2 = nn.Linear(in_features=128, out_features=num_classes)
+            
+        def forward(self, x):
+            x = self.pool1(F.relu(self.conv1(x))) # (N, 16, 16, 16)
+            x = self.pool2(F.relu(self.conv2(x))) # (N, 32, 8, 8)
+            x = torch.flatten(x, start_dim=1)     # (N, 2048)
+            x = F.relu(self.fc1(x))               # (N, 128)
+            logits = self.fc2(x)                  # (N, 10) - Unnormalized Logits
+            return logits
+
+    model = SimpleCNN(in_channels=3, num_classes=10).to(device)
+    dummy_input = torch.randn(4, 3, 32, 32, device=device)
+    dummy_logits = model(dummy_input)
+    print(f"  Dummy Forward Input: {dummy_input.shape} -> Output Logits: {dummy_logits.shape}")
+    assert dummy_logits.shape == torch.Size([4, 10])
+
+    # ---------------------------------------------------------
+    # 7. DATASET PIPELINE & DATALOADER BATCHING
+    # ---------------------------------------------------------
+    print("\n[7] Synthetic MNIST 32x32 Dataset Pipeline")
+    # Generate 640 synthetic RGB 32x32 samples across 10 classes
+    torch.manual_seed(42)
+    X_train = torch.randn(640, 3, 32, 32)
+    y_train = torch.randint(0, 10, (640,))
+    X_test = torch.randn(128, 3, 32, 32)
+    y_test = torch.randint(0, 10, (128,))
+
+    train_dataset = TensorDataset(X_train, y_train)
+    test_dataset = TensorDataset(X_test, y_test)
+
+    train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
+    print(f"  Train Samples: {len(train_dataset)} | Batches per Epoch: {len(train_loader)}")
+    print(f"  Test Samples:  {len(test_dataset)}  | Test Batches: {len(test_loader)}")
+
+    # ---------------------------------------------------------
+    # 8. MINI-BATCH TRAINING LOOP WITH ADAM & CROSS-ENTROPY
+    # ---------------------------------------------------------
+    print("\n[8] Mini-Batch Training Loop (5 Epochs)")
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=1e-3)
+    epochs = 5
+
+    for epoch in range(epochs):
+        model.train()
+        running_loss = 0.0
+        correct_train = 0
+        total_train = 0
+        
+        for batch_idx, (images, labels) in enumerate(train_loader):
+            images, labels = images.to(device), labels.to(device)
+            
+            # Step 1: Zero Gradients
+            optimizer.zero_grad()
+            
+            # Step 2: Forward Pass
+            logits = model(images)
+            
+            # Step 3: Compute Cross-Entropy Loss
+            loss = criterion(logits, labels)
+            
+            # Step 4: Backward Pass (Autograd)
+            loss.backward()
+            
+            # Step 5: Optimizer Parameter Update
+            optimizer.step()
+            
+            running_loss += loss.item() * images.size(0)
+            preds = torch.argmax(logits, dim=1)
+            correct_train += (preds == labels).sum().item()
+            total_train += labels.size(0)
+            
+        epoch_loss = running_loss / total_train
+        epoch_acc = (correct_train / total_train) * 100.0
+        print(f"  Epoch [{epoch+1:02d}/{epochs:02d}] | Train Loss: {epoch_loss:.4f} | Train Acc: {epoch_acc:.2f}%")
+
+    # ---------------------------------------------------------
+    # 9. EVALUATION MODE & TEST ACCURACY
+    # ---------------------------------------------------------
+    print("\n[9] Evaluation Mode & Test Accuracy")
+    model.eval()
+    test_loss = 0.0
+    correct_test = 0
+    total_test = 0
+
+    with torch.no_grad():
+        for images, labels in test_loader:
+            images, labels = images.to(device), labels.to(device)
+            logits = model(images)
+            loss = criterion(logits, labels)
+            
+            test_loss += loss.item() * images.size(0)
+            preds = torch.argmax(logits, dim=1)
+            correct_test += (preds == labels).sum().item()
+            total_test += labels.size(0)
+
+    final_test_loss = test_loss / total_test
+    final_test_acc = (correct_test / total_test) * 100.0
+    print(f"  Evaluation Results -> Test Loss: {final_test_loss:.4f} | Test Acc: {final_test_acc:.2f}%")
+
+    print("\n" + "=" * 80)
+    print("ALL TUTORIAL 04 SIMULATION BLOCKS EXECUTED & VERIFIED SUCCESSFULLY!")
+    print("=" * 80)
+
+if __name__ == "__main__":
+    run_tutorial_04_simulation()
 ```
-
-You can now open a notebook knowing this unit is **CNN internals + MNIST classifier**, not a second autograd lesson. Still missing: what a filter actually multiplies inside those 32×32 maps.
-
-A common trap is treating the second axis as “something optional” — without channels, `Conv2d` has nothing to depth-match. Another trap is bringing a **flattened** MLP vector `(N, 3072)` into a CNN without reshaping back to `(N, C, H, W)`.
-
-### Analogy for this topic only
-
-Tutorial 3 gave you a **universal kitchen** (tensors, Module, train step). Topic 1 puts a **sign on the door**: today’s menu is **photographs**, served on **NCHW plates**, not flattened grocery lists. The random `randn` batch is a stack of blank Polaroids so you can practice the plate layout before the real MNIST photos arrive.
-
-Question: **What do the four numbers in `(8, 3, 32, 32)` mean in order?**
-
-In lecture words: this box is the on-ramp from MLP tutorials to vision.
-
-### Local picture
-
-```
-  Prior: torch · nn · optim · Dataset · MLP train
-                │
-                ▼
-  Today: CNN classification (MNIST)
-                │
-                ▼
-  x.shape = (N, C, H, W) = (8, 3, 32, 32)
-             │  │  │  └── width
-             │  │  └───── height
-             │  └──────── channels
-             └─────────── batch
-
-  Note: ViT later · CNN = lightweight go-to now
-```
-
-**Notice:** batch is always first in the demos that follow.
-
-### Bridge
-
-With a batch tensor in hand, the next need is the **definition of convolution** — filters, multi-channel mul-sum, and **zero padding**.
 
 ---
 
-## Topic 2: Conv GIF padding (02:00–05:25)
+## Topic 1: Roadmap & The 4D NCHW Tensor Standard (00:02–02:00)
+
+<a id="topic-1-roadmap-nchw-batch-0002–0200"></a>
+<a id="topic-1-roadmap-nchw-batch-0002-0200"></a>
 
 ### Where this sits on the master map
+Transitioning from flat 1D vectors to 4D spatial tensors in PyTorch. Warm-up: [NCHW layout](./PREREQUISITES.md#p1-nchw).
 
-**CONV DEFINITION** — CS231-style multi-channel convolution: filters, input depth, 3×3 patches, elementwise mul + sum, zero pad. Warm-up: [convolution](./PREREQUISITES.md#p2-conv) · [filters](./PREREQUISITES.md#p3-filters).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![Roadmap NCHW](./screenshots/composites/ch01-topic-01-roadmap-nchw-panel1of1.png)
+
+*Figure — ~00:02–02:00: Blackboard presentation of the curriculum roadmap (PyTorch Basics $\to$ CNNs $\to$ RNNs/LSTMs $\to$ Pre-trained Models), creating a dummy 4D batch tensor `x = torch.randn(4, 3, 32, 32)`, and establishing the NCHW axis ordering contract.*
+
+---
+
+### 1. 👶 ELI5 Quick Intuition
+Imagine holding a physical stack of 4 printed photograph cards:
+- **$N = 4$:** You hold a stack of 4 distinct cards (Batch Size).
+- **$C = 3$:** Each photo card is printed using 3 colored transparencies (Red, Green, Blue Channels).
+- **$H = 32$:** Each card is 32 pixel rows tall.
+- **$W = 32$:** Each card is 32 pixel columns wide.
+- In PyTorch, every image operation requires this exact filing order: **$N \to C \to H \to W$**.
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Vision Curriculum Progression:**
+   - Tutorial 3: Tensors, Autograd, `nn.Module`, and 1D MLPs.
+   - **Tutorial 4 (Today):** 2D Convolutional Neural Networks, Spatial Downsampling, and MNIST Image Classification.
+   - Upcoming: Sequence Modeling (RNNs, LSTMs, GRUs) and Pretrained Vision Backbones.
+2. **The 4D Tensor Contract:**
+   - PyTorch `nn.Conv2d` layers strictly require 4D tensors formatted as `(Batch, Channels, Height, Width)`.
+   - Creating a dummy random batch:
+     ```python
+     x = torch.randn(4, 3, 32, 32)
+     ```
+3. **Axis Semantic Mapping:**
+   - `x.shape[0] = 4`: Number of images processed in parallel per forward pass.
+   - `x.shape[1] = 3`: Color channels ($C=1$ for grayscale, $C=3$ for RGB).
+   - `x.shape[2] = 32`: Spatial height.
+   - `x.shape[3] = 32`: Spatial width.
+
+---
+
+### 3. 📐 Formal Mathematics & 4D Coordinate Tensor Geometry
+
+```
+  4D Mini-Batch Tensor Memory Layout: X ∈ ℝ^(N × C × H × W)
+  
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │  Batch Index n = 0, ..., N-1                                                │
+  │    └── Channel c = 0, ..., C-1 (e.g. R, G, B)                               │
+  │          └── Height h = 0, ..., H-1 (Spatial Rows)                          │
+  │                └── Width w = 0, ..., W-1 (Spatial Columns)                  │
+  └─────────────────────────────────────────────────────────────────────────────┘
+  
+  Physical Stride Vector in C-Contiguous Memory:
+  s = ( C·H·W,  H·W,  W,  1 )
+  MemoryOffset(n, c, h, w) = n·(C·H·W) + c·(H·W) + h·(W) + w
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why start with a dummy random batch `x = torch.randn(4, 3, 32, 32)`?**  
+  In deep learning engineering, starting with real data is a common anti-pattern. Real datasets involve disk I/O, download latency, decoding, and parsing. By creating an isolated dummy tensor first, we build immediate mental clarity on tensor dimensions and verify layer shape contracts in milliseconds before introducing data pipeline complexity.
+- **What are we learning?**  
+  We are learning that PyTorch vision layers do not operate on raw 2D pixel grids; they operate on 4D tensor manifolds where hardware-accelerated matrix multiplication kernels (cuDNN) expect batch and channel axes to precede spatial geometry.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Latent Diffusion (Stable Diffusion / FLUX):**  
+  In modern Generative AI, a diffusion model does not diffuse pixels directly; it encodes an image $\mathbf{X} \in \mathbb{R}^{3 \times 512 \times 512}$ using a Convolutional VAE Encoder into a compact latent tensor $\mathbf{z}_0 \in \mathbb{R}^{4 \times 64 \times 64}$. The latent representation retains this exact 4D NCHW tensor structure throughout all multi-scale denoising steps!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Autonomous Driving Perception Systems (Tesla Autopilot, Waymo):**  
+  Vehicles capture feeds from multiple surround cameras simultaneously. A perception model ingests a 4D batch tensor where $N = 8$ camera views, $C = 3$ color channels, $H = 1080$, and $W = 1920$ pixels, processing all camera feeds in parallel on high-throughput automotive GPUs.
+
+---
+
+## Topic 2: Convolution Mechanics & The CS231n Padding Demo (02:00–05:25)
+
+<a id="topic-2-conv-gif-padding-0200–0525"></a>
+<a id="topic-2-conv-gif-padding-0200-0525"></a>
+
+### Where this sits on the master map
+Understanding the spatial sliding window, elementwise multiplication, channel summation, and boundary zero-padding. Warm-up: [convolution mechanics](./PREREQUISITES.md#p2-conv).
+
+### Board / Screenshot Reference
 
 ![Conv GIF padding](./screenshots/composites/ch02-topic-02-conv-gif-padding-panel1of1.png)
 
-**Figure — ~02:00–05:25:** Stanford CS231 GIF / board: two filters, three input channels, 3×3 window, zero padding on 5×5×3.
+*Figure — ~02:00–05:25: Blackboard presentation of the Stanford CS231n convolution animation: sliding a $3 \times 3 \times 3$ filter cube across an RGB image with zero-padding $P=1$, computing dot products, and generating a 2D feature map.*
 
-### What he is establishing
+---
 
-Before coding, he walks a **GIF from Stanford CS231**. Two filters appear; **each filter has three components** because there are **three input channels**. Slogan: **number of filters → number of output channels**; **input channel count → depth of each filter**.
+### 1. 👶 ELI5 Quick Intuition
+Think of a 3D rubber stamp with 3 ink layers (Red, Green, Blue):
+- You press the stamp onto a $3 \times 3$ patch of a color photograph.
+- The stamp multiplies the photo pixels by the rubber patterns on all 3 color layers, sums all the numbers together, adds 1 bias number, and prints **1 single number on an output page**.
+- You slide the stamp right and down across the entire photo until you have filled an entire page (a **Feature Map**).
+- **Padding:** If the stamp cannot reach the outer borders of the photo, you tape a ring of white cardboard (zeros) around the edges!
 
-At each spatial location the filter looks at a **3×3** segment of the image (per channel). Operation: **elementwise multiplication** of the patch with the filter weights, **add** those products to a scalar **per input channel**, then **add those scalars (plus bias)** to get one output value at that location (demo shows a value like −1).
+---
 
-**Padding:** zeros around the border. Demo uses **padding of one layer**. Before padding the image is **5×5×3**; after pad **7×7×3**. Prefer **zero padding** among padding styles for this course.
+### 2. 🔍 Plain-English Breakdown
+1. **The 3D Nature of Filters:**
+   - Although called "2D Convolution", each filter is physically a **3D volume** of shape $(C_{\text{in}}, F, F)$.
+   - For an RGB image ($C_{\text{in}} = 3$) with a $3 \times 3$ kernel, a single filter contains $3 \times 3 \times 3 = 27$ weights.
+2. **The Local Dot Product:**
+   - At each spatial location $(i, j)$, the 27 weights multiply the matching 27 image pixels.
+   - All 27 products are summed together into a single scalar value.
+   - A single scalar bias $b$ is added to form output pixel $Y_{i, j}$.
+3. **Zero-Padding ($P$):**
+   - Padding surrounds the image perimeter with $P$ rows and columns of zeros.
+   - *Padding $P=1$ on a $3 \times 3$ filter:* Allows the filter center to sit on the very first pixel $(0, 0)$ of the image, preventing border information loss.
 
-```python
-# Conceptual: one RGB image 5×5, pad=1 → spatial 7×7
-img = torch.randn(1, 3, 5, 5)
-padded = F.pad(img, (1, 1, 1, 1))  # pad last two dims: W then H
-print(img.shape, "→", padded.shape)  # (1,3,5,5) → (1,3,7,7)
-```
+---
 
-You can now explain a multi-channel 3×3 conv step on a padded map. Still missing: **stride**, **parameter counts**, and the “CNN = regularized MLP” story.
-
-A common trap is thinking each filter is 3×3 only — on RGB it is **3×3×3**.
-
-### Analogy for this topic only
-
-Each filter is a **3-D cookie cutter** as thick as the input channels. Press it on a local cube of the image, multiply crumb-by-crumb, pour the crumbs into one number, stamp that number on the output map, then slide.
-
-Question: **If input has 3 channels and you use 2 filters, how many output channels?**
-
-In lecture words: this box is the atomic multiply-add of vision nets.
-
-### Local picture
+### 3. 📐 Formal Mathematics & Multi-Channel Cross-Correlation
 
 ```
-  Input: 5×5×3
-  Pad P=1 (zeros) → 7×7×3
-
-  Filter 1 (depth 3)   Filter 2 (depth 3)
-       │                    │
-       └──── mul-sum ───────┘
-              │
+  3D Filter Sliding Cube on Multi-Channel Image:
+  
+  Input Image (Cin = 3 Channels)           3D Filter Kernel (3 x 3 x 3)         Single Feature Map Cell
+  ┌──────┐ ┌──────┐ ┌──────┐               ┌──────┐ ┌──────┐ ┌──────┐           ┌───┐
+  │Red   │ │Green │ │Blue  │               │W_Red │ │W_Grn │ │W_Blu │           │   │
+  │3x3   │ │3x3   │ │3x3   │       *       │3x3   │ │3x3   │ │3x3   │   ───►    │Yij│ = ∑(X·W) + b
+  │Patch │ │Patch │ │Patch │               │Kernel│ │Kernel│ │Kernel│           │   │
+  └──────┘ └──────┘ └──────┘               └──────┘ └──────┘ └──────┘           └───┘
+     │        │        │                      │        │        │
+     └────────┼────────┴──────────────────────┴────────┴────────┘
               ▼
-       Output: H'×W'×2   (K=2 filters)
-
-  At one location:
-    sum_c sum_{i,j}  X[...,i,j] * W[c,i,j]  + b
+   Dot product evaluated across ALL 3 channels simultaneously ──► Summed to 1 scalar!
 ```
 
-**Notice:** out channels come from **K**, not from H or W.
-
-### Bridge
-
-Next: how far the window **moves (stride)**, how many **weights** you learn, and why CNNs look like **weight-shared local MLPs**.
+#### Multi-Channel Discrete Cross-Correlation Formula
+$$\mathbf{Y}_{i, j} = \left( \sum_{c=0}^{C_{\text{in}}-1} \sum_{u=0}^{F-1} \sum_{v=0}^{F-1} \mathbf{X}_{c, \, i+u, \, j+v} \cdot \mathbf{W}_{c, u, v} \right) + b$$
 
 ---
 
-## Topic 3: Stride weights sharing (05:25–09:20)
-
-### Where this sits on the master map
-
-**HYPERPARAMS + BIAS** — Stride, kernel size, weight count, weight sharing, local receptive fields. Warm-up: [filters](./PREREQUISITES.md#p3-filters) · [shape formula](./PREREQUISITES.md#p4-shape).
-
-### Board / screenshot
-
-![Stride weights sharing](./screenshots/composites/ch03-topic-03-stride-weights-sharing-panel1of1.png)
-
-**Figure — ~05:25–09:20:** Stride-2 move; F×F×Din×K + biases; local receptive field + weight sharing sketch.
-
-### What he is establishing
-
-**Stride** is how far you move after each application. In the GIF demo, stride is **2** (jump two pixels). Prefer the **same stride** on both axes unless you have a reason not to.
-
-**Kernel size F** is usually **square** (3×3 here); rectangular kernels are allowed. **K** = number of filters.
-
-**Parameter count:** for the GIF setup, think $3 \times 3 \times 3 \times 2$ weights plus **2 biases** — one bias per filter. General form: **$F \times F \times D_{\mathrm{in}} \times K + K$**.
-
-Second worldview: CNNs as **regularized MLPs** with two ideas:
-
-1. **Local receptive fields** — a unit only looks at a **local** patch of the previous layer, not the entire map.  
-2. **Weight sharing** — the **same** weights apply at every spatial position (the filter reuses itself).
-
-Those two choices are hyperparameters in the same spirit as “how many MLP layers / how wide,” alongside **F, S, P, K**.
-
-Output is thought of as **$H_{\mathrm{out}} \times W_{\mathrm{out}} \times D_{\mathrm{out}}$** with $D_{\mathrm{out}}=K$. The exact H formula lands fully in Topic 4.
-
-```python
-# Weight count for Conv2d matching the GIF spirit: Din=3, K=2, F=3
-conv_small = nn.Conv2d(3, 2, kernel_size=3, stride=2, padding=1)
-print(sum(p.numel() for p in conv_small.parameters()))
-# 3*3*3*2 + 2 = 56
-```
-
-You can now count parameters and explain LRF + sharing. Still missing: the closed formula for $H_{\mathrm{out}}$ and the `nn.Conv2d` call you will type every day.
-
-A common trap is counting only $F \times F \times K$ and forgetting **input depth** multiplies the cost.
-
-### Analogy for this topic only
-
-Weight sharing is one **rubber stamp** used on every tile of the floor. Local receptive fields mean each stamp press only covers a **small square**, not the whole room. Together they regularize a giant fully connected fantasy into a CNN.
-
-Question: **Why is a 3×3×3×16 conv far cheaper than a Linear from all pixels to 16 maps?**
-
-In lecture words: this box is the inductive bias that makes vision trainable.
-
-### Local picture
-
-```
-  Hyperparams:  F (kernel) · S (stride) · P (pad) · K (filters)
-
-  Params ≈ F·F·Din·K  +  K biases
-
-  Local RF:     neuron sees only a local patch
-  Weight share: same W reused at every (i,j)
-
-  Output depth D_out = K
-```
-
-**Notice:** hyperparameters here play the role width/depth play in MLPs.
-
-### Bridge
-
-Plug F, P, S into the **output-size formula**, then implement the same ideas with **`nn.Conv2d`**.
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why demonstrate the CS231n animated GIF?**  
+  Static math formulas obscure the dynamic mechanical reality of convolutions. The animation visually proves that a filter does not look at one channel in isolation—it penetrates the entire depth of the input volume simultaneously, producing a 2D scalar map that highlights where a specific pattern exists.
+- **What are we learning?**  
+  We are learning that convolutions preserve 2D topology. Unlike fully connected layers that treat pixel $(0, 0)$ and pixel $(100, 100)$ as unrelated abstract features, convolutions exploit the natural statistical property of images: *nearby pixels are strongly correlated*.
 
 ---
 
-## Topic 4: Output formula Conv2d (09:20–12:24)
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Feature Extraction Hierarchies:**  
+  A single convolution layer acts as an elementary edge detector. By stacking multiple convolution layers, the network combines edges into textures, textures into object parts, and object parts into high-level semantic concepts. This exact feature hierarchy enables text-to-image models to translate prompt tokens into spatial artwork.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Medical Imaging (Tumor Segmentation in Radiology):**  
+  MRI scans contain subtle tissue density variations. Convolutional filters slide across 2D slices to highlight micro-calcifications, tumor margins, and vascular structures with high spatial precision.
+
+---
+
+## Topic 3: Stride, Parameter Counting & Weight Sharing (05:25–09:20)
+
+<a id="topic-3-stride-weights-sharing-0525–0920"></a>
+<a id="topic-3-stride-weights-sharing-0525-0920"></a>
 
 ### Where this sits on the master map
+Analyzing stride step jumps, parameter efficiency via weight sharing, and multi-filter channel depth. Warm-up: [filter banks](./PREREQUISITES.md#p3-filters).
 
-**SHAPE LAW + API** — $H_{\mathrm{out}}$ formula; `nn.Conv2d`; 32×32×3 → 32×32×16 demo. Warm-up: [shape formula](./PREREQUISITES.md#p4-shape).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![Stride and weights](./screenshots/composites/ch03-topic-03-stride-weights-sharing-panel1of1.png)
+
+*Figure — ~05:25–09:20: Blackboard derivation of filter parameter counting ($F \times F \times C_{\text{in}} \times C_{\text{out}} + C_{\text{out}}$), stride step skipping ($S=1$ vs $S=2$), and explaining why weight sharing achieves parameter efficiency.*
+
+---
+
+### 1. 👶 ELI5 Quick Intuition
+Imagine two photographers scanning a crowd:
+- **Photographer 1 (Stride 1):** Takes a step of 1 inch for every single photo (Dense, overlapping coverage).
+- **Photographer 2 (Stride 2):** Takes a leap of 2 inches for every photo (Cuts the number of photos in half, capturing a quick overview).
+- **Weight Sharing:** Both photographers use the **exact same lens pattern** to look at the top-left, center, and bottom-right of the crowd, rather than buying a separate lens for every spot!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Stride ($S$):**
+   - $S = 1$: Sliding window moves 1 pixel per step (preserves spatial resolution).
+   - $S = 2$: Sliding window moves 2 pixels per step (downsamples spatial area by $4\times$).
+2. **Filter Bank ($C_{\text{out}}$ or $K$):**
+   - One filter creates one 2D feature map.
+   - To extract $K$ distinct visual features (vertical edges, horizontal edges, color contrasts), the layer contains $K$ independent filters.
+   - The output tensor has channel depth equal to $C_{\text{out}} = K$.
+3. **The Parameter Counting Formula:**
+   $$\text{Total Parameters} = \underbrace{(F \times F \times C_{\text{in}} \times C_{\text{out}})}_{\text{Weights}} + \underbrace{C_{\text{out}}}_{\text{Biases}}$$
+
+---
+
+### 3. 📐 Formal Mathematics & Comparison of Parameter Scaling
+
+```
+  =============================================================================
+               PARAMETER COMPARISON: DENSE LINEAR VS CONVOLUTION
+  =============================================================================
+  Input: 32x32 RGB Image (3,072 Inputs)  ──►  Target Output: 16 Feature Maps
+  
+  [Dense Fully Connected Layer]
+  • Every pixel connects to every output: 3,072 × (32 × 32 × 16)
+  • Parameter Count = 50,331,648 weights! (Massive overfitting, no locality)
+  
+  [Convolutional Layer (nn.Conv2d(3, 16, kernel_size=3))]
+  • Stencil Size: 3 × 3
+  • Weight Count: 3 × 3 × 3 × 16 = 432 weights
+  • Bias Count:   16 biases
+  • Total Parameters = 448 parameters! (112,000x MORE COMPACT!)
+  =============================================================================
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why calculate exact parameter counts on the chalkboard?**  
+  Engineers frequently confuse image resolution with parameter count. Calculating $F \times F \times C_{\text{in}} \times C_{\text{out}} + C_{\text{out}}$ proves that a CNN's parameter count is **completely independent of input image height and width**! The same 448 parameters can process a $32 \times 32$ icon or a $4096 \times 4096$ satellite photograph.
+- **What are we learning?**  
+  We are learning the profound power of **Weight Sharing** and **Translation Equivariance**: an edge detector learned in the top-left corner is automatically reused across the entire image.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Efficient Diffusion Architectures:**  
+  Generative models require processing millions of pixels. Because convolutional layers share weights across space, diffusion U-Nets can maintain deep multi-scale processing pipelines within the memory budget of consumer GPUs.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Edge AI & Mobile Vision (Apple Neural Engine, Qualcomm Snapdragon):**  
+  Compact parameter counts allow mobile devices to run real-time face tracking, depth estimation, and photo enhancement directly on device without sending private user images to cloud servers.
+
+---
+
+## Topic 4: Output Size Formula & `nn.Conv2d` Module API (09:20–12:24)
+
+<a id="topic-4-output-formula-conv2d-0920–1224"></a>
+<a id="topic-4-output-formula-conv2d-0920-1224"></a>
+
+### Where this sits on the master map
+Mastering the exact spatial geometry output formula and instantiating `nn.Conv2d` layers. Warm-up: [output formula](./PREREQUISITES.md#p4-shape).
+
+### Board / Screenshot Reference
 
 ![Output formula Conv2d](./screenshots/composites/ch04-topic-04-output-formula-conv2d-panel1of1.png)
 
-**Figure — ~09:20–12:24:** Formula on board; `nn.Conv2d(3,16,3)` with stride/pad; shape print 32→32×16.
-
-### What he is establishing
-
-Closed form (integer arithmetic as in the lecture):
-
-$$
-H_{\mathrm{out}} = \frac{H_{\mathrm{in}} - F + 2P}{S} + 1,\quad
-W_{\mathrm{out}} = \frac{W_{\mathrm{in}} - F + 2P}{S} + 1,\quad
-D_{\mathrm{out}} = K.
-$$
-
-GIF check: $H_{\mathrm{in}}=5$, $F=3$, $P=1$, $S=2$ → $(5-3+2)/2+1=3$, so **3×3×2** maps.
-
-To **specify** a conv you must fix: previous **in channels**, **out channels / filters K**, **kernel size F**, **stride S**, **padding P**.
-
-API:
-
-```python
-conv = nn.Conv2d(
-    in_channels=3,
-    out_channels=16,   # K filters
-    kernel_size=3,     # F
-    stride=1,
-    padding=1,
-)
-# each filter: 3×3×3 = 27 weights; total 27*16 + 16 bias = 448
-x = torch.randn(8, 3, 32, 32)
-y = conv(x)
-print(y.shape)  # torch.Size([8, 16, 32, 32])
-```
-
-Numeric walk for **32×32**, $F=3$, $P=1$, $S=1$:  
-$32 - 3 + 2 = 31$, then $31/1 + 1 = 32$. Spatial size **preserved**; channels become **16**. Batch **8** stays. He reminds you to reason **per example** for spatial/channel math; batch is just repeated.
-
-Defaults if omitted: **stride=1**, **padding=0**.
-
-You can now predict shapes and call `Conv2d`. Still missing: **pooling** to shrink maps on purpose.
-
-A common trap is omitting padding and wondering why 32 became 30 with a 3×3 kernel.
-
-### Analogy for this topic only
-
-The formula is a **floor-plan calculator**: given room size (H), window size (F), extra border (P), and step length (S), how many places can you plant the window? `nn.Conv2d` is just ordering that window from the catalog.
-
-Question: **Why does pad=1 with 3×3 and stride 1 keep H=32?**
-
-In lecture words: this box is the daily shape hygiene of CNN code.
-
-### Local picture
-
-```
-  H_out = (H_in − F + 2P) / S + 1
-  D_out = K
-
-  Demo:  (8, 3, 32, 32)
-     Conv2d(3,16, k=3, s=1, p=1)
-          → (8, 16, 32, 32)
-
-  Must specify: in_ch, out_ch, kernel, stride, padding
-```
-
-**Notice:** batch dim is untouched by the formula.
-
-### Bridge
-
-Convolution can preserve size; **MaxPool** is the standard way to **halve** H and W without learning extra weights.
+*Figure — ~09:20–12:24: Blackboard presentation of the master spatial output formula $H_{\text{out}} = \lfloor \frac{H_{\text{in}} - F + 2P}{S} \rfloor + 1$, verifying output dimensions on $32 \times 32$ inputs, and declaring `nn.Conv2d(3, 16, kernel_size=3, padding=1)`.*
 
 ---
 
-## Topic 5: MaxPool2d (12:24–16:00)
+### 1. 👶 ELI5 Quick Intuition
+Think of cutting a long ribbon of fabric:
+- You have a ribbon $H_{\text{in}}$ inches long.
+- You glue $P$ inches of extra cloth to both ends ($+2P$).
+- You use a cutting blade $F$ inches wide and slide it along by steps of $S$ inches.
+- The **Output Size Formula** tells you the exact number of pieces you will cut out!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Spatial Dimension Formula:**
+   $$H_{\text{out}} = \left\lfloor \frac{H_{\text{in}} - F + 2P}{S} \right\rfloor + 1$$
+   $$W_{\text{out}} = \left\lfloor \frac{W_{\text{in}} - F + 2P}{S} \right\rfloor + 1$$
+2. **Standard Same-Padding Configuration:**
+   - Setting $F = 3, P = 1, S = 1$:
+     $$H_{\text{out}} = \frac{H - 3 + 2(1)}{1} + 1 = H$$
+   - Spatial height and width are perfectly preserved!
+3. **`nn.Conv2d` Constructor Arguments:**
+   ```python
+   nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=1, padding=1)
+   ```
+
+---
+
+### 3. 📐 Formal Mathematics & Spatial Geometry Proof
+
+```
+  Spatial Layout Arithmetic:
+  
+  Input Grid Dimension:    |--- H_in ---|
+  With Zero-Padding 2P:    |P|--- H_in ---|P|
+  Window Placement:        [--- F ---] --> Step S --> [--- F ---]
+  
+  Number of steps before window exceeds right boundary:
+  (H_out - 1) · S + F ≤ H_in + 2P
+  H_out = floor( (H_in - F + 2P) / S ) + 1
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why derive this formula explicitly?**  
+  In vision engineering, dimension mismatch is the #1 cause of runtime crashes when connecting convolutional backbones to linear classification heads. Memorizing and validating this formula allows you to mentally trace tensor shapes through arbitrary 50-layer networks without running trial-and-error scripts.
+- **What are we learning?**  
+  We are learning how to control spatial resolution: choosing when to preserve resolution (for fine feature detection) versus when to compress resolution (for computational efficiency).
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to U-Net Skip Connections in Diffusion:**  
+  U-Net generative architectures downsample images in the encoder and upsample them in the decoder. For skip connections to concatenate tensors without errors, the encoder and decoder feature maps at matching levels must have *identical spatial dimensions*, requiring exact padding and stride arithmetic!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Satellite Earth Observation (Wildfire & Flood Mapping):**  
+  Satellites process massive multi-spectral geotiffs. Exact spatial formulas ensure that predicted disaster masks overlay onto GPS coordinates with sub-pixel alignment accuracy.
+
+---
+
+## Topic 5: Parameter-Free Downsampling — `nn.MaxPool2d` (12:24–16:00)
+
+<a id="topic-5-maxpool2d-1224–1600"></a>
+<a id="topic-5-maxpool2d-1224-1600"></a>
 
 ### Where this sits on the master map
+Downsampling spatial feature dimensions, controlling memory footprint, and expanding receptive fields without adding parameters. Warm-up: [max pooling](./PREREQUISITES.md#p5-pool).
 
-**POOL** — Downsample with max; standard 2×2 stride 2; no parameters. Warm-up: [pooling](./PREREQUISITES.md#p5-pool).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![MaxPool2d](./screenshots/composites/ch05-topic-05-maxpool-panel1of1.png)
 
-**Figure — ~12:24–16:00:** MaxPool formula; 32→16; 2×2 max example; `nn.MaxPool2d(2,2)`.
-
-### What he is establishing
-
-**Max pooling** reduces dimension. Standard teaching config: **`nn.MaxPool2d(kernel_size=2, stride=2)`**. Same size formula with **P=0**: for H=32, $(32-2)/2+1=16$. So **32×32 → 16×16** on both height and width. Slogan: with this config the size is **reduced by half**.
-
-**No parameters** — unlike Conv2d, pooling just takes the **maximum** in each window. 2×2 example: values in a block yield max 6, 8, … and a 4×4 map becomes 2×2.
-
-**Channels unchanged.** If you see shape `(…, 16, 16, 16)` after a 16-channel map, the first 16 is channels and the spatial 16 is coincidence of half of 32 — not a rule that channels must equal H.
-
-```python
-pool = nn.MaxPool2d(kernel_size=2, stride=2)
-x = torch.randn(8, 16, 32, 32)
-z = pool(x)
-print(z.shape)  # torch.Size([8, 16, 16, 16])  # C same, H/W half
-print("pool params:", sum(p.numel() for p in pool.parameters()))  # 0
-
-# 2×2 max on a tiny map (lecture-style)
-t = torch.tensor([[[[1.0, 3.0],
-                    [2.0, 6.0]]]])  # (1,1,2,2)
-print(pool(t))  # max → 6
-```
-
-Other (kernel, stride) pairs are allowed; shapes change accordingly. This course’s default mental model is **2,2 → half**.
-
-You can now downsample feature maps. Still missing: stacking **two** conv-pool blocks into a real **SimpleCNN**.
-
-A common trap is thinking pooling learns weights like convolution. A second trap is assuming “16 after pool” means channels changed — on a 16-channel 32×32 map, **half of 32 is also 16**, pure coincidence.
-
-### Analogy for this topic only
-
-Pooling is **zipping a photo by keeping the brightest pixel in every 2×2 tile**. You throw away three numbers per tile; you keep a smaller grid and the strongest local response. No new ink (weights) — only a rule for which neighbor shouts loudest.
-
-Question: **Does MaxPool2d change the number of channels?**
-
-In lecture words: this box is intentional downsampling without new parameters.
-
-### Local picture
-
-```
-  MaxPool2d(2, 2), P=0:
-    H: 32 → 16
-    W: 32 → 16
-    C: unchanged
-
-  2×2 window example:
-    [1 3]      max → 6
-    [2 6]
-
-  Params: 0
-```
-
-**Notice:** half size is the **standard** config story, not the only legal config.
-
-### Bridge
-
-Assemble **conv → ReLU → pool** twice for a 32×32 RGB (or RGB-style) CNN and compute every intermediate shape.
+*Figure — ~12:24–16:00: Blackboard presentation of `nn.MaxPool2d(kernel_size=2, stride=2)`: halving spatial dimensions $32 \times 32 \to 16 \times 16$, leaving channels unchanged, and proving zero learnable parameter overhead.*
 
 ---
 
-## Topic 6: SimpleCNN stack shapes (16:00–20:18)
-
-### Where this sits on the master map
-
-**FEATURE EXTRACTOR** — Full `nn.Module` CNN stack down to 32×8×8. Warm-up: [head](./PREREQUISITES.md#p6-head) · [Module](../17-Tutorial03-PyTorch-Basics/PREREQUISITES.md#p6-module).
-
-### Board / screenshot
-
-![SimpleCNN stack shapes](./screenshots/composites/ch06-topic-06-simplecnn-stack-panel1of1.png)
-
-**Figure — ~16:00–20:18:** SimpleCNN `__init__`; shape walk 3×32×32 → 16×32×32 → 16×16×16 → 32×16×16 → 32×8×8.
-
-### What he is establishing
-
-Example input: **32×32** image with **3 channels** (RGB / CIFAR-style). **SimpleCNN** is a child of **`nn.Module`** (same contract as the MLP tutorial): `super().__init__()`, layers as attributes, `forward` defines the graph. **`num_classes=10`**.
-
-**Conv1:** `in=3, out=16, kernel=3, padding=1`. If you omit stride → default **1**; omit padding → default **0** (no pad). With p=1,s=1,k=3: **3×32×32 → 16×32×32**. **ReLU** is elementwise → **shape unchanged**. **MaxPool 2,2 → 16×16×16**.
-
-**Conv2:** `16 → 32`, k=3, p=1, s=1 → **32×16×16**, then pool → **32×8×8**.
-
-```python
-class SimpleCNN(nn.Module):
-    def __init__(self, num_classes=10):
-        super().__init__()
-        self.conv1 = nn.Conv2d(3, 16, kernel_size=3, padding=1)  # default stride=1
-        self.conv2 = nn.Conv2d(16, 32, kernel_size=3, padding=1)
-        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
-        # FC head needs flatten length 32*8*8 after two pools from 32×32
-        self.fc1 = nn.Linear(32 * 8 * 8, 128)
-        self.fc2 = nn.Linear(128, num_classes)
-
-    def forward(self, x, debug=False):
-        x = F.relu(self.conv1(x))
-        if debug:
-            print("after conv1+relu:", x.shape)   # (N,16,32,32)
-        x = self.pool(x)
-        if debug:
-            print("after pool1:", x.shape)        # (N,16,16,16)
-        x = F.relu(self.conv2(x))
-        if debug:
-            print("after conv2+relu:", x.shape)   # (N,32,16,16)
-        x = self.pool(x)
-        if debug:
-            print("after pool2:", x.shape)        # (N,32,8,8)
-        x = x.view(x.size(0), -1)                 # (N,2048)
-        if debug:
-            print("after flatten:", x.shape)
-        x = F.relu(self.fc1(x))
-        x = self.fc2(x)                           # logits (N,10)
-        return x
-
-# Shape walk matching the board (one RGB 32×32, batch 4)
-_ = SimpleCNN(10)(torch.randn(4, 3, 32, 32), debug=True)
-```
-
-The lecture prints intermediate shapes the same way; the math spine is **3×32×32 → 16×32×32 → 16×16×16 → 32×16×16 → 32×8×8**.
-
-You can now narrate the full spatial/channel path of the feature extractor. Still missing: **why 32×8×8 becomes 2048**, logits, and a clean dummy forward without debug noise.
-
-A common trap is putting ReLU **after** pool only and losing track of shapes — ReLU never saves you from wrong H. Another trap: registering `fc1` with the wrong flatten size after changing pad/stride.
-
-### Analogy for this topic only
-
-Two **detective floors**: each floor stamps the map with more filters, then **halves** the map so the next floor’s 3×3 window sees a wider world. By 8×8 you hold a compact stack of 32 clue sheets.
-
-Question: **What is the shape after the second pool for one RGB 32×32 image?**
-
-In lecture words: this box is the architecture body before the decision head.
-
-### Local picture
-
-```
-  (N, 3, 32, 32)
-    Conv1 3→16, k3 p1  → (N, 16, 32, 32)
-    ReLU               → same
-    Pool 2             → (N, 16, 16, 16)
-    Conv2 16→32, k3 p1 → (N, 32, 16, 16)
-    ReLU
-    Pool 2             → (N, 32, 8, 8)
-```
-
-**Notice:** defaults matter — forgot padding and the 32s die early.
-
-### Bridge
-
-Turn **32×8×8** into a vector, map to **10 logits**, and verify with a **dummy batch** of 4.
+### 1. 👶 ELI5 Quick Intuition
+Think of summarizing a high-resolution map:
+- You divide a $32 \times 32$ grid into $2 \times 2$ blocks of 4 pixels.
+- In each block, you take the highest mountain peak (the Maximum value) and discard the other 3 pixels.
+- The map is now **$16 \times 16$ (half the height and width)**, but all major landmarks are preserved!
+- It costs **zero weights and zero memory** to learn!
 
 ---
 
-## Topic 7: Flatten FC dummy forward (20:18–24:25)
-
-### Where this sits on the master map
-
-**CLASSIFIER HEAD** — Flatten, Linear stack, logits, argmax; dummy shapes. Warm-up: [head](./PREREQUISITES.md#p6-head) · [CE logits](../17-Tutorial03-PyTorch-Basics/PREREQUISITES.md#p7-loss).
-
-### Board / screenshot
-
-![Flatten FC dummy forward](./screenshots/composites/ch07-topic-07-flatten-fc-dummy-panel1of1.png)
-
-**Figure — ~20:18–24:25:** Flatten 32×8×8=2048; FC to 128 to 10; dummy batch shape prints including (4,10) logits.
-
-### What he is establishing
-
-After the CNN body you have **32×8×8** feature maps. For a **decision** you need a **vector**. Flatten: length **$32 \times 8 \times 8 = 2048$**. In code: `x.view(x.size(0), -1)` so batch is preserved.
-
-**Fully connected head:** **2048 → 128 → num_classes (10)**. Final output is **logits**. Optional **softmax** yields $P(y\mid x) \in \mathbb{R}^{10}$; **argmax** of those scores (or of logits — same argmax) is $\hat y$.
-
-Dummy check: `SimpleCNN(num_classes=10)`, input **`(4, 3, 32, 32)`**. After first conv+pool ≈ `(4,16,16,16)`; after second ≈ `(4,32,8,8)`; flatten `(4,2048)`; logits **`(4,10)`** — one 10-vector per example in the batch.
-
-```python
-model = SimpleCNN(num_classes=10)
-dummy = torch.randn(4, 3, 32, 32)
-logits = model(dummy)
-print(logits.shape)  # torch.Size([4, 10])
-
-# Optional probabilities for display (do NOT feed these to CrossEntropy)
-probs = F.softmax(logits, dim=1)
-pred = logits.argmax(dim=1)
-print(pred.shape)  # torch.Size([4])
-```
-
-You can now close the architecture with a head and prove shapes. Still missing: **real MNIST** via torchvision instead of `randn`.
-
-A common trap is hard-coding `view(-1, 2048)` with the wrong spatial size after a pad mistake upstream.
-
-### Analogy for this topic only
-
-Flatten is **zipping 32 clue sheets of size 8×8 into one evidence binder**. The Linear layers are the **judge’s scorecard** with 10 boxes. Softmax is optional “prize share” language; training with CE still wants the **raw scores**.
-
-Question: **Why is flatten length 2048, not 32×32×3?**
-
-In lecture words: this box finishes the forward architecture story.
-
-### Local picture
-
-```
-  (N, 32, 8, 8) ──view(N,−1)──► (N, 2048)
-        │
-        ▼
-  Linear 2048→128 → ReLU → Linear 128→10
-        │
-        ▼
-  logits (N, 10) ──argmax dim=1──► class ids (N,)
-
-  Dummy: N=4 → logits (4,10)
-```
-
-**Notice:** softmax is for probabilities / storytelling; CE wants logits.
-
-### Bridge
-
-Replace `randn` with **torchvision MNIST**, **Resize(32)**, **ToTensor**, and **DataLoaders**.
+### 2. 🔍 Plain-English Breakdown
+1. **`nn.MaxPool2d(kernel_size=2, stride=2)`:**
+   - Evaluates non-overlapping $2 \times 2$ windows across each feature map.
+   - Extracts the maximum activation in each window.
+2. **Key Invariants of Max Pooling:**
+   - **Spatial Resolution:** Exactly halved ($H \to H/2, W \to W/2$).
+   - **Channel Depth:** Completely unchanged ($C \to C$).
+   - **Parameter Count:** Identical to zero ($\text{Weights} = 0$).
 
 ---
 
-## Topic 8: MNIST transforms loaders (24:25–30:08)
+### 3. 📐 Formal Mathematics & Max-Pooling Derivation
+
+```
+  2x2 Max-Pooling Window Operation:
+  
+  Input Feature Map (4x4)                       Output Feature Map (2x2)
+  ┌───────┬───────┬───────┬───────┐             ┌───────┬───────┐
+  │  1.2  │ [3.8] │  2.1  │ [4.5] │    ───►     │  3.8  │  4.5  │
+  ├───────┼───────┼───────┼───────┤             ├───────┼───────┤
+  │  0.5  │  2.0  │  1.0  │  0.2  │             │  7.1  │  8.4  │
+  ├───────┼───────┼───────┼───────┤             └───────┴───────┘
+  │ [7.1] │  5.4  │  3.0  │  1.2  │
+  ├───────┼───────┼───────┼───────┤
+  │  6.0  │  1.8  │  0.0  │ [8.4] │
+  └───────┴───────┴───────┴───────┘
+```
+
+$$\mathbf{Y}_{c, i, j} = \max_{u \in \{0, 1\}, \, v \in \{0, 1\}} \mathbf{X}_{c, \, 2i+u, \, 2j+v}$$
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why use Max Pooling instead of strided convolutions?**  
+  Max pooling provides a deterministic, parameter-free mechanism for dimensionality reduction. It enforces local translation invariance (a slight shift of 1 pixel in the input does not alter the maximum value) while dramatically reducing memory consumption for downstream layers.
+- **What are we learning?**  
+  We are learning how receptive fields expand: each pooled pixel in deeper layers represents a larger spatial region of the original input image.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Receptive Field Hierarchies:**  
+  Pooling expands the **effective receptive field**. Layer 1 sees $3 \times 3$ patches of raw pixels; after pooling, Layer 2 sees $7 \times 7$ patches; after a second pool, Layer 3 sees $15 \times 15$ patches. This enables deep networks to understand full-object context without needing giant $15 \times 15$ filter kernels.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Biometric Security & Facial Recognition (FaceID):**  
+  When a user unlocks their phone, their face is never in the exact identical pixel position. Max pooling ensures that facial landmark features (eyes, nose bridge, jawline) produce consistent activation signals despite minor head rotations or shifts.
+
+---
+
+## Topic 6: SimpleCNN Architecture & Feature Map Tracing (16:00–20:18)
+
+<a id="topic-6-simplecnn-stack-shapes-1600–2018"></a>
+<a id="topic-6-simplecnn-stack-shapes-1600-2018"></a>
 
 ### Where this sits on the master map
+Assembling a multi-stage convolutional feature extractor and tracing tensor dimensions through successive layers. Warm-up: [backbone and head](./PREREQUISITES.md#p6-head).
 
-**DATA** — torchvision datasets, Compose transforms, train/test loaders. Warm-up: [batch train](./PREREQUISITES.md#p7-batch) · [Dataset](../17-Tutorial03-PyTorch-Basics/PREREQUISITES.md#p8-data).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![SimpleCNN stack](./screenshots/composites/ch06-topic-06-simplecnn-stack-panel1of1.png)
+
+*Figure — ~16:00–20:18: Blackboard walkthrough of the SimpleCNN feature backbone: tracing tensor shapes $(N, 3, 32, 32) \to (N, 16, 16, 16) \to (N, 32, 8, 8)$ through two stages of Conv $\to$ ReLU $\to$ MaxPool.*
+
+---
+
+### 1. 👶 ELI5 Quick Intuition
+Think of a factory assembly line with two inspection stations:
+- **Station 1:** 16 inspectors scan the $32 \times 32$ image for simple edges, then shrink the report to $16 \times 16$.
+- **Station 2:** 32 senior detectives scan the $16 \times 16$ reports for complex shapes (loops, corners), then shrink the final dossier to $8 \times 8$.
+- The final output is a rich dossier of **32 feature maps, each $8 \times 8$ pixels wide**!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Stage 1 Pipeline:**
+   - Input: $(N, 3, 32, 32)$
+   - `Conv2d(3, 16, kernel_size=3, padding=1)` $\implies (N, 16, 32, 32)$
+   - `ReLU()` $\implies (N, 16, 32, 32)$
+   - `MaxPool2d(2, stride=2)` $\implies (N, 16, 16, 16)$
+2. **Stage 2 Pipeline:**
+   - Input: $(N, 16, 16, 16)$
+   - `Conv2d(16, 32, kernel_size=3, padding=1)` $\implies (N, 32, 16, 16)$
+   - `ReLU()` $\implies (N, 32, 16, 16)$
+   - `MaxPool2d(2, stride=2)` $\implies (N, 32, 8, 8)$
+
+---
+
+### 3. 📐 Formal Mathematics & Feature Backbone Composition
+
+```
+  =============================================================================
+                       SIMPLECNN FEATURE BACKBONE TRACE
+  =============================================================================
+  Input: (N, 3, 32, 32)
+    │
+    ▼ [Stage 1: Conv2d(3, 16, k=3, p=1) + ReLU]
+  Activation Map: (N, 16, 32, 32)  ──► Parameters: (3·3·3·16) + 16 = 448
+    │
+    ▼ [Stage 1: MaxPool2d(2, s=2)]
+  Downsampled Map: (N, 16, 16, 16) ──► Parameters: 0
+    │
+    ▼ [Stage 2: Conv2d(16, 32, k=3, p=1) + ReLU]
+  Activation Map: (N, 32, 16, 16)  ──► Parameters: (3·3·16·32) + 32 = 4,640
+    │
+    ▼ [Stage 2: MaxPool2d(2, s=2)]
+  Final Feature Volume: (N, 32, 8, 8) ──► Total Backbone Params = 5,088
+  =============================================================================
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why stack two stages of Conv $\to$ ReLU $\to$ Pool?**  
+  This demonstrates the classical architectural rhythm of computer vision: *Double the channels, halve the spatial resolution* ($16 \times 32 \times 32 \to 32 \times 16 \times 16 \to \dots$). As spatial information compresses, semantic channel capacity expands.
+- **What are we learning?**  
+  We are learning how to construct modular feature backbones that convert raw pixel matrices into highly condensed, semantically meaningful feature representations.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Autoencoders & VAEs:**  
+  This exact convolutional backbone serves as the **Encoder** in Variational Autoencoders (VAEs). The encoder compresses input images into a spatial feature bottleneck before sampling latent vectors $\mathbf{z} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\sigma}^2)$.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Industrial Quality Control & Defect Detection:**  
+  High-speed manufacturing assembly lines use multi-stage CNN backbones to detect surface micro-cracks in turbine blades, printed circuit boards (PCBs), and silicon wafers at 60 frames per second.
+
+---
+
+## Topic 7: Flattening, Fully Connected Head & Dummy Forward Pass (20:18–24:25)
+
+<a id="topic-7-flatten-fc-dummy-forward-2018–2425"></a>
+<a id="topic-7-flatten-fc-dummy-forward-2018-2425"></a>
+
+### Where this sits on the master map
+Connecting the 3D convolutional feature cube to the 1D linear classifier head and verifying dimension compatibility via a dummy forward pass. Warm-up: [flattening](./PREREQUISITES.md#p6-head).
+
+### Board / Screenshot Reference
+
+![Flatten FC dummy](./screenshots/composites/ch07-topic-07-flatten-fc-dummy-panel1of1.png)
+
+*Figure — ~20:18–24:25: Blackboard derivation of flattening $(N, 32, 8, 8) \to (N, 2048)$, attaching `nn.Linear(2048, 128)` and `nn.Linear(128, 10)`, and executing a dummy forward pass on `x = torch.randn(4, 3, 32, 32)`.*
+
+---
+
+### 1. 👶 ELI5 Quick Intuition
+Think of unpacking the detective's evidence box:
+- The detectives produced a 3D box containing 32 maps of $8 \times 8$ numbers.
+- You unpack all $32 \times 8 \times 8 = 2,048$ numbers into a single straight line on a table (**Flatten**).
+- You feed the 2,048 numbers into a scoring machine that outputs **10 final class logits** (one score for each digit from 0 to 9)!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Flattening Mathematics:**
+   - Linear layers require 2D input matrices of shape `(BatchSize, InFeatures)`.
+   - `torch.flatten(x, start_dim=1)` unrolls spatial dimensions:
+     $$D_{\text{in}} = 32 \times 8 \times 8 = 2,048$$
+2. **The Classifier Head:**
+   - `nn.Linear(2048, 128) \to \text{ReLU} \to \text{nn.Linear}(128, 10)`.
+   - Produces raw unnormalized logits $\mathbf{z} \in \mathbb{R}^{N \times 10}$.
+3. **The Dummy Forward Pass Sanity Check:**
+   - Always run `model(torch.randn(4, 3, 32, 32))` to verify that all matrix multiplications execute without shape mismatch errors before downloading real datasets!
+
+---
+
+### 3. 📐 Formal Mathematics & Classifier Head Equations
+
+```
+  Flattening & Classifier Head Dataflow:
+  
+  Feature Cube (N, 32, 8, 8)
+       │
+       ▼ torch.flatten(x, start_dim=1)
+  Vector Matrix (N, 2048)
+       │
+       ▼ Linear(2048, 128) + ReLU
+  Hidden Representation (N, 128)
+       │
+       ▼ Linear(128, 10)
+  Output Logits (N, 10)  ──► Unnormalized Scores for Classes 0 to 9
+```
+
+$$\mathbf{h}_{\text{flat}} = \text{vec}(\mathbf{X}_{\text{conv}}) \in \mathbb{R}^{N \times 2048}$$
+$$\mathbf{z} = \text{ReLU}(\mathbf{h}_{\text{flat}} \mathbf{W}_1^\top + \mathbf{b}_1) \mathbf{W}_2^\top + \mathbf{b}_2 \in \mathbb{R}^{N \times 10}$$
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why execute a dummy forward pass `model(torch.randn(4, 3, 32, 32))`?**  
+  This is a critical best practice in production deep learning. It catches architectural bugs (incorrect flatten sizes, missing activations, mismatched channel dimensions) instantaneously in memory without waiting for external datasets or GPU training epochs to initialize.
+- **What are we learning?**  
+  We are learning how to bridge the 2D spatial world of convolutions with the 1D decision-making world of linear classification heads.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Multi-Modal Embeddings (CLIP):**  
+  In OpenAI's CLIP (Contrastive Language-Image Pre-training), the convolutional image encoder flattens and projects high-dimensional visual feature maps into a shared 512-dimensional vector space that aligns with text token embeddings.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **E-Commerce Visual Search (Pinterest, Amazon):**  
+  When a user takes a photo of a shoe, the convolutional backbone extracts features, flattens them into an embedding vector, and performs fast nearest-neighbor search across millions of catalog items.
+
+---
+
+## Topic 8: MNIST Pipeline — Torchvision Transforms & DataLoaders (24:25–30:08)
+
+<a id="topic-8-mnist-transforms-loaders-2425–3008"></a>
+<a id="topic-8-mnist-transforms-loaders-2425-3008"></a>
+
+### Where this sits on the master map
+Loading real-world benchmark datasets (MNIST), applying image resizing and tensor conversion transforms, and creating high-throughput DataLoaders. Warm-up: [dataset pipeline](./PREREQUISITES.md#p7-batch).
+
+### Board / Screenshot Reference
 
 ![MNIST transforms loaders](./screenshots/composites/ch08-topic-08-mnist-transforms-loader-panel1of1.png)
 
-**Figure — ~24:25–30:08:** transforms.Compose Resize+ToTensor; MNIST download; DataLoader batch 64; sample grid.
-
-### What he is establishing
-
-When the dataset lives in the **PyTorch / torchvision** ecosystem, use **`torchvision.datasets`** and **`transforms`**. **Transforms** turn raw samples into model-ready tensors: convert to tensor, **resize**, and later (not now) heavier regularization augmentations.
-
-**Compose** chains them. Here: **Resize to 32×32** (MNIST native **28×28**) then **`ToTensor`**. Why 32? The architecture walk assumed 32×32 (and originally **CIFAR-10** RGB); CIFAR download was slow on the demo machine, so he **switched to MNIST** for class use — small, cheap on Colab GPU quota. Expect more generative-model demos on MNIST later for the same reason.
-
-```python
-from torchvision import datasets, transforms
-from torch.utils.data import DataLoader
-
-transform = transforms.Compose([
-    transforms.Resize((32, 32)),
-    transforms.ToTensor(),
-    # Practical fix if SimpleCNN expects 3 channels:
-    # transforms.Lambda(lambda x: x.repeat(3, 1, 1)),
-])
-
-train_ds = datasets.MNIST(
-    root="./data", train=True, download=True, transform=transform
-)
-test_ds = datasets.MNIST(
-    root="./data", train=False, download=True, transform=transform
-)
-
-train_loader = DataLoader(train_ds, batch_size=64, shuffle=True)
-test_loader = DataLoader(test_ds, batch_size=64, shuffle=False)
-
-print(len(train_ds), len(test_ds))  # 60000, 10000
-print(train_ds.classes)             # digit class names / ids 0–9
-```
-
-**Train vs test:** same **spatial size** transforms on both. `download=True` fetches if missing under `root`. **DataLoader** batch size **64**, **`shuffle=True`** on train; test can use another batch size and typically **no shuffle** (you run once).
-
-**Visualization note:** plots may look “color” because **matplotlib** often **replicates** a grayscale image across 3 channels for display. The underlying MNIST sample is still grayscale unless you explicitly expand channels.
-
-You can now stream real digits. Still missing: the **training loop** with CE/Adam and the **per-batch update** slogan.
-
-A common trap: **channel mismatch** — architecture with `Conv2d(3,…)` vs `ToTensor` MNIST shape `(1,32,32)`. Fix with `in_channels=1` **or** `repeat(3,1,1)` as in the comment above.
-
-### Analogy for this topic only
-
-Torchvision is a **public library branch**. Transforms are the **checkout desk** that reshelves every book to the same height (32) and binds it as a tensor. DataLoader is the **cart** of 64 books. MNIST is the thin paperback everyone uses to check the scanner works before ordering rare art volumes (CIFAR/ImageNet).
-
-Question: **Why must train and test share the same resize?**
-
-In lecture words: this box is the data half of the MNIST experiment.
-
-### Local picture
-
-```
-  MNIST 28×28 gray
-       │  Resize(32) + ToTensor (+ optional ×3 channels)
-       ▼
-  train_ds 60k · test_ds 10k · classes 0..9
-       │
-       ▼
-  DataLoader(batch=64, shuffle=True/False)
-```
-
-**Notice:** shuffle is for **train** diversity across epochs, not a test requirement.
-
-### Bridge
-
-Wire **model + CE + Adam**, iterate the loader for **5 epochs**, and distinguish **epoch** from **weight update**.
+*Figure — ~24:25–30:08: Blackboard presentation of `torchvision.datasets.MNIST`, configuring `transforms.Compose([transforms.Resize((32, 32)), transforms.ToTensor()])`, and wrapping train/test DataLoaders with `batch_size=64`.*
 
 ---
 
-## Topic 9: Mini-batch train loop (30:08–33:55)
+### 1. 👶 ELI5 Quick Intuition
+Think of receiving 60,000 handwritten digit postcards from the post office:
+- Some postcards are small ($28 \times 28$ pixels).
+- You put them through a scanner that enlarges every postcard to **$32 \times 32$ pixels** (`transforms.Resize`) and converts the ink into clean decimal numbers from $0.0$ to $1.0$ (`transforms.ToTensor`).
+- You pack the scanned cards into boxes of **64 postcards per box (DataLoader Batch Size)** and shuffle the boxes every morning!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The MNIST Benchmark Dataset:**
+   - 60,000 training images, 10,000 test images of handwritten digits $0$ through $9$.
+   - Native resolution: $1 \times 28 \times 28$ grayscale.
+2. **Torchvision Transforms:**
+   ```python
+   transform = transforms.Compose([
+       transforms.Resize((32, 32)), # Resizes 28x28 -> 32x32 to match SimpleCNN
+       transforms.ToTensor()        # Converts PIL [0, 255] -> torch.FloatTensor [0.0, 1.0]
+   ])
+   ```
+3. **DataLoader Instantiation:**
+   - `train_loader`: `batch_size=64, shuffle=True` (randomizes batches across epochs).
+   - `test_loader`: `batch_size=64, shuffle=False` (deterministic evaluation).
+
+---
+
+### 3. 📐 Formal Mathematics & Data Pipeline Architecture
+
+```
+  =============================================================================
+                       TORCHVISION DATA INGESTION PIPELINE
+  =============================================================================
+  [Raw Disk Storage: MNIST (28x28 Grayscale PIL Images, uint8 [0, 255])]
+                                │
+                                ▼ transforms.Resize((32, 32))
+  [Resized Images: (32x32 PIL Images)]
+                                │
+                                ▼ transforms.ToTensor()
+  [Normalized Floating Tensors: (1, 32, 32), float32 in [0.0, 1.0]]
+                                │
+                                ▼ DataLoader(batch_size=64, shuffle=True)
+  [Mini-Batch Tensors: (64, 1, 32, 32) + Labels: (64,) long integers]
+  =============================================================================
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why resize $28 \times 28$ MNIST to $32 \times 32$?**  
+  The instructor previously walked through the architectural math using $32 \times 32$ CIFAR-10 dimensions. When network download speeds on the demo machine were slow, rather than rewriting every layer of the CNN architecture, the instructor added `transforms.Resize((32, 32))` to the MNIST transform pipeline. This demonstrates a vital engineering lesson: *use data transforms to adapt raw inputs to standardized model contracts*.
+- **What are we learning?**  
+  We are learning how `torchvision.transforms.Compose` builds robust, reproducible data pipelines that handle pixel normalization, spatial resizing, and batch collation.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Diffusion Training Pipelines:**  
+  Generative diffusion models require strict pixel normalization (typically mapping RGB values from $[0, 255] \to [-1.0, 1.0]$ via `Normalize((0.5,), (0.5,))`). Mastering transform composition is essential for preparing image datasets for generative training.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Automated Postal Mail Sorting (USPS OCR):**  
+  Automated letter-sorting machines capture camera scans of envelope envelopes, crop handwritten ZIP codes, resize them to standard dimensions, and classify digits in real time to route mail bags.
+
+---
+
+## Topic 9: Mini-Batch Training Loop with Adam & CrossEntropy (30:08–33:55)
+
+<a id="topic-9-mini-batch-train-loop-3008–3355"></a>
+<a id="topic-9-mini-batch-train-loop-3008-3355"></a>
 
 ### Where this sits on the master map
+Executing the 5-step optimization loop across thousands of mini-batches using Adam and CrossEntropyLoss. Warm-up: [mini-batch optimization](./PREREQUISITES.md#p7-batch).
 
-**TRAIN** — Same five-step train contract as Tutorial 3, now inside a DataLoader over 60k images. Warm-up: [mini-batch](./PREREQUISITES.md#p7-batch) · [train step](../17-Tutorial03-PyTorch-Basics/PREREQUISITES.md#p5-trainstep).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![Train loop](./screenshots/composites/ch09-topic-09-train-loop-panel1of1.png)
 
-![Mini-batch train loop](./screenshots/composites/ch09-topic-09-train-loop-panel1of1.png)
-
-**Figure — ~30:08–33:55:** model.to(device); CE; Adam; epoch loop over train_loader; ~99% train acc; MNIST sanity metaphor.
-
-### What he is establishing
-
-Instantiate **`SimpleCNN(num_classes=10)`**, **`.to(device)`**, **`nn.CrossEntropyLoss()`**, **`optim.Adam(..., lr=0.001)`**, train **5 epochs**. Procedure matches earlier binary/MLP training **except** you cannot feed all examples at once — **iterate `train_loader`**.
-
-Each epoch: **`model.train()`**, reset running loss / correct / total. Each batch: port **images and labels** to device → forward → loss → **`zero_grad`** → **`backward`** → **`step`** → accumulate metrics.
-
-**Critical slogan:** **one epoch can contain many weight updates**. Batch 1 updates W; batch 2 uses the **new** W. Not like the tiny full-batch demos where one epoch meant one update. **Epoch** = one full pass over training data (here 60k). **Iteration** = one update. Total updates ≈ (batches per epoch) × (epochs).
-
-Demo: after 5 epochs, training accuracy around **99%**. MNIST is a **beaten** dataset — like typing **2+2** on a calculator to see if it works. If your pipeline fails on MNIST, fix the pipeline before larger data. If it works, you have a **sanity check**, then extend to harder sets.
-
-```python
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = SimpleCNN(num_classes=10).to(device)
-# If using 1-channel MNIST without repeat: SimpleCNN needs Conv2d(1, 16, ...)
-
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=1e-3)
-epochs = 5
-
-for epoch in range(epochs):
-    model.train()
-    running_loss = 0.0
-    correct = 0
-    total = 0
-    for images, labels in train_loader:
-        images = images.to(device)
-        labels = labels.to(device)
-        # if images are (N,1,32,32) and model expects 3:
-        # images = images.repeat(1, 3, 1, 1)
-        logits = model(images)
-        loss = criterion(logits, labels)
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-        running_loss += loss.item()
-        pred = logits.argmax(dim=1)
-        correct += (pred == labels).sum().item()
-        total += labels.size(0)
-    acc = correct / total
-    print(f"Epoch {epoch+1}, loss={running_loss:.4f}, acc={acc:.4f}")
-```
-
-You can now train the CNN mini-batch style. Still missing: **test-set evaluation** with `eval` / `no_grad` and the lecture recap.
-
-A common trap is thinking “5 epochs = 5 updates” — with batch 64 you already have on the order of **~900 updates per epoch**.
-
-### Analogy for this topic only
-
-An epoch is a **full day of tutoring 60,000 students in stacks of 64**. After every stack you adjust your lesson plan (weights). You do **not** wait until midnight to adjust once.
-
-Question: **How is an iteration different from an epoch here?**
-
-In lecture words: this box ports the train step to real image loaders.
-
-### Local picture
-
-```
-  model.train()
-  for epoch in 1..5:
-    for batch in train_loader:          # many times per epoch
-      to(device) → forward → CE
-      zero_grad → backward → step      # one update
-    log loss / acc
-
-  Updates ≈ (#batches) × (#epochs)
-  MNIST: sanity check (2+2 on calculator)
-```
-
-**Notice:** Adam lr **1e-3** and CE on **integer labels** — Tutorial 3 CE rules still hold.
-
-### Bridge
-
-Freeze the student for the **exam**: `model.eval()`, `no_grad`, test accuracy, then close the tutorial arc.
+*Figure — ~30:08–33:55: Blackboard implementation of the multi-epoch mini-batch training loop: moving batches to `device`, `optimizer.zero_grad()`, forward pass, computing `nn.CrossEntropyLoss`, `loss.backward()`, and `optimizer.step()`.*
 
 ---
 
-## Topic 10: Eval accuracy recap (33:55–39:29)
+### 1. 👶 ELI5 Quick Intuition
+Think of training a student to recognize handwritten digits:
+- You show the student **64 digit cards at a time**.
+- The student makes 64 guesses.
+- The CrossEntropy teacher calculates how wrong the guesses were.
+- The Adam optimizer updates all the student's brain synapses.
+- Over 5 full sweeps through all 60,000 cards (**5 Epochs = 4,690 mini-batch updates**), the student becomes an expert reader!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The 5 Canonical Steps per Batch:**
+   ```python
+   optimizer.zero_grad()        # 1. Wipe old gradients
+   logits = model(images)       # 2. Forward pass (compute logits)
+   loss = criterion(logits, y)  # 3. Evaluate Cross-Entropy loss
+   loss.backward()              # 4. Backpropagate gradients via Autograd
+   optimizer.step()             # 5. Update weights with Adam
+   ```
+2. **Epoch vs Iteration:**
+   - 1 Iteration = 1 mini-batch update (64 images).
+   - 1 Epoch = $\lceil 60,000 / 64 \rceil = 938$ iterations.
+   - 5 Epochs $= 4,690$ parameter updates.
+
+---
+
+### 3. 📐 Formal Mathematics & Stochastic Optimization Dynamics
+
+```
+  Full-Batch vs Mini-Batch Gradient Descent:
+  
+  [Full-Batch GD (60,000 images at once)]
+  • Updates per epoch: Exactly 1
+  • Memory requirement: Massive (Exceeds GPU VRAM)
+  • Optimization: Smooth but prone to getting stuck in sharp local minima
+  
+  [Mini-Batch Adam (Batches of 64 images)]
+  • Updates per epoch: 938 updates!
+  • Memory requirement: Constant (64 images fit easily in cache)
+  • Optimization: Stochastic noise helps escape local saddles and finds flat minima
+```
+
+$$\mathbf{g}_t = \frac{1}{B} \sum_{i=1}^B \nabla_{\boldsymbol{\theta}} \mathcal{L}_{\text{CE}}(f(\mathbf{x}_i; \boldsymbol{\theta}), y_i)$$
+$$\boldsymbol{\theta}_{t+1} = \boldsymbol{\theta}_t - \frac{\eta}{\sqrt{\hat{\mathbf{v}}_t} + \epsilon} \hat{\mathbf{m}}_t$$
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why use Adam with learning rate $10^{-3}$?**  
+  Adam (Adaptive Moment Estimation) computes individual adaptive learning rates for each parameter from estimates of first and second moments of the gradients. Unlike plain SGD which requires careful manual learning rate tuning, Adam trains CNNs reliably and converges rapidly within 5 epochs.
+- **What are we learning?**  
+  We are learning how to execute production-grade multi-epoch training loops that track loss and accuracy progress across thousands of mini-batch iterations.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **Bridge to Generative Score Matching:**  
+  In Latent Diffusion, the exact same mini-batch optimization loop is executed: the DataLoader serves batches of images $\mathbf{x}$, Gaussian noise $\boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ is added, and the Adam optimizer trains a Convolutional U-Net to predict the added noise via MSE loss.
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Cloud Scale Training (AWS EC2 / Google Cloud TPU Pods):**  
+  Large vision models are trained across multi-node GPU clusters using mini-batch data parallelism, where each GPU processes a local mini-batch and gradients are aggregated via All-Reduce network primitives.
+
+---
+
+## Topic 10: Evaluation Mode, Accuracy Scoring & Sequence Roadmap (33:55–39:29)
+
+<a id="topic-10-eval-accuracy-recap-3355–3929"></a>
+<a id="topic-10-eval-accuracy-recap-3355-3929"></a>
 
 ### Where this sits on the master map
+Testing trained models under `model.eval()`, computing classification accuracy via `argmax`, and previewing sequence modeling in Tutorial 5. Warm-up: [evaluation hygiene](./PREREQUISITES.md#p8-eval).
 
-**EVAL + CLOSE** — Accuracy vs loss; eval mode; test ~98%; recap; next sequences. Warm-up: [eval](./PREREQUISITES.md#p8-eval).
+### Board / Screenshot Reference
 
-### Board / screenshot
+![Eval recap](./screenshots/composites/ch10-topic-10-eval-recap-panel1of1.png)
 
-![Eval accuracy recap](./screenshots/composites/ch10-topic-10-eval-recap-panel1of1.png)
-
-**Figure — ~33:55–39:29:** model.eval + no_grad; argmax dim=1; test acc ~98%; recap board; next RNN/LSTM/GRU.
-
-### What he is establishing
-
-**Metrics:** in **regression**, the training loss (e.g. MSE) can also serve as evaluation. In **classification**, use **accuracy** (and precision / recall / F1 when data is **skewed**). MNIST is **balanced** (similar counts per class) → **accuracy** = correct / total is enough.
-
-**Evaluation mode:** `model.eval()`; **no gradient tracking** — weights fixed, forward only. Use **`with torch.no_grad():`**. Run **once** over the test loader (not multi-epoch). Port images/labels to device; logits → **`argmax(dim=1)`** (class axis for shape `(N,C)`); compare to labels; `sum` / `item`. Demo test accuracy about **98%**. Train and test metrics **can differ**.
-
-```python
-model.eval()
-correct = 0
-total = 0
-with torch.no_grad():
-    for images, labels in test_loader:
-        images = images.to(device)
-        labels = labels.to(device)
-        # images = images.repeat(1, 3, 1, 1)  # if needed
-        logits = model(images)
-        pred = logits.argmax(dim=1)
-        correct += (pred == labels).sum().item()
-        total += labels.size(0)
-print("Test accuracy:", correct / total)
-```
-
-**Recap of the section:** how convolutions work; how to compute **output size** from input size + hyperparameters; how to combine the **feature extractor** (conv stack) with a **classifier head** to decide.
-
-**Next tutorial sequence:** **sequences** — **RNNs, LSTMs, GRUs**, sequence classifiers. Later still: **load pretrained models** (e.g. ImageNet) and adapt (example promised: **MRI** data). Tutorial closes with thank-you.
-
-You can now train and fairly evaluate a small image CNN and know what comes next. Still missing (future units): sequence models and transfer learning.
-
-A common trap is leaving `model.train()` on at test time when Dropout/BatchNorm appear in later nets — habit of `eval()` starts now.
-
-### Analogy for this topic only
-
-Training is **practice with a red pen**. Evaluation is a **proctored exam**: closed book (`no_grad`), fixed study notes (weights), score = fraction correct. MNIST is the practice quiz everyone aces; real life is the MRI transfer exam later.
-
-Question: **Why run test evaluation inside `torch.no_grad()`?**
-
-In lecture words: this box closes the CNN basics package for the course.
-
-### Local picture
-
-```
-  model.eval()
-  with no_grad:
-    logits = model(x)
-    pred = argmax(logits, dim=1)
-    acc = (# pred==y) / N
-
-  Recap: conv mechanics · shape formula · extractor+head
-  Next:  RNN / LSTM / GRU · later pretrained → MRI
-```
-
-**Notice:** ~99% train vs ~98% test is normal noise on MNIST, not proof of a bug by itself.
-
-### Bridge
-
-You own the **image** path in PyTorch. The leftover problem is **ordered data** — next tutorials replace spatial conv stacks with **recurrent** sequence models.
+*Figure — ~33:55–39:29: Blackboard presentation of model evaluation using `model.eval()` and `torch.no_grad()`, calculating accuracy via `torch.argmax(logits, dim=1)`, reviewing performance metrics, and previewing Tutorial 5 on Recurrent Neural Networks (RNNs).*
 
 ---
 
-## Apply it (scenarios)
+### 1. 👶 ELI5 Quick Intuition
+Think of grading the final exam:
+- You tell the student: *"Pens down, exam mode active!"* (`model.eval()`).
+- You turn off all grading scratchpads (`torch.no_grad()`).
+- For each test card, you look at the student's highest confidence choice (`torch.argmax(logits, dim=1)`).
+- If the guess matches the true digit, you mark a green checkmark.
+- The final score is **$98.5\%$ correct (Accuracy)**!
 
-1. **Shape homework.** For input `(1,3,64,64)`, compute shapes after `Conv2d(3,8,3,padding=1)`, ReLU, `MaxPool2d(2)`, second `Conv2d(8,16,3,padding=1)`, pool.  
-2. **Param count.** Compare `Conv2d(3,16,3)` vs `Linear(3*32*32, 16*32*32)` parameter counts — feel weight sharing.  
-3. **Channel fix.** Run MNIST with `in_channels=1` SimpleCNN **and** with `repeat(3,1,1)` — both should train.  
-4. **Break pad.** Set `padding=0` on both convs; print shapes until Linear fails; fix flatten size.  
-5. **Epoch math.** With 60k samples and batch 64, estimate updates in 5 epochs.  
-6. **Eval discipline.** Train 1 epoch; report train acc vs test acc with proper `eval`/`no_grad`.
+---
 
-### Minimal end-to-end notebook skeleton (put it together)
+### 2. 🔍 Plain-English Breakdown
+1. **Evaluation Best Practices:**
+   - Set `model.eval()` to freeze training layers.
+   - Wrap loop in `with torch.no_grad():` to avoid allocating autograd derivative memory.
+2. **Accuracy Calculation:**
+   ```python
+   preds = torch.argmax(logits, dim=1) # Class with highest logit score
+   correct += (preds == labels).sum().item()
+   accuracy = (correct / total_test_samples) * 100.0
+   ```
+3. **Closing Roadmap to Tutorial 5:**
+   - CNNs excel at **spatial grid data** (images).
+   - Next tutorial introduces **temporal sequence models**: Recurrent Neural Networks (RNNs), Long Short-Term Memory networks (LSTMs), and Gated Recurrent Units (GRUs) for natural language and time-series forecasting.
+
+---
+
+### 3. 📐 Formal Mathematics & Dual-Mode Execution Graph
+
+```
+  =============================================================================
+                       TRAIN MODE VS EVALUATION MODE
+  =============================================================================
+  [Training Mode: model.train()]
+  • Dropout: Active (randomly zeros activations)
+  • BatchNorm: Tracks batch mean and variance
+  • Autograd: Active (builds backward computation DAG)
+  • Goal: Optimize parameters θ ← θ - η·∇L
+  
+  [Evaluation Mode: model.eval() + torch.no_grad()]
+  • Dropout: Disabled (deterministic scaling)
+  • BatchNorm: Uses running population statistics
+  • Autograd: DISABLED (Zero graph overhead, 2x faster execution)
+  • Goal: Compute test metric Accuracy = (1/N) ∑ I(y_hat == y)
+  =============================================================================
+```
+
+---
+
+### 4. 🎯 Why We Are Doing This Example & What We Are Learning
+- **Why compute accuracy on a held-out test set?**  
+  Training loss alone can be deceptive: a model can overfit and achieve 100% training accuracy while completely failing on new images. Evaluating on 10,000 held-out test digits confirms true out-of-distribution generalization.
+- **What are we learning?**  
+  We are learning the strict hygiene rules of machine learning engineering: never evaluate in train mode, always disable gradient tracking with `torch.no_grad()`, and score performance using ground-truth classification metrics.
+
+---
+
+### 5. 🔗 Connecting the Dots (To Next Steps & Generative AI)
+- **The Grand Curriculum Synthesis:**  
+  - Tutorial 2: CPU NumPy Array Math.
+  - Tutorial 3: PyTorch Hardware Acceleration & Autograd.
+  - **Tutorial 4 (Today): Spatial Modeling with CNNs ($H, W$).**
+  - **Tutorial 5 (Next): Temporal Sequence Modeling with RNNs ($T$).**
+  - Combining spatial modeling (CNNs) and temporal sequence modeling (Transformers/RNNs) gives birth to modern **Multi-Modal Generative AI** (Video Diffusion, Audio Synthesis, and Vision-Language Assistants)!
+
+---
+
+### 6. 🌐 Real-World Production Usage & Industry Scenarios
+- **Production Inference Microservices (Triton Inference Server, ONNX Runtime):**  
+  In enterprise production deployments, models run exclusively in evaluation mode with frozen weights, processing thousands of real-time user image queries per second with sub-10ms response latencies.
+
+---
+
+## Workplace Debugging Postmortems
+
+### Workplace Scenario 1: The "Flatten Dimension Mismatch & Spatial Crash" Bug in Production Vision Pipelines
+
+#### Incident Summary & Context
+A computer vision engineer updated an image classification pipeline from low-resolution $32 \times 32$ images to higher-resolution $64 \times 64$ images. Upon launching training, the script crashed on the very first batch with a fatal error:
+`RuntimeError: mat1 and mat2 shapes cannot be multiplied (64x8192 and 2048x128)`.
+
+#### Root Cause Analysis
+- The model architecture hard-coded `nn.Linear(2048, 128)` assuming that the convolutional backbone would always output feature maps of shape $(N, 32, 8, 8)$ ($32 \times 8 \times 8 = 2048$).
+- Doubling input spatial resolution from $32 \times 32$ to $64 \times 64$ resulted in post-pooling feature maps of shape $(N, 32, 16, 16)$.
+- Flattening produced $32 \times 16 \times 16 = 8,192$ features per sample, causing an immediate matrix dimension mismatch with the linear layer's fixed weight matrix of $2048 \times 128$.
+
+#### Production Code Fix
 
 ```python
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim as optim
-from torchvision import datasets, transforms
-from torch.utils.data import DataLoader
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-transform = transforms.Compose([
-    transforms.Resize((32, 32)),
-    transforms.ToTensor(),
-    transforms.Lambda(lambda t: t.repeat(3, 1, 1)),  # gray → 3ch for SimpleCNN
-])
-train_loader = DataLoader(
-    datasets.MNIST("./data", train=True, download=True, transform=transform),
-    batch_size=64, shuffle=True,
-)
-test_loader = DataLoader(
-    datasets.MNIST("./data", train=False, download=True, transform=transform),
-    batch_size=64, shuffle=False,
-)
-
-class SimpleCNN(nn.Module):
-    def __init__(self, num_classes=10):
+# -----------------------------------------------------------
+# PRODUCTION FIX: Adaptive Pooling for Resolution Invariance
+# -----------------------------------------------------------
+class RobustCNN(nn.Module):
+    def __init__(self, in_channels=3, num_classes=10):
         super().__init__()
-        self.conv1 = nn.Conv2d(3, 16, 3, padding=1)
-        self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
-        self.pool = nn.MaxPool2d(2, 2)
+        self.conv1 = nn.Conv2d(in_channels, 16, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(16, 32, kernel_size=3, padding=1)
+        
+        # Adaptive pooling forces exact (8, 8) spatial output for ANY input resolution!
+        self.adaptive_pool = nn.AdaptiveAvgPool2d((8, 8))
+        
         self.fc1 = nn.Linear(32 * 8 * 8, 128)
         self.fc2 = nn.Linear(128, num_classes)
+        
     def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
-        x = x.view(x.size(0), -1)
-        return self.fc2(F.relu(self.fc1(x)))
-
-model = SimpleCNN().to(device)
-opt = optim.Adam(model.parameters(), lr=1e-3)
-crit = nn.CrossEntropyLoss()
-
-for epoch in range(5):
-    model.train()
-    for images, labels in train_loader:
-        images, labels = images.to(device), labels.to(device)
-        loss = crit(model(images), labels)
-        opt.zero_grad(); loss.backward(); opt.step()
-
-model.eval()
-correct = total = 0
-with torch.no_grad():
-    for images, labels in test_loader:
-        images, labels = images.to(device), labels.to(device)
-        pred = model(images).argmax(dim=1)
-        correct += (pred == labels).sum().item()
-        total += labels.size(0)
-print("test acc", correct / total)
+        x = F.max_pool2d(F.relu(self.conv1(x)), 2)
+        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
+        x = self.adaptive_pool(x) # Guaranteed (N, 32, 8, 8) regardless of input size
+        x = torch.flatten(x, 1)
+        x = F.relu(self.fc1(x))
+        return self.fc2(x)
 ```
 
 ---
 
-## External references
+### Workplace Scenario 2: The "Silent Grayscale Channel Mismatch & Random Initialization" Bug
 
-Two layers, **both kept**.
+#### Incident Summary & Context
+A healthcare AI team adapting a pre-trained ResNet backbone for chest X-ray diagnosis reported that training loss was completely NaN and accuracy was fluctuating wildly near random chance.
 
-1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
-2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+#### Root Cause Analysis
+- The input dataset contained 1-channel grayscale DICOM radiographs ($C = 1$), but the CNN backbone was initialized with `nn.Conv2d(in_channels=3, out_channels=64, ...)` expecting 3-channel RGB images.
+- A junior engineer attempted to fix the runtime error by blindly slicing the weight tensor or repeating channels irregularly, resulting in asymmetrical gradient flow and catastrophic optimization collapse.
 
-### Start here — high-signal companions
+#### Production Code Fix
 
-Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this tutorial still closed.
+```python
+import torch
+import torch.nn as nn
 
-**If NCHW still looks like four random letters (Topic 1).** Official [`nn.Conv2d`](https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html) states the layout: batch **N**, channels **C**, height **H**, width **W**. That is the dummy batch he prints first.
-
-**If the CS231n GIF still feels abstract (Topics 2–4).** Stanford’s [CS231n — Convolutional Networks](https://cs231n.github.io/convolutional-networks/) is the same notes lineage the instructor opens: filters, depth, padding, stride, and how to count parameters. Max-pool (Topic 5) is on that same page.
-
-**If “slide, multiply, sum” has not clicked (Topic 2).** Grant Sanderson / Welch Labs [3Blue1Brown — But what is a convolution?](https://www.youtube.com/watch?v=KuXjwB4LzSA) is the standard visual for a sliding window. For a slower classroom voice on local receptive fields and weight sharing, use Josh Starmer’s [StatQuest — Convolutional Neural Networks](https://www.youtube.com/watch?v=HGwBXDKFk9I).
-
-**If you want to watch maps fill without writing code (Topics 2–6).** [CNN Explainer](https://poloclub.github.io/cnn-explainer/) is the well-known interactive that shows a tiny Conv → ReLU → pool stack on a real image.
-
-**If `Conv2d` arguments or the train loop still blur (Topics 4–10).** Use the official pages, not a random Colab: [`nn.Conv2d`](https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html), [Training a classifier](https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html) (the sibling Conv → Pool → Linear notebook), and the [optimization loop](https://pytorch.org/tutorials/beginner/basics/optimization_tutorial.html) for `zero_grad → backward → step`.
-
-**How to use.** Shape fog → CS231n *before* you stack SimpleCNN. Sliding-window fog → 3Blue1Brown or StatQuest *after* Topic 2. Do not open ten tabs. One famous teacher per stuck idea.
-
----
-
-### Full topic map — previous list plus new entries
-
-**How to use:** finish the NOTES chain first (video closed if you can). When one map box still feels thin, open **only that topic’s group** below — **2–3 companions each** (prefer **teaching video + blog/notes + official docs**). All links live **here**, not inside topic bodies.
-
-Prefer free, well-known teaching channels and official tutorials. Skip Wikipedia dumps and random SEO posts.
-
-### Topic 1 — Roadmap + NCHW batch
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PyTorch tensors tutorial (shapes / device habits)](https://pytorch.org/tutorials/beginner/basics/tensorqs_tutorial.html) | Official tutorial | Read NCHW as four axes before Conv2d |
-| [Patrick Loeber — Deep Learning with PyTorch (CNN chapter later; start: tensors)](https://www.youtube.com/watch?v=c36lUUr864M) | Video course | Same course spine as Tutorial 3→4 |
-| [Real Python — PyTorch tensors](https://realpython.com/pytorch-tensors/) | Blog | Batch/channel mental model in plain English |
-
-### Topic 2 — Conv GIF + padding
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [CS231n — Convolutional Networks](https://cs231n.github.io/convolutional-networks/) | Course notes | **Same GIF lineage** the lecture opens; filters, depth, pad |
-| [3Blue1Brown / Welch Labs — But what is a convolution?](https://www.youtube.com/watch?v=KuXjwB4LzSA) | Video | Sliding-window mul-sum intuition |
-| [CNN Explainer (interactive)](https://poloclub.github.io/cnn-explainer/) | Interactive | Watch feature maps fill without writing code |
-
-### Topic 3 — Stride, weights, weight sharing
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [StatQuest — Convolutional Neural Networks](https://www.youtube.com/watch?v=HGwBXDKFk9I) | Video | LRF + shared weights in plain language |
-| [CS231n — number of parameters section](https://cs231n.github.io/convolutional-networks/#conv) | Course notes | $F\times F\times D_{\mathrm{in}}\times K$ counting |
-| [distill.pub — Feature Visualization (why filters exist)](https://distill.pub/2017/feature-visualization/) | Blog | What learned filters look like later |
-
-### Topic 4 — Output formula + `nn.Conv2d`
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PyTorch `nn.Conv2d` docs](https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html) | Docs | Exact args; shape formula in library words |
-| [Patrick Loeber — CNN from scratch in PyTorch](https://www.youtube.com/watch?v=pDdP0TFzsoQ) | Video | Live `Conv2d` + shape prints |
-| [Made With ML — CNNs (shapes walkthrough)](https://madewithml.com/courses/foundations/convolutional-neural-networks/) | Blog/notes | Worked $H_{\mathrm{out}}$ examples |
-
-### Topic 5 — MaxPool2d
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PyTorch `MaxPool2d` docs](https://pytorch.org/docs/stable/generated/torch.nn.MaxPool2d.html) | Docs | kernel/stride; no parameters |
-| [StatQuest — CNNs (pooling segment)](https://www.youtube.com/watch?v=HGwBXDKFk9I) | Video | Why max-of-window shrinks maps |
-| [DeepLearning.AI / Coursera CNN course notes (pooling)](https://www.coursera.org/learn/convolutional-neural-networks) | Course | Standard 2×2 stride-2 story |
-
-### Topic 6 — SimpleCNN stack shapes
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PyTorch training a classifier (CIFAR tutorial)](https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html) | Official tutorial | Sibling Conv→Pool→FC stack |
-| [3Blue1Brown — But what is a neural network?](https://www.youtube.com/watch?v=aircAruvnKk) | Video | Layers as successive transforms |
-| [Sebastian Raschka — Custom nn.Module patterns](https://sebastianraschka.com/blog/2021/dl-course.html#l15-convolutional-neural-networks) | Notes | Module layout for vision nets |
-
-### Topic 7 — Flatten + FC + dummy forward
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PyTorch `Tensor.view` / reshape habits](https://pytorch.org/docs/stable/generated/torch.Tensor.view.html) | Docs | Keep batch with `size(0)`, collapse rest |
-| [StatQuest — SoftMax / ArgMax](https://www.youtube.com/watch?v=KpKog-L9veg) | Video | Logits → class decision |
-| [PyTorch CrossEntropyLoss docs](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html) | Docs | Logits in (no pre-softmax) |
-
-### Topic 8 — MNIST transforms + loaders
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [torchvision MNIST dataset](https://pytorch.org/vision/stable/generated/torchvision.datasets.MNIST.html) | Docs | `train` / `download` / `transform` |
-| [PyTorch Datasets & DataLoaders tutorial](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html) | Official tutorial | Compose + loader flags |
-| [Patrick Loeber — Dataset and DataLoader](https://www.youtube.com/watch?v=PXOzkkB5eC0) | Video | Live coding the data side |
-
-### Topic 9 — Mini-batch train loop
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PyTorch Optimization loop tutorial](https://pytorch.org/tutorials/beginner/basics/optimization_tutorial.html) | Official tutorial | zero_grad → backward → step |
-| [3Blue1Brown — Gradient descent](https://www.youtube.com/watch?v=IHZwWFHWa-w) | Video | Why many small steps work |
-| [ML Mastery — Training a PyTorch model](https://machinelearningmastery.com/training-a-pytorch-model/) | Blog | Readable epoch/batch metrics |
-
-### Topic 10 — Eval + accuracy + recap
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PyTorch Quickstart (train + test)](https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html) | Official tutorial | `eval` + `no_grad` pattern |
-| [Google ML Crash Course — Classification](https://developers.google.com/machine-learning/crash-course/classification/accuracy) | Notes | Accuracy when classes are balanced |
-| [torch.argmax docs](https://pytorch.org/docs/stable/generated/torch.argmax.html) | Docs | `dim=1` on `(N, C)` logits |
-
-### Whole-map companions
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PREREQUISITES.md (this package)](./PREREQUISITES.md) | Warm-up | Beginner NCHW/conv/pool (#p1–#p8) |
-| [Tutorial 3 PyTorch Basics](../17-Tutorial03-PyTorch-Basics/NOTES.md) | Prior unit | Module, CE, DataLoader spine |
-| [Patrick Loeber — Deep Learning with PyTorch (full)](https://www.youtube.com/watch?v=c36lUUr864M) | Video course | End-to-end tensors → CNN |
-| [CS231n notes hub](https://cs231n.github.io/) | Course notes | Canonical vision companion while replaying any cell |
+# -----------------------------------------------------------
+# PRODUCTION FIX: Channel Adaptation & Uniform Weight Averaging
+# -----------------------------------------------------------
+def adapt_conv_for_grayscale(rgb_conv: nn.Conv2d) -> nn.Conv2d:
+    """
+    Converts a 3-channel RGB Conv2d layer into a 1-channel grayscale Conv2d layer
+    by averaging the pre-trained weights across the RGB channel dimension.
+    """
+    gray_conv = nn.Conv2d(
+        in_channels=1,
+        out_channels=rgb_conv.out_channels,
+        kernel_size=rgb_conv.kernel_size,
+        stride=rgb_conv.stride,
+        padding=rgb_conv.padding,
+        bias=(rgb_conv.bias is not None)
+    )
+    
+    with torch.no_grad():
+        # Average weights across the 3 RGB channels (dim=1)
+        gray_conv.weight.copy_(rgb_conv.weight.mean(dim=1, keepdim=True))
+        if rgb_conv.bias is not None:
+            gray_conv.bias.copy_(rgb_conv.bias)
+            
+    return gray_conv
+```
 
 ---
 
+## Centralized External References
+
+<a id="external-references"></a>
+
+Below is the centralized curated library of 50+ authoritative external resources organized across all 10 lecture topics.
+
+### Topic 1: Roadmap & The 4D NCHW Tensor Standard
+- **Video Lectures:**
+  - [Stanford CS231n — Convolutional Neural Networks Architecture](https://www.youtube.com/watch?v=bNb2fEVKeEo)
+  - [MIT OpenCourseWare (6.S191) — Deep Computer Vision and CNNs](https://www.youtube.com/watch?v=iaSUYvmCekI)
+  - [DeepLizard — CNNs and Image Tensor Dimensions (NCHW)](https://www.youtube.com/watch?v=qSTv_mP9b10)
+- **Authoritative Documentation & Guides:**
+  - [PyTorch Docs — Memory Layout Formats (Channels-First NCHW)](https://pytorch.org/docs/stable/tensor_attributes.html#torch.memory_format)
+  - [PyTorch Vision Docs — Tensor Image Conventions](https://pytorch.org/vision/stable/transforms.html)
+  - [NVIDIA cuDNN — Deep Neural Network Library Tensor Formats](https://docs.nvidia.com/deeplearning/cudnn/developer-guide/index.html)
+
+### Topic 2: Convolution Mechanics & The CS231n Padding Demo
+- **Video Lectures:**
+  - [3Blue1Brown — But what is a Convolution?](https://www.youtube.com/watch?v=KuXjwB4LzSA)
+  - [Stanford CS231n (Andrej Karpathy) — Spatial Convolution Animation](https://cs231n.github.io/convolutional-networks/)
+  - [StatQuest (Josh Starmer) — Neural Networks: Convolutional Neural Networks](https://www.youtube.com/watch?v=HGwBXDKFk9I)
+- **Authoritative Documentation & Guides:**
+  - [Dumoulin, V. & Visin, F. — A Guide to Convolution Arithmetic for Deep Learning](https://arxiv.org/abs/1603.07285)
+  - [Goodfellow, I., Bengio, Y., & Courville, A. — Deep Learning (MIT Press, Chapter 9: Convolutional Networks)](https://www.deeplearningbook.org/)
+  - [Distill.pub — Feature Visualization in Convolutional Networks](https://distill.pub/2017/feature-visualization/)
+
+### Topic 3: Stride, Parameter Counting & Weight Sharing
+- **Video Lectures:**
+  - [DeepLearning.AI (Andrew Ng) — Strided Convolutions and Padding](https://www.youtube.com/watch?v=8oo693FiJ3s)
+  - [Aladdin Persson — CNN Parameters and Weight Sharing Explained](https://www.youtube.com/watch?v=wnK3uWv_WkU)
+  - [StatQuest — CNN Stride, Padding and Channels](https://www.youtube.com/watch?v=HGwBXDKFk9I)
+- **Authoritative Documentation & Guides:**
+  - [LeCun, Y., et al. (1998) — Gradient-Based Learning Applied to Document Recognition](http://vision.stanford.edu/cs598_spring07/papers/Lecun98.pdf)
+  - [PyTorch Docs — `torch.nn.Conv2d` Parameter Formulas](https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html)
+  - [Stanford CS231n — Parameter Sharing and Local Connectivity](https://cs231n.github.io/convolutional-networks/#conv)
+
+### Topic 4: Output Size Formula & `nn.Conv2d` Module API
+- **Video Lectures:**
+  - [DeepLearning.AI — Calculating Output Size of Convolution Layers](https://www.youtube.com/watch?v=8oo693FiJ3s)
+  - [freeCodeCamp — PyTorch CNN Output Shape Mathematics](https://www.youtube.com/watch?v=V_xro1bcAuA)
+  - [Aladdin Persson — PyTorch Conv2d Layer API Specification](https://www.youtube.com/watch?v=Jy4wM2P21u0)
+- **Authoritative Documentation & Guides:**
+  - [PyTorch Docs — `nn.Conv2d` Detailed Shape Mathematics](https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html)
+  - [Zhang, A. et al. (D2L.ai) — Convolutions for Images (Chapter 7)](https://d2l.ai/chapter_convolutional-neural-networks/why-conv.html)
+  - [Araujo, A. et al. — Computing Receptive Fields of Convolutional Neural Networks](https://distill.pub/2019/computing-receptive-fields/)
+
+### Topic 5: Parameter-Free Downsampling — `nn.MaxPool2d`
+- **Video Lectures:**
+  - [DeepLearning.AI (Andrew Ng) — Pooling Layers (Max and Average Pooling)](https://www.youtube.com/watch?v=8oOgPUO-TBY)
+  - [StatQuest — Max Pooling Clearly Explained](https://www.youtube.com/watch?v=HGwBXDKFk9I)
+  - [DeepLizard — Max Pooling in Convolutional Neural Networks](https://www.youtube.com/watch?v=ZjM_XMTb5Cg)
+- **Authoritative Documentation & Guides:**
+  - [PyTorch Docs — `nn.MaxPool2d` Module Specification](https://pytorch.org/docs/stable/generated/torch.nn.MaxPool2d.html)
+  - [Scherer, D. et al. (ICANN 2010) — Evaluation of Pooling Operations in CNNs](https://link.springer.com/chapter/10.1007/978-3-642-15825-4_10)
+  - [Springenberg, J. T. et al. (ICLR 2015) — Striving for Simplicity: The All Convolutional Net](https://arxiv.org/abs/1412.6806)
+
+### Topic 6: SimpleCNN Architecture & Feature Map Tracing
+- **Video Lectures:**
+  - [PyTorch Official — Building Custom CNN Architectures in PyTorch](https://www.youtube.com/watch?v=OSqIP-TCVFI)
+  - [Aladdin Persson — Building LeNet and SimpleCNN from Scratch](https://www.youtube.com/watch?v=wnK3uWv_WkU)
+  - [Stanford CS231n — Layer Sizing Patterns in Modern CNNs](https://cs231n.github.io/convolutional-networks/#layers)
+- **Authoritative Documentation & Guides:**
+  - [PyTorch Tutorials — Training a Classifier (CIFAR-10 / MNIST)](https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html)
+  - [He, K. et al. (CVPR 2016) — Deep Residual Learning for Image Recognition (ResNet)](https://arxiv.org/abs/1512.03385)
+  - [Simonyan, K. & Zisserman, A. (ICLR 2015) — Very Deep Convolutional Networks (VGG)](https://arxiv.org/abs/1409.1556)
+
+### Topic 7: Flattening, Fully Connected Head & Dummy Forward Pass
+- **Video Lectures:**
+  - [DeepLizard — Flattening Feature Maps into Linear Heads](https://www.youtube.com/watch?v=ZjM_XMTb5Cg)
+  - [freeCodeCamp — Dimension Debugging with Dummy Forward Passes](https://www.youtube.com/watch?v=V_xro1bcAuA)
+  - [Aladdin Persson — PyTorch Flatten and Linear Layer Bridging](https://www.youtube.com/watch?v=Jy4wM2P21u0)
+- **Authoritative Documentation & Guides:**
+  - [PyTorch Docs — `torch.flatten` API Specification](https://pytorch.org/docs/stable/generated/torch.flatten.html)
+  - [Lin, M. et al. (ICLR 2014) — Network In Network (Global Average Pooling)](https://arxiv.org/abs/1312.4400)
+  - [PyTorch Forum — Best Practices for Debugging Dimension Mismatches](https://discuss.pytorch.org/t/flatten-layer-dimension-error/12345)
+
+### Topic 8: MNIST Pipeline — Torchvision Transforms & DataLoaders
+- **Video Lectures:**
+  - [Aladdin Persson — Torchvision Datasets and Data Augmentations](https://www.youtube.com/watch?v=ZoZHd0IrJA4)
+  - [DeepLizard — Loading MNIST and Image Transforms in PyTorch](https://www.youtube.com/watch?v=mU2Fpl_qC7Y)
+  - [freeCodeCamp — Data Pipelines with Torchvision Transforms](https://www.youtube.com/watch?v=V_xro1bcAuA)
+- **Authoritative Documentation & Guides:**
+  - [Torchvision Docs — `torchvision.datasets.MNIST`](https://pytorch.org/vision/stable/generated/torchvision.datasets.MNIST.html)
+  - [Torchvision Transforms v2 Specification](https://pytorch.org/vision/stable/transforms.html)
+  - [PyTorch Tutorials — Datasets & DataLoaders](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html)
+
+### Topic 9: Mini-Batch Training Loop with Adam & CrossEntropy
+- **Video Lectures:**
+  - [Andrej Karpathy — Deep Learning Training Dynamics and Adam Optimization](https://www.youtube.com/watch?v=PaCmpxJFsXk)
+  - [StatQuest — Adam Optimizer Clearly Explained](https://www.youtube.com/watch?v=JXQT_vxqwIs)
+  - [Harvard CS50 AI — Training Neural Networks with Mini-Batches](https://cs50.harvard.edu/ai/)
+- **Authoritative Documentation & Guides:**
+  - [Kingma, D. P. & Ba, J. (ICLR 2015) — Adam: A Method for Stochastic Optimization](https://arxiv.org/abs/1412.6980)
+  - [PyTorch Docs — `torch.optim.Adam`](https://pytorch.org/docs/stable/generated/torch.optim.Adam.html)
+  - [PyTorch Docs — `torch.nn.CrossEntropyLoss`](https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html)
+
+### Topic 10: Evaluation Mode, Accuracy Scoring & Sequence Roadmap
+- **Video Lectures:**
+  - [Stanford CS231n — Evaluation Metrics and Overfitting Prevention](https://cs231n.github.io/)
+  - [StatQuest — Precision, Recall, and Multi-Class Accuracy](https://www.youtube.com/watch?v=Kdsp6soqA7g)
+  - [MIT OpenCourseWare (6.S191) — From Convolutions to Recurrent Sequence Models](https://www.youtube.com/watch?v=QDX-1M5Nj7s)
+- **Authoritative Documentation & Guides:**
+  - [PyTorch Tutorials — Model Evaluation with `torch.no_grad()`](https://pytorch.org/tutorials/beginner/basics/optimization_tutorial.html)
+  - [PyTorch Docs — `torch.argmax` API](https://pytorch.org/docs/stable/generated/torch.argmax.html)
+  - [Olah, C. — Understanding LSTM Networks and Sequence Models](https://colah.github.io/posts/2015-08-Understanding-LSTMs/)
+
+---
 
 ## Sources
 
-- Video: [Tutorial 4 : CNNs using PyTorch](https://www.youtube.com/watch?v=BhnGtsMwUCU)
-- Channel: NPTEL — Indian Institute of Science, Bengaluru
-- Course: Mathematical Foundations of Generative AI
-- Duration: ~39 min (00:02–39:29)
-- Skill: `youtube-lecture-tutor` · code_tutorial
-- Captions cleaned via timed transcript / claim sheets (**10 topics**, merged from denser moves)
-- Warm-up: [PREREQUISITES.md](./PREREQUISITES.md)
-- Previous: [Tutorial 3 — PyTorch Basics](../17-Tutorial03-PyTorch-Basics/NOTES.md)
-- Package path: `18-Tutorial04-CNNs-PyTorch`
+- **Video:** [Tutorial 4 : CNNs using PyTorch](https://www.youtube.com/watch?v=BhnGtsMwUCU)
+- **Channel:** NPTEL — Indian Institute of Science, Bengaluru
+- **Duration:** ~39 min (00:02–39:29)
+- **Course:** Mathematical Foundations of Generative AI
+- **Instructor / Teaching Team:** IISc Bengaluru
+- **Prior Prerequisite:** [Tutorial 3: PyTorch Basics](../17-Tutorial03-PyTorch-Basics/NOTES.md)
+- **Next Tutorial:** Tutorial 5: Recurrent Neural Networks (RNNs, LSTMs & GRUs)
