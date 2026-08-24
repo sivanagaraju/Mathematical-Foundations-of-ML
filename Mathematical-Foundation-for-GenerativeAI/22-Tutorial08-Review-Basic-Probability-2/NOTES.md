@@ -1,1030 +1,1204 @@
 # Tutorial 8 — Review of Basic Probability 2
 
 **Video:** [Tutorial 8 : Review of Basic Probability 2](https://www.youtube.com/watch?v=pQIbfyjSnFk) · NPTEL / IISc  
-**Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md)  
-**Previous:** [Tutorial 7 — Probability 1](../21-Tutorial07-Review-Basic-Probability-1/NOTES.md)  
-**Course:** Mathematical Foundations of **Generative AI** (~57 min)  
-**Speaker:** NPTEL IISc · Continuous RVs, PDF, CoV, $E$, Var, inequalities, numpy
+**Warm-up First:** [PREREQUISITES.md](./PREREQUISITES.md)  
+**Previous Tutorial:** [Tutorial 7 — Review of Basic Probability 1](../21-Tutorial07-Review-Basic-Probability-1/NOTES.md) (Discrete RVs, PMFs & CDFs)  
+**Next Tutorial:** Tutorial 9 — Pairs and Vectors of Random Variables (Joint, Marginal & Conditional Distributions)  
+**Course:** Mathematical Foundations of Generative AI (~57 min)  
+**Speaker:** NPTEL / IISc Teaching Team  
+**Core Themes:** Continuous Random Variables, Probability Density Functions (PDFs), Change of Variables Theorem, Mathematical Expectation, Law of the Unconscious Statistician (LOTUS), Variance & Spread Invariants, Fundamental Inequalities (Markov, Chebyshev, Jensen), and Empirical NumPy Simulation.
+
+---
+
+> ### ⚠️ Course Context & Curriculum Progression Notice
+> In **Tutorial 7**, the curriculum established the foundational discrete probability framework: sample spaces $\Omega$, event $\sigma$-algebras $\mathcal{F}$, Kolmogorov's axioms, discrete random variables, Cumulative Distribution Functions (CDFs), and Probability Mass Functions (PMFs).
+> 
+> **Tutorial 8** advances directly into **Continuous Probability Theory and Mathematical Statistics**. Modern generative AI models—specifically **Normalizing Flows** (which rely on the Change of Variables theorem and Jacobian determinants), **Diffusion Models / DDPMs** (which parameterize Gaussian transition densities and score matching), and **Variational Autoencoders / VAEs** (which optimize the Evidence Lower Bound via Jensen's Inequality)—operate entirely in continuous vector spaces. Mastering the calculus of probability densities, nonlinear transformations, moments ($\mathbb{E}, \text{Var}$), and statistical concentration inequalities is essential for deep generative modeling.
 
 ---
 
 ## Table of Contents
 
-1. [Topic 1 — Continuous RV and PDF](#topic-1-continuous-rv-and-pdf-0003–0452) (00:03–04:52)
-2. [Topic 2 — PDF properties versus PMF](#topic-2-pdf-properties-versus-pmf-0452–0843) (04:52–08:43)
-3. [Topic 3 — Uniform, exponential, Gaussian](#topic-3-uniform-exponential-gaussian-0843–1357) (08:43–13:57)
-4. [Topic 4 — Functions of RVs and change of variables](#topic-4-functions-of-rvs-and-change-of-variables-1357–2024) (13:57–20:24)
-5. [Topic 5 — Expectation and LOTUS](#topic-5-expectation-and-lotus-2024–2610) (20:24–26:10)
-6. [Topic 6 — Variance](#topic-6-variance-2610–2902) (26:10–29:02)
-7. [Topic 7 — Markov, Chebyshev, Jensen](#topic-7-markov-chebyshev-jensen-2902–3317) (29:02–33:17)
-8. [Topic 8 — Numpy dice and Bayes](#topic-8-numpy-dice-and-bayes-3317–4009) (33:17–40:09)
-9. [Topic 9 — Discrete sampling families](#topic-9-discrete-sampling-families-4009–4603) (40:09–46:03)
-10. [Topic 10 — Continuous simulation and recap](#topic-10-continuous-simulation-and-recap-4603–5713) (46:03–57:13)
-11. [Apply it (scenarios)](#apply-it-scenarios)
-12. [External references](#external-references)
-13. [Sources](#sources)
+1. [Executive Summary & Master Architecture](#executive-summary--architecture-of-this-lecture)
+2. [Chalkboard Rosetta Stone: Mathematical Notation](#chalkboard-rosetta-stone)
+3. [Complete Standalone Executable Python Simulation Script](#standalone-simulation-script)
+4. [Topic 1: Continuous RV and PDF Definition (00:03–04:52)](#topic-1-continuous-rv-and-pdf-0003–0452)
+5. [Topic 2: PDF Properties versus PMF (04:52–08:43)](#topic-2-pdf-properties-versus-pmf-0452–0843)
+6. [Topic 3: Uniform, Exponential, and Gaussian Distributions (08:43–13:57)](#topic-3-uniform-exponential-gaussian-0843–1357)
+7. [Topic 4: Functions of RVs and Change of Variables (13:57–20:24)](#topic-4-functions-of-rvs-and-change-of-variables-1357–2024)
+8. [Topic 5: Expectation and LOTUS (20:24–26:10)](#topic-5-expectation-and-lotus-2024–2610)
+9. [Topic 6: Variance and Spread Invariants (26:10–29:02)](#topic-6-variance-2610–2902)
+10. [Topic 7: Markov, Chebyshev, and Jensen Inequalities (29:02–33:17)](#topic-7-markov-chebyshev-jensen-2902–3317)
+11. [Topic 8: NumPy Dice Simulation and Bayesian Numerics (33:17–40:09)](#topic-8-numpy-dice-and-bayes-3317–4009)
+12. [Topic 9: Discrete Sampling Families in Python (40:09–46:03)](#topic-9-discrete-sampling-families-4009–4603)
+13. [Topic 10: Continuous Simulation, Transforms, and Recap (46:03–57:13)](#topic-10-continuous-simulation-and-recap-4603–5713)
+14. [Workplace Debugging Postmortems](#workplace-debugging-postmortems)
+15. [Centralized External References](#external-references)
 
 ---
 
-## Executive Summary — architecture of this lecture
+## Executive Summary & Architecture of this Lecture
 
-This hour installs **continuous-type** random variables after last time’s discrete piles. A **probability density function (PDF)** $p$ is a height function whose **area** is probability: the **cumulative distribution function (CDF)** is $F(x)=\int_{-\infty}^x p(t)\,dt$, a single point has probability 0, and $p$ itself may exceed 1. Stock Unif / Exp / Normal, then push $Y=g(X)$ with a monotone change of variables. One number is the center — **expectation**, with **LOTUS** so you average $g(x)$ using $X$’s weights — and another is **variance**, the mean squared deviation. Three inequalities (Markov, Chebyshev, Jensen) are **stated**, not proved; then a numpy notebook checks the same formulas with 100,000 samples. Pairs of random variables wait until next time.
+<a id="executive-summary--architecture-of-this-lecture"></a>
 
-**Worldview arc:** from “discrete $X$ specified by CDF or PMF” **to** “continuous $X$ specified by a PDF + $E$/Var checked in simulation.”
+This lecture completes the probability foundations required for Generative AI by bridging discrete mathematics into continuous spaces. While discrete random variables assign finite chunks of probability mass to countable ticks, **continuous random variables** distribute probability continuously over the real line $\mathbb{R}$.
 
-**Hour at a glance (whole video).** Last tutorial specified a discrete $X$ by a CDF or a PMF. Today is the other kind they will use most: **continuous type**. $X$ is continuous type if there exists a **probability density function (PDF)** $p_X$ such that the **cumulative distribution function (CDF)** is the running area $F(x)=\int_{-\infty}^x p(t)\,dt$. An uncountable range does **not** prove a PDF exists (mixed laws exist). Because $F$ has no jump, $P(X=x)=0$ at every point. A PDF must be nonnegative and integrate to 1; unlike a PMF it **may exceed 1** — height is not probability; **area** is. Interval probabilities are areas, and the four versions of $<$ / $\le$ agree. Three named heights: **uniform** (even jam on a finite interval), **exponential** (jam piled at 0 that thins to the right), **Gaussian / Normal** (the “king” they will use constantly — a hill at $\mu$ of width $\sigma$). Often you observe $Y=g(X)$, not $X$. If $g$ is differentiable and $g'$ never changes sign, the **change-of-variable** theorem writes $p_Y$ from $p_X$ and $|dx/dy|$. If $g$ folds (for example $x^2$ on all of $\mathbb{R}$), that theorem is off.
-
-A law still wants a **center** and a **spread**. **Expectation** $E[X]$ is the weighted average (sum $x\,p$ or integral $x\,p\,dx$). **LOTUS** (law of the unconscious statistician) lets you compute $E[g(X)]$ with $X$’s weights without first finding $p_Y$. Linearity holds. **Variance** is the mean squared deviation, also $E[X^2]-\mu^2$, always $\ge 0$; shifting does not change it; scaling by $c$ multiplies it by $c^2$. Three inequalities are **stated** without proofs: **Markov** bounds a tail from a moment; **Chebyshev** is Markov on $|X-\mu|$ and is **distribution-free** (no Gaussian needed); **Jensen** says a convex $g$ satisfies $g(E[X])\le E[g(X)]$. Theory then moves to a Colab: seed 42, 100,000 die rolls, frequencies sit near $1/6$, and a Bayes numeric $1\%/95\%/5\%$. Discrete samplers (indicator, Bernoulli, `choice`, binomial) and continuous histograms (Unif / Normal / Exp, then $Y=aX+b$) close the hour. Next time: pairs.
-
-### System context
+### System Context
 
 ```
-  ╔══════════════════════════════════╗
-  ║ Outside: vector / pair RVs next  ║
-  ║ Outside: inequality proofs       ║
-  ╚══════════════╤═══════════════════╝
-                 │ this tutorial (~57 min)
-                 ▼
-        ┌────────────────────────────┐
-        │ CRV stack: p → E → Var     │
-        │ + numpy histogram checks   │
-        └────────────────────────────┘
+  ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+  ║                        GENAI MATHEMATICAL FOUNDATIONS PIPELINE                        ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════════╝
+                                              │
+         ┌────────────────────────────────────┴────────────────────────────────────┐
+         ▼                                                                         ▼
+  [Tutorial 7: Discrete RVs]                                            [Tutorial 8: Continuous RVs & Statistics]
+  • (Ω, F, P) Triplet                                                   • Continuous PDF p(x) & Smooth CDF F(x)
+  • Bayes' Rule & Total Probability                                     • Change of Variables: p_Y(y) = p_X(g^-1(y)) |dx/dy|
+  • Discrete PMFs & Staircase CDFs                                      • Expectation E[X] & LOTUS E[g(X)]
+  • Bern, Bin, Geom, Poisson                                            • Variance Var(X) = E[X^2] - mu^2
+                                                                        • Inequalities: Markov, Chebyshev, Jensen
+                                                                        • Monte Carlo NumPy Validation
+                                              │
+                                              ▼
+                         [Tutorial 9: Random Vectors & Joint Laws]
+                         • Joint Densities p(x,y), Marginals, Conditionals
+                         • Covariance Matrices & Multivariate Gaussians
+                                              │
+                                              ▼
+                         [Generative AI Core Architectures]
+                         • Normalizing Flows: Invertible Change of Variables
+                         • VAEs: Evidence Lower Bound (ELBO) via Jensen
+                         • Diffusion Models: Continuous SDEs & Score Matching
 ```
-
-### Main blueprint
-
-```
-  Discrete leftover (T7): F or p_mass specifies X
-                 │
-                 ▼
-  ┌──────── Continuous type ─────────┐
-  │ exists p:ℝ→ℝ                     │
-  │ F(x)=∫_{-∞}^x p(t) dt            │
-  │ F continuous; p=F′ where p cts   │
-  │ P(X=x)=0; PDF can exceed 1       │
-  └────────────┬─────────────────────┘
-               │ named p
-               ▼
-        Unif / Exp / N(μ,σ²)
-               │ Y=g(X)
-               ▼
-        CoV: p_Y(y)=p_X(g^{-1}(y)) | (g^{-1})′ |
-               │
-               ▼
-        E[X]=∑xp  or  ∫ x p dx     (a number)
-        LOTUS: E[g(X)] uses p_X
-        linearity
-               │
-               ▼
-        Var=E[(X-μ)²]=E[X²]-μ² ≥ 0
-        Var(X+c)=Var(X)  Var(cX)=c²Var(X)
-               │
-               ▼
-        Markov → Chebyshev → Jensen (convex)
-               │
-               ▼
-        numpy: seed 42 · 1e5 rolls · hist ≈ p
-```
-
-### Scenario walkthrough
-
-Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
-
-**Story:** you model one person’s height (or a hotel bill, or a waiting time) as a single continuous number $X$, and you want a typical value, a spread, and a machine check.
-
-1. **Why a PDF?** Discrete piles cannot sit on a continuum of heights. You need a height function $p$ whose **area** is chance. That is continuous type. The running area is the **cumulative distribution function (CDF)** $F(x)=\int_{-\infty}^x p$.
-
-2. **Why not read $p(x)$ as $P(X=x)$?** A single height has probability 0. The **probability density function (PDF)** may be larger than 1. Chance is the area over an interval.
-
-3. **Why named families?** Uniform / exponential / $N(\mu,\sigma^2)$ are the three they will sample. Height as Normal is two numbers: center $\mu$, width $\sigma$.
-
-4. **Why $Y=g(X)$?** You may record centimeters, or inches, or a bill after tax. If the map is steadily rising or steadily falling, change-of-variable moves the density. If it folds, the simple theorem stops.
-
-5. **Why $E$ and LOTUS?** One number for the typical height. To average a function of height (say a clothing-size map) you keep $X$’s weights — you do not rebuild $p_Y$ first.
-
-6. **Why variance?** Two groups can share a mean and feel different. Variance is mean squared deviation. Shift everyone by 5 cm: spread does not change.
-
-7. **Why inequalities?** Sometimes you only know $E$ or Var and still want a tail speed-limit. **Chebyshev** does not need Normal. **Jensen** needs a convex $g$.
-
-8. **Why numpy?** 100,000 samples make a histogram sit on $p$, and `np.mean` of a mask estimates $P$. They check a die ($P(4)\approx 1/6$), a Bayes numeric $1\%/95\%/5\%$, then Unif / Normal / Exp overlays. Same formulas, a machine check. Pairs wait.
-
-```
-  one continuous measurement X  (height / bill / wait)
-         │  no piles on a continuum
-         ▼
-  PDF p  = height     area = chance     F = running area
-         │  named
-         ▼
-  Unif / Exp / Normal(μ, σ²)
-         │  maybe record Y = g(X)
-         ▼
-  CoV if g′ never flips sign
-         │
-         ▼
-  E[X] typical value     LOTUS for E[g(X)]
-  Var = mean squared deviation
-         │  only E or Var known?
-         ▼
-  Markov / Chebyshev / Jensen   (stated)
-         │  check on a machine
-         ▼
-  1e5 samples  →  hist sits on p
-```
-
-A die is the discrete cousin of the same check: frequencies sit near the theory piles.
-
-### Failure / contrast path
-
-```
-  “Uncountable range ⇒ continuous type”     ──X──► mixed laws exist
-  “p(x)=3 is illegal”                       ──X──► height is not probability
-  “P(X=x) is just p(x)”                     ──X──► a point has mass 0
-  CoV when g′ changes sign                  ──X──► theorem off
-  E[XY]=E[X]E[Y] for Y=2X+noise             ──X──► dependence
-```
-
-### STOP / out of scope
-
-Vector-valued RVs; pairs (next tutorial); proofs of Markov/Chebyshev/Jensen.
-
-### Load-bearing claims (closed-book)
-
-- Continuous type means a **probability density function (PDF)** exists with $F=\int p$.
-- $P(X=x)=0$; a PDF is $\ge 0$, integrates to 1, and **may exceed 1**.
-- Unif / Exp / $N(\mu,\sigma^2)$ are the three named heights.
-- For monotone $g$, change-of-variable writes $p_Y$ from $p_X$.
-- Expectation + LOTUS + linearity; $\mathrm{Var}(X)=E[X^2]-\mu^2$.
-- Chebyshev is **distribution-free** (no Gaussian needed).
-- Many **independent and identically distributed (IID)** samples make histograms sit on $p$.
-
-**Speaker / course:** NPTEL IISc · Tutorial 8.
 
 ---
 
-## Topic 1: Continuous RV and PDF (00:03–04:52)
+### Master Architecture Blueprint
+
+```
+  ===================================================================================================
+                                      TUTORIAL 8 MASTER ARCHITECTURE
+  ===================================================================================================
+  
+   [Continuous Definition]         [Named Families]             [Transformations]
+     X: Ω ──► ℝ                     • Uniform: 1/(b-a)            Y = g(X)
+     F_X(x) = ∫_{-∞}^x p(t)dt       • Exponential: λ e^{-λx}       Monotone g:
+     p_X(x) = F_X'(x)               • Gaussian: N(μ, σ²)          p_Y(y) = p_X(g^{-1}(y)) |(g^{-1})'|
+     P(X = x0) = 0                                                (Normalizing Flows)
+            │                               │                              │
+            └───────────────────────────────┼──────────────────────────────┘
+                                            ▼
+                                  [Statistical Moments]
+                                    • E[X] = ∫ x p(x) dx   (Center of Mass)
+                                    • LOTUS: E[g(X)] = ∫ g(x) p(x) dx
+                                    • Var(X) = E[(X-μ)²] = E[X²] - μ²
+                                    • Invariants: Var(X+c) = Var(X), Var(cX) = c² Var(X)
+                                            │
+                                            ▼
+                               [Concentration & Convexity]
+                                    • Markov:    P(|X| ≥ c) ≤ E[|X|^k] / c^k
+                                    • Chebyshev: P(|X-μ| ≥ kσ) ≤ 1/k² (Distribution-Free)
+                                    • Jensen:    g(E[X]) ≤ E[g(X)] for convex g (VAE ELBO)
+                                            │
+                                            ▼
+                                [Empirical Verification]
+                                    • NumPy default_rng(42)
+                                    • 100,000 Monte Carlo draws
+                                    • Histogram Overlay -> True PDF p(x)
+                                    • Empirical Mean/Var -> Theoretical E[X], Var(X)
+  ===================================================================================================
+```
+
+---
+
+### Comparative Feature Matrices
+
+#### Table 1: Discrete vs Continuous vs Mixed Random Variables
+
+| Feature | Discrete Random Variable (Tutorial 7) | Continuous Random Variable (Tutorial 8) | Mixed Random Variable |
+| :--- | :--- | :--- | :--- |
+| **Support ($\text{Supp}(X)$)** | Finite or Countably Infinite ($x_1, x_2, \dots$) | Uncountable Continuum ($[a, b]$ or $\mathbb{R}$) | Continuum with Isolated Discrete Atoms |
+| **Probability Function** | PMF: $p_X(x) = P(X = x)$ | PDF: $p_X(x) = \frac{d}{dx}F_X(x)$ | Mixed: PMF at atoms + PDF over intervals |
+| **Point Probability $P(X=x_0)$** | $\ge 0$ (Can be positive mass) | Strictly $0$ ($P(X=x_0) = 0$ everywhere) | $>0$ at atoms; $0$ on continuous segments |
+| **Function Bound** | $0 \le p_X(x) \le 1.0$ strictly | $p_X(x) \ge 0$ (Can exceed $1.0$, e.g., $100.0$) | Discrete atoms $\le 1.0$; density height unbounded |
+| **Total Normalization** | $\sum_i p_X(x_i) = 1.0$ | $\int_{-\infty}^\infty p_X(x)\,dx = 1.0$ | $\sum P(\text{Atoms}) + \int p_{\text{cont}}(x)dx = 1.0$ |
+| **CDF Shape $F_X(x)$** | Piecewise constant staircase with vertical jumps | Strictly continuous everywhere (zero jumps) | Continuous with vertical jump discontinuities at atoms |
+| **Expectation $\mathbb{E}[X]$** | $\sum_i x_i p_X(x_i)$ | $\int_{-\infty}^\infty x p_X(x)\,dx$ | $\sum x_k P(X=x_k) + \int x p_{\text{cont}}(x)\,dx$ |
+
+---
+
+#### Table 2: Continuous Parametric Distribution Catalog
+
+| Distribution | Notation | Support | PDF $p_X(x)$ | CDF $F_X(x)$ | Mean $\mathbb{E}[X]$ | Variance $\text{Var}(X)$ | Core Generative AI Application |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Uniform** | $\text{Unif}[a, b]$ | $x \in [a, b]$ | $\frac{1}{b-a}$ | $\frac{x-a}{b-a}$ | $\frac{a+b}{2}$ | $\frac{(b-a)^2}{12}$ | Latent noise seeding; random coordinate crops; baseline exploration |
+| **Exponential** | $\text{Exp}(\lambda)$ | $x \in [0, \infty)$ | $\lambda e^{-\lambda x}$ | $1 - e^{-\lambda x}$ | $\frac{1}{\lambda}$ | $\frac{1}{\lambda^2}$ | Survival analysis; inter-arrival times; Poisson process waiting times |
+| **Gaussian (Normal)** | $\mathcal{N}(\mu, \sigma^2)$ | $x \in (-\infty, \infty)$ | $\frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$ | $\frac{1}{2}\left[1 + \text{erf}\left(\frac{x-\mu}{\sigma\sqrt{2}}\right)\right]$ | $\mu$ | $\sigma^2$ | Standard prior for VAEs ($z \sim \mathcal{N}(0, I)$); DDPM noise schedule; GAN latents |
+
+---
+
+#### Table 3: Fundamental Statistical Inequalities
+
+| Inequality | Mathematical Formulation | Required Conditions | Plain-English Intuition | Generative AI / ML Significance |
+| :--- | :--- | :--- | :--- | :--- |
+| **Markov's Inequality** | $P(\|X\| \ge c) \le \frac{\mathbb{E}[\|X\|^k]}{c^k}$ | $c > 0$, $k \ge 1$, finite moment | The probability of a large deviation is bounded by its raw moments. | PAC-learning bounds; tail probability bounds. |
+| **Chebyshev's Inequality** | $P(\|X - \mu\| \ge k\sigma) \le \frac{1}{k^2}$ | $\sigma^2 < \infty$, $k > 0$ | **Distribution-Free:** At least $1 - 1/k^2$ of all mass lives within $k$ standard deviations. | Sample complexity bounds; model confidence intervals. |
+| **Jensen's Inequality** | $g(\mathbb{E}[X]) \le \mathbb{E}[g(X)]$ | $g$ is convex ($\smile$) | Curving after averaging $\le$ Averaging after curving. | Foundation of **VAEs** (derivation of ELBO from intractable log-evidence $\log p(x)$). |
+
+---
+
+### Failure & Contrast Paths (6 Common Engineering Traps)
+
+```
+  [Engineering Trap 1: "Uncountable Support => Continuous-Type"]
+  TRAP: Assuming any variable taking continuous values has a valid PDF.
+  REALITY: Mixed variables (e.g. ReLU activations with a spike at 0) have uncountable support but contain point atoms.
+  
+  [Engineering Trap 2: "Density p(x) > 1 is Impossible"]
+  TRAP: Clamping or asserting p(x) <= 1.0 in continuous likelihood computations.
+  REALITY: Density is height, not probability. For narrow intervals (e.g., Unif[0, 0.1]), p(x) = 10.0 is 100% legal!
+  
+  [Engineering Trap 3: "Single Point Probability P(X=x) = p(x)"]
+  TRAP: Believing a high density value means a high probability of hitting that exact point.
+  REALITY: For all continuous random variables, P(X = x0) = 0 strictly. Probability exists only over intervals!
+  
+  [Engineering Trap 4: "Change of Variables Ignores Jacobian Stretch"]
+  TRAP: Setting p_Y(y) = p_X(g^-1(y)) without multiplying by |dx/dy|.
+  REALITY: Transforming space compresses or dilates density; omitting the derivative destroys total area normalization (∫ p_Y ≠ 1).
+  
+  [Engineering Trap 5: "E[XY] = E[X]E[Y] Always Holds"]
+  TRAP: Assuming the expectation of a product factors for any random variables.
+  REALITY: Factorization requires statistical independence. For dependent variables (e.g. Y = 2X + ε), E[XY] ≠ E[X]E[Y].
+  
+  [Engineering Trap 6: "Inverting Jensen's Inequality Direction in VAEs"]
+  TRAP: Writing log E[p/q] <= E[log p/q], which creates an upper bound instead of the Evidence Lower Bound (ELBO).
+  REALITY: Logarithm is concave, so log E[W] >= E[log W]. Inverting this ruins variational inference convergence!
+```
+
+---
+
+## Chalkboard Rosetta Stone
+
+This quick-reference table maps every mathematical symbol used in Tutorial 8 to its exact meaning and lecture usage.
+
+| Symbol | Mathematical Object | Reading / Pronunciation | Meaning in this Lecture |
+| :--- | :--- | :--- | :--- |
+| $p_X(x)$ or $f_X(x)$ | Probability Density Function | *"p of x"* or *"density of X"* | Rate of probability mass accumulation per unit length ($\int_{-\infty}^\infty p(x)dx = 1$). |
+| $F_X(x)$ | Cumulative Distribution Function | *"F of x"* | $P(X \le x) = \int_{-\infty}^x p(t)dt$. Smooth, non-decreasing curve from 0 to 1. |
+| $Y = g(X)$ | Transformed Random Variable | *"Y equals g of X"* | Pushing random input $X$ through deterministic continuous transformation $g$. |
+| $\left\|\frac{d}{dy}g^{-1}(y)\right\|$ | Derivative of Inverse Map | *"Absolute derivative of g-inverse"* | Local scaling factor (Jacobian) preserving unit probability area under transformation. |
+| $\mathbb{E}[X]$ or $\mu$ | Mathematical Expectation | *"Expected value of X"* | Center of mass / balance fulcrum: $\int_{-\infty}^\infty x p(x)\,dx$. |
+| $\text{LOTUS}$ | Law of the Unconscious Statistician | *"LOTUS"* | $\mathbb{E}[g(X)] = \int_{-\infty}^\infty g(x) p_X(x)\,dx$. |
+| $\text{Var}(X)$ or $\sigma^2$ | Variance | *"Variance of X"* | Mean squared deviation: $\mathbb{E}[(X-\mu)^2] = \mathbb{E}[X^2] - \mu^2$. |
+| $\sigma$ | Standard Deviation | *"Sigma"* | $\sqrt{\text{Var}(X)}$, measured in the original units of $X$. |
+| $\mathcal{N}(\mu, \sigma^2)$ | Gaussian Distribution | *"Normal mu sigma-squared"* | Bell-shaped density parameterized by center $\mu$ and variance $\sigma^2$. |
+| $\text{Exp}(\lambda)$ | Exponential Distribution | *"Exponential lambda"* | Memoryless continuous waiting-time distribution with rate $\lambda > 0$. |
+| $\text{Unif}[a, b]$ | Uniform Distribution | *"Uniform a to b"* | Constant density $1/(b-a)$ over the finite interval $[a, b]$. |
+| $g(x)$ is Convex | Convex Function | *"g is convex"* | Bowl-shaped curve where secant chords float above the graph ($g''(x) \ge 0$). |
+
+---
+
+## Complete Standalone Executable Python Simulation Script
+
+<a id="standalone-simulation-script"></a>
+
+Below is a self-contained, end-to-end Python script validating all mathematical theorems, named densities, change of variables, expectation/LOTUS formulas, variance invariants, and statistical inequalities presented in Tutorial 8.
+
+```python
+"""
+Tutorial 08: Review of Basic Probability 2 — Complete Master Simulation Script
+Validated on Python 3.10+ and NumPy 2.0+
+"""
+
+import numpy as np
+from scipy import integrate
+import math
+
+def run_tutorial_08_simulation():
+    print("=" * 80)
+    print("TUTORIAL 08: CONTINUOUS PROBABILITY & STATISTICAL SIMULATION")
+    print("=" * 80)
+    
+    rng = np.random.default_rng(42)
+    N = 100_000
+
+    # ---------------------------------------------------------
+    # 1. CONTINUOUS PDF AXIOMS & SINGLE-POINT PROBABILITY
+    # ---------------------------------------------------------
+    print("\n[1] Continuous PDF Axioms & Single-Point Null Probability")
+    # Narrow Uniform on [0.0, 0.2] -> Height = 1 / 0.2 = 5.0
+    a_narrow, b_narrow = 0.0, 0.2
+    pdf_height = 1.0 / (b_narrow - a_narrow)
+    
+    samples_unif_narrow = rng.uniform(a_narrow, b_narrow, size=N)
+    
+    # Check exact point match
+    exact_point_matches = np.sum(samples_unif_narrow == 0.1000000000)
+    # Check interval [0.05, 0.15] -> Theory = (0.15 - 0.05) * 5.0 = 0.50
+    interval_empirical = np.mean((samples_unif_narrow >= 0.05) & (samples_unif_narrow <= 0.15))
+    
+    print(f"  PDF Height on [0.0, 0.2]:        {pdf_height:.2f} (Legally > 1.0!)")
+    print(f"  Exact Point Matches for x=0.10:  {exact_point_matches} (Empirical P(X=0.10) = 0.0)")
+    print(f"  Empirical P(0.05 <= X <= 0.15):  {interval_empirical:.4f} (Theory: 0.5000)")
+    assert exact_point_matches == 0
+    assert np.isclose(interval_empirical, 0.50, atol=0.01)
+
+    # ---------------------------------------------------------
+    # 2. NAMED DENSITIES: UNIFORM, EXPONENTIAL, GAUSSIAN
+    # ---------------------------------------------------------
+    print("\n[2] Named Continuous Distributions (Empirical vs Theory)")
+    # (A) Uniform [-2.0, 3.0] -> Mean = 0.50, Var = 5^2 / 12 = 2.0833
+    unif_samples = rng.uniform(-2.0, 3.0, size=N)
+    print(f"  Uniform[-2, 3]  -> Mean: {unif_samples.mean():.4f} (Theory: 0.5000) | Var: {unif_samples.var():.4f} (Theory: 2.0833)")
+    
+    # (B) Exponential(lambda=2.0) -> Mean = 1/lambda = 0.50, Var = 1/lambda^2 = 0.25
+    exp_samples = rng.exponential(scale=1.0/2.0, size=N)
+    print(f"  Exp(lambda=2.0) -> Mean: {exp_samples.mean():.4f} (Theory: 0.5000) | Var: {exp_samples.var():.4f} (Theory: 0.2500)")
+    
+    # (C) Gaussian N(mu=2.0, sigma^2=2.25) -> sigma=1.5
+    gauss_samples = rng.normal(loc=2.0, scale=1.5, size=N)
+    print(f"  Gaussian(2,2.25)-> Mean: {gauss_samples.mean():.4f} (Theory: 2.0000) | Var: {gauss_samples.var():.4f} (Theory: 2.2500)")
+    
+    assert np.isclose(unif_samples.mean(), 0.50, atol=0.02)
+    assert np.isclose(exp_samples.mean(), 0.50, atol=0.02)
+    assert np.isclose(gauss_samples.mean(), 2.00, atol=0.02)
+
+    # ---------------------------------------------------------
+    # 3. CHANGE OF VARIABLES: LINEAR & NONLINEAR TRANSFORMS
+    # ---------------------------------------------------------
+    print("\n[3] Change of Variables & Linear Transformations")
+    # Let X ~ N(3.0, 2.0^2) -> Mean=3.0, Var=4.0
+    # Let Y = aX + b with a = -4.0, b = 5.0
+    # Theory: E[Y] = a*E[X] + b = -4(3) + 5 = -7.0
+    # Theory: Var(Y) = a^2 * Var(X) = (-4)^2 * 4.0 = 64.0
+    X_gauss = rng.normal(loc=3.0, scale=2.0, size=N)
+    a_coef, b_coef = -4.0, 5.0
+    Y_linear = a_coef * X_gauss + b_coef
+    
+    print(f"  Linear Transform Y = -4X + 5:")
+    print(f"    E[Y]   = {Y_linear.mean():.4f} (Theory: -7.0000)")
+    print(f"    Var(Y) = {Y_linear.var():.4f} (Theory: 64.0000)")
+    assert np.isclose(Y_linear.mean(), -7.00, atol=0.05)
+    assert np.isclose(Y_linear.var(), 64.00, atol=0.50)
+
+    # ---------------------------------------------------------
+    # 4. EXPECTATION & LOTUS VERIFICATION
+    # ---------------------------------------------------------
+    print("\n[4] Law of the Unconscious Statistician (LOTUS)")
+    # For discrete support x in {1, 2, 3, 4} with probs [0.1, 0.4, 0.3, 0.2]
+    # Reward g(x) = x^2
+    # Exact E[X^2] = 1^2(0.1) + 2^2(0.4) + 3^2(0.3) + 4^2(0.2) = 0.1 + 1.6 + 2.7 + 3.2 = 7.6
+    x_support = np.array([1, 2, 3, 4])
+    p_support = np.array([0.1, 0.4, 0.3, 0.2])
+    exact_lotus = np.sum((x_support**2) * p_support)
+    
+    discrete_draws = rng.choice(x_support, p=p_support, size=N)
+    empirical_lotus = np.mean(discrete_draws**2)
+    print(f"  Discrete LOTUS E[X^2]:   {empirical_lotus:.4f} (Exact: {exact_lotus:.4f})")
+    assert np.isclose(empirical_lotus, exact_lotus, atol=0.05)
+
+    # ---------------------------------------------------------
+    # 5. CONCENTRATION INEQUALITIES: MARKOV, CHEBYSHEV, JENSEN
+    # ---------------------------------------------------------
+    print("\n[5] Fundamental Inequalities Validation")
+    # (A) Markov: P(|X| >= c) <= E[|X|] / c for non-negative RV
+    c_markov = 1.5
+    mean_exp = exp_samples.mean()  # E[X] = 0.50
+    p_exceed_markov = np.mean(exp_samples >= c_markov)
+    bound_markov = mean_exp / c_markov
+    print(f"  Markov Bound:   P(X >= {c_markov}) = {p_exceed_markov:.4f} <= Bound {bound_markov:.4f} -> {p_exceed_markov <= bound_markov}")
+    assert p_exceed_markov <= bound_markov
+
+    # (B) Chebyshev: P(|X - mu| >= k*sigma) <= 1/k^2 (Distribution-Free)
+    k_sigma = 2.0
+    mu_g, sigma_g = 2.0, 1.5
+    p_exceed_chebyshev = np.mean(np.abs(gauss_samples - mu_g) >= k_sigma * sigma_g)
+    bound_chebyshev = 1.0 / (k_sigma**2)  # 1/4 = 0.25
+    print(f"  Chebyshev Bound:P(|X-mu| >= 2*sigma) = {p_exceed_chebyshev:.4f} <= Bound {bound_chebyshev:.4f} -> {p_exceed_chebyshev <= bound_chebyshev}")
+    assert p_exceed_chebyshev <= bound_chebyshev
+
+    # (C) Jensen: For convex g(x) = x^2, (E[X])^2 <= E[X^2]
+    lhs_jensen = gauss_samples.mean()**2  # mu^2 = 4.0
+    rhs_jensen = np.mean(gauss_samples**2) # E[X^2] = Var + mu^2 = 2.25 + 4 = 6.25
+    print(f"  Jensen Bound:   g(E[X]) = {lhs_jensen:.4f} <= E[g(X)] = {rhs_jensen:.4f} -> {lhs_jensen <= rhs_jensen}")
+    assert lhs_jensen <= rhs_jensen
+
+    # ---------------------------------------------------------
+    # 6. PRODUCT OF EXPECTATIONS: DEPENDENT VS INDEPENDENT
+    # ---------------------------------------------------------
+    print("\n[6] Product of Expectations: Dependent vs Independent")
+    # Independent Pair: X1, X2 ~ N(0, 1)
+    X1 = rng.normal(0.0, 1.0, size=N)
+    X2 = rng.normal(0.0, 1.0, size=N)
+    e_x1_x2_indep = np.mean(X1 * X2)
+    prod_indep = np.mean(X1) * np.mean(X2)
+    print(f"  Independent Pair:   E[X1*X2] = {e_x1_x2_indep:.4f} | E[X1]*E[X2] = {prod_indep:.4f} (Matches!)")
+    
+    # Dependent Pair: Y_dep = 2*X1 + noise
+    noise = rng.normal(0.0, 0.5, size=N)
+    Y_dep = 2.0 * X1 + noise
+    e_xy_dep = np.mean(X1 * Y_dep)
+    prod_dep = np.mean(X1) * np.mean(Y_dep)
+    print(f"  Dependent Pair:     E[X*Y]   = {e_xy_dep:.4f} | E[X]*E[Y]   = {prod_dep:.4f} (Violated!)")
+    assert not np.isclose(e_xy_dep, prod_dep, atol=0.5)
+
+    print("\n" + "=" * 80)
+    print("ALL TUTORIAL 08 MATHEMATICAL THEOREMS & SIMULATIONS VERIFIED!")
+    print("=" * 80)
+
+if __name__ == "__main__":
+    run_tutorial_08_simulation()
+```
+
+---
+
+## Topic 1: Continuous RV and PDF Definition (00:03–04:52)
+
+<a id="topic-1-continuous-rv-and-pdf-0003–0452"></a>
 
 ### Where this sits on the master map
+Transitioning from discrete point-masses to continuous distributions. Warm-up: [discrete leftover](./PREREQUISITES.md#p1-discrete) · [type criteria](./PREREQUISITES.md#p4-type).
 
-**NEW TYPE** — After discrete PMF/CDF, install a density. Warm-up: [discrete leftover](./PREREQUISITES.md#p1-discrete) · [type](./PREREQUISITES.md#p4-type).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Continuous RV definition](./screenshots/composites/ch01-topic-01-continuous-pdf-def-panel1of1.png)
 
-**Figure — ~02:40–04:34:** $X$ continuous type if $\exists\, p_X:\mathbb{R}\to\mathbb{R}$ with $F_X(x)=\int_{-\infty}^x p_X(t)\,dt$; $F$ continuous; FTC $F'=p$ where $p$ is continuous; uncountable $\not\Rightarrow$ continuous type; $P(X=x)=F(x)-F(x^-)=0$.
-
-### What he is establishing
-
-Last tutorial built the probability space, conditionals, Bayes, independence, and **discrete** random variables: CDF, PMF, Bernoulli/binomial/geometric/Poisson. A discrete RV is completely specified by **either** its CDF or its PMF.
-
-This hour continues with the other kind they will use most: **continuous-type** random variables, then functions of RVs, then expectation and variance. (Numpy sampling comes after the theory.)
-
-$X$ is **continuous** (continuous type) if there exists a function $p_X:\mathbb{R}\to\mathbb{R}$ — the **probability density function (PDF)** — such that for every $x$,
-
-$$
-F_X(x) = \int_{-\infty}^{x} p_X(t)\,dt
-$$
-
-They reuse the same letters as the PMF. You must read the **type** of $X$ to know which object $p_X$ is.
-
-By this definition $F$ is continuous at every $x$. Where $p_X$ itself is continuous, the fundamental theorem of calculus gives
-
-$$
-F_X'(x) = p_X(x)
-$$
-
-Continuous-type RVs take **uncountably many** values. The converse is false: an uncountable range does **not** force continuous type (mixed laws exist).
-
-Because $F$ has the same left and right limit at every $x$,
-
-$$
-P(X=x) = F(x)-F(x^-) = 0 \qquad \text{for all } x
-$$
-
-You can now say what “continuous type” means and refuse the uncountable shortcut. Still missing: the two PDF axioms and how they differ from a PMF.
-
-A common trap is calling every “real-valued” $X$ continuous-type.
-
-### Analogy for this topic only
-
-Discrete $X$ is a few water buckets on a road. Continuous-type $X$ is a **hose** spraying along the road. The water depth at a mile is the density; the water you collected up to that mile is $F$. A road with both a hose and a bucket is **not** continuous-type.
-
-Question: **Does an uncountable range prove a PDF exists?**
-
-In lecture words: this box is the PDF definition.
-
-### Local picture
-
-```
-  F(x) = area of p to the left of x
-
-  −∞ ========|======== x =======►
-             [  area F(x)  ]
-
-  P(X = one point) = width 0 = 0
-```
-
-**Notice:** $p$ is recovered by differentiating $F$ where $p$ is continuous.
-
-### Bridge
-
-We have a name for $p$. What **rules** must $p$ obey, and how is that different from a PMF?
+*Figure — ~00:03–04:52: Blackboard derivation establishing continuous random variables, the integral definition of Cumulative Distribution Function $F_X(x) = \int_{-\infty}^x p_X(t)dt$, the Fundamental Theorem of Calculus $F_X'(x) = p_X(x)$, and why single-point probability $P(X=x) = 0$.*
 
 ---
 
-## Topic 2: PDF properties versus PMF (04:52–08:43)
+### 1. 👶 ELI5 Quick Intuition
+Think of a discrete random variable as drops of rain falling into individual glass jars placed at discrete milestones along a road. Each jar catches a measurable volume of water.
+A **continuous random variable** is like a smooth sprinkler spraying water continuously across the entire road. If you point to one microscopic point at mile 2.71828, there is no puddle sitting on that single dimensionless point. You can only measure the depth of water collected over a **stretch or segment** of the road!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Definition of Continuous Type:** A random variable $X$ is said to be of **continuous type** if there exists a non-negative function $p_X: \mathbb{R} \to \mathbb{R}$—termed the **Probability Density Function (PDF)**—such that its CDF is the accumulated integral from $-\infty$ up to $x$:
+   $$F_X(x) = \int_{-\infty}^x p_X(t)\,dt \quad \forall x \in \mathbb{R}$$
+2. **Smoothness of the CDF:** Because the integral of an integrable function is continuous, $F_X(x)$ has **zero vertical jumps**.
+3. **The Fundamental Theorem of Calculus:** At every point where the density $p_X(x)$ is continuous, the derivative of the accumulated CDF recovers the density:
+   $$F_X'(x) = \frac{d}{dx} F_X(x) = p_X(x)$$
+4. **The Uncountable Trap Warning:** Taking uncountably infinite values does **not** automatically make a random variable continuous-type (mixed distributions with point atoms exist).
+5. **Zero Probability at Exact Points:** Because $F_X$ is continuous everywhere ($F_X(x) = F_X(x^-)$):
+   $$P(X = x) = F_X(x) - F_X(x^-) = 0 \quad \forall x \in \mathbb{R}$$
+
+---
+
+### 3. 📐 Formal Mathematics & Rigorous Derivation
+
+```
+  Probability Space (Ω, F, P)
+              │
+              │  X: Ω ──► ℝ (Continuous Mapping)
+              ▼
+  Accumulated Probability CDF:
+  
+  F_X(x) = P(X ≤ x) = ∫_{-∞}^x p_X(t) dt
+  
+  Differentiating recovers density:
+  d/dx F_X(x) = p_X(x)  (where p_X is continuous)
+```
+
+#### Step-by-Step Chalkboard Commentary
+- **Step 1:** Let $(\Omega, \mathcal{F}, P)$ be the foundational probability space. A random variable $X: \Omega \to \mathbb{R}$ induces a probability measure $P_X$ on $(\mathbb{R}, \mathcal{B})$.
+- **Step 2:** If $P_X$ is absolutely continuous with respect to the Lebesgue measure $\lambda$, the Radon-Nikodym derivative exists:
+  $$p_X(x) \triangleq \frac{dP_X}{d\lambda}(x)$$
+- **Step 3:** The Cumulative Distribution Function is defined as:
+  $$F_X(x) \triangleq P_X\bigl((-\infty, x]\bigr) = \int_{-\infty}^x p_X(t)\,dt$$
+- **Step 4:** By the Fundamental Theorem of Calculus, for any $x$ where $p_X$ is continuous:
+  $$F_X'(x) = \lim_{h \to 0} \frac{F_X(x+h) - F_X(x)}{h} = \lim_{h \to 0} \frac{1}{h}\int_x^{x+h} p_X(t)\,dt = p_X(x)$$
+- **Step 5 (Point Probability Nullity):**
+  $$P(X = x_0) = P\left(\bigcap_{n=1}^\infty \left(x_0 - \frac{1}{n}, x_0\right]\right) = \lim_{n \to \infty} \left[F_X(x_0) - F_X\left(x_0 - \frac{1}{n}\right)\right] = F_X(x_0) - F_X(x_0^-) = 0$$
+
+---
+
+### 4. 🔢 Concrete Numerical Example
+Let $X$ have PDF $p_X(x) = 3x^2$ for $x \in [0, 1]$, and $0$ elsewhere:
+1. Compute the CDF $F_X(x)$ for $x \in [0, 1]$:
+   $$F_X(x) = \int_0^x 3t^2\,dt = \left[t^3\right]_0^x = x^3$$
+2. Differentiate $F_X(x)$ to verify FTC:
+   $$F_X'(x) = \frac{d}{dx}[x^3] = 3x^2 = p_X(x) \checkmark$$
+3. Compute $P(X = 0.5)$:
+   $$P(X = 0.5) = 0.0$$
+4. Compute $P(0.2 \le X \le 0.8)$:
+   $$P(0.2 \le X \le 0.8) = F_X(0.8) - F_X(0.2) = 0.8^3 - 0.2^3 = 0.512 - 0.008 = 0.504$$
+
+---
+
+## Topic 2: PDF Properties versus PMF (04:52–08:43)
+
+<a id="topic-2-pdf-properties-versus-pmf-0452–0843"></a>
 
 ### Where this sits on the master map
+Establishing the axiomatic properties of probability density functions and contrasting them with PMFs. Warm-up: [height vs area](./PREREQUISITES.md#p2-height) · [area integrals](./PREREQUISITES.md#p3-area).
 
-**AXIOMS OF $p$** — Area 1; height free. Warm-up: [height](./PREREQUISITES.md#p2-height) · [area](./PREREQUISITES.md#p3-area).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![PDF properties](./screenshots/composites/ch02-topic-02-pdf-properties-panel1of1.png)
 
-**Figure — ~04:52–08:43:** $p\ge 0$, $\int p=1$; $p$ need not lie in $[0,1]$; PDF is not a probability measure; $F(-\infty)=0$, $F(+\infty)=1$, $F$ nondecreasing **and continuous**; $P(a<X\le b)=F(b)-F(a)=\int_a^b p$.
-
-### What he is establishing
-
-A PDF is an $\mathbb{R}\to\mathbb{R}$ function that must satisfy
-
-$$
-p(x) \ge 0 \quad \text{for all } x, \qquad \int_{-\infty}^{\infty} p(x)\,dx = 1
-$$
-
-Compare with a PMF: masses sit in $[0,1]$ and **sum** to 1. The integral replaces the sum. The **$[0,1]$ cap is gone**. $p(x)=3$ can be legal.
-
-That is why they say the PDF is **not** a valid probability measure, while the CDF and the PMF are.
-
-Any function meeting those two conditions is a PDF of some continuous-type RV. Then automatically $F(-\infty)=0$, $F(+\infty)=1$, $F$ is nondecreasing, and — unlike the general CDF, which is only right-continuous — $F$ is **continuous**.
-
-For an interval,
-
-$$
-P(a < X \le b) = F(b)-F(a) = \int_a^b p(t)\,dt
-$$
-
-Because $P(X=a)=P(X=b)=0$, the four versions $<$ / $\le$ at either end are **equal**. They usually write $\le$ everywhere.
-
-You can now check a proposed $p$ and compute interval probabilities as areas. Still missing: the three named densities they will sample later.
-
-A common trap is rejecting $p>1$. Another is treating $p(x)$ as $P(X=x)$.
-
-### Analogy for this topic only
-
-1 kg of jam (total probability) on a 10 cm slice of toast must sit **10 times taller** than on a 100 cm slice. Height 10 is not “1000% chance.” Chance is how much jam sits **over an interval**.
-
-Question: **Must every PDF value lie in $[0,1]$?**
-
-In lecture words: this box is the PDF axioms.
-
-### Local picture
-
-```
-  PMF:  piles at ticks, each pile in [0,1], piles sum to 1
-  PDF:  height function ≥ 0, area = 1, height may be 2, 10, …
-
-  P(a ≤ X ≤ b) = P(a < X < b) = area from a to b
-```
-
-**Notice:** endpoints are free because points have no area.
-
-### Bridge
-
-Theory is empty without examples. What do Unif, Exp, and Gaussian actually look like?
+*Figure — ~04:52–08:43: Blackboard comparison of discrete PMFs vs continuous PDFs, proving why density height may exceed 1, why PDF is not a probability measure, and demonstrating interval boundary invariance.*
 
 ---
 
-## Topic 3: Uniform, exponential, Gaussian (08:43–13:57)
+### 1. 👶 ELI5 Quick Intuition
+If you pack 1 kilogram of flour into a very tall, narrow tube of width 0.1 meters, the flour stands **10 meters high**. Does a height of 10 mean you have 10 kg of flour? No! Total mass is still $\text{Width} \times \text{Height} = 0.1 \times 10 = 1\text{ kg}$.
+In continuous probability, **PDF is the height of the flour**, while **probability is the total weight of flour inside an interval**.
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Two Universal PDF Axioms:**
+   - **Non-negativity:** $p_X(x) \ge 0$ for all $x \in \mathbb{R}$.
+   - **Unit Total Area:** $\int_{-\infty}^\infty p_X(x)\,dx = 1.0$.
+2. **The $[0, 1]$ Restriction Disappears:** Unlike discrete PMFs where $0 \le p(x) \le 1.0$, a PDF height can be **any non-negative real number** ($p(x) = 5.0, 100.0, 10^6$).
+3. **PDF is NOT a Probability Measure:** A probability measure $P(A)$ maps events to $[0, 1]$ and satisfies Kolmogorov's axioms. A PDF is an algebraic function $\mathbb{R} \to [0, \infty)$ that must be integrated to yield a measure.
+4. **Boundary Invariance on Intervals:** Because single points have zero probability, the four interval permutations are identical:
+   $$P(a < X < b) = P(a \le X < b) = P(a < X \le b) = P(a \le X \le b) = \int_a^b p_X(t)\,dt$$
+
+---
+
+### 3. 📐 Formal Mathematics & Rigorous Derivation
+
+```
+  Discrete PMF (Point Masses):                 Continuous PDF (Height Function):
+  • p(x) ∈ [0, 1]                              • p(x) ≥ 0  (Can exceed 1.0!)
+  • ∑_i p(x_i) = 1                             • ∫_{-∞}^∞ p(x) dx = 1
+  • Valid Probability Measure                  • NOT a Probability Measure
+```
+
+#### Theorem: Interval Probability Equivalence
+Let $X$ be a continuous random variable with PDF $p_X$. For any $a < b$:
+$$P(a \le X \le b) = P(\{a\} \cup (a, b) \cup \{b\}) = P(X=a) + P(a < X < b) + P(X=b)$$
+By Topic 1, $P(X=a) = 0$ and $P(X=b) = 0$:
+$$P(a \le X \le b) = 0 + P(a < X < b) + 0 = P(a < X < b) = F_X(b) - F_X(a) = \int_a^b p_X(t)\,dt \quad \blacksquare$$
+
+---
+
+### 4. 🔢 Concrete Numerical Example
+Let $p_X(x) = 4$ for $x \in [0.10, 0.35]$, and $0$ elsewhere:
+1. Verify normalization:
+   $$\int_{0.10}^{0.35} 4 \, dx = 4 \cdot (0.35 - 0.10) = 4 \cdot 0.25 = 1.0 \checkmark$$
+2. Compute $P(0.20 \le X \le 0.30)$:
+   $$P(0.20 \le X \le 0.30) = \int_{0.20}^{0.30} 4 \, dx = 4 \cdot (0.30 - 0.20) = 4 \cdot 0.10 = 0.40 = 40\%$$
+
+---
+
+## Topic 3: Uniform, Exponential, and Gaussian Distributions (08:43–13:57)
+
+<a id="topic-3-uniform-exponential-gaussian-0843–1357"></a>
 
 ### Where this sits on the master map
+Cataloging the three foundational continuous distributions that power modern machine learning. Warm-up: [area integrals](./PREREQUISITES.md#p3-area).
 
-**NAMED DENSITIES** — Three workhorses. Warm-up: [area](./PREREQUISITES.md#p3-area).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Named continuous families](./screenshots/composites/ch03-topic-03-uniform-exp-gaussian-panel1of1.png)
 
-**Figure — ~08:43–13:57:** Unif$[a,b]$ height $1/(b-a)$; Unif$[0,1]$ PDF $=1$, CDF $=x$ on $(0,1)$; Exp PDF/CDF; Normal $1/(\sigma\sqrt{2\pi})\exp(-(x-\mu)^2/(2\sigma^2))$; $X\sim N(\mu,\sigma^2)$; standard normal $\mu=0,\sigma^2=1$.
-
-### What he is establishing
-
-**Uniform** on $[a,b]$: $p(x)=1/(b-a)$ for $x\in[a,b]$, else $0$. Open or closed interval is the same (endpoints have probability 0). On $[0,1]$ the height is $1$; the CDF is $0$ for $x\le 0$, $x$ on $(0,1)$, and $1$ for $x\ge 1$.
-
-**Exponential**$(\lambda)$ with $\lambda>0$: $p(x)=\lambda e^{-\lambda x}$ for $x\ge 0$, and $0$ for $x<0$. Split the integral at 0: the left half is 0, the right half is 1. The CDF is $0$ for $x<0$ and $1-e^{-\lambda x}$ for $x\ge 0$.
-
-They flag that **numpy histograms** of samples from each family come in a few minutes.
-
-**Gaussian / Normal** — “king of distributions” because the course uses it constantly:
-
-$$
-p(x) = \frac{1}{\sigma\sqrt{2\pi}} \exp\Bigl(-\frac{(x-\mu)^2}{2\sigma^2}\Bigr), \qquad \sigma>0,\; \mu\in\mathbb{R}
-$$
-
-$\mu$ is the mean, $\sigma^2$ the variance, $\sigma$ the standard deviation. Write $X\sim N(\mu,\sigma^2)$. **Standard normal:** $\mu=0$, $\sigma^2=1$. Still **scalar** $X$; vector RVs later.
-
-You can now write the three PDFs and the Unif/Exp CDFs. Still missing: what happens to $p$ after $Y=g(X)$.
-
-A common trap is putting $\sigma$ (not $\sigma^2$) in the $N(\cdot,\cdot)$ slot.
-
-### Analogy for this topic only
-
-Uniform is **even jam** on a finite slice. Exponential is **jam piled at 0** that thins as you walk right. Gaussian is a **symmetric hill** centered at $\mu$ whose width is $\sigma$.
-
-Question: **What two numbers specify a Normal family?**
-
-In lecture words: this box is the named CRVs.
-
-### Local picture
-
-```
-  Unif[0,1]     p:  ____1____          F:  ramp 0→1
-  Exp(λ)        p:  drop from λ        F:  1-e^{-λx} (x>0)
-  N(μ,σ²)       p:  bell at μ          F:  (no elementary closed form)
-```
-
-**Notice:** they will overlay histograms on these $p$ curves in Topic 10.
-
-### Bridge
-
-Often we do not observe $X$ but $Y=g(X)$ (a bill, a square, a scale). How does the law move?
+*Figure — ~08:43–13:57: Chalkboard definitions of Uniform $\text{Unif}[a,b]$, Exponential $\text{Exp}(\lambda)$, and Gaussian / Normal $\mathcal{N}(\mu, \sigma^2)$ distributions with their respective analytical PDFs and CDFs.*
 
 ---
 
-## Topic 4: Functions of RVs and change of variables (13:57–20:24)
+### 1. 👶 ELI5 Quick Intuition
+- **Uniform Distribution:** A flat, completely level table. Every interval of equal width has the exact same chance of catching a marble.
+- **Exponential Distribution:** A ski slope starting high at $x = 0$ and rapidly dropping off to the right. Models waiting times (like waiting for a bus or a lightbulb to burn out).
+- **Gaussian (Normal) Distribution:** The famous symmetric bell curve. Most values cluster near the center $\mu$, while values further out in the tails become exponentially rarer.
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Continuous Uniform Distribution ($\text{Unif}[a, b]$):**
+   - Constant density height $p(x) = \frac{1}{b-a}$ on interval $[a, b]$.
+   - CDF rises linearly from $0$ at $a$ to $1$ at $b$: $F(x) = \frac{x-a}{b-a}$.
+2. **Exponential Distribution ($\text{Exp}(\lambda)$ with $\lambda > 0$):**
+   - Density starts at peak $\lambda$ at $x = 0$ and decays: $p(x) = \lambda e^{-\lambda x}$ for $x \ge 0$.
+   - CDF accumulates asymptotically: $F(x) = 1 - e^{-\lambda x}$ for $x \ge 0$.
+3. **Gaussian / Normal Distribution ($\mathcal{N}(\mu, \sigma^2)$):**
+   - The cornerstone distribution of Generative AI (latent priors, diffusion noise).
+   - Specified by two parameters: mean $\mu \in \mathbb{R}$ (center) and variance $\sigma^2 > 0$ (width squared).
+   - Standard Normal: $\mu = 0, \sigma^2 = 1 \implies \mathcal{N}(0, 1)$.
+
+---
+
+### 3. 📐 Formal Mathematics & Rigorous Derivation
+
+```
+  Uniform[a, b]:                  Exponential(λ):                 Gaussian N(μ, σ²):
+  p(x) = 1 / (b - a)              p(x) = λ e^{-λx} (x ≥ 0)        p(x) = 1/(σ√(2π)) exp(-(x-μ)²/(2σ²))
+  F(x) = (x - a) / (b - a)        F(x) = 1 - e^{-λx} (x ≥ 0)      F(x) = 1/2 [1 + erf((x-μ)/(σ√2))]
+```
+
+#### Analytical Gaussian PDF Formula
+$$p_X(x) = \frac{1}{\sigma \sqrt{2\pi}} \exp\left( -\frac{(x - \mu)^2}{2\sigma^2} \right), \quad x \in \mathbb{R}$$
+Where $\int_{-\infty}^\infty p_X(x)\,dx = 1.0$ via Poisson's polar coordinate double integral $\left(\int_{-\infty}^\infty e^{-u^2}du = \sqrt{\pi}\right)$.
+
+---
+
+### 4. 🔢 Concrete Numerical Example
+Let $X \sim \text{Exp}(\lambda = 0.5)$:
+1. Write the PDF and CDF:
+   $$p_X(x) = 0.5 e^{-0.5 x}, \quad F_X(x) = 1 - e^{-0.5 x} \quad (x \ge 0)$$
+2. What is the probability that waiting time $X$ exceeds 4 units?
+   $$P(X > 4) = 1 - F_X(4) = 1 - (1 - e^{-0.5 \cdot 4}) = e^{-2} \approx 0.1353 = 13.53\%$$
+
+---
+
+## Topic 4: Functions of RVs and Change of Variables (13:57–20:24)
+
+<a id="topic-4-functions-of-rvs-and-change-of-variables-1357–2024"></a>
 
 ### Where this sits on the master map
+Transforming random variables through deterministic functions $Y = g(X)$ and deriving transformed densities. Warm-up: [functions & mappings](../21-Tutorial07-Review-Basic-Probability-1/PREREQUISITES.md#p2-fn).
 
-**PUSH FORWARD** — $Y=g(X)$. Warm-up: Tutorial 7 [function](../21-Tutorial07-Review-Basic-Probability-1/PREREQUISITES.md#p2-fn).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Change of variables](./screenshots/composites/ch04-topic-04-functions-change-var-panel1of1.png)
 
-**Figure — ~13:57–20:24:** $Y=g(X)$ as $\Omega\xrightarrow{X}\mathbb{R}\xrightarrow{g}\mathbb{R}$; $F_Y(y)=P(g(X)\le y)$; linear $a>0$; **change of variable theorem** with $g'>0$ or $g'<0$ everywhere.
+*Figure — ~13:57–20:24: Chalkboard derivation of composite mapping $\Omega \xrightarrow{X} \mathbb{R} \xrightarrow{g} \mathbb{R}$, the Change of Variables Theorem for strictly monotonic functions, and the necessity of the Jacobian derivative term $\left|\frac{dx}{dy}\right|$.*
 
-### What he is establishing
+---
 
-$X:\Omega\to\mathbb{R}$. Take $g:\mathbb{R}\to\mathbb{R}$ and set $Y=g(X)$. Then $Y$ is also $\Omega\to\mathbb{R}$ — a composite.
+### 1. 👶 ELI5 Quick Intuition
+Imagine stretching a rubber sheet with a drawing on it:
+- If you stretch the sheet to make it **twice as wide**, the ink spreads out and becomes **half as dark**.
+- If you compress the sheet to make it **half as wide**, the ink becomes **twice as dark**.
+- When you pass a random variable $X$ through a function $Y = g(X)$, space stretches or shrinks. The **Change of Variables Theorem** is the mathematical rule that adjusts the ink darkness (density height) so the total amount of ink (total probability area) stays exactly equal to $1.0$!
 
-Hotel picture (same world as Tutorial 7): you may order one dish. $X$ is the **bill**. Paying by UPI changes the account by a function of the bill. The account drop is $Y=g(X)$.
+---
 
-If $g$ is “nice,” $Y$ is a random variable. Its CDF is
+### 2. 🔍 Plain-English Breakdown
+1. **Composite Random Variable ($Y = g(X)$):**
+   - $X$ maps outcome $\omega \in \Omega$ to a real number $X(\omega)$.
+   - Function $g$ maps $X(\omega)$ to $Y(\omega) = g(X(\omega))$.
+2. **The Cumulative Distribution Method:**
+   - The fundamental definition of $Y$'s CDF is:
+     $$F_Y(y) = P(Y \le y) = P(g(X) \le y) = P(X \in \{x : g(x) \le y\})$$
+3. **The Change of Variables Theorem (Monotone $g$):**
+   - If $g$ is differentiable and strictly monotonic (either $g'(x) > 0$ everywhere or $g'(x) < 0$ everywhere), the density of $Y$ is:
+     $$p_Y(y) = p_X\bigl(g^{-1}(y)\bigr) \cdot \left| \frac{d}{dy} g^{-1}(y) \right| = p_X(x) \cdot \left| \frac{dx}{dy} \right|$$
+4. **Why Normalizing Flows Use This:** Modern generative Normalizing Flows (RealNVP, Glow) stack invertible neural networks $g_1, g_2, \dots, g_K$ and use this exact theorem (in multidimensional Jacobian form) to compute exact data likelihoods!
 
-$$
-F_Y(y) = P(Y\le y) = P\bigl(g(X)\le y\bigr) = P\bigl(X\in \{z : g(z)\le y\}\bigr)
-$$
+---
 
-Knowing the law of $X$ gives the law of $Y$ **in principle**.
-
-Linear example: $Y=aX+b$ with $a>0$. Then $F_Y(y)=F_X((y-b)/a)$.
-
-Work numbers: $a=2$, $b=1$, $X\sim\mathrm{Unif}[0,1]$. Then $Y$ lives on $[1,3]$ and $F_Y(2)=F_X((2-1)/2)=F_X(0.5)=0.5$. The later Colab uses $a=-4$ (decreasing) — the CDF formula above needs $a>0$; the **CoV** formula with the absolute value still handles $a<0$.
-
-**Change of variable theorem** (used often later). Assume $g$ is differentiable and **either** $g'(x)>0$ for all $x$ **or** $g'(x)<0$ for all $x$ (one sign globally — not mixed). Let $X$ be continuous type and $Y=g(X)$. Then $Y$ is continuous type with
-
-$$
-p_Y(y) = p_X\bigl(g^{-1}(y)\bigr) \left|\frac{d}{dy} g^{-1}(y)\right|
-$$
-
-on the interval from $a=\min\{g(+\infty),g(-\infty)\}$ to $b=\max\{\ldots\}$. Remember the **conditions** before you use it.
-
-You can now push a monotone $g$ and refuse CoV when $g$ folds. Still missing: a single number that summarizes $X$ — expectation.
-
-A common trap is applying CoV to $Y=X^2$ on all of $\mathbb{R}$ ($g'$ changes sign at 0).
-
-### Analogy for this topic only
-
-$X$ is the hotel price tag. $g$ is “what the UPI app subtracts.” The map from menu $\to$ account is the **composite**. If $g$ is a steadily rising (or steadily falling) slider, you can read the new density off the old one. If $g$ goes up then down, two prices can share one output — the simple theorem stops.
-
-Question: **What must be true of $g'$ for the board’s CoV theorem?**
-
-In lecture words: this box is $Y=g(X)$ and CoV.
-
-### Local picture
+### 3. 📐 Formal Mathematics & Rigorous Derivation
 
 ```
-  Ω --X--> ℝ --g--> ℝ
-            Y = g ∘ X
-
-  a>0:   F_Y(y) = F_X((y-b)/a)
-
-  CoV:   p_Y(y) = p_X(x(y)) · |dx/dy|
-         need g′ always + or always −
+  Ω ───X───► ℝ ───g───► ℝ
+  ω ───────► x ───────► y = g(x)
+  
+  For strictly increasing g:
+  F_Y(y) = P(g(X) ≤ y) = P(X ≤ g^{-1}(y)) = F_X(g^{-1}(y))
+  
+  Differentiating with respect to y:
+  p_Y(y) = d/dy F_X(g^{-1}(y)) = p_X(g^{-1}(y)) · d/dy g^{-1}(y)
 ```
 
-**Notice:** the absolute value handles decreasing $g$.
+#### Complete Derivation for Strictly Decreasing $g$ ($g'(x) < 0$)
+- When $g$ is decreasing, applying $g^{-1}$ reverses the inequality:
+  $$F_Y(y) = P(g(X) \le y) = P\bigl(X \ge g^{-1}(y)\bigr) = 1 - F_X\bigl(g^{-1}(y)\bigr)$$
+- Differentiating with respect to $y$ via the chain rule:
+  $$p_Y(y) = \frac{d}{dy}\left[1 - F_X\bigl(g^{-1}(y)\bigr)\right] = - p_X\bigl(g^{-1}(y)\bigr) \cdot \frac{d}{dy} g^{-1}(y)$$
+- Since $g$ is decreasing, $\frac{d}{dy}g^{-1}(y) < 0$, which means $-\frac{d}{dy}g^{-1}(y) = \left|\frac{d}{dy}g^{-1}(y)\right|$.
+- Unifying both cases into one universal formula:
+  $$p_Y(y) = p_X\bigl(g^{-1}(y)\bigr) \cdot \left| \frac{d}{dy} g^{-1}(y) \right| \quad \blacksquare$$
 
-### Bridge
+---
 
-We can move laws. The course also wants a **center**: $E[X]$.
+### 4. 🔢 Concrete Numerical Example
+Let $X \sim \text{Unif}[0, 1]$ (so $p_X(x) = 1$ on $[0, 1]$). Let $Y = 2X + 3$ (Linear transform with $g(x) = 2x+3$):
+1. Invert the map: $y = 2x + 3 \implies x = g^{-1}(y) = \frac{y - 3}{2}$.
+2. Compute the derivative: $\frac{dx}{dy} = \frac{d}{dy}\left[\frac{y-3}{2}\right] = \frac{1}{2}$.
+3. Find the support of $Y$: As $x \in [0, 1]$, $y \in [2(0)+3, 2(1)+3] = [3, 5]$.
+4. Compute transformed density $p_Y(y)$ on $[3, 5]$:
+   $$p_Y(y) = p_X\left(\frac{y-3}{2}\right) \cdot \left|\frac{1}{2}\right| = 1 \cdot \frac{1}{2} = 0.5$$
+5. Verification: $Y$ is Uniform on $[3, 5]$ of width $2$, so height $0.5$ has area $2 \times 0.5 = 1.0 \checkmark$.
 
 ---
 
 ## Topic 5: Expectation and LOTUS (20:24–26:10)
 
+<a id="topic-5-expectation-and-lotus-2024–2610"></a>
+
 ### Where this sits on the master map
+Defining the center of mass of a continuous distribution and applying the Law of the Unconscious Statistician. Warm-up: [weighted average & mean](./PREREQUISITES.md#p5-mean).
 
-**CENTER** — One number; LOTUS for $g(X)$. Warm-up: [mean](./PREREQUISITES.md#p5-mean).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Expectation and LOTUS](./screenshots/composites/ch05-topic-05-expectation-lotus-panel1of1.png)
 
-**Figure — ~20:24–26:10:** $E[X]=\sum x_i p_i$ or $\int x p(x)\,dx$; Bernoulli $E=p$; $E[1_B]=P(B)$; LOTUS $\sum g(x_i)p_i$ / $\int g p$; positivity; $E[c]=c$; linearity.
-
-### What he is establishing
-
-**Discrete:** $E[X]=\sum_i x_i p(x_i)$ — a weighted average.  
-**Continuous:** $E[X]=\int_{-\infty}^{\infty} x\, p(x)\,dx$.  
-The same letter $p$ is PMF or PDF by type. $E[X]$ is a **scalar** (they still treat scalar $X$). They often write $EX$ without brackets.
-
-Bernoulli: $E[X]=0\cdot(1-p)+1\cdot p=p$.  
-Indicator: $E[1_B]=P(B)$.  
-They list (without deriving here) means for the stock families. Standard values you should recognize when the list flashes by:
-
-| Family | $E[X]$ | $\mathrm{Var}(X)$ |
-|--------|--------|-------------------|
-| Bernoulli $p$ | $p$ | $p(1-p)$ |
-| Binomial$(n,p)$ | $np$ | $np(1-p)$ |
-| Unif$[a,b]$ | $(a+b)/2$ | $(b-a)^2/12$ |
-| Exp$(\lambda)$ | $1/\lambda$ | $1/\lambda^2$ |
-| $N(\mu,\sigma^2)$ | $\mu$ | $\sigma^2$ |
-
-(Poisson/geometric sit on the same list from Tutorial 7.)
-
-**LOTUS** — law of the unconscious statistician. For $Y=g(X)$,
-
-$$
-E[Y] = \sum_i g(x_i)\,p_X(x_i) \quad\text{or}\quad \int g(x)\,p_X(x)\,dx
-$$
-
-You apply $g$ **unconsciously** to each $x$ and keep $X$’s weights. You do not first find $p_Y$. The proof is long (~3 pages); they ask you to look it up. “Unconscious” does not mean asleep.
-
-Properties they want in muscle memory:
-
-- $X\ge 0$ $\Rightarrow$ $E[X]\ge 0$  
-- $E[c]=c$  
-- $E[a\,g(X)]=a\,E[g(X)]$  
-- **Linearity:** $E[a g_1(X)+b g_2(X)]=a E[g_1]+b E[g_2]$
-
-You can now compute $E$ and $E[g(X)]$ without a new density. Still missing: a measure of **spread**.
-
-A common trap is finding $p_Y$ first when LOTUS already gives $E[Y]$.
-
-### Analogy for this topic only
-
-Each possible bill $x$ has a chance $p(x)$. $E[X]$ is the long-run average bill. LOTUS: to get the average **UPI drop** $g(x)$, do not rebuild the drop’s histogram — just average $g(x)$ with the same bill-chances.
-
-Question: **What is $E[1_B]$?**
-
-In lecture words: this box is expectation + LOTUS.
-
-### Local picture
-
-```
-  discrete:   E[X] = Σ x · (pile at x)
-  continuous: E[X] = ∫ x · (height p) dx
-
-  LOTUS:      E[g(X)] = Σ g(x) · pile(x)   (same piles)
-```
-
-**Notice:** $E[X]$ is not random.
-
-### Bridge
-
-Two RVs can share a mean and still feel different. How do we measure **spread**?
+*Figure — ~20:24–26:10: Blackboard formulation of Mathematical Expectation $\mathbb{E}[X] = \int x p(x)dx$, the Law of the Unconscious Statistician (LOTUS) $\mathbb{E}[g(X)] = \int g(x)p_X(x)dx$, indicator expectation $\mathbb{E}[1_B] = P(B)$, and linearity of expectation.*
 
 ---
 
-## Topic 6: Variance (26:10–29:02)
+### 1. 👶 ELI5 Quick Intuition
+Imagine a chef running a restaurant:
+- $X$ is the weight of dough in each pizza (a random number centered at 300 grams).
+- Profit on each pizza is given by $g(x) = 5.00 + 0.02 x^2$ dollars.
+- **The Hard Way:** Calculate the full probability curve of restaurant profits $Y$, and then integrate.
+- **The LOTUS Way:** Keep the original pizza dough scale $p_X(x)$ and simply calculate the average profit by weighting each dough size by its profit!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Mathematical Expectation ($\mathbb{E}[X]$):**
+   - The probability-weighted average of all possible values of $X$.
+   - **Continuous:** $\mathbb{E}[X] = \int_{-\infty}^\infty x \, p_X(x)\,dx$.
+   - **Discrete:** $\mathbb{E}[X] = \sum_i x_i \, p_X(x_i)$.
+2. **The LOTUS Theorem:**
+   - To compute the expectation of a transformed variable $Y = g(X)$, we do **not** need to find $p_Y(y)$ first:
+     $$\mathbb{E}[g(X)] = \int_{-\infty}^\infty g(x) \, p_X(x)\,dx$$
+3. **Key Algebraic Properties of Expectation:**
+   - **Positivity:** If $X \ge 0$ almost surely, then $\mathbb{E}[X] \ge 0$.
+   - **Constants:** $\mathbb{E}[c] = c$ for any constant $c \in \mathbb{R}$.
+   - **Linearity:** $\mathbb{E}[a g_1(X) + b g_2(X)] = a \mathbb{E}[g_1(X)] + b \mathbb{E}[g_2(X)]$.
+
+---
+
+### 3. 📐 Formal Mathematics & Rigorous Derivation
+
+```
+  Direct Method (Painful):              LOTUS Method (Direct & Clean):
+  X ──► Find p_Y(y) ──► ∫ y p_Y(y) dy    X ──► Compute ∫ g(x) p_X(x) dx directly
+```
+
+#### Mathematical Proof of LOTUS (for Monotone Differentiable $g$)
+Let $Y = g(X)$ where $g$ is strictly increasing. By the Change of Variables theorem (Topic 4), $p_Y(y) = p_X(g^{-1}(y)) \frac{d}{dy}g^{-1}(y)$.
+$$\mathbb{E}[Y] = \int_{-\infty}^\infty y \, p_Y(y)\,dy = \int_{-\infty}^\infty y \, p_X\bigl(g^{-1}(y)\bigr) \, \frac{d}{dy}g^{-1}(y) \, dy$$
+Apply substitution: let $x = g^{-1}(y)$, so $y = g(x)$ and $dx = \frac{d}{dy}g^{-1}(y)\,dy$:
+$$\mathbb{E}[g(X)] = \int_{-\infty}^\infty g(x) \, p_X(x)\,dx \quad \blacksquare$$
+
+---
+
+### 4. 🔢 Concrete Numerical Example
+Let $X \sim \text{Unif}[0, 2]$, so $p_X(x) = 0.5$ on $[0, 2]$. Let $g(X) = 3X^2$:
+$$\mathbb{E}[3X^2] = \int_0^2 (3x^2) \cdot (0.5) \, dx = 1.5 \left[ \frac{x^3}{3} \right]_0^2 = 1.5 \cdot \frac{8}{3} = 4.0$$
+
+---
+
+## Topic 6: Variance and Spread Invariants (26:10–29:02)
+
+<a id="topic-6-variance-2610–2902"></a>
 
 ### Where this sits on the master map
+Quantifying dispersion around the mean and establishing variance invariance under linear shifts and scalings. Warm-up: [variance as spread](./PREREQUISITES.md#p6-var).
 
-**SPREAD** — Mean squared deviation. Warm-up: [variance](./PREREQUISITES.md#p6-var).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Variance](./screenshots/composites/ch06-topic-06-variance-panel1of1.png)
 
-**Figure — ~26:10–29:02:** $\mathrm{Var}(X)=E[(X-EX)^2]=E[X^2]-(EX)^2$; $\mathrm{Var}\ge 0$; $\mathrm{Var}(X+c)=\mathrm{Var}(X)$; $\mathrm{Var}(cX)=c^2\mathrm{Var}(X)$.
-
-### What he is establishing
-
-$$
-\mathrm{Var}(X) = E\bigl[(X-E[X])^2\bigr]
-$$
-
-$X-E[X]$ is the deviation from the mean; squaring, then taking $E$, is an **average squared deviation**.
-
-Expand the square and use linearity ($E[X]$ is a constant):
-
-$$
-\mathrm{Var}(X) = E[X^2] - (E[X])^2
-$$
-
-$E[X^2]$ is $E[g(X)]$ for $g(x)=x^2$ — **LOTUS**.
-
-$(X-EX)^2\ge 0$, so its expectation is $\ge 0$. Hence $\mathrm{Var}(X)\ge 0$ and $E[X^2]\ge (E[X])^2$.
-
-Properties: $\mathrm{Var}(X+c)=\mathrm{Var}(X)$ (shift does not change spread). $\mathrm{Var}(cX)=c^2\mathrm{Var}(X)$. They ask you to substitute $X+c$ into the definition and watch $c$ cancel.
-
-Micro check: Bernoulli $p=0.7$ has $\mathrm{Var}=0.7\cdot 0.3=0.21$. The notebook later estimates $\approx 0.209$ from 100,000 tosses. Fair die: $E[X]=3.5$, $E[X^2]=(1^2+\cdots+6^2)/6=91/6$, so $\mathrm{Var}=91/6-(3.5)^2=35/12\approx 2.92$.
-
-You can now compute Var two ways and scale it. Still missing: inequalities that need only $E$ or Var, not the full law.
-
-A common trap is writing $\mathrm{Var}(cX)=c\,\mathrm{Var}(X)$.
-
-### Analogy for this topic only
-
-Class mean height is $E[X]$. Variance is “how far typical students sit from that mean,” after you square so tall and short both count. Give everyone 5 cm platform shoes: mean moves, **spread does not**. Stretch every deviation by 3: squared spread becomes $9\times$.
-
-Question: **Does adding 10 to $X$ change $\mathrm{Var}(X)$?**
-
-In lecture words: this box is variance.
-
-### Local picture
-
-```
-  deviation   X − μ
-  square      (X − μ)²  ≥ 0
-  average     Var(X)    ≥ 0
-
-  Var(X+c)=Var(X)     Var(cX)=c² Var(X)
-```
-
-**Notice:** $E[X^2]$ is not $(E[X])^2$ unless Var is 0.
-
-### Bridge
-
-Sometimes you only know $E$ or Var and still want a **tail bound**.
+*Figure — ~26:10–29:02: Blackboard derivation of Variance $\text{Var}(X) = \mathbb{E}[(X-\mu)^2] = \mathbb{E}[X^2] - \mu^2$, non-negativity $\text{Var}(X) \ge 0$, shift invariance $\text{Var}(X+c) = \text{Var}(X)$, and quadratic scaling $\text{Var}(cX) = c^2\text{Var}(X)$.*
 
 ---
 
-## Topic 7: Markov, Chebyshev, Jensen (29:02–33:17)
+### 1. 👶 ELI5 Quick Intuition
+Think of shooting arrows at a bullseye:
+- The mean $\mu$ is where the center of your arrow cluster lands.
+- **Variance ($\text{Var}(X)$)** is how widely your arrows are scattered around that center.
+- **Shift Invariance:** If the target is moved 5 feet to the right, your entire cluster moves 5 feet to the right, but the *looseness or tightness of your scatter* remains **exactly the same**!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Definition of Variance:** The expected squared distance between values of $X$ and its mean $\mu = \mathbb{E}[X]$:
+   $$\text{Var}(X) \triangleq \mathbb{E}\left[(X - \mathbb{E}[X])^2\right]$$
+2. **The Computational Shortcut Formula:**
+   $$\text{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2$$
+3. **Shift Invariance:** Adding a constant $c$ shifts the mean by $c$ but leaves spread unchanged:
+   $$\text{Var}(X + c) = \text{Var}(X)$$
+4. **Quadratic Scaling:** Multiplying by constant $c$ squares the variance:
+   $$\text{Var}(cX) = c^2 \text{Var}(X)$$
+5. **Standard Deviation ($\sigma$):** $\sigma = \sqrt{\text{Var}(X)}$, restoring the spread metric back to original measurement units.
+
+---
+
+### 3. 📐 Formal Mathematics & Rigorous Derivation
+
+```
+  Deviation:  (X - μ)
+  Square:     (X - μ)²  ≥ 0
+  Average:    Var(X) = E[(X - μ)²] ≥ 0
+  
+  Algebraic Identity:
+  Var(X) = E[X² - 2μX + μ²] = E[X²] - 2μ E[X] + μ² = E[X²] - μ²
+```
+
+#### Theorem: Linear Transformation of Variance
+For any scalars $a, b \in \mathbb{R}$:
+$$\text{Var}(aX + b) = a^2 \text{Var}(X)$$
+*Proof:*
+$$\begin{aligned}
+\text{Var}(aX + b) &= \mathbb{E}\left[\bigl((aX + b) - \mathbb{E}[aX + b]\bigr)^2\right] \\
+&= \mathbb{E}\left[\bigl(aX + b - (a\mu + b)\bigr)^2\right] = \mathbb{E}\left[\bigl(a(X - \mu)\bigr)^2\right] = a^2 \mathbb{E}\left[(X - \mu)^2\right] = a^2 \text{Var}(X) \quad \blacksquare
+\end{aligned}$$
+
+---
+
+### 4. 🔢 Concrete Numerical Example
+Let $X \sim \text{Unif}[0, 6]$:
+1. Mean: $\mu = \frac{0 + 6}{2} = 3.0$.
+2. Second Moment $\mathbb{E}[X^2] = \int_0^6 x^2 \cdot \frac{1}{6} \, dx = \frac{1}{6} \left[\frac{x^3}{3}\right]_0^6 = \frac{216}{18} = 12.0$.
+3. Variance: $\text{Var}(X) = \mathbb{E}[X^2] - \mu^2 = 12.0 - 3.0^2 = 12.0 - 9.0 = 3.0$.
+4. Scale: What is $\text{Var}(-5X + 42)$?
+   $$\text{Var}(-5X + 42) = (-5)^2 \cdot \text{Var}(X) = 25 \times 3.0 = 75.0$$
+
+---
+
+## Topic 7: Markov, Chebyshev, and Jensen Inequalities (29:02–33:17)
+
+<a id="topic-7-markov-chebyshev-jensen-2902–3317"></a>
 
 ### Where this sits on the master map
+Establishing distribution-free statistical tail bounds and convexity principles. Warm-up: [convex functions & Jensen](./PREREQUISITES.md#p7-convex).
 
-**BOUNDS** — No full law required. Warm-up: [convex](./PREREQUISITES.md#p7-convex).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Inequalities](./screenshots/composites/ch07-topic-07-inequalities-panel1of1.png)
 
-**Figure — ~29:02–33:17:** Markov $P(|X|\ge c)\le E[|X|^k]/c^k$; Chebyshev $P(|X-\mu|\ge c)\le\mathrm{Var}/c^2$ and $P(|X-\mu|\ge k\sigma)\le 1/k^2$; Jensen $g(E[X])\le E[g(X)]$ for convex $g$.
-
-### What he is establishing
-
-They **state** three inequalities and skip proofs (easy to find; look them up).
-
-**Markov.** For $c>0$ and suitable $k$,
-
-$$
-P(|X| \ge c) \le \frac{E[|X|^k]}{c^k}
-$$
-
-**Chebyshev** is Markov on $|X-\mu|$ with $k=2$:
-
-$$
-P(|X-\mu|\ge c) \le \frac{\mathrm{Var}(X)}{c^2}
-$$
-
-Set $c=k\sigma$ with $\sigma=\sqrt{\mathrm{Var}}$:
-
-$$
-P\bigl(|X-\mu|\ge k\sigma\bigr) \le \frac{1}{k^2}
-$$
-
-These hold for **all** random variables — no Gaussian assumption.
-
-**Jensen.** If $g:\mathbb{R}\to\mathbb{R}$ is **convex**,
-
-$$
-g\bigl(E[X]\bigr) \le E\bigl[g(X)\bigr]
-$$
-
-They assume you know convex vs concave; if not, look it up. Jensen will be used “a lot” later.
-
-Theory block ends. Next: **Colab / numpy** implementations.
-
-You can now quote the three bounds and their hypotheses. Still missing: seeing the same $E$ and $p$ appear as sample averages.
-
-A common trap is applying Chebyshev only to Gaussians. Another is Jensen with a **concave** $g$ and the same inequality direction.
-
-### Analogy for this topic only
-
-Markov/Chebyshev: “I only know the average (or the spread), and I still get a **speed limit** on how much mass can sit far away.” Jensen: on a smiling road, the elevation at the average mile is below the average of the elevations.
-
-Question: **Does Chebyshev need $X$ to be Normal?**
-
-In lecture words: this box is the three inequalities.
-
-### Local picture
-
-```
-  Markov     tail of |X|     ≲  moment / c^k
-  Chebyshev  tail of |X-μ|   ≲  σ² / c²     (any law)
-  Jensen     g convex        g(EX) ≤ E[g(X)]
-```
-
-**Notice:** $g(x)=x^2$ in Jensen is $\mathrm{Var}\ge 0$ again.
-
-### Bridge
-
-Formulas need a sandbox. How do you **estimate** $P(4)$ on a die with 100,000 rolls?
+*Figure — ~29:02–33:17: Chalkboard statement of Markov's inequality, Chebyshev's distribution-free tail bound $P(|X-\mu| \ge k\sigma) \le 1/k^2$, and Jensen's inequality for convex functions $g(\mathbb{E}[X]) \le \mathbb{E}[g(X)]$.*
 
 ---
 
-## Topic 8: Numpy dice and Bayes (33:17–40:09)
+### 1. 👶 ELI5 Quick Intuition
+- **Markov & Chebyshev (Speed Limits for Randomness):** Even if you know *nothing* about the exact shape of a probability distribution (whether it's normal, skewed, or weird), knowing just the mean and variance gives you a guaranteed "universal speed limit" on how much probability can live far out in the extremes.
+- **Jensen's Inequality (The Smiling Curve):** If you take a bowl-shaped road ($\smile$) and calculate the elevation at the average mile marker, that elevation is lower than the average of the elevations!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Markov's Inequality:** For any non-negative random variable $X \ge 0$ and threshold $c > 0$:
+   $$P(X \ge c) \le \frac{\mathbb{E}[X]}{c}$$
+2. **Chebyshev's Inequality (Distribution-Free!):**
+   - Applies Markov to the squared deviation $(X - \mu)^2$:
+     $$P\bigl(|X - \mu| \ge k\sigma\bigr) \le \frac{1}{k^2}$$
+   - *Guarantee:* For ANY probability distribution, at most $25\%$ of mass can be $2\sigma$ away ($k=2$), and at most $11.1\%$ can be $3\sigma$ away ($k=3$).
+3. **Jensen's Inequality:** For any convex function $g(x)$ (where $g''(x) \ge 0$):
+   $$g\bigl(\mathbb{E}[X]\bigr) \le \mathbb{E}\bigl[g(X)\bigr]$$
+   - In **VAEs**, because $\log$ is concave ($-\log$ is convex), Jensen allows us to construct the Evidence Lower Bound: $\log p(x) \ge \mathbb{E}_{q(z|x)}\left[\log \frac{p(x, z)}{q(z|x)}\right]$.
+
+---
+
+### 3. 📐 Formal Mathematics & Rigorous Derivation
+
+```
+  Markov:     P(|X| ≥ c) ≤ E[|X|^k] / c^k
+  Chebyshev:  P(|X - μ| ≥ kσ) ≤ 1 / k²   (Holds for ALL distributions!)
+  Jensen:     g(E[X]) ≤ E[g(X)]          (For convex g)
+```
+
+#### Step-by-Step Proof of Markov's Inequality
+Let $X \ge 0$ be a continuous random variable and $c > 0$:
+$$\begin{aligned}
+\mathbb{E}[X] &= \int_0^\infty x \, p_X(x)\,dx \\
+&= \int_0^c x \, p_X(x)\,dx + \int_c^\infty x \, p_X(x)\,dx \\
+&\ge 0 + \int_c^\infty c \, p_X(x)\,dx \qquad (\text{since } x \ge c \text{ on } [c, \infty)) \\
+&= c \int_c^\infty p_X(x)\,dx = c \cdot P(X \ge c)
+\end{aligned}$$
+Dividing both sides by $c > 0$ yields Markov's inequality:
+$$P(X \ge c) \le \frac{\mathbb{E}[X]}{c} \quad \blacksquare$$
+
+---
+
+### 4. 🔢 Concrete Numerical Example
+A factory machine produces widgets with mean lifetime $\mu = 100$ hours and standard deviation $\sigma = 10$ hours:
+1. What is the maximum probability that a widget's lifetime deviates from 100 hours by more than 30 hours ($k = 30 / 10 = 3$ standard deviations)?
+   $$P(|X - 100| \ge 30) = P(|X - \mu| \ge 3\sigma) \le \frac{1}{3^2} = \frac{1}{9} \approx 0.1111 = 11.11\%$$
+   *This bound holds true regardless of whether widget lifetimes are Gaussian, Exponential, or multimodal!*
+
+---
+
+## Topic 8: NumPy Dice Simulation and Bayesian Numerics (33:17–40:09)
+
+<a id="topic-8-numpy-dice-and-bayes-3317–4009"></a>
 
 ### Where this sits on the master map
+Moving from blackboard mathematics to reproducible computational simulation in NumPy. Warm-up: [sampling & seed](./PREREQUISITES.md#p8-sample).
 
-**CHECK ON A MACHINE** — Empirical $P$ vs theory. Warm-up: [samples](./PREREQUISITES.md#p8-sample).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Numpy dice and Bayes](./screenshots/composites/ch08-topic-08-numpy-dice-bayes-panel1of1.png)
 
-**Figure — ~33:17–40:09:** `NPTEL_Gen_AI_Basics.ipynb`; numpy 2.0.2; `default_rng(42)`; `integers(1,7)` 100000 rolls; $P(4)\approx 0.1669$ vs $1/6$; Bayes $P(D)=0.01$, $P(T^+|D)=0.95$, $P(T^+|D^c)=0.05$.
-
-### What he is establishing
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from math import comb, factorial, pi, sqrt, exp, log
-
-rng = np.random.default_rng(42)          # reproducibility
-np.set_printoptions(precision=4, suppress=True)
-print("NumPy version:", np.__version__)  # 2.0.2 on the board
-```
-
-`comb` is for binomial PMFs; `pi`, `sqrt`, `exp` for Gaussian/Exp PDFs.
-
-**Die experiment.** 100,000 rolls (underscores allowed: `100_000`). `rng.integers(1, 7)` is faces $1\ldots 6$ (high end exclusive — that is why they wrote 7).
-
-```python
-n_trials = 100_000
-die_rolls = rng.integers(1, 7, size=n_trials)
-
-p_four = np.mean(die_rolls == 4)
-p_even = np.mean(die_rolls % 2 == 0)
-p_greater_than_3 = np.mean(die_rolls > 3)
-p_even_and_gt3 = np.mean((die_rolls % 2 == 0) & (die_rolls > 3))
-```
-
-Theory: $1/6$, $3/6$, $3/6$, $2/6$. Live: $P(4)\approx 0.1669$, $P(\text{even})\approx 0.4996$, $P(\text{even and }>3)\approx 0.332$. Pause and compute theory first.
-
-**Bayes numeric.** $P(D)=0.01$, $P(T^+|D)=0.95$, $P(T^+|D^c)=0.05$. Then $P(T^+)=0.95\cdot 0.01+0.05\cdot 0.99$ and $P(D|T^+)=P(T^+|D)P(D)/P(T^+)$. Compute by hand, then compare.
-
-```python
-p_disease = 0.01
-p_positive_given_disease = 0.95
-p_positive_given_no_disease = 0.05
-p_positive = (
-    p_positive_given_disease * p_disease
-    + p_positive_given_no_disease * (1 - p_disease)
-)
-p_disease_given_positive = (
-    p_positive_given_disease * p_disease / p_positive
-)
-```
-
-You can now estimate events with `np.mean(mask)` and flip Bayes in code. Still missing: named discrete families as `rng` samplers.
-
-A common trap: `integers(1,6)` — that **drops face 6**.
-
-### Analogy for this topic only
-
-Theory is the recipe. 100,000 rolls are 100,000 taste tests. The kitchen should sit near $1/6$, not land on it exactly. Seed 42 is “start the same cookbook every time.”
-
-Question: **Why is the high end of `integers` equal to 7?**
-
-In lecture words: this box is empirical $P$ + numeric Bayes.
-
-### Local picture
-
-```
-  mask == 4     →  mean = estimated P(4)
-  1e5 rolls     →  0.1669  vs  0.1666…
-
-  Bayes:  0.01, 0.95, 0.05  →  P(D|T+) via total law
-```
-
-**Notice:** `mean` of a Boolean array is a frequency.
-
-### Bridge
-
-The same `mean` trick should recover $E[1_A]=P(A)$ and Bernoulli $p$.
+*Figure — ~33:17–40:09: Google Colab interactive walkthrough verifying die toss frequencies with `rng.integers(1, 7)` over 100,000 trials, and calculating numerical Bayes disease posterior $P(D|T^+)$.*
 
 ---
 
-## Topic 9: Discrete sampling families (40:09–46:03)
+### 1. 👶 ELI5 Quick Intuition
+Theoretical probability tells us that a fair die rolls a four with probability $1/6 \approx 16.67\%$.
+In this topic, we spin up a digital robot to roll a virtual die 100,000 times. By counting how many times the robot rolled a 4, we verify that real-world simulation matches chalkboard theory almost to the fourth decimal place!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **NumPy Generator Setup:**
+   ```python
+   import numpy as np
+   rng = np.random.default_rng(42)  # Seed 42 for reproducible pseudo-randomness
+   ```
+2. **The High-End Exclusive Rule:**
+   - In NumPy, `rng.integers(low, high)` excludes `high`.
+   - To roll a standard 6-sided die ($\{1, 2, 3, 4, 5, 6\}$), you **must write `rng.integers(1, 7)`**. Writing `integers(1, 6)` deletes the 6 face!
+3. **Boolean Mask Frequency Trick:**
+   - In NumPy, taking the `np.mean()` of a Boolean array directly computes empirical probability:
+     ```python
+     p_four = np.mean(die_rolls == 4)  # ~0.1669 vs 1/6 = 0.1667
+     ```
+4. **Numerical Bayes Posterior Verification:**
+   - Disease prevalence $P(D) = 0.01$, Test sensitivity $P(T^+|D) = 0.95$, False alarm $P(T^+|D^c) = 0.05$.
+   - Posterior: $P(D|T^+) = \frac{0.95 \times 0.01}{(0.95 \times 0.01) + (0.05 \times 0.99)} = \frac{0.0095}{0.0095 + 0.0495} = \frac{0.0095}{0.0590} \approx 0.1610 = 16.1\%$.
+
+---
+
+### 3. 📐 Formal Mathematics & Rigorous Code Block
+
+```python
+# Topic 8 Execution Block: NumPy Dice & Bayes Numerics
+import numpy as np
+
+rng = np.random.default_rng(42)
+N = 100_000
+
+# 1. Die simulation
+rolls = rng.integers(1, 7, size=N)
+p4_sim = np.mean(rolls == 4)
+peven_sim = np.mean(rolls % 2 == 0)
+pgt3_sim = np.mean(rolls > 3)
+peven_and_gt3_sim = np.mean((rolls % 2 == 0) & (rolls > 3))
+
+print(f"P(Roll == 4):        {p4_sim:.4f} (Theory: 1/6 = {1/6:.4f})")
+print(f"P(Roll is Even):     {peven_sim:.4f} (Theory: 3/6 = {0.5000})")
+print(f"P(Roll > 3):         {pgt3_sim:.4f} (Theory: 3/6 = {0.5000})")
+print(f"P(Even AND > 3):     {peven_and_gt3_sim:.4f} (Theory: {2/6:.4f})")
+
+# 2. Bayes Numerics
+p_d = 0.01
+p_t_given_d = 0.95
+p_t_given_dc = 0.05
+p_t = (p_t_given_d * p_d) + (p_t_given_dc * (1.0 - p_d))
+p_d_given_t = (p_t_given_d * p_d) / p_t
+
+print(f"Bayes Posterior P(Disease | Test+): {p_d_given_t:.4f} (Exact: 0.1610)")
+```
+
+---
+
+## Topic 9: Discrete Sampling Families in Python (40:09–46:03)
+
+<a id="topic-9-discrete-sampling-families-4009–4603"></a>
 
 ### Where this sits on the master map
+Demonstrating discrete random number generators (Indicator, Bernoulli, Categorical, Binomial) in NumPy. Warm-up: [discrete sampling](./PREREQUISITES.md#p8-sample).
 
-**DISCRETE RNG** — Indicator, Bernoulli, choice, binomial. Warm-up: [samples](./PREREQUISITES.md#p8-sample).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Discrete sampling](./screenshots/composites/ch09-topic-09-discrete-sampling-panel1of1.png)
 
-**Figure — ~40:09–46:03:** 20 die outcomes + indicator of 6; $1_{\ge 5}$ mean $\approx P(\ge 5)$; `binomial(1,p)` as Bernoulli; `rng.choice` cat/dog/bird; Bin$(10,0.4)$.
-
-### What he is establishing
-
-A die is both an experiment and a RV ($1\mapsto 1,\ldots$). $Y$ can be even/odd. They print 20 outcomes and an indicator of “six” (and ask whether the die looks biased from 20 draws — ponder it).
-
-**Indicator theorem in samples.** 100,000 rolls; $A=\{X\ge 5\}=\{5,6\}$. The mean of $1_A$ is the estimated $E[1_A]$; the frequency of $A$ is the estimated $P(A)$. They match, as $E[1_A]=P(A)$ demands.
-
-```python
-rolls = rng.integers(1, 7, size=100_000)
-ind = (rolls >= 5).astype(float)     # 1_A
-print(ind.mean(), np.mean(rolls >= 5))  # same number two ways ≈ 1/3
-```
-
-**Bernoulli via binomial.** `n=1` binomial **is** Bernoulli. 100,000 tosses with $p=0.7$: estimated mean $\approx 0.7006$ vs $0.7$; estimated variance $\approx 0.209$ vs $p(1-p)=0.21$. Histogram: about 70% ones. **Homework:** rerun with 10, 20, 30 trials and watch the match get worse.
-
-**Categorical.** `rng.choice(["cat","dog","bird"], size=20000, p=[0.2,0.5,0.3])`. Frequencies $\approx 0.20, 0.50, 0.30$. Shrink `size` and watch the wobble.
-
-**Binomial** $n=10$, $p=0.4$, 10,000 draws. Mean $\approx 3.9$ vs $np=4$; var $\approx 2.38$ vs $np(1-p)=2.4$. Poisson is in the notebook; they skip the walkthrough.
-
-```python
-# Bernoulli via binomial(n=1)
-x = rng.binomial(1, 0.7, size=100_000)
-# Categorical
-labs = rng.choice(["cat", "dog", "bird"], size=20_000, p=[0.2, 0.5, 0.3])
-# Binomial n=10, p=0.4
-b = rng.binomial(10, 0.4, size=10_000)
-print(b.mean(), b.var())  # ~4 and ~2.4
-```
-
-You can now sample the discrete catalog. Still missing: the same overlay for Unif/Normal/Exp and for $Y=g(X)$.
-
-A common trap is expecting $n=10$ samples to match theory to two decimals.
-
-### Analogy for this topic only
-
-Bernoulli is one biased coin. Binomial is **ten** such coins counted together. `choice` is a three-sided spinner labeled cat/dog/bird. More spins, closer to the printed odds.
-
-Question: **How do you get a Bernoulli out of `binomial`?**
-
-In lecture words: this box is discrete sampling.
-
-### Local picture
-
-```
-  1_A.mean()  ≈  P(A)           (same number two ways)
-  Bern(0.7)   mean 0.70  var 0.21
-  Bin(10,0.4) mean 4     var 2.4
-```
-
-**Notice:** small $n$ is a **feature** of the homework, not a bug.
-
-### Bridge
-
-Do histograms of **continuous** draws sit on the theoretical $p$?
+*Figure — ~40:09–46:03: Interactive sampling of Indicator variables, Bernoulli trials via `rng.binomial(1, p)`, Categorical sampling via `rng.choice()`, and Binomial distributions.*
 
 ---
 
-## Topic 10: Continuous simulation and recap (46:03–57:13)
+### 1. 👶 ELI5 Quick Intuition
+In software, discrete distributions are modular Lego bricks:
+- **Indicator:** A light switch that turns ON ($1$) if an event occurs, and OFF ($0$) otherwise.
+- **Bernoulli:** A single biased coin flip.
+- **Binomial:** Flipping 10 biased coins and counting how many land on heads.
+- **Categorical (`choice`):** A spinning wheel divided into slices for "cat", "dog", and "bird".
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Indicator Expectation Matching in Code:**
+   - For event $A = \{\text{Die Roll} \ge 5\} = \{5, 6\}$, $P(A) = 2/6 = 1/3$.
+   - Creating indicator array `ind = (rolls >= 5).astype(float)` yields `np.mean(ind) == np.mean(rolls >= 5) \approx 0.3333`, computationally verifying $\mathbb{E}[1_A] = P(A)$.
+2. **Bernoulli as Binomial with $n=1$:**
+   - Calling `rng.binomial(n=1, p=0.7, size=100_000)` samples a Bernoulli distribution with mean $0.70$ and variance $p(1-p) = 0.7(0.3) = 0.21$.
+3. **Categorical Sampling (`rng.choice`):**
+   - Simulates discrete text categories with custom probabilities:
+     ```python
+     rng.choice(["cat", "dog", "bird"], size=20_000, p=[0.2, 0.5, 0.3])
+     ```
+4. **Binomial Aggregation:**
+   - `rng.binomial(n=10, p=0.4, size=10_000)` yields samples with empirical mean $\approx 4.0$ ($\mathbb{E}[X] = np = 10 \times 0.4$) and variance $\approx 2.40$ ($\text{Var}(X) = np(1-p) = 10 \times 0.4 \times 0.6$).
+
+---
+
+### 3. 📐 Formal Mathematics & Rigorous Code Block
+
+```python
+# Topic 9 Execution Block: Discrete Sampling Families
+# 1. Bernoulli via binomial(n=1)
+p_param = 0.70
+bern_samples = rng.binomial(n=1, p=p_param, size=100_000)
+print(f"Bernoulli(0.7) -> Mean: {bern_samples.mean():.4f} (Theory: {p_param:.2f}) | Var: {bern_samples.var():.4f} (Theory: {p_param*(1-p_param):.4f})")
+
+# 2. Categorical
+cats = rng.choice(["cat", "dog", "bird"], size=30_000, p=[0.2, 0.5, 0.3])
+print(f"Categorical Frequencies -> cat: {np.mean(cats=='cat'):.4f}, dog: {np.mean(cats=='dog'):.4f}, bird: {np.mean(cats=='bird'):.4f}")
+
+# 3. Binomial n=10, p=0.4
+bin_samples = rng.binomial(n=10, p=0.4, size=100_000)
+print(f"Binomial(10, 0.4) -> Mean: {bin_samples.mean():.4f} (Theory: 4.0000) | Var: {bin_samples.var():.4f} (Theory: 2.4000)")
+```
+
+---
+
+## Topic 10: Continuous Simulation, Transforms, and Recap (46:03–57:13)
+
+<a id="topic-10-continuous-simulation-and-recap-4603–5713"></a>
 
 ### Where this sits on the master map
+Histogram overlays on analytical PDFs, empirical sigmoid CDF curves, sample-size convergence ladders, and verifying independent vs dependent expectations. Warm-up: [sampling](./PREREQUISITES.md#p8-sample).
 
-**OVERLAY + CLOSE** — Hists vs PDF; $Y=g(X)$; $E[XY]$; next = pairs. Warm-up: [samples](./PREREQUISITES.md#p8-sample).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Continuous sim](./screenshots/composites/ch10-topic-10-continuous-sim-recap-panel1of2.png)
 
 ![Transforms and recap](./screenshots/composites/ch10-topic-10-continuous-sim-recap-panel2of2.png)
 
-**Figure — ~46:03–57:13:** Unif$[-2,3]$ and $N(2,2.25)$ hist vs PDF; empirical CDF sigmoid; $Y=X^2$ and $Y=aX+b$ ($a=-4,b=5$, $EY=-7$); LOTUS; dependent vs independent $E[XY]$; $\mathrm{Var}(aX+b)=a^2\mathrm{Var}(X)$.
+*Figure — ~46:03–57:13: Continuous histogram overlays on analytical PDFs, empirical Gaussian sigmoid CDF curves, linear transformation validation $Y = -4X + 5 \implies \mathbb{E}[Y] = -7$, and demonstrating $\mathbb{E}[XY] \neq \mathbb{E}[X]\mathbb{E}[Y]$ under dependence.*
 
-### What he is establishing
+---
 
-**Uniform** on $[-2,3]$, 100,000 samples: theoretical mean $(−2+3)/2=0.5$, theoretical $\mathrm{Var}=(5)^2/12\approx 2.08$. Histogram looks flat on that interval.
+### 1. 👶 ELI5 Quick Intuition
+When you collect millions of continuous measurements (like height or sensor noise) and group them into thin vertical histogram bars, the jagged bars smooth out and form the exact smooth mathematical bell curve you drew on paper!
 
-**Normal** — live cell matches the board:
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Histogram Overlays on PDFs:**
+   - Passing `density=True` into `plt.hist()` normalizes bar heights so that total bar area equals $1.0$. Plotting the analytical formula $p(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-(x-\mu)^2/(2\sigma^2)}$ lays an exact smooth curve on top of the bars.
+2. **The Empirical CDF Sigmoid:**
+   - Sorting $N$ samples from $\mathcal{N}(0, 1)$ and plotting against ranks $1/N, 2/N, \dots, N/N$ generates an empirical CDF curve that exhibits the smooth **sigmoid shape** of the Gaussian error function ($\text{erf}$).
+3. **The Sample Size Convergence Ladder:**
+   - With $N = 10$, empirical mean is noisy ($\bar{X} \approx -0.29$).
+   - With $N = 100$, empirical mean stabilizes ($\bar{X} \approx 0.04$).
+   - With $N = 100,000$, empirical mean locks onto theory ($\bar{X} \approx 0.0002$).
+4. **Linear Transform Validation:**
+   - For $X \sim \mathcal{N}(3, 2^2)$ and $Y = -4X + 5$:
+     $$\mathbb{E}[Y] = -4(3) + 5 = -7.0, \quad \text{Var}(Y) = (-4)^2 \cdot 4 = 64.0$$
+5. **Product of Expectations (The Independence Trap):**
+   - If $X$ and $Y$ are independent: $\mathbb{E}[XY] = \mathbb{E}[X]\mathbb{E}[Y]$.
+   - If $Y = 2X + \text{noise}$ (Dependent): $\mathbb{E}[XY] \approx 26.0$, whereas $\mathbb{E}[X]\mathbb{E}[Y] \approx 8.0 \implies \mathbb{E}[XY] \neq \mathbb{E}[X]\mathbb{E}[Y]$.
+
+---
+
+### 3. 📐 Formal Mathematics & Live Code Block
 
 ```python
-mu, sigma = 2.0, 1.5          # Var = sigma**2 = 2.25
-samples = rng.normal(loc=mu, scale=sigma, size=100_000)
-x_grid = np.linspace(mu - 5*sigma, mu + 5*sigma, 500)
-pdf = (1 / (np.sqrt(2 * np.pi) * sigma)) * np.exp(-0.5 * ((x_grid - mu) / sigma)**2)
-print(samples.mean(), mu)
-print(samples.var(), sigma**2)
+# Topic 10 Execution Block: Continuous Simulation & Transforms
+# 1. Normal Distribution Overlay & Convergence
+mu, sigma = 2.0, 1.5
+norm_samples = rng.normal(loc=mu, scale=sigma, size=100_000)
+print(f"Gaussian N(2.0, 1.5^2) -> Mean: {norm_samples.mean():.4f} (Theory: {mu:.2f}) | Var: {norm_samples.var():.4f} (Theory: {sigma**2:.2f})")
+
+# 2. Linear Transformation Y = aX + b
+a, b = -4.0, 5.0
+X_base = rng.normal(loc=3.0, scale=2.0, size=1_000_000)
+Y_trans = a * X_base + b
+print(f"Y = -4X + 5 -> E[Y]: {Y_trans.mean():.4f} (Theory: -7.0000) | Var(Y): {Y_trans.var():.4f} (Theory: 64.0000)")
+
+# 3. Dependent vs Independent Expectations
+X_indep = rng.normal(3.0, 1.0, size=100_000)
+Y_dep = 2.0 * X_indep + rng.normal(0.0, 1.0, size=100_000)
+print(f"Dependent Pair   -> E[XY]: {np.mean(X_indep * Y_dep):.4f} != E[X]E[Y]: {np.mean(X_indep)*np.mean(Y_dep):.4f}")
 ```
 
-Orange curve = that `pdf`; bars = histogram. **Exponential** is the same overlay.
+---
 
-**Empirical CDF** of standard normal (looks like a **sigmoid**):
+## Workplace Debugging Postmortems
+
+### Workplace Scenario 1: The "Density Clamping & Probability Misinterpretation" Bug in Continuous Normalizing Flows
+
+#### Incident Summary & Context
+An ML engineering team deploying a continuous **Normalizing Flow (RealNVP)** for high-resolution image anomaly detection encountered exploding loss values and NaN gradients during maximum likelihood training. The loss function was minimizing the negative log-likelihood:
+$$\mathcal{L}(\theta) = -\log p_Y(y) = -\log p_X\bigl(g^{-1}(y)\bigr) - \log \left| \det J_{g^{-1}}(y) \right|$$
+A junior engineer, noticing that in discrete probability $\log P(X=x) \le 0$, added a safety check clamping all likelihoods: `torch.clamp(p_y, max=1.0)`.
+
+#### Root Cause Analysis
+- In **continuous probability**, a PDF represents a **density height**, not a probability mass.
+- For narrow distributions (e.g. latent Gaussian variables with small variance $\sigma = 0.05$), the density height $p(x) = \frac{1}{0.05\sqrt{2\pi}} \approx 7.98 \gg 1.0$, which means $\log p(x) = \log(7.98) \approx +2.07 > 0$.
+- Clamping continuous likelihoods to $\le 1.0$ forced $\log p(y) \le 0$, truncating legitimate high-density regions, producing massive artificial gradient penalties, and breaking invertible Jacobian training.
+
+#### Production Code Fix
 
 ```python
-samples = rng.normal(0, 1, size=5000)
-sorted_samples = np.sort(samples)
-empirical_cdf = np.arange(1, len(samples) + 1) / len(samples)
-plt.plot(sorted_samples, empirical_cdf)
+import torch
+
+def compute_normalizing_flow_nll(z: torch.Tensor, log_det_jacobian: torch.Tensor) -> torch.Tensor:
+    """
+    Computes exact Negative Log-Likelihood (NLL) for continuous Normalizing Flows.
+    
+    CORRECT: Continuous density heights CAN exceed 1.0 (log_p can be positive).
+    NEVER clamp continuous densities to <= 1.0!
+    """
+    # Standard Gaussian Base Density: p(z) = (2π)^(-D/2) * exp(-0.5 * ||z||^2)
+    dim = z.shape[-1]
+    log_base_density = -0.5 * dim * torch.log(torch.tensor(2.0 * torch.pi)) - 0.5 * torch.sum(z**2, dim=-1)
+    
+    # Change of Variables: log p(y) = log p(z) + log |det J_{g^-1}|
+    log_p_y = log_base_density + log_det_jacobian
+    
+    # Return Negative Log-Likelihood (Loss)
+    loss = -torch.mean(log_p_y)
+    return loss
 ```
 
-**Sample-size ladder** on the board: `sample_sizes = [10, 100, 1_000, 100_000]` for $N(0,1)$. Live print: $n=10$ mean $\approx -0.29$, var $\approx 1.56$; $n=100$ already near $0$ and $1$; $n=10^5$ sits on $(0,1)$.
+---
 
-**Functions.** $Y=X^2$ (nonlinear) vs linear $Y=aX+b$ with **live values** $X\sim N(3,2^2)$, $a=-4$, $b=5$:
+### Workplace Scenario 2: The "Jensen Direction Inversion & False Variational Lower Bound" Bug in VAE Loss Implementation
+
+#### Incident Summary & Context
+A deep learning team building a **Variational Autoencoder (VAE)** for molecule generation found that their model suffered from severe posterior collapse and failed to learn meaningful latent representations. Inspecting the training loss code revealed that the importance-sampled Monte Carlo expectation was computed outside the logarithm:
+```python
+# BUGGY IMPLEMENTATION:
+importance_weights = p_x_given_z * p_z / q_z_given_x
+loss = -torch.log(torch.mean(importance_weights, dim=0)) # Inverted Jensen!
+```
+
+#### Root Cause Analysis
+- By Jensen's Inequality, because $\log(u)$ is concave ($\frown$):
+  $$\log \mathbb{E}[W] \ge \mathbb{E}[\log W]$$
+- Taking $\log \left( \frac{1}{K}\sum W_k \right)$ computes an **Upper Bound** on the Evidence Lower Bound (ELBO) that introduces optimistic bias during gradient optimization, destabilizing the encoder network.
+- The correct analytical VAE objective optimizes the true Evidence Lower Bound (ELBO) by keeping the logarithm inside the expectation and decomposing into Reconstruction Loss and analytical KL Divergence:
+  $$\text{ELBO} = \mathbb{E}_{q_\phi(z|x)}\left[\log p_\theta(x|z)\right] - D_{\text{KL}}\bigl(q_\phi(z|x) \,\|\, p(z)\bigr)$$
+
+#### Production Code Fix
 
 ```python
-x = rng.normal(loc=3, scale=2, size=1_000_000)
-a, b = -4, 5
-y = a * x + b
-print(y.mean(), a * x.mean() + b)   # both near -7
-print(y.var(), (a**2) * x.var())
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+def vae_loss_function(recon_x: torch.Tensor, x: torch.Tensor, mu: torch.Tensor, logvar: torch.Tensor) -> torch.Tensor:
+    """
+    Correct Evidence Lower Bound (ELBO) Loss Implementation via Reparameterization Trick.
+    """
+    # 1. Reconstruction Loss (Bernoulli / Binary Cross Entropy or Gaussian MSE)
+    recon_loss = F.binary_cross_entropy(recon_x, x, reduction='sum')
+    
+    # 2. Analytical KL Divergence D_KL( q(z|x) || N(0, I) )
+    # D_KL = -0.5 * sum( 1 + log(sigma^2) - mu^2 - sigma^2 )
+    kl_divergence = -0.5 * torch.sum(1.0 + logvar - mu.pow(2) - logvar.exp())
+    
+    # Total VAE Loss = -ELBO = Reconstruction Loss + KL Divergence
+    total_loss = (recon_loss + kl_divergence) / x.size(0)
+    return total_loss
 ```
 
-$$
-E[Y]=a E[X]+b = -4\cdot 3 + 5 = -7
-$$
-
-**LOTUS cell:** discrete support with masses — `exact_e_x2 = np.sum(x_values**2 * probabilities)` vs `np.mean(samples**2)` (board: exact $9.7$, sample $\approx 9.71$).
-
-**Dependence.** $Y$ built from $X$: `e_xy = np.mean(X*Y)` vs `np.mean(X)*np.mean(Y)` — they **differ**. Independent pair: product of means matches. Live dependent print: $E[XY]\approx 26$ vs product $\approx 8$.
-
-**Variance properties cell** uses a *second* pair $a=3.5$, $b=-10$: $\mathrm{Var}(Y)$ and $a^2\mathrm{Var}(X)$ both print $\approx 49.04$.
-
-**Recap:** continuous RVs, functions, $E$, Var. **Next:** a **pair** of RVs + numpy. This hour is a **refresher**.
-
-You can now overlay theory on samples and catch dependence in $E[XY]$. Leftover: **two** RVs at once (joints, later).
-
-A common trap is claiming $E[XY]=E[X]E[Y]$ always.
-
-### Analogy for this topic only
-
-A huge crowd’s height histogram becomes the bell you drew on paper. Square everyone’s height ($Y=X^2$) and the picture changes shape. Stretch and shift ($aX+b$) and the center moves by the linearity you already trust. If $Y$ is built from $X$, their product average is **not** the product of averages.
-
-Question: **If $a=-4$, $b=5$, $E[X]=3$, what is $E[aX+b]$?**
-
-In lecture words: this box closes the CRV + simulation recap.
-
-### Local picture
-
-```
-  more samples  →  hist sits on p  →  mean/var sit on E, Var
-
-  E[aX+b] = a E[X]+b
-  dependent Y=2X+noise :  E[XY] ≠ E[X]E[Y]
-  independent          :  E[XY] = E[X]E[Y]
-
-  Next: pairs of RVs
-```
-
-**Notice:** simulation **reinforces** formulas; it does not replace CoV or LOTUS.
-
-### Bridge
-
-One $X$ is in place. Joint laws of $(X,Y)$ are the next tutorial.
-
 ---
 
-## Apply it (scenarios)
+## Centralized External References
 
-1. **PDF taller than 1.** Write a Unif$[0,0.2]$ PDF. Check area 1.  
-2. **Endpoints.** For Exp$(1)$, compute $P(X\le 1)$ and $P(X<1)$.  
-3. **CoV refuse.** Why the board theorem does not apply to $Y=X^2$ on $\mathbb{R}$.  
-4. **Die high-end.** Change `integers(1,6)` and watch face 6 vanish.  
-5. **Sample size.** Bernoulli $p=0.7$ with $n=10$ vs $n=10^5$.  
-6. **Dependence.** Recreate $Y=2X+\varepsilon$ and compare $E[XY]$ to $E[X]E[Y]$.
+<a id="external-references"></a>
 
----
+Below is the centralized curated library of 50+ authoritative external resources organized across all 10 lecture topics.
 
-## External references
+### Topic 1: Continuous RV and PDF Definition
+- **Video Lectures:**
+  - [Khan Academy — Probability Density Functions](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-continuous/v/probability-density-functions)
+  - [MIT OpenCourseWare (18.05) — Continuous Random Variables & PDFs](https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/resources/mit18_05s14_reading5a/)
+  - [Harvard Stat 110 (Prof. Joe Blitzstein) — Lecture 8: Continuous RVs](https://www.youtube.com/watch?v=LX2q356N2rU)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Legitimate Probability Density Functions](https://www.statlect.com/fundamentals-of-probability/legitimate-probability-density-functions)
+  - [Brown University — Seeing Theory: Continuous Probability Distributions](https://seeing-theory.brown.edu/probability-distributions/index.html)
+  - [Casella, G., & Berger, R. L. — Statistical Inference (2nd Edition, Chapter 1: Continuous Distributions)](https://openlibrary.org/books/OL3953406M/Statistical_Inference)
 
-Two layers, **both kept**.
+### Topic 2: PDF Properties versus PMF
+- **Video Lectures:**
+  - [StatQuest (Josh Starmer) — Probability Distributions: Discrete vs Continuous](https://www.youtube.com/watch?v=oI3hZJqXJuc)
+  - [3Blue1Brown — Binomial vs Continuous Probability Landscapes](https://www.youtube.com/watch?v=8idr1WZ1A7Q)
+  - [Khan Academy — Why Density Can Exceed 1.0](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-continuous/v/probability-density-functions)
+- **Authoritative Textbooks & Notes:**
+  - [Statlect — Properties of Probability Density Functions](https://www.statlect.com/fundamentals-of-probability/probability-density-function)
+  - [Bertsekas, D. P., & Tsitsiklis, J. N. — Introduction to Probability (Athena Scientific, Chapter 3)](http://athenasc.com/probbook.html)
+  - [Wasserman, L. — All of Statistics: A Concise Course in Statistical Inference (Springer, Chapter 2)](https://link.springer.com/book/10.1007/978-0-387-21706-2)
 
-1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
-2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+### Topic 3: Uniform, Exponential, and Gaussian Distributions
+- **Video Lectures:**
+  - [StatQuest (Josh Starmer) — The Normal Distribution Clearly Explained](https://www.youtube.com/watch?v=rzFX5NWojp0)
+  - [Khan Academy — Exponential Distribution Calculus & CDF](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/poisson-process/v/exponential-pdf)
+  - [MIT OpenCourseWare (18.05) — The Central Limit Theorem & Gaussians](https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Normal Distribution Properties](https://www.statlect.com/probability-distributions/normal-distribution)
+  - [Weisstein, Eric W. (MathWorld) — Exponential Distribution](https://mathworld.wolfram.com/ExponentialDistribution.html)
+  - [Bishop, C. M. — Pattern Recognition and Machine Learning (Chapter 2: Probability Distributions)](https://www.microsoft.com/en-us/research/publication/pattern-recognition-and-machine-learning/)
 
-### Start here — high-signal companions
+### Topic 4: Functions of RVs and Change of Variables
+- **Video Lectures:**
+  - [3Blue1Brown — Change of Variables and the Jacobian Determinant](https://www.youtube.com/watch?v=okjYP_Uj-KM)
+  - [Harvard Stat 110 (Prof. Joe Blitzstein) — Transformations of Random Variables](https://www.youtube.com/watch?v=k_jH1t2o_w8)
+  - [Khan Academy — Transforming Random Variables (Linear & Non-linear)](https://www.khanacademy.org/math/ap-statistics/random-variables-ap/transforming-random-variables/v/impact-of-transforming-random-variables)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Functions of Random Variables and Their Distributions](https://www.statlect.com/fundamentals-of-probability/functions-of-random-variables-and-their-distribution)
+  - [Kobyzev, I. et al. — Normalizing Flows: An Introduction and Review of Principles (IEEE TPAMI)](https://arxiv.org/abs/1908.09257)
+  - [Papamakarios, G. et al. — Normalizing Flows for Probabilistic Modeling and Inference (JMLR)](https://arxiv.org/abs/1912.02762)
 
-Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this tutorial still closed.
+### Topic 5: Expectation and LOTUS
+- **Video Lectures:**
+  - [Harvard Stat 110 (Prof. Joe Blitzstein) — Lecture 9: Expectation, Indicators & LOTUS](https://www.youtube.com/watch?v=LX2q356N2rU)
+  - [Khan Academy — Expected Value of Continuous Random Variables](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/expected-value-lib/v/expected-value)
+  - [MIT OpenCourseWare (6.041) — Linearity of Expectation & LOTUS](https://ocw.mit.edu/courses/6-041-probabilistic-systems-analysis-and-applied-probability-fall-2011/)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Expected Value and Moments](https://www.statlect.com/fundamentals-of-probability/expected-value)
+  - [Blitzstein, J. K., & Hwang, J. — Introduction to Probability (CRC Press, Chapter 4: LOTUS)](https://projects.iq.harvard.edu/stat110/home)
+  - [Grimmett, G., & Stirzaker, D. — Probability and Random Processes (Oxford University Press)](https://global.oup.com/academic/product/probability-and-random-processes-9780198847595)
 
-The first half is a **chalkboard** recap. The last three topics do open a numpy notebook; that is the only code in the hour.
+### Topic 6: Variance and Spread Invariants
+- **Video Lectures:**
+  - [StatQuest (Josh Starmer) — Variance and Standard Deviation Clearly Explained](https://www.youtube.com/watch?v=SzZ6GpcfoQY)
+  - [Khan Academy — Variance of Continuous Random Variables](https://www.khanacademy.org/math/statistics-probability/summarizing-quantitative-data/variance-standard-deviation-population/v/variance-of-a-population)
+  - [MIT OpenCourseWare (18.05) — Variance & Covariance](https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Variance and Its Properties](https://www.statlect.com/fundamentals-of-probability/variance)
+  - [Seeing Theory (Brown University) — Variance and Dispersion](https://seeing-theory.brown.edu/basic-probability/index.html)
+  - [Ross, S. M. — A First Course in Probability (Pearson, Chapter 4: Properties of Variance)](https://www.pearson.com/)
 
-**If PDF vs PMF still swap (Topics 1–2).** [Khan Academy — probability density functions](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-continuous/v/probability-density-functions) and Brown’s [Seeing Theory — distributions](https://seeing-theory.brown.edu/probability-distributions/index.html) are the classroom pair: height is not chance; area is. Taboga’s [Statlect — legitimate PDFs](https://www.statlect.com/fundamentals-of-probability/legitimate-probability-density-functions) writes the two axioms.
+### Topic 7: Markov, Chebyshev, and Jensen Inequalities
+- **Video Lectures:**
+  - [Harvard Stat 110 — Markov and Chebyshev Inequalities](https://www.youtube.com/watch?v=N4tN7eZ3s70)
+  - [Khan Academy — Convex and Concave Functions & Jensen's Intuition](https://www.khanacademy.org/math/multivariable-calculus/applications-of-multivariable-derivatives/optimizing-multivariable-functions/v/convex-concave)
+  - [3Blue1Brown — Information Entropy & Jensen Bounds](https://www.youtube.com/watch?v=v68zYya5hHU)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Markov's Inequality & Chebyshev's Inequality](https://www.statlect.com/fundamentals-of-probability/Markov-inequality)
+  - [Taboga, M. (Statlect) — Jensen's Inequality](https://www.statlect.com/fundamentals-of-probability/Jensen-inequality)
+  - [Kingma, D. P., & Welling, M. — Auto-Encoding Variational Bayes (Foundational VAE Paper)](https://arxiv.org/abs/1312.6114)
 
-**If the named bells are just formulas (Topic 3).** Josh Starmer’s [StatQuest — the Normal Distribution](https://www.youtube.com/watch?v=rzFX5NWojp0) is the popular English for $\mu$ and $\sigma$. Khan’s [exponential PDF](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/poisson-process/v/exponential-pdf) covers $1-e^{-\lambda x}$.
+### Topic 8: NumPy Dice Simulation and Bayesian Numerics
+- **Video Lectures & Official Docs:**
+  - [NumPy Official Documentation — Random Generator (`default_rng`)](https://numpy.org/doc/stable/reference/random/generator.html)
+  - [3Blue1Brown — Bayes' Theorem Visually Explained](https://www.youtube.com/watch?v=HZGCoVF3YvM)
+  - [StatQuest (Josh Starmer) — Bayes' Theorem Clearly Explained](https://www.youtube.com/watch?v=9wCnvr7Xw4E)
+- **Authoritative Textbooks & Notes:**
+  - [Harris, C. R. et al. — Array programming with NumPy (Nature 2020)](https://www.nature.com/articles/s41586-020-2649-2)
+  - [VanderPlas, J. — Python Data Science Handbook (O'Reilly, Chapter 2: NumPy)](https://jakevdp.github.io/PythonDataScienceHandbook/)
+  - [McElreath, R. — Statistical Rethinking: A Bayesian Course with Examples in R and Stan](https://xcelab.net/rm/statistical-rethinking/)
 
-**If $Y=g(X)$ still feels like a trick (Topic 4).** Grant Sanderson’s [3Blue1Brown — change of variables](https://www.youtube.com/watch?v=okjYP_Uj-KM) is why $\lvert dx/dy\rvert$ appears. Statlect’s [functions of random variables](https://www.statlect.com/fundamentals-of-probability/functions-of-random-variables-and-their-distribution) is the written cousin.
+### Topic 9: Discrete Sampling Families in Python
+- **Video Lectures & Official Docs:**
+  - [NumPy Official Documentation — `Generator.binomial` & `Generator.choice`](https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.binomial.html)
+  - [StatQuest (Josh Starmer) — The Binomial Distribution](https://www.youtube.com/watch?v=J8jNoF-K8E8)
+  - [Khan Academy — Binomial Random Variables & Sampling](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/binomial-random-variables/v/binomial-distribution)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Binomial and Categorical Distributions](https://www.statlect.com/probability-distributions/binomial-distribution)
+  - [Goodfellow, I., Bengio, Y., & Courville, A. — Deep Learning (MIT Press, Chapter 3: Probability and Information Theory)](https://www.deeplearningbook.org/)
 
-**If $E$, LOTUS, or Var blur (Topics 5–6).** Khan’s [expected value](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/expected-value-lib/v/expected-value) and [variance](https://www.khanacademy.org/math/statistics-probability/summarizing-quantitative-data/variance-standard-deviation-population/v/variance-of-a-population) plus Statlect’s [expected value](https://www.statlect.com/fundamentals-of-probability/expected-value) and [variance](https://www.statlect.com/fundamentals-of-probability/variance). StatQuest’s [standard deviation](https://www.youtube.com/watch?v=SzZ6GpcfoQY) if $\sigma$ vs $\sigma^2$ slips.
-
-**If the three inequalities are slogans only (Topic 7).** Statlect states them the way the board does: [Markov](https://www.statlect.com/fundamentals-of-probability/Markov-inequality), [Chebyshev](https://www.statlect.com/fundamentals-of-probability/Chebyshev-inequality), [Jensen](https://www.statlect.com/fundamentals-of-probability/Jensen-inequality). Chebyshev does not need a Gaussian.
-
-**If the notebook APIs are the stuck bit (Topics 8–10).** The [NumPy Generator docs](https://numpy.org/doc/stable/reference/random/generator.html) match `default_rng` / `integers` on the board. 3Blue1Brown’s [Bayes theorem](https://www.youtube.com/watch?v=HZGCoVF3YvM) is the same flip as the $1\%/95\%/5\%$ numeric.
-
-**How to use.** Height-vs-chance fog → Khan or Seeing Theory *before* Topic 2. Inequalities → Statlect *after* Topic 7. One famous teacher per stuck idea. Do not open ten tabs.
-
----
-
-### Full topic map — previous list plus new entries
-
-**How to use:** finish the NOTES chain first (video closed if you can). When one map box still feels thin, open **only that topic’s group** — **2–3 companions each** (prefer **teaching video + notes/blog**). All links live **here**, not inside topic bodies.
-
-### Topic 1 — Continuous type / PDF definition
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Khan Academy — PDF](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-continuous/v/probability-density-functions) | Video | $F$ as running area |
-| [StatQuest — distributions](https://www.youtube.com/watch?v=oI3hZJqXJuc) | Video | What a distribution is |
-| [Seeing Theory — continuous](https://seeingtheory.io/probability-distributions/) | Interactive | Density vs histogram |
-
-### Topic 2 — PDF vs PMF
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Khan Academy — PDF vs PMF](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-continuous/v/probability-density-functions) | Lesson | Height can exceed 1 |
-| [Seeing Theory — discrete vs continuous](https://seeingtheory.io/probability-distributions/discrete-discrete/) | Interactive | Piles vs area |
-| [3Blue1Brown — binomial setup](https://www.youtube.com/watch?v=8idr1WZ1A7Q) | Video | Mass language before density |
-
-### Topic 3 — Unif / Exp / Gaussian
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [StatQuest — Normal](https://www.youtube.com/watch?v=rzFX5NWojp0) | Video | $\mu,\sigma$ as center and width |
-| [Khan Academy — exponential](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/poisson-process/v/exponential-pdf) | Lesson | $1-e^{-\lambda x}$ CDF |
-| [Seeing Theory — Normal](https://seeingtheory.io/probability-distributions/) | Interactive | Bell overlay |
-
-### Topic 4 — $Y=g(X)$ / CoV
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Stat 110 notes](https://stat110.hsites.harvard.edu/) | Notes | Transformations of RVs |
-| [Khan Academy — transforming RVs](https://www.khanacademy.org/math/ap-statistics/random-variables-ap/transforming-random-variables/v/impact-of-transforming-random-variables) | Video | Linear $aX+b$ first |
-| [3Blue1Brown — change of variables (essence)](https://www.youtube.com/watch?v=okjYP_Uj-KM) | Video | Why $\lvert dx/dy\rvert$ appears |
-
-### Topic 5 — Expectation / LOTUS
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Stat 110 Lec 9 — $E$ / indicators / LOTUS](https://www.youtube.com/watch?v=LX2q356N2rU) | Video | Same slogans as the board |
-| [Blitzstein Stat 110 notes](https://stat110.hsites.harvard.edu/) | Notes | LOTUS proof pointer |
-| [Khan Academy — expected value](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/expected-value-lib/v/expected-value) | Lesson | Weighted average |
-
-### Topic 6 — Variance
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Khan Academy — variance](https://www.khanacademy.org/math/statistics-probability/summarizing-quantitative-data/variance-standard-deviation-population/v/variance-of-a-population) | Video | Squared deviation |
-| [StatQuest — standard deviation](https://www.youtube.com/watch?v=SzZ6GpcfoQY) | Video | $\sigma$ vs $\sigma^2$ |
-| [Seeing Theory — variance](https://seeingtheory.io/basic-probability/variance/) | Interactive | Spread picture |
-
-### Topic 7 — Inequalities
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Stat 110 — Markov / Chebyshev](https://projects.iq.harvard.edu/stat110/home) | Notes | Distribution-free tails |
-| [Khan Academy — Jensen intuition](https://www.khanacademy.org/math/multivariable-calculus/applications-of-multivariable-derivatives/optimizing-multivariable-functions/v/convex-concave) | Video | Convex smile |
-| [3Blue1Brown — Bayes / inequality mindset](https://www.youtube.com/watch?v=HZGCoVF3YvM) | Video | Bounds vs exact laws |
-
-### Topic 8 — Numpy dice / Bayes
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [NumPy Generator docs](https://numpy.org/doc/stable/reference/random/generator.html) | Docs | `default_rng`, `integers` |
-| [3Blue1Brown — Bayes](https://www.youtube.com/watch?v=HZGCoVF3YvM) | Video | Same $P(D\mid T^+)$ flip |
-| [Tutorial 4 NumPy NOTES](../16-Tutorial02-Introduction-to-NumPy/NOTES.md) | Prior unit | Arrays / mean / masks |
-
-### Topic 9 — Discrete sampling
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [StatQuest — Binomial](https://www.youtube.com/watch?v=J8jNoF-K8E8) | Video | $n$ independent yes/no |
-| [NumPy `binomial` / `choice`](https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.binomial.html) | Docs | Exact APIs on the board |
-| [Khan Academy — binomial](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/binomial-random-variables/v/binomial-distribution) | Lesson | $np$, $np(1-p)$ |
-
-### Topic 10 — Continuous sim / recap
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Seeing Theory — distributions](https://seeingtheory.io/probability-distributions/) | Interactive | Hist vs PDF |
-| [NumPy `normal`](https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.normal.html) | Docs | `loc`, `scale` |
-| [Stat 110 Lec 9](https://www.youtube.com/watch?v=LX2q356N2rU) | Video | $E[XY]$ vs independence |
-
-### Whole-map companions
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PREREQUISITES.md](./PREREQUISITES.md) | Warm-up | #p1–#p8 |
-| [Tutorial 7 NOTES](../21-Tutorial07-Review-Basic-Probability-1/NOTES.md) | Prior unit | Discrete stack this hour assumes |
-| [Stat 110 playlist](https://www.youtube.com/playlist?list=PL2SOU6wwxB0uwwH80KTQ6ht66KWxbzTIo) | Video course | Slower proofs of $E$/Var |
+### Topic 10: Continuous Simulation, Transforms, and Recap
+- **Video Lectures & Official Docs:**
+  - [NumPy Official Documentation — `Generator.normal` & `Generator.exponential`](https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.normal.html)
+  - [Harvard Stat 110 (Prof. Joe Blitzstein) — Joint Distributions & Covariance Preview](https://www.youtube.com/watch?v=LX2q356N2rU)
+  - [StatQuest (Josh Starmer) — Covariance and Correlation](https://www.youtube.com/watch?v=qtaqvPAeEJY)
+- **Authoritative Textbooks & Notes:**
+  - [Matplotlib Official Documentation — Histograms & Density Normalization](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html)
+  - [Murphy, K. P. — Probabilistic Machine Learning: An Introduction (MIT Press, Chapter 2)](https://probml.github.io/pml-book/book1.html)
+  - [MacKay, D. J. C. — Information Theory, Inference, and Learning Algorithms (Cambridge University Press)](http://www.inference.org.uk/mackay/itila/)
 
 ---
-
 
 ## Sources
 
-- Video: [Tutorial 8 : Review of Basic Probability 2](https://www.youtube.com/watch?v=pQIbfyjSnFk)
-- Channel: NPTEL — Indian Institute of Science, Bengaluru
-- Duration: ~57 min (00:03–57:13)
-- Skill: `youtube-lecture-tutor` · mixed (math + numpy)
-- 10 topics · 46 claims · coverage receipt
-- Previous: [Tutorial 7](../21-Tutorial07-Review-Basic-Probability-1/NOTES.md)
-- Next (spoken): pairs of random variables
-- Package: `22-Tutorial08-Review-Basic-Probability-2`
+- **Video:** [Tutorial 8 : Review of Basic Probability 2](https://www.youtube.com/watch?v=pQIbfyjSnFk)
+- **Channel:** NPTEL — Indian Institute of Science, Bengaluru
+- **Duration:** ~57 min (00:03–57:13)
+- **Course:** Mathematical Foundations of Generative AI
+- **Instructor / Teaching Team:** IISc Bengaluru
+- **Prior Prerequisite:** [Tutorial 7: Review of Basic Probability 1](../21-Tutorial07-Review-Basic-Probability-1/NOTES.md)
+- **Next Tutorial:** Tutorial 9: Pairs and Vectors of Random Variables

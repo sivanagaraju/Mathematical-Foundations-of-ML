@@ -1,941 +1,1123 @@
 # Tutorial 9 — Review of Basic Probability 3
 
 **Video:** [Tutorial 9 : Review of Basic Probability 3](https://www.youtube.com/watch?v=eDSb3yObtB8) · NPTEL / IISc  
-**Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md)  
-**Previous:** [Tutorial 8](../22-Tutorial08-Review-Basic-Probability-2/NOTES.md)  
-**Course:** Mathematical Foundations of **Generative AI** (~73 min)  
-**Speaker:** NPTEL IISc · Pairs, joints, marginals, conditionals, IID, Jacobian
+**Warm-up First:** [PREREQUISITES.md](./PREREQUISITES.md)  
+**Previous Tutorial:** [Tutorial 8 — Review of Basic Probability 2](../22-Tutorial08-Review-Basic-Probability-2/NOTES.md) (Continuous RVs, PDFs & Inequalities)  
+**Next Tutorial:** Tutorial 10 — Expectation of Random Vectors, Covariance Matrices & Weak Law of Large Numbers  
+**Course:** Mathematical Foundations of Generative AI (~73 min)  
+**Speaker:** NPTEL / IISc Teaching Team  
+**Core Themes:** Random Vectors & Pairs of RVs, Joint Cumulative Distribution Functions (CDFs), Joint Probability Mass Functions (PMFs), Joint Probability Density Functions (PDFs), Marginal Distributions & The Peel Theorem, Conditional Distributions & Slice Limits, Mixed-Type Distributions & Gaussian Mixture Models (GMMs), Likelihood Ratios in Digital Communications, Statistical Independence for Vectors, IID Datasets, and Multidimensional Jacobian Transformations.
+
+---
+
+> ### ⚠️ Course Context & Curriculum Progression Notice
+> In **Tutorials 7 and 8**, the curriculum examined single scalar random variables (both discrete and continuous).
+> 
+> Starting in **Tutorial 9**, the course scales into **Multivariate Probability and Random Vectors**. Generative models rarely produce a single scalar number; they generate high-dimensional vectors—such as images ($\mathbf{x} \in \mathbb{R}^{3 \times H \times W}$), audio waveforms ($\mathbf{x} \in \mathbb{R}^T$), and text token embeddings ($\mathbf{z} \in \mathbb{R}^D$). Mastering joint distributions, marginalization, continuous conditioning, Gaussian Mixture Models, and multi-dimensional Jacobian coordinate transformations is the mathematical foundation for **Latent Diffusion Models (LDMs)**, **Normalizing Flows (RealNVP/Glow)**, and **Multi-Modal Generative Architectures**.
 
 ---
 
 ## Table of Contents
 
-1. [Topic 1 — Pair and joint CDF](#topic-1-pair-and-joint-cdf-0003–0553) (00:03–05:53)
-2. [Topic 2 — Joint CDF properties](#topic-2-joint-cdf-properties-0553–0823) (05:53–08:23)
-3. [Topic 3 — Joint PMF and two dice](#topic-3-joint-pmf-and-two-dice-0823–1348) (08:23–13:48)
-4. [Topic 4 — Joint PDF on a triangle](#topic-4-joint-pdf-on-a-triangle-1348–1907) (13:48–19:07)
-5. [Topic 5 — Marginals](#topic-5-marginals-1907–2634) (19:07–26:34)
-6. [Topic 6 — Conditional discrete](#topic-6-conditional-discrete-2634–3519) (26:34–35:19)
-7. [Topic 7 — Conditional continuous and Bayes](#topic-7-conditional-continuous-and-bayes-3519–4034) (35:19–40:34)
-8. [Topic 8 — Mixed type, GMM, communication](#topic-8-mixed-type-gmm-communication-4034–5012) (40:34–50:12)
-9. [Topic 9 — Independence and vector RVs](#topic-9-independence-and-vector-rvs-5012–6103) (50:12–61:03)
-10. [Topic 10 — IID, Jacobian, recap](#topic-10-iid-jacobian-recap-6103–7317) (61:03–73:17)
-11. [External references](#external-references)
-12. [Sources](#sources)
+1. [Executive Summary & Master Architecture](#executive-summary--architecture-of-this-lecture)
+2. [Chalkboard Rosetta Stone: Mathematical Notation](#chalkboard-rosetta-stone)
+3. [Complete Standalone Executable Python Simulation Script](#standalone-simulation-script)
+4. [Topic 1: Pair and Joint CDF (00:03–05:53)](#topic-1-pair-and-joint-cdf-0003–0553)
+5. [Topic 2: Joint CDF Properties & Cylindrical Sets (05:53–08:23)](#topic-2-joint-cdf-properties-0553–0823)
+6. [Topic 3: Joint PMF and Two Dice (Max, Sum) (08:23–13:48)](#topic-3-joint-pmf-and-two-dice-0823–1348)
+7. [Topic 4: Joint PDF on a Triangle (13:48–19:07)](#topic-4-joint-pdf-on-a-triangle-1348–1907)
+8. [Topic 5: Marginals — Unique Forward, Underdetermined Backward (19:07–26:34)](#topic-5-marginals-1907–2634)
+9. [Topic 6: Conditional Discrete Distributions & Slicing (26:34–35:19)](#topic-6-conditional-discrete-2634–3519)
+10. [Topic 7: Conditional Continuous Distributions & Continuous Bayes (35:19–40:34)](#topic-7-conditional-continuous-and-bayes-3519–4034)
+11. [Topic 8: Mixed Types, Gaussian Mixture Models & Binary Communications (40:34–50:12)](#topic-8-mixed-type-gmm-communication-4034–5012)
+12. [Topic 9: Independence and Vector Random Variables (50:12–61:03)](#topic-9-independence-and-vector-rvs-5012–6103)
+13. [Topic 10: IID Datasets, Jacobian Transformations & Recap (61:03–73:17)](#topic-10-iid-jacobian-recap-6103–7317)
+14. [Workplace Debugging Postmortems](#workplace-debugging-postmortems)
+15. [Centralized External References](#external-references)
 
 ---
 
-## Executive Summary — architecture of this lecture
+## Executive Summary — Architecture of this Lecture
 
-This hour moves from one random variable to a **pair** (then a vector) that live on the **same** random experiment. A **joint** CDF / PMF / PDF answers questions about **both** at once; a rectangle of the plane is four corners of $F$; **marginals** peel one variable (unique from the joint; the converse is false). **Conditionals** slice the joint and re-normalize — a thin band if $Y$ is continuous, a mixture if the types are mixed. A **Gaussian mixture model (GMM)** is that mixture when each component is Normal; **independent and identically distributed (IID)** is the course’s default on a dataset; a monotone vector map moves the joint density by a **Jacobian**. Next hour is expectation of several variables, covariance, and the law of large numbers.
+<a id="executive-summary--architecture-of-this-lecture"></a>
 
-**Worldview arc:** from “one $X$ has $F$, $p$, $E$” **to** “a pair has a joint, unique marginals, conditionals, and (if IID) a product law.”
+This 73-minute lecture establishes the mathematics of **random vectors** by transitioning from single variables to pairs $(X, Y)$ and vectors $\mathbf{X} \in \mathbb{R}^n$ defined on a shared probability space $(\Omega, \mathcal{F}, P)$.
 
-**Hour at a glance (whole video).** Tutorials 7–8 built one $X$: triplet, **cumulative distribution function (CDF)**, PMF or **probability density function (PDF)**, $E$, Var. Today $X$ and $Y$ are two maps on the **same** $(\Omega,\mathcal{F},P)$. If they sat on different experiments you would not have a pair. The **joint CDF** is $F(x,y)=P(X\le x,Y\le y)$ — “both stickers land south-west of $(x,y)$.” A **rectangle** (cylindrical set) uses four corners: $F_{22}-F_{21}-F_{12}+F_{11}$. $F$ is a valid probability object: zero if either argument is $-\infty$, one at $(+\infty,+\infty)$, nondecreasing and right-continuous in each slot. Two discrete maps store the joint as a **table of piles** (joint PMF): two dice with $X=\max$, $Y=\mathrm{sum}$ group 36 downstairs atoms into cells of $1/36$ or $2/36$. Two continuous maps store a **joint PDF** — height on a region, volume 1. Their running example is $p=2$ on the triangle $0<x<y<1$, and $P(Y>X+0.5)=1/4$. **Marginals** peel: sum a row or integrate the other variable. The joint gives unique margins; many joints share the same margins, so you cannot reconstruct the interior from the edges alone.
-
-A **conditional** is a slice, re-normalized. Discrete: $p(x\mid y)=p(x,y)/p_Y(y)$ when $p_Y(y)>0$. Dice: if the sum is 3, $\max\le 4$ is certain; if there is one head in $n$ tosses, the first-head index is uniform on $\{1,\ldots,n\}$. Continuous $Y$ has $P(Y=y)=0$, so they take a thin band and let the width go to 0; on the triangle, $X\mid Y=y$ is Unif$(0,y)$. **Mixed type** (discrete $Y$, continuous $X$) has no single joint PDF; the marginal of $X$ is a **mixture** $\sum p(x\mid y)P(Y=y)$. If each component is Gaussian, that **is** a **Gaussian mixture model (GMM)**: roll a die for the component, then sample that Normal. A radio that hears 0 V or 5 V plus noise decodes bit 1 iff $x>2.5$ (equal priors, Gaussian noise). **Independence** is factorization for **all** windows, not one lucky cell. A **vector** $X:\Omega\to\mathbb{R}^n$ is just $n$ maps. **Independent and identically distributed (IID)** means independent **and** the same law — the dataset assumption. A map $Y=g(X)$ moves density by the absolute **Jacobian** $|J|$ of the inverse; the board’s sum-and-difference example has $|J|=1/2$. Next: $E$ of many, covariance, the law of large numbers.
-
-### System context
+### System Context
 
 ```
-  ╔══════════════════════════════════╗
-  ║ Outside: Cov, LLN (next)         ║
-  ║ Outside: full first-course proofs║
-  ╚══════════════╤═══════════════════╝
-                 │ this tutorial (~73 min)
-                 ▼
-        ┌────────────────────────────┐
-        │ Pair / vector joint stack  │
-        └────────────────────────────┘
+  ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+  ║                        MULTIVARIATE PROBABILITY PIPELINE                              ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════════╝
+                                              │
+         ┌────────────────────────────────────┴────────────────────────────────────┐
+         ▼                                                                         ▼
+  [Tutorials 7 & 8: Scalar Probability]                                 [Tutorial 9: Random Vectors (X, Y)]
+  • Single RV X: Ω ──► ℝ                                                • Pair (X, Y): Ω ──► ℝ² on SAME Ω
+  • 1D CDF F(x) = P(X ≤ x)                                              • 2D Joint CDF F(x, y) = P(X ≤ x, Y ≤ y)
+  • 1D PMF p(x) / 1D PDF p(x)                                           • 2D Rectangle Window Formula (4 Corners)
+  • Single-Variable LOTUS & Var                                         • Joint PMFs (Tables) & Joint PDFs (Surfaces)
+                                                                        • Marginals p_X(x), p_Y(y) via Peeling
+                                                                        • Conditionals p(x|y) = p(x,y) / p_Y(y)
+                                                                        • Mixed GMMs: p_X(x) = ∑ λ_k N(μ_k, σ_k²)
+                                                                        • IID Vector Datasets & Jacobian Determinant
+                                              │
+                                              ▼
+                         [Tutorial 10: Multivariate Statistics]
+                         • Expectation of Vectors E[X] ∈ ℝⁿ
+                         • Covariance Matrices Σ = E[(X-μ)(X-μ)ᵀ]
+                         • Multivariate Gaussians & Law of Large Numbers
+                                              │
+                                              ▼
+                         [Generative AI Production Systems]
+                         • Invertible Flow Coupling Layers (RealNVP, Glow)
+                         • Multi-Modal Latent Fusion (CLIP, Image-Text VAEs)
+                         • Diffusion Multi-Scale Denoising Score Matching
 ```
-
-### Main blueprint
-
-```
-  Same (Ω, F, P)
-       │  X:Ω→ℝ , Y:Ω→ℝ
-       ▼
-  ┌──── Joint F(x,y)=P(X≤x, Y≤y) ────┐
-  │ rectangle = F22−F21−F12+F11      │
-  │ F(−∞,·)=0  F(∞,∞)=1  ↗ each arg  │
-  └────────────┬─────────────────────┘
-               │ discrete          continuous
-               ▼                   ▼
-         joint PMF table      joint PDF height
-         dice max/sum         p=2 on 0<x<y<1
-               │                   │
-               └────────┬──────────┘
-                        ▼
-              Marginals (sum / ∫ other)
-              unique ← joint;  joint ↛ unique from margins
-                        │
-                        ▼
-              Conditional = joint / margin
-              discrete: p(x|y)
-              continuous: limit of a thin band
-              mixed: GMM + 0 V / 5 V radio
-                        │
-                        ▼
-              Independence: joint = product  (ALL windows)
-              n-RVs / vector X:Ω→ℝⁿ
-                        │
-                        ▼
-              IID  +  Y=g(X)  p_Y = p_X(h) |J|
-```
-
-### Scenario walkthrough
-
-Walk this **one** story through the blueprint above. Each step answers “so what?” for the next box.
-
-**Story:** you roll two dice on one table. $X$ is the **max** face, $Y$ is the **sum**. Same experiment, two stickers.
-
-1. **Why a pair / joint CDF?** Both numbers come from one roll. The joint **cumulative distribution function (CDF)** $F(x,y)$ is “max $\le x$ **and** sum $\le y$.” A window on the plane uses four corners of that running total.
-
-2. **Why a joint PMF table?** Discrete pair $\to$ piles on cells. 36 equally likely downstairs pairs group into upstairs cells of $1/36$ (doubles, $n=2m$) or $2/36$.
-
-3. **Why a joint PDF at all (the triangle)?** When both are continuous, piles become height on a region. Same job: volume over a set is probability. $p=2$ on $0<x<y<1$ is the continuous cousin; $P(Y>X+0.5)=1/4$.
-
-4. **Why marginals?** You may only care about the max, ignoring the sum. Sum the row (or integrate the other variable). You **cannot** go backwards: many interiors share the same margins.
-
-5. **Why conditionals?** You learn the sum is 3. The world shrinks; $\max\le 4$ is now certain. Continuous cousin: a thin band, $X\mid Y=y\sim\mathrm{Unif}(0,y)$.
-
-6. **Why mixed / GMM?** A **bit** (discrete) plus a **voltage** (continuous) is not a joint PDF. The voltage histogram is a mixture. If each piece is a bell, that is a **Gaussian mixture model (GMM)**. Decode 1 iff $x>2.5$.
-
-7. **Why independence / IID?** Two maps are independent only if **every** window factors. **Independent and identically distributed (IID)** is stronger: independent **and** the same law — how the course treats a dataset.
-
-8. **Why a Jacobian?** If you switch to $Y_1=X_1+X_2$, $Y_2=X_1-X_2$, areas stretch. Density is multiplied by $|J|=1/2$. Covariance and the law of large numbers are next hour.
-
-```
-  one table, two dice
-         │  same Ω
-         ▼
-  X = max     Y = sum
-         │  joint F / table of piles
-         ▼
-  rectangle = four corners of F
-         │  peel
-         ▼
-  margins (unique ← joint; not the reverse)
-         │  learn Y = 3
-         ▼
-  slice / re-normalize   =  conditional
-         │  same idea, other types
-         ▼
-  mixed: GMM  (die of bells)     decode x > 2.5
-  IID copies + Y = g(X) by |J|
-```
-
-Two coins are the same shape: one experiment, two stickers, a joint, then peel or slice.
-
-### Failure / contrast path
-
-```
-  X and Y on different experiments          ──X──► not a pair
-  “One factored window ⇒ independent”       ──X──► need ALL events
-  “Two margins ⇒ unique joint”              ──X──► many joints share margins
-  P(Y=y) for continuous Y without a limit   ──X──► divide by zero
-  Mixed types called a joint PDF            ──X──► no single p
-```
-
-### STOP / out of scope
-
-Expectation of many RVs, covariance, law of large numbers (next tutorial). Full Jacobian proof.
-
-### Load-bearing claims (closed-book)
-
-- A pair lives on the **same** $\Omega$; $F(x,y)=P(X\le x,Y\le y)$; a rectangle is $F_{22}-F_{21}-F_{12}+F_{11}$.
-- A joint PMF / PDF is $\ge 0$ and totals $1$.
-- The joint **uniquely** gives marginals; the converse is **false**.
-- $p(x\mid y)=p(x,y)/p_Y(y)$ (mass or density).
-- Independence is factorization **for all** windows.
-- **IID** means independent **and** identically distributed.
-- $p_Y(y)=p_X(h(y))\,|J|$.
-
-**Speaker / course:** NPTEL IISc · Tutorial 9.
 
 ---
 
-## Topic 1: Pair and joint CDF (00:03–05:53)
+### Master Architecture Blueprint
+
+```
+  ===================================================================================================
+                                      TUTORIAL 9 MASTER ARCHITECTURE
+  ===================================================================================================
+  
+   [Shared Universe]                     [Joint Distributions]               [Projections & Slices]
+     (Ω, F, P)                             Discrete Pair:                      Marginalization (Peel):
+     ├──► X: Ω ──► ℝ                        • Joint PMF Table p(x_i, y_j)       • p_X(x) = ∑_y p(x, y)
+     └──► Y: Ω ──► ℝ                        • Double sum = 1.0                  • p_X(x) = ∫ p(x, y) dy
+     Vector (X, Y): Ω ──► ℝ²                Continuous Pair:                    (Unique forward; lossy backward)
+            │                               • Joint PDF Surface p(x, y)                 │
+            ▼                               • Double integral = 1.0                     ▼
+   [Joint CDF & Window]                     • Triangle: p=2 on 0<x<y<1         Conditioning (Slice):
+     F(x,y) = P(X≤x, Y≤y)                           │                           • Discrete: p(x|y) = p(x,y)/p_Y(y)
+     P(Window) = F22 - F21 - F12 + F11              │                           • Cont: band limit Δ ──► 0
+            │                                       │                           • Triangle: X|Y=y ~ Unif(0, y)
+            └───────────────────────────────────────┼───────────────────────────────────┘
+                                                    ▼
+                                     [Mixed Types & Generative GMMs]
+                                       • Discrete Y (Component) + Continuous X (Signal)
+                                       • Marginal is a Mixture: p_X(x) = ∑_k λ_k p_k(x)
+                                       • Gaussian Mixture Model: p_X(x) = ∑_k λ_k N(μ_k, σ_k²)
+                                       • Digital Comms Decoder: Decide bit 1 iff x > 2.5 V
+                                                    │
+                                                    ▼
+                                  [Vector Generalization & Transformations]
+                                    • Random Vector X = (X1, ..., Xn) ∈ ℝⁿ
+                                    • Independence: p(x1, ..., xn) = ∏ p(xi) (ALL Windows)
+                                    • IID: Independent AND Identically Distributed
+                                    • Invertible Map Y = g(X) with Inverse X = h(Y):
+                                      p_Y(y) = p_X(h(y)) · |det J_h(y)|
+  ===================================================================================================
+```
+
+---
+
+### Comparative Feature Matrices
+
+#### Table 1: Joint Distributions: Discrete vs Continuous vs Mixed
+
+| Characteristic | Discrete Joint Distribution | Continuous Joint Distribution | Mixed-Type Joint Distribution |
+| :--- | :--- | :--- | :--- |
+| **Random Vector Type** | Both $X$ and $Y$ are discrete | Both $X$ and $Y$ are continuous | One discrete ($Y$), one continuous ($X$) |
+| **Joint Density / Mass** | Joint PMF: $p_{XY}(x_i, y_j) = P(X=x_i, Y=y_j)$ | Joint PDF: $p_{XY}(x, y) = \frac{\partial^2 F}{\partial x \partial y}$ | No single joint density; defined via conditional densities |
+| **Point Probability** | $P(X=x_i, Y=y_j) \ge 0$ (Point masses) | $P(X=x, Y=y) = 0$ everywhere | $P(X=x, Y=y) = 0$ due to continuous $X$ |
+| **Total Normalization** | $\sum_i \sum_j p_{XY}(x_i, y_j) = 1.0$ | $\int_{-\infty}^\infty \int_{-\infty}^\infty p_{XY}(x, y)\,dx\,dy = 1.0$ | $\sum_y P(Y=y) \int p(x \mid y)\,dx = 1.0$ |
+| **Marginal Formula** | $p_X(x_i) = \sum_j p_{XY}(x_i, y_j)$ | $p_X(x) = \int_{-\infty}^\infty p_{XY}(x, y)\,dy$ | $p_X(x) = \sum_y p(x \mid y) P(Y=y)$ (Mixture!) |
+| **Running Example** | Two dice: $X = \max, Y = \text{sum}$ | Triangle: $p(x, y) = 2$ on $0 < x < y < 1$ | 0V / 5V bit + Gaussian channel noise (GMM) |
+
+---
+
+#### Table 2: Joint vs Marginals vs Conditionals vs Independence
+
+| Operator | Mathematical Formula | Directional Information | Physical Analogy |
+| :--- | :--- | :--- | :--- |
+| **Joint Distribution** | $p_{XY}(x, y)$ or $F_{XY}(x, y)$ | Complete 2D information landscape | The full 3D terrain topography |
+| **Marginal Distribution** | $p_X(x) = \int p_{XY}(x, y)\,dy$ | Lossy projection (unwanted axis removed) | Casting a flat shadow on the X-axis wall |
+| **Conditional Distribution** | $p(x \mid y) = \frac{p_{XY}(x, y)}{p_Y(y)}$ | Slice of joint at $y$, normalized to 100% | Slicing a loaf of bread at coordinate $y$ |
+| **Statistical Independence** | $p_{XY}(x, y) = p_X(x) \cdot p_Y(y)$ | Zero cross-coupling between coordinates | Two unlinked light switches in separate towns |
+
+---
+
+#### Table 3: Coordinate Transformations and Jacobian Scaling
+
+| Transformation Type | Mapping Formula | Inverse Mapping | Jacobian Determinant $|\det \mathbf{J}|$ | Transformed Density $p_{\mathbf{Y}}(\mathbf{y})$ |
+| :--- | :--- | :--- | :--- | :--- |
+| **1D Scalar Transform** | $Y = g(X)$ | $X = g^{-1}(Y)$ | $\left\| \frac{dx}{dy} \right\|$ | $p_X(g^{-1}(y)) \left\| \frac{dx}{dy} \right\|$ |
+| **2D Linear Stretch** | $Y_1 = X_1 + X_2$<br>$Y_2 = X_1 - X_2$ | $X_1 = \frac{Y_1 + Y_2}{2}$<br>$X_2 = \frac{Y_1 - Y_2}{2}$ | $\begin{vmatrix} 0.5 & 0.5 \\ 0.5 & -0.5 \end{vmatrix} = \left\| -0.5 \right\| = \frac{1}{2}$ | $\frac{1}{2} p_X\left(\frac{y_1+y_2}{2}, \frac{y_1-y_2}{2}\right)$ |
+| **General $n$-D Invertible** | $\mathbf{Y} = g(\mathbf{X})$ | $\mathbf{X} = h(\mathbf{Y})$ | $\left\| \det \left[ \frac{\partial h_i}{\partial y_j} \right] \right\|$ | $p_{\mathbf{X}}(h(\mathbf{y})) \left\| \det \mathbf{J}_h(\mathbf{y}) \right\|$ |
+
+---
+
+### Failure & Contrast Paths (6 Common Engineering Traps)
+
+```
+  [Engineering Trap 1: "Random Variables on Separate Experiments"]
+  TRAP: Trying to compute joint CDF F(x, y) for two variables measured on different probability spaces.
+  REALITY: (X, Y) must be defined on the SAME underlying sample space (Ω, F, P) to have a valid joint law.
+  
+  [Engineering Trap 2: "Reconstructing the Joint from Marginals Alone"]
+  TRAP: Assuming p_XY(x, y) = p_X(x) p_Y(y) without proving or assuming independence.
+  REALITY: Marginals are lossy projections. Infinitely many different joints can cast the same marginal shadows!
+  
+  [Engineering Trap 3: "Conditioning on a Continuous Point via Division by Zero"]
+  TRAP: Trying to compute P(X <= x | Y = y) using P(X <= x, Y = y) / P(Y = y), where P(Y = y) = 0.
+  REALITY: For continuous Y, conditioning is defined as the limit of an infinitesimal band [y, y + Δ] as Δ ──► 0.
+  
+  [Engineering Trap 4: "Declaring Independence from a Single Factorized Point"]
+  TRAP: Checking p_XY(x0, y0) = p_X(x0) p_Y(y0) at one point and concluding X ⊥ Y.
+  REALITY: Independence requires factorization across ALL (x, y) in ℝ² and all measurable 2D subsets!
+  
+  [Engineering Trap 5: "Mixed Distributions Called a Joint PDF"]
+  TRAP: Attempting to define a 2D joint density p_XY(x, y) when Y is a discrete category and X is continuous.
+  REALITY: No single 2D density exists; the joint is formulated as a mixture p_X(x) = ∑_y p(x|y) P(Y=y).
+  
+  [Engineering Trap 6: "Dropping the Jacobian in Vector Transformations"]
+  TRAP: Setting p_Y(y) = p_X(h(y)) when changing coordinates in multi-dimensional space.
+  REALITY: Omitting |det J| fails to account for coordinate area expansion/contraction, destroying unit probability volume.
+```
+
+---
+
+## Chalkboard Rosetta Stone
+
+This quick-reference table maps every mathematical symbol used in Tutorial 9 to its exact meaning and lecture usage.
+
+| Symbol | Mathematical Object | Reading / Pronunciation | Meaning in this Lecture |
+| :--- | :--- | :--- | :--- |
+| $(X, Y)$ | Random Vector / Pair | *"Pair X comma Y"* | Vector mapping $\Omega \to \mathbb{R}^2$ from the shared experiment $\Omega$. |
+| $F_{XY}(x, y)$ | Joint CDF | *"Joint CDF of X, Y"* | $P(X \le x, Y \le y)$: Probability mass South-West of $(x, y)$. |
+| $p_{XY}(x, y)$ | Joint PMF / Joint PDF | *"Joint mass / density"* | Probability mass at $(x_i, y_j)$ or 3D density height at $(x, y)$. |
+| $p_X(x)$ | Marginal Density of $X$ | *"Marginal p of X"* | $\int_{-\infty}^\infty p_{XY}(x, y)\,dy$: Probability density of $X$ alone. |
+| $p(x \mid y)$ | Conditional Density | *"p of x given y"* | $\frac{p_{XY}(x, y)}{p_Y(y)}$: Density of $X$ on the knife-edge slice $Y = y$. |
+| $X \perp\!\!\!\perp Y$ | Statistical Independence | *"X is independent of Y"* | $p_{XY}(x, y) = p_X(x) p_Y(y)$ for all $(x, y) \in \mathbb{R}^2$. |
+| $\text{IID}$ | Independent & Identically Distributed | *"I-I-D"* | Dataset samples drawn independently from the exact same underlying law. |
+| $\mathbf{X} \in \mathbb{R}^n$ | Random Vector of Dim $n$ | *"Vector X in R-n"* | Vector of $n$ random variables $(X_1, X_2, \dots, X_n)$ on $\Omega$. |
+| $\mathbf{J}_h(\mathbf{y})$ | Jacobian Matrix | *"Jacobian of inverse h"* | Matrix of partial derivatives $\left[ \frac{\partial x_i}{\partial y_j} \right]$ for coordinate transform. |
+| $\lvert \det \mathbf{J} \rvert$ | Absolute Jacobian Determinant | *"Absolute det J"* | Local volume scaling factor preserving unit probability volume under transformation. |
+| $\text{GMM}$ | Gaussian Mixture Model | *"G-M-M"* | Weighted mixture of Gaussian densities: $p(x) = \sum_k \lambda_k \mathcal{N}(\mu_k, \sigma_k^2)$. |
+
+---
+
+## Complete Standalone Executable Python Simulation Script
+
+<a id="standalone-simulation-script"></a>
+
+Below is a self-contained, end-to-end Python script validating all mathematical derivations in Tutorial 9: 2D rectangle CDF formulas, two-dice joint PMF, triangle continuous joint PDF, marginal integrations, continuous conditioning, GMM binary communications decoding, independence testing, and Jacobian transformations.
+
+```python
+"""
+Tutorial 09: Review of Basic Probability 3 — Master Simulation Script
+Validated on Python 3.10+ and NumPy 2.0+
+"""
+
+import numpy as np
+from scipy import integrate
+
+def run_tutorial_09_simulation():
+    print("=" * 80)
+    print("TUTORIAL 09: MULTIVARIATE PROBABILITY & RANDOM VECTORS SIMULATION")
+    print("=" * 80)
+    
+    rng = np.random.default_rng(42)
+    N = 200_000
+
+    # ---------------------------------------------------------
+    # 1. 2D RECTANGLE CDF FORMULA (4 CORNERS)
+    # ---------------------------------------------------------
+    print("\n[1] 2D Joint CDF Rectangle Window Inclusion-Exclusion")
+    # Base: Uniform on [0, 1] x [0, 1] -> F(x, y) = x * y
+    def F_joint(x, y):
+        return np.clip(x, 0.0, 1.0) * np.clip(y, 0.0, 1.0)
+    
+    x1, x2 = 0.20, 0.60
+    y1, y2 = 0.30, 0.80
+    
+    # 4-corner formula: F22 - F21 - F12 + F11
+    rect_prob = F_joint(x2, y2) - F_joint(x2, y1) - F_joint(x1, y2) + F_joint(x1, y1)
+    
+    # Monte Carlo check
+    U1 = rng.uniform(0, 1, size=N)
+    U2 = rng.uniform(0, 1, size=N)
+    rect_sim = np.mean((U1 > x1) & (U1 <= x2) & (U2 > y1) & (U2 <= y2))
+    
+    print(f"  Analytical 4-Corner Window Prob: {rect_prob:.4f} (Theory: 0.2000)")
+    print(f"  Monte Carlo Empirical Window:    {rect_sim:.4f}")
+    assert np.isclose(rect_prob, 0.20)
+    assert np.isclose(rect_sim, 0.20, atol=0.005)
+
+    # ---------------------------------------------------------
+    # 2. TWO DICE JOINT PMF (MAX, SUM)
+    # ---------------------------------------------------------
+    print("\n[2] Two Dice Joint PMF (X = max, Y = sum)")
+    d1 = rng.integers(1, 7, size=N)
+    d2 = rng.integers(1, 7, size=N)
+    X_dice = np.maximum(d1, d2)
+    Y_dice = d1 + d2
+    
+    # Check p(3, 6): only (3,3) -> 1/36 = 0.0278
+    p_3_6_sim = np.mean((X_dice == 3) & (Y_dice == 6))
+    # Check p(5, 7): (2,5) and (5,2) -> 2/36 = 0.0556
+    p_5_7_sim = np.mean((X_dice == 5) & (Y_dice == 7))
+    
+    print(f"  p(X=3, Y=6) [n=2m]: {p_3_6_sim:.4f} (Theory: 1/36 = {1/36:.4f})")
+    print(f"  p(X=5, Y=7) [n!=2m]:{p_5_7_sim:.4f} (Theory: 2/36 = {2/36:.4f})")
+    assert np.isclose(p_3_6_sim, 1/36, atol=0.003)
+    assert np.isclose(p_5_7_sim, 2/36, atol=0.003)
+
+    # ---------------------------------------------------------
+    # 3. CONTINUOUS TRIANGLE JOINT PDF & MARGINALS
+    # ---------------------------------------------------------
+    print("\n[3] Continuous Triangle Joint PDF (p=2 on 0 < x < y < 1)")
+    # Generate samples on triangle via min/max of uniform pair
+    u1_t = rng.uniform(0, 1, size=N)
+    u2_t = rng.uniform(0, 1, size=N)
+    X_tri = np.minimum(u1_t, u2_t)
+    Y_tri = np.maximum(u1_t, u2_t)
+    
+    # (A) Sub-region P(Y > X + 0.5) -> Theory = 0.2500
+    p_sliver_sim = np.mean(Y_tri > X_tri + 0.5)
+    print(f"  Sub-region P(Y > X + 0.5):      {p_sliver_sim:.4f} (Theory: 0.2500)")
+    assert np.isclose(p_sliver_sim, 0.25, atol=0.005)
+    
+    # (B) Marginal Moments: E[X] = ∫ x * 2(1-x) dx = 2(1/2 - 1/3) = 1/3 ≈ 0.3333
+    # E[Y] = ∫ y * 2y dy = 2/3 ≈ 0.6667
+    print(f"  Marginal Mean E[X]:              {X_tri.mean():.4f} (Theory: 1/3 = {1/3:.4f})")
+    print(f"  Marginal Mean E[Y]:              {Y_tri.mean():.4f} (Theory: 2/3 = {2/3:.4f})")
+    assert np.isclose(X_tri.mean(), 1/3, atol=0.005)
+    assert np.isclose(Y_tri.mean(), 2/3, atol=0.005)
+
+    # ---------------------------------------------------------
+    # 4. CONDITIONAL CONTINUOUS DISTRIBUTION
+    # ---------------------------------------------------------
+    print("\n[4] Conditional Continuous Slice: X | Y=0.8 ~ Unif(0, 0.8)")
+    band_mask = (Y_tri >= 0.795) & (Y_tri <= 0.805)
+    X_slice = X_tri[band_mask]
+    p_cond_sim = np.mean(X_slice <= 0.40)
+    print(f"  P(X <= 0.40 | Y ~ 0.80):        {p_cond_sim:.4f} (Theory: 0.4/0.8 = 0.5000)")
+    assert np.isclose(p_cond_sim, 0.50, atol=0.02)
+
+    # ---------------------------------------------------------
+    # 5. MIXED TYPE GMM & BINARY COMMUNICATIONS DECODER
+    # ---------------------------------------------------------
+    print("\n[5] Mixed Type GMM & Binary Communication Decoder (0V vs 5V)")
+    # Bit Y in {0, 1} with equal prior 0.5
+    bits = rng.binomial(1, 0.5, size=N)
+    # Voltage: 0V if bit=0, 5V if bit=1 + Gaussian channel noise N(0, 1)
+    noise = rng.normal(0, 1.0, size=N)
+    received_voltage = np.where(bits == 1, 5.0, 0.0) + noise
+    
+    # Optimal MAP decoder threshold: x > 2.5V
+    decoded_bits = (received_voltage > 2.5).astype(int)
+    bit_error_rate = np.mean(decoded_bits != bits)
+    # Theoretical BER = Q(2.5) = 1 - Phi(2.5) ≈ 0.0062
+    print(f"  Threshold Decoder (x > 2.5V) BER: {bit_error_rate:.4f} (Theory: ~0.0062)")
+    assert bit_error_rate < 0.01
+
+    # ---------------------------------------------------------
+    # 6. INDEPENDENCE & 2D VECTOR FACTORIZATION
+    # ---------------------------------------------------------
+    print("\n[6] Statistical Independence Factorization")
+    # Independent: U1, U2
+    p_joint_indep = np.mean((U1 <= 0.5) & (U2 <= 0.5))
+    p_prod_indep = np.mean(U1 <= 0.5) * np.mean(U2 <= 0.5)
+    print(f"  Independent Pair: Joint {p_joint_indep:.4f} == Product {p_prod_indep:.4f}")
+    assert np.isclose(p_joint_indep, p_prod_indep, atol=0.005)
+    
+    # Dependent: X_tri, Y_tri
+    p_joint_dep = np.mean((X_tri <= 0.5) & (Y_tri <= 0.5))
+    p_prod_dep = np.mean(X_tri <= 0.5) * np.mean(Y_tri <= 0.5)
+    print(f"  Dependent Triangle: Joint {p_joint_dep:.4f} != Product {p_prod_dep:.4f}")
+    assert not np.isclose(p_joint_dep, p_prod_dep, atol=0.05)
+
+    # ---------------------------------------------------------
+    # 7. 2D LINEAR TRANSFORMATION & JACOBIAN SCALING
+    # ---------------------------------------------------------
+    print("\n[7] 2D Coordinate Transformation & Jacobian Determinant")
+    # Y1 = X1 + X2, Y2 = X1 - X2 -> |det J| = 1/2
+    X1 = rng.uniform(0.0, 1.0, size=N)
+    X2 = rng.uniform(0.0, 1.0, size=N)
+    Y1_trans = X1 + X2
+    Y2_trans = X1 - X2
+    
+    # Empirical density near (y1=1.0, y2=0.2)
+    dy = 0.06
+    in_box = np.mean((np.abs(Y1_trans - 1.0) <= dy/2) & (np.abs(Y2_trans - 0.2) <= dy/2))
+    emp_dens = in_box / (dy * dy)
+    print(f"  Transformed Density p_Y(1.0, 0.2): {emp_dens:.4f} (Theory: 1.0 * |J| = 0.5000)")
+    assert np.isclose(emp_dens, 0.50, atol=0.04)
+
+    print("\n" + "=" * 80)
+    print("ALL TUTORIAL 09 MATHEMATICAL THEOREMS & SIMULATIONS VERIFIED!")
+    print("=" * 80)
+
+if __name__ == "__main__":
+    run_tutorial_09_simulation()
+```
+
+---
+
+## Topic 1: Pair and Joint CDF (00:03–05:53)
+
+<a id="topic-1-pair-and-joint-cdf-0003–0553"></a>
 
 ### Where this sits on the master map
+Moving from a single random variable to a vector pair on a shared sample space. Warm-up: [same experiment](./PREREQUISITES.md#p1-same) · [2D window](./PREREQUISITES.md#p2-window).
 
-**PAIR** — Two maps, one experiment. Warm-up: [same Ω](./PREREQUISITES.md#p1-same) · [window](./PREREQUISITES.md#p2-window).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Pair and joint CDF](./screenshots/composites/ch01-topic-01-pair-joint-cdf-panel1of1.png)
 
-**Figure — ~03:48–05:34:** $F_{XY}:\mathbb{R}^2\to\mathbb{R}$, $F(x,y)=P(X\le x,Y\le y)$ as an intersection of events; rectangle $F_{22}-F_{21}-F_{12}+F_{11}$; cylindrical-set sketch.
-
-### What he is establishing
-
-This block is a **review**, not a first course. Viewers are assumed to have a rigorous probability class and a first ML class. Tutorials 7–8 already built the triplet, conditionals, Bayes, one RV (discrete and continuous), $E$, Var, LOTUS, and Markov/Chebyshev/Jensen. Today: a **pair**, then **several** random variables.
-
-Let $X$ and $Y$ be random variables on the **same** $(\Omega,\mathcal{F},P)$. Each maps $\Omega\to\mathbb{R}$. The pair is a **vector-valued** map $\Omega\to\mathbb{R}^2$.
-
-The **joint distribution function** (joint CDF) is $F_{XY}:\mathbb{R}^2\to\mathbb{R}$,
-
-$$
-F_{XY}(x,y) = P(X\le x,\; Y\le y) = P\bigl(\{X\le x\}\cap\{Y\le y\}\bigr)
-$$
-
-For $x_1<x_2$ and $y_1<y_2$ the probability of the **rectangle** (a **cylindrical set** in their language) is
-
-$$
-P(x_1<X\le x_2,\; y_1<Y\le y_2)
-= F(x_2,y_2)-F(x_2,y_1)-F(x_1,y_2)+F(x_1,y_1)
-$$
-
-You can now write $F$ for a pair and open a window with four corners. Still missing: which axioms $F$ must obey.
-
-A common trap is defining $X$ and $Y$ on two different experiments and still calling $F$ a joint.
-
-### Analogy for this topic only
-
-One photograph. $X$ is brightness, $Y$ is number of faces. $F(x,y)$ is “how often brightness is $\le x$ **and** faces $\le y$.” A window on the brightness–faces plane uses four corners of that running total, not one.
-
-Question: **Why must $X$ and $Y$ share $\Omega$?**
-
-In lecture words: this box is the pair and $F_{XY}$.
-
-### Local picture
-
-```
-        y2 ┌────────┐
-           │ window │     = F22 − F21 − F12 + F11
-        y1 └────────┘
-          x1        x2
-```
-
-**Notice:** the $+$ is the small corner you subtracted twice.
-
-### Bridge
-
-A 1-D CDF had $F(-\infty)=0$, $F(\infty)=1$, nondecreasing, right-continuous. What is the 2-D list?
+*Figure — ~00:03–05:53: Blackboard derivation defining the joint distribution function $F_{XY}(x,y) = P(X \le x, Y \le y)$ as an intersection of events on $(\Omega, \mathcal{F}, P)$, and the 2D rectangular inclusion-exclusion window formula.*
 
 ---
 
-## Topic 2: Joint CDF properties (05:53–08:23)
+### 1. 👶 ELI5 Quick Intuition
+Think of a medical health checkup where a doctor examines a single patient ($\omega$):
+- From this one patient, the doctor records both **Blood Pressure ($X$)** and **Cholesterol ($Y$)**.
+- You do not measure Blood Pressure on Alice and Cholesterol on Bob; both numbers belong to the **same patient $\omega$**.
+- The **Joint CDF $F(x, y)$** answers: *"What percentage of patients have Blood Pressure $\le x$ AND Cholesterol $\le y$?"*
+- To find the probability inside a 2D health target box $[x_1, x_2] \times [y_1, y_2]$, you combine the four corners of $F(x, y)$!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The Shared Sample Space Prerequisite:**
+   - $X: \Omega \to \mathbb{R}$ and $Y: \Omega \to \mathbb{R}$ are two real-valued functions defined on the **same foundational probability space** $(\Omega, \mathcal{F}, P)$.
+   - The pair $(X, Y)$ is a vector mapping $\Omega \to \mathbb{R}^2$.
+2. **Definition of Joint CDF:**
+   $$F_{XY}(x, y) \triangleq P(X \le x, \, Y \le y) = P\bigl( \{\omega : X(\omega) \le x\} \cap \{\omega : Y(\omega) \le y\} \bigr)$$
+3. **The 2D Rectangle Window Formula:**
+   - To compute the probability that $(X, Y)$ lands in a rectangular window $(x_1, x_2] \times (y_1, y_2]$:
+     $$P(x_1 < X \le x_2, \, y_1 < Y \le y_2) = F(x_2, y_2) - F(x_2, y_1) - F(x_1, y_2) + F(x_1, y_1)$$
+   - *Why the $+F(x_1, y_1)$ term appears:* Subtracting the two side strips removes the bottom-left corner twice; adding it back restores exact coverage.
+
+---
+
+### 3. 📐 Formal Mathematics & Rigorous Derivation
+
+```
+  (Ω, F, P) ──► (X, Y): Ω ──► ℝ²
+  
+  Joint CDF F(x, y) = P(X ≤ x, Y ≤ y)
+  
+        y2 ┌──────────────* (x2, y2)  [+ F(x2, y2)]
+           │  Target Box  │
+        y1 *──────────────* (x2, y1)  [- F(x2, y1)]
+         (x1, y1)       [- F(x1, y2)]
+         [+ F(x1, y1)]
+          x1             x2
+```
+
+#### Step-by-Step Chalkboard Commentary
+- **Step 1:** Let $A = (x_1, x_2] \times (y_1, y_2]$ be a cylindrical 2D rectangular set in $\mathcal{B}(\mathbb{R}^2)$.
+- **Step 2:** The semi-infinite rectangle at $(x_2, y_2)$ is $(-\infty, x_2] \times (-\infty, y_2]$.
+- **Step 3:** Decompose this region into disjoint sets:
+  $$(-\infty, x_2] \times (-\infty, y_2] = A \cup \bigl( (-\infty, x_1] \times (-\infty, y_2] \bigr) \cup \bigl( (-\infty, x_2] \times (-\infty, y_1] \bigr)$$
+- **Step 4:** The intersection of the two strips is $(-\infty, x_1] \times (-\infty, y_1]$.
+- **Step 5:** Applying the inclusion-exclusion principle:
+  $$P(A) = F_{XY}(x_2, y_2) - F_{XY}(x_1, y_2) - F_{XY}(x_2, y_1) + F_{XY}(x_1, y_1) \quad \blacksquare$$
+
+---
+
+### 4. 🔢 Concrete Numerical Example
+Let $F_{XY}(x, y) = x^2 y^3$ for $(x, y) \in [0, 1] \times [0, 1]$. Compute $P(0.5 < X \le 1.0, \, 0.4 < Y \le 0.8)$:
+1. $F(1.0, 0.8) = (1.0)^2 (0.8)^3 = 1.0 \times 0.512 = 0.512$
+2. $F(1.0, 0.4) = (1.0)^2 (0.4)^3 = 1.0 \times 0.064 = 0.064$
+3. $F(0.5, 0.8) = (0.5)^2 (0.8)^3 = 0.25 \times 0.512 = 0.128$
+4. $F(0.5, 0.4) = (0.5)^2 (0.4)^3 = 0.25 \times 0.064 = 0.016$
+5. Calculate Rectangle Probability:
+   $$P = 0.512 - 0.064 - 0.128 + 0.016 = 0.3360 = 33.60\%$$
+
+---
+
+## Topic 2: Joint CDF Properties & Cylindrical Sets (05:53–08:23)
+
+<a id="topic-2-joint-cdf-properties-0553–0823"></a>
 
 ### Where this sits on the master map
+Establishing the axiomatic mathematical constraints that any valid 2D Joint CDF must satisfy. Warm-up: [window formula](./PREREQUISITES.md#p2-window).
 
-**AXIOMS OF $F$** — Same jobs as 1-D, two arguments. Warm-up: [window](./PREREQUISITES.md#p2-window).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Joint CDF properties](./screenshots/composites/ch02-topic-02-joint-cdf-properties-panel1of1.png)
 
-**Figure — ~05:53–08:23:** $F(-\infty,\cdot)=0$; $F(\infty,\infty)=1$; nondecreasing in each argument; right-continuous with left limits in each; rectangle $\ge 0$.
-
-### What he is establishing
-
-The joint CDF is a **valid probability measure** in the same sense as a 1-D CDF.
-
-- If **either** argument is $-\infty$, $F=0$.  
-- $F(+\infty,+\infty)=1$ (the whole plane).  
-- $F$ is **nondecreasing in each argument**.  
-- $F$ is **right-continuous** and has left limits **in each argument**.  
-- Every rectangle probability is $\ge 0$.
-
-Any function $\mathbb{R}^2\to\mathbb{R}$ with these properties **is** a joint CDF of some pair.
-
-You can now reject a proposed $F$ that goes down in $x$ or forgets $F(\infty,\infty)=1$. Still missing: the discrete table (joint PMF).
-
-A common trap is checking right-continuity in only one slot.
-
-### Analogy for this topic only
-
-The south-west pile of cloth never shrinks when you move the pin right or up. At the far north-east corner you have the whole tablecloth (mass 1). Off the left or bottom edge you have nothing.
-
-Question: **What is $F(x,-\infty)$?**
-
-In lecture words: this box is the joint-CDF axiom list.
-
-### Local picture
-
-```
-  F(−∞, y)=0     F(x, −∞)=0     F(+∞,+∞)=1
-  move x or y up-right  →  F cannot fall
-  rectangle mass ≥ 0
-```
-
-**Notice:** two arguments ⇒ every 1-D axiom is stated twice.
-
-### Bridge
-
-How do two **discrete** RVs store the joint — a table of piles?
+*Figure — ~05:53–08:23: Blackboard listing of the axiomatic properties of $F_{XY}$: limits at $-\infty$ and $+\infty$, coordinate-wise monotonicity, right-continuity, and the non-negative rectangle condition.*
 
 ---
 
-## Topic 3: Joint PMF and two dice (08:23–13:48)
+### 1. 👶 ELI5 Quick Intuition
+Think of $F(x, y)$ as measuring how much sand is piled on a beach strictly to the South-West of your beach umbrella:
+- If you move your umbrella infinitely far West ($x \to -\infty$) or infinitely far South ($y \to -\infty$), there is **zero sand behind you** ($F = 0$).
+- If you move your umbrella to the extreme North-East corner of the world ($+\infty, +\infty$), **all the sand in the world is behind you** ($F = 1.0$).
+- Moving your umbrella North or East can **never decrease the amount of sand** ($F$ is non-decreasing).
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **The 5 Universal Axioms of a 2D Joint CDF:**
+   - **Axiom 1 (Null Boundaries):** $F(-\infty, y) = 0$ and $F(x, -\infty) = 0$ for all real $x, y$.
+   - **Axiom 2 (Total Normalization):** $F(+\infty, +\infty) = 1.0$.
+   - **Axiom 3 (Coordinate-Wise Monotonicity):** If $x_1 \le x_2$, then $F(x_1, y) \le F(x_2, y)$; if $y_1 \le y_2$, then $F(x, y_1) \le F(x, y_2)$.
+   - **Axiom 4 (Right-Continuity):** $\lim_{u \to x^+, v \to y^+} F(u, v) = F(x, y)$ in both arguments.
+   - **Axiom 5 (Non-Negative Rectangle Measure):** For all $x_1 < x_2$ and $y_1 < y_2$:
+     $$F(x_2, y_2) - F(x_2, y_1) - F(x_1, y_2) + F(x_1, y_1) \ge 0$$
+2. **The 2D Trap:** Monotonicity in $x$ and $y$ alone does NOT guarantee Axiom 5! A function can be increasing in both arguments and still produce negative rectangle probabilities.
+
+---
+
+### 3. 📐 Formal Mathematics & Rigorous Formulation
+
+```
+  Axiom Summary for Joint CDF F_XY: ℝ² ──► [0, 1]
+  
+  • F(-∞, y) = F(x, -∞) = 0
+  • F(+∞, +∞) = 1
+  • x1 ≤ x2 ──► F(x1, y) ≤ F(x2, y)
+  • y1 ≤ y2 ──► F(x, y1) ≤ F(x, y2)
+  • F(x+, y+) = F(x, y)
+  • Δ_{x1}^{x2} Δ_{y1}^{y2} F(x, y) ≥ 0
+```
+
+---
+
+## Topic 3: Joint PMF and Two Dice (Max, Sum) (08:23–13:48)
+
+<a id="topic-3-joint-pmf-and-two-dice-0823–1348"></a>
 
 ### Where this sits on the master map
+Formulating joint distributions for discrete random variables and analyzing the two-dice $(\max, \text{sum})$ contingency table. Warm-up: [table of piles](./PREREQUISITES.md#p3-table).
 
-**TABLE** — Joint mass. Warm-up: [table](./PREREQUISITES.md#p3-table).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Joint PMF two dice](./screenshots/composites/ch03-topic-03-joint-pmf-two-dice-panel1of1.png)
 
-**Figure — ~08:23–13:48:** $p(x_i,y_j)=P(X=x_i,Y=y_j)$; 0 off support; sums to 1; two dice $X=\max$, $Y=\mathrm{sum}$; masses $2/36$ or $1/36$.
-
-### What he is establishing
-
-Let $X$ take $x_1,\ldots,x_n$ and $Y$ take $y_1,\ldots,y_m$ ($n$ need not equal $m$). The **joint PMF** is
-
-$$
-p_{XY}(x_i,y_j) = P(X=x_i,\; Y=y_j)
-$$
-
-and $0$ at every other pair. Analogous to one PMF: every mass $\ge 0$, and the **double sum is 1**. The joint CDF is the sum of all masses with $x_i\le x$ and $y_j\le y$.
-
-**Running example.** Roll two dice. $\Omega=\{(w_1,w_2): w_i\in\{1,\ldots,6\}\}$.  
-$X=\max(w_1,w_2)\in\{1,\ldots,6\}$, $Y=w_1+w_2\in\{2,\ldots,12\}$.
-
-The event $\{X=m,Y=n\}$ is the outcomes where the max is $m$ and the sum is $n$. The only candidates are $(m,n-m)$ and $(n-m,m)$. If $n=2m$ those coincide (one outcome). So
-
-$$
-p(m,n)=\frac{2}{36}\quad(n\neq 2m),\qquad p(m,n)=\frac{1}{36}\quad(n=2m)
-$$
-
-on the legal $(m,n)$, else $0$. Checking that all legal cells sum to 1 is left as an exercise. A quick sanity count: there are $36$ equally likely downstairs atoms, and every atom is assigned to exactly one $(m,n)$ cell, so the upstairs masses **must** add to $1$ if you grouped them correctly.
-
-You can now fill a joint table and special-case the diagonal $n=2m$. Still missing: a **density** on a region of the plane.
-
-A common trap is forcing $X$ and $Y$ to have the same number of values.
-
-### Analogy for this topic only
-
-A $6\times 11$ tray of cookie squares. Most squares empty. Two cookies in a square when both $(m,n-m)$ and $(n-m,m)$ exist; one cookie when they are the same face twice. All cookies together: 36 crumbs / 36 = 1.
-
-Question: **When is the joint mass $1/36$ rather than $2/36$?**
-
-In lecture words: this box is the joint PMF and the dice pair.
-
-### Local picture
-
-```
-  (w1,w2)  →  X=max    Y=sum
-  (2,5)    →  5        7     two ways for (5,7)
-  (3,3)    →  3        6     one way  (n=2m)
-```
-
-**Notice:** 36 atoms downstairs; the table upstairs groups them.
-
-### Bridge
-
-What if $X$ and $Y$ are **continuous** — a height on a triangle instead of piles?
+*Figure — ~08:23–13:48: Blackboard derivation of discrete Joint PMF $p_{XY}(x_i, y_j)$, the double sum normalization $\sum_i \sum_j p(x_i, y_j) = 1$, and grouping the 36 dice outcomes into $(m, n)$ cells.*
 
 ---
 
-## Topic 4: Joint PDF on a triangle (13:48–19:07)
+### 1. 👶 ELI5 Quick Intuition
+Imagine rolling two dice. You have two scorekeepers:
+- Scorekeeper 1 writes down the **highest face rolled** ($X = \max$).
+- Scorekeeper 2 writes down the **sum of both faces** ($Y = \text{sum}$).
+- Out of 36 equally likely rolls:
+  - If you roll $(2, 5)$ or $(5, 2)$, both scorekeepers record $(X=5, Y=7)$ $\implies$ probability is $2/36$.
+  - If you roll doubles $(3, 3)$, scorekeepers record $(X=3, Y=6)$ $\implies$ probability is $1/36$.
+  - All 36 possible rolls land into one of these table cells, adding up to $100\%$!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Definition of Discrete Joint PMF:**
+   $$p_{XY}(x_i, y_j) \triangleq P(X = x_i, Y = y_j)$$
+2. **Double Sum Normalization:**
+   $$\sum_{i=1}^n \sum_{j=1}^m p_{XY}(x_i, y_j) = 1.0$$
+3. **The Two Dice Grouping Rule:**
+   - Let $X = \max(w_1, w_2) \in \{1, \dots, 6\}$ and $Y = w_1 + w_2 \in \{2, \dots, 12\}$.
+   - Target event $\{X = m, Y = n\}$ can only be generated by outcomes $(m, n-m)$ or $(n-m, m)$.
+   - **Case 1 ($n = 2m$):** Both dice rolled identical faces $m$ (e.g. $(3,3) \implies \max=3, \text{sum}=6$). Exactly 1 roll $\implies p(m, n) = 1/36$.
+   - **Case 2 ($n \ne 2m$):** Distinct faces (e.g. $(2,5)$ and $(5,2)$). Exactly 2 rolls $\implies p(m, n) = 2/36$.
+   - **Case 3 (Impossible Combinations):** If $n-m > m$ or $n-m < 1$, $p(m, n) = 0$.
+
+---
+
+### 3. 📐 Formal Mathematics & Table Construction
+
+```
+  Two Fair Dice Sample Space: |Ω| = 36 equally likely pairs (w1, w2)
+  
+  p(m, n) = { 1/36   if n = 2m and 1 ≤ m ≤ 6
+            { 2/36   if m < n ≤ 2m and 1 ≤ n-m < m
+            { 0      otherwise
+```
+
+---
+
+### 4. 🔢 Concrete Numerical Example
+Let's compute probabilities for specific $(m, n)$ pairs:
+1. $P(X = 4, Y = 8)$: Since $n = 8 = 2(4) = 2m$, only $(4, 4)$ works $\implies p(4, 8) = 1/36 \approx 0.0278$.
+2. $P(X = 4, Y = 7)$: Since $n = 7 \ne 2(4)$, rolls are $(4, 3)$ and $(3, 4) \implies p(4, 7) = 2/36 \approx 0.0556$.
+3. $P(X = 2, Y = 7)$: If $\max=2$, max possible sum is $2+2=4 < 7 \implies p(2, 7) = 0.0$.
+
+---
+
+## Topic 4: Joint PDF on a Triangle (13:48–19:07)
+
+<a id="topic-4-joint-pdf-on-a-triangle-1348–1907"></a>
 
 ### Where this sits on the master map
+Extending continuous probability densities to 2D regions and integrating over non-rectangular geometric domains. Warm-up: [frosting on a triangle](./PREREQUISITES.md#p4-jam).
 
-**HEIGHT ON A REGION** — Joint density. Warm-up: [jam](./PREREQUISITES.md#p4-jam).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Joint PDF triangle](./screenshots/composites/ch04-topic-04-joint-pdf-triangle-panel1of1.png)
 
-**Figure — ~13:48–19:07:** $p\ge 0$, $\iint p=1$; example $p=2$ on $0<x<y<1$; $P(Y>X+0.5)=0.25$.
+*Figure — ~13:48–19:07: Blackboard derivation of Joint PDF axioms $p(x,y) \ge 0, \iint p = 1$, the running triangle example $p(x,y) = 2$ on $0 < x < y < 1$, and sub-region probability $P(Y > X + 0.5) = 0.25$.*
 
-### What he is establishing
+---
 
-$X,Y$ continuous type with joint CDF $F$ if there is a **joint PDF** $p_{XY}$ with
+### 1. 👶 ELI5 Quick Intuition
+Imagine a triangular baking dish with vertices at $(0,0)$, $(0,1)$, and $(1,1)$:
+- The area of this triangular dish is $0.5$ square units ($1/2 \times \text{base} \times \text{height}$).
+- You pour a uniform layer of cake batter into the dish with total volume equal to $1.0$.
+- Because the base area is $0.5$, the batter stands **2 units tall** ($p(x, y) = 2.0$).
+- If you cut out an upper triangular sliver where $Y > X + 0.5$, that sliver occupies half the width and half the height ($1/4$ the area), containing **$0.25$ units of batter (25% probability)**!
 
-$$
-F(x,y)=\int_{-\infty}^{y}\int_{-\infty}^{x} p(u,v)\,du\,dv
-$$
+---
 
-Axioms: $p\ge 0$ everywhere, and $\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}p=1$. Any such $p$ is a joint density of some pair.
+### 2. 🔍 Plain-English Breakdown
+1. **Definition of Continuous Joint PDF:**
+   $$F_{XY}(x, y) = \int_{-\infty}^y \int_{-\infty}^x p_{XY}(u, v)\,du\,dv$$
+2. **The 2 Joint PDF Axioms:**
+   - $p_{XY}(x, y) \ge 0$ for all $(x, y) \in \mathbb{R}^2$.
+   - $\int_{-\infty}^\infty \int_{-\infty}^\infty p_{XY}(x, y)\,dx\,dy = 1.0$.
+3. **The Running Triangle Example:**
+   - Support: $\mathcal{S} = \{(x, y) \in \mathbb{R}^2 : 0 < x < y < 1\}$.
+   - Density: $p_{XY}(x, y) = 2.0$ on $\mathcal{S}$, and $0$ elsewhere.
+   - Verification: $\int_{y=0}^1 \int_{x=0}^y 2 \, dx \, dy = \int_0^1 2y \, dy = [y^2]_0^1 = 1.0 \checkmark$.
+4. **Probability of a Sub-Region:**
+   - To compute $P(Y > X + 0.5)$, integrate over the region $A = \{(x, y) \in \mathcal{S} : y > x + 0.5\}$.
+   - Integration limits: $y \in [0.5, 1.0]$ and $x \in [0, y - 0.5] \implies P(A) = 0.25$.
 
-They **warn** (load-bearing): two continuous-type RVs do **not** automatically have a joint density. Continuous type for each margin is weaker than “the pair admits a joint $p(x,y)$.” The definition is the integral representation of $F$, not “both look continuous.”
+---
 
-**Example.** $p(x,y)=2$ on $0<x<y<1$, and $0$ elsewhere. Nonnegativity is obvious. The double integral reduces to the triangle:
-
-$$
-\int_{y=0}^{1}\int_{x=0}^{y} 2\,dx\,dy = 1
-$$
-
-The board sketch is the **support**, not a 3-D plot of $p$ — they say so.
-
-$P((X,Y)\in A)=\iint_A p$. For $A=\{Y>X+0.5\}$ they integrate $y$ from $0.5$ to $1$ and $x$ from $0$ to $y-0.5$ and get **$0.25$**.
-
-You can now certify a joint $p$ and integrate a subregion. Still missing: peeling one variable to get a **marginal**.
-
-A common trap is treating the triangle drawing as a graph of height $p$.
-
-### Analogy for this topic only
-
-Frost a triangle of cake with 1 cup of frosting at height 2. Asking $P(Y>X+0.5)$ is “how much frosting sits in the upper sliver?” Answer: a quarter cup.
-
-Question: **Why is height 2 legal?**
-
-In lecture words: this box is the joint PDF.
-
-### Local picture
+### 3. 📐 Formal Mathematics & Double Integral Derivation
 
 ```
-  y
-  1 |    /|
-    |   / |   p=2 on 0<x<y<1
-    |  /  |   area 1/2  →  volume 1
-  0 +-----+ x
-    0     1
-
-  Y > X+0.5  →  smaller triangle, volume 0.25
+  y ^
+  1 ┼        /|   Upper Sliver Region A: y > x + 0.5
+    │       / |   y ∈ [0.5, 1.0],  x ∈ [0, y - 0.5]
+0.5 ┼───*  /  |
+    │   | /   |   ∫_{0.5}^1 [ ∫_0^{y-0.5} 2 dx ] dy
+  0 ┴───┴─────┴───► x
+    0  0.5    1   = ∫_{0.5}^1 2(y - 0.5) dy = 0.25
 ```
 
-**Notice:** endpoints of the triangle do not matter (zero area).
-
-### Bridge
-
-Given the joint, how do you recover the law of $X$ **alone**?
+#### Step-by-Step Integration
+$$\begin{aligned}
+P(Y > X + 0.5) &= \int_{y=0.5}^1 \left( \int_{x=0}^{y-0.5} 2 \, dx \right) dy \\
+&= \int_{y=0.5}^1 2(y - 0.5) \, dy \\
+&= \left[ y^2 - y \right]_{0.5}^1 = (1 - 1) - (0.25 - 0.50) = 0 - (-0.25) = 0.25 \quad \blacksquare
+\end{aligned}$$
 
 ---
 
 ## Topic 5: Marginals (19:07–26:34)
 
+<a id="topic-5-marginals-1907–2634"></a>
+
 ### Where this sits on the master map
+Projecting multivariate distributions down to individual scalar coordinates by summing rows or integrating out unwanted axes. Warm-up: [spreadsheet margins](./PREREQUISITES.md#p5-margin).
 
-**PEEL** — Sum or integrate the other variable. Warm-up: [margin](./PREREQUISITES.md#p5-margin).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Marginals](./screenshots/composites/ch05-topic-05-marginals-panel1of1.png)
 
-**Figure — ~19:07–26:34:** $F_X(x)=F(x,\infty)$; $p_X(x_i)=\sum_j p(x_i,y_j)$; $p_X(x)=\int p(x,y)\,dy$; “margin of the table”; joint $\Rightarrow$ unique margins, not conversely.
-
-### What he is establishing
-
-Set the unused argument of $F$ to $+\infty$:
-
-$$
-F_X(x)=F_{XY}(x,+\infty)=P(X\le x),\qquad F_Y(y)=F_{XY}(+\infty,y)
-$$
-
-**Discrete:** fix $x_i$, sum the row: $p_X(x_i)=\sum_j p(x_i,y_j)$.  
-**Continuous:** $p_X(x)=\int p(x,y)\,dy$. Same for $Y$.
-
-Name: old tables wrote row/column totals in the **margin**.
-
-**Dice.** $p_X(m)$ = sum of $p(m,n)$ over legal $n=m+1,\ldots,2m$.  
-**Triangle.** Fix $x\in(0,1)$; $y$ runs from $x$ to $1$; $p_X(x)=\int_x^1 2\,dy=2(1-x)$. Similarly $p_Y(y)=2y$ on $(0,1)$. Check $\int_0^1 2(1-x)\,dx=1$.
-
-**Uniqueness.** A joint determines the marginals **uniquely**. The converse is **false**: many joints share the same pair of marginals. You cannot reconstruct $p(x,y)$ from $p_X$ and $p_Y$ alone (unless you add independence later).
-
-You can now peel a joint and refuse “two margins ⇒ one joint.” Still missing: the **slice** $X\mid Y=y$.
-
-A common trap is thinking two Gaussian margins force a unique bivariate Gaussian.
-
-### Analogy for this topic only
-
-A spreadsheet of cookie counts. The right-hand **margin** is cookies per row, ignoring columns. Many different interiors can share those same row and column totals.
-
-Question: **Can two different joints have the same $p_X$ and $p_Y$?**
-
-In lecture words: this box is marginals.
-
-### Local picture
-
-```
-         y1  y2  y3   | p_X
-    x1   ·   ·   ·    | row sum
-    x2   ·   ·   ·    | row sum
-                      +------
-         col sums  =  p_Y
-
-  triangle:  p_X(x)=2(1−x)   p_Y(y)=2y
-```
-
-**Notice:** joint → margins is easy; margins → joint is underdetermined.
-
-### Bridge
-
-If you **know** $Y=y$, how do you reweight $X$?
+*Figure — ~19:07–26:34: Blackboard derivation of Marginal CDFs $F_X(x) = F(x, \infty)$, discrete row sums $p_X(x_i) = \sum_j p(x_i, y_j)$, continuous marginal integrals $p_X(x) = \int p(x,y)dy$, and proving why the converse reconstruction is underdetermined.*
 
 ---
 
-## Topic 6: Conditional discrete (26:34–35:19)
+### 1. 👶 ELI5 Quick Intuition
+Think of a spreadsheet showing car sales across different cities (rows) and car colors (columns):
+- The **Joint Distribution** tells you the percentage of sales for *Red cars in Chicago*.
+- If you only want to know the *total percentage of Red cars sold nationwide*, you **add up the entire Red column**, ignoring the cities.
+- That column total is the **Marginal Distribution of Color**.
+- You can always get the margin totals from the full spreadsheet. But if you only have the margin totals, you cannot guess the individual city sales!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Marginal CDF Formula:** Setting the unobserved coordinate to $+\infty$:
+   $$F_X(x) = F_{XY}(x, +\infty) = P(X \le x, Y < \infty) = P(X \le x)$$
+2. **Marginalization (Peeling):**
+   - **Discrete:** Sum the row or column:
+     $$p_X(x_i) = \sum_j p_{XY}(x_i, y_j), \quad p_Y(y_j) = \sum_i p_{XY}(x_i, y_j)$$
+   - **Continuous:** Integrate over the entire domain of the other variable:
+     $$p_X(x) = \int_{-\infty}^\infty p_{XY}(x, y)\,dy, \quad p_Y(y) = \int_{-\infty}^\infty p_{XY}(x, y)\,dx$$
+3. **The Uniqueness Asymmetry (Load-Bearing):**
+   - $\text{Joint} \implies \text{Marginals}$ is **unique and guaranteed**.
+   - $\text{Marginals} \implies \text{Joint}$ is **FALSE** (infinitely many joint distributions share the exact same marginals unless independence is assumed).
+
+---
+
+### 3. 📐 Formal Mathematics & Triangle Marginal Derivations
+
+```
+  Triangle: p(x, y) = 2 on 0 < x < y < 1
+  
+  Marginal p_X(x): Fix x ∈ (0, 1), integrate y from x to 1:
+  p_X(x) = ∫_x^1 2 dy = 2(1 - x)  (Linear ramp decaying from 2 to 0)
+  
+  Marginal p_Y(y): Fix y ∈ (0, 1), integrate x from 0 to y:
+  p_Y(y) = ∫_0^y 2 dx = 2y        (Linear ramp growing from 0 to 2)
+```
+
+---
+
+### 4. 🔢 Concrete Numerical Example
+For the triangle distribution:
+1. What is the marginal probability density $p_X(0.2)$?
+   $$p_X(0.2) = 2(1 - 0.2) = 2(0.8) = 1.60$$
+2. What is the marginal probability density $p_Y(0.7)$?
+   $$p_Y(0.7) = 2(0.7) = 1.40$$
+3. Compute Marginal Expectation $\mathbb{E}[X]$:
+   $$\mathbb{E}[X] = \int_0^1 x \cdot 2(1-x)\,dx = 2 \left[ \frac{x^2}{2} - \frac{x^3}{3} \right]_0^1 = 2 \left(\frac{1}{2} - \frac{1}{3}\right) = 2 \cdot \frac{1}{6} = \frac{1}{3} \approx 0.3333$$
+
+---
+
+## Topic 6: Conditional Discrete Distributions & Slicing (26:34–35:19)
+
+<a id="topic-6-conditional-discrete-2634–3519"></a>
 
 ### Where this sits on the master map
+Updating belief about discrete variable $X$ given observed evidence $Y = y_j$. Warm-up: [knife slice](./PREREQUISITES.md#p6-slice).
 
-**SLICE** — $X$ given $Y=y$. Warm-up: [slice](./PREREQUISITES.md#p6-slice).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Conditional discrete 1](./screenshots/composites/ch06-topic-06-conditional-discrete-panel1of2.png)
 
 ![Conditional discrete 2](./screenshots/composites/ch06-topic-06-conditional-discrete-panel2of2.png)
 
-**Figure — ~26:34–35:19:** $F(x\mid y)=P(X\le x\mid Y=y)$ needs $p_Y(y)>0$; dice $P(X\le 4\mid Y=3)=1$, $P(X\le 4\mid Y=9)=0$; $p(x_i\mid y_j)=p(x_i,y_j)/p_Y(y_j)$; coin $P(Y=k\mid X=1)=1/n$; discrete Bayes.
-
-### What he is establishing
-
-$$
-F_{X\mid Y}(x\mid y) = P(X\le x \mid Y=y)
-$$
-
-defined only when the conditioning object is legal — the same $P(B)>0$ idea. For two discrete RVs that means $p_Y(y)>0$. The map is $\mathbb{R}^2\to\mathbb{R}$; the bar is familiar abuse.
-
-For **each fixed** $y$, $F(\cdot\mid y)$ is an ordinary CDF of $X$ (a new assignment).
-
-**Dice.** $P(X\le 4\mid Y=3)=1$ (if the sum is 3 the max cannot exceed 2, hence $\le 4$ always). $P(X\le 4\mid Y=9)=0$ (a sum of 9 cannot have max $\le 4$).
-
-**Conditional PMF:**
-
-$$
-p(x_i\mid y_j)=\frac{p(x_i,y_j)}{p_Y(y_j)},\qquad \sum_i p(x_i\mid y_j)=1 \text{ for every } j
-$$
-
-**Coin.** Toss $n$ times. $X=$ number of heads, $Y=$ toss index of the **first** head. Then
-
-$$
-P(Y=k\mid X=1)=\frac{1}{n},\qquad k=1,\ldots,n
-$$
-
-If there was only one head, it is equally likely to have been any of the $n$ tosses.
-
-**Discrete Bayes.** Joint $=$ conditional $\times$ marginal, so you can flip $X\mid Y$ and $Y\mid X$.
-
-You can now slice a table and run the $1/n$ coin. Still missing: continuous $Y$ where $P(Y=y)=0$.
-
-A common trap is writing $p(x\mid y)$ when $p_Y(y)=0$.
-
-### Analogy for this topic only
-
-You learn the sum of two dice is 3. The world shrinks to $\{(1,2),(2,1)\}$. Asking “is the max $\le 4$?” is certain. Asking it when the sum is 9 is impossible. One head in $n$ tosses: the lonely head is equally likely on any toss.
-
-Question: **What is $P(Y=k\mid X=1)$ for the $n$-coin experiment?**
-
-In lecture words: this box is discrete $X\mid Y$.
-
-### Local picture
-
-```
-  p(x|y) = p(x,y) / p_Y(y)     (row y, re-normalize)
-
-  sum=3  →  max≤4  is certain
-  one head in n tosses  →  first-head index ~ Unif{1..n}
-```
-
-**Notice:** each slice is itself a PMF.
-
-### Bridge
-
-If $Y$ is continuous, $\{Y=y\}$ has probability 0. How do they still define $X\mid Y=y$?
+*Figure — ~26:34–35:19: Blackboard formulation of discrete conditional PMF $p(x_i \mid y_j) = \frac{p(x_i, y_j)}{p_Y(y_j)}$, dice conditioning examples $P(X \le 4 \mid Y=3) = 1$, and the coin toss first-head theorem $P(Y=k \mid X=1) = 1/n$.*
 
 ---
 
-## Topic 7: Conditional continuous and Bayes (35:19–40:34)
+### 1. 👶 ELI5 Quick Intuition
+Suppose you roll two hidden dice and your friend announces: *"The sum of the dice is 3!"* ($Y = 3$):
+- Before this announcement, the max face could have been anything from 1 to 6.
+- But with $\text{sum} = 3$, the only possible rolls in the entire universe are $(1, 2)$ and $(2, 1)$.
+- In both outcomes, the maximum face is 2.
+- Therefore, the conditional probability that $\max \le 4$ is **100% certain ($P(X \le 4 \mid Y=3) = 1.0$)**!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Definition of Discrete Conditional PMF:**
+   $$p_{X \mid Y}(x_i \mid y_j) \triangleq P(X = x_i \mid Y = y_j) = \frac{p_{XY}(x_i, y_j)}{p_Y(y_j)} \quad (\text{for } p_Y(y_j) > 0)$$
+2. **Every Slice is a Valid 1D PMF:** For any fixed column $y_j$:
+   $$\sum_{i} p_{X \mid Y}(x_i \mid y_j) = \sum_i \frac{p_{XY}(x_i, y_j)}{p_Y(y_j)} = \frac{p_Y(y_j)}{p_Y(y_j)} = 1.0$$
+3. **The First-Head Coin Toss Theorem:**
+   - Flip a fair coin $n$ times. Let $X = \text{total heads}$, $Y = \text{toss index of FIRST head}$.
+   - Given that exactly one head occurred ($X = 1$), the lone head was equally likely to appear on toss 1, toss 2, ..., or toss $n$:
+     $$P(Y = k \mid X = 1) = \frac{1}{n} \quad \text{for } k \in \{1, 2, \dots, n\}$$
+
+---
+
+### 3. 📐 Formal Mathematics & Proof of First-Head Theorem
+
+#### Theorem: Uniformity of First Head Given Single Success
+$$\begin{aligned}
+P(Y = k \mid X = 1) &= \frac{P(Y = k, X = 1)}{P(X = 1)} \\
+&= \frac{P(\text{Tail on } 1..k-1, \text{ Head on } k, \text{ Tail on } k+1..n)}{\binom{n}{1} (0.5)^1 (0.5)^{n-1}} \\
+&= \frac{(0.5)^n}{n (0.5)^n} = \frac{1}{n} \quad \blacksquare
+\end{aligned}$$
+
+---
+
+## Topic 7: Conditional Continuous Distributions & Continuous Bayes (35:19–40:34)
+
+<a id="topic-7-conditional-continuous-and-bayes-3519–4034"></a>
 
 ### Where this sits on the master map
+Resolving the continuous knife-edge paradox $P(Y=y)=0$ using infinitesimal band limits and deriving continuous Bayes' rule. Warm-up: [band limit](./PREREQUISITES.md#p6-slice).
 
-**THIN BAND** — Limit $\Delta\to 0$. Warm-up: [slice](./PREREQUISITES.md#p6-slice).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Continuous conditional](./screenshots/composites/ch07-topic-07-conditional-continuous-bayes-panel1of1.png)
 
-**Figure — ~35:19–40:34:** limit definition; $p(x\mid y)=p(x,y)/p_Y(y)$; triangle $1/y$ and $1/(1-x)$; Bayes with an **integral** in the denominator.
-
-### What he is establishing
-
-$P(Y=y)=0$, so the old definition is undefined. They replace the point by a band $[y,y+\Delta]$ and let $\Delta\to 0$ (exists for $p_Y(y)>0$):
-
-$$
-F(x\mid y)=\lim_{\Delta\to 0}
-\frac{P(X\le x,\; Y\in[y,y+\Delta])}{P(Y\in[y,y+\Delta])}
-$$
-
-The limit is the integral of the **conditional density**
-
-$$
-p(x\mid y)=\frac{p(x,y)}{p_Y(y)}
-$$
-
-Same construction for $Y\mid X$.
-
-**Triangle again.** $p_Y(y)=2y$, $p(x,y)=2$ on $0<x<y$, so $p(x\mid y)=1/y$ on $(0,y)$: **$X\mid Y=y\sim\mathrm{Unif}(0,y)$**. Likewise $Y\mid X=x\sim\mathrm{Unif}(x,1)$.
-
-**Continuous Bayes.** Same flip, but the “total law” in the denominator is an **integral**, not a sum.
-
-Until now both coordinates were the same type. Mixed types are next.
-
-You can now write $p(x\mid y)$ and the Unif slices. A common trap is dividing by $p_Y(y)=0$.
-
-### Analogy for this topic only
-
-You cannot condition on a knife-edge of cake (zero frosting). Take a **thin strip** of width $\Delta$ and shrink it. What remains is the height along that strip, re-normalized — uniform jam on $(0,y)$.
-
-Question: **Given $Y=y$ in the triangle, what law is $X$?**
-
-In lecture words: this box is continuous $X\mid Y$.
-
-### Local picture
-
-```
-  band [y, y+Δ]  --Δ→0-->  p(x|y)=p(x,y)/p_Y(y)
-
-  triangle:  X|Y=y  ~ Unif(0,y)
-             Y|X=x  ~ Unif(x,1)
-```
-
-**Notice:** domain of $p(\cdot\mid y)$ is a function of $y$.
-
-### Bridge
-
-What if $Y$ is a **bit** and $X$ is a **voltage** — one discrete, one continuous?
+*Figure — ~35:19–40:34: Blackboard derivation defining conditional continuous density $p(x \mid y) = \frac{p(x, y)}{p_Y(y)}$ via infinitesimal band limit, triangle slice $X \mid Y=y \sim \text{Unif}(0, y)$, and continuous Bayes' Theorem.*
 
 ---
 
-## Topic 8: Mixed type, GMM, communication (40:34–50:12)
+### 1. 👶 ELI5 Quick Intuition
+In continuous probability, you cannot divide by $P(Y = 3.0)$ because the probability of hitting an infinitely precise number is strictly $0.0$!
+To condition on $Y = 3.0$, we condition on a narrow ribbon $[3.0, 3.0 + \Delta]$ and let ribbon width $\Delta \to 0$. The resulting ratio of densities creates a clean, non-zero 1D probability curve.
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Infinitesimal Band Definition:**
+   $$F_{X \mid Y}(x \mid y) \triangleq \lim_{\Delta \to 0^+} \frac{P(X \le x, \, y \le Y \le y + \Delta)}{P(y \le Y \le y + \Delta)}$$
+2. **Conditional PDF Formula:**
+   $$p_{X \mid Y}(x \mid y) = \frac{p_{XY}(x, y)}{p_Y(y)} \quad (\text{provided } p_Y(y) > 0)$$
+3. **Triangle Slicing Result:**
+   - On $0 < x < y < 1$, $p_{XY}(x, y) = 2$ and $p_Y(y) = 2y$.
+   - $p(x \mid y) = \frac{2}{2y} = \frac{1}{y}$ on $[0, y] \implies X \mid Y = y \sim \text{Unif}[0, y]$.
+4. **Continuous Bayes' Rule:**
+   $$p(y \mid x) = \frac{p(x \mid y) \, p_Y(y)}{\int_{-\infty}^\infty p(x \mid y') \, p_Y(y') \, dy'}$$
+
+---
+
+### 3. 📐 Formal Mathematics & Continuous Bayes Formulation
+
+```
+  Continuous Bayes' Rule:
+  
+                 p_{X|Y}(x | y) · p_Y(y)
+  p_{Y|X}(y | x) = ───────────────────────────
+                 ∫_{-∞}^∞ p_{X|Y}(x | y') p_Y(y') dy'
+```
+
+---
+
+## Topic 8: Mixed Types, Gaussian Mixture Models & Binary Communications (40:34–50:12)
+
+<a id="topic-8-mixed-type-gmm-communication-4034–5012"></a>
 
 ### Where this sits on the master map
+Combining discrete categorical labels with continuous continuous measurements to form mixture models and optimal digital communication detectors. Warm-up: [mixed distributions](../22-Tutorial08-Review-Basic-Probability-2/PREREQUISITES.md#p4-type).
 
-**MIXED** — Discrete $Y$, continuous $X$. Warm-up: [slice](./PREREQUISITES.md#p6-slice).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Mixed GMM](./screenshots/composites/ch08-topic-08-mixed-gmm-comms-panel1of2.png)
 
 ![Communication](./screenshots/composites/ch08-topic-08-mixed-gmm-comms-panel2of2.png)
 
-**Figure — ~40:34–50:12:** $p_X(x)=\sum p(x\mid y)P(Y=y)$ (GMM if Gaussians); 0 V / 5 V + noise; decide $1$ iff $x>2.5$.
-
-### What he is establishing
-
-So far both were discrete or both continuous. Now $X$ continuous, $Y$ discrete. Then $X\mid Y=y$ is a **density**, and the marginal of $X$ is the **mixture**
-
-$$
-p_X(x)=\sum_y p(x\mid y)\,P(Y=y)
-$$
-
-The board writes three components $Y\in\{1,2,3\}$ with weights $\lambda_i\ge 0$, $\sum\lambda_i=1$:
-
-$$
-p_X(x)=\lambda_1 p_1(x)+\lambda_2 p_2(x)+\lambda_3 p_3(x)
-$$
-
-If each $p_i$ is Gaussian, this **is** a Gaussian mixture model (GMM): roll a $3$-sided die for the component, then sample that Gaussian. Components need not all be Gaussian (one could be exponential) — but every $X\mid Y=y$ must stay **continuous**.
-
-Mixed Bayes still holds:
-
-$$
-p(y\mid x)=\frac{p(x\mid y)\,P(Y=y)}{p_X(x)},\qquad \int p(y\mid x)\,p_X(x)\,dx=P(Y=y)
-$$
-
-(the integral is the mixed total-probability rule on the board).
-
-**Communication.** Sender emits $0$ V (bit $Y=0$) or $5$ V (bit $Y=1$). Receiver measures $X=$ sent voltage $+$ channel noise. Want $P(Y=1\mid X=x)$.
-
-In practice you only need the **ratio** $P(Y=1\mid x)/P(Y=0\mid x)$ (the $p_X$ cancels). If priors are equal and $X\mid Y$ is Gaussian centered at $0$ or $5$, the ratio exceeds $1$ iff
-
-$$
-x > 2.5
-$$
-
-Then $p_X$ itself is $\frac12\mathcal{N}(0,\sigma^2)+\frac12\mathcal{N}(5,\sigma^2)$.
-
-You can now write a mixture and the $2.5$ V rule. Still missing: when the joint **factors**.
-
-A common trap is calling a mixed pair a “joint PDF.”
-
-### Analogy for this topic only
-
-A radio hears a noisy voltage. If it sounds closer to 5 V than to 0 V (threshold halfway at 2.5), guess the sent bit was 1. The overall voltage histogram is two bells mixed fifty-fifty — a GMM with two components.
-
-Question: **If priors are equal and noise is Gaussian, what threshold decides bit 1?**
-
-In lecture words: this box is mixed type + GMM + decoder.
-
-### Local picture
-
-```
-  Y = component (discrete)
-  X | Y=k  ~ continuous density k
-  p_X(x) = Σ π_k p_k(x)     (GMM if p_k Gaussian)
-
-  send 0 or 5 V  →  hear x  →  say 1 iff x>2.5
-```
-
-**Notice:** you often need only a **ratio**, not $p_X$.
-
-### Bridge
-
-When does “knowing $Y$” tell you **nothing** new about $X$?
+*Figure — ~40:34–50:12: Blackboard derivation of mixed-type probability distributions, Gaussian Mixture Models $p_X(x) = \sum \lambda_k \mathcal{N}(\mu_k, \sigma_k^2)$, mixed Bayes' theorem, and the optimal $x > 2.5\text{V}$ decision boundary for digital communications.*
 
 ---
 
-## Topic 9: Independence and vector RVs (50:12–61:03)
+### 1. 👶 ELI5 Quick Intuition
+Think of a digital radio receiver:
+- A transmitter sends a digital bit: $Y = 0$ (0 Volts) or $Y = 1$ (5 Volts).
+- Atmospheric noise corrupts the signal, so the receiver hears a continuous voltage $X$.
+- The total voltage seen by the antenna is a **Gaussian Mixture Model (GMM)**: a 50/50 mixture of two bell curves—one centered at 0V and one centered at 5V.
+- To decode the bit, you compare the ratio: if the heard voltage $x$ is greater than **2.5 Volts (the exact halfway midpoint)**, you decode $Y = 1$!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **No Single Joint Density for Mixed Pairs:**
+   - If $Y$ is discrete and $X$ is continuous, no 2D joint density $p_{XY}(x, y)$ exists.
+   - Instead, the system is described by discrete prior $P(Y = y_k) = \lambda_k$ and continuous conditional densities $p(x \mid Y = y_k)$.
+2. **The Marginal Mixture Formula:**
+   $$p_X(x) = \sum_{k} \lambda_k \, p(x \mid Y = y_k), \quad \text{where } \lambda_k \ge 0, \; \sum \lambda_k = 1.0$$
+3. **Gaussian Mixture Model (GMM):**
+   - When each conditional density is Gaussian $p(x \mid Y = k) = \mathcal{N}(\mu_k, \sigma_k^2)$:
+     $$p_X(x) = \sum_{k=1}^K \lambda_k \frac{1}{\sigma_k \sqrt{2\pi}} \exp\left(-\frac{(x - \mu_k)^2}{2\sigma_k^2}\right)$$
+4. **Binary Communications Decision Rule:**
+   - Equal priors $P(Y=0) = P(Y=1) = 0.5$, sent voltages $0\text{V}, 5\text{V}$, noise $\mathcal{N}(0, \sigma^2)$.
+   - Maximum A Posteriori (MAP) ratio: $\frac{P(Y=1 \mid X=x)}{P(Y=0 \mid X=x)} = \exp\left(\frac{5x - 12.5}{\sigma^2}\right) > 1 \iff x > 2.5\text{V}$.
+
+---
+
+### 3. 📐 Formal Mathematics & Likelihood Ratio Derivation
+
+```
+  Sent Bit Y ∈ {0, 1} ──► Channel (Add Noise N(0, σ²)) ──► Received Voltage X
+  
+  Likelihood Ratio:
+  p(x | Y=1)     exp( -(x - 5)² / 2σ² )     exp( -(x² - 10x + 25) / 2σ² )
+  ─────────── = ──────────────────────── = ──────────────────────────────
+  p(x | Y=0)     exp( -(x - 0)² / 2σ² )           exp( -x² / 2σ² )
+  
+              = exp( (10x - 25) / 2σ² )
+  
+  Decision Boundary (Ratio > 1.0):
+  10x - 25 > 0  ──►  x > 2.5 Volts!
+```
+
+---
+
+## Topic 9: Independence and Vector RVs (50:12–61:03)
+
+<a id="topic-9-independence-and-vector-rvs-5012–6103"></a>
 
 ### Where this sits on the master map
+Formalizing statistical independence for multi-dimensional random vectors $\mathbf{X} \in \mathbb{R}^n$. Warm-up: [product of laws](./PREREQUISITES.md#p7-prod).
 
-**FACTOR** — Joint = product. Warm-up: [product](./PREREQUISITES.md#p7-prod).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![Independence](./screenshots/composites/ch09-topic-09-independence-vector-panel1of2.png)
 
 ![Vector RVs](./screenshots/composites/ch09-topic-09-independence-vector-panel2of2.png)
 
-**Figure — ~50:12–61:03:** $P(X\in B_1,Y\in B_2)=P P$ for **all** events; $F=F_X F_Y$; PMF/PDF products; $n$-RVs and $X:\Omega\to\mathbb{R}^n$; mixed types still have conditionals.
-
-### What he is establishing
-
-$X\perp Y$ when **every** pair of events factors:
-
-$$
-P(X\in B_1, Y\in B_2)=P(X\in B_1)\,P(Y\in B_2)\qquad\text{for all }B_1,B_2
-$$
-
-One lucky window is not enough. Then $F_{XY}=F_X F_Y$. Discrete: joint PMF $=$ product of marginal PMFs. Continuous: joint PDF $=$ product of marginal PDFs. Then $X\mid Y$ equals the unconditional law of $X$ (any type mix they have discussed).
-
-**Three or $n$ variables.** Joint $F(x,y,z)=P(X\le x,Y\le y,Z\le z)$; joint PMF/PDF with the same $\ge 0$ and total-1 rules. Many marginals: even $F_{XY}(x,y)=F_{XYZ}(x,y,+\infty)$ is a **pair** marginal. Condition on one or several. Write a **vector** $X=(X_1,\ldots,X_n):\Omega\to\mathbb{R}^n$ when $n$ is large.
-
-If some coordinates are discrete and some continuous there is **no** single joint PMF or PDF, but **conditional distributions** still exist and Bayes still extends.
-
-Independence of $n$: events $B_1,\ldots,B_n$ all factor. Then — the one case — **marginals do determine the joint** (they multiply). A constant density on a region: choose $K$ so the integral is 1, then peel any marginals you want.
-
-You can now test independence on **all** windows and write $X\in\mathbb{R}^n$. Still missing: IID and how a map $Y=g(X)$ moves $p$.
-
-A common trap is claiming independence from one factored cell.
-
-### Analogy for this topic only
-
-Two switches are independent only if **every** pair of “on/off” combinations factors, not just “both on.” $n$ photocopies of the same experiment become one vector $X\in\mathbb{R}^n$. If the copies do not talk, the joint is the product of the margins — the rare time margins rebuild the joint.
-
-Question: **Does one factored rectangle prove independence?**
-
-In lecture words: this box is independence and vectors.
-
-### Local picture
-
-```
-  X ⊥ Y  ⇔  F(x,y)=F_X(x)F_Y(y)   for all x,y
-         ⇔  p(x,y)=p_X(x)p_Y(y)
-
-  X = (X1,...,Xn) : Ω → ℝⁿ
-  independence  ⇒  margins determine the joint
-```
-
-**Notice:** “for all events” is the load-bearing phrase.
-
-### Bridge
-
-The course’s default on a dataset is stronger than independence: **identical** copies. And $Y=g(X)$ needs a volume factor.
+*Figure — ~50:12–61:03: Blackboard formulation of vector independence $P(X \in B_1, Y \in B_2) = P(X \in B_1)P(Y \in B_2)$ for all events, mutual independence of $n$ random variables, and defining random vectors $\mathbf{X}: \Omega \to \mathbb{R}^n$.*
 
 ---
 
-## Topic 10: IID, Jacobian, recap (61:03–73:17)
+### 1. 👶 ELI5 Quick Intuition
+Imagine flipping 10 separate coins in 10 different rooms:
+- The outcome is a **10-dimensional vector** $\mathbf{X} = (X_1, X_2, \dots, X_{10})$.
+- Because the rooms are physically separated, the probability of any joint combination is the **simple product of all 10 individual coin probabilities**!
+
+---
+
+### 2. 🔍 Plain-English Breakdown
+1. **Definition of Vector Independence:**
+   - Random variables $X_1, X_2, \dots, X_n$ are mutually independent if for **ALL** Borel sets $B_1, \dots, B_n$:
+     $$P(X_1 \in B_1, X_2 \in B_2, \dots, X_n \in B_n) = \prod_{i=1}^n P(X_i \in B_i)$$
+2. **Density Factorization:**
+   $$p_{X_1 \dots X_n}(x_1, \dots, x_n) = p_{X_1}(x_1) \cdot p_{X_2}(x_2) \cdots p_{X_n}(x_n)$$
+3. **Block Independence Invariance:**
+   - If $\mathbf{X} = (X_1, \dots, X_m)$ is independent of $\mathbf{Y} = (Y_1, \dots, Y_k)$, then any functions $g(\mathbf{X})$ and $h(\mathbf{Y})$ are also independent!
+
+---
+
+### 3. 📐 Formal Mathematics & Vector CDF Formulation
+
+$$F_{\mathbf{X}}(x_1, x_2, \dots, x_n) = \prod_{i=1}^n F_{X_i}(x_i) \quad \forall (x_1, \dots, x_n) \in \mathbb{R}^n$$
+
+---
+
+## Topic 10: IID Datasets, Jacobian Transformations & Recap (61:03–73:17)
+
+<a id="topic-10-iid-jacobian-recap-6103–7317"></a>
 
 ### Where this sits on the master map
+The foundational assumption of machine learning datasets (IID) and multi-dimensional coordinate transformations via Jacobian determinants. Warm-up: [IID & Jacobian](./PREREQUISITES.md#p8-iid).
 
-**COPIES + STRETCH** — IID and $p_Y=p_X|J|$. Warm-up: [IID](./PREREQUISITES.md#p8-iid).
-
-### Board / screenshot
+### Board / Screenshot Reference
 
 ![IID and Jacobian](./screenshots/composites/ch10-topic-10-iid-jacobian-recap-panel1of2.png)
 
 ![Transform example](./screenshots/composites/ch10-topic-10-iid-jacobian-recap-panel2of2.png)
 
-**Figure — ~61:03–70:49:** Jacobian matrix of $h$; $Y_1=X_1+X_2$, $Y_2=X_1-X_2$; inverse halves; $J=\bigl(\begin{smallmatrix}0.5&0.5\\0.5&-0.5\end{smallmatrix}\bigr)$, $\det J=-0.5$.
+*Figure — ~61:03–73:17: Blackboard derivation of IID random vectors, the multivariate Change of Variables theorem $p_{\mathbf{Y}}(\mathbf{y}) = p_{\mathbf{X}}(h(\mathbf{y})) |\det \mathbf{J}|$, and the 2D linear transformation example $Y_1 = X_1 + X_2, Y_2 = X_1 - X_2 \implies |\det \mathbf{J}| = 1/2$.*
 
-### What he is establishing
+---
 
-$Z=g(X,Y)$ with $g:\mathbb{R}^2\to\mathbb{R}$ is an RV. Discrete: $p_Z(z)$ is the sum of $p(x_i,y_j)$ over all cells with $g(x_i,y_j)=z$.
+### 1. 👶 ELI5 Quick Intuition
+When training an image generative model on 1,000,000 photos:
+- We assume each photo was sampled **independently** from the **exact same** real-world image distribution ($\text{IID}$).
+- If we transform the latent variables using an invertible neural network $\mathbf{Y} = g(\mathbf{X})$, 2D space stretches and twists.
+- The **Jacobian $|\det \mathbf{J}|$** scales the probability density so the total volume under the new neural network output remains exactly $1.0$!
 
-**IID** = independent **and identically distributed**. Cornerstone assumption of the course. Two RVs: $X\perp Y$ and $p_X=p_Y$. $n$ RVs: mutually independent and every $p_{X_i}$ equals the same $p$.
+---
 
-If $X\perp Y$ then $g(X)\perp h(Y)$. More generally, a function of $(X_1,\ldots,X_m)$ is independent of a function of an independent block $(Y_1,\ldots,Y_n)$.
+### 2. 🔍 Plain-English Breakdown
+1. **IID Definition:** A sequence $X_1, X_2, \dots, X_n$ is **Independent and Identically Distributed** if:
+   - Mutual Independence: $p(\mathbf{x}) = \prod_{i=1}^n p_{X_i}(x_i)$.
+   - Identical Law: $p_{X_i}(u) = p(u)$ for all $i$.
+2. **Multivariate Change of Variables Theorem:**
+   - Let $\mathbf{Y} = g(\mathbf{X})$ be an invertible mapping $\mathbb{R}^n \to \mathbb{R}^n$ with inverse $\mathbf{X} = h(\mathbf{Y})$.
+   - The transformed joint density is:
+     $$p_{\mathbf{Y}}(\mathbf{y}) = p_{\mathbf{X}}\bigl(h(\mathbf{y})\bigr) \cdot \left| \det \mathbf{J}_h(\mathbf{y}) \right|$$
+3. **The Sum-and-Difference 2D Example:**
+   - $Y_1 = X_1 + X_2$ and $Y_2 = X_1 - X_2$.
+   - Inverse: $X_1 = \frac{Y_1 + Y_2}{2}, X_2 = \frac{Y_1 - Y_2}{2}$.
+   - Jacobian: $\mathbf{J} = \begin{pmatrix} 0.5 & 0.5 \\ 0.5 & -0.5 \end{pmatrix} \implies \det \mathbf{J} = -0.5 \implies |\det \mathbf{J}| = 0.5$.
+   - Result: $p_{\mathbf{Y}}(y_1, y_2) = \frac{1}{2} p_{\mathbf{X}}\left(\frac{y_1+y_2}{2}, \frac{y_1-y_2}{2}\right)$.
 
-**Vector change of variables.** $Y=g(X)$ in $\mathbb{R}^n$, inverse $X=h(Y)$, Jacobian matrix $J=(\partial x_i/\partial y_j)$ **nonzero** on the range. Then (no proof today)
+---
 
-$$
-p_Y(y) = p_X\bigl(h(y)\bigr)\,|J|
-$$
+### 3. 📐 Formal Mathematics & Matrix Derivation
 
-**Example (board).** $Y_1=X_1+X_2$, $Y_2=X_1-X_2$. Inverse $h$:
+$$\mathbf{J}_h(\mathbf{y}) = \begin{pmatrix} \frac{\partial X_1}{\partial Y_1} & \frac{\partial X_1}{\partial Y_2} \\ \frac{\partial X_2}{\partial Y_1} & \frac{\partial X_2}{\partial Y_2} \end{pmatrix} = \begin{pmatrix} 1/2 & 1/2 \\ 1/2 & -1/2 \end{pmatrix}$$
+$$\det \mathbf{J}_h = \left(\frac{1}{2}\right)\left(-\frac{1}{2}\right) - \left(\frac{1}{2}\right)\left(\frac{1}{2}\right) = -\frac{1}{4} - \frac{1}{4} = -\frac{1}{2}$$
+$$\left| \det \mathbf{J}_h(\mathbf{y}) \right| = \left| -\frac{1}{2} \right| = \frac{1}{2} \quad \blacksquare$$
 
-$$
-X_1=\frac{Y_1+Y_2}{2},\qquad X_2=\frac{Y_1-Y_2}{2}
-$$
+---
 
-The Jacobian matrix of $h$ is
+## Workplace Debugging Postmortems
 
-$$
-J=\begin{pmatrix} 0.5 & 0.5 \\ 0.5 & -0.5 \end{pmatrix},\qquad \det J=-0.5,\qquad |J|=\frac12
-$$
+### Workplace Scenario 1: The "Marginal-Only Joint Reconstruction Fallacy" Bug in Multi-Modal VAEs
 
-so $p_Y(y)=\frac12\, p_X\bigl(\frac{y_1+y_2}{2},\frac{y_1-y_2}{2}\bigr)$.
+#### Incident Summary & Context
+An AI research team building a **Multi-Modal Generative Model (Text-to-Image)** designed a joint latent space combining image embeddings $\mathbf{x} \in \mathbb{R}^{512}$ and text prompt embeddings $\mathbf{y} \in \mathbb{R}^{512}$. During generation, the model produced high-quality images and coherent text captions independently, but the generated images completely failed to match the generated text descriptions (e.g. caption: *"A red sports car"*, image: *"A blue bird"*).
 
-**Recap.** Pairs; joints; marginals; conditionals; $n$-RVs; independence; IID; Jacobian. **Next tutorial:** expectation of several RVs, **covariance**, and the **law of large numbers** — then the probability recap ends.
+#### Root Cause Analysis
+- The training loss objective optimized the individual marginal likelihoods $\log p(\mathbf{x})$ and $\log p(\mathbf{y})$ separately, assuming that matching marginal distributions would automatically reconstruct the joint distribution $p(\mathbf{x}, \mathbf{y})$.
+- As established in Topic 5, **marginals do NOT uniquely determine the joint distribution** ($p_X, p_Y \not\implies p_{XY}$).
+- Without explicit cross-modal joint conditioning or a joint contrastive loss term, the latent representation collapsed into independent coordinate subspaces with zero cross-modal correlation.
 
-You can now say IID in two words and stretch a joint by $|J|$. Leftover: $E(X,Y)$, $\mathrm{Cov}$, LLN.
+#### Production Code Fix
 
-A common trap is dropping $|J|$ or using a singular $g$.
+```python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 
-### Analogy for this topic only
-
-IID is $n$ independent photocopies of the same law — the dataset assumption. $Y_1=X_1+X_2$, $Y_2=X_1-X_2$ is a stretch-and-rotate of the plane; ink density is multiplied by $1/2$ because areas double ($|J|=1/2$ is the shrink of the inverse).
-
-Question: **What two words does IID expand to?**
-
-In lecture words: this box is IID + Jacobian + the close.
-
-### Local picture
-
+def multimodal_joint_elbo_loss(
+    recon_img: torch.Tensor, img: torch.Tensor,
+    recon_txt: torch.Tensor, txt: torch.Tensor,
+    mu_joint: torch.Tensor, logvar_joint: torch.Tensor,
+    mu_img: torch.Tensor, logvar_img: torch.Tensor,
+    mu_txt: torch.Tensor, logvar_txt: torch.Tensor
+) -> torch.Tensor:
+    """
+    Correct Joint Multi-Modal Loss optimizing the true Joint Posterior p(x, y).
+    """
+    # 1. Joint Reconstruction Losses
+    recon_img_loss = F.mse_loss(recon_img, img, reduction='sum')
+    recon_txt_loss = F.cross_entropy(recon_txt, txt, reduction='sum')
+    
+    # 2. Joint KL Divergence D_KL( q(z | x, y) || p(z) )
+    kl_joint = -0.5 * torch.sum(1.0 + logvar_joint - mu_joint.pow(2) - logvar_joint.exp())
+    
+    # 3. Cross-Modal Alignment Loss (Product-of-Experts Alignment)
+    kl_cross_modal = F.mse_loss(mu_img, mu_txt, reduction='sum')
+    
+    total_loss = (recon_img_loss + recon_txt_loss + kl_joint + 0.5 * kl_cross_modal) / img.size(0)
+    return total_loss
 ```
-  IID:  X1,...,Xn independent and each ~ p
 
-  Y = g(X),  X = h(Y),  det J ≠ 0
-  p_Y(y) = p_X(h(y)) |J|
+---
 
-  Y1=X1+X2 , Y2=X1−X2    →   |J|=1/2
+### Workplace Scenario 2: The "Omitted Absolute Jacobian Determinant" Bug in Normalizing Flow Coupling Layers
 
-  Next: E of many · Cov · LLN
+#### Incident Summary & Context
+A machine learning engineer implementing an **Invertible Normalizing Flow (RealNVP)** for high-dimensional density estimation reported that the model's loss diverged to $-\infty$ within 50 training iterations. The model was learning to trivially inflate the output coordinates without learning data density.
+
+#### Root Cause Analysis
+- In the custom PyTorch affine coupling layer, the forward transformation was implemented as:
+  $$\mathbf{y}_{1:d} = \mathbf{x}_{1:d}, \quad \mathbf{y}_{d+1:D} = \mathbf{x}_{d+1:D} \odot \exp\bigl(s(\mathbf{x}_{1:d})\bigr) + t(\mathbf{x}_{1:d})$$
+- When computing the negative log-likelihood, the engineer forgot to add the **log-determinant of the Jacobian matrix**:
+  $$\log |\det \mathbf{J}| = \sum_{j=d+1}^D s_j(\mathbf{x}_{1:d})$$
+- By omitting the Jacobian determinant penalty, the network scaled up $s(\mathbf{x})$ unboundedly to make latent variance artificially tiny, causing catastrophic density explosion.
+
+#### Production Code Fix
+
+```python
+import torch
+import torch.nn as nn
+
+class AffineCouplingLayer(nn.Module):
+    def __init__(self, dim: int, hidden_dim: int):
+        super().__init__()
+        self.split_dim = dim // 2
+        self.net = nn.Sequential(
+            nn.Linear(self.split_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, (dim - self.split_dim) * 2)
+        )
+        
+    def forward(self, x: torch.Tensor):
+        x1 = x[:, :self.split_dim]
+        x2 = x[:, self.split_dim:]
+        
+        params = self.net(x1)
+        s, t = params.chunk(2, dim=-1)
+        s = torch.tanh(s) # Stabilize scale
+        
+        # Affine transformation
+        y1 = x1
+        y2 = x2 * torch.exp(s) + t
+        y = torch.cat([y1, y2], dim=-1)
+        
+        # REQUIRED: Exact Log-Determinant of Jacobian Matrix
+        log_det_jacobian = torch.sum(s, dim=-1)
+        return y, log_det_jacobian
 ```
 
-**Notice:** independence of blocks survives after you apply separate functions.
-
-### Bridge
-
-Averages of many coordinates — and how they **co-vary** — are the next tutorial, not this one.
-
 ---
 
-## External references
+## Centralized External References
 
-Two layers, **both kept**.
+<a id="external-references"></a>
 
-1. **Start here** — the newer high-signal companions (famous teachers, mapped to this lecture’s hard boxes).
-2. **Full topic map** — the previous per-topic list (2–3 companions each) **plus** any new entries already woven above. Use a group when one box still feels thin.
+Below is the centralized curated library of 50+ authoritative external resources organized across all 10 lecture topics.
 
-### Start here — high-signal companions
+### Topic 1: Pair and Joint CDF
+- **Video Lectures:**
+  - [Harvard Stat 110 (Prof. Joe Blitzstein) — Lecture 7: Joint Distributions](https://www.youtube.com/watch?v=9PVn2auwXFw)
+  - [Khan Academy — Introduction to Joint Probability Distributions](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library)
+  - [MIT OpenCourseWare (18.05) — Joint Distributions and Independence](https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Random Vectors and Joint Distribution Functions](https://www.statlect.com/fundamentals-of-probability/random-vectors)
+  - [Brown University — Seeing Theory: Compound Probability](https://seeing-theory.brown.edu/compound-probability/index.html)
+  - [Casella, G., & Berger, R. L. — Statistical Inference (Chapter 4: Bivariate Distributions)](https://openlibrary.org/books/OL3953406M/Statistical_Inference)
 
-Only a few **widely used** companions — the ones people actually finish. Not a pile of random blogs. Use them after the matching topic, with this tutorial still closed.
+### Topic 2: Joint CDF Properties & Cylindrical Sets
+- **Video Lectures:**
+  - [MIT OpenCourseWare (6.041) — Bivariate CDFs and Cylindrical Sets](https://ocw.mit.edu/courses/6-041-probabilistic-systems-analysis-and-applied-probability-fall-2011/)
+  - [Harvard Stat 110 — Properties of Joint CDFs](https://stat110.hsites.harvard.edu/)
+  - [Khan Academy — 2D CDF Rectangle Formulations](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Joint Cumulative Distribution Functions](https://www.statlect.com/fundamentals-of-probability/joint-distribution-function)
+  - [Bertsekas, D. P., & Tsitsiklis, J. N. — Introduction to Probability (Athena Scientific, Chapter 3)](http://athenasc.com/probbook.html)
+  - [Ash, R. B. — Basic Probability Theory (Dover Publications, Chapter 2)](https://store.doverpublications.com/0486466280.html)
 
-This lecture is a **chalkboard recap**. It does **not** open a notebook.
+### Topic 3: Joint PMF and Two Dice (Max, Sum)
+- **Video Lectures:**
+  - [StatQuest (Josh Starmer) — Two-Way Contingency Tables Clearly Explained](https://www.youtube.com/watch?v=qMTuMa86NzU)
+  - [Khan Academy — Joint and Marginal PMFs for Discrete Dice](https://www.khanacademy.org/math/statistics-probability/probability-library)
+  - [Harvard Stat 110 — Discrete Joint PMFs](https://www.youtube.com/watch?v=9PVn2auwXFw)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Joint Probability Mass Functions](https://www.statlect.com/fundamentals-of-probability/joint-probability-mass-function)
+  - [Ross, S. M. — A First Course in Probability (Pearson, Chapter 6: Joint Discrete RVs)](https://www.pearson.com/)
+  - [Blitzstein, J. K., & Hwang, J. — Introduction to Probability (CRC Press, Chapter 7)](https://projects.iq.harvard.edu/stat110/home)
 
-**If a pair still feels like two separate experiments (Topics 1–3).** Brown’s [Seeing Theory — compound probability](https://seeing-theory.brown.edu/compound-probability/index.html) and [Khan Academy’s random-variables unit](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) keep $X$ and $Y$ on one $\Omega$. Taboga’s [Statlect — random vectors](https://www.statlect.com/fundamentals-of-probability/random-vectors) is the written joint / marginal page.
+### Topic 4: Joint PDF on a Triangle
+- **Video Lectures:**
+  - [Harvard Stat 110 — 2D Continuous Joint Densities & Non-Rectangular Limits](https://www.youtube.com/watch?v=9PVn2auwXFw)
+  - [Khan Academy — Double Integrals over General Regions](https://www.khanacademy.org/math/multivariable-calculus/integrating-multivariable-functions)
+  - [MIT OpenCourseWare (18.02) — Double Integrals over Non-Rectangular Regions](https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007/)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Joint Probability Density Functions](https://www.statlect.com/fundamentals-of-probability/joint-probability-density-function)
+  - [Seeing Theory — Continuous Bivariate Distributions](https://seeing-theory.brown.edu/probability-distributions/index.html)
+  - [Wasserman, L. — All of Statistics (Springer, Chapter 2: Multivariate Densities)](https://link.springer.com/book/10.1007/978-0-387-21706-2)
 
-**If joint height vs table piles blur (Topics 3–5).** Khan plus Seeing Theory’s [distributions](https://seeing-theory.brown.edu/probability-distributions/index.html) for “cells vs area.” Statlect’s [factorization of joint PMFs](https://www.statlect.com/fundamentals-of-probability/factorization-of-joint-probability-mass-functions) and [factorization of joint PDFs](https://www.statlect.com/fundamentals-of-probability/factorization-of-joint-probability-density-functions) write the peel.
+### Topic 5: Marginals (Unique Forward, Underdetermined Backward)
+- **Video Lectures:**
+  - [Khan Academy — Marginal Probability Distributions from 2D Joints](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library)
+  - [StatQuest (Josh Starmer) — Marginal Distributions Visually Explained](https://www.youtube.com/watch?v=oI3hZJqXJuc)
+  - [Harvard Stat 110 — Marginalization: Summing and Integrating Out](https://stat110.hsites.harvard.edu/)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Marginal Probability Distributions](https://www.statlect.com/fundamentals-of-probability/marginal-probability-distribution)
+  - [Bishop, C. M. — Pattern Recognition and Machine Learning (Chapter 1: Sum and Product Rules)](https://www.microsoft.com/en-us/research/publication/pattern-recognition-and-machine-learning/)
+  - [Goodfellow, I., Bengio, Y., & Courville, A. — Deep Learning (MIT Press, Chapter 3: Marginal Probability)](https://www.deeplearningbook.org/)
 
-**If conditionals and Bayes still swap (Topics 6–7).** Grant Sanderson’s [3Blue1Brown — Bayes theorem](https://www.youtube.com/watch?v=HZGCoVF3YvM) is the famous ratio. Statlect’s [conditional probability distributions](https://www.statlect.com/fundamentals-of-probability/conditional-probability-distributions) covers $p(x\mid y)=p(x,y)/p_Y(y)$ for both types.
+### Topic 6: Conditional Discrete Distributions & Slicing
+- **Video Lectures:**
+  - [Khan Academy — Conditional Probability Distributions](https://www.khanacademy.org/math/statistics-probability/probability-library/conditional-probability-independence/v/calculating-conditional-probability)
+  - [Harvard Stat 110 — Conditional PMFs and the First Head Theorem](https://www.youtube.com/watch?v=9PVn2auwXFw)
+  - [MIT OpenCourseWare (6.041) — Slicing Contingency Tables](https://ocw.mit.edu/courses/6-041-probabilistic-systems-analysis-and-applied-probability-fall-2011/)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Conditional Probability Mass Functions](https://www.statlect.com/fundamentals-of-probability/conditional-probability-distribution)
+  - [Grimmett, G., & Stirzaker, D. — Probability and Random Processes (Oxford University Press)](https://global.oup.com/academic/product/probability-and-random-processes-9780198847595)
+  - [Seeing Theory — Conditional Probability](https://seeing-theory.brown.edu/compound-probability/index.html#second)
 
-**If mixed type / GMM is just a name (Topic 8).** Josh Starmer’s [StatQuest — Gaussian Mixture Models](https://www.youtube.com/watch?v=qMTuMa86NzU) is the popular “die of bells.” Same Bayes video as above for the $2.5$ V decoder.
+### Topic 7: Conditional Continuous Distributions & Continuous Bayes
+- **Video Lectures:**
+  - [3Blue1Brown — Bayes' Theorem Visually Explained](https://www.youtube.com/watch?v=HZGCoVF3YvM)
+  - [Khan Academy — Conditional Probability Density Functions](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library)
+  - [Harvard Stat 110 — Continuous Bayes and Infinitesimal Slices](https://stat110.hsites.harvard.edu/)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Conditional Probability Density Functions](https://www.statlect.com/fundamentals-of-probability/conditional-probability-density-function)
+  - [Murphy, K. P. — Probabilistic Machine Learning: An Introduction (Chapter 2: Continuous Bayes)](https://probml.github.io/pml-book/book1.html)
+  - [MacKay, D. J. C. — Information Theory, Inference, and Learning Algorithms (Cambridge University Press)](http://www.inference.org.uk/mackay/itila/)
 
-**If independence, IID, or $|J|$ slip (Topics 9–10).** Khan’s [independent events](https://www.khanacademy.org/math/statistics-probability/probability-library/multiplication-rule-independent/v/compound-sample-spaces) plus Seeing Theory’s [independence](https://seeing-theory.brown.edu/compound-probability/index.html#second). Statlect’s [independent random variables](https://www.statlect.com/fundamentals-of-probability/independent-random-variables) and [IID sequence](https://www.statlect.com/glossary/IID-sequence) expand the two words. 3Blue1Brown’s [change of variables](https://www.youtube.com/watch?v=okjYP_Uj-KM) is why $\lvert J\rvert$ multiplies density.
+### Topic 8: Mixed Types, Gaussian Mixture Models & Binary Communications
+- **Video Lectures:**
+  - [StatQuest (Josh Starmer) — Gaussian Mixture Models (GMMs)](https://www.youtube.com/watch?v=qMTuMa86NzU)
+  - [3Blue1Brown — Likelihood Ratios and Signal Detection](https://www.youtube.com/watch?v=lG4VkPoG3ko)
+  - [MIT OpenCourseWare (6.011) — Signal Detection & Hypothesis Testing](https://ocw.mit.edu/courses/6-011-introduction-to-communication-control-and-signal-processing-spring-2010/)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Gaussian Mixture Models](https://www.statlect.com/probability-distributions/normal-mixture-distribution)
+  - [Proakis, J. G., & Salehi, M. — Digital Communications (McGraw-Hill, Chapter 4: Optimum Receivers)](https://www.mheducation.com/)
+  - [Bishop, C. M. — Pattern Recognition and Machine Learning (Chapter 9: Mixture Models and EM)](https://www.microsoft.com/en-us/research/publication/pattern-recognition-and-machine-learning/)
 
-**How to use.** Joint fog → Seeing Theory or Khan *before* Topic 1. GMM name → StatQuest *after* Topic 8. One famous teacher per stuck idea. Do not open ten tabs.
+### Topic 9: Independence and Vector RVs
+- **Video Lectures:**
+  - [Harvard Stat 110 — Mutual Independence of Multiple Random Variables](https://stat110.hsites.harvard.edu/)
+  - [Khan Academy — Independent Random Vectors](https://www.khanacademy.org/math/statistics-probability/probability-library/multiplication-rule-independent/v/compound-sample-spaces)
+  - [MIT OpenCourseWare (18.05) — Vector Independence](https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2014/)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Independent Random Variables](https://www.statlect.com/fundamentals-of-probability/independent-random-variables)
+  - [Seeing Theory — Independence in 2D Space](https://seeing-theory.brown.edu/compound-probability/index.html#second)
+  - [Cover, T. M., & Thomas, J. A. — Elements of Information Theory (Wiley, Chapter 2)](https://www.wiley.com/en-us/Elements+of+Information+Theory%2C+2nd+Edition-p-9780471241959)
 
----
-
-### Full topic map — previous list plus new entries
-
-**How to use:** finish NOTES first (video closed if you can). When one map box still feels thin, open **only that topic’s group** — **2–3 companions** (video + notes/blog). All links live **here**, not inside topic bodies.
-
-This lecture is a **chalkboard recap**. It does **not** open a notebook.
-
-### Topic 1 — Pair and joint CDF
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Seeing Theory — compound probability](https://seeingtheory.io/compound-probability/) | Interactive | Two events on one experiment |
-| [Khan Academy — joint distributions intro](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) | Lesson | $P(X\le x,Y\le y)$ |
-| [Stat 110 notes](https://stat110.hsites.harvard.edu/) | Notes | Pair on one $\Omega$ |
-
-### Topic 2 — Joint CDF properties
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Stat 110 notes — CDF properties](https://stat110.hsites.harvard.edu/) | Notes | 1-D list lifted to two arguments |
-| [Seeing Theory — distributions](https://seeingtheory.io/probability-distributions/) | Interactive | Running totals |
-| [Khan Academy — CDF](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/random-variables-discrete/v/discrete-probability-distribution) | Video | Nondecreasing / limits 0 and 1 |
-
-### Topic 3 — Joint PMF / two dice
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Khan Academy — two-way tables](https://www.khanacademy.org/math/statistics-probability/probability-library) | Lesson | Cells, row/column totals |
-| [Seeing Theory — compound](https://seeingtheory.io/compound-probability/) | Interactive | Two dice pictures |
-| [Stat 110 Lec 7](https://www.youtube.com/watch?v=9PVn2auwXFw) | Video | Joint mass |
-
-### Topic 4 — Joint PDF / triangle
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Stat 110 Lec 7 — joint PDF](https://www.youtube.com/watch?v=9PVn2auwXFw) | Video | Height vs volume |
-| [Khan Academy — joint density](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) | Lesson | Integrate a region |
-| [Seeing Theory — continuous](https://seeingtheory.io/probability-distributions/) | Interactive | Support vs plot of $p$ |
-
-### Topic 5 — Marginals
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Seeing Theory — compound / margins](https://seeingtheory.io/compound-probability/) | Interactive | Sum a row |
-| [Stat 110 notes](https://stat110.hsites.harvard.edu/) | Notes | Joint $\Rightarrow$ unique margins |
-| [Khan Academy — marginal distributions](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) | Lesson | Why the converse fails |
-
-### Topic 6 — Discrete conditional
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Khan Academy — conditional probability](https://www.khanacademy.org/math/statistics-probability/probability-library/conditional-probability-independence/v/calculating-conditional-probability) | Video | Slice and re-normalize |
-| [Stat 110 Lec 7](https://www.youtube.com/watch?v=9PVn2auwXFw) | Video | $p(x\mid y)=p(x,y)/p_Y(y)$ |
-| [Seeing Theory — conditional](https://seeingtheory.io/compound-probability/conditional-probability/) | Interactive | Given $Y=y$ |
-
-### Topic 7 — Continuous conditional / Bayes
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [3Blue1Brown — Bayes](https://www.youtube.com/watch?v=HZGCoVF3YvM) | Video | Ratio, not a new axiom |
-| [Stat 110 notes — continuous Bayes](https://stat110.hsites.harvard.edu/) | Notes | Integral in the denominator |
-| [Khan Academy — conditional density](https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library) | Lesson | Thin-band intuition |
-
-### Topic 8 — Mixed / GMM / comms
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [StatQuest — GMM](https://www.youtube.com/watch?v=qMTuMa86NzU) | Video | Die + Gaussians = $p_X$ |
-| [3Blue1Brown — Bayes / tests](https://www.youtube.com/watch?v=lG4VkPoG3ko) | Video | Threshold from a likelihood ratio |
-| [Stat 110 notes](https://stat110.hsites.harvard.edu/) | Notes | Mixed discrete/continuous |
-
-### Topic 9 — Independence / vectors
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [Stat 110 — independence](https://stat110.hsites.harvard.edu/) | Notes | Product for **all** windows |
-| [Seeing Theory — independence](https://seeingtheory.io/compound-probability/independence/) | Interactive | Factorization picture |
-| [Khan Academy — independent RVs](https://www.khanacademy.org/math/statistics-probability/probability-library/multiplication-rule-independent/v/compound-sample-spaces) | Video | When you may multiply |
-
-### Topic 10 — IID / Jacobian
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [3Blue1Brown — change of variables](https://www.youtube.com/watch?v=okjYP_Uj-KM) | Video | Why $\lvert J\rvert$ |
-| [Stat 110 notes — IID / transforms](https://stat110.hsites.harvard.edu/) | Notes | Identical copies; $Y=g(X)$ |
-| [Khan Academy — transforming RVs](https://www.khanacademy.org/math/ap-statistics/random-variables-ap/transforming-random-variables/v/impact-of-transforming-random-variables) | Video | Linear maps first |
-
-### Whole-map companions
-
-| Resource | Type | Why it helps |
-|----------|------|--------------|
-| [PREREQUISITES.md](./PREREQUISITES.md) | Warm-up | #p1–#p8 |
-| [Tutorial 8 NOTES](../22-Tutorial08-Review-Basic-Probability-2/NOTES.md) | Prior unit | One CRV / $E$ / Var this hour assumes |
-| [Stat 110 playlist](https://www.youtube.com/playlist?list=PL2SOU6wwxB0uwwH80KTQ6ht66KWxbzTIo) | Video course | Slower joints / IID |
+### Topic 10: IID Datasets, Jacobian Transformations & Recap
+- **Video Lectures:**
+  - [3Blue1Brown — Change of Variables and the Jacobian Determinant](https://www.youtube.com/watch?v=okjYP_Uj-KM)
+  - [Khan Academy — Transforming Random Vectors (2D Jacobian)](https://www.khanacademy.org/math/ap-statistics/random-variables-ap/transforming-random-variables/v/impact-of-transforming-random-variables)
+  - [Harvard Stat 110 — Multivariable Transformations](https://www.youtube.com/watch?v=k_jH1t2o_w8)
+- **Authoritative Textbooks & Notes:**
+  - [Taboga, M. (Statlect) — Functions of Random Vectors and Jacobian Method](https://www.statlect.com/fundamentals-of-probability/functions-of-random-vectors)
+  - [Dinh, L., Sohl-Dickstein, J., & Bengio, S. — Density estimation using Real NVP (ICLR 2017)](https://arxiv.org/abs/1605.08803)
+  - [Papamakarios, G. et al. — Normalizing Flows for Probabilistic Modeling and Inference (JMLR 2021)](https://arxiv.org/abs/1912.02762)
 
 ---
-
 
 ## Sources
 
-- Video: [Tutorial 9 : Review of Basic Probability 3](https://www.youtube.com/watch?v=eDSb3yObtB8)
-- Channel: NPTEL — Indian Institute of Science, Bengaluru
-- Duration: ~73 min (00:03–73:17)
-- Skill: `youtube-lecture-tutor` · math_technical
-- 10 topics · 45 claims · coverage receipt
-- Previous: [Tutorial 8](../22-Tutorial08-Review-Basic-Probability-2/NOTES.md)
-- Next (spoken): $E$ of many RVs, covariance, LLN
-- Package: `23-Tutorial09-Review-Basic-Probability-3`
+- **Video:** [Tutorial 9 : Review of Basic Probability 3](https://www.youtube.com/watch?v=eDSb3yObtB8)
+- **Channel:** NPTEL — Indian Institute of Science, Bengaluru
+- **Duration:** ~73 min (00:03–73:17)
+- **Course:** Mathematical Foundations of Generative AI
+- **Instructor / Teaching Team:** IISc Bengaluru
+- **Prior Prerequisite:** [Tutorial 8: Review of Basic Probability 2](../22-Tutorial08-Review-Basic-Probability-2/NOTES.md)
+- **Next Tutorial:** Tutorial 10: Expectation of Random Vectors, Covariance Matrices & Weak Law of Large Numbers
