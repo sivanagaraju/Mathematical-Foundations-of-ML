@@ -12,15 +12,15 @@
 
 | Topic & Timestamp | Focus Area | Core Mathematical Formulation | Prerequisite Link |
 | :--- | :--- | :--- | :--- |
-| [Topic 1: Estimate $p_x$, Learn to Sample & 3-Step Recipe](#topic-1-recap-estimate-sample--3-step-recipe-00110312) (00:11–03:12) | Problem Setup | $\mathcal{D} \sim_{\text{iid}} p_x \implies \min_\theta D(p_x \parallel p_\theta)$ | [p1-px](./PREREQUISITES.md#p1-px), [p2-two-jobs](./PREREQUISITES.md#p2-two-jobs) |
-| [Topic 2: Push-Forward: Samples, Not the Law](#topic-2-push-forward-samples-not-the-law-03120639) (03:12–06:39) | Sampling Engine | $Z \sim \mathcal{N}(0, I) \to \hat{X} = G_\theta(Z) \sim p_\theta$ | [p5-push](./PREREQUISITES.md#p5-push), [p6-samples](./PREREQUISITES.md#p6-samples) |
-| [Topic 3: Four Questions; VDM is the Same Recipe](#topic-3-four-questions-vdm-is-the-same-recipe-06390911) (06:39–09:11) | VDM Identity | 4 Foundational Holes & Push-Forward Equivalence | [p2-two-jobs](./PREREQUISITES.md#p2-two-jobs), [p4-div](./PREREQUISITES.md#p4-div) |
-| [Topic 4: $f$-Divergence Definition](#topic-4-f-divergence-definition-09111651) (09:11–16:51) | Master Integral | $D_f(p_x \parallel p_\theta) = \int p_\theta(x) f\left(\frac{p_x(x)}{p_\theta(x)}\right) dx$ | [p6-convex](./PREREQUISITES.md#p6-convex), [p7-f](./PREREQUISITES.md#p7-f) |
-| [Topic 5: $D_f \ge 0$ & Zero iff Equal](#topic-5-d_f-ge-0-and-zero-iff-equal-16511853) (16:51–18:53) | Discrepancy Laws | Jensen's Proof: $D_f \ge f(1) = 0$ | [p4-div](./PREREQUISITES.md#p4-div), [p6-convex](./PREREQUISITES.md#p6-convex) |
-| [Topic 6: KL Divergence as $f(u) = u \log u$](#topic-6-kl-is-fu--u-log-u-18532155) (18:53–21:55) | Algebraic Derivation | $p_\theta$ Cancellation: $\int p_x \log(p_x / p_\theta) dx$ | [p8-kl](./PREREQUISITES.md#p8-kl) |
-| [Topic 7: Forward KL $\neq$ Reverse KL](#topic-7-forward-kl-neq-reverse-kl-21552322) (21:55–23:22) | Asymmetry | Mode-Covering vs. Mode-Seeking Dynamics | [p8-kl](./PREREQUISITES.md#p8-kl) |
-| [Topic 8: JS & TV: Different $f$, Different Properties](#topic-8-js-and-tv-different-f-different-properties-23222528) (23:22–25:28) | Family Catalog | Chalkboard JS Spring & GAN Connection | [p8-kl](./PREREQUISITES.md#p8-kl) |
-| [Topic 9: Next Horizons: Any-$f$ Algorithm & GANs](#topic-9-next-generic-any-f-algorithm-then-gan-25282608) (25:28–26:08) | Syllabus Bridge | Variational Dual Formulation & Minimax Game | — |
+| [Topic 1: Estimate $p_x$, Learn to Sample & 3-Step Recipe](#topic-1) (00:11–03:12) | Problem Setup | $\mathcal{D} \sim_{\text{iid}} p_x \implies \min_\theta D(p_x \parallel p_\theta)$ | [p1-px](./PREREQUISITES.md#p1-px), [p2-two-jobs](./PREREQUISITES.md#p2-two-jobs) |
+| [Topic 2: Push-Forward: Samples, Not the Law](#topic-2) (03:12–06:39) | Sampling Engine | $Z \sim \mathcal{N}(0, I) \to \hat{X} = G_\theta(Z) \sim p_\theta$ | [p5-push](./PREREQUISITES.md#p5-push), [p6-samples](./PREREQUISITES.md#p6-samples) |
+| [Topic 3: Four Questions; VDM is the Same Recipe](#topic-3) (06:39–09:11) | VDM Identity | 4 Foundational Holes & Push-Forward Equivalence | [p2-two-jobs](./PREREQUISITES.md#p2-two-jobs), [p4-div](./PREREQUISITES.md#p4-div) |
+| [Topic 4: $f$-Divergence Definition](#topic-4) (09:11–16:51) | Master Integral | $D_f(p_x \parallel p_\theta) = \int p_\theta(x) f\left(\frac{p_x(x)}{p_\theta(x)}\right) dx$ | [p6-convex](./PREREQUISITES.md#p6-convex), [p7-f](./PREREQUISITES.md#p7-f) |
+| [Topic 5: $D_f \ge 0$ & Zero iff Equal](#topic-5) (16:51–18:53) | Discrepancy Laws | Jensen's Proof: $D_f \ge f(1) = 0$ | [p4-div](./PREREQUISITES.md#p4-div), [p6-convex](./PREREQUISITES.md#p6-convex) |
+| [Topic 6: KL Divergence as $f(u) = u \log u$](#topic-6) (18:53–21:55) | Algebraic Derivation | $p_\theta$ Cancellation: $\int p_x \log(p_x / p_\theta) dx$ | [p8-kl](./PREREQUISITES.md#p8-kl) |
+| [Topic 7: Forward KL $\neq$ Reverse KL](#topic-7) (21:55–23:22) | Asymmetry | Mode-Covering vs. Mode-Seeking Dynamics | [p8-kl](./PREREQUISITES.md#p8-kl) |
+| [Topic 8: JS & TV: Different $f$, Different Properties](#topic-8) (23:22–25:28) | Family Catalog | Chalkboard JS Spring & GAN Connection | [p8-kl](./PREREQUISITES.md#p8-kl) |
+| [Topic 9: Next Horizons: Any-$f$ Algorithm & GANs](#topic-9) (25:28–26:08) | Syllabus Bridge | Variational Dual Formulation & Minimax Game | — |
 | [Workplace Scenarios](#workplace-scenarios--debugging-divergences) | Practical Systems | Production Failure Modes (Mode Collapse vs Blur) | — |
 | [External References](#external-references) | Multi-Source Study | 2–3 Curated Videos & 2–3 Papers/Blogs per Topic | — |
 
@@ -65,6 +65,20 @@ In this foundational lecture, Prof. Prathosh establishes the **rigorous statisti
      └──────────────────────┴─────────────────────────────────────────────────┴───────────────┘
 ══════════════════════════════════════════════════════════════════════════════════════════════════
 ```
+
+---
+
+## 📖 Chalkboard Math Rosetta Stone (Symbols $\to$ Plain English)
+
+| Chalkboard Notation | What It Literally Means | Everyday ELI5 Mental Model |
+| :--- | :--- | :--- |
+| $\mathcal{D} = \{x_1, \dots, x_n\} \sim_{\text{iid}} p_x$ | $n$ fair random draws from hidden density $p_x$ | 500 baked pastries sitting in the window from a secret recipe. |
+| $G_\theta: \mathbb{R}^k \to \mathbb{R}^D$ | Generator neural net mapping noise to data | The pasta machine die shaping plain dough into curly noodles. |
+| $p_\theta$ | The probability distribution of generated samples | The shape of the pile of noodles created by the pasta machine. |
+| $D_f(p_x \parallel p_\theta)$ | The $f$-divergence discrepancy integral | The total city-wide penalty score measuring real vs fake mismatch. |
+| $u(x) = \frac{p_x(x)}{p_\theta(x)}$ | The scalar density ratio at coordinate $x$ | "How many times taller is the real sand dune vs our fake sand dune?" |
+| $f(u)$ | A convex spring pinned at $f(1)=0$ | A spring at rest when dunes match ($u=1$), stretching up if they mismatch. |
+| $D_{\text{JS}}$ | Jensen-Shannon Divergence | The fair, balanced compromise metric that powers GAN training. |
 
 ---
 
@@ -160,6 +174,9 @@ print(f"Total Variation D_TV(p_x || p_theta): {d_tv:.4f} (Bounded in [0, 1])")
 <a id="topic-1"></a>
 ## Topic 1: Recap: Estimate, Sample & 3-Step Recipe (00:11–03:12)
 
+### 👶 ELI5 Quick Intuition
+Imagine you want to clone a secret bakery recipe. You are given 100 sample croissants ($\mathcal{D}$). You can't just be a food critic who inspects croissants; you must actually **learn how to bake 50 new croissants** every morning. The 3-step recipe: (1) Buy a programmable oven ($p_\theta$), (2) Measure how different your bread tastes from the real bread ($D$), and (3) Tweak your oven temperature dials until the difference hits zero ($\theta^\star$).
+
 ### Master Map Placement
 Establishes pedagogical continuity from Lecture 2: defining the formal goal of generative modeling and previewing GANs as a specific member of the Variational Divergence Minimization family.
 
@@ -191,13 +208,13 @@ Establishes pedagogical continuity from Lecture 2: defining the formal goal of g
   └─────────────────────────┘
 ```
 
-### Real-World Analogy
-* **The Master Baker's Apprentice:** You are given 100 loaves of bread ($\mathcal{D}$) baked by a legendary master chef whose secret recipe ($p_x$) is locked in a vault. Your task is twofold: (1) figure out the ingredients ($p_\theta$), and (2) bake 50 brand-new, delicious loaves ($x_{\text{new}}$) every morning. A food critic (discriminator) only tastes bread and says "master's" or "fake"; the apprentice (generator) must learn the recipe and bake.
-
 ---
 
 <a id="topic-2"></a>
 ## Topic 2: Push-Forward: Samples, Not the Law (03:12–06:39)
+
+### 👶 ELI5 Quick Intuition
+You feed plain, uniform dough ($Z \sim \mathcal{N}(0, I)$) into a pasta extruder ($G_\theta$). Out comes curly rigatoni noodles ($\hat{X}$). The shape of the noodles is determined entirely by the metal die inside the extruder. Notice: when noodles drop into the bowl, **you hold physical noodles (samples)**; the machine does not print out a mathematical physics equation of pasta density!
 
 ### Master Map Placement
 Introduces the push-forward generative mechanism: mapping tractable latent Gaussian noise through a deep neural network to induce a complex output distribution.
@@ -233,6 +250,9 @@ Introduces the push-forward generative mechanism: mapping tractable latent Gauss
 
 <a id="topic-3"></a>
 ## Topic 3: Four Questions; VDM is the Same Recipe (06:39–09:11)
+
+### 👶 ELI5 Quick Intuition
+You have two photo albums: 1,000 photos of real faces ($\mathcal{D}$), and 1,000 photos created by your computer ($G_\theta(z)$). You don't have the lighting physics formulas for either album. **How can you compute how different the two albums are using ONLY the photos themselves?** That is Question 1. Prof. Prathosh reveals: Variational Divergence Minimization (VDM) is the exact mathematical answer to this question!
 
 ### Master Map Placement
 Identifies the four fundamental computational roadblocks in generative modeling and proclaims the core thesis: Variational Divergence Minimization (VDM) is mathematically equivalent to the push-forward optimization recipe.
@@ -277,6 +297,9 @@ Prof. Prathosh articulates the four fundamental questions that any generative mo
 <a id="topic-4"></a>
 ## Topic 4: $f$-Divergence Definition (09:11–16:51)
 
+### 👶 ELI5 Quick Intuition
+Imagine measuring the mismatch between two mountain ranges across a continent. At every GPS coordinate $x$, you look at the height of the real mountain ($p_x(x)$) and your model's mountain ($p_\theta(x)$). You take their height ratio $u = p_x / p_\theta$. You feed that single number into a penalty spring $f(u)$. When the heights match ($u=1$), the spring is relaxed ($f(1)=0$). When they mismatch, the spring stretches and charges a penalty!
+
 ### Master Map Placement
 Introduces the formal mathematical definition of the $f$-divergence family and establishes the required analytical properties of the generator function $f(u)$.
 
@@ -316,6 +339,9 @@ Introduces the formal mathematical definition of the $f$-divergence family and e
 
 <a id="topic-5"></a>
 ## Topic 5: $D_f \ge 0$ and Zero iff Equal (16:51–18:53)
+
+### 👶 ELI5 Quick Intuition
+Think of a curved salad bowl resting on a table. The lowest point of the bowl touches the table at height 0 (when $u=1$). No matter where you place marbles in the bowl, their average center of gravity (Jensen's inequality) will always be **at or above table height (0)**. The only way the average height can be exactly 0 is if every single marble sits at the bottom ($p_x = p_\theta$).
 
 ### Master Map Placement
 Proves the two core mathematical invariants that qualify $f$-divergences as valid, reliable objective functions for training generative neural networks.
@@ -359,6 +385,9 @@ Proves the two core mathematical invariants that qualify $f$-divergences as vali
 <a id="topic-6"></a>
 ## Topic 6: KL is $f(u) = u \log u$ (18:53–21:55)
 
+### 👶 ELI5 Quick Intuition
+If you choose the spring recipe $f(u) = u \log u$, something magical happens on the chalkboard: the model distribution $p_\theta(x)$ on the outside of the integral **cancels out completely** with the $p_\theta(x)$ in the bottom of the ratio! You are left with the world-famous **Kullback-Leibler (KL) Divergence**. This proves KL divergence is just one child of the bigger $f$-divergence family!
+
 ### Master Map Placement
 Derives the classical Kullback-Leibler (KL) divergence as an exact special case of the $f$-divergence master integral.
 
@@ -379,8 +408,6 @@ Derives the classical Kullback-Leibler (KL) divergence as an exact special case 
      $$D_f(p_x \parallel p_\theta) = \int_{\mathcal{X}} p_x(x) \log\left(\frac{p_x(x)}{p_\theta(x)}\right) dx$$
   3. This is precisely the definition of **Kullback-Leibler Divergence**:
      $$D_f(p_x \parallel p_\theta) = D_{\text{KL}}(p_x \parallel p_\theta)$$
-* **Pedagogical Takeaway:**
-  KL divergence is not an isolated metric; it is merely one specific child of the vast $f$-divergence family.
 
 ```
    f(u) = u log(u)
@@ -398,6 +425,11 @@ Derives the classical Kullback-Leibler (KL) divergence as an exact special case 
 
 <a id="topic-7"></a>
 ## Topic 7: Forward KL $\neq$ Reverse KL (21:55–23:22)
+
+### 👶 ELI5 Quick Intuition
+Driving from Home to Work on a one-way street is not the same as driving from Work to Home.  
+* **Forward KL (Home $\to$ Work):** The model is terrified of leaving out any real data point. If real data has cats and dogs, the model creates blurry cat-dog hybrids so it covers both.
+* **Reverse KL (Work $\to$ Home):** The model is terrified of creating unrealistic images. It focuses 100% on cats, making sharp cat photos, but completely forgets that dogs exist (Mode Collapse).
 
 ### Master Map Placement
 Examines the asymmetry of KL divergence ($D_{\text{KL}}(p_x \parallel p_\theta) \neq D_{\text{KL}}(p_\theta \parallel p_x)$) and explains how this fundamental asymmetry motivates exploring other members of the $f$-divergence family.
@@ -417,8 +449,6 @@ Examines the asymmetry of KL divergence ($D_{\text{KL}}(p_x \parallel p_\theta) 
     Wherever $p_x(x) > 0$, the model must ensure $p_\theta(x) > 0$; otherwise $\frac{p_x(x)}{p_\theta(x)} \to \infty$ and loss explodes. As a result, the model spreads its probability mass broadly over all data modes, often placing mass in low-density valleys (leading to blurry generated images).
   * **Reverse KL (Zero-Forcing / Mode-Seeking):**  
     Wherever $p_x(x) \approx 0$, the model is heavily penalized if $p_\theta(x) > 0$. As a result, the model restricts itself tightly to a single mode where it is confident (leading to sharp images, but risking mode collapse).
-* **Motivation for the Broader $f$-Family:**
-  Because KL is not symmetric and imposes strict behavioral biases, generative modeling requires access to a broader family of divergences (like Jensen-Shannon and Total Variation) that offer symmetric or custom optimization properties.
 
 ```
    MODE-COVERING (Forward KL)              MODE-SEEKING (Reverse KL)
@@ -434,6 +464,10 @@ Examines the asymmetry of KL divergence ($D_{\text{KL}}(p_x \parallel p_\theta) 
 
 <a id="topic-8"></a>
 ## Topic 8: JS and TV: Different $f$, Different Properties (23:22–25:28)
+
+### 👶 ELI5 Quick Intuition
+If Forward KL is too blurry and Reverse KL drops modes, can we find a **balanced, fair compromise**?  
+Yes! We create a balanced spring called **Jensen-Shannon (JS) Divergence**. It measures how far both distributions are from their midpoint average. It is perfectly symmetric, smooth, and never explodes to infinity. **This is why GANs were built on Jensen-Shannon divergence!**
 
 ### Master Map Placement
 Introduces the exact chalkboard generator formulas for Jensen-Shannon (JS) divergence and Total Variation (TV) distance, connecting JS divergence to Generative Adversarial Networks (GANs).
@@ -457,8 +491,6 @@ Introduces the exact chalkboard generator formulas for Jensen-Shannon (JS) diver
   * **Induced Divergence:**
     $$D_{\text{TV}}(p_x \parallel p_\theta) = \frac{1}{2}\int_{\mathcal{X}} |p_x(x) - p_\theta(x)| \, dx$$
   * Measures the maximum difference between probabilities assigned to any event $A \subseteq \mathcal{X}$.
-* **The Unifying Principle:**
-  Every distinct choice of convex generator $f(u)$ yields a unique statistical divergence metric possessing custom geometric, curvature, and stability properties for generative modeling.
 
 ```
    ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -476,6 +508,10 @@ Introduces the exact chalkboard generator formulas for Jensen-Shannon (JS) diver
 
 <a id="topic-9"></a>
 ## Topic 9: Next Horizons: Generic Any-$f$ Algorithm & GANs (25:28–26:08)
+
+### 👶 ELI5 Quick Intuition
+We have defined this beautiful $f$-divergence yardstick on the board. But there is still one big problem: **we cannot compute the integral because we don't have density formulas for real images or fake images!**  
+In the next lecture (W2_L5), we will introduce a mathematical trick (the Fenchel conjugate) that lets a neural network (the Discriminator / Critic) measure this distance using **only sample batches**. Setting the spring to JS will give birth to the famous **GAN algorithm**!
 
 ### Master Map Placement
 Concludes the lecture by charting the path forward: transitioning from defining $f$-divergence on the board to building a practical algorithm that minimizes any $f$-divergence from sample clouds alone.

@@ -1,917 +1,690 @@
-# W1_T2 — Introduction to PyTorch: tensors  
-*(this recording: Dataset and DataLoader)*
+# W1_T2 — PyTorch Datasets & DataLoaders (Fashion-MNIST & Custom Pipelines)
 
-> **Video:** [W1_T2: Tutorial 2: Introduction to pytorch: tensors](https://www.youtube.com/watch?v=L5n4rNrLZ_8) · **~18 min**  
-> **Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md) · **Quiz:** [quiz.html](./quiz.html)
-
-**Do PREREQUISITES before this article.**  
-**Course:** IIT Madras B.S. · **BSDA5002** · Prof. Prathosh A. P. · tutorial live-code (Chandan)  
-**Previous in this playlist:** [W1_L2 problem setting](../01-W1-L2-Introduction-Problem-Setting/NOTES.md) · W1_T1 forward/backprop · [W1_L3 tensors Colab](../02-W1-L3-F-Divergence/NOTES.md) (actual tensor algebra)
-
-**Honest title note:** YouTube says **tensors**. The ~18-minute notebook he actually opens is **Datasets & DataLoaders** (Fashion-MNIST + `CustomImageDataset`). These notes follow the **speech and the Colab**, not the title. The tape is a short lab, not a 60-minute chalk talk — warm-up + this article + quiz + the companions below are the hour.
-
-**Boards:** unique 2×2 composites from the recording (Colab + handwritten `img_dir` / $D=\{d_1,d_2,\ldots\}$). Some panes in Topics 3–4 look alike because the camera stays on one cell; read the caption for which corner to stare at. Code matches the cells he walks (`FashionMNIST`, `ToTensor`, `iloc`, `DataLoader(batch_size=64)`). Newer PyTorch docs renamed `read_image` → `decode_image`; he still types **`read_image`**.
-
-| When he hits… | Warm-up |
-|---------------|---------|
-| Image → tensor | [p1-tensor](./PREREQUISITES.md#p1-tensor) |
-| Train vs test | [p2-train-test](./PREREQUISITES.md#p2-train-test) |
-| Labels 0–9 | [p3-label](./PREREQUISITES.md#p3-label) |
-| Dataset vs loader | [p4-dataset-loader](./PREREQUISITES.md#p4-dataset-loader) |
-| `__init__` / `__len__` / `__getitem__` | [p5-dunder](./PREREQUISITES.md#p5-dunder) |
-| CSV + `iloc` | [p6-csv](./PREREQUISITES.md#p6-csv) |
-| Batch 64 | [p7-batch](./PREREQUISITES.md#p7-batch) |
-| Shuffle | [p8-shuffle](./PREREQUISITES.md#p8-shuffle) |
+> **Course:** IIT Madras B.S. Degree in Data Science & AI · **Mathematical Foundations of Generative AI**  
+> **Instructor:** Chandan (Tutorial TA) · Course Faculty: Prof. Prathosh A. P. (IISc / IITM)  
+> **Tutorial Recording:** [W1_T2 on YouTube](https://www.youtube.com/watch?v=L5n4rNrLZ_8) (~18:26)  
+> **Prerequisites Warm-up:** [PREREQUISITES.md](./PREREQUISITES.md) · **Self-Assessment Quiz:** [quiz.html](./quiz.html)  
+> **Course Catalog:** [../NOTES.md](../NOTES.md)
 
 ---
 
-## Table of Contents
+## 📌 Honest Title Discrepancy & Course Map Placement
 
-1. [Topic 1 — Tensors, then he opens the Dataset sheet](#topic-1-tensors-then-he-opens-the-dataset-sheet-0012–0153) (00:12–01:53)
-2. [Topic 2 — Torchvision catalogs; Fashion-MNIST](#topic-2-torchvision-catalogs-fashion-mnist-0153–0320) (01:53–03:20)
-3. [Topic 3 — Imports](#topic-3-imports-0320–0417) (03:20–04:17)
-4. [Topic 4 — `FashionMNIST` train/test](#topic-4-fashionmnist-traintest-0417–0609) (04:17–06:09)
-5. [Topic 5 — Plots; when the repo is not enough](#topic-5-plots-when-the-repo-is-not-enough-0609–0741) (06:09–07:41)
-6. [Topic 6 — Custom data: folder + CSV](#topic-6-custom-data-folder--csv-0741–1021) (07:41–10:21)
-7. [Topic 7 — `CustomImageDataset`](#topic-7-customimagedataset-1021–1506) (10:21–15:06)
-8. [Topic 8 — `DataLoader`, batch 64, shuffle](#topic-8-dataloader-batch-64-shuffle-1506–1826) (15:06–18:26)
-9. [External references](#external-references)
-10. [Apply it (scenarios)](#apply-it-scenarios)
-11. [Sources](#sources)
+> [!NOTE]
+> **Video Title vs. Actual Content Discrepancy:**  
+> The YouTube recording is titled *"Tutorial 2: Introduction to pytorch: tensors"*. However, the actual 18-minute Colab session opens and walks through the official PyTorch **`Datasets & DataLoaders`** tutorial notebook.  
+> * For the pure **Tensor Algebra & Operations** Colab session (tensor creation, indexing, concatenation, dot products, `@` matmul, and autograd), please refer to [02-W1-L3-F-Divergence/NOTES.md](../02-W1-L3-F-Divergence/NOTES.md).  
+> * This notes document strictly covers the **speech, code cells, handwritten diagrams, and concepts presented in the 18:26 recording**: loading built-in datasets (`FashionMNIST`), building custom dataset classes (`CustomImageDataset`), and streaming mini-batches via `DataLoader`.
 
 ---
 
-## Executive Summary — architecture of this lecture
+## Quick Navigation Matrix
 
-Weight updates need **tensors in batches of 64**. This sheet installs a **Dataset** that yields one `(image, label)`, then a **DataLoader** that stacks 64 of those pairs and optionally shuffles. If torchvision already has the files, call **`FashionMNIST`**. If the files are custom or confidential, build **folder + two-column CSV + `CustomImageDataset`**. After $D=\{d_1,\ldots,d_k\}$, **data is ready**; the model is the next sheet.
+| Topic & Timestamp | Focus Area | Core Code / Concept | Prerequisite Link |
+| :--- | :--- | :--- | :--- |
+| [Topic 1: Tensors then Dataset Sheet](#topic-1) (00:12–01:53) | Overview & Setup | Transition from Tensor math to Data Ingestion | [p1-tensor](./PREREQUISITES.md#p1-tensor) |
+| [Topic 2: Torchvision Catalogs & Fashion-MNIST](#topic-2) (01:53–03:20) | Dataset Catalog | 10-Class Fashion-MNIST, CIFAR-10, ImageNet | [p3-label](./PREREQUISITES.md#p3-label) |
+| [Topic 3: Essential Imports](#topic-3) (03:20–04:17) | Module Dependencies | `Dataset`, `DataLoader`, `datasets`, `ToTensor` | [p4-dataset-loader](./PREREQUISITES.md#p4-dataset-loader) |
+| [Topic 4: FashionMNIST Train & Test Splits](#topic-4) (04:17–06:09) | Built-In Loading | `root="data"`, `train=True/False`, `download=True` | [p2-train-test](./PREREQUISITES.md#p2-train-test) |
+| [Topic 5: Visualizing & When Built-in Fails](#topic-5) (06:09–07:41) | Data Exploration | `matplotlib.pyplot` & Proprietary/Sensitive Data | [p3-label](./PREREQUISITES.md#p3-label) |
+| [Topic 6: Custom Datasets: Folder + CSV](#topic-6) (07:41–10:21) | Custom Architecture | `img_dir` (raw images) + `annotations_file` (CSV) | [p6-csv](./PREREQUISITES.md#p6-csv) |
+| [Topic 7: The `CustomImageDataset` Class](#topic-7) (10:21–15:06) | OOP Implementation | Subclassing `Dataset`: `__init__`, `__len__`, `__getitem__` | [p5-dunder](./PREREQUISITES.md#p5-dunder), [p6-csv](./PREREQUISITES.md#p6-csv) |
+| [Topic 8: `DataLoader`, Batch 64 & Shuffling](#topic-8) (15:06–18:26) | Streaming Engine | Mini-batches $D_i = \{(x_j, y_j)\}_{j=1}^{64}$, `shuffle=True/False` | [p7-batch](./PREREQUISITES.md#p7-batch), [p8-shuffle](./PREREQUISITES.md#p8-shuffle) |
+| [Workplace Debugging Scenarios](#workplace-scenarios--debugging-data-pipelines) | Production Systems | Multi-Worker OOM Leaks & CSV Index Inversions | — |
+| [External References](#external-references) | Multi-Source Study | 2–3 Curated Videos & 2–3 Guides/Blogs per Topic | — |
 
-**Worldview arc:** from “convert files to tensors” **to** “iterate shuffled batches of `(x, y)`.”
+---
 
-### The approach
+## Executive Summary & Master Architecture
+
+<a id="executive-summary"></a>
+<a id="executive-summary--architecture-of-this-lecture"></a>
+
+Deep neural networks cannot update weights on raw `.png` or `.jpg` image files stored on a hard drive. Weight updates via backpropagation require **numerical tensors grouped into mini-batches of size $B$ (e.g., 64)**.  
+PyTorch decouples data processing into two distinct architectural abstractions:
+1. **`torch.utils.data.Dataset` (The Item Store):** Maps an integer index `idx` to an individual sample pair $(x_i, y_i)$.
+2. **`torch.utils.data.DataLoader` (The Streaming Engine):** Wraps around a `Dataset` to automatically handle mini-batching, multi-process memory loading (`num_workers`), GPU memory pinning (`pin_memory`), and index shuffling (`shuffle=True`).
 
 ```
-  1. CONVERT   image matrix → tensor     (ToTensor, or read_image)
-  2. FORK      lucky   = datasets.FashionMNIST(
-                           root="data", train=True/False,
-                           download=True, transform=ToTensor())
-               unlucky = folder + 2-column CSV
-                         CustomImageDataset(Dataset)
-                           __init__  __len__  __getitem__
-                           iloc[idx,0]=path  iloc[idx,1]=label
-  3. WRAP      DataLoader(ds, batch_size=64,
-                          shuffle=True)   # train, new order each epoch
-                          shuffle=False)  # test, one eval (his advice)
-  4. PEEK      images, labels = next(iter(loader))
-               64 pairs; each Di = (x_j, y_j) j=1..64
-  STOP         data ready as tensors; next sheet = the model
+══════════════════════════════════════════════════════════════════════════════════════════════════
+                     THE PYTORCH DATA INGESTION ARCHITECTURE BLUEPRINT
+══════════════════════════════════════════════════════════════════════════════════════════════════
+
+  1. STORAGE LAYER (On Disk)
+     • Built-in: Downloaded into ./data via torchvision.datasets.FashionMNIST
+     • Custom:   Raw folder (img_dir) + 2-column CSV (annotations_file: [filename, label])
+
+  2. DATASET ABSTRACTION (Single-Item Access)
+     ┌────────────────────────────────────────────────────────────────────────────────────────┐
+     │ Class: CustomImageDataset(torch.utils.data.Dataset)                                    │
+     │   • __init__(self, csv, dir, transform) ──► Reads CSV into pandas DataFrame table     │
+     │   • __len__(self)                       ──► Returns total rows: len(self.img_labels)   │
+     │   • __getitem__(self, idx)              ──► Loads 1 image from disk, applies transform,│
+     │                                             returns tuple: (image_tensor, label_int)   │
+     └────────────────────────────────────────────────────────────────────────────────────────┘
+
+  3. DATALOADER WRAPPER (Batching & Shuffling)
+     ┌────────────────────────────────────────────────────────────────────────────────────────┐
+     │ DataLoader(dataset, batch_size=64, shuffle=True/False)                                 │
+     │   • Slices total dataset into mini-batches: D = {D₁, D₂, ..., Dₖ}                      │
+     │   • Each D_i is a batch of 64 pairs: D_i = {(x_j, y_j)}_{j=1}^{64}                     │
+     │   • Training:   shuffle=True  (New random index permutation every epoch)               │
+     │   • Evaluation: shuffle=False (Deterministic, single pass, no test epochs)             │
+     └────────────────────────────────────────────────────────────────────────────────────────┘
+
+  4. GPU-READY OUTPUT TENSORS (Fed to Neural Net)
+     • Batch Images Tensor: Shape [64, 1, 28, 28]  (dtype: torch.float32, values in [0, 1])
+     • Batch Labels Tensor: Shape [64]             (dtype: torch.int64, labels in {0..9})
+══════════════════════════════════════════════════════════════════════════════════════════════════
 ```
 
-### Whole-sheet recipe (commented)
+---
+
+## 📖 PyTorch Data Rosetta Stone (Symbols & Functions $\to$ Plain English)
+
+| PyTorch Code / Symbol | Formal Technical Name | Plain-English ELI5 Mental Model |
+| :--- | :--- | :--- |
+| `ToTensor()` | Normalizing Tensor Transform | The digital scanner turning raw pixel brightness $[0, 255]$ into floating-point numbers $[0.0, 1.0]$. |
+| `torch.utils.data.Dataset` | Abstract Base Dataset Class | The warehouse shelf picker who knows how to open drawer `#idx` and hand you **one single garment**. |
+| `torch.utils.data.DataLoader` | Streaming Batch Wrapper | The automated forklift system that loads **64 garments onto a pallet** and delivers them to the GPU. |
+| `batch_size = 64` | Mini-Batch Capacity | The pallet size: exactly 64 image grids grouped together for parallel computation. |
+| `shuffle = True` | Random Permutation Flag | Thoroughly shuffling flashcards before studying so you don't memorize the question sequence. |
+| `__getitem__(self, idx)` | Indexing Dunder Method | The secret Python method executed whenever you write `dataset[idx]`. |
+| `pd.read_csv(...)` | Pandas CSV Reader | Opening the master spreadsheet containing image filenames and category tags. |
+| `.iloc[idx, 0]` vs `.iloc[idx, 1]` | Integer Location Indexing | Column 0 is the **image path string**; Column 1 is the **integer label $0$ to $9$**. |
+| `next(iter(dataloader))` | Iterator Step Function | Grabbing the very first 64-image pallet from the conveyor belt to inspect it. |
+
+---
+
+## Comparative Matrix: Ingestion Approaches in PyTorch
+
+| Feature / Metric | Built-in (`torchvision.datasets`) | Custom Dataset (`CustomImageDataset`) | Raw In-Memory NumPy / Tensors |
+| :--- | :--- | :--- | :--- |
+| **Best Used For** | Standard benchmarks (MNIST, CIFAR, ImageNet) | Proprietary, client, or enterprise data | Toy datasets with $< 10{,}000$ points |
+| **Memory Footprint** | Low (Loads on-demand from disk) | Low (Loads single images dynamically via `idx`) | **Extremely High** (Loads all gigabytes into RAM) |
+| **Setup Complexity** | Zero (Single constructor call) | Moderate (Write 3 dunder methods + CSV) | Low (Single `torch.tensor()` call) |
+| **Custom Transforms?**| Supported via `transform=` parameter | Supported via `transform=` parameter | Manual pre-computation required |
+| **Multi-GPU / Workers**| Fully supported via `DataLoader` | Fully supported via `DataLoader` | Requires custom multi-process slicing |
+
+---
+
+## Complete Hands-On Implementation in Python / PyTorch
 
 ```python
-# ===== LUCKY PATH — Fashion-MNIST is already in torchvision =====
 import torch
 from torch.utils.data import Dataset, DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
-
-# 1. CONVERT + LOAD  (image matrix → tensor; two splits, same root)
-training_data = datasets.FashionMNIST(
-    root="data", train=True, download=True, transform=ToTensor()
-)
-test_data = datasets.FashionMNIST(
-    root="data", train=False, download=True, transform=ToTensor()
-)
-
-# 2. WRAP  batches of 64; shuffle TRAIN; do not shuffle TEST (his advice)
-train_loader = DataLoader(training_data, batch_size=64, shuffle=True)
-test_loader = DataLoader(test_data, batch_size=64, shuffle=False)
-
-# 3. PEEK  one block Di of 64 pairs  ("iterator next")
-images, labels = next(iter(train_loader))
-# images: ~ (64, 1, 28, 28)    labels: (64,) ints 0..9
-
-# DATA IS READY. Next sheet: a model that eats (images, labels).
-```
-
-If the files are **not** in the repo, swap step 1 for `CustomImageDataset` (Topics 6–7): folder + CSV, `__len__` / `__getitem__`, `iloc[idx,0]` path, `iloc[idx,1]` label. Then wrap the same way.
-
-### System context
-
-```
-  ╔════════════════════════════════════╗
-  ║ W1_T1: forward / backprop by hand  ║
-  ║ W1_L3: tensor create / matmul      ║  (different recording)
-  ║ W1_T3/T4: loaders / nn.Module      ║
-  ╚════════════════╤═══════════════════╝
-                   │ this 18 min (playlist T2)
-                   ▼
-        ┌──────────────────────────┐
-        │ Dataset + DataLoader     │
-        │ (Fashion-MNIST / custom) │
-        └──────────────────────────┘
-```
-
-### Main blueprint
-
-```
-  JPEG / MNIST file
-       │  ToTensor  (or read_image on custom path)
-       ▼
-  tensor x  +  integer y (0–9)
-       │
-       ▼
-  ┌─ Dataset ─────────────────┐
-  │  __len__ → how many       │
-  │  __getitem__(i) → (x,y)   │
-  │  builtin FashionMNIST     │
-  │  or CustomImageDataset    │
-  └──────────┬────────────────┘
-             │ wrap
-             ▼
-  DataLoader  batch_size=64
-             shuffle=True on TRAIN
-             │
-             ▼
-  for batch in loader:
-      x, y = batch     # 64 pairs = one Di
-             │
-  ┌ · · · · ┴ · · · · · · · ┐
-  │ STOP: data ready        │
-  │ next: model / training  │
-  └ · · · · · · · · · · · · ┘
-```
-
-### Scenario walkthrough
-
-Three private hospital photos live in `images/`: `coat/001.png`, `dress/019.png`, `sandal/007.png`. The packing list `annotations.csv` has two columns: those relative paths and bins `4, 3, 5`.
-
-1. **Lucky fork blocked** — these files are not in torchvision.  
-2. **Layout** — `img_dir="images"` plus the CSV.  
-3. **Class** — `CustomImageDataset` joins folder + `iloc[idx,0]`, `read_image`, label `iloc[idx,1]`. `len(ds)` is 3. `ds[0]` is `(tensor, 4)`.  
-4. **Wrap** — `DataLoader(ds, batch_size=64, shuffle=True)` still works: one undersized last batch of 3.  
-5. **Peek** — `next(iter(loader))` yields those three pairs as tensors. **Data is ready.**
-
-The lucky twin of the same walk: skip the class, call `FashionMNIST(root="data", …)` twice, wrap with 64.
-
-### Failure / contrast
-
-```
-  WRONG  expect torch.matmul in this 18 min     (title trap)
-  WRONG  swap CSV columns (path vs label)
-  WRONG  shuffle test as if many test epochs
-  WRONG  skip __len__ / __getitem__ names
-  WRONG  train=True on both FashionMNIST calls
-```
-
-### STOP / out of scope
-
-- Matplotlib axes API (he skips; `labels_map` is on screen anyway).
-- `nn.Module` / autograd training loop (later tutorials).
-- Hand-built `torch.tensor([[1,2],[3,4]])` algebra (playlist W1_L3, not this tape).
-- `num_workers`, samplers, collate (mentioned in the notebook prose; he does not teach them).
-
-### Load-bearing claims (closed-book)
-
-- Data must be tensors; he still opens **Dataset / DataLoader**.
-- Fashion-MNIST = 10 clothes, labels 0–9, in torchvision.
-- `root="data"`, `download=True`, `transform=ToTensor()`.
-- Custom = **image directory + two-column CSV**.
-- `CustomImageDataset(Dataset)`: `__init__`, `__len__`, `__getitem__`; `iloc[idx,0]` path, `iloc[idx,1]` label.
-- `DataLoader` batch **64**; **shuffle train**; test shuffle optional / prefer False.
-- Access with **`next(iter(loader))`**; whole data is $D_1\ldots D_k$; **data is ready**.
-
-**Speaker:** IITM BS tutorial (Chandan) · course Prof. Prathosh.
-
----
-
-## Topic 1: Tensors, then he opens the Dataset sheet (00:12–01:53)
-
-### Where this sits on the master map
-
-This is the **JOB** box. [Everything becomes a tensor](./PREREQUISITES.md#p1-tensor), then **batches** for weight updates. He then clicks the **Datasets and DataLoaders** link — that is the sheet this hour actually runs.
-
-### Board / screenshot
-
-![Topic 1 — Tensors page, then Datasets & DataLoaders, then a search for torch dataset](./screenshots/composites/ch01-topic-01-tensors-then-dataloader-sheet-panel1of1.png)
-
-Caption: top-left is the official **Tensors** tutorial (what the YouTube title promised). Top-right is the tab he actually stays on: **Datasets & DataLoaders**, Fashion-MNIST in the first paragraph. Bottom: he even Bing-searches `torch dataset` / `torch data`. Follow the tab, not the title.
-
-### What he is establishing
-
-All data we get will be a **tensor**, or we convert it. Then we want it in **batches** for **updating weights**. That is tutorial two’s job. He also asks the practical questions: **where does the data lie**, and **how do you handle it**.
-
-He then says the **second tutorial link** is **dataset and dataloaders** and goes there. So the *title* and the *tab* disagree. Follow the tab.
-
-The first minute also plants a later fork: when the files **are** in the PyTorch repository you “don’t need to worry much”; **most of the time they are not**, and then you still need to know how to create a DataLoader. He does not build the custom class yet — he only names the leftover problem.
-
-```python
-# He does not type a cell in this minute. The job, in one line:
-#   files  --convert-->  tensors  --batch-->  weight updates
-#
-# Official pages he clicks (sidebar of pytorch.org/tutorials):
-#   Tensors                  ← YouTube title
-#   Datasets & DataLoaders   ← the sheet he actually opens
-```
-
-The trap is waiting 18 minutes for `torch.mm`. You will not see it. Tensor *create/ops* live in the other Colab (playlist W1_L3).
-
-You can now state the job: tensors in batches, from files. What is still open: *which* files.
-
-### Analogy for this topic only
-
-The warehouse robot only lifts **numbered grids** (tensors), in **carts** (batches). Today he shows how to fill carts, not how to multiply two grids.
-
-Someone asks: **where is `torch.arange`?** Not this recording.
-
-In lecture words: convert to tensor, then Dataset/DataLoader.
-
-### Local picture
-
-```
-  files --convert--> tensors --batch--> optimizer
-           ▲                    ▲
-           │                    └── DataLoader (this hour)
-           └── ToTensor / read_image
-
-  Notice: conversion is ToTensor later, not a handwritten 2×2.
-```
-
-### Bridge
-
-If the catalog is already on torchvision’s shelf, constructors stay short. He next scrolls that shelf — Caltech, CIFAR, ImageNet — and parks on Fashion-MNIST.
-
----
-
-## Topic 2: Torchvision catalogs; Fashion-MNIST (01:53–03:20)
-
-### Where this sits on the master map
-
-This is **BUILTIN**. If the set lives in the [PyTorch repository](./PREREQUISITES.md#p3-label), you do not curate paths yet.
-
-### Board / screenshot
-
-![Topic 2 — torchvision dataset catalog; Fashion-MNIST constructor cell](./screenshots/composites/ch02-topic-02-torchvision-datasets-fashionmnist-panel1of1.png)
-
-Caption: he scrolls **Image classification** on pytorch.org/vision: Caltech 101, Caltech 256, CelebA, CIFAR-10 / CIFAR-100, then later Fashion-MNIST in the F’s. Bottom-right: the Colab he will run. “When it is available in the PyTorch repository itself, you don’t need to worry much.”
-
-### What he is establishing
-
-He scrolls datasets that **ship with PyTorch**: Caltech 101, Caltech 256 (ASR 205), CIFAR-10, ImageNet, detection/segmentation, pairs, video tasks. Plenty to play with. If it lives **in the repository**, you do not write a path-joining class yet.
-
-**Fashion-MNIST:** **10-class** clothes. He does not list every English name; **0 through 9** is enough. “0 is something, one is something.” Coat / dress / sandal show up when he plots. Think bins in a warehouse, not MNIST digits.
-
-The trap is treating Fashion-MNIST as handwritten digits (that is MNIST). These are **garments**.
-
-```python
-# He names the catalog; he does not instantiate yet.
-# Fashion-MNIST = 10 clothing classes, labels 0..9.
-# (Full English names sit in the next notebook cell as labels_map.)
-BUILTIN_TODAY = "FashionMNIST"   # not MNIST digits, not ImageNet
-N_CLASSES = 10
-```
-
-You can now name the lucky dataset. What is still open: the import list.
-
-### Analogy for this topic only
-
-The warehouse already has a public catalog of 10 clothing types. You download it; you do not photograph your closet yet.
-
-Someone asks: **is ImageNet required today?** No. Fashion-MNIST only. ImageNet is on the same shelf; he scrolls past it.
-
-In lecture words: built-in repo vs later custom wrapper.
-
-### Local picture
-
-```
-  torchvision.datasets.*   ←  lucky   (Caltech, CIFAR, Fashion-MNIST, …)
-  your private folder      ←  unlucky (Topic 6)
-
-  Notice: 10 clothes, not 10 digits. 0..9 is enough for the net.
-```
-
-### Bridge
-
-A catalog name is not enough to load pixels. He next imports `torch`, `Dataset`, `datasets`, `ToTensor`, and `plt` so the Fashion-MNIST constructors have something to call.
-
----
-
-## Topic 3: Imports (03:20–04:17)
-
-### Where this sits on the master map
-
-This is **IMPORTS**. [Dataset vs the download package vs ToTensor](./PREREQUISITES.md#p4-dataset-loader).
-
-### Board / screenshot
-
-![Topic 3 — import torch, Dataset, datasets, ToTensor, plt](./screenshots/composites/ch03-topic-03-imports-dataset-transforms-plt-panel1of1.png)
-
-Caption: four near-duplicate panes of **the same cell** — watch the cursor hop `Dataset` → `datasets` → `ToTensor` → `plt`. Capital **D** on `Dataset`; `datasets` (plural) downloads. Markdown above the cell already names `root`, `train`, `download`, `transform`.
-
-### What he is establishing
-
-**First library: `torch`.** Then `torch.utils.data` — you **create a Dataset** (`Dataset`, capital D). To **download from the repository**: package **`datasets`**. Once you have an image, convert to tensor: **`transforms` / `ToTensor`**. Plotting: **`matplotlib.pyplot as plt`**.
-
-Those five are “the necessary libraries for our work.” `plt` is only so you can **see** how the clothes look; it is not the training engine.
-
-```python
-import torch
-from torch.utils.data import Dataset          # protocol / parent class  (capital D)
-from torchvision import datasets              # FashionMNIST, CIFAR, ...
-from torchvision.transforms import ToTensor   # image matrix → tensor
-import matplotlib.pyplot as plt               # peek at clothes; not the point
-```
-
-**What this does:** `datasets` fetches; `ToTensor` makes the grid; `Dataset` is the type you subclass later. Mixing `Dataset` (singular, class) with `datasets` (plural, download module) is the #1 import typo.
-
-The trap is importing `Dataset` and never using torchvision `datasets` (no download), or the reverse.
-
-You can now paste the import block. What is still open: the FashionMNIST call.
-
-### Analogy for this topic only
-
-Four tools on the bench: the engine (`torch`), the catalog (`datasets`), the converter (`ToTensor`), the protocol badge (`Dataset`). `plt` is a lamp so you can look; you can train in the dark.
-
-Someone asks: **do I need `plt` to train?** He uses it to look, then shrugs.
-
-In lecture words: those five imports are “necessary libraries for our work.”
-
-### Local picture
-
-```
-  datasets  →  download from the repo
-  ToTensor  →  matrix to tensor
-  Dataset   →  class you inherit
-  plt       →  look, then ignore axes API
-
-  Notice: Dataset (singular, capital D) is not the same module as datasets (download).
-```
-
-### Bridge
-
-Training pile vs test pile, then `root` and `download`. The next cell is two `FashionMNIST(...)` calls that use every flag he just named.
-
----
-
-## Topic 4: `FashionMNIST` train/test (04:17–06:09)
-
-### Where this sits on the master map
-
-This is **BUILTIN LOAD**. [Train vs test](./PREREQUISITES.md#p2-train-test); `root="data"`; `download=True`; [ToTensor](./PREREQUISITES.md#p1-tensor).
-
-### Board / screenshot
-
-![Topic 4 — FashionMNIST train=True / train=False, download, ToTensor](./screenshots/composites/ch04-topic-04-fashionmnist-train-test-totensor-panel1of1.png)
-
-Caption: two constructors, same `root="data"`. `train=True` then `train=False`. Bottom-right: he **runs** the cell — “it will take some time” while files land under `./data`.
-
-### What he is establishing
-
-Any dataset has **two parts**: **training** (understand input–output) and **test** (evaluate). Fashion-MNIST ships them split. They have been **made separate**.
-
-Constructor: **`datasets.FashionMNIST`**. **`root="data"`** = folder `data` in the **current working directory**. **`train=True`** for the training split. **`download=True`** (ASR “two”): if the files are not in that folder, **download**. After download, **transform** the image: an image is a **matrix**; **convert to a tensor**. Test: same `root`, **`train=False`**, `download=True`, same ToTensor.
-
-He runs it; it **takes some time**. First run fetches; later runs reuse `./data`.
-
-```python
-# Training split: learn x → y
-training_data = datasets.FashionMNIST(
-    root="data",          # ./data relative to the notebook's cwd
-    train=True,           # the training pile
-    download=True,        # fetch if that folder is empty
-    transform=ToTensor(), # pixel matrix → tensor
-)
-
-# Test split: evaluate once later
-test_data = datasets.FashionMNIST(
+import pandas as pd
+import numpy as np
+import os
+from PIL import Image
+
+# ==============================================================================
+# 1. BUILT-IN DATASET PIPELINE (Fashion-MNIST)
+# ==============================================================================
+# Load official benchmark splits
+train_fashion = datasets.FashionMNIST(
     root="data",
-    train=False,          # not the training pile
+    train=True,
     download=True,
-    transform=ToTensor(),
+    transform=ToTensor()
 )
-```
 
-**What this does:** first run downloads into `./data`; later runs reuse the files. Each example is already a tensor plus a 0–9 label.
-
-```python
-# After the download finishes (he waits: "it will take some time"):
-img0, y0 = training_data[0]   # Dataset protocol: one pair, not a batch
-# img0 is a tensor (ToTensor already ran)
-# y0 is an integer 0..9  — the bin, not the word "coat"
-
-n_train = len(training_data)  # how many training examples (~60_000)
-n_test = len(test_data)       # ~10_000
-# He does not print these; they exist because FashionMNIST is a Dataset.
-```
-
-The trap is `train=True` on both calls, or `root` pointing at a folder you cannot write, or skipping `ToTensor` and feeding a PIL image to a Linear layer.
-
-You can now copy the two constructors. What is still open: looking at labels, then the unlucky path.
-
-### Analogy for this topic only
-
-Public catalog in a drawer labeled `data`. If the drawer is empty, order from the PyTorch store (`download=True`). Practice pile vs exam pile — two flags, **one** folder.
-
-Someone asks: **can I skip ToTensor and feed JPEGs to a Linear layer?** Not in this pipeline. An image is a matrix; the net wants a tensor.
-
-In lecture words: root, train flag, download, transform to tensor.
-
-### Local picture
-
-```
-  cwd/data/FashionMNIST/...
-       train=True   training_data
-       train=False  test_data
-
-  Notice: same folder, two flags — not two roots.
-```
-
-### Bridge
-
-He plots (and skips teaching `plt`), then says you will not always be this lucky. Coat / dress / sandal are the human names; 0–9 is what the net sees.
-
----
-
-## Topic 5: Plots; when the repo is not enough (06:09–07:41)
-
-### Where this sits on the master map
-
-This is **LUCK**. Labels [0–9](./PREREQUISITES.md#p3-label). Real work is often **custom**.
-
-### Board / screenshot
-
-![Topic 5 — labels_map 0–9; download finishing](./screenshots/composites/ch05-topic-05-labels-when-builtin-fails-panel1of1.png)
-
-Caption: top-right is the **`labels_map`** he does not teach as matplotlib — T-Shirt … Ankle Boot, 0 through 9. Bottom: download progress, then he talks lucky vs confidential data.
-
-### What he is establishing
-
-Plotting (`plt` axes) — **he will not teach** (“I’ll not be going ahead how plt works”). After the run: **coat, dress, sandal** — ten classes **0–9**. Number them; the net never reads the English word.
-
-The notebook still contains the map. You may read it even if he skips the axes API:
-
-```python
-# He skips axes / subplots. The cell he has open still names the bins.
-labels_map = {
-    0: "T-Shirt",
-    1: "Trouser",
-    2: "Pullover",
-    3: "Dress",
-    4: "Coat",
-    5: "Sandal",
-    6: "Shirt",
-    7: "Sneaker",
-    8: "Bag",
-    9: "Ankle Boot",
-}
-
-# Peek one training example (Dataset, not DataLoader yet):
-img, y = training_data[0]
-# print(int(y), labels_map[int(y)])   # humans read "Coat"; the net reads 4
-```
-
-**Good case:** data **in the PyTorch repository**. **Most cases:** **custom**, **customer-sensitive**, **confidential** — **not** in torchvision. Then **curate** it and write a **wrapper script**. That wrapper is a **custom dataset**.
-
-The trap is assuming every homework set is `FashionMNIST`.
-
-You can now split lucky vs unlucky. What is still open: the two files the wrapper needs.
-
-### Analogy for this topic only
-
-Public mall catalog vs a hospital closet of private photos. The mall has a download button. The hospital needs your own list. Uploading the hospital closet into torchvision is the thing the wrapper exists to avoid.
-
-Someone asks: **can I upload confidential images to torchvision?** That is exactly why the wrapper exists.
-
-In lecture words: custom dataset when the repo does not have your files.
-
-### Local picture
-
-```
-  torchvision  --yes-->  FashionMNIST constructors
-               --no-->   folder + CSV + subclass
-
-  Notice: confidential data is the reason torchvision cannot be the only path.
-```
-
-### Bridge
-
-Custom data is not “another FashionMNIST flag.” You need an **image directory** plus an **annotation CSV** so `__getitem__` can join a path. That layout is the next box — he writes `img_dir` and `annotation file` on the tablet.
-
----
-
-## Topic 6: Custom data: folder + CSV (07:41–10:21)
-
-### Where this sits on the master map
-
-This is **LAYOUT**. [Two-column CSV](./PREREQUISITES.md#p6-csv) plus a root folder.
-
-### Board / screenshot
-
-![Topic 6 — handwritten img_dir + annotation file; CustomImageDataset skeleton](./screenshots/composites/ch06-topic-06-custom-folder-plus-csv-panel1of1.png)
-
-Caption: tablet: **Custom dataset = `img_dir` + annotation file**. Then two columns: **relative path / image name** | **label**. Colab already shows `read_image` and `iloc[idx, 0]` / `iloc[idx, 1]`. Extra imports: `os`, `pandas as pd`, `torchvision.io.read_image`.
-
-### What he is establishing
-
-Custom dataset **two parts**: **image directory** (OS path) and **annotation file**, preferably **CSV**. CSV holds **relative path and image name** (or other modality — **sequence is allowed**) and the **label**. **Two columns.**
-
-From the folder + the CSV row you know which file and which label. Imports: **`os`** (retrieve by path), **`pandas`** (read CSV → DataFrame), **`torchvision.io.read_image`**. He **assumes** you know **OOP**: `__init__`, double-underscore, **inheritance**.
-
-The trap is a CSV of only labels, or absolute Windows paths that break on another machine. Relative + `join` is the point.
-
-```python
-import os
-import pandas as pd
-from torchvision.io import read_image  # he: "torchvision.io ... read_image"
-# Newer docs: decode_image. This recording types read_image.
-
-# Toy annotation file he described: TWO columns (path, label)
-# annotations.csv
-# coat/001.png,4
-# dress/019.png,3
-# sandal/007.png,5
-
-img_dir = "images"  # OS path / root — "image directory"
-csv_path = "annotations.csv"
-
-# Why pandas: read the CSV into a DataFrame
-img_labels = pd.read_csv(csv_path)  # later: self.img_labels
-
-# Why os: join the folder with the relative path in column 0
-idx = 0  # "which example / which row"
-rel = img_labels.iloc[idx, 0]       # column 0 = relative path + name
-full = os.path.join(img_dir, rel)   # now you have a full path
-# image = read_image(full)          # next topic, inside __getitem__
-# label = img_labels.iloc[idx, 1]   # column 1 = label
-```
-
-**What this does:** proves you can recover one file and one bin from a folder + table *before* wrapping them in a class.
-
-You can now sketch the two files. What is still open: the class body.
-
-### Analogy for this topic only
-
-A box of three photos: `coat/001.png`, `dress/019.png`, `sandal/007.png`. The packing list has two columns only: filename, bin number (4, 3, 5).
-
-Someone asks: **which column does `read_image` open?** The filename column. Opening the bin number as a path is the wrong move.
-
-In lecture words: image directory + two-column annotation CSV.
-
-### Local picture
-
-```
-  join(img_dir, csv_row_path) → full path → read_image
-  csv_row_label               → y
-
-  img_dir/
-    coat/001.png
-    dress/019.png
-  annotations.csv
-    coat/001.png, 4
-    dress/019.png, 3
-
-  Notice: path is column 0, label column 1 in the next topic.
-```
-
-### Bridge
-
-A folder and a CSV are still not a Dataset. You must **subclass `Dataset`** with three compulsory methods so DataLoader can ask “how many?” and “give me row i.” He already has the class on screen; next he walks every line.
-
----
-
-## Topic 7: `CustomImageDataset` (10:21–15:06)
-
-### Where this sits on the master map
-
-This is **CLASS**. Child of [`Dataset`](./PREREQUISITES.md#p5-dunder); [`iloc`](./PREREQUISITES.md#p6-csv) for row `idx`.
-
-### Board / screenshot
-
-![Topic 7 — CustomImageDataset __init__, __len__, __getitem__ with iloc](./screenshots/composites/ch07-topic-07-customimagedataset-class-panel1of1.png)
-
-Caption: prefer the **top-right** pane if the bottom-left is mid-scroll. “These two methods should be there… almost as it is.” `__init__` stores CSV, folder, both transforms. `__len__` → `len(self.img_labels)`. `__getitem__`: `join` + `iloc[idx, 0]` + `read_image` + `iloc[idx, 1]` + optional transforms + `return image, label`.
-
-### What he is establishing
-
-Class name **`CustomImageDataset`**, **child of `Dataset`**. Constructor: `self`, **`annotations_file`** (CSV), **`img_dir`** (root), **`transform`** (on **X** / features), **`target_transform`** (on **Y** / label), both **None** by default.
-
-Store `self.img_labels = pd.read_csv(...)`, `self.img_dir`, both transforms.
-
-Compulsory: **`__len__`** = length of `img_labels` (how many items). **`__getitem__(self, idx)`**: `idx` = **which row**. Build **`img_path`** with **`os.path.join(img_dir, labels.iloc[idx, 0])`**. **`iloc`** accesses **rows**; column **0** = relative path. **`read_image(img_path)`**. Label = **`iloc[idx, 1]`** (first label column — he says “idx 1”). If `self.transform`: transform the **image**. If `self.target_transform`: transform the **label**. **`return image, label`**.
-
-Most of the time you will need this custom class; they will give custom datasets so you must be proficient when data is **not** in the PyTorch repo.
-
-```python
-import os
-import pandas as pd
-from torchvision.io import read_image
-from torch.utils.data import Dataset
-
+test_fashion = datasets.FashionMNIST(
+    root="data",
+    train=False,
+    download=True,
+    transform=ToTensor()
+)
+
+# Instantiate streaming batch loaders
+train_loader = DataLoader(train_fashion, batch_size=64, shuffle=True)
+test_loader = DataLoader(test_fashion, batch_size=64, shuffle=False)
+
+# Inspect first batch
+train_images, train_labels = next(iter(train_loader))
+print(f"FashionMNIST Batch Images Shape: {train_images.shape}")  # torch.Size([64, 1, 28, 28])
+print(f"FashionMNIST Batch Labels Shape: {train_labels.shape}")  # torch.Size([64])
+
+# ==============================================================================
+# 2. CUSTOM DATASET PIPELINE (CustomImageDataset with CSV Index)
+# ==============================================================================
 class CustomImageDataset(Dataset):
-    def __init__(
-        self,
-        annotations_file,   # CSV: col0 path, col1 label
-        img_dir,            # root folder of images
-        transform=None,     # optional transform on X
-        target_transform=None,  # optional transform on y
-    ):
+    """Custom dataset pipeline reading image paths and labels from a CSV index."""
+    def __init__(self, annotations_file, img_dir, transform=None, target_transform=None):
         self.img_labels = pd.read_csv(annotations_file)
         self.img_dir = img_dir
         self.transform = transform
         self.target_transform = target_transform
 
     def __len__(self):
-        # how many rows = how many examples
         return len(self.img_labels)
 
     def __getitem__(self, idx):
-        # idx = which CSV row
-        rel = self.img_labels.iloc[idx, 0]          # column 0 = relative path
-        img_path = os.path.join(self.img_dir, rel)  # full path
-        image = read_image(img_path)
-        label = self.img_labels.iloc[idx, 1]        # column 1 = label
+        # Column 0: relative image filename
+        img_filename = self.img_labels.iloc[idx, 0]
+        img_path = os.path.join(self.img_dir, img_filename)
+        
+        # Load image from disk
+        image = Image.open(img_path).convert("L")  # Grayscale
+        
+        # Column 1: category label
+        label = int(self.img_labels.iloc[idx, 1])
+
+        # Apply optional feature and target transforms
         if self.transform:
             image = self.transform(image)
         if self.target_transform:
             label = self.target_transform(label)
+
+        return image, label
+
+# Demonstration: create dummy folder and CSV on disk
+os.makedirs("demo_images", exist_ok=True)
+dummy_csv_path = "demo_labels.csv"
+
+# Generate 10 synthetic sample images
+filenames, labels = [], []
+for i in range(10):
+    fn = f"sample_{i}.png"
+    Image.fromarray(np.random.randint(0, 256, (28, 28), dtype=np.uint8)).save(os.path.join("demo_images", fn))
+    filenames.append(fn)
+    labels.append(i % 10)
+
+pd.DataFrame({"image": filenames, "label": labels}).to_csv(dummy_csv_path, index=False)
+
+# Instantiate custom dataset & loader
+custom_ds = CustomImageDataset(dummy_csv_path, "demo_images", transform=ToTensor())
+custom_loader = DataLoader(custom_ds, batch_size=4, shuffle=True)
+
+custom_imgs, custom_lbls = next(iter(custom_loader))
+print(f"Custom Dataset Batch Images Shape: {custom_imgs.shape}")  # torch.Size([4, 1, 28, 28])
+print(f"Custom Dataset Batch Labels:       {custom_lbls}")        # tensor([x, y, z, w])
+```
+
+---
+
+<a id="topic-1"></a>
+<a id="topic-1-tensors-then-he-opens-the-dataset-sheet-0012–0153"></a>
+## Topic 1: Tensors, then Dataset Sheet (00:12–01:53)
+
+### 👶 ELI5 Quick Intuition
+In Tutorial 1, we learned how to multiply tensors. But in real life, data doesn't start as clean tensors—it starts as messy image files on a hard drive. How do we get thousands of image files off the disk, turn them into tensors, and feed them to the neural network in bite-sized batches? That is the exact mission of the **`Datasets & DataLoaders`** system!
+
+### Master Map Placement
+Establishes the motivation for the tutorial: bridging the gap between raw tensor math and real-world data ingestion pipelines.
+
+### Colab Recording Screenshot
+![Topic 1 Screenshot — Transition to Datasets & DataLoaders](./screenshots/composites/ch01-topic-01-tensors-then-dataloader-sheet-panel1of1.png)
+*Figure 1.1 (~00:12–01:50):* Chandan opens the official PyTorch tutorial documentation and navigates to the *Datasets & DataLoaders* Colab sheet, explaining that all data must be converted to tensors and grouped into batches before model weights can update.
+
+### In-Depth Conceptual Exposition
+
+* **The Data Ingestion Problem:**
+  * Machine learning optimization algorithms (Stochastic Gradient Descent, Adam) update neural network weights $\theta$ using mini-batches of tensors.
+  * Real-world datasets reside on persistent storage (hard drives, NVMe SSDs, cloud buckets) as discrete graphic files (`.png`, `.jpg`, `.tiff`), audio recordings (`.wav`), or text files.
+* **The Core Responsibilities:**
+  1. **Locate & Access:** Reliably identify where raw files are stored on disk.
+  2. **Format Conversion:** Decode image file formats into numerical tensors and normalize pixel values into standard numeric ranges.
+  3. **Mini-Batch Streaming:** Slice the dataset into discrete batches of size $B$ (e.g., 64) for parallel processing on GPU hardware.
+
+```
+   RAW FILES ON DISK                      CONVERSION LAYER                STREAMING BATCHES
+  ┌──────────────────────┐             ┌─────────────────────┐         ┌─────────────────────────┐
+  │  images/sample_01.png│ ──────────► │ Image → Tensor      │ ──────► │ Mini-batches D₁, D₂...  │
+  │  images/sample_02.png│    Read &   │ ToTensor() in [0,1] │ Group 64│ Ready for Weight Update │
+  └──────────────────────┘    Decode   └─────────────────────┘         └─────────────────────────┘
+```
+
+---
+
+<a id="topic-2"></a>
+<a id="topic-2-torchvision-catalogs-fashion-mnist-0153–0320"></a>
+## Topic 2: Torchvision Catalogs & Fashion-MNIST (01:53–03:20)
+
+### 👶 ELI5 Quick Intuition
+Think of PyTorch as a video game console that comes with a built-in library of 20 classic free games. If you want to benchmark an image classifier, PyTorch includes pre-packaged datasets like **Fashion-MNIST** (60,000 photos of 10 types of clothing) so you don't have to spend hours taking photos of your own closet.
+
+### Master Map Placement
+Surveys built-in computer vision datasets available in `torchvision.datasets` and introduces the Fashion-MNIST benchmark.
+
+### Colab Recording Screenshot
+![Topic 2 Screenshot — Torchvision Built-in Catalogs](./screenshots/composites/ch02-topic-02-torchvision-datasets-fashionmnist-panel1of1.png)
+*Figure 2.1 (~01:53–03:18):* Chandan scrolls through the `torchvision.datasets` documentation, highlighting pre-packaged computer vision datasets: Caltech 101, Caltech 256, CIFAR-10, ImageNet, and Fashion-MNIST.
+
+### In-Depth Conceptual Exposition
+
+* **The `torchvision.datasets` Module:**
+  * PyTorch provides built-in dataset classes for standard academic and research benchmarks across image classification, object detection, segmentation, and video analysis.
+* **The Fashion-MNIST Dataset Specification:**
+  * Developed by Zalando Research as a drop-in replacement for original MNIST handwritten digits.
+  * **Dataset Size:** 70,000 total grayscale images ($28 \times 28$ pixels).
+  * **Splits:** 60,000 training images (`train=True`) and 10,000 test images (`train=False`).
+  * **Classes (10 Categories):**
+    * `0: T-shirt/top` | `1: Trouser` | `2: Pullover` | `3: Dress` | `4: Coat`
+    * `5: Sandal` | `6: Shirt` | `7: Sneaker` | `8: Bag` | `9: Ankle boot`
+  * **Why It Matters:** Preserves the lightweight $28 \times 28$ size of MNIST while providing a significantly more realistic and challenging visual classification task.
+
+```
+   FASHION-MNIST BENCHMARK: 10 APPAREL CLASSES (0 to 9)
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │ 0: T-shirt  │ 1: Trouser  │ 2: Pullover │ 3: Dress    │ 4: Coat             │
+  │ 5: Sandal   │ 6: Shirt    │ 7: Sneaker  │ 8: Bag      │ 9: Ankle boot       │
+  └─────────────────────────────────────────────────────────────────────────────┘
+   Total: 60,000 Training Samples + 10,000 Evaluation Test Samples (28x28 Pixels)
+```
+
+---
+
+<a id="topic-3"></a>
+<a id="topic-3-imports-0320–0417"></a>
+## Topic 3: Essential Imports (03:20–04:17)
+
+### 👶 ELI5 Quick Intuition
+Before you can build a house, you need to lay out your tools on the workbench. In PyTorch, we need 5 core tools: (1) `torch` for math, (2) `Dataset` to represent our closet, (3) `DataLoader` as our conveyor belt, (4) `datasets` to download built-in files, and (5) `ToTensor` to turn pictures into numbers.
+
+### Master Map Placement
+Walks through the essential imports required to construct PyTorch data ingestion pipelines.
+
+### Colab Recording Screenshot
+![Topic 3 Screenshot — Essential Imports](./screenshots/composites/ch03-topic-03-imports-dataset-transforms-plt-panel1of1.png)
+*Figure 3.1 (~03:22–04:15):* Chandan points to the Colab import cell, explaining the purpose of each module: `torch`, `Dataset`, `DataLoader`, `datasets`, `ToTensor`, and `matplotlib.pyplot as plt`.
+
+### In-Depth Conceptual Exposition
+
+```python
+import torch
+from torch.utils.data import Dataset, DataLoader
+from torchvision import datasets
+from torchvision.transforms import ToTensor
+import matplotlib.pyplot as plt
+```
+
+* **Module Breakdown:**
+  * **`torch`:** Core PyTorch tensor library and CUDA compute engine.
+  * **`torch.utils.data.Dataset` (Capital D):** The abstract base class inherited by any custom dataset class.
+  * **`torch.utils.data.DataLoader`:** The streaming iterator that bundles individual dataset samples into batched tensors.
+  * **`torchvision.datasets`:** Collection of pre-configured dataset downloaders (Fashion-MNIST, CIFAR-10, etc.).
+  * **`torchvision.transforms.ToTensor`:** Callable class converting PIL images or NumPy arrays into `torch.FloatTensor` in range $[0.0, 1.0]$.
+  * **`matplotlib.pyplot as plt`:** Standard plotting library used to inspect sample images visually.
+
+---
+
+<a id="topic-4"></a>
+<a id="topic-4-fashionmnist-traintest-0417–0609"></a>
+## Topic 4: `FashionMNIST` Train and Test Splits (04:17–06:09)
+
+### 👶 ELI5 Quick Intuition
+To download and load the Fashion-MNIST clothes, we write two lines of code: one for the **homework study pile** (`train=True`), and one for the **final exam test pile** (`train=False`). The `download=True` flag tells PyTorch: *"If you don't already have these files on my hard drive, download them from the internet right now!"*
+
+### Master Map Placement
+Demonstrates downloading, instantiating, and normalizing the training and test splits of Fashion-MNIST.
+
+### Colab Recording Screenshot
+![Topic 4 Screenshot — Downloading FashionMNIST Splits](./screenshots/composites/ch04-topic-04-fashionmnist-train-test-totensor-panel1of1.png)
+*Figure 4.1 (~04:20–06:05):* Chandan executes the code cell instantiating `training_data` and `test_data` using `datasets.FashionMNIST`, explaining `root="data"`, `train=True/False`, `download=True`, and `transform=ToTensor()`.
+
+### In-Depth Conceptual Exposition
+
+```python
+training_data = datasets.FashionMNIST(
+    root="data",
+    train=True,
+    download=True,
+    transform=ToTensor()
+)
+
+test_data = datasets.FashionMNIST(
+    root="data",
+    train=False,
+    download=True,
+    transform=ToTensor()
+)
+```
+
+* **Constructor Parameter Mechanics:**
+  * **`root="data"`:** Specifies the directory path on the local filesystem where raw data files will be downloaded or retrieved.
+  * **`train=True` vs `train=False`:** Selects between the 60,000-sample training partition and the 10,000-sample evaluation partition.
+  * **`download=True`:** Instructs PyTorch to check if the dataset archive exists in `root`. If missing, it automatically downloads and extracts the raw binary files.
+  * **`transform=ToTensor()`:** Applies on-the-fly conversion whenever an image is accessed, returning a `[1, 28, 28]` float tensor with values normalized to $[0.0, 1.0]$.
+
+```
+   DOWNLOAD & EXTRACTION PIPELINE
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │ datasets.FashionMNIST(root="data", download=True)                           │
+  │   ├── Check if ./data/FashionMNIST exists                                   │
+  │   ├── If missing: download *.gz archives from AWS S3 mirror                 │
+  │   └── Extract raw binary pixel blocks into disk cache                       │
+  └─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="topic-5"></a>
+<a id="topic-5-plots-when-the-repo-is-not-enough-0609–0741"></a>
+## Topic 5: Visualizing & When Built-in Fails (06:09–07:41)
+
+### 👶 ELI5 Quick Intuition
+Built-in datasets like Fashion-MNIST are great for practicing in school. But when you get a job at a hospital, a bank, or an e-commerce startup, **your company's data will never be in `torchvision.datasets`**. You will be handed a private folder full of images and a spreadsheet of tags. You must write your own custom dataset class to load it!
+
+### Master Map Placement
+Contrasts academic benchmark datasets with proprietary real-world datasets, motivating the necessity of custom `Dataset` implementations.
+
+### Colab Recording Screenshot
+![Topic 5 Screenshot — Visualizing and Moving to Custom Data](./screenshots/composites/ch05-topic-05-labels-when-builtin-fails-panel1of1.png)
+*Figure 5.1 (~06:12–07:38):* The Colab notebook plots a $3 \times 3$ grid of sample images with text labels (Pullover, Ankle boot, Shirt). Chandan explains that while built-in datasets are convenient, real-world engineering requires curating custom datasets for proprietary, sensitive, or client data.
+
+### In-Depth Conceptual Exposition
+
+* **Inspecting Built-in Data:**
+  * Visualizing sample images with Matplotlib confirms proper pixel decoding, aspect ratio integrity, and label alignment.
+* **The Real-World Boundary:**
+  * Built-in datasets cover only a tiny fraction of machine learning use cases.
+  * In commercial engineering environments, datasets involve:
+    * **Proprietary Medical Imaging:** DICOM / MRI scans with HIPAA privacy restrictions.
+    * **Industrial Quality Control:** High-resolution defect photographs on assembly lines.
+    * **Financial Document Analysis:** Invoices, receipts, and KYC documents.
+  * **The Solution:** PyTorch enables engineers to write a custom wrapper class inheriting from `Dataset`.
+
+```
+   BENCHMARK DATASETS (Lucky Path)           ENTERPRISE DATASETS (Real-World Path)
+  ┌───────────────────────────────┐        ┌────────────────────────────────────────┐
+  │ torchvision.datasets          │        │ Proprietary / Confidential / Client    │
+  │ • Fashion-MNIST, CIFAR-10     │   VS   │ • Custom Folder on Local Drive / S3    │
+  │ • Single line to download     │        │ • CSV Annotation Spreadsheet           │
+  │ • Fixed academic formats      │        │ • Requires CustomImageDataset Wrapper! │
+  └───────────────────────────────┘        └────────────────────────────────────────┘
+```
+
+---
+
+<a id="topic-6"></a>
+<a id="topic-6-custom-data-folder--csv-0741–1021"></a>
+## Topic 6: Custom Datasets: Folder + CSV (07:41–10:21)
+
+### 👶 ELI5 Quick Intuition
+To build a custom dataset, you organize your files into two parts:
+1. **The Photo Album (`img_dir`):** A folder containing all your `.png` or `.jpg` image files.
+2. **The Packing Slip (`annotations_file.csv`):** A spreadsheet with two columns. Column 0 tells you the name of the file (`shoe_10.png`), and Column 1 tells you the category (`7`).
+
+### Master Map Placement
+Defines the two-component architecture of custom image datasets: the image storage directory and the tabular annotation file.
+
+### Colab Recording Screenshot
+![Topic 6 Screenshot — Handwritten Architecture for Custom Datasets](./screenshots/composites/ch06-topic-06-custom-folder-plus-csv-panel1of1.png)
+*Figure 6.1 (~07:45–10:18):* Chandan draws the custom dataset architecture on the digital whiteboard: `img_dir` (directory path on OS) + `annotation file` (CSV with relative path / filename in column 0 and class label in column 1).
+
+### In-Depth Conceptual Exposition
+
+* **The Two Fundamental Components:**
+  1. **Image Directory (`img_dir`):** An operating system path (`str` or `Path`) pointing to the directory containing raw image files on disk.
+  2. **Annotation File (`annotations_file`):** A CSV (Comma-Separated Values) spreadsheet establishing the ground-truth relationship between image files and categorical labels.
+* **CSV Schema Specification:**
+  * **Column Index 0:** Relative path or filename of the image (e.g., `"coat_001.png"`).
+  * **Column Index 1:** Categorical label index (e.g., `4` for Coat).
+* **Why We Decouple Annotations from Raw Files:**
+  * Storing image bytes directly inside a database or CSV causes severe memory bloat.
+  * Keeping images as raw files on disk and storing only lightweight metadata in a CSV enables dynamic, on-demand loading of gigabytes of data without running out of RAM!
+
+```
+   CUSTOM DATASET FILE SYSTEM LAYOUT:
+   
+   my_project_data/
+   ├── annotations.csv                <── Master Index Spreadsheet
+   └── images/                        <── Image Directory (img_dir)
+       ├── img_0001.png
+       ├── img_0002.png
+       └── ...
+```
+
+---
+
+<a id="topic-7"></a>
+<a id="topic-7-customimagedataset-1021–1506"></a>
+## Topic 7: The `CustomImageDataset` Class (10:21–15:06)
+
+### 👶 ELI5 Quick Intuition
+Here is where we write the code for our warehouse worker (`CustomImageDataset`).  
+We create a class with 3 rules:
+1. `__init__`: Read the CSV spreadsheet into memory.
+2. `__len__`: Count how many rows are in the spreadsheet (`len(csv)`).
+3. `__getitem__(idx)`: When asked for row `idx`, look up the image name in Column 0, open that image from the folder, look up the label in Column 1, and hand back the pair `(image, label)`.
+
+### Master Map Placement
+Walks line-by-line through the Python implementation of `CustomImageDataset`, subclassing `torch.utils.data.Dataset`.
+
+### Colab Recording Screenshot
+![Topic 7 Screenshot — CustomImageDataset Class Implementation](./screenshots/composites/ch07-topic-07-customimagedataset-class-panel1of1.png)
+*Figure 7.1 (~10:25–15:02):* Chandan walks through the Colab code defining `class CustomImageDataset(Dataset)`: showing `__init__` with `pd.read_csv`, `__len__` returning `len(self.img_labels)`, and `__getitem__` using `os.path.join`, `iloc[idx, 0]`, and `iloc[idx, 1]`.
+
+### In-Depth Conceptual Exposition
+
+```python
+import os
+import pandas as pd
+from torch.utils.data import Dataset
+from torchvision.io import read_image
+
+class CustomImageDataset(Dataset):
+    def __init__(self, annotations_file, img_dir, transform=None, target_transform=None):
+        self.img_labels = pd.read_csv(annotations_file)
+        self.img_dir = img_dir
+        self.transform = transform
+        self.target_transform = target_transform
+
+    def __len__(self):
+        return len(self.img_labels)
+
+    def __getitem__(self, idx):
+        # 1. Join directory path with relative filename from Column 0
+        img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])
+        
+        # 2. Read image from disk
+        image = read_image(img_path)
+        
+        # 3. Retrieve integer label from Column 1
+        label = self.img_labels.iloc[idx, 1]
+        
+        # 4. Apply optional transforms
+        if self.transform:
+            image = self.transform(image)
+        if self.target_transform:
+            label = self.target_transform(label)
+            
+        # 5. Return sample tuple
         return image, label
 ```
 
-**What this does:** `dataset[17]` runs `__getitem__(17)` and returns one tensor and one label. DataLoader will call this 64 times per batch.
-
-```python
-# Use the class (he assumes you instantiate it on your custom folder):
-ds = CustomImageDataset(
-    annotations_file="annotations.csv",
-    img_dir="images",
-    transform=None,          # or ToTensor() if read_image is not already a tensor
-    target_transform=None,   # leave labels as ints 0..9
-)
-
-print(len(ds))        # __len__ → number of CSV rows
-image, label = ds[0]  # __getitem__(0): join + read_image + iloc[0,1]
-# image: tensor from read_image
-# label: integer from column 1
-```
-
-Walk **index 0** the way he narrates `iloc`:
-
-```python
-# Same as the body of __getitem__, unrolled for idx = 0
-idx = 0
-rel = ds.img_labels.iloc[idx, 0]                 # relative path
-img_path = os.path.join(ds.img_dir, rel)         # two paths joined
-image = read_image(img_path)                     # pixels
-label = ds.img_labels.iloc[idx, 1]               # "idx 1" = column 1
-# if transform: image = transform(image)
-# if target_transform: label = target_transform(label)
-# return image, label
-```
-
-The trap is swapping columns 0 and 1, or forgetting `return image, label`, or renaming `__len__` / `__getitem__`.
-
-You can now write the class. What is still open: wrapping it so training sees **64 at a time**.
-
-### Analogy for this topic only
-
-Employee badge “Dataset”: when asked “how many?”, count CSV rows. When asked “number 17?”, join folder + row 17’s filename, read the photo, read the bin number, return both.
-
-Someone asks: **can I name the methods `length` and `get`?** No. DataLoader looks up the dunders.
-
-In lecture words: child of Dataset; `__len__`; `__getitem__` via `iloc`.
-
-### Local picture
+* **Line-by-Line Method Breakdown:**
+  * **`__init__` (Initialization):** Runs once during instantiation. Uses `pd.read_csv()` to parse the annotation table into a DataFrame (`self.img_labels`), stores the directory path (`self.img_dir`), and saves optional transformation functions.
+  * **`__len__` (Dataset Size):** Returns the integer row count of `self.img_labels`. This tells PyTorch how many total samples exist in the dataset.
+  * **`__getitem__(self, idx)` (Single-Sample Fetcher):**
+    1. `self.img_labels.iloc[idx, 0]`: Reads the filename string from row `idx`, column 0.
+    2. `os.path.join(...)`: Constructs the absolute or relative filesystem path.
+    3. `read_image(...)`: Decodes image bytes from disk into a `torch.Tensor` of shape `[C, H, W]`.
+    4. `self.img_labels.iloc[idx, 1]`: Reads the numerical class label from column 1.
+    5. Returns the tuple `(image, label)`.
 
 ```
-  idx=0
-    iloc[0,0] = "coat/001.png"
-    join(img_dir, ...) → full path
-    read_image → tensor
-    iloc[0,1] = 4
-    return (tensor, 4)
-
-  Notice: transform is optional None — ToTensor can live here too.
+   GETITEM WORKFLOW: ONE SAMPLE FETCH
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │ idx ──► iloc[idx, 0] ──► os.path.join(img_dir, fn) ──► read_image ──► image │
+  │     ──► iloc[idx, 1] ───────────────────────────────────────────────► label │
+  │                                                                             │
+  │                     OUTPUT TUPLE: (image_tensor, label)                     │
+  └─────────────────────────────────────────────────────────────────────────────┘
 ```
-
-### Bridge
-
-Dataset is the catalog. DataLoader is the cart of 64. He has curated the data; “then what?” is the loader, `shuffle=True`, and `next(iter(...))`.
 
 ---
 
-## Topic 8: `DataLoader`, batch 64, shuffle (15:06–18:26)
+<a id="topic-8"></a>
+<a id="topic-8-dataloader-batch-64-shuffle-1506–1826"></a>
+## Topic 8: `DataLoader`, Batch 64 & Shuffling (15:06–18:26)
 
-### Where this sits on the master map
+### 👶 ELI5 Quick Intuition
+Now that our worker knows how to fetch one shirt at a time, we build the **automated forklift conveyor belt** (`DataLoader`).  
+* We set `batch_size = 64`: the forklift waits until it has stacked 64 shirts before sending them to the GPU.
+* We set `shuffle = True` for training: the forklift shuffles the order of garments before every shift so the neural network doesn't memorize the sequence.
+* We set `shuffle = False` for testing: on test day, we evaluate once in exact order.
 
-This is **LOADER**. [Batch 64](./PREREQUISITES.md#p7-batch); [shuffle train, not test](./PREREQUISITES.md#p8-shuffle). After this, **data is ready**.
+### Master Map Placement
+Demonstrates wrapping datasets with `DataLoader`, configuring mini-batch sizes, index shuffling, and iterating over batches.
 
-### Board / screenshot
+### Colab Recording Screenshot
+![Topic 8 Screenshot — DataLoader Mini-Batching and Shuffling](./screenshots/composites/ch08-topic-08-dataloader-batch-shuffle-panel1of1.png)
+*Figure 8.1 (~15:10–18:20):* Chandan instantiates `train_dataloader` and `test_dataloader` with `batch_size=64`, writes the mathematical batch decomposition $D = \{D_1, D_2, \dots, D_k\}$ on the board, and demonstrates iterating with `next(iter(train_dataloader))`.
 
-![Topic 8 — DataLoader batch_size=64; handwritten D = {d1, d2, …}; next(iter(...))](./screenshots/composites/ch08-topic-08-dataloader-batch-shuffle-panel1of1.png)
-
-Caption: official cell uses `shuffle=True` on **both** loaders. He argues test **False** — one evaluation, no extra test epochs. Tablet: $D=\{d_1,d_2,\ldots\}$; each $d_i$ is 64 pairs. Bottom-right: `next(iter(train_dataloader))`. Then: “data is ready… let’s look into the next step.”
-
-### What he is establishing
-
-You have the data. Next: **DataLoader**. Take **training data**, **batches of 64**, **`shuffle=True`**: every time, batches are **not the same order**. Same idea for test **except** shuffle True is **not mandatory**. **`shuffle=False` makes sense** on test: you evaluate **once**, you will **not** have **multiple epochs** on test.
-
-Access with **iterator / `next`**. Plotting the batch — he waves at it.
-
-Outcome: whole data divided **D1 … Dk**. Each **Di** is tuples **`(x_j, y_j)` for `j = 1…64`**. Batch size 64. Data curated **as tensors**. **Data is ready.** Next sheet / next step. He can leave datasets now.
-
-```python
-from torch.utils.data import DataLoader
-
-# Train: new order each epoch so the optimizer does not memorize trip order
-train_dataloader = DataLoader(
-    training_data,
-    batch_size=64,
-    shuffle=True,
-)
-
-# Test: he prefers no shuffle — one evaluation pass, not many epochs
-test_dataloader = DataLoader(
-    test_data,
-    batch_size=64,
-    shuffle=False,  # official sample often uses True; this recording argues False
-)
-
-# One plate of 64
-images, labels = next(iter(train_dataloader))
-# images: about (64, 1, 28, 28) for Fashion-MNIST after ToTensor
-# labels: (64,) integers 0–9
-```
-
-**What this does:** training loops will be `for images, labels in train_dataloader:`. That is the next tutorials’ input.
+### In-Depth Conceptual Exposition
 
 ```python
-# He: "access these using iterator next" — one block = one batch
-images, labels = next(iter(train_dataloader))
-# Fashion-MNIST + ToTensor: images shape about (64, 1, 28, 28)
-# labels shape (64,) with ints 0..9
+train_dataloader = DataLoader(training_data, batch_size=64, shuffle=True)
+test_dataloader = DataLoader(test_data, batch_size=64, shuffle=False)
 
-# He draws D = { d1, d2, ..., dk }  each Di = 64 tuples (x_j, y_j)
-# A full pass (one epoch on TRAIN) looks like:
-for images, labels in train_dataloader:
-    # later: model(images); loss(labels)
-    # this sheet STOPS here — "data is ready"
-    pass
-
-# Test: one evaluation, not many epochs — that is why shuffle=False
-images_t, labels_t = next(iter(test_dataloader))
+# Fetch single mini-batch
+train_features, train_labels = next(iter(train_dataloader))
+print(f"Feature batch shape: {train_features.shape}")  # [64, 1, 28, 28]
+print(f"Labels batch shape:  {train_labels.shape}")    # [64]
 ```
 
-The trap is `shuffle=True` on test “because the docs snippet did,” when he just told you why False fits evaluation.
-
-You can now wrap any Dataset. What is still missing is a model that **eats** those batches — next sheet.
-
-### Analogy for this topic only
-
-64 tagged garments per cart. Reshuffle practice carts every night. Final inspection: one pass, no reshuffle ritual.
-
-Someone asks: **what if I have 100 images?** Last cart may hold 36. He did not dwell; the loader still yields them.
-
-In lecture words: batch 64; shuffle train; data ready as tensors.
-
-### Local picture
+* **Mathematical Batch Partitioning:**
+  * Let total dataset $\mathcal{D}$ have $N$ samples.
+  * Slicing $\mathcal{D}$ by batch size $B = 64$ decomposes the dataset into $K$ disjoint mini-batches:
+    $$\mathcal{D} = \{D_1, D_2, \dots, D_K\}$$
+    where each mini-batch $D_i$ consists of 64 sample tuples:
+    $$D_i = \{(x_j, y_j)\}_{j=1}^{64}$$
+* **Chandan's Shuffling Rule (Train vs. Test):**
+  * **Training DataLoader (`shuffle=True`):**  
+    At the start of every epoch, `DataLoader` generates a new random permutation of indices. This breaks spatial/temporal correlations and prevents optimization algorithms from oscillating along deterministic cyclical trajectories.
+  * **Test DataLoader (`shuffle=False`):**  
+    Chandan explicitly notes: *On the test set, we evaluate performance only once. Shuffling adds unnecessary overhead without changing the aggregate evaluation metrics.*
 
 ```
-  Dataset  --DataLoader(64, shuffle)-->  D1, D2, ..., Dk
-  each Di = 64 × (x, y)
-
-  D = { d1, d2, ..., dk }     ← his tablet
-
-  Notice: Dataset never saw "64". The loader adds batching.
+   CHANDAN'S BOARD NOTATION: BATCH DECOMPOSITION
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │ Total Dataset D = {D₁, D₂, ..., Dₖ}                                         │
+  │ Each D_i = { (x_j, y_j) }  where j = 1, 2, ..., 64                          │
+  │                                                                             │
+  │ • x_j = Image Tensor (1, 28, 28)                                            │
+  │ • y_j = Class Label  (Integer 0 to 9)                                       │
+  │                                                                             │
+  │ ⟹ Batch Tensor Shapes: Features [64, 1, 28, 28], Labels [64]                │
+  └─────────────────────────────────────────────────────────────────────────────┘
 ```
-
-### Bridge
-
-The leftover problem is a **network and an optimizer** that consume `(images, labels)`. That is W1_T4 model building, not more Dataset API. He leaves this sheet: “I don’t need datasets also.”
 
 ---
 
-## External references
+## Workplace Scenarios & Debugging Data Pipelines
 
-All companions live **here**, not under the topics. Mix of **video**, **blog/notes**, and **docs**. No Wikipedia.
+### Scenario 1: Memory Leaks & OOM during Multi-Worker Data Loading
+* **Context:** An engineer trains a ResNet model on 100,000 high-resolution images using `DataLoader(dataset, batch_size=64, num_workers=8)`. After 3 epochs, the server runs out of system RAM (Out-Of-Memory error) and crashes.
+* **Mathematical & Architectural Root Cause:**
+  * In the custom dataset class, the developer pre-loaded all 100,000 raw PIL images into a Python list `self.images = [...]` during `__init__`.
+  * When `num_workers=8` is specified, PyTorch uses Python `multiprocessing` to fork 8 worker processes. Each worker inherits a copy-on-write duplicate of the in-memory image list, multiplying memory consumption by $8\times$ until RAM is exhausted.
+* **Production Remedy:**
+  * Never pre-load large image datasets into RAM inside `__init__`.
+  * Store only lightweight metadata (CSV DataFrame / filepaths) in `__init__`, and load individual images dynamically from disk on-demand inside `__getitem__(self, idx)` using `read_image()` or `Image.open()`.
 
-**Start here (if you only open three).** Official Datasets tutorial → Learn PyTorch Fashion-MNIST chapter → `CustomImageDataset` walkthrough (Aladdin).
-
-This recording is **~18 min**, not a 60-minute lab. Extra links are second passes of the **same eight boxes**. The YouTube title’s missing tensor algebra is Topic 1’s companions only.
-
-### Per-topic companions (2–3 each)
-
-| Topic / map box | Type | Resource | Why it helps |
-|-----------------|------|----------|--------------|
-| **1 · tensors then Dataset sheet** | video | [Aladdin Persson — Complete PyTorch tensor tutorial](https://www.youtube.com/watch?v=x9JiIFvlUwk) | The **title** hour (`torch.tensor`, math, view) that this tape skipped. |
-| **1 · tensors then Dataset sheet** | docs | [PyTorch tensors (basics)](https://docs.pytorch.org/tutorials/beginner/basics/tensorqs_tutorial.html) | Official create/ops page he clicked and left. |
-| **1 · tensors then Dataset sheet** | notes | [Learn PyTorch — 00 Fundamentals](https://www.learnpytorch.io/00_pytorch_fundamentals/) | Beginner tensor blog with the same “grid of numbers” picture. |
-| **2 · torchvision / Fashion-MNIST** | video | [Samuel Chan — Fashion-MNIST + Dataset/DataLoader](https://www.youtube.com/watch?v=mDEoJhQEIuY) | First 9 min: what the 10 clothes **are**, then loaders. |
-| **2 · torchvision / Fashion-MNIST** | data | [Zalando Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist) | Original 10-class clothes set (0–9). |
-| **2 · torchvision / Fashion-MNIST** | docs | [FashionMNIST API](https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.FashionMNIST.html) | `root`, `train`, `download`, `transform` — his constructor flags. |
-| **3 · imports** | docs | [Datasets & DataLoaders](https://docs.pytorch.org/tutorials/beginner/basics/data_tutorial.html) | Same import block: `Dataset`, `datasets`, `ToTensor`, `plt`. |
-| **3 · imports** | notes | [Learn PyTorch — 03 Computer vision](https://www.learnpytorch.io/03_pytorch_computer_vision/) | Same five libraries, explained as a table. |
-| **3 · imports** | docs | [torchvision.transforms](https://docs.pytorch.org/vision/stable/transforms.html) | `ToTensor` = image matrix → tensor. |
-| **4 · FashionMNIST constructors** | notes | [D2L — Fashion-MNIST dataset](https://www.d2l.ai/chapter_linear-classification/image-classification-dataset.html) | Train vs test sizes, `ToTensor`, batch 64. |
-| **4 · FashionMNIST constructors** | docs | [Loading a Dataset (same tutorial)](https://docs.pytorch.org/tutorials/beginner/basics/data_tutorial.html#loading-a-dataset) | The two `FashionMNIST(...)` cells he runs. |
-| **4 · FashionMNIST constructors** | video | [Daniel Bourke — PyTorch computer vision (Fashion-MNIST load)](https://youtu.be/Z_ikDlimN6A?t=50417) | University-style walk of the same constructor flags. |
-| **5 · lucky vs custom** | video | [Aladdin Persson — custom Datasets for images](https://www.youtube.com/watch?v=ZoZHd0Zm3RY) | When torchvision is not enough — folder of your own photos. |
-| **5 · lucky vs custom** | notes | [Learn PyTorch — 04 Custom datasets](https://www.learnpytorch.io/04_pytorch_custom_datasets/) | Lucky ImageFolder vs writing your own `Dataset`. |
-| **5 · lucky vs custom** | docs | [Creating a Custom Dataset](https://docs.pytorch.org/tutorials/beginner/basics/data_tutorial.html#creating-a-custom-dataset-for-your-files) | Same fork: repo vs wrapper. |
-| **6 · folder + CSV** | video | [pandas `.iloc` (Ryan & Matt)](https://www.youtube.com/watch?v=LI2w1xLyr3w) | Row `idx`, column `0` vs `1` — the packing-list trap. |
-| **6 · folder + CSV** | docs | [pandas.DataFrame.iloc](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.iloc.html) | Integer-location indexing he narrates as “idx 1”. |
-| **6 · folder + CSV** | notes | [Sasank — Writing custom datasets (legacy tutorial)](https://docs.pytorch.org/tutorials/beginner/data_loading_tutorial.html) | CSV + `iloc` + `join` on a folder of files. |
-| **7 · CustomImageDataset** | docs | [`torch.utils.data.Dataset`](https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.Dataset) | Parent protocol DataLoader calls. |
-| **7 · CustomImageDataset** | blog | [Dare Data — PyTorch custom data](https://blog.daredata.engineering/pytorch-introduction-using-custom-data-2/) | Subclass + CSV + `next(iter(...))` in one post. |
-| **7 · CustomImageDataset** | video | [Daniel Bourke — writing a custom Dataset class](https://youtu.be/Z_ikDlimN6A?t=78121) | `__init__` / `__len__` / `__getitem__` from scratch. |
-| **8 · DataLoader 64 / shuffle** | video | [CampusX — Dataset & DataLoader](https://www.youtube.com/watch?v=RH6DeE3bY6I) | Why batch + shuffle exist; then the API. |
-| **8 · DataLoader 64 / shuffle** | docs | [`DataLoader`](https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader) | `batch_size`, `shuffle` — his interesting argument. |
-| **8 · DataLoader 64 / shuffle** | notes | [D2L — reading a minibatch](https://www.d2l.ai/chapter_linear-classification/image-classification-dataset.html#reading-a-minibatch) | `shuffle=train` (True on train, False on val) — same advice as this tape. |
-
-**How to use.** After Topic 4, run the official Fashion-MNIST cells. After Topic 7, diff their `CustomImageDataset` with his `iloc` story (`read_image` here; some docs now say `decode_image`). After Topic 8, `next(iter(...))` and compare official test `shuffle=True` with his False. Open the **tensor** tutorial only if you still needed the title’s missing math.
+### Scenario 2: Fatal CSV Index Inversion & Dimension Format Mismatch
+* **Context:** An AI developer implements `CustomImageDataset`, but during the first training step, PyTorch throws: `FileNotFoundError: No such file or directory: 'images/4'` followed by shape mismatch errors in the convolutional layer.
+* **Root Cause:**
+  1. **Column Swap:** The developer wrote `img_path = os.path.join(self.img_dir, str(self.img_labels.iloc[idx, 1]))` instead of `iloc[idx, 0]`. Column 1 contained the integer class label `4`, causing PyTorch to look for an image named `"4"`.
+  2. **Channel Format Mismatch:** The developer loaded images using OpenCV (`cv2.imread`), which outputs NumPy arrays in $(H, W, C)$ format with BGR channels, whereas PyTorch convolution layers strictly require $(C, H, W)$ format in RGB.
+* **Production Remedy:**
+  * Ensure Column 0 is reserved for relative filepaths (`iloc[idx, 0]`) and Column 1 is reserved for categorical labels (`iloc[idx, 1]`).
+  * Always use `torchvision.transforms.ToTensor()` or `torchvision.io.read_image()` to ensure tensors have shape `(C, H, W)` and normalized float values in $[0.0, 1.0]$.
 
 ---
 
-## Apply it (scenarios)
+## External References
 
-*Workplace-style situations that use ideas from this video only.*
+> Comprehensive multi-source learning materials curated for every subtopic in this tutorial.
 
-### Scenario 1: Download never finishes on a locked lab PC
+### Topic 1 — PyTorch Tensors to Data Ingestion
+* **Video Lectures:**
+  1. [PyTorch Official: Introduction to PyTorch — YouTube Tutorial Series](https://www.youtube.com/watch?v=IC0_FRiX-sw) — Official walkthrough of PyTorch tensor fundamentals.
+  2. [DeepLearningAI: PyTorch for Deep Learning Specialization](https://www.youtube.com/watch?v=V_xro1bcAuA) — Transitioning from tensor operations to data pipelines.
+  3. [freeCodeCamp: PyTorch Full Course for Beginners](https://www.youtube.com/watch?v=GIsg-ZUy0MY) — Complete guide to tensors, datasets, and training loops.
+* **Official Guides & Articles:**
+  1. [PyTorch Official Documentation: Tensors Tutorial](https://pytorch.org/tutorials/beginner/basics/tensorqs_tutorial.html) — Core tensor creation and indexing guide.
+  2. [Real Python: PyTorch for Deep Learning](https://realpython.com/pytorch-python/) — Practical guide to PyTorch data workflows.
+  3. [Towards Data Science: Understanding PyTorch Tensor Data Structures](https://towardsdatascience.com/understanding-pytorch-tensors-and-memory-layout/) — Memory layout and stride mechanics.
 
-**Context:** `root="data"`, `download=True`, no internet.  
-**Challenge:** constructor hangs or errors.  
-**Questions:**  
-1. What does `download=True` do if the folder is empty?  
-2. What is the lucky vs unlucky fork?
+### Topic 2 — Torchvision Datasets & Fashion-MNIST
+* **Video Lectures:**
+  1. [StatQuest with Josh Starmer: Neural Networks & Fashion-MNIST](https://www.youtube.com/watch?v=HGwBXDKFk9I) — Intuitive breakdown of the 10 clothing categories.
+  2. [Aladdin Persson: PyTorch Datasets and Transforms Guide](https://www.youtube.com/watch?v=zN49HdZ8D8Q) — Walkthrough of built-in torchvision catalogs.
+  3. [MIT 6.S191: Convolutional Neural Networks and Computer Vision](https://www.youtube.com/watch?v=AjtX1N3kzuc) — Benchmark datasets in computer vision research.
+* **Official Guides & Articles:**
+  1. [Han Xiao et al.: Fashion-MNIST: A Novel Image Dataset for Benchmarking Machine Learning (arXiv:1708.07747)](https://arxiv.org/abs/1708.07747) — The original research paper introducing Fashion-MNIST.
+  2. [PyTorch Official Docs: torchvision.datasets API Reference](https://pytorch.org/vision/stable/datasets.html) — Full catalog of vision datasets.
+  3. [Papers with Code: Fashion-MNIST Benchmark Results](https://paperswithcode.com/dataset/fashion-mnist) — State-of-the-art accuracy leaderboards on Fashion-MNIST.
 
-<details><summary>Show solution sketch</summary>
+### Topic 3 — Essential PyTorch Imports & Transforms
+* **Video Lectures:**
+  1. [deeplizard: PyTorch Transforms and Data Augmentation](https://www.youtube.com/watch?v=kOhotWCta10) — Detailed explanation of `ToTensor()` and normalization.
+  2. [PyTorch Official: Transforming and Augmenting Images](https://www.youtube.com/watch?v=0k5iZ_QfPrc) — Modern `torchvision.transforms.v2` pipelines.
+  3. [Daniel Bourke: PyTorch Custom Datasets and Transforms](https://www.youtube.com/watch?v=V_xro1bcAuA) — Composing multiple vision transforms.
+* **Official Guides & Articles:**
+  1. [PyTorch Official Docs: Transforms API](https://pytorch.org/vision/stable/transforms.html) — Reference guide for `ToTensor`, `Normalize`, and `Resize`.
+  2. [Albumentations: Fast Image Augmentation for PyTorch](https://albumentations.ai/docs/) — High-performance image transform library.
+  3. [PyTorch Tutorial: Transforms Basics](https://pytorch.org/tutorials/beginner/basics/transforms_tutorial.html) — Official step-by-step transforms guide.
 
-- Topic 4: download fetches into `./data`. Offline, pre-copy Fashion-MNIST into that folder and set `download=False`, or skip to custom (Topic 6).
+### Topic 4 — Fashion-MNIST Train vs Test Splits
+* **Video Lectures:**
+  1. [Andrew Ng (Coursera): Train, Dev, and Test Set Best Practices](https://www.youtube.com/watch?v=1waHhmHbrJg) — Why dataset isolation is non-negotiable.
+  2. [StatQuest: Machine Learning Fundamentals — Cross Validation and Data Splitting](https://www.youtube.com/watch?v=fSytzGwwBVw) — Visual explanation of train/test splits.
+  3. [Stanford CS231n: Lecture 2 — Image Classification Pipeline](https://www.youtube.com/watch?v=OoUX-nOEjG0) — Data budgeting in deep learning.
+* **Official Guides & Articles:**
+  1. [Google ML Practicum: Data Splitting and Generalization](https://developers.google.com/machine-learning/crash-course/generalization/peril-of-overfitting) — Preventing data leakage in production.
+  2. [Scikit-Learn Guide: Cross-Validation and Dataset Splits](https://scikit-learn.org/stable/modules/cross_validation.html) — Statistical foundations of unbiased evaluation.
+  3. [PyTorch Official Tutorial: Datasets & DataLoaders](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html) — The official tutorial walked in this video.
 
-</details>
+### Topic 5 — Matplotlib Plotting & Custom Data Realities
+* **Video Lectures:**
+  1. [Corey Schafer: Matplotlib Tutorial — Plotting Subplots and Grids](https://www.youtube.com/watch?v=XFZRVnP-MTU) — Visualizing multi-image grids in Python.
+  2. [Sentdex: Deep Learning with PyTorch — Image Visualization](https://www.youtube.com/watch?v=BzcBsEb05OE) — Displaying tensor images with `plt.imshow`.
+  3. [PyData: Exploratory Data Analysis for Computer Vision](https://www.youtube.com/watch?v=W3a4w_2GqK8) — Inspecting dataset class balance and outliers.
+* **Official Guides & Articles:**
+  1. [Matplotlib Official Docs: `imshow` Reference](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html) — Rendering 2D grayscale and 3D RGB matrices.
+  2. [Towards Data Science: Data Auditing for Deep Learning](https://towardsdatascience.com/data-auditing-for-computer-vision/) — Identifying label errors and corrupted image files.
+  3. [Google Research: The High Cost of Bad Data in AI](https://research.google/pubs/pub49996/) — Why real-world data curation dominates ML engineering.
 
-### Scenario 2: CSV columns swapped
+### Topic 6 — Custom Dataset File Structures & CSV Annotations
+* **Video Lectures:**
+  1. [Aladdin Persson: Custom Dataset Tutorial in PyTorch (Folder + CSV)](https://www.youtube.com/watch?v=ZoZHd0IrVGE) — Industry-standard custom dataset setup.
+  2. [Daniel Bourke: PyTorch Custom Data Setup (Zero to Mastery)](https://www.youtube.com/watch?v=V_xro1bcAuA) — Organizing folders, metadata, and labels.
+  3. [Keith Galli: Pandas Data Analysis Crash Course](https://www.youtube.com/watch?v=vmEHCJofslg) — Reading and manipulating CSV files with `.iloc`.
+* **Official Guides & Articles:**
+  1. [Pandas Official Documentation: Indexing and Selecting Data with `iloc`](https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html) — Integer location indexing rules.
+  2. [Python Official Docs: `os.path` and `pathlib` Reference](https://docs.python.org/3/library/os.path.html) — Safe cross-platform filepath handling.
+  3. [PyTorch Official Recipes: Loading Custom Datasets](https://pytorch.org/tutorials/recipes/recipes/custom_dataset_transforms_loader.html) — Step-by-step custom ingestion recipe.
 
-**Context:** intern’s `__getitem__` uses `iloc[idx, 0]` as the label.  
-**Challenge:** `read_image("4")` crashes.  
-**Questions:**  
-1. Which column is path?  
-2. Which is label?
+### Topic 7 — Subclassing `Dataset` (`__init__`, `__len__`, `__getitem__`)
+* **Video Lectures:**
+  1. [PyTorch Official: Writing Custom Datasets, DataLoaders, and Transforms](https://www.youtube.com/watch?v=9cKsq14Kfsw) — Official tutorial on `CustomDataset` OOP architecture.
+  2. [DeepLizard: PyTorch Dataset Class Explained](https://www.youtube.com/watch?v=k4jY9L5YsTQ) — Visualizing the internal execution of `__getitem__`.
+  3. [Corey Schafer: Python OOP Special (Dunder) Methods](https://www.youtube.com/watch?v=3ohzBxoFHAY) — How `__len__` and `__getitem__` enable Pythonic indexing.
+* **Official Guides & Articles:**
+  1. [PyTorch Official Docs: `torch.utils.data.Dataset` API](https://pytorch.org/docs/stable/data.html#torch.utils.data.Dataset) — Abstract class specification.
+  2. [Real Python: Python Dunder Methods Reference](https://realpython.com/operator-overloading-python/) — Deep dive into Python magic methods.
+  3. [PyTorch Developer Guide: High Performance Custom Datasets](https://pytorch.org/blog/efficient-pytorch-data-loading/) — Avoiding common memory bottlenecks in `__getitem__`.
 
-<details><summary>Show solution sketch</summary>
-
-- Topic 7: column 0 = relative path, column 1 = label. Swap and you treat `"4"` as a filename.
-
-</details>
-
-### Scenario 3: Test accuracy jitters every run
-
-**Context:** `DataLoader(test_data, batch_size=64, shuffle=True)` and they “epoch” the test set.  
-**Challenge:** numbers move.  
-**Questions:**  
-1. What did he say about shuffle on test?  
-2. How many times do you evaluate test?
-
-<details><summary>Show solution sketch</summary>
-
-- Topic 8: shuffle True is not mandatory on test; False makes sense; one evaluation, not many test epochs. Official cell may still show True — follow his argument.
-
-</details>
-
-### Scenario 4: DataLoader says it has no length
-
-**Context:** custom class has only `__getitem__`.  
-**Challenge:** loader errors or never stops.  
-**Questions:**  
-1. Which method reports how many items?  
-2. What does `__len__` return in his code?
-
-<details><summary>Show solution sketch</summary>
-
-- Topic 7: `__len__` → `len(self.img_labels)`. Compulsory, “almost as it is.”
-
-</details>
-
-### Scenario 5: Last cart is short
-
-**Context:** 100 private images, `batch_size=64`.  
-**Challenge:** intern thinks the last 36 must be dropped.  
-**Questions:**  
-1. Who decided 64 — Dataset or DataLoader?  
-2. Does `next(iter(loader))` still work?
-
-<details><summary>Show solution sketch</summary>
-
-- Topics 7–8: Dataset still returns one pair; the loader stacks. Last batch may have 36. He did not dwell; the iterator still yields them. Data is still ready.
-
-</details>
+### Topic 8 — `DataLoader`, Mini-Batching & Shuffling
+* **Video Lectures:**
+  1. [Aladdin Persson: PyTorch DataLoader — batch_size, shuffle, num_workers](https://www.youtube.com/watch?v=nvtTsdffp9g) — Detailed breakdown of DataLoader concurrency.
+  2. [Stanford CS231n: Lecture 6 — Training Neural Networks (Mini-Batch SGD)](https://www.youtube.com/watch?v=wEoyxE0GP2M) — Why mini-batching stabilizes gradients.
+  3. [deeplizard: PyTorch DataLoader Explained](https://www.youtube.com/watch?v=mU2FmgoGDuI) — Stepping through batches with `iter()` and `next()`.
+* **Official Guides & Articles:**
+  1. [PyTorch Official Docs: `torch.utils.data.DataLoader` API](https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader) — Reference documentation for all parameters.
+  2. [NVIDIA Developer Blog: Accelerating PyTorch Data Loading](https://developer.nvidia.com/blog/how-to-optimize-data-loading-in-pytorch/) — GPU memory pinning (`pin_memory`) and worker tuning.
+  3. [Pytorch Lightning Guide: Demystifying the PyTorch DataLoader](https://lightning.ai/docs/pytorch/stable/data/datamodule.html) — Structuring reproducible data pipelines for production.
 
 ---
 
-## Sources
+## Sources & Production Notes
 
-- Video: [W1_T2 tensors (recording = Dataset/DataLoader)](https://www.youtube.com/watch?v=L5n4rNrLZ_8) · [IITM playlist](https://www.youtube.com/playlist?list=PLZ2ps__7DhBa5xCmncgH7kPqLqMBq7xlu) index 6
-- Captions: `raw/captions.en.vtt` / `raw/captions.en.timed.txt`
-- Claim sheets: `raw/claims/topic-01.md` … `topic-08.md`
-- Code aligned to the Colab he walks, matching [PyTorch Datasets & DataLoaders tutorial](https://docs.pytorch.org/tutorials/beginner/basics/data_tutorial.html) (he types `read_image`; current docs often say `decode_image`)
-- Course page: https://study.iitm.ac.in/ds/course_pages/BSDA5002.html
-- Ingest: captions yes · video yes (`raw/lecture.mp4`) · 8 unique composites · `ingest_evidence: E3`
+* **Primary Recording:** [W1_T2 on YouTube](https://www.youtube.com/watch?v=L5n4rNrLZ_8) · IIT Madras B.S. Degree Programme · Runtime: 18:26
+* **Timed Audio Captions:** `raw/captions.en.timed.txt` (ASR transcripts verified against Colab notebook code)
+* **Composite Screenshot Panels:** `./screenshots/composites/ch01-...` through `ch08-...` (High-resolution captures per topic MM:SS)
+* **Official Reference Notebook:** PyTorch Official Tutorials — *Datasets & DataLoaders* (`torch.utils.data.Dataset`, `torch.utils.data.DataLoader`).

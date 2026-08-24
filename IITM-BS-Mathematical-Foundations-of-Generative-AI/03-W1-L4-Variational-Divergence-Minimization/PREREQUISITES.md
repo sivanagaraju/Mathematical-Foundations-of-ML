@@ -1,21 +1,45 @@
-# Prerequisites — Comprehensive Mathematical Foundations for Variational Divergence Minimization (W1_L4)
+# Prerequisites — Intuitive Math Foundations for Variational Divergence Minimization (W1_L4)
 
-> **Welcome to the Elite Mathematical Foundations of Generative AI!**  
-> Before diving into the lecture notes in [NOTES.md](./NOTES.md), use this master preparatory guide to build complete mathematical intuition for probability modeling, convex analysis, statistical divergences, pushforward measure theory, and the $f$-divergence family.  
-> Written with deep pedagogical clarity: visual ASCII diagrams, intuitive real-world analogies, step-by-step algebraic proofs, concrete numerical calculations, actionable engineering scenarios, runnable Python code, and knowledge-check diagnostics.
+> **Welcome! Start Here Before Diving Into [NOTES.md](./NOTES.md).**  
+> If you haven't touched calculus, linear algebra, or probability theory in 10 or 15 years, **you are in the right place**.  
+> Every concept below is explained in three progressive layers:  
+> 1. **👶 ELI5 (Explain Like I'm 5):** Pure intuition, zero jargon, vivid everyday analogies.  
+> 2. **🔍 Plain-English Breakdown:** Step-by-step translation of the symbols into simple concepts.  
+> 3. **📐 The Formal Mathematics:** The exact formulas used on the IIT Madras chalkboard, with every single variable demystified.
+
+---
+
+## 📖 The Math Terminology Rosetta Stone (Scary Math $\to$ Plain English)
+
+Keep this translation table handy whenever a formula looks intimidating:
+
+| Mathematical Symbol | Formal Name | Plain-English Translation | Everyday Intuition |
+| :--- | :--- | :--- | :--- |
+| $\mathbb{R}^D$ | $D$-Dimensional Real Space | A list / spreadsheet row with $D$ numbers | A $28 \times 28$ image is a list of $784$ pixel brightness numbers ($\mathbb{R}^{784}$). |
+| $p(x)$ | Probability Density Function | The "height" or likelihood of finding data at spot $x$ | The height of a sand dune at coordinate $x$. Taller dune = more common data. |
+| $\mathcal{D} = \{x_1, \dots, x_n\}$ | Empirical Dataset | A folder containing $n$ actual saved files | The 60,000 `.png` image files sitting on your hard drive. |
+| $\text{IID}$ | Independent & Identically Distributed | Fair, unbiased random draws from the same source | Flipping the exact same coin repeatedly without the flips affecting each other. |
+| $\theta$ (Theta) | Parameter Vector | The adjustable dials / knobs inside the neural network | The millions of weight numbers you tweak during gradient descent. |
+| $\arg\min_\theta$ | Argument of the Minimum | "Find the knob settings that give the lowest score" | Turning the volume knob until background noise is at its lowest possible level. |
+| $\int_{\mathcal{X}} \dots dx$ | Definite Integral | Adding up tiny slices across the whole map | Walking across the entire city and summing up the total cost. |
+| $\mathbb{E}_{x \sim p}[g(x)]$ | Expected Value / Expectation | The weighted average of $g(x)$ over all scenarios | Your average daily commute time, giving more weight to usual traffic days. |
+| $u(x) = \frac{p_x(x)}{p_\theta(x)}$ | Density Ratio | "How many times taller is the real sand dune vs fake dune?" | If real height is 6 and fake height is 2, the ratio is $3.0$ (Real is 3x taller). |
+| $f(u)$ | Convex Generator Function | A flexible mathematical "penalty spring" | A spring pinned at zero when $u=1$ (match); stretches upward when $u \neq 1$. |
+| $\sup$ (Supremum) | Least Upper Bound | The highest ceiling / absolute maximum value | Finding the highest peak among all possible functions. |
+| $\liminf_{u \to u_0^-}$ | Limit Inferior from Left | "Look at the curve as you approach from the left" | Making sure a roller coaster track doesn't have an upward cliff jump. |
 
 ```
 ══════════════════════════════════════════════════════════════════════════════════════════════════
                                THE 8 FOUNDATIONAL PILLARS OF W1_L4
 ══════════════════════════════════════════════════════════════════════════════════════════════════
- §1 Unknown Population p_x vs Empirical Dataset D ──► Population Law vs Finite Sample Observations
- §2 The Dual Objective: Estimate p_x AND Sample   ──► Density Fitting vs Synthesizing Novel Samples
- §3 Deep Neural Parametric Models p_θ             ──► Universal Approximators & Weight Manifolds
- §4 Statistical Divergences as Discrepancy Scores ──► Distance-Like Penalties on Probability Manifolds
- §5 The Pushforward Generative Engine G_θ(z)      ──► Transforming Latent Priors into High-D Data
- §6 Deep Dive: Convex Analysis & Jensen's Bound   ──► Epigraphs, Secants, Subgradients & Strict Proofs
- §7 The Unified Csiszár-Ali-Silvey f-Divergence   ──► The Integral Form, Scalar Ratios & Non-Negativity
- §8 The Exhaustive f-Divergence Catalog & Scenarios─► KL, Rev-KL, JS, TV, Pearson χ², Hellinger & Alpha
+ §1 Unknown Population p_x vs Empirical Dataset D ──► The True Recipe vs The Bakery Display Case
+ §2 The Dual Objective: Estimate p_x AND Sample   ──► Learning the Theory vs Baking Fresh Croissants
+ §3 Deep Neural Parametric Models p_θ             ──► The Universal Audio Synthesizer with Knobs θ
+ §4 Statistical Divergences as Discrepancy Scores ──► The Balance Scale That Reads 0 Only on Match
+ §5 The Pushforward Generative Engine G_θ(z)      ──► The Pasta Extruder Shaping Noise into Data
+ §6 Deep Dive: Convex Analysis & Jensen's Bound   ──► The Hanging Hammock & Center of Gravity Rule
+ §7 The Unified Csiszár-Ali-Silvey f-Divergence   ──► One Master Integral, Many Famous Children
+ §8 The Exhaustive f-Divergence Catalog & Scenarios─► Forward KL, Reverse KL, JS in GANs & TV
 ══════════════════════════════════════════════════════════════════════════════════════════════════
 ```
 
@@ -25,60 +49,53 @@
 
 <a id="p1-px"></a>
 
-### Why It Matters for Lecture 4
-All generative modeling begins with a fundamental asymmetry in data science: reality generates phenomena through a complex, continuous, multi-dimensional probability density function $p_x$, but the machine learning engineer only ever possesses a finite, discrete collection of historical observations $\mathcal{D} = \{x_1, \dots, x_n\}$. We can never query $p_x(x)$ analytically.
-
-### Formal & Intuitive Architecture
+### 👶 ELI5 (Explain Like I'm 5)
+Imagine a master pastry chef who has a secret, magical recipe book ($p_x$). Every morning, the chef bakes 500 croissants and puts them in the bakery window ($\mathcal{D}$).  
+You are an apprentice. You can touch, smell, and taste all 500 croissants on the counter. But **nobody gives you the secret recipe book**. You only have the baked pastries in front of you.  
+* **The Recipe Book ($p_x$):** The infinite mathematical rule governing all possible valid croissants in the universe.
+* **The Pastries in the Window ($\mathcal{D}$):** The finite collection of samples you actually hold.
 
 ```
-         TRUE PHYSICAL UNIVERSE (p_x)                     EMPIRICAL DATASET (D)
+      TRUE HIDDEN WORLD RULE (p_x)                    SAMPLES IN YOUR HAND (D)
    ┌────────────────────────────────────────┐          ┌───────────────────────────┐
-   │ Continuous Density Function on ℝᴰ      │  ──IID─► │ Finite set of n vectors   │
-   │ Infinite possible high-res photographs │  Draws   │ D = {x₁, x₂, ..., xₙ} ⊂ ℝᴰ│
-   │ FORMULA IS COMPLETELY UNKNOWN!         │          │ WE HOLD THESE ON DISK!    │
+   │ Continuous Density Function on ℝᴰ      │  ──IID─► │ Finite collection of      │
+   │ (Infinite possible valid photographs)  │  Draws   │ n saved image files       │
+   │ WE DO NOT HAVE THIS FORMULA!           │          │ D = {x₁, x₂, ..., xₙ}     │
    └────────────────────────────────────────┘          └───────────────────────────┘
 ```
 
-* **True Population Distribution ($p_x$):** An unknown probability density function $p_x: \mathbb{R}^D \to \mathbb{R}^+$ satisfying $\int_{\mathbb{R}^D} p_x(x) \, dx = 1$.
-* **Empirical Dataset ($\mathcal{D}$):** An unordered set of $n$ independent and identically distributed ($\text{IID}$) vectors $x_i \sim p_x$.
-* **The Core Mathematical Paradox:** We want to optimize an objective $D(p_x \parallel p_\theta)$, but we cannot evaluate the function $p_x(x)$ at any arbitrary point $x \in \mathbb{R}^D$.
+### 🔍 Plain-English Mathematical Translation
+* **$p_x$ (Population Law):** A continuous probability function over the high-dimensional space of data ($\mathbb{R}^D$). If you feed it an image $x$, it tells you how likely that image is in nature. We **never** have the formula for $p_x$.
+* **$\mathcal{D} = \{x_1, x_2, \dots, x_n\}$ (Empirical Dataset):** A finite list of $n$ specific data vectors (e.g., 60,000 MNIST images). Each $x_i$ is a single realization drawn from $p_x$.
+* **$\text{IID}$ (Independent and Identically Distributed):** Every sample in $\mathcal{D}$ was generated independently by the exact same rule $p_x$, with no bias or memory between draws.
+* **The Fundamental Machine Learning Dilemma:** We want our model to match $p_x$, but we cannot write $p_x$ down on paper or evaluate it in code. We must learn solely by inspecting the sample files in $\mathcal{D}$.
 
-### Worked Micro-Examples
+### 📐 Worked Micro-Example
+* **Discrete Case:** Roll a 6-sided die. The unknown true law $p_x$ is loaded: $P(6) = 0.5$, and $P(1)=P(2)=P(3)=P(4)=P(5) = 0.1$.
+* You roll it 10 times: $\mathcal{D} = [6, 2, 6, 6, 1, 6, 4, 6, 5, 6]$.
+* The list of 10 numbers is your dataset $\mathcal{D}$. The list is **not** the formula $P(6)=0.5$. You must deduce the underlying law from the list!
 
-1. **Discrete Case (Rolling a Biased Die):**
-   * *True Law $p_x$:* $P(X=6) = 0.5$, $P(X=k) = 0.1$ for $k \in \{1, 2, 3, 4, 5\}$.
-   * *Dataset $\mathcal{D}$ (20 rolls):* $\{6, 6, 2, 6, 1, 6, 4, 6, 6, 3, 5, 6, 2, 6, 6, 1, 6, 3, 6, 4\}$.
-   * The list of 20 integers is an empirical realization; it is not the mathematical probability mass function $p_x$.
-2. **Continuous Case (MNIST Handwritten Digits):**
-   * *True Law $p_x$:* The continuous manifold of all natural handwritten digits embedded in $\mathbb{R}^{784}$ ($28 \times 28$ pixels).
-   * *Dataset $\mathcal{D}$:* A static array of $60{,}000$ specific image matrices stored in a binary tensor file.
-
-### Real-World Pedagogical Analogies
-* **The Master Baker's Secret Recipe:** The master baker's locked recipe book represents $p_x$. The 500 croissants sitting in the bakery display case represent $\mathcal{D}$. Eating every croissant in the case gives you rich sensory data (samples), but nobody hands you the recipe book ($p_x$).
-* **Continental Climate vs Weather Logs:** The continent's climate system represents $p_x$. A binder containing 365 daily temperature logs represents $\mathcal{D}$. Reading the binder does not give you the analytical atmospheric differential equations ($p_x$).
-
-### Python Code Illustration
+### 💻 Python Code Illustration
 
 ```python
 import numpy as np
 
-# 1. Simulate the hidden world distribution p_x (Bimodal 1D Gaussian Mixture)
-def sample_true_world_px(n=1000):
-    mode = np.random.binomial(1, 0.35, size=n)
-    samples = np.where(mode == 0,
-                       np.random.normal(loc=-2.5, scale=0.6, size=n),
-                       np.random.normal(loc=2.0, scale=0.9, size=n))
-    return samples
+# 1. Hidden continuous world law p_x (Two Gaussian peaks)
+def draw_from_unknown_px(n_samples=500):
+    mode = np.random.binomial(1, 0.4, size=n_samples)
+    # Peak 1 at -2.0, Peak 2 at +3.0
+    return np.where(mode == 0, 
+                    np.random.normal(-2.0, 0.5, size=n_samples), 
+                    np.random.normal(3.0, 0.8, size=n_samples))
 
-# 2. We only hold the finite dataset D
-dataset_D = sample_true_world_px(n=500)
-print(f"Dataset D size: {len(dataset_D)} samples.")
-print(f"Sample mean: {np.mean(dataset_D):.4f} | True density formula remains inaccessible!")
+# 2. You only get the array of numbers (The Dataset D)
+dataset_D = draw_from_unknown_px(500)
+print(f"Holding {len(dataset_D)} points on disk. (Formula for p_x remains unknown!)")
 ```
 
-### Diagnostic Mini-Check
-1. Is a `.png` image file $x_i$ the same mathematical object as the density function $p_x$? *(Answer: No, $x_i$ is a single sample vector; $p_x$ is the continuous density mapping $\mathbb{R}^D \to \mathbb{R}^+$).*
-2. Why can we not evaluate $\int_{\mathbb{R}^D} p_x(x) \log p_x(x) \, dx$ directly on Day 1? *(Answer: Because we only have a discrete sample collection $\mathcal{D}$, not an analytical equation for $p_x$).*
+### 💡 Diagnostic Mini-Check
+1. Is the `.jpg` file on your laptop the distribution $p_x$? *(Answer: No, it is a single sample $x_i$; $p_x$ is the continuous probability function that created it).*
+2. What does IID mean in simple terms? *(Answer: Every data sample was drawn fairly from the same distribution without affecting the other samples).*
 
 ---
 
@@ -86,40 +103,38 @@ print(f"Sample mean: {np.mean(dataset_D):.4f} | True density formula remains ina
 
 <a id="p2-two-jobs"></a>
 
-### Why It Matters for Lecture 4
-Supervised learning models estimate conditional boundaries $p(y \mid x)$ to categorize existing data. Deep generative modeling is strictly defined by **two simultaneous, non-negotiable requirements**: estimating the distribution and constructing an efficient sampling engine.
-
-### Formal System Breakdown
+### 👶 ELI5 (Explain Like I'm 5)
+Imagine two different people trying to pass an art exam:
+1. **The Art Critic (Discriminative Model):** Looks at a painting and says: *"This is a genuine Picasso ($y=1$)"* or *"This is a fake ($y=0$)"*. If you give the critic a blank canvas and a brush, **they cannot paint anything**.
+2. **The Master Forger / Artist (Generative Model):** Studies 100 genuine Picassos ($\mathcal{D}$). They learn Picasso's style ($p_x$) and can paint a **brand-new painting** ($x_{\text{new}}$) that looks like Picasso made it, even though Picasso never painted that scene!
 
 ```
-                             THE DUAL GOALS OF GENERATIVE AI
+                             THE TWO JOBS OF GENERATIVE AI
                                             │
         ┌───────────────────────────────────┴───────────────────────────────────┐
         ▼                                                                       ▼
    JOB 1: ESTIMATE p_x                                                     JOB 2: LEARN TO SAMPLE
-   • Align candidate model density p_θ with p_x                            • Provide an executable procedure
-   • Explicit: closed-form log p_θ(x) density                                to synthesize brand-new points
-   • Implicit: parameterized generator network G_θ                           x_new ~ p_θ* ≈ p_x (Novel creations!)
+   • Understand the underlying distribution p_θ ≈ p_x                      • Provide an engine that synthesizes
+   • Explicit: Mathematical density equation log p_θ(x)                      brand-new, unseen data points
+   • Implicit: Neural network generator G_θ                                  x_new ~ p_θ* (Create novel images!)
 ```
 
-* **Job 1 (Distribution Estimation):** Optimize parameters $\theta$ such that candidate distribution $p_\theta$ approaches $p_x$ in probability distribution space.
-* **Job 2 (Sample Generation):** Provide a fast, tractable sampling algorithm to draw novel data points $x_{\text{new}} \sim p_{\theta^\star}$ that are statistically indistinguishable from genuine data $p_x$, without duplicating entries from $\mathcal{D}$.
+### 🔍 Plain-English Mathematical Translation
+* **Job 1 (Distribution Estimation):** Adjust your model $p_\theta$ so that it matches the shape of the true distribution $p_x$.
+* **Job 2 (Sampling):** Create a fast computer algorithm that outputs fresh vectors $x_{\text{new}} \in \mathbb{R}^D$ drawn from your learned model $p_\theta$.
+* **Why Classifiers Don't Count:** A classifier calculates $p(y \mid x)$ (the probability of a label given an input). It never learns how to synthesize an input $x$ from scratch.
 
-### Comparative Architecture Matrix
+### 📐 Comparative Matrix
 
-| Model Class | Primary Goal | Density Evaluation $p(x)$? | Novel Sample Generation? | Typical Failure Mode |
+| Model Type | What It Does | Can It Tell Likelihood $p(x)$? | Can It Create New Images? | Everyday Analogy |
 | :--- | :--- | :---: | :---: | :--- |
-| **Discriminative** (ResNet, SVM) | Estimate $p(y \mid x)$ | **No** | **No** (Cannot draw $x$) | Adversarial Vulnerability |
-| **Explicit Generative** (PixelCNN, Flows) | Maximize $\mathbb{E}[\log p_\theta(x)]$ | **Yes** (Exact density) | Yes (Often slow/autoregressive) | High computational cost |
-| **Implicit Generative** (GANs, VDM) | Minimize $D_f(p_x \parallel p_\theta)$ | **No** (Density implicit) | **Yes** (Fast 1-step $G_\theta(z)$) | Mode Collapse / Instability |
+| **Classifier** (ResNet, SVM) | Predicts label $y$ from image $x$ | ❌ No | ❌ No | Art Inspector grading a painting |
+| **Explicit Generative** (Flows) | Calculates exact likelihood $\log p_\theta(x)$ | ✅ Yes | ✅ Yes (Often slow) | Mathematician calculating density formulas |
+| **Implicit Generative** (GANs, VDM) | Transforms random noise into data | ❌ No | ✅ **Yes (Instant 1-step!)** | Master Painter creating new canvases |
 
-### Real-World Pedagogical Analogies
-* **Art Critic vs Master Painter:** An art critic (discriminative classifier) inspects a painting and outputs a label: *"Authentic Rembrandt ($y=1$)"* or *"Fake ($y=0$)"*. The critic cannot paint. A master painter (generative model) studies 100 authentic Rembrandts ($\mathcal{D}$) and paints a brand-new masterpiece ($x_{\text{new}}$) in Rembrandt's exact stylistic distribution ($p_x$).
-* **Photocopier vs Novelist:** A photocopier memorizes and reproduces training text. A novelist learns the linguistic distribution ($p_x$) and authors an original novel.
-
-### Diagnostic Mini-Check
-1. If an algorithm calculates an accurate density value $p(x)$ for any test image but has no algorithm to draw new images, has it solved Job 2? *(Answer: No, it solved Job 1 but failed Job 2).*
-2. Does an implicit generative model require calculating $p_\theta(x)$ to draw a sample? *(Answer: No, it maps random noise through a generator $G_\theta(z)$).*
+### 💡 Diagnostic Mini-Check
+1. If a model accurately detects whether an email is spam ($y=1$) or not spam ($y=0$), is it a generative model? *(Answer: No, that is a discriminative classifier calculating $p(y \mid x)$).*
+2. Does an implicit generative model need a mathematical formula for $p_\theta(x)$ to draw an image? *(Answer: No, it directly outputs samples through a neural generator $G_\theta(z)$).*
 
 ---
 
@@ -127,35 +142,35 @@ Supervised learning models estimate conditional boundaries $p(y \mid x)$ to cate
 
 <a id="p3-model"></a>
 
-### Why It Matters for Lecture 4
-We cannot perform an unconstrained search over the infinite-dimensional universe of all mathematical functions. We constrain our search to a **parametric family** $\mathcal{P} = \{p_\theta \mid \theta \in \Theta\}$ parameterized by the synaptic weight tensors $\theta$ of a deep neural network.
-
-### Universal Approximation & Parameter Manifolds
+### 👶 ELI5 (Explain Like I'm 5)
+Imagine a massive electronic audio synthesizer with **10 million slider knobs**.  
+* When all knobs are set to 0, the synthesizer emits random static noise.
+* If you adjust 500 knobs, it sounds like a trumpet.
+* If you tune all 10 million knobs to the perfect positions ($\theta^\star$), the synthesizer can play an entire Beethoven symphony ($p_x$).  
+The synthesizer hardware is the **Deep Neural Network**. The positions of the 10 million knobs are the **weights $\theta$**. The resulting sound distribution is **$p_\theta$**.
 
 ```
    INFINITE FUNCTION SPACE                          PARAMETRIC NEURAL FAMILY {p_θ}
   ┌─────────────────────────────────┐              ┌───────────────────────────────┐
-  │ All continuous probability      │              │ Candidate laws parameterized  │
-  │ distributions on ℝᴰ             │ ──RESTRICT──►│ by deep net weights θ ∈ ℝᴹ    │
-  │ (Infinite degrees of freedom)   │              │ (Universal Approximators)     │
+  │ All possible continuous shapes  │              │ Shapes you can create by      │
+  │ in the universe                 │ ──RESTRICT──►│ adjusting neural weights θ    │
+  │ (Too vast to search!)           │              │ (Universal Approximators)     │
   └─────────────────────────────────┘              └───────────────┬───────────────┘
                                                                    │
-                                                            Gradient Updates on θ
+                                                            Tune Knobs θ via SGD
                                                                    ▼
                                                       p_θ₁ ──► p_θ₂ ──► p_θ* ≈ p_x
 ```
 
-* **The Parametric Family:** A structured collection of probability distributions indexed by a finite weight vector $\theta \in \mathbb{R}^M$.
-* **Universal Approximation Theorem (Hornik et al., 1989):** A feedforward neural network with non-linear activation functions and sufficient hidden units can approximate any continuous Borel-measurable function to arbitrary precision $\epsilon > 0$.
-* **The Course Terminology:** In this course, the term **"model"** refers specifically to the parametric candidate distribution $p_\theta$ represented by the neural network.
+### 🔍 Plain-English Mathematical Translation
+* **Parametric Family $\{p_\theta\}$:** We cannot search through every imaginable mathematical equation in the universe. Instead, we fix a deep neural network architecture and search only over all possible values of its weight vector $\theta \in \mathbb{R}^M$.
+* **$\theta$ (Theta):** A huge list of numbers representing the weights and biases connecting artificial neurons.
+* **Universal Approximation Theorem:** Mathematical proof (Hornik et al., 1989) showing that deep neural networks with non-linear activations (like ReLU) can approximate **any** smooth mathematical function to arbitrary accuracy if given enough neurons.
+* **Course Slang:** When Prof. Prathosh says *"we choose the model $p_\theta$,"* he means *"we choose the neural network architecture and initialize its weights $\theta$."*
 
-### Real-World Pedagogical Analogies
-* **The Modular Audio Synthesizer:** A modular synthesizer has 10,000 knobs and patch cords ($\theta$). At configuration $\theta_1$, it outputs a violin wave; at $\theta_2$, a flute; at $\theta^\star$, an authentic orchestral string section ($p_x$). The synthesizer circuit is the neural architecture; the knob angles are $\theta$.
-* **Sculptor's Steel Armature:** A steel armature with thousands of adjustable joints can be configured into any anatomical pose. The armature structure is the neural network; the joint angles are $\theta$.
-
-### Diagnostic Mini-Check
-1. What does the variable $\theta$ represent in $p_\theta$? *(Answer: The vector of all trainable synaptic weights and biases in the neural network).*
-2. If we double the depth of network $G_\theta$, what happens to the parametric family $\{p_\theta\}$? *(Answer: It expands the expressiveness and representational capacity of the candidate distribution family).*
+### 💡 Diagnostic Mini-Check
+1. When we say "train the model," what are we mathematically changing? *(Answer: The numerical values of the weight vector $\theta$).*
+2. Why do we use deep neural networks instead of simple bell curves (Gaussians) for $p_\theta$? *(Answer: Because real data like images have millions of complex modes and curves that only deep nets can represent).*
 
 ---
 
@@ -163,15 +178,17 @@ We cannot perform an unconstrained search over the infinite-dimensional universe
 
 <a id="p4-div"></a>
 
-### Why It Matters for Lecture 4
-Training a generative model requires a mathematical yardstick that evaluates the distance between two probability distributions. A **statistical divergence** $D(p \parallel q)$ quantifies the discrepancy between two probability density functions on a manifold.
-
-### The Invariant Divergence Axioms
+### 👶 ELI5 (Explain Like I'm 5)
+Imagine you have a magical **Discrepancy Meter**. You point it at two sandcastles: the Real Sandcastle ($p_x$) and your Model Sandcastle ($p_\theta$).
+* If the two sandcastles look completely different, the meter beeps loudly and reads a big positive number like $+85.4$.
+* As you sculpt and reshape your sandcastle to look more like the real one, the meter reading drops: $+42.0 \to +10.2 \to +1.5$.
+* When your sandcastle matches the real sandcastle perfectly down to every grain of sand, the meter reads **exactly $0.00$**.
+* The meter **can never read a negative number** (like $-5.0$).
 
 ```
-        True Distribution p_x            Model Distribution p_θ        Statistical Divergence D(p_x ‖ p_θ)
+        Real Distribution p_x            Model Distribution p_θ        Statistical Divergence D(p_x ‖ p_θ)
      ▲                                 ▲                             ▲
-     │      ┌───┐                      │               ┌───┐         │   D(p_x ‖ p_θ) >> 0 (High loss!)
+     │      ┌───┐                      │               ┌───┐         │   D(p_x ‖ p_θ) = 14.8 (High Loss!)
      │     ┌┘   └┐                     │              ┌┘   └┐        │
      └─────┴─────┴──────────► x        └──────────────┴─────┴──► x   └──────────────────────────────►
              Region A                                   Region B
@@ -180,28 +197,25 @@ Training a generative model requires a mathematical yardstick that evaluates the
      ▲
      │      ┌───┐   <── p_x and p_θ* OVERLAP PERFECTLY!
      │     ┌┘   └┐
-     └─────┴─────┴──────────► x        ════════════════════════════►  D(p_x ‖ p_θ*) = 0 (Global Minimum!)
+     └─────┴─────┴──────────► x        ════════════════════════════►  D(p_x ‖ p_θ*) = 0.00 (Global Minimum!)
 ```
 
-1. **Non-Negativity (Axiom 1):**
-   $$D(p \parallel q) \ge 0 \quad \forall \, p, q$$
-2. **Identity of Indiscernibles (Axiom 2):**
-   $$D(p \parallel q) = 0 \iff p = q \quad (\text{almost everywhere})$$
-3. **Asymmetry (Not a Metric):**
-   In general, $D(p \parallel q) \neq D(q \parallel p)$, and statistical divergences do not satisfy the triangle inequality $D(p \parallel r) \le D(p \parallel q) + D(q \parallel r)$.
+### 🔍 Plain-English Mathematical Translation
+A **statistical divergence** $D(p \parallel q)$ is a mathematical function that takes two probability distributions and returns a single discrepancy score satisfying two strict rules:
+1. **Rule 1 (Always Non-Negative):**
+   $$D(p \parallel q) \ge 0 \quad \text{for all distributions } p \text{ and } q$$
+2. **Rule 2 (Zero Only on Perfect Match):**
+   $$D(p \parallel q) = 0 \iff p = q \quad (\text{they are identical everywhere})$$
+3. **Why It's Called a Divergence (Not a Distance):** A true distance (metric) like Euclidean distance must be symmetric ($A \to B$ equals $B \to A$). Most divergences in machine learning are **asymmetric**: $D(p \parallel q) \neq D(q \parallel p)$.
 
-### Why These Axioms Enable Generative Learning
-Because $D(p_x \parallel p_\theta) \ge 0$ with its absolute global minimum uniquely located at $0$, framing generative training as:
+### 📐 Why This Makes Neural Network Training Work
+Because the score is always $\ge 0$ and hits $0$ only when the distributions match, we set up training as an optimization game:
 $$\theta^\star = \arg\min_\theta \, D(p_x \parallel p_\theta)$$
-guarantees that driving the divergence loss to zero forces the generator's distribution $p_{\theta^\star}$ to match the ground-truth data distribution $p_x$!
+By using gradient descent to drive the divergence score down to $0$, the neural network $p_\theta$ is mathematically forced to become identical to the real data $p_x$!
 
-### Real-World Pedagogical Analogies
-* **Discrepancy Scale for Flour:** You place two bowls of flour ($p_x$ and $p_\theta$) on a sensor. The scale reads $\ge 0.00\text{ kg}$, and reads exactly $0.00\text{ kg}$ if and only if both bowls have identical density profiles. Adjusting recipe knobs $\theta$ until the scale reads $0.00$ guarantees the recipes match.
-* **Laser Target Deviation Meter:** A target tracking system measures distance from the bullseye. The deviation is non-negative and zero only when the crosshair hits the exact center.
-
-### Diagnostic Mini-Check
-1. If a proposed loss function could evaluate to $-12.8$, why would $\arg\min_\theta D$ fail to align distributions? *(Answer: Minimizing the loss would drive it into negative infinity rather than stopping when distributions match at zero).*
-2. Does a statistical divergence satisfy symmetry $D(p \parallel q) = D(q \parallel p)$? *(Answer: Generally no; most divergences like KL are asymmetric).*
+### 💡 Diagnostic Mini-Check
+1. If a proposed loss function could evaluate to $-100$, what would happen during training? *(Answer: Gradient descent would keep making the loss more negative instead of stopping when distributions match at zero).*
+2. Does a statistical divergence have to be symmetric? *(Answer: No, statistical divergences are generally asymmetric).*
 
 ---
 
@@ -210,77 +224,67 @@ guarantees that driving the divergence loss to zero forces the generator's distr
 <a id="p5-push"></a>
 <a id="p6-samples"></a>
 
-### Why It Matters for Lecture 4
-How does a neural network transform a vector of simple computer-generated random numbers into a photorealistic $480{,}000$-dimensional image? It uses the **pushforward measure** principle from probability theory.
-
-### Mathematical Formulation & Pipeline Architecture
+### 👶 ELI5 (Explain Like I'm 5)
+How does a computer generate a brand-new $1024 \times 1024$ photorealistic face?  
+It uses a **Pasta Machine** concept:
+1. **The Plain Dough ($Z$):** You feed simple, boring, uniform dough into the machine. In math, this is standard Gaussian random noise (just a list of 16 random numbers drawn from a bell curve $\mathcal{N}(0, I)$).
+2. **The Shaping Die ($G_\theta$):** The metal mold inside the machine cuts and shapes the dough. In math, this is the deep neural network $G_\theta$ with all its weight layers.
+3. **The Delicious Pasta ($\hat{X}$):** Beautiful, intricate noodles come out of the slot! In math, this is the generated photorealistic image $\hat{X} = G_\theta(Z)$.
 
 ```
 ══════════════════════════════════════════════════════════════════════════════════════════════════
                             THE PUSHFORWARD SAMPLING PIPELINE
 ══════════════════════════════════════════════════════════════════════════════════════════════════
 
-   Tractable Latent Prior               Deterministic Generator                   Generated Data Sample
-        Z ∈ ℝᵏ                               G_θ : ℝᵏ ──► ℝᴰ                          X̂ ∈ ℝᴰ
-  ┌──────────────────┐                     ┌──────────────────┐                 ┌──────────────────┐
-  │ Z ~ N(0, I_k)    │ ──────────────────► │ Deep Neural Net  │ ──────────────► │ X̂ = G_θ(Z)       │
-  │ Standard Normal  │    Forward Pass     │ (Synaptic θ)     │                 │ X̂ ~ p_θ(x̂)       │
-  └──────────────────┘                     └──────────────────┘                 └──────────────────┘
-    Trivial to sample!                        Deterministic                        Complex Natural
-    (torch.randn)                              Transformation                       Data Distribution
+   Tractable Random Prior              Deterministic Generator                   Generated Data Sample
+        Z ∈ ℝᵏ                              G_θ : ℝᵏ ──► ℝᴰ                          X̂ ∈ ℝᴰ
+  ┌──────────────────┐                    ┌──────────────────┐                 ┌──────────────────┐
+  │ Z ~ N(0, I_k)    │ ─────────────────► │ Deep Neural Net  │ ──────────────► │ X̂ = G_θ(Z)       │
+  │ Standard Normal  │    Forward Pass    │ (Synaptic θ)     │                 │ X̂ ~ p_θ(x̂)       │
+  └──────────────────┘                    └──────────────────┘                 └──────────────────┘
+    Trivial to draw!                         Deterministic                        Complex Realistic
+    (torch.randn)                             Transformation                       Data Point (Image)
 ══════════════════════════════════════════════════════════════════════════════════════════════════
 ```
 
-1. **Latent Base Prior ($Z \sim p_z$):** We sample from an accessible low-dimensional Gaussian $Z \sim \mathcal{N}(0, I_k)$ in latent space $\mathbb{R}^k$ (where $k \ll D$).
-2. **Deterministic Neural Transformation ($G_\theta$):** A deep neural network $G_\theta: \mathbb{R}^k \to \mathbb{R}^D$ parameterized by weights $\theta$.
-3. **Induced Output Random Variable ($\hat{X}$):** A deterministic function of a random variable is itself a random variable:
-   $$\hat{X} = G_\theta(Z) \in \mathbb{R}^D$$
-   The resulting probability distribution of $\hat{X}$ is denoted $p_\theta$.
-4. **Pushforward Measure Definition:** For any Borel-measurable set $A \subseteq \mathbb{R}^D$:
-   $$p_\theta(A) = P(\hat{X} \in A) = P(G_\theta(Z) \in A) = P(Z \in G_\theta^{-1}(A)) = \int_{G_\theta^{-1}(A)} p_z(z) \, dz$$
-5. **The Critical Insight:** Running a forward pass through $G_\theta$ yields **concrete samples from $p_\theta$**, but does not provide an analytical formula for $p_\theta(x)$!
+### 🔍 Plain-English Mathematical Translation
+* **$Z \sim \mathcal{N}(0, I_k)$ (Latent Prior):** A vector of $k$ random numbers (e.g., $k=16$ or $k=128$) drawn independently from a standard normal distribution (mean 0, variance 1). It is trivial for any computer to draw $Z$ using `torch.randn()`.
+* **$G_\theta: \mathbb{R}^k \to \mathbb{R}^D$ (Deterministic Generator):** A deep neural network that takes the $k$ random numbers and deterministically computes a high-dimensional vector of $D$ pixel numbers (e.g., $D = 784$ for MNIST or $D = 3 \times 1024 \times 1024 \approx 3{,}000{,}000$ for HD color images).
+* **Pushforward Measure ($p_\theta$):** Because the input $Z$ is random, the output $\hat{X} = G_\theta(Z)$ is also a random variable! The shape of $\hat{X}$'s probability distribution is completely determined by the neural network weights $\theta$.
+* **The Critical Distinction:** Running $G_\theta(z)$ creates **samples from $p_\theta$**. It does **not** give you a mathematical formula for $p_\theta(x)$!
 
-### Worked Micro-Example (1D Analytical Pushforward)
+### 📐 Worked 1D Pushforward Example
+* Let random noise $Z \sim \text{Uniform}[0, 1]$ (a flat line between 0 and 1).
+* Let our generator function be $g(z) = z^2$.
+* The output is $\hat{X} = Z^2$.
+* The output probability density is $p_{\hat{X}}(x) = \frac{1}{2\sqrt{x}}$ for $x \in (0, 1]$.
+* By simply squaring the input numbers, we transformed a flat uniform distribution into a curved distribution that bunches up near 0!
 
-* Let latent variable $Z \sim \text{Uniform}[0, 1]$ (density $p_z(z) = 1$ for $z \in [0, 1]$).
-* Let deterministic generator $g(z) = -\frac{1}{\lambda} \ln(1 - z)$ for $\lambda > 0$.
-* The output random variable is $\hat{X} = g(Z)$.
-* Using the transformation rule for monotonic functions ($p_{\hat{X}}(x) = p_z(g^{-1}(x)) \left|\frac{d}{dx} g^{-1}(x)\right|$):
-  $$z = g^{-1}(x) = 1 - e^{-\lambda x} \implies \frac{dz}{dx} = \lambda e^{-\lambda x}$$
-  $$p_{\hat{X}}(x) = 1 \cdot \lambda e^{-\lambda x} = \lambda e^{-\lambda x} \quad (x \ge 0)$$
-* Pushing uniform noise through $g(z)$ generated an **Exponential Distribution $\text{Exp}(\lambda)$**!
-
-### Real-World Pedagogical Analogies
-* **The Industrial Pasta Extruder:** Standardized wheat flour dough ($Z \sim \mathcal{N}(0, I)$) is pushed through an interchangeable steel die ($G_\theta$). If the die is configured for penne, penne noodles emerge; if configured for fusilli, fusilli noodles emerge. You never write a mathematical density equation for pasta; you design the die.
-* **Refractive Optical Prism:** Uniform white sunlight ($Z$) enters a finely ground glass prism ($G_\theta$). The deterministic refractive geometry bends the light rays into a rich multi-colored spectrum ($\hat{X}$).
-
-### Python Code Illustration
+### 💻 Python Code Illustration
 
 ```python
 import torch
 import torch.nn as nn
 
-# Define pushforward generator (Latent k=8 -> Data D=2)
-class ToyGenerator(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.net = nn.Sequential(
-            nn.Linear(8, 32),
-            nn.ReLU(),
-            nn.Linear(32, 2)
-        )
-    def forward(self, z):
-        return self.net(z)
+# Generator taking 4 random numbers -> outputting a 2D coordinate (D=2)
+generator = nn.Sequential(
+    nn.Linear(4, 16),
+    nn.ReLU(),
+    nn.Linear(16, 2)
+)
 
-generator = ToyGenerator()
-z_noise = torch.randn(100, 8)       # 100 samples from N(0, I)
-x_fake = generator(z_noise)         # 100 samples from p_theta!
-print(f"Generated sample cloud shape: {x_fake.shape}")
+# Draw 5 random noise vectors
+z = torch.randn(5, 4)  # 5 samples from N(0, I)
+
+# Push through generator
+fake_samples = generator(z)
+print("Generated 5 samples from p_theta:")
+print(fake_samples)
 ```
 
-### Diagnostic Mini-Check
-1. If we feed the exact same noise vector $z_0$ into $G_\theta$ twenty times, do we get 20 different images? *(Answer: No, $G_\theta$ is deterministic; identical input produces identical output).*
-2. Where does the diversity of generated samples come from? *(Answer: From sampling different latent vectors $z \sim \mathcal{N}(0, I)$).*
+### 💡 Diagnostic Mini-Check
+1. If you input the exact same noise vector $z_1$ into $G_\theta$ twice, will you get two different images? *(Answer: No, $G_\theta$ is a deterministic function; identical input produces identical output).*
+2. Where does the variety in generated images come from? *(Answer: From drawing different random noise vectors $z$).*
 
 ---
 
@@ -288,103 +292,100 @@ print(f"Generated sample cloud shape: {x_fake.shape}")
 
 <a id="p6-convex"></a>
 
-### Why It Matters for Lecture 4
-The entire $f$-divergence framework relies on a generator function $f(u)$ that is **convex on $\mathbb{R}^+$ with $f(1) = 0$**. Understanding convex functions, secant lines, supporting hyperplanes, and Jensen's inequality provides the rigorous mathematical proof of why $D_f(p_x \parallel p_\theta) \ge 0$.
-
-### Mathematical Definitions of Convexity
+### 👶 ELI5 (Explain Like I'm 5)
+* **What is a Convex Function?**  
+  Imagine a **hanging hammock** or a **salad bowl** sitting on a table.  
+  If you pick any two points on the hammock and stretch a straight piece of string (a secant line) between them, **the string always floats ABOVE the hammock**. The hammock never bends upward to poke through the string.
+* **What is the Supporting Tangent Line?**  
+  If you place a stiff wooden board flat against the bottom of the bowl, the entire bowl sits **above** the wooden board.
+* **What is Jensen's Inequality?**  
+  If you put two equal weights into the bowl, their average balance point (center of gravity) will always sit **at or above** the lowest point of the bowl curve.
 
 ```
                              GEOMETRY OF A CONVEX FUNCTION
        f(u)
         ▲
-        │                                  / (Secant line lies ABOVE curve!)
+        │                                  / Straight string (Secant line) floats ABOVE!
         │        (u₁, f(u₁))  *───────────* (u₂, f(u₂))
         │                     │  \     /  │
         │                     │   \___/   │
         │                     │     ▲     │
-        │                     │     │ Curve f(u) lies strictly BELOW secant!
+        │                     │     │ Hammock curve f(u) dips strictly BELOW string!
         0 ────────────────────┴─────┴─────┴────────► u
                              u₁     u*    u₂
 ```
 
-1. **Secant Inequality Definition:**  
-   A function $f: \mathcal{C} \subseteq \mathbb{R} \to \mathbb{R}$ is convex if for all $u_1, u_2 \in \mathcal{C}$ and all $\lambda \in [0, 1]$:
+### 🔍 Plain-English Mathematical Translation
+1. **Mathematical Definition of Convexity:**  
+   A function $f(u)$ is convex if for any two points $u_1, u_2$ and any blend fraction $\lambda \in [0, 1]$:
    $$f(\lambda u_1 + (1-\lambda) u_2) \le \lambda f(u_1) + (1-\lambda) f(u_2)$$
-   *Strict convexity* holds if the inequality is strict ($<$) for all $u_1 \neq u_2$ and $\lambda \in (0, 1)$.
-2. **First-Order Condition (Supporting Hyperplane):**  
-   If $f$ is continuously differentiable, $f$ is convex if and only if the tangent line at any point $u_0$ lies entirely below the function graph:
-   $$f(u) \ge f(u_0) + f'(u_0)(u - u_0) \quad \forall \, u \in \mathcal{C}$$
-3. **Second-Order Condition (Curvature Test):**  
-   If $f$ is twice differentiable on an open interval, $f$ is convex if and only if its second derivative is non-negative everywhere:
-   $$f''(u) \ge 0 \quad \forall \, u > 0$$
+   *Plain English:* The function value of the average is less than or equal to the average of the function values!
+2. **The Second Derivative Test ($f''(u) \ge 0$):**  
+   If you can take derivatives, $f(u)$ is convex if its second derivative is always positive or zero ($f''(u) \ge 0$). This means the slope is always curving upward like a smiley face $\smile$.
+3. **The Supporting Tangent Line:**  
+   At any point $u_0$, the tangent line $y = f(u_0) + f'(u_0)(u - u_0)$ lies entirely **underneath** the curve:
+   $$f(u) \ge f(u_0) + f'(u_0)(u - u_0)$$
 
 ```
-   SUPPORTING HYPERPLANE / TANGENT PROPERTY:
+   SUPPORTING TANGENT LINE PROPERTY:
    f(u)
-    ▲                                    / f(u) curve
+    ▲                                    / f(u) Bowl Curve
     │                     *             /
     │                    / \           /
     │                   /   *─────────* 
-    │                  /   /  Tangency point (u₀, f(u₀))
+    │                  /   /  Touch point (u₀, f(u₀))
     │                 /  /
-    │  Tangent Line: / / y = f(u₀) + f'(u₀)(u - u₀)  <── Lies ENTIRELY BELOW f(u)!
+    │  Tangent Line: / / y = f(u₀) + f'(u₀)(u - u₀)  <── Sits ENTIRELY UNDERNEATH f(u)!
     └───────────────┴─┴──────────────────────────────► u
                      u₀
 ```
 
-### Complete Mathematical Proof of Jensen's Inequality
+---
 
-**Theorem (Jensen's Inequality):**  
-Let $f: \mathbb{R} \to \mathbb{R}$ be a convex function, and let $U$ be an integrable random variable. Then:
+### 📐 Step-by-Step Proof of Jensen's Inequality (Demystified)
+
+**The Theorem:** For any convex function $f$ and any random variable $U$:
 $$\mathbb{E}[f(U)] \ge f(\mathbb{E}[U])$$
+*(The average of the function values is $\ge$ the function of the average).*
 
-**Proof via Supporting Hyperplanes:**
-1. Let $\mu = \mathbb{E}[U]$ be the expected value of $U$.
-2. Since $f$ is convex, there exists a supporting hyperplane (subgradient slope $c$) at $\mu$ such that for all possible real values $u$:
-   $$f(u) \ge f(\mu) + c(u - \mu)$$
-3. Since this inequality holds for every realization $u$ of the random variable $U$, it holds for the random variable $U$ itself:
+**The Simple 5-Step Proof:**
+1. Let $\mu = \mathbb{E}[U]$ be the average value of $U$.
+2. Because $f$ is convex, the supporting tangent line at $\mu$ sits underneath the curve everywhere:
+   $$f(u) \ge f(\mu) + c(u - \mu) \quad (\text{where } c = f'(\mu) \text{ is the tangent slope})$$
+3. Since this holds for every single possible number $u$, it must hold for the random variable $U$:
    $$f(U) \ge f(\mu) + c(U - \mu)$$
-4. Take the mathematical expectation $\mathbb{E}[\cdot]$ on both sides:
-   $$\mathbb{E}[f(U)] \ge \mathbb{E}[f(\mu) + c(U - \mu)]$$
-5. Using the linearity of the expectation operator:
-   $$\mathbb{E}[f(U)] \ge f(\mu) + c\left(\mathbb{E}[U] - \mu\right)$$
-6. Since $\mu = \mathbb{E}[U]$, the term $(\mathbb{E}[U] - \mu) = 0$:
-   $$\mathbb{E}[f(U)] \ge f(\mu) + c(0) = f(\mathbb{E}[U])$$
-7. Substituting $\mu = \mathbb{E}[U]$ completes the proof:
-   $$\mathbb{E}[f(U)] \ge f(\mathbb{E}[U]) \quad \blacksquare$$
+4. Now take the average ($\mathbb{E}$) of both sides:
+   $$\mathbb{E}[f(U)] \ge \mathbb{E}[f(\mu)] + c\mathbb{E}[U - \mu]$$
+5. Notice that $f(\mu)$ is just a fixed constant, and $\mathbb{E}[U - \mu] = \mathbb{E}[U] - \mu = \mu - \mu = 0$!
+   $$\mathbb{E}[f(U)] \ge f(\mu) + c(0) = f(\mathbb{E}[U]) \quad \blacksquare$$
 
-### Why $f(1) = 0$ Guarantees $D_f(p_x \parallel p_\theta) \ge 0$
+---
 
-Let $U(x) = \frac{p_x(x)}{p_\theta(x)}$ be the density ratio evaluated at random variable $X \sim p_\theta$.  
-1. Compute the expectation of the density ratio under the model distribution $p_\theta$:
-   $$\mathbb{E}_{X \sim p_\theta}[U(X)] = \int_{\mathcal{X}} p_\theta(x) \left(\frac{p_x(x)}{p_\theta(x)}\right) dx = \int_{\mathcal{X}} p_x(x) \, dx = 1$$
-2. Apply Jensen's inequality to the expectation of $f(U)$:
-   $$D_f(p_x \parallel p_\theta) = \mathbb{E}_{X \sim p_\theta}[f(U(X))] \ge f\left(\mathbb{E}_{X \sim p_\theta}[U(X)]\right) = f(1)$$
-3. Since the generator function satisfies $f(1) = 0$:
-   $$D_f(p_x \parallel p_\theta) \ge 0 \quad \forall \, p_x, p_\theta$$
+### 🌟 Why $f(1) = 0$ Proves That $f$-Divergence Is Always $\ge 0$
+
+Let $U(x) = \frac{p_x(x)}{p_\theta(x)}$ be the density ratio.  
+1. What is the average value of $U(x)$ under the model distribution $p_\theta$?
+   $$\mathbb{E}_{x \sim p_\theta}[U(x)] = \int p_\theta(x) \left(\frac{p_x(x)}{p_\theta(x)}\right) dx = \int p_x(x) \, dx = 1 \quad (\text{Total probability is always } 1!)$$
+2. Now apply Jensen's inequality:
+   $$D_f(p_x \parallel p_\theta) = \mathbb{E}_{x \sim p_\theta}[f(U(x))] \ge f\left(\mathbb{E}_{x \sim p_\theta}[U(x)]\right) = f(1)$$
+3. Since our generator function was designed with $f(1) = 0$:
+   $$D_f(p_x \parallel p_\theta) \ge 0 \quad \text{ALWAYS!}$$
 
 ```
    ┌───────────────────────────────────────────────────────────────────────────┐
-   │                    THE JENSEN NON-NEGATIVITY GUARANTEE                    │
+   │                    THE 3-LINE PROOF OF NON-NEGATIVITY                     │
    │                                                                           │
-   │   D_f(p_x ‖ p_θ) = E_{X ~ p_θ}[ f( p_x(X) / p_θ(X) ) ]                    │
-   │                  ≥ f( E_{X ~ p_θ}[ p_x(X) / p_θ(X) ] )  (Jensen's Bound)  │
-   │                  = f( ∫ p_x(x) dx )                     (Ratio cancels)   │
-   │                  = f( 1 )                               (Probability sum) │
-   │                  = 0                                    (Axiom f(1) = 0)  │
+   │   1. D_f = E_{p_θ}[ f( p_x / p_θ ) ]                                      │
+   │   2.     ≥ f( E_{p_θ}[ p_x / p_θ ] )        (By Jensen's Inequality!)     │
+   │   3.     = f( 1 ) = 0                       (Since total real mass is 1)  │
    │                                                                           │
    │   ⟹ D_f(p_x ‖ p_θ) ≥ 0 with equality if and only if p_x = p_θ!          │
    └───────────────────────────────────────────────────────────────────────────┘
 ```
 
-### What is Left Semi-Continuity?
-A function $f: \mathbb{R}^+ \to \mathbb{R}$ is **left semi-continuous** at $u_0$ if:
-$$\liminf_{u \to u_0^-} f(u) \ge f(u_0)$$
-Geometrically, as $u$ approaches $u_0$ from the left, the function values do not suddenly jump upwards. This technical property guarantees that convex conjugates $f^*(t) = \sup_{u > 0} \{ut - f(u)\}$ and integrals over $f$ remain well-defined at the boundary $u \to 0^+$.
-
-### Diagnostic Mini-Check
-1. If $f(u) = u^2$, why is it not a valid $f$-divergence generator as written? *(Answer: Because $f(1) = 1^2 = 1 \neq 0$; we must shift it to $f(u) = u^2 - 1$ or $(u-1)^2$).*
-2. What allows $p_\theta(x)$ to cancel out inside $\mathbb{E}_{p_\theta}[p_x/p_\theta]$? *(Answer: The integral $\int p_\theta(x) \frac{p_x(x)}{p_\theta(x)} dx = \int p_x(x) dx = 1$).*
+### 💡 Diagnostic Mini-Check
+1. If $f(u) = u \log u$, let's check its second derivative: $f'(u) = \log u + 1$, $f''(u) = \frac{1}{u}$. For positive $u > 0$, is $f''(u) > 0$? *(Answer: Yes, $\frac{1}{u} > 0$, proving $f(u)=u\log u$ is strictly convex).*
+2. What does $f(1) = 0$ physically represent? *(Answer: When the real and fake distributions match locally ($p_x=p_\theta \implies u=1$), the mismatch penalty is exactly zero).*
 
 ---
 
@@ -392,50 +393,37 @@ Geometrically, as $u$ approaches $u_0$ from the left, the function values do not
 
 <a id="p7-f"></a>
 
-### Why It Matters for Lecture 4
-Introduced independently by Imre Csiszár (1967) and S. M. Ali & S. D. Silvey (1966), $f$-divergence provides a master mathematical framework that unifies nearly all statistical distances used in information theory, probability theory, and machine learning into a single integral.
-
-### Master Integral Definition
-
-Let $p_x$ and $p_\theta$ be continuous probability density functions supported on domain $\mathcal{X} \subseteq \mathbb{R}^D$. The **$f$-divergence** between $p_x$ and $p_\theta$ is defined as:
-
-$$D_f(p_x \parallel p_\theta) = \int_{\mathcal{X}} p_\theta(x) \, f\left(\frac{p_x(x)}{p_\theta(x)}\right) dx$$
-
-where $f: \mathbb{R}^+ \to \mathbb{R}$ satisfies:
-1. **$f$ is convex on $(0, \infty)$**
-2. **$f$ is left semi-continuous**
-3. **$f(1) = 0$**
+### 👶 ELI5 (Explain Like I'm 5)
+Imagine you are walking down a street with $D$ addresses. At every house $x$:
+* You look at the height of the **Real Data Sand Dune** ($p_x(x)$).
+* You look at the height of your **Model Sand Dune** ($p_\theta(x)$).
+* You compute their height ratio: $u(x) = \frac{\text{Real Height}}{\text{Model Height}}$.
+* You plug this ratio into a custom mathematical spring $f(u)$ that stretches when $u \neq 1$.
+* You multiply by the model's footprint $p_\theta(x)$ and add up all the penalties across the entire street to get your total bill ($D_f$).
 
 ```
-  THE ANATOMY OF THE f-DIVERGENCE INTEGRAL
+  ANATOMY OF THE f-DIVERGENCE FORMULA
   ─────────────────────────────────────────────────────────────────────────────
-                ┌── Outer expectation weight: p_θ(x)
+                ┌── Weight: Model distribution footprint p_θ(x)
                 │
    D_f = ∫_X  p_θ(x) · f( p_x(x) / p_θ(x) )  dx
                           └────────┬────────┘
-                                   └── Density ratio u(x) is a 1D SCALAR in ℝ⁺!
-                                       f evaluates single positive real numbers.
+                                   └── Density Ratio u(x) is a 1D SCALAR!
+                                       f evaluates single positive numbers.
 ```
 
-### Why the Density Ratio $u(x)$ is a 1D Scalar
+### 🔍 Plain-English Mathematical Translation
+The master $f$-divergence formula is:
+$$D_f(p_x \parallel p_\theta) = \int_{\mathcal{X}} p_\theta(x) \, f\left(\frac{p_x(x)}{p_\theta(x)}\right) dx$$
+* **$x \in \mathbb{R}^D$:** The data point (e.g., a $28 \times 28$ image of 784 numbers).
+* **$p_x(x)$ and $p_\theta(x)$:** The probability heights at coordinate $x$. Even if $x$ has 1,000,000 pixels, $p_x(x)$ is just **one scalar number** (like $0.042$).
+* **$u(x) = \frac{p_x(x)}{p_\theta(x)}$:** The density ratio. A single positive real number.
+* **$f(u)$:** An arbitrary convex function satisfying $f(1) = 0$.
+* **$\mathcal{X}$:** The support space (the region where data exists, typically $\mathbb{R}^D$).
 
-* Although data vector $x \in \mathbb{R}^D$ resides in high dimensions (e.g., $D = 784$ for MNIST or $D = 480{,}000$ for high-resolution color images), evaluating probability densities at $x$ yields two scalar heights: $p_x(x) \in \mathbb{R}^+$ and $p_\theta(x) \in \mathbb{R}^+$.
-* Therefore, the density ratio:
-  $$u(x) = \frac{p_x(x)}{p_\theta(x)}$$
-  is a **single positive real scalar**.
-* $f(u)$ simply evaluates this 1D scalar ratio. The function $f$ never acts directly on the high-dimensional vector $x$.
-
-### Expectation Representation
-The integral can be expressed concisely as an expectation under the model distribution:
-
-$$D_f(p_x \parallel p_\theta) = \mathbb{E}_{x \sim p_\theta}\left[ f\left(\frac{p_x(x)}{p_\theta(x)}\right) \right]$$
-
-### Real-World Pedagogical Analogy
-* **City Building Height Discrepancy:** You walk across a city with $D$ coordinates. At every address $x$, there are two towers: Tower A (height $p_x(x)$) and Tower B (height $p_\theta(x)$). You compute their height ratio $u = p_x(x)/p_\theta(x)$. A spring $f(u)$ measures the tension of their mismatch. You multiply by Tower B's base area $p_\theta(x) dx$ and integrate across the entire city to determine the municipal mismatch penalty ($D_f$).
-
-### Diagnostic Mini-Check
-1. If $x \in \mathbb{R}^{1000000}$, what is the dimensionality of the input to $f$? *(Answer: Dimension 1 (a scalar), because the ratio of two density values is a single real number).*
-2. If $p_x(x) = p_\theta(x)$ at all $x$, what is $u(x)$ and what is $f(u(x))$? *(Answer: $u(x) = 1$, and $f(1) = 0$, so $D_f = 0$).*
+### 💡 Diagnostic Mini-Check
+1. If $x$ is an image with $1{,}000{,}000$ pixels, does $f$ take a $1{,}000{,}000$-dimensional vector as input? *(Answer: No! $f$ takes the scalar ratio $u = p_x(x)/p_\theta(x)$, which is a single 1D number).*
+2. If $p_x(x) = p_\theta(x)$ everywhere, what does $u(x)$ equal, and what is $D_f$? *(Answer: $u(x) = 1$ everywhere; since $f(1) = 0$, the integral evaluates to $0$).*
 
 ---
 
@@ -443,118 +431,110 @@ $$D_f(p_x \parallel p_\theta) = \mathbb{E}_{x \sim p_\theta}\left[ f\left(\frac{
 
 <a id="p8-kl"></a>
 
-### Why It Matters for Lecture 4
-Different choices of generator function $f(u)$ produce different statistical divergences, each with distinct geometric curvature, gradient behaviors, and mode-fitting characteristics in machine learning.
+### 👶 ELI5 (Explain Like I'm 5)
+Different choices of the spring $f(u)$ punish mistakes differently:
+* **Forward KL ($f(u) = u \log u$): "The Paranoid Student"**  
+  Terrified of missing any question on the exam. It spreads its mass everywhere to cover all topics, but ends up writing vague, blurry answers.
+* **Reverse KL ($f(u) = -\log u$): "The Specialized Student"**  
+  Only studies one single topic really well. It writes a razor-sharp, perfect answer on that one topic, but completely ignores the rest of the exam (Mode Collapse).
+* **Jensen-Shannon ($f(u) = \text{JS Spring}$): "The Balanced Diplomat"**  
+  A fair, symmetric compromise between both sides. This is the exact metric used to train **Generative Adversarial Networks (GANs)**!
 
 ```
 ══════════════════════════════════════════════════════════════════════════════════════════════════
                                THE MASTER f-DIVERGENCE CATALOG
 ══════════════════════════════════════════════════════════════════════════════════════════════════
- Divergence Name            Generator Function f(u)                        Integral Formula D_f(p_x ‖ p_θ)
+ Divergence Name            Generator Function f(u)                        Induced Divergence Formula
  ────────────────────────────────────────────────────────────────────────────────────────────────
  1. Forward KL              f(u) = u log(u)                                ∫ p_x(x) log( p_x(x) / p_θ(x) ) dx
  2. Reverse KL              f(u) = -log(u)                                 ∫ p_θ(x) log( p_θ(x) / p_x(x) ) dx
  3. Jensen-Shannon (JS)     f(u) = ½ [ u log u - (u+1) log((u+1)/2) ]      ½ D_KL(p_x ‖ M) + ½ D_KL(p_θ ‖ M)
  4. Total Variation (TV)    f(u) = ½ |u - 1|                               ½ ∫ |p_x(x) - p_θ(x)| dx
  5. Pearson χ²              f(u) = (u - 1)²  or  u² - 1                    ∫ (p_x(x) - p_θ(x))² / p_θ(x) dx
- 6. Neyman χ²               f(u) = (1 - u)² / u                            ∫ (p_x(x) - p_θ(x))² / p_x(x) dx
- 7. Squared Hellinger       f(u) = (√u - 1)²                               ½ ∫ (√p_x(x) - √p_θ(x))² dx
- 8. Alpha-Divergence (α≠0,1)f(u) = (u^α - αu + (α - 1)) / (α(α - 1))       1/(α(α-1)) [ ∫ p_x^α p_θ^(1-α) dx - 1 ]
+ 6. Squared Hellinger       f(u) = (√u - 1)²                               ½ ∫ (√p_x(x) - √p_θ(x))² dx
 ══════════════════════════════════════════════════════════════════════════════════════════════════
 ```
 
 ---
 
-### Detailed Mathematical Derivations
+### 🔍 Derivation: How Forward KL Emerges from $f(u) = u \log u$
 
-#### 1. Forward KL Divergence Derivation ($f(u) = u \log u$)
-1. Substitute $f(u) = u \log u$ into the $f$-divergence integral:
-   $$D_f(p_x \parallel p_\theta) = \int_{\mathcal{X}} p_\theta(x) \left[ \left(\frac{p_x(x)}{p_\theta(x)}\right) \log\left(\frac{p_x(x)}{p_\theta(x)}\right) \right] dx$$
-2. The outer $p_\theta(x)$ cancels with the denominator of the ratio:
-   $$D_f(p_x \parallel p_\theta) = \int_{\mathcal{X}} p_x(x) \log\left(\frac{p_x(x)}{p_\theta(x)}\right) dx = D_{\text{KL}}(p_x \parallel p_\theta)$$
-
-#### 2. Reverse KL Divergence Derivation ($f(u) = -\log u$)
-1. Substitute $f(u) = -\log u$ into the $f$-divergence integral:
-   $$D_f(p_x \parallel p_\theta) = \int_{\mathcal{X}} p_\theta(x) \left[ -\log\left(\frac{p_x(x)}{p_\theta(x)}\right) \right] dx$$
-2. Using logarithm inversion $-\log(a/b) = \log(b/a)$:
-   $$D_f(p_x \parallel p_\theta) = \int_{\mathcal{X}} p_\theta(x) \log\left(\frac{p_\theta(x)}{p_x(x)}\right) dx = D_{\text{KL}}(p_\theta \parallel p_x)$$
-
-#### 3. Pearson $\chi^2$ Divergence Derivation ($f(u) = (u - 1)^2$)
-1. Substitute $f(u) = (u - 1)^2$ into the $f$-divergence integral:
-   $$D_f(p_x \parallel p_\theta) = \int_{\mathcal{X}} p_\theta(x) \left( \frac{p_x(x)}{p_\theta(x)} - 1 \right)^2 dx = \int_{\mathcal{X}} p_\theta(x) \left( \frac{p_x(x) - p_\theta(x)}{p_\theta(x)} \right)^2 dx$$
-2. Simplifying the algebra:
-   $$D_f(p_x \parallel p_\theta) = \int_{\mathcal{X}} \frac{(p_x(x) - p_\theta(x))^2}{p_\theta(x)} \, dx = \chi^2(p_x \parallel p_\theta)$$
+1. Start with the master integral:
+   $$D_f(p_x \parallel p_\theta) = \int p_\theta(x) \, f\left(\frac{p_x(x)}{p_\theta(x)}\right) dx$$
+2. Substitute $f(u) = u \log u$ where $u = \frac{p_x(x)}{p_\theta(x)}$:
+   $$D_f(p_x \parallel p_\theta) = \int p_\theta(x) \left[ \left(\frac{p_x(x)}{p_\theta(x)}\right) \log\left(\frac{p_x(x)}{p_\theta(x)}\right) \right] dx$$
+3. Notice that $p_\theta(x)$ in front **cancels** with $p_\theta(x)$ in the denominator:
+   $$D_f(p_x \parallel p_\theta) = \int p_x(x) \log\left(\frac{p_x(x)}{p_\theta(x)}\right) dx \equiv D_{\text{KL}}(p_x \parallel p_\theta) \quad \blacksquare$$
 
 ---
 
-### Deep Dive: Forward KL vs Reverse KL Mode Dynamics
+### 🎨 Visual Mode Dynamics: Forward KL vs Reverse KL
 
 ```
-   GROUND TRUTH DISTRIBUTION p_x (Bimodal with two distinct peaks):
+   GROUND TRUTH REAL DATA p_x (Two separate modes: e.g., Cats and Dogs):
    ▲
    │        ┌───┐             ┌───┐
    │       ┌┘   └┐           ┌┘   └┐
    └───────┴─────┴───────────┴─────┴──────► x
-          Mode 1            Mode 2
+          Cats              Dogs
 
-   FORWARD KL FIT (Mode-Covering / Zero-Avoiding):
+   FORWARD KL FIT (Mode-Covering / Zero-Avoiding / VAE Style):
    ▲
-   │        ┌─────────────────────┐      <── Spreads probability mass across BOTH modes!
-   │       ┌┘                     └┐         (Places fake mass in the middle valley -> Blurry images)
+   │        ┌─────────────────────┐      <── Spreads mass across BOTH modes!
+   │       ┌┘                     └┐         (Places fake mass in middle -> Blurry Cat-Dog hybrids!)
    └───────┴───────────────────────┴──────► x
 
-   REVERSE KL FIT (Mode-Seeking / Zero-Forcing):
+   REVERSE KL FIT (Mode-Seeking / Zero-Forcing / GAN Style):
    ▲
    │        ┌───┐
-   │       ┌┘   └┐                       <── Locks tightly onto Mode 1!
-   └───────┴─────┴────────────────────────► x (Completely drops Mode 2 -> Mode collapse)
+   │       ┌┘   └┐                       <── Locks 100% onto Cats!
+   └───────┴─────┴────────────────────────► x (Completely ignores Dogs -> Mode Collapse)
 ```
 
-* **Forward KL ($D_{\text{KL}}(p_x \parallel p_\theta) = \mathbb{E}_{x \sim p_x}[\log \frac{p_x(x)}{p_\theta(x)}]$):**
-  * **Zero-Avoiding Property:** If $p_x(x) > 0$ and $p_\theta(x) \to 0$, the ratio $\frac{p_x(x)}{p_\theta(x)} \to \infty$, causing the loss to explode to $+\infty$.
-  * **Behavior:** The model refuses to allow $p_\theta(x) = 0$ anywhere real data exists. It spreads its mass to cover all modes, generating blurry intermediate samples.
-* **Reverse KL ($D_{\text{KL}}(p_\theta \parallel p_x) = \mathbb{E}_{x \sim p_\theta}[\log \frac{p_\theta(x)}{p_x(x)}]$):**
-  * **Zero-Forcing Property:** If $p_x(x) = 0$ and $p_\theta(x) > 0$, the penalty explodes to $+\infty$.
-  * **Behavior:** The model refuses to place generated mass anywhere real data is missing. It tightly encapsulates a single mode, ignoring other modes.
+* **Forward KL ($D_{\text{KL}}(p_x \parallel p_\theta) = \mathbb{E}_{p_x}[\log \frac{p_x}{p_\theta}]$):**
+  * If real data has cats ($p_x > 0$) but model has no cats ($p_\theta \to 0$), the ratio $\frac{p_x}{p_\theta} \to \infty$ and loss explodes!
+  * The model is forced to spread its mass over everything, creating blurry averages in between modes.
+* **Reverse KL ($D_{\text{KL}}(p_\theta \parallel p_x) = \mathbb{E}_{p_\theta}[\log \frac{p_\theta}{p_x}]$):**
+  * If model generates a cat-dog hybrid where real data is 0 ($p_x \approx 0$), the penalty explodes!
+  * The model protects itself by fitting only one mode perfectly (sharp images, but drops other modes).
 
 ---
 
-### Practical Engineering Scenarios: When to Use Which $f$-Divergence
+### 🛠️ Practical Engineering Scenarios: Which Divergence to Use?
 
 ```
 ══════════════════════════════════════════════════════════════════════════════════════════════════
-                               PRACTICAL SCENARIO SELECTION MATRIX
+                               PRACTICAL SCENARIO SELECTION GUIDE
 ══════════════════════════════════════════════════════════════════════════════════════════════════
- Scenario / Domain                   Recommended Divergence    Technical Rationale
+ Project Goal / Scenario             Best Divergence           Why It Works Best
  ────────────────────────────────────────────────────────────────────────────────────────────────
- Maximum Likelihood / VAE Decoder    Forward KL                Guarantees all data modes are covered;
-                                                               avoids omitting rare training samples.
- Variational Inference (ELBO)        Reverse KL                Tractable expectation under candidate q_θ;
-                                                               locks onto tight posterior approximations.
- Standard GANs (Goodfellow 2014)     Jensen-Shannon (JS)       Symmetric & bounded in [0, log 2]; discriminator
-                                                               acts as smooth density ratio estimator.
- Least Squares GANs (LSGAN)          Pearson χ²                Linear penalty on large errors; prevents vanishing
-                                                               gradients on samples far from real boundary.
- Distribution Drift & Data Quality   Total Variation (TV)      Intuitive interpretation: upper bounds the maximum
-                                                               probability shift on any arbitrary event.
- Robust Anomaly Detection            Squared Hellinger         Bounded metric in [0, 1]; symmetric and heavily
-                                                               resistant to extreme dataset outliers.
- Continuous Tunable Balancing        Alpha-Divergence          Varying α smoothly interpolates between mode-
-                                                               covering (α=1) and mode-seeking (α=0).
+ Maximum Likelihood / VAEs           Forward KL                Ensures all data modes are covered;
+                                                               never drops rare medical disease cases.
+ Variational Inference (ELBO)        Reverse KL                Tractable to compute under candidate q_θ;
+                                                               locks onto tight posterior estimates.
+ Photorealistic Image GANs           Jensen-Shannon (JS)       Symmetric and bounded in [0, log 2];
+                                                               provides smooth gradients to generator.
+ Stable Non-Saturating GANs (LSGAN)  Pearson χ²                Penalizes large errors quadratically;
+                                                               stops gradient vanishing on far-off points.
+ Data Drift Detection in Production  Total Variation (TV)      Directly measures the percentage of
+                                                               shifted probability mass between datasets.
+ Anomaly Detection with Outliers     Squared Hellinger         Bounded in [0, 1]; extremely robust
+                                                               against extreme sensor noise and outliers.
 ══════════════════════════════════════════════════════════════════════════════════════════════════
 ```
 
 ---
 
-### Step-by-Step Numerical Calculations on Discrete Distributions
+### 🔢 Step-by-Step Numerical Calculation (Concrete Numbers)
 
-Let True Distribution $P = [0.8, 0.2]$ and Model Distribution $Q = [0.4, 0.6]$.
+Let True Distribution $P = [0.8, 0.2]$ (80% Class A, 20% Class B)  
+Let Model Distribution $Q = [0.4, 0.6]$ (40% Class A, 60% Class B)
 
-1. **Forward KL:**
-   $$D_{\text{KL}}(P \parallel Q) = 0.8 \ln\left(\frac{0.8}{0.4}\right) + 0.2 \ln\left(\frac{0.2}{0.6}\right) = 0.8 \ln(2) + 0.2 \ln(1/3) = 0.8(0.6931) + 0.2(-1.0986) = 0.5545 - 0.2197 = \mathbf{0.3348}$$
-2. **Reverse KL:**
-   $$D_{\text{KL}}(Q \parallel P) = 0.4 \ln\left(\frac{0.4}{0.8}\right) + 0.6 \ln\left(\frac{0.6}{0.2}\right) = 0.4 \ln(0.5) + 0.6 \ln(3) = 0.4(-0.6931) + 0.6(1.0986) = -0.2772 + 0.6592 = \mathbf{0.3820}$$
-   *(Note: $D_{\text{KL}}(P \parallel Q) \neq D_{\text{KL}}(Q \parallel P)$, numerically proving asymmetry!)*
+1. **Forward KL ($P \parallel Q$):**
+   $$D_{\text{KL}}(P \parallel Q) = 0.8 \ln\left(\frac{0.8}{0.4}\right) + 0.2 \ln\left(\frac{0.2}{0.6}\right) = 0.8 \ln(2) + 0.2 \ln(0.3333) = 0.8(0.6931) + 0.2(-1.0986) = \mathbf{0.3348}$$
+2. **Reverse KL ($Q \parallel P$):**
+   $$D_{\text{KL}}(Q \parallel P) = 0.4 \ln\left(\frac{0.4}{0.8}\right) + 0.6 \ln\left(\frac{0.6}{0.2}\right) = 0.4 \ln(0.5) + 0.6 \ln(3) = 0.4(-0.6931) + 0.6(1.0986) = \mathbf{0.3820}$$
+   *(Notice that $0.3348 \neq 0.3820$, proving asymmetry with real numbers!)*
 3. **Total Variation (TV):**
    $$D_{\text{TV}}(P \parallel Q) = \frac{1}{2}\left( |0.8 - 0.4| + |0.2 - 0.6| \right) = \frac{1}{2}(0.4 + 0.4) = \mathbf{0.4000}$$
 4. **Pearson $\chi^2$:**
@@ -562,49 +542,21 @@ Let True Distribution $P = [0.8, 0.2]$ and Model Distribution $Q = [0.4, 0.6]$.
 
 ---
 
-### Python Verification Script for All $f$-Divergences
-
-```python
-import numpy as np
-
-# Define discrete distributions
-P = np.array([0.8, 0.2])
-Q = np.array([0.4, 0.6])
-
-# Generator functions f(u)
-f_dict = {
-    "Forward KL": lambda u: u * np.log(u),
-    "Reverse KL": lambda u: -np.log(u),
-    "Jensen-Shannon": lambda u: 0.5 * (u * np.log(u) - (u + 1) * np.log((u + 1) / 2.0)),
-    "Total Variation": lambda u: 0.5 * np.abs(u - 1.0),
-    "Pearson Chi-Sq": lambda u: (u - 1.0)**2,
-    "Squared Hellinger": lambda u: (np.sqrt(u) - 1.0)**2
-}
-
-print("--- Numerical Verification of f-Divergence Values ---")
-for name, f_gen in f_dict.items():
-    ratio = P / Q
-    div_val = np.sum(Q * f_gen(ratio))
-    print(f"{name:20s}: {div_val:.4f}")
-```
-
----
-
-## Prerequisite Mastery Matrix
+## 🎯 Prerequisite Mastery Matrix
 
 Check off each item before starting [NOTES.md](./NOTES.md):
 
-- [ ] I understand why population density $p_x$ is never available in closed form.
-- [ ] I can articulate the dual generative requirements: (1) estimate $p_x$ and (2) learn to sample novel points.
-- [ ] I understand that neural network weights $\theta$ define the candidate parametric family $\{p_\theta\}$.
-- [ ] I know that divergences satisfy $D(p \parallel q) \ge 0$ and $D(p \parallel q) = 0 \iff p = q$.
-- [ ] I can explain the pushforward sampling mechanism $Z \sim \mathcal{N}(0, I) \to G_\theta(Z) \sim p_\theta$.
-- [ ] I can write the second-derivative test $f''(u) \ge 0$ and state the supporting hyperplane definition of convexity.
-- [ ] I can walk through the algebraic proof of Jensen's inequality $\mathbb{E}[f(U)] \ge f(\mathbb{E}[U])$ and explain why $f(1)=0$ proves $D_f \ge 0$.
+- [ ] I can explain the difference between the hidden recipe $p_x$ and the pastries on the shelf $\mathcal{D}$.
+- [ ] I know the two jobs: (1) estimate the distribution and (2) synthesize novel samples.
+- [ ] I understand that neural network weights $\theta$ are the adjustable knobs of the parametric model $p_\theta$.
+- [ ] I know that statistical divergences are $\ge 0$, and equal $0$ only when distributions match.
+- [ ] I can describe the pushforward pasta machine: noise $z \to G_\theta(z) \to$ samples $\hat{x}$.
+- [ ] I understand the hanging hammock analogy and can explain why $f''(u) \ge 0$ means convex.
+- [ ] I understand how Jensen's inequality and $f(1)=0$ prove that $D_f \ge 0$.
 - [ ] I can derive Forward KL from $f(u) = u \log u$ by canceling $p_\theta(x)$.
-- [ ] I understand the behavioral difference between mode-covering (Forward KL) and mode-seeking (Reverse KL).
-- [ ] I know the chalkboard generator for Jensen-Shannon divergence and its historical connection to GANs.
+- [ ] I know why Forward KL causes blurry averages and Reverse KL causes mode collapse.
+- [ ] I know that Jensen-Shannon (JS) divergence is the symmetric metric behind Generative Adversarial Networks (GANs).
 
 ---
 
-**You are fully prepared! Proceed to [NOTES.md](./NOTES.md).**
+**You have mastered the foundations! Proceed to [NOTES.md](./NOTES.md).**

@@ -1,0 +1,29 @@
+{
+  "title": "W3L8: GANs as classifier-guided generative sampler",
+  "video_id": "ga8VOW6pPeA",
+  "url": "https://www.youtube.com/watch?v=ga8VOW6pPeA",
+  "duration_seconds": 2489,
+  "channel": "IIT Madras - B.S. Degree Programme",
+  "instructor": "Prof. Prathosh A P (EECS, IISc Bangalore)",
+  "playlist_index": 13,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 10,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "Recap: VDM and where GAN sits",
+    "The classifier-guided reading",
+    "The naive strategy and its one-way truth",
+    "The counterexample: sliding past a fixed boundary",
+    "The fix: retrain the classifier too",
+    "Failure mode: mode collapse and the VDM translation",
+    "Formalizing the classifier: two likelihood objectives",
+    "The combined objective, the inversion, the saddle game",
+    "One math, two lenses — and the lens is not general",
+    "The full story, instability, and what's next"
+  ]
+}
