@@ -292,85 +292,266 @@ assert union == {2, 4, 5, 6}, "Set union failed!"
 
 ---
 
-### <a id="p4-axioms"></a>Pillar 4: Probability Measure $P$ & Axioms
+### <a id="p4-axioms"></a>Pillar 4: Probability Measure $P$, Kolmogorov Axioms & AI Loss Functions
 
 ```
   ===================================================================================================
-                       PILLAR 4: THE THREE KOLMOGOROV PROBABILITY AXIOMS
+                  PILLAR 4: KOLMOGOROV AXIOMS & THE UNIFIED LOSS FUNCTION DERIVATION
   ===================================================================================================
   
    AXIOM 1: NON-NEGATIVITY            AXIOM 2: NORMALIZATION             AXIOM 3: DISJOINT ADDITIVITY
    ┌────────────────────────┐         ┌────────────────────────┐         ┌─────────────────────────┐
    │ P(A) ≥ 0               │         │ P(Ω) = 1.0             │         │ If A ∩ B = ∅:           │
-   │ (No negative chances)  │         │ (Certain universe)     │         │ P(A ∪ B) = P(A) + P(B)  │
-   └────────────────────────┘         └────────────────────────┘         └─────────────────────────┘
+   │ (Prevents complex/NaN) │         │ (Zero-sum budget)      │         │ P(A ∪ B) = P(A) + P(B)  │
+   └───────────┬────────────┘         └───────────┬────────────┘         └────────────┬────────────┘
+               │                                  │                                   │
+               └──────────────────────────────────┼───────────────────────────────────┘
+                                                  ▼
+                               SOFTMAX NORMALIZATION IN NEURAL NETS
+                                   p̂_k = exp(z_k) / Σ_j exp(z_j)
+                                                  │
+                                                  ▼
+                               MAXIMUM LIKELIHOOD ESTIMATION (MLE)
+                                     L(θ) = Π_i p_θ(x_i)
+                                                  │
+                                                  ▼
+                               NEGATIVE LOG-LIKELIHOOD (NLL) LOSS
+                                   NLL(θ) = - 1/n Σ_i ln p_θ(x_i)
+                                                  │
+                                                  ▼
+                                  CATEGORICAL CROSS-ENTROPY LOSS
+                                   H(y, p̂) = - Σ_k y_k ln(p̂_k)
+                                                  │
+                                                  ▼
+                                    FORWARD KL DIVERGENCE
+                            D_KL(p_data || p_θ) = argmin_θ H(p_data, p_θ)
   ===================================================================================================
 ```
 
-#### 1. 👶 ELI5 Intuition: Slicing a Complete Birthday Cake
-Imagine a whole birthday cake representing all possibilities.
-1. **Axiom 1 (Non-negativity):** You cannot give someone a negative slice of cake (every slice size $\ge 0$).
-2. **Axiom 2 (Normalization):** The entire cake equals $1.0$ (100% of the cake).
-3. **Axiom 3 (Disjoint Additivity):** If you cut two completely separate slices that do not overlap, the total cake you hold is simply the sum of Slice A plus Slice B!
+#### 1. 👶 ELI5 Intuition: The $100 Budget & Slicing a Complete Birthday Cake
+Imagine you are given a strict financial allowance of **exactly $100** to distribute among all possible outcomes in your company:
+1. **Axiom 1 (Non-negativity):** You cannot allocate a negative budget (you cannot give $-\$50$ to Marketing). Every department must receive $\ge \$0$.
+2. **Axiom 2 (Normalization / Bounded Budget):** The sum of all allocations across all departments must equal **exactly $100$**. If you want to increase Research & Development from $\$20$ to $\$80$, you are **forced** to reduce Marketing and Sales! There is no free money.
+3. **Axiom 3 (Disjoint Additivity):** If two events cannot happen at the same time (e.g. either Team A wins OR Team B wins), the budget for "Team A or Team B winning" is simply Budget(A) + Budget(B).
 
-#### 2. 🔍 Plain-English Breakdown
-Kolmogorov established that all of probability theory rests upon three simple rules:
-- **Axiom 1 (Non-Negativity):** Every event $A$ has a probability greater than or equal to zero: $P(A) \ge 0$.
-- **Axiom 2 (Normalization):** The total probability of the entire sample space $\Omega$ is exactly 1: $P(\Omega) = 1$.
-- **Axiom 3 (Countable Additivity):** For any collection of mutually exclusive (non-overlapping) events $A_1, A_2, \dots$:
-  $$P(A_1 \cup A_2 \cup \dots) = P(A_1) + P(A_2) + \dots$$
+> 💡 **The Great AI Connection:** In AI, a neural network is an optimizer allocating a total confidence budget of **$1.0$ (100%)** across candidate answers (e.g. Cat vs Dog vs Horse, or the next token in ChatGPT). The **Softmax function** is the mathematical machine that enforces these exact three rules!
 
-#### 3. 📐 Formal Mathematics
-$$P: \mathcal{F} \to [0, 1]$$
-$$\text{1. } \forall A \in \mathcal{F}, \; P(A) \ge 0$$
-$$\text{2. } P(\Omega) = 1$$
-$$\text{3. } A_i \cap A_j = \emptyset \; (\forall i \neq j) \implies P\left(\bigcup_{i=1}^\infty A_i\right) = \sum_{i=1}^\infty P(A_i)$$
-$$\text{Consequence (Inclusion-Exclusion): } P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+---
+
+#### 2. 🔍 Plain-English Breakdown: Why These Axioms Are Mandatory for AI
+In 1933, Andrey Kolmogorov proved that all of probability theory rests upon three simple rules. In machine learning, these are not just abstract mathematical decorations—**without them, every single AI loss function collapses into catastrophic failure**:
+
+1. **Why We Need Axiom 1 ($P(A) \ge 0$):**
+   - In neural networks, loss functions evaluate the natural logarithm of model confidence: $\ln(p_\theta(x))$.
+   - If $p_\theta(x) < 0$, the logarithm $\ln(\text{negative number})$ is mathematically undefined in real numbers (it produces complex numbers or `NaN`), instantly crashing backpropagation and gradient descent.
+
+2. **Why We Need Axiom 2 ($P(\Omega) = 1.0$) — The Zero-Sum Economy:**
+   - Without normalization ($\sum p_k = 1.0$), a neural network can **trivially cheat the training loss**!
+   - Suppose a model tries to maximize likelihood $p_\theta(x)$ without the constraint $\sum p_k = 1.0$.
+   - The neural network would simply scale its weights to infinity: $p_\theta(\text{cat}) = 1,000,000$, $p_\theta(\text{dog}) = 1,000,000$.
+   - The loss $-\ln(p_\theta(x))$ would equal $-\ln(1,000,000) = -13.8$ (negative loss approaching $-\infty$). The model gets an "A+" on the loss function while having learned **zero** discriminating ability!
+   - **Axiom 2 forces competition:** To increase confidence on the true label ($p_\theta(\text{cat}) \to 1.0$), the model is strictly forced to suppress all wrong labels ($p_\theta(\text{dog}) \to 0.0$).
+
+3. **Why We Need Axiom 3 ($P(A \cup B) = P(A) + P(B)$ for disjoint events):**
+   - Guarantees that probabilities across mutually exclusive classes are strictly conservative and additive without double-counting.
+   - Allows computing marginal probabilities: $P(Y = \text{cat}) = \sum_z P(Y = \text{cat}, Z = z)$.
+
+---
+
+#### 3. 📐 Formal Mathematical Derivation: Connecting Axioms to AI Loss Functions
+
+Here is the complete, rigorous mathematical bridge showing how Kolmogorov Axioms create the loss functions powering all modern deep learning and generative models:
+
+##### Step 1: Enforcing Kolmogorov Axioms via the Softmax Operator
+Let a deep neural network produce unconstrained real-valued logits $z = [z_1, z_2, \dots, z_K]^\top \in \mathbb{R}^K$ for $K$ mutually exclusive classes. To map $z$ to a valid Kolmogorov probability distribution vector $\hat{p} = [\hat{p}_1, \dots, \hat{p}_K]^\top$, we apply the **Softmax function**:
+
+$$\hat{p}_k = \frac{\exp(z_k)}{\sum_{j=1}^K \exp(z_j)}$$
+
+- **Axiom 1 Verified:** Since $\exp(z_k) > 0$ for all real $z_k \in \mathbb{R}$, $\hat{p}_k > 0$ (Non-negativity guaranteed).
+- **Axiom 2 Verified:** $\sum_{k=1}^K \hat{p}_k = \frac{\sum_{k=1}^K \exp(z_k)}{\sum_{j=1}^K \exp(z_j)} = 1.0$ (Normalization guaranteed).
+- **Axiom 3 Verified:** For any two disjoint classes $i \neq j$, $P(\{i\} \cup \{j\}) = \hat{p}_i + \hat{p}_j$.
+
+---
+
+##### Step 2: Joint Likelihood & Maximum Likelihood Estimation (MLE)
+Given an empirical training dataset of $n$ independent and identically distributed (IID) samples $D = \{x_1, x_2, \dots, x_n\} \sim p_{\text{data}}$, the joint probability under our parametric model $p_\theta$ is the **Likelihood Function**:
+
+$$L(\theta) = P(D \mid \theta) = \prod_{i=1}^n p_\theta(x_i)$$
+
+The principle of **Maximum Likelihood Estimation (MLE)** seeks the optimal parameter vector $\theta^*$ that maximizes this joint probability:
+
+$$\theta^*_{\text{MLE}} = \arg\max_{\theta \in \Theta} \prod_{i=1}^n p_\theta(x_i)$$
+
+---
+
+##### Step 3: From Likelihood to Negative Log-Likelihood (NLL)
+Multiplying thousands of small probabilities ($p_i \in (0, 1)$) causes arithmetic **underflow** to absolute zero on computer hardware. Because the natural logarithm $\ln(\cdot)$ is a strictly monotonic increasing function:
+$$\arg\max_\theta L(\theta) \equiv \arg\max_\theta \ln L(\theta)$$
+
+Taking the log converts the product of probabilities into a sum:
+$$\ln L(\theta) = \ln \left( \prod_{i=1}^n p_\theta(x_i) \right) = \sum_{i=1}^n \ln p_\theta(x_i)$$
+
+Because optimization algorithms (Gradient Descent, Adam, RMSProp) are built to **minimize** costs rather than maximize, we negate the objective to define the **Negative Log-Likelihood (NLL) Loss**:
+
+$$\mathcal{L}_{\text{NLL}}(\theta) \triangleq - \frac{1}{n} \sum_{i=1}^n \ln p_\theta(x_i)$$
+
+---
+
+##### Step 4: Connecting Negative Log-Likelihood to Categorical Cross-Entropy
+In supervised multi-class classification, each data sample has a ground-truth target vector $y = [y_1, \dots, y_K]^\top \in \{0, 1\}^K$ formatted as a **one-hot vector** (where $y_c = 1$ for true class $c$, and $y_k = 0$ for all $k \neq c$).
+
+The **Cross-Entropy Loss** between true one-hot distribution $y$ and model distribution $\hat{p}$ is defined as:
+
+$$\mathcal{L}_{\text{CE}}(y, \hat{p}) \triangleq - \sum_{k=1}^K y_k \ln \hat{p}_k$$
+
+Notice what happens when we evaluate this sum:
+$$\mathcal{L}_{\text{CE}}(y, \hat{p}) = - \Big( 0 \cdot \ln \hat{p}_1 + \dots + \underbrace{1 \cdot \ln \hat{p}_c}_{\text{True Class } c} + \dots + 0 \cdot \ln \hat{p}_K \Big) = -\ln \hat{p}_c$$
+
+$$\mathbf{\text{Grand Insight: }} \mathcal{L}_{\text{CE}}(y, \hat{p}) \equiv -\ln p_\theta(y = c \mid x) \equiv \mathcal{L}_{\text{NLL}}(\theta)$$
+
+> 🎯 **Cross-Entropy Loss is simply Negative Log-Likelihood evaluated on discrete categorical distributions!**
+
+---
+
+##### Step 5: Connecting Cross-Entropy to Forward Kullback-Leibler (KL) Divergence
+How does this connect to continuous Generative AI (VAEs, Diffusion, LLMs)?
+The **Kullback-Leibler (KL) Divergence** measures the statistical distance from the true data distribution $p_{\text{data}}$ to our model family $p_\theta$:
+
+$$D_{\text{KL}}(p_{\text{data}} \parallel p_\theta) \triangleq \int p_{\text{data}}(x) \ln \left( \frac{p_{\text{data}}(x)}{p_\theta(x)} \right) dx = \mathbb{E}_{x \sim p_{\text{data}}}\left[ \ln p_{\text{data}}(x) - \ln p_\theta(x) \right]$$
+
+Expanding the expectation:
+$$D_{\text{KL}}(p_{\text{data}} \parallel p_\theta) = \underbrace{\mathbb{E}_{x \sim p_{\text{data}}}[\ln p_{\text{data}}(x)]}_{- H(p_{\text{data}}) \text{ (Constant Entropy of Nature)}} - \underbrace{\mathbb{E}_{x \sim p_{\text{data}}}[\ln p_\theta(x)]}_{- H(p_{\text{data}}, p_\theta) \text{ (Cross-Entropy)}}$$
+
+$$D_{\text{KL}}(p_{\text{data}} \parallel p_\theta) = - H(p_{\text{data}}) + H(p_{\text{data}}, p_\theta)$$
+
+Since the true data entropy $H(p_{\text{data}})$ does **not depend on our model parameters $\theta$**:
+
+$$\arg\min_\theta D_{\text{KL}}(p_{\text{data}} \parallel p_\theta) \equiv \arg\min_\theta H(p_{\text{data}}, p_\theta) \equiv \arg\min_\theta \left( - \mathbb{E}_{x \sim p_{\text{data}}}[\ln p_\theta(x)] \right) \approx \arg\min_\theta \left( -\frac{1}{n} \sum_{i=1}^n \ln p_\theta(x_i) \right)$$
+
+$$\mathbf{\text{THE GRAND UNIFIED EQUIVALENCE:}}$$
+$$\boxed{\arg\min_\theta D_{\text{KL}}(p_{\text{data}} \parallel p_\theta) \equiv \arg\min_\theta \mathcal{L}_{\text{Cross-Entropy}} \equiv \arg\min_\theta \mathcal{L}_{\text{NLL}} \equiv \arg\max_\theta \mathcal{L}_{\text{MLE}}}$$
+
+---
 
 #### 4. 🎯 Why We Are Doing This & What We Are Learning
-- **Why?** To understand the mathematical guarantees that keep AI loss functions (cross-entropy, log-likelihood) mathematically bounded and valid.
-- **What are we learning?** How to calculate probabilities for both disjoint and overlapping events without double-counting.
+- **Why?** Because software engineers often treat Cross-Entropy, NLL, MLE, and KL Divergence as four separate, confusing loss functions.
+- **What are we learning?** They are all **the exact same mathematical operation** viewed through different lenses:
+  * In statistics: It is **Maximum Likelihood Estimation (MLE)**.
+  * In optimization: It is **Negative Log-Likelihood (NLL)**.
+  * In deep classification: It is **Categorical Cross-Entropy**.
+  * In information theory & Generative AI: It is **Forward KL Divergence Minimization**.
+  * And every single one of them relies directly on the **three Kolmogorov Axioms**!
 
-#### 5. 🔗 Connecting the Dots
-In Topic 8 of Lecture 01, we use these axioms to prove that $P(\emptyset) = 0$ and $P(A^c) = 1 - P(A)$, showing why neural network Softmax outputs must sum to $1.0$.
-
-#### 6. 🌐 Real-World Production Scenario
-In classification neural networks, the final Softmax layer converts logits $z \in \mathbb{R}^K$ into a valid probability distribution vector $\hat{p} \in [0, 1]^K$ satisfying $\sum_k \hat{p}_k = 1.0$ (Axiom 2).
-
-#### 7. 🔢 Concrete Numerical Micro-Example
-Fair 6-sided die: $P(\{k\}) = 1/6$ for all $k \in \{1, 2, 3, 4, 5, 6\}$.
-- Let $A = \{2, 4, 6\}$ (Even) $\implies P(A) = 3/6 = 1/2$.
-- Let $B = \{1\}$ $\implies P(B) = 1/6$.
-- Since $A \cap B = \emptyset$, $P(A \cup B) = P(A) + P(B) = 1/2 + 1/6 = 4/6 = 2/3$.
-- Let $C = \{5, 6\}$ (High) $\implies P(A \cap C) = P(\{6\}) = 1/6$.
-- $P(A \cup C) = P(A) + P(C) - P(A \cap C) = 3/6 + 2/6 - 1/6 = 4/6 = 2/3$.
-
-#### 8. 💻 Runnable Python / NumPy Snippet
-```python
-import numpy as np
-
-# Simulating die rolls to verify Kolmogorov Axioms
-n_trials = 100_000
-rolls = np.random.randint(1, 7, size=n_trials)
-
-# Axiom 1: Non-negativity
-p_even = np.mean(np.isin(rolls, [2, 4, 6]))
-p_one  = np.mean(rolls == 1)
-print(f"P(Even): {p_even:.4f} >= 0 (Axiom 1 Valid)")
-print(f"P(One):  {p_one:.4f} >= 0 (Axiom 1 Valid)")
-
-# Axiom 3: Disjoint Additivity for Even ∪ {1}
-p_even_or_one = np.mean(np.isin(rolls, [1, 2, 4, 6]))
-print(f"Empirical P(Even ∪ {{1}}): {p_even_or_one:.4f}")
-print(f"Sum P(Even) + P(One):      {p_even + p_one:.4f}")
-assert np.isclose(p_even_or_one, p_even + p_one, atol=0.01), "Axiom 3 violated!"
+```
+                  THE ZERO-SUM ECONOMY OF SOFTMAX (AXIOM 2 IN ACTION)
+                  
+   Unconstrained Logits z ∈ ℝ^3               Softmax Probabilities p̂ ∈ [0, 1]^3
+   ┌───────────────────────────┐              ┌──────────────────────────────────────┐
+   │ Class 1 (Cat):    z_1 = 3 │ ── Softmax ─►│ p̂_1 = exp(3) / Σ = 20.08 / 23.39=0.86│ ──┐
+   │ Class 2 (Dog):    z_2 = 1 │    Machine   │ p̂_2 = exp(1) / Σ =  2.72 / 23.39=0.11│  │ Sum = 1.0
+   │ Class 3 (Horse):  z_3 = 0 │              │ p̂_3 = exp(0) / Σ =  1.00 / 23.39=0.04│ ──┘ (Axiom 2)
+   └───────────────────────────┘              └──────────────────────────────────────┘
+                                                                 │
+                                    Loss = - ln(p̂_cat) = - ln(0.86) = 0.15
+                                    If model increases p̂_cat to 0.99,
+                                    Dog and Horse are FORCED to drop to 0.01!
 ```
 
+---
+
+#### 5. 🔗 Connecting the Dots: From Foundations to Advanced Generative Models
+1. **Lecture 01 (Foundations):** Introduces Kolmogorov Axioms $P(A) \ge 0$, $P(\Omega) = 1$, and $P(A \cup B) = P(A) + P(B)$.
+2. **Lecture 02 (Problem Formulation):** Shows that all generative modeling minimizes a divergence $d(p_{\text{data}}, p_\theta)$.
+3. **Lecture 03 ($f$-Divergence) & Lecture 04 (VDM):** Generalizes KL divergence to the broad family of $f$-divergences.
+4. **Lecture 05 & Beyond (GANs, VAEs, Diffusion):**
+   - **Autoregressive LLMs (GPT-4/Claude):** Directly minimize Cross-Entropy (NLL) token-by-token.
+   - **VAEs:** Maximize the Evidence Lower Bound (ELBO), which is a variational lower bound on $\ln p_\theta(x)$.
+   - **Diffusion Models:** Minimize the variational bound on negative log-likelihood via score matching $\mathbb{E}[\|\epsilon - \epsilon_\theta(x_t, t)\|^2]$.
+
+---
+
+#### 6. 🌐 Real-World Production Scenarios & Industry Architectures
+
+##### Scenario A: Large Language Model (LLM) Next-Token Generation
+When an LLM (such as Llama 3 or GPT-4) generates text, it outputs a logit vector over a vocabulary of $V = 128,000$ tokens:
+1. Softmax converts $z \in \mathbb{R}^{128000}$ into a valid Kolmogorov distribution $\hat{p} \in [0, 1]^{128000}$ where $\sum_{v=1}^{128000} \hat{p}_v = 1.0$.
+2. The training objective is **Cross-Entropy / NLL**: $\mathcal{L} = -\ln \hat{p}_{w_{t+1}}$ for the target token $w_{t+1}$.
+3. During inference, the temperature parameter $T$ scales logits: $\hat{p}_v = \frac{\exp(z_v / T)}{\sum_j \exp(z_j / T)}$. As $T \to 0$, the probability mass collapses to an argmax one-hot distribution (greedy sampling).
+
+##### Scenario B: Medical Diagnosis & Multi-Label vs Multi-Class Pitfall
+- **Multi-Class (Mutually Exclusive):** A patient has strictly one primary tumor grade (Grade 1 vs 2 vs 3). The classes are disjoint ($A \cap B = \emptyset$). We use **Softmax + Cross-Entropy** ($\sum p_k = 1.0$).
+- **Multi-Label (Non-Disjoint):** A patient can have BOTH Pneumonia AND COVID-19 simultaneously ($A \cap B \neq \emptyset$). Using Softmax here violates Axiom 3 because the events are not mutually exclusive! In production, we replace Softmax with independent **Sigmoids + Binary Cross-Entropy (BCE)** per disease.
+
+---
+
+#### 7. 🔢 Concrete Numerical Micro-Example: Hand-Calculating Loss & Equivalence
+
+Let true class be **Cat** ($y = [1, 0, 0]^\top$).  
+Suppose the neural network outputs raw logits: $z = [2.0, 0.5, -1.0]^\top$.
+
+1. **Exponentiate logits:**
+   - $\exp(2.0) \approx 7.389$
+   - $\exp(0.5) \approx 1.649$
+   - $\exp(-1.0) \approx 0.368$
+   - Normalization Denominator $\sum = 7.389 + 1.649 + 0.368 = 9.406$
+
+2. **Compute Kolmogorov Probabilities via Softmax:**
+   - $\hat{p}_{\text{cat}} = 7.389 / 9.406 \approx \mathbf{0.7856}$
+   - $\hat{p}_{\text{dog}} = 1.649 / 9.406 \approx \mathbf{0.1753}$
+   - $\hat{p}_{\text{horse}} = 0.368 / 9.406 \approx \mathbf{0.0391}$
+   - Verification (Axiom 2): $0.7856 + 0.1753 + 0.0391 = \mathbf{1.0000}$ ✅
+
+3. **Compute Losses:**
+   - **Categorical Cross-Entropy:** $\mathcal{L}_{\text{CE}} = - (1 \cdot \ln(0.7856) + 0 + 0) = -(-0.2413) = \mathbf{0.2413}$
+   - **Negative Log-Likelihood:** $\mathcal{L}_{\text{NLL}} = -\ln \hat{p}_{\text{true}} = -\ln(0.7856) = \mathbf{0.2413}$
+   - **Both losses yield the exact same value: $0.2413$!**
+
+---
+
+#### 8. 💻 Runnable Python / PyTorch Snippet: Proving the Equivalence in Code
+
+```python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+# 1. Raw neural network logits for a single sample (Cat, Dog, Horse)
+logits = torch.tensor([[2.0, 0.5, -1.0]], dtype=torch.float32, requires_grad=True)
+true_class = torch.tensor([0]) # Index 0 = Cat
+
+# 2. Method A: Built-in PyTorch CrossEntropyLoss
+ce_loss_fn = nn.CrossEntropyLoss()
+loss_ce = ce_loss_fn(logits, true_class)
+
+# 3. Method B: Manual Softmax (Kolmogorov Axioms) + NLL Loss
+probs = F.softmax(logits, dim=-1) # Axioms 1 & 2: Probs >= 0, Sum == 1.0
+log_probs = torch.log(probs)
+loss_nll = F.nll_loss(log_probs, true_class)
+
+# 4. Method C: Manual KL Divergence from one-hot target
+target_one_hot = torch.tensor([[1.0, 0.0, 0.0]])
+loss_kl = F.kl_div(log_probs, target_one_hot, reduction='batchmean')
+
+print("--- LOSS EQUIVALENCE VERIFICATION ---")
+print(f"1. PyTorch CrossEntropyLoss:        {loss_ce.item():.6f}")
+print(f"2. Manual Softmax + NLL Loss:       {loss_nll.item():.6f}")
+print(f"3. Forward KL Divergence to One-Hot: {loss_kl.item():.6f}")
+
+# Verify exact mathematical equivalence
+assert torch.isclose(loss_ce, loss_nll), "Cross-Entropy and NLL do not match!"
+assert torch.isclose(loss_ce, loss_kl), "Cross-Entropy and KL Divergence do not match!"
+print("\n[SUCCESS] Mathematical Equivalence Proven 100% in PyTorch!")
+```
+
+---
+
 #### 9. 🧠 Diagnostic Mini-Checks
-1. **Q:** Why can we NOT compute $P(A \cup B) = P(A) + P(B)$ if $A$ and $B$ overlap?  
-   *Answer:* Because the elements in $A \cap B$ would be added twice (double-counted).
-2. **Q:** What is the value of $P(A) + P(A^c)$ for any event $A$?  
-   *Answer:* Exactly 1.0, because $A$ and its complement $A^c$ are disjoint and partition $\Omega$.
+1. **Q:** What would happen during gradient descent if a model could output $\sum_k \hat{p}_k = 1000$ instead of $1.0$?  
+   *Answer:* The model would minimize Negative Log-Likelihood by scaling all probabilities to infinity without learning meaningful representations (The Cheating Model Paradox).
+2. **Q:** Why is Cross-Entropy loss mathematically identical to Negative Log-Likelihood for one-hot classification?  
+   *Answer:* Because one-hot targets have $y_{\text{true}} = 1$ and $y_{\text{other}} = 0$, reducing $\mathcal{L}_{\text{CE}} = -\sum y_k \ln \hat{p}_k$ strictly to $-\ln \hat{p}_{\text{true}}$.
+3. **Q:** Why does multi-label classification require Sigmoids instead of Softmax?  
+   *Answer:* Because non-mutually exclusive events can occur together ($A \cap B \neq \emptyset$), which violates the disjoint additivity assumption (Axiom 3) enforced by Softmax.
 
 ---
 
