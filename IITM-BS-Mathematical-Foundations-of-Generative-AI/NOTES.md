@@ -14,6 +14,7 @@ This file is the **course map + catalog**. Per-lecture study packages (`PREREQUI
 | 2          | W1_L2 Introduction & problem setting                                      | [`01-W1-L2-Introduction-Problem-Setting/`](./01-W1-L2-Introduction-Problem-Setting/)                                 |
 | 3          | W1_L3 (YouTube title: F-divergence;**recording is PyTorch tensors**)      | [`02-W1-L3-F-Divergence/`](./02-W1-L3-F-Divergence/)                                                                 |
 | 4          | W1_L4 Variational divergence minimization                                 | [`03-W1-L4-Variational-Divergence-Minimization/`](./03-W1-L4-Variational-Divergence-Minimization/)                   |
+| 5          | W1_T1 Tutorial 1: Forward pass & backprop *(recording: f-Div Minimization)* | [`04-W1-T1-Forward-Pass-Backpropagation/`](./04-W1-T1-Forward-Pass-Backpropagation/)                                 |
 | 6          | W1_T2 Introduction to pytorch: tensors*(recording: Dataset / DataLoader)* | [`04-W1-T2-Introduction-to-PyTorch-Tensors/`](./04-W1-T2-Introduction-to-PyTorch-Tensors/)                           |
 | 9          | W2_L5 (YouTube title: VDM;**recording is MLP forward/backprop**)          | [`07-W2-L5-Generative-Modelling-via-VDM/`](./07-W2-L5-Generative-Modelling-via-VDM/)                                 |
 | 10         | W2_L6 Generative adversarial networks: introduction                       | [`08-W2-L6-Generative-Adversarial-Networks-Introduction/`](./08-W2-L6-Generative-Adversarial-Networks-Introduction/) |

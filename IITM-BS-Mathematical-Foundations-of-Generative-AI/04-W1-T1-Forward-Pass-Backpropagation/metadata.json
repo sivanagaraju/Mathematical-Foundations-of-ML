@@ -4,7 +4,26 @@
   "url": "https://www.youtube.com/watch?v=VxRIqenOoQw",
   "duration_seconds": 2570,
   "channel": "IIT Madras - B.S. Degree Programme",
-  "description": "Welcome to Week 1 Tutorial 1 on the course \"Generative AI\" by Prof. Prathosh A P.\nFull Course: https://study.iitm.ac.in/ds/course_pages/BSDA5002.html \n\nVideo Overview\nThis tutorial provides a foundational understanding of Multi-Layer Perceptrons (MLPs) and their role in supervised learning. We'll cover the basic MLP structure, delve into the forward pass with detailed calculations, and explore the concept of backpropagation using gradient descent to minimize error. This session assumes basic knowledge of MLPs and regression tasks.\n\nAbout IIT Madras' online Bachelor of Science programme\nIIT Madras offers four-year BS programmes that aim to provide quality education to all, irrespective of age, educational background, or location. The BS programme has multiple levels, which provide flexibili",
+  "instructor": "IITM BS tutorial (Chandan / TA); course Prof. Prathosh A. P.",
+  "description": "Week 1 Tutorial 1: Algorithm for f-divergence minimization via variational lower bounds and Fenchel conjugates (F-GAN foundation). Note: YouTube video is titled 'Forward pass & backpropagation' by the channel, but the lecture content covers f-divergence minimization, Fenchel duality, LOTUS, and Variational Divergence Estimation.",
   "playlist_index": 5,
-  "chapter_count": 0
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 8,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "course_short": "IITM-BS-MFGAI",
+  "topics": [
+    "The Generative Setup and f-Divergence Objective",
+    "The Intractability Bottleneck: Unknown Densities and High Dimensions",
+    "The Statistical Bridge: LOTUS and Monte Carlo Sample Averages",
+    "The Entanglement Obstacle: Trapped Density Ratios",
+    "Convex Functions and the Fenchel Conjugate",
+    "Biconjugacy: Reconstructing Functions via Supporting Hyperplanes",
+    "Swapping Supremum and Integral: Lifting Scalars to Function Space",
+    "The Variational Lower Bound and Expectation-Based Optimization"
+  ]
 }
