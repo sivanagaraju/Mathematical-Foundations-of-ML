@@ -187,6 +187,21 @@ Ordinary nets already cannot hunt a global min in a trillion-parameter Hessian. 
 
 ---
 
+## 📐 Chalkboard & PyTorch Rosetta Stone
+
+| Symbol / Term | Theoretical / Chalkboard Meaning | PyTorch / Software Implementation | Role in Training Loop | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| **$p_x$** | True data distribution on $\mathbb{R}^d$ | `real_batch = next(dataloader)` | The ground-truth distribution to match | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| **$p_\theta$** | Push-forward distribution $G_\theta(z)$ | `fake_batch = generator(z)` | The generated synthetic sample manifold | [Autoregressive Models](../../../MathsTerms/Autoregressive_Models.md) |
+| **$D_f(P \parallel Q)$** | Classical $f$-divergence (KL, JSD) | Saturates on disjoint manifolds | Unstable yardstick; zero gradient when supports miss | [f-Divergence](../../../MathsTerms/f_Divergence.md) |
+| **$W_1(P, Q)$** | Wasserstein-1 Distance (Earth-Mover) | `loss = -(real_score.mean() - fake_score.mean())` | Primal transport cost; provides constant clean slope | [Wasserstein Distance & EMD](../../../MathsTerms/Wasserstein_Distance_and_EMD.md) |
+| **$\pi / \gamma$** | Joint transport plan in $\Pi(P, Q)$ | Coupling matrix with fixed marginals | Conservation of mass transport allocation | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| **$T_w(x)$** | 1-Lipschitz Critic Net | `critic = nn.Sequential(...)` | Unbounded scalar potential scorer; slope $\le 1$ | [Batch Normalization & Spectral Norm](../../../MathsTerms/Batch_Normalization_and_Spectral_Norm.md) |
+| **$\|W\|_2 \le 1$** | Spectral Norm / 1-Lipschitz Bound | `torch.nn.utils.spectral_norm(layer)` | Prevents critic gradient explosion; guarantees KR duality | [Batch Normalization & Spectral Norm](../../../MathsTerms/Batch_Normalization_and_Spectral_Norm.md) |
+| **$\text{Saddle}$** | $\min_\theta \max_{w: \|T_w\|_L \le 1} J(\theta, w)$ | WGAN Alternating Minimax Loop | Finds equilibrium between Generator and 1-Lipschitz Critic | [Fenchel Conjugate & Dual Representations](../../../MathsTerms/Fenchel_Conjugate_and_Dual_Representations.md) |
+
+---
+
 ## Topic 1: Agenda still a saddle; Hessian; stop on surrogates (00:02–08:33)
 
 ### Where this sits on the master map

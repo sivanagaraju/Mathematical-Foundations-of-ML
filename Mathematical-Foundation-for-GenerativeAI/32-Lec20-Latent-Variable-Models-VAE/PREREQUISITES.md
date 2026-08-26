@@ -41,6 +41,21 @@ This hour is **chalk**, not a Colab. He derives why a hidden $z$ forces a **lowe
 
 ---
 
+## 🪨 Latent Variable Models & VAE Rosetta Stone
+
+| Symbol / Term | Theoretical Concept | Plain-English Software Meaning | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- |
+| **$x \in \mathcal{X}$** | Observed Data Point | Visible pixel tensor in dataset | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| **$z \in \mathcal{Z}$** | Latent Random Variable | Unobserved hidden recipe / code vector | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| **$p_\theta(x, z)$** | Generative Joint Distribution | Model probability of pair $(x, z) = p_\theta(x \mid z) p(z)$ | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| **$p_\theta(x) = \int p_\theta(x, z) dz$** | Marginal Likelihood (Evidence) | Total observable evidence across all possible hidden causes | [Likelihood & Log-Likelihood](../../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
+| **$p_\theta(z \mid x)$** | True Intractable Posterior | Exact posterior probability of code $z$ given image $x$ | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| **$q_\phi(z \mid x)$** | Variational Posterior (Encoder) | Neural approximation parameterized by $\mu_\phi(x), \sigma_\phi^2(x)$ | [ELBO & Variational Inference](../../../MathsTerms/ELBO_and_Variational_Inference.md) |
+| **$\mathcal{L}_{\text{ELBO}}(\theta, \phi; x)$** | Evidence Lower Bound | Tractable lower bound $\le \ln p_\theta(x)$ optimized by gradient ascent | [ELBO & Variational Inference](../../../MathsTerms/ELBO_and_Variational_Inference.md) |
+| **$D_{\text{KL}}(q_\phi \parallel p)$** | Kullback-Leibler Divergence | Information penalty regularizing latent space towards prior | [KL Divergence](../../../MathsTerms/KL_Divergence.md) |
+
+---
+
 ## 1. Observed vs latent
 
 <a id="p1-observed-latent"></a>

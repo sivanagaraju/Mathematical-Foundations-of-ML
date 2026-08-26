@@ -185,19 +185,19 @@ This 48-minute tutorial delivers the complete proof mechanics and numerical vali
 
 This reference table maps statistical proof symbols directly to Python implementations and tutorial chalkboard usage.
 
-| Symbol / Syntax | Formal Concept | Python / SciPy Implementation | Tutorial Usage & Context |
-| :--- | :--- | :--- | :--- |
-| $P, Q$ | Probability Measures / Laws | `p_dist, q_dist` | The distributions being compared in $D_f(P \parallel Q)$. |
-| $p(x), q(x)$ | Probability Density Functions | `p_pdf(x), q_pdf(x)` | Continuous density heights used in the integral $\int q f(p/q) dx$. |
-| $R(x) = \frac{p(x)}{q(x)}$ | Likelihood / Density Ratio | `r = p / q` | The random variable $R$ whose expectation is evaluated under $Q$. |
-| $P \ll Q$ | Absolute Continuity | `assert np.all((q == 0) <= (p == 0))` | The mathematical license allowing division $p(x)/q(x)$. |
-| $f(u)$ | Convex Generator Function | `f = lambda u: u * np.log(u)` | Function defining the spring tension ($f''(u) \ge 0, f(1) = 0$). |
-| $\mathbb{E}_{x \sim Q}[f(R(x))]$ | Expectation under Measure $Q$ | `np.sum(q * f(r))` | The expectation form of $f$-divergence: $D_f(P \parallel Q)$. |
-| $Q\text{-almost surely}$ | Equality off $Q$-Null Sets | `np.allclose(p, q)` | The exact condition for $D_f(P \parallel Q) = 0 \iff P = Q$. |
-| $D_{\text{KL}}(P \parallel Q)$ | Forward KL Divergence | `scipy.stats.entropy(p, q)` | $f(u) = u \ln u$; equivalent to Maximum Likelihood. |
-| $D_{\text{RKL}}(P \parallel Q)$ | Reverse KL Divergence | `scipy.stats.entropy(q, p)` | $f(u) = -\ln u$; equivalent to $D_{\text{KL}}(Q \parallel P)$. |
-| $\text{TV}(P, Q)$ | Total Variation Distance | `0.5 * np.sum(np.abs(p - q))` | $f(u) = \frac{1}{2}|u - 1|$; true distance metric on distributions. |
-| $\text{JSD}(P \parallel Q)$ | Jensen-Shannon Divergence | `scipy.spatial.distance.jensenshannon(p, q)**2` | Symmetric mixture divergence bounded in $[0, \ln 2]$. |
+| Symbol / Syntax | Formal Concept | Python / SciPy Implementation | Tutorial Usage & Context | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| $P, Q$ | Probability Measures / Laws | `p_dist, q_dist` | The distributions being compared in $D_f(P \parallel Q)$. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $p(x), q(x)$ | Probability Density Functions | `p_pdf(x), q_pdf(x)` | Continuous density heights used in the integral $\int q f(p/q) dx$. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| $R(x) = \frac{p(x)}{q(x)}$ | Likelihood / Density Ratio | `r = p / q` | The random variable $R$ whose expectation is evaluated under $Q$. | [f-Divergence](../../../MathsTerms/f_Divergence.md) |
+| $P \ll Q$ | Absolute Continuity | `assert np.all((q == 0) <= (p == 0))` | The mathematical license allowing division $p(x)/q(x)$. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $f(u)$ | Convex Generator Function | `f = lambda u: u * np.log(u)` | Function defining the spring tension ($f''(u) \ge 0, f(1) = 0$). | [f-Divergence](../../../MathsTerms/f_Divergence.md) |
+| $\mathbb{E}_{x \sim Q}[f(R(x))]$ | Expectation under Measure $Q$ | `np.sum(q * f(r))` | The expectation form of $f$-divergence: $D_f(P \parallel Q)$. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| $Q\text{-almost surely}$ | Equality off $Q-Null$ Sets | `np.allclose(p, q)` | The exact condition for $D_f(P \parallel Q) = 0 \iff P = Q$. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $D_{\text{KL}}(P \parallel Q)$ | Forward KL Divergence | `scipy.stats.entropy(p, q)` | $f(u) = u \ln u$; equivalent to Maximum Likelihood. | [KL Divergence](../../../MathsTerms/KL_Divergence.md) |
+| $D_{\text{RKL}}(P \parallel Q)$ | Reverse KL Divergence | `scipy.stats.entropy(q, p)` | $f(u) = -\ln u$; equivalent to $D_{\text{KL}}(Q \parallel P)$. | [KL Divergence](../../../MathsTerms/KL_Divergence.md) |
+| $\text{TV}(P, Q)$ | Total Variation Distance | `0.5 * np.sum(np.abs(p - q))` | $f(u) = \frac{1}{2}|u - 1|$; true distance metric on distributions. | [f-Divergence](../../../MathsTerms/f_Divergence.md) |
+| $\text{JSD}(P \parallel Q)$ | Jensen-Shannon Divergence | `scipy.spatial.distance.jensenshannon(p, q)**2` | Symmetric mixture divergence bounded in $[0, \ln 2]$. | [Jensen-Shannon Divergence](../../../MathsTerms/Jensen_Shannon_Divergence.md) |
 
 ---
 

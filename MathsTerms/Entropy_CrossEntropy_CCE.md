@@ -603,8 +603,8 @@ def focal_loss(logits, target, gamma=2.0):
     fl = ((1 - pt) ** gamma) * ce
     return fl.mean()
 
-easy_logits = torch.tensor([[0.0, 5.0, 0.0]]) # pt ≈ 0.98 (Easy background)
-hard_logits = torch.tensor([[2.0, 0.5, 1.0]]) # pt ≈ 0.15 (Hard foreground object)
+easy_logits = torch.tensor([[0.0, 5.0, 0.0]]) # pt ~= 0.98 (Easy background)
+hard_logits = torch.tensor([[2.0, 0.5, 1.0]]) # pt ~= 0.15 (Hard foreground object)
 
 fl_easy = focal_loss(easy_logits, target_class, gamma=2.0)
 fl_hard = focal_loss(hard_logits, target_class, gamma=2.0)

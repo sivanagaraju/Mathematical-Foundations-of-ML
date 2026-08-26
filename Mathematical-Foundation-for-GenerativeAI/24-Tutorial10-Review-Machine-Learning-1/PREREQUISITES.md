@@ -82,16 +82,16 @@ In introductory statistics, Maximum Likelihood Estimation (MLE) is straightforwa
 
 This reference table bridges formal mathematical notation, plain-English statistical definitions, software implementations, and physical analogies.
 
-| Symbol / Term | Formal Mathematical Concept | Plain-English Software Meaning | Everyday Physical Metaphor |
-| :--- | :--- | :--- | :--- |
-| **$L(\theta \mid \mathcal{D})$** | Likelihood function $P(\mathcal{D} \mid \theta)$ | Score assessing how well candidate parameter $\theta$ explains frozen data | Tasting a finished pot of soup to guess the chef's secret spice recipe. |
-| **$\ell(\theta) = \log L(\theta)$** | Log-Likelihood objective function | Numerical log transform converting products into sums | Replacing a cascade of tiny gear multiplications with a simple ruler addition. |
-| **$\Phi(z) = \int_{-\infty}^z \frac{e^{-t^2/2}}{\sqrt{2\pi}} dt$** | Standard Normal Cumulative Distribution | Area under standard Gaussian curve from $-\infty$ to threshold $z$ | Watermark level on a flood reservoir gauge indicating capacity below $z$. |
-| **$\Phi^{-1}(p)$** | Quantile (Inverse Normal CDF) Function | Finds the $z$-score corresponding to cumulative probability $p$ | Looking up the exact cutoff score on a standardized grading curve. |
-| **$Z_i \in \{0, 1\}$** | Binary latent indicator variable | Hidden switch indicating which sub-population generated sample $i$ | An invisible order tag showing whether kitchen 1 or kitchen 2 cooked the meal. |
-| **$\gamma_i = P(Z_i=1 \mid x_i, \theta^{\text{old}})$** | Posterior responsibility score | Soft probability that component 1 produced observation $x_i$ | Detective assigning 85% probability that suspect A committed the crime. |
-| **$Q(\theta \mid \theta^{\text{old}})$** | Expected Complete-Data Log-Likelihood | Surrogate objective function maximized during the M-step | An adjustable scaffolding platform that guarantees climbing higher. |
-| **$\hat{\theta}_{\text{MLE}} = \arg\max_\theta \ell(\theta)$** | Maximum Likelihood Estimator | The parameter value achieving the absolute highest likelihood peak | The highest summit coordinates on a topological mountain range. |
+| Symbol / Term | Formal Mathematical Concept | Plain-English Software Meaning | Everyday Physical Metaphor | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| **$L(\theta \mid \mathcal{D})$** | Likelihood function $P(\mathcal{D} \mid \theta)$ | Score assessing how well candidate parameter $\theta$ explains frozen data | Tasting a finished pot of soup to guess the chef's secret spice recipe. | [Likelihood & Log-Likelihood](../../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
+| **$\ell(\theta) = \log L(\theta)$** | Log-Likelihood objective function | Numerical log transform converting products into sums | Replacing a cascade of tiny gear multiplications with a simple ruler addition. | [Likelihood & Log-Likelihood](../../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
+| **$\Phi(z) = \int_{-\infty}^z \frac{e^{-t^2/2}}{\sqrt{2\pi}} dt$** | Standard Normal Cumulative Distribution | Area under standard Gaussian curve from $-\infty$ to threshold $z$ | Watermark level on a flood reservoir gauge indicating capacity below $z$. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| **$\Phi^{-1}(p)$** | Quantile (Inverse Normal CDF) Function | Finds the $z$-score corresponding to cumulative probability $p$ | Looking up the exact cutoff score on a standardized grading curve. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| **$Z_i \in \{0, 1\}$** | Binary latent indicator variable | Hidden switch indicating which sub-population generated sample $i$ | An invisible order tag showing whether kitchen 1 or kitchen 2 cooked the meal. | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| **$\gamma_i = P(Z_i=1 \mid x_i, \theta^{\text{old}})$** | Posterior responsibility score | Soft probability that component 1 produced observation $x_i$ | Detective assigning 85% probability that suspect A committed the crime. | [Expectation-Maximization](../../../MathsTerms/Expectation_Maximization_Algorithm.md) |
+| **$Q(\theta \mid \theta^{\text{old}})$** | Expected Complete-Data Log-Likelihood | Surrogate objective function maximized during the M-step | An adjustable scaffolding platform that guarantees climbing higher. | [Expectation-Maximization](../../../MathsTerms/Expectation_Maximization_Algorithm.md) |
+| **$\hat{\theta}_{\text{MLE}} = \arg\max_\theta \ell(\theta)$** | Maximum Likelihood Estimator | The parameter value achieving the absolute highest likelihood peak | The highest summit coordinates on a topological mountain range. | [Maximum Likelihood Estimation](../../../MathsTerms/MLE.md) |
 
 ---
 

@@ -32,6 +32,14 @@ Different recording from the NPTEL folder above. Same instructor (Prof. Prathosh
 
 Start at [`NOTES.md`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md) (catalog). Lecture packages: [`01-W1-L2-Introduction-Problem-Setting/`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/01-W1-L2-Introduction-Problem-Setting/), [`02-W1-L3-F-Divergence/`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/02-W1-L3-F-Divergence/) (PyTorch tensors), [`04-W1-T1-Forward-Pass-Backpropagation/`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/04-W1-T1-Forward-Pass-Backpropagation/) (f-divergence minimization & variational duality).
 
+## 📚 Core Mathematical Knowledge Base (`MathsTerms/`)
+
+The repository features **32 comprehensive, standalone mathematical reference guides** strictly adhering to the 5-point pedagogical bridge (ELI5 Intuition $\iff$ Plain-English Breakdown $\iff$ Micro-Numerical Arithmetic $\iff$ Formal Proofs $\iff$ Runnable PyTorch Code):
+
+- Master Index Catalog: [`MathsTerms/README.md`](./MathsTerms/README.md)
+- Core areas covered: **Deep Learning & Optimization Calculus**, **Probability & Information Theory**, **$f$-Divergences & Optimal Transport**, **Variational Inference (ELBO/VAEs)**, and **Adversarial Learning (GANs, WGAN-GP, BiGAN, FID)**.
+- Every guide contains a self-contained, 100% executable Python/PyTorch verification suite.
+
 ## Skill
 
 **`/youtube-lecture-tutor`** — **only** skill for full lecture packages:

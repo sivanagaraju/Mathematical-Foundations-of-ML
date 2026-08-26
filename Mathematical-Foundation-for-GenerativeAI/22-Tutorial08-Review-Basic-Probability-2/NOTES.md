@@ -182,20 +182,20 @@ This lecture completes the probability foundations required for Generative AI by
 
 This quick-reference table maps every mathematical symbol used in Tutorial 8 to its exact meaning and lecture usage.
 
-| Symbol | Mathematical Object | Reading / Pronunciation | Meaning in this Lecture |
-| :--- | :--- | :--- | :--- |
-| $p_X(x)$ or $f_X(x)$ | Probability Density Function | *"p of x"* or *"density of X"* | Rate of probability mass accumulation per unit length ($\int_{-\infty}^\infty p(x)dx = 1$). |
-| $F_X(x)$ | Cumulative Distribution Function | *"F of x"* | $P(X \le x) = \int_{-\infty}^x p(t)dt$. Smooth, non-decreasing curve from 0 to 1. |
-| $Y = g(X)$ | Transformed Random Variable | *"Y equals g of X"* | Pushing random input $X$ through deterministic continuous transformation $g$. |
-| $\left\|\frac{d}{dy}g^{-1}(y)\right\|$ | Derivative of Inverse Map | *"Absolute derivative of g-inverse"* | Local scaling factor (Jacobian) preserving unit probability area under transformation. |
-| $\mathbb{E}[X]$ or $\mu$ | Mathematical Expectation | *"Expected value of X"* | Center of mass / balance fulcrum: $\int_{-\infty}^\infty x p(x)\,dx$. |
-| $\text{LOTUS}$ | Law of the Unconscious Statistician | *"LOTUS"* | $\mathbb{E}[g(X)] = \int_{-\infty}^\infty g(x) p_X(x)\,dx$. |
-| $\text{Var}(X)$ or $\sigma^2$ | Variance | *"Variance of X"* | Mean squared deviation: $\mathbb{E}[(X-\mu)^2] = \mathbb{E}[X^2] - \mu^2$. |
-| $\sigma$ | Standard Deviation | *"Sigma"* | $\sqrt{\text{Var}(X)}$, measured in the original units of $X$. |
-| $\mathcal{N}(\mu, \sigma^2)$ | Gaussian Distribution | *"Normal mu sigma-squared"* | Bell-shaped density parameterized by center $\mu$ and variance $\sigma^2$. |
-| $\text{Exp}(\lambda)$ | Exponential Distribution | *"Exponential lambda"* | Memoryless continuous waiting-time distribution with rate $\lambda > 0$. |
-| $\text{Unif}[a, b]$ | Uniform Distribution | *"Uniform a to b"* | Constant density $1/(b-a)$ over the finite interval $[a, b]$. |
-| $g(x)$ is Convex | Convex Function | *"g is convex"* | Bowl-shaped curve where secant chords float above the graph ($g''(x) \ge 0$). |
+| Symbol | Mathematical Object | Reading / Pronunciation | Meaning in this Lecture | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| $p_X(x)$ or $f_X(x)$ | Probability Density Function | *"p of x"* or *"density of X"* | Rate of probability mass accumulation per unit length ($\int_{-\infty}^\infty p(x)dx = 1$). | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| $F_X(x)$ | Cumulative Distribution Function | *"F of x"* | $P(X \le x) = \int_{-\infty}^x p(t)dt$. Smooth, non-decreasing curve from 0 to 1. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| $Y = g(X)$ | Transformed Random Variable | *"Y equals g of X"* | Pushing random input $X$ through deterministic continuous transformation $g$. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| $\left\|\frac{d}{dy}g^{-1}(y)\right\|$ | Derivative of Inverse Map | *"Absolute derivative of g-inverse"* | Local scaling factor (Jacobian) preserving unit probability area under transformation. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
+| $\mathbb{E}[X]$ or $\mu$ | Mathematical Expectation | *"Expected value of X"* | Center of mass / balance fulcrum: $\int_{-\infty}^\infty x p(x)\,dx$. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| $\text{LOTUS}$ | Law of the Unconscious Statistician | *"LOTUS"* | $\mathbb{E}[g(X)] = \int_{-\infty}^\infty g(x) p_X(x)\,dx$. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| $\text{Var}(X)$ or $\sigma^2$ | Variance | *"Variance of X"* | Mean squared deviation: $\mathbb{E}[(X-\mu)^2] = \mathbb{E}[X^2] - \mu^2$. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| $\sigma$ | Standard Deviation | *"Sigma"* | $\sqrt{\text{Var}(X)}$, measured in the original units of $X$. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| $\mathcal{N}(\mu, \sigma^2)$ | Gaussian Distribution | *"Normal mu sigma-squared"* | Bell-shaped density parameterized by center $\mu$ and variance $\sigma^2$. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| $\text{Exp}(\lambda)$ | Exponential Distribution | *"Exponential lambda"* | Memoryless continuous waiting-time distribution with rate $\lambda > 0$. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| $\text{Unif}[a, b]$ | Uniform Distribution | *"Uniform a to b"* | Constant density $1/(b-a)$ over the finite interval $[a, b]$. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| $g(x)$ is Convex | Convex Function | *"g is convex"* | Bowl-shaped curve where secant chords float above the graph ($g''(x) \ge 0$). | [Convexity & Jensen's Inequality](../../../MathsTerms/Convexity_and_Jensens_Inequality.md) |
 
 ---
 

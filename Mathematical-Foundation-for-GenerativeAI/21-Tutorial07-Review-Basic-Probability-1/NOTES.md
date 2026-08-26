@@ -206,18 +206,18 @@ P(D | T^+) = [ P(T^+ | D) P(D) ] / P(T^+)
 
 ## Chalkboard Rosetta Stone
 
-| Chalkboard Notation | Mathematical Meaning | Formal Space | Plain-English Definition |
-| :--- | :--- | :--- | :--- |
-| $(\Omega, \mathcal{F}, P)$ | Probability Space | Triplet | The complete formal system: Outcomes, Events, Probability Measure. |
-| $\omega \in \Omega$ | Atomic Outcome | $\Omega$ | Single elementary result of an experiment. |
-| $A, B \in \mathcal{F}$ | Measurable Events | $\mathcal{F} \subseteq 2^\Omega$ | Subsets of outcomes that can be assigned probabilities. |
-| $P(A \mid B)$ | Conditional Probability | $[0, 1]$ | Probability of $A$ given that event $B$ has definitely occurred. |
-| $A \perp\!\!\!\perp B$ | Statistical Independence | Boolean relation | $P(A \cap B) = P(A)P(B)$. |
-| $X$ | Random Variable | $X: \Omega \to \mathbb{R}$ | Deterministic mapping from outcomes to real numbers. |
-| $(\mathbb{R}, \mathcal{B}, P_X)$ | Pushforward Probability Space | Triplet on $\mathbb{R}$ | The probability distribution induced on real numbers by $X$. |
-| $F_X(x)$ | Cumulative Distribution Function | $F: \mathbb{R} \to [0, 1]$ | $P(X \le x)$: Total probability mass accumulated up to $x$. |
-| $p_X(x)$ | Probability Mass Function | $p: \mathbb{R} \to [0, 1]$ | $P(X = x)$: Point mass spike sitting on coordinate $x$. |
-| $1_B(\omega)$ | Indicator Random Variable | $1_B: \Omega \to \{0, 1\}$ | Binary variable: $1$ if $\omega \in B$, $0$ otherwise. |
+| Chalkboard Notation | Mathematical Meaning | Formal Space | Plain-English Definition | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| $(\Omega, \mathcal{F}, P)$ | Probability Space | Triplet | The complete formal system: Outcomes, Events, Probability Measure. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $\omega \in \Omega$ | Atomic Outcome | $\Omega$ | Single elementary result of an experiment. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $A, B \in \mathcal{F}$ | Measurable Events | $\mathcal{F} \subseteq 2^\Omega$ | Subsets of outcomes that can be assigned probabilities. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $P(A \mid B)$ | Conditional Probability | $[0, 1]$ | Probability of $A$ given that event $B$ has definitely occurred. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $A \perp\!\!\!\perp B$ | Statistical Independence | Boolean relation | $P(A \cap B) = P(A)P(B)$. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $X$ | Random Variable | $X: \Omega \to \mathbb{R}$ | Deterministic mapping from outcomes to real numbers. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| $(\mathbb{R}, \mathcal{B}, P_X)$ | Pushforward Probability Space | Triplet on $\mathbb{R}$ | The probability distribution induced on real numbers by $X$. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| $F_X(x)$ | Cumulative Distribution Function | $F: \mathbb{R} \to [0, 1]$ | $P(X \le x)$: Total probability mass accumulated up to $x$. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| $p_X(x)$ | Probability Mass Function | $p: \mathbb{R} \to [0, 1]$ | $P(X = x)$: Point mass spike sitting on coordinate $x$. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| $1_B(\omega)$ | Indicator Random Variable | $1_B: \Omega \to \{0, 1\}$ | Binary variable: $1$ if $\omega \in B$, $0$ otherwise. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
 
 ---
 

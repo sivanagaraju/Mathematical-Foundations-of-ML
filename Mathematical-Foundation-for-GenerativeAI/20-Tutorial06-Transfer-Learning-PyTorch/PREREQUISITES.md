@@ -83,16 +83,16 @@ Why can't we train a 50-layer deep neural network directly from random noise on 
 
 This reference table bridges formal mathematical symbols, deep learning transfer terms, plain-English translations, and intuitive physical analogies.
 
-| Symbol / Term | Formal Mathematical Concept | Plain-English Software Meaning | Everyday Physical Metaphor |
-| :--- | :--- | :--- | :--- |
-| **$(N, C, H, W)$** | 4th-order image tensor $\mathbf{X} \in \mathbb{R}^{N \times 3 \times 224 \times 224}$ | Batch of RGB images standardized to $224 \times 224$ pixels | Standard photographic picture frames that fit into a projector carousel. |
-| **$\boldsymbol{\theta}_{\text{pre}} \in \mathbb{R}^P$** | Source task pre-trained parameter vector | Millions of weights pre-trained on ImageNet ($1.4\text{M}$ images) | A master chef's lifetime of chopping, sautéing, and knife skills. |
-| **$\boldsymbol{\theta}_{\text{head}} \in \mathbb{R}^{H \times C_{\text{new}}}$** | Target task linear projection weight matrix | Newly initialized linear classification layer for $C$ target classes | Learning the specific recipe menu for a new restaurant. |
-| **$y = F(x) + x$** | Residual skip connection identity mapping | Adding the layer input directly to the layer transformation | An express HOV highway lane bypassing traffic congestion. |
-| **$\text{requires\_grad}$** | Autograd parameter gradient accumulation flag | Setting `False` freezes weights; `True` enables updates | Freezing food ingredients in a refrigerator vs cooking them on the stove. |
-| **$\boldsymbol{\mu}_{\text{ImageNet}}, \boldsymbol{\sigma}_{\text{ImageNet}}$** | Channel-wise standardization constants | Mean $[0.485, 0.456, 0.406]$ and std $[0.229, 0.224, 0.225]$ | Adjusting the white-balance and tint dials on an antique television. |
-| **`ImageFolder`** | Directory-based dataset abstraction | Automatically assigns class IDs based on subfolder names | A filing cabinet where folder tab labels determine document categories. |
-| **$\mathcal{L}_{\text{CE}}$** | Categorical Cross-Entropy Loss | Loss penalty computed on target class logits $\mathbf{z} \in \mathbb{R}^C$ | Grading a medical student's diagnosis against the senior doctor's chart. |
+| Symbol / Term | Formal Mathematical Concept | Plain-English Software Meaning | Everyday Physical Metaphor | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| **$(N, C, H, W)$** | 4th-order image tensor $\mathbf{X} \in \mathbb{R}^{N \times 3 \times 224 \times 224}$ | Batch of RGB images standardized to $224 \times 224$ pixels | Standard photographic picture frames that fit into a projector carousel. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| **$\boldsymbol{\theta}_{\text{pre}} \in \mathbb{R}^P$** | Source task pre-trained parameter vector | Millions of weights pre-trained on ImageNet ($1.4\text{M}$ images) | A master chef's lifetime of chopping, sautéing, and knife skills. | [Convolution & Pooling](../../../MathsTerms/Convolution_and_Pooling.md) |
+| **$\boldsymbol{\theta}_{\text{head}} \in \mathbb{R}^{H \times C_{\text{new}}}$** | Target task linear projection weight matrix | Newly initialized linear classification layer for $C$ target classes | Learning the specific recipe menu for a new restaurant. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| **$y = F(x) + x$** | Residual skip connection identity mapping | Adding the layer input directly to the layer transformation | An express HOV highway lane bypassing traffic congestion. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
+| **$\text{requires\_grad}$** | Autograd parameter gradient accumulation flag | Setting `False` freezes weights; `True` enables updates | Freezing food ingredients in a refrigerator vs cooking them on the stove. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
+| **$\boldsymbol{\mu}_{\text{ImageNet}}, \boldsymbol{\sigma}_{\text{ImageNet}}$** | Channel-wise standardization constants | Mean $[0.485, 0.456, 0.406]$ and std $[0.229, 0.224, 0.225]$ | Adjusting the white-balance and tint dials on an antique television. | [Batch Normalization & Spectral Norm](../../../MathsTerms/Batch_Normalization_and_Spectral_Norm.md) |
+| **`ImageFolder`** | Directory-based dataset abstraction | Automatically assigns class IDs based on subfolder names | A filing cabinet where folder tab labels determine document categories. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| **$\mathcal{L}_{\text{CE}}$** | Categorical Cross-Entropy Loss | Loss penalty computed on target class logits $\mathbf{z} \in \mathbb{R}^C$ | Grading a medical student's diagnosis against the senior doctor's chart. | [Loss Functions](../../../MathsTerms/Loss_Functions.md) |
 
 ---
 

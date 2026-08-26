@@ -178,6 +178,21 @@ Matching $p_{\hat x}$ to $p_x$ does **not** by itself give you $E$. Pixel $W_2$ 
 
 ---
 
+## 📐 Chalkboard & PyTorch Rosetta Stone
+
+| Symbol / Term | Theoretical Meaning | PyTorch / Software Implementation | Role in GAN Inversion & FID | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| **$x \in \mathbb{R}^D$** | Ambient Data Vector | `x = batch_images.view(B, -1)` | High-dimensional observable pixel vector ($D=784, 12288$) | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| **$z \in \mathbb{R}^K$** | Low-Dimensional Latent Code | `z = torch.randn(B, K)` | True underlying degrees of freedom on data manifold ($K \ll D$) | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| **$G(z)$** | Push-Forward Generator (Decoder) | `x_fake = generator(z)` | Maps low-D latent Gaussian code to high-D synthetic pixels | [Autoregressive Models](../../../MathsTerms/Autoregressive_Models.md) |
+| **$E(x)$** | Inversion Encoder Network | `z_hat = encoder(x)` | Maps high-D real images to latent feature representations | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| **$q(x, z)$ vs $p(x, z)$** | Joint Empirical vs Model Measures | `(x, E(x))` vs `(G(z), z)` | BiGAN / ALI joint distribution matching pairs | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| **$D(x, z)$** | Joint Discriminator Network | `score = discriminator(x, z)` | Classifies joint image-latent pairs $(x, z)$ as real or fake | [Jensen-Shannon Divergence](../../../MathsTerms/Jensen_Shannon_Divergence.md) |
+| **$\phi(x) \in \mathbb{R}^{2048}$** | Inception-v3 pool3 Embedding | `feats = inception_v3(x)` | Perceptual feature representation capturing semantic realism | [Convolution & Pooling](../../../MathsTerms/Convolution_and_Pooling.md) |
+| **$\text{FID}$** | Fréchet Inception Distance | `FrechetInceptionDistance()` | Evaluates generator sample quality & diversity via 2-Wasserstein | [Fréchet Inception Distance](../../../MathsTerms/Frechet_Inception_Distance.md) |
+
+---
+
 ## Topic 1: Sampler, manifold, $K\ll D$ (00:01–01:55)
 
 ### Where this sits on the master map

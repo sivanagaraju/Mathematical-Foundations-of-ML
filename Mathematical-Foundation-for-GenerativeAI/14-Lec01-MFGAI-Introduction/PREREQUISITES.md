@@ -50,22 +50,24 @@
 
 ## 🗝️ Math Terminology Rosetta Stone
 
-This translation table decodes every formal mathematical symbol used in Lecture 01 into everyday software engineering concepts and intuitive physical analogies.
+This translation table decodes every formal mathematical symbol used in Lecture 01 into everyday software engineering concepts, intuitive physical analogies, and links to deep-dive guides in [`MathsTerms`](../../../MathsTerms).
 
-| Symbol / Term | Formal Mathematical Name | Plain-English Software Translation | Real-World Physical Analogy |
-| :--- | :--- | :--- | :--- |
-| **$\Omega$ (Omega)** | Sample Space | Enum / Domain containing every possible raw execution outcome. | A restaurant's complete master menu of every dish they can cook. |
-| **$\omega \in \Omega$ (Omega)** | Elementary Outcome | A single specific run or instance of an execution. | The specific hot plate of pasta brought to table 4 tonight. |
-| **$\mathcal{F}$ (F / Sigma-Algebra)**| Event Space | The list of all valid boolean queries/filters you are allowed to ask. | The legal filter checkboxes on an e-commerce website (e.g. "Price < $20"). |
-| **$A \in \mathcal{F}$** | Event | A subset of outcomes satisfying a specific condition ($A \subseteq \Omega$). | The subset of menu dishes that are completely vegetarian. |
-| **$P: \mathcal{F} \to [0, 1]$** | Probability Measure | A sizing function assigning a confidence score between 0.0 and 1.0 to queries. | A kitchen scale where the entire inventory weighs exactly 1.0 kg. |
-| **$(\Omega, \mathcal{F}, P)$** | Kolmogorov Probability Triplet | The complete formal mathematical definition of an uncertain system. | A game rulebook defining allowed dice rolls ($\Omega$), valid bets ($\mathcal{F}$), and house odds ($P$). |
-| **$X: \Omega \to \mathbb{R}^d$** | Random Variable (Random Vector) | A deterministic measurement extraction function (sensor pipeline). | A digital barcode scanner converting a physical grocery item into a price integer. |
-| **$x \in \mathbb{R}^d$** | Realization / Data Vector | The concrete numeric vector or file saved to disk (`image.png`, `token_id`). | The numeric receipt printed out by the cash register. |
-| **$X^{-1}(B)$** | Pre-Image (Inverse Image) | The set of all raw outcomes $\omega$ whose sensor output falls inside set $B$. | Searching a photo library for all physical scenes that produced a bright blue pixel. |
-| **$P_X(x)$ / $F_X(x)$** | Cumulative Distribution Function (CDF) | $P(X \le x)$: The total probability mass of getting a measurement $\le x$. | An odometer measuring the cumulative percentage of cars driving under 65 mph. |
-| **$D = \{x_1, \dots, x_n\}$** | Empirical Dataset | A list of $n$ saved files collected from running nature's experiment $n$ times. | A database table storing 50,000 customer transaction logs. |
-| **$x_i \sim P_X$** | Sampled According To | Shorthand asserting that $x_i$ was generated according to the probability law $P_X$. | Water pouring out of a specific faucet nozzle according to its pressure flow. |
+| Symbol / Term | Formal Mathematical Name | Plain-English Software Translation | Real-World Physical Analogy | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| **$\Omega$ (Omega)** | Sample Space | Enum / Domain containing every possible raw execution outcome. | A restaurant's complete master menu of every dish they can cook. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$\omega \in \Omega$ (Omega)** | Elementary Outcome | A single specific run or instance of an execution. | The specific hot plate of pasta brought to table 4 tonight. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$\mathcal{F}$ (F / Sigma-Algebra)**| Event Space | The list of all valid boolean queries/filters you are allowed to ask. | The legal filter checkboxes on an e-commerce website (e.g. "Price < $20"). | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$A \in \mathcal{F}$** | Event | A subset of outcomes satisfying a specific condition ($A \subseteq \Omega$). | The subset of menu dishes that are completely vegetarian. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$P: \mathcal{F} \to [0, 1]$** | Probability Measure | A sizing function assigning a confidence score between 0.0 and 1.0 to queries. | A kitchen scale where the entire inventory weighs exactly 1.0 kg. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$(\Omega, \mathcal{F}, P)$** | Kolmogorov Probability Triplet | The complete formal mathematical definition of an uncertain system. | A game rulebook defining allowed dice rolls ($\Omega$), valid bets ($\mathcal{F}$), and house odds ($P$). | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$X: \Omega \to \mathbb{R}^d$** | Random Variable (Random Vector) | A deterministic measurement extraction function (sensor pipeline). | A digital barcode scanner converting a physical grocery item into a price integer. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| **$x \in \mathbb{R}^d$** | Realization / Data Vector | The concrete numeric vector or file saved to disk (`image.png`, `token_id`). | The numeric receipt printed out by the cash register. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| **$X^{-1}(B)$** | Pre-Image (Inverse Image) | The set of all raw outcomes $\omega$ whose sensor output falls inside set $B$. | Searching a photo library for all physical scenes that produced a bright blue pixel. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| **$P_X(x)$ / $F_X(x)$** | Cumulative Distribution Function (CDF) | $P(X \le x)$: The total probability mass of getting a measurement $\le x$. | An odometer measuring the cumulative percentage of cars driving under 65 mph. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| **$D = \{x_1, \dots, x_n\}$** | Empirical Dataset | A list of $n$ saved files collected from running nature's experiment $n$ times. | A database table storing 50,000 customer transaction logs. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| **$x_i \sim P_X$** | Sampled According To | Shorthand asserting that $x_i$ was generated according to the probability law $P_X$. | Water pouring out of a specific faucet nozzle according to its pressure flow. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| **$L(\theta; D)$ / $\ell(\theta)$** | Likelihood / Log-Likelihood | Plausibility rating of parameter dials $\theta$ given fixed observed data $D$. | A detective scoring how well suspect $\theta$ matches crime scene evidence. | [Likelihood & Log-Likelihood](../../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
+| **$\theta_{\text{MLE}}$** | Maximum Likelihood Estimator | The parameter configuration $\arg\max_\theta \ell(\theta)$ maximizing fit. | The best-fitting key that unlocks the padlock. | [Maximum Likelihood Estimation](../../../MathsTerms/MLE.md) |
 
 ---
 
@@ -200,8 +202,8 @@ import itertools
 die = [1, 2, 3, 4, 5, 6]
 omega_two_dice = list(itertools.product(die, die))
 
-print(f"Total Outcomes in Sample Space |Ω|: {len(omega_two_dice)}")
-print(f"First 5 Outcomes in Ω: {omega_two_dice[:5]}")
+print(f"Total Outcomes in Sample Space |Omega|: {len(omega_two_dice)}")
+print(f"First 5 Outcomes in Omega: {omega_two_dice[:5]}")
 assert len(omega_two_dice) == 36, "Sample space generation incorrect!"
 ```
 
@@ -276,11 +278,11 @@ event_high = {5, 6}
 intersection = event_even.intersection(event_high) # {6}
 union = event_even.union(event_high)               # {2, 4, 5, 6}
 
-print("Sample Space Ω:      ", omega)
+print("Sample Space Omega:     ", omega)
 print("Event Even (A):       ", event_even)
 print("Event High (B):       ", event_high)
-print("Intersection (A ∩ B): ", intersection)
-print("Union (A ∪ B):        ", union)
+print("Intersection (A and B): ", intersection)
+print("Union (A or B):        ", union)
 assert union == {2, 4, 5, 6}, "Set union failed!"
 ```
 

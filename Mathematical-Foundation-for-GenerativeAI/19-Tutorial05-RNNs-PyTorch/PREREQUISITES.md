@@ -84,18 +84,18 @@ Recurrent Neural Networks incorporate three physical principles (inductive biase
 
 This reference table bridges formal mathematical symbols, deep learning sequence terms, plain-English translations, and intuitive physical analogies.
 
-| Symbol / Term | Formal Mathematical Concept | Plain-English Software Meaning | Everyday Physical Metaphor |
-| :--- | :--- | :--- | :--- |
-| **$(N, T, D)$** | 3rd-order tensor $\mathbf{X} \in \mathbb{R}^{N \times T \times D}$ | `batch_size`, `seq_len`, `input_size` | A stack of $N$ audio cassette tapes, each $T$ seconds long, recording $D$ microphone tracks. |
-| **$\mathbf{x}_t \in \mathbb{R}^D$** | Input feature vector at time step $t$ | Current time-step observation | The single musical chord or word spoken right now. |
-| **$\mathbf{h}_t \in \mathbb{R}^H$** | Hidden recurrent memory state vector | Running summary of all history up to step $t$ | The runner's mental memory summary passing the baton in a relay race. |
-| **$\mathbf{c}_t \in \mathbb{R}^H$** | Long-term LSTM Cell State stream | Uninterrupted error carousel / memory highway | A physical conveyor belt notebook where information is added or erased. |
-| **$\mathbf{W}_{xh} \in \mathbb{R}^{H \times D}$** | Input-to-hidden transition weight matrix | Weights mapping new input $\mathbf{x}_t$ into memory | Translating what you see today into notes for your diary. |
-| **$\mathbf{W}_{hh} \in \mathbb{R}^{H \times H}$** | Hidden-to-hidden recurrent transition matrix | Weights mapping yesterday's memory $\mathbf{h}_{t-1}$ to today | Carrying forward your yesterday's memory into today's mindset. |
-| **$\sigma(\cdot)$** | Logistic Sigmoid activation function | Gating valve function mapping numbers to $[0, 1]$ | A faucet valve dial: $0.0 = \text{fully closed}$, $1.0 = \text{fully open}$. |
-| **$\tanh(\cdot)$** | Hyperbolic Tangent activation function | State squashing function mapping numbers to $[-1, 1]$ | A rubber bumper keeping memory numbers between $-1$ and $+1$. |
-| **$\odot$** | Hadamard Elementwise Product | Multiplying gate valves by candidate memory vectors | Filtering coffee grounds through a mesh strainer. |
-| **$\text{BPTT}$** | Backpropagation Through Time | Chain-rule gradient propagation unrolled across $T$ steps | Tracing a domino chain reaction backwards from the last fall to the first push. |
+| Symbol / Term | Formal Mathematical Concept | Plain-English Software Meaning | Everyday Physical Metaphor | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| **$(N, T, D)$** | 3rd-order tensor $\mathbf{X} \in \mathbb{R}^{N \times T \times D}$ | `batch_size`, `seq_len`, `input_size` | A stack of $N$ audio cassette tapes, each $T$ seconds long, recording $D$ microphone tracks. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| **$\mathbf{x}_t \in \mathbb{R}^D$** | Input feature vector at time step $t$ | Current time-step observation | The single musical chord or word spoken right now. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| **$\mathbf{h}_t \in \mathbb{R}^H$** | Hidden recurrent memory state vector | Running summary of all history up to step $t$ | The runner's mental memory summary passing the baton in a relay race. | [Recurrent Neural Networks](../../../MathsTerms/Recurrent_Neural_Networks.md) |
+| **$\mathbf{c}_t \in \mathbb{R}^H$** | Long-term LSTM Cell State stream | Uninterrupted error carousel / memory highway | A physical conveyor belt notebook where information is added or erased. | [Recurrent Neural Networks](../../../MathsTerms/Recurrent_Neural_Networks.md) |
+| **$\mathbf{W}_{xh} \in \mathbb{R}^{H \times D}$** | Input-to-hidden transition weight matrix | Weights mapping new input $\mathbf{x}_t$ into memory | Translating what you see today into notes for your diary. | [Recurrent Neural Networks](../../../MathsTerms/Recurrent_Neural_Networks.md) |
+| **$\mathbf{W}_{hh} \in \mathbb{R}^{H \times H}$** | Hidden-to-hidden recurrent transition matrix | Weights mapping yesterday's memory $\mathbf{h}_{t-1}$ to today | Carrying forward your yesterday's memory into today's mindset. | [Recurrent Neural Networks](../../../MathsTerms/Recurrent_Neural_Networks.md) |
+| **$\sigma(\cdot)$** | Logistic Sigmoid activation function | Gating valve function mapping numbers to $[0, 1]$ | A faucet valve dial: $0.0 = \text{fully closed}$, $1.0 = \text{fully open}$. | [Activation Functions](../../../MathsTerms/Activation_Functions.md) |
+| **$\tanh(\cdot)$** | Hyperbolic Tangent activation function | State squashing function mapping numbers to $[-1, 1]$ | A rubber bumper keeping memory numbers between $-1$ and $+1$. | [Activation Functions](../../../MathsTerms/Activation_Functions.md) |
+| **$\odot$** | Hadamard Elementwise Product | Multiplying gate valves by candidate memory vectors | Filtering coffee grounds through a mesh strainer. | [Vector Norms & Inner Products](../../../MathsTerms/Vector_Norms_and_Inner_Products.md) |
+| **$\text{BPTT}$** | Backpropagation Through Time | Chain-rule gradient propagation unrolled across $T$ steps | Tracing a domino chain reaction backwards from the last fall to the first push. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
 
 ---
 

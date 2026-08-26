@@ -161,6 +161,226 @@ He does **not** open a full PyTorch / autograd trainer today (preview only at th
 
 ---
 
+## Chalkboard & Mathematical Rosetta Stone
+
+This reference table maps every operator, matrix transformation, and layer function used across Tutorial 02 to its plain-English software meaning, mathematical definition, and dedicated guide in [`MathsTerms`](../../../MathsTerms).
+
+| Chalkboard / Code Syntax | Formal Mathematical Concept | Plain-English Software Role | Output Shape / Behavior | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| **`np.ndarray`** | $T \in \mathbb{R}^{d_1 \times \dots \times d_k}$ | Homogeneous, contiguous multi-dimensional array buffer in RAM. | N-dimensional grid | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| **`arr.shape`** | Dimension Tuple $(d_1, \dots, d_k)$ | Tuple containing the exact element counts along each axis. | `(32, 784)` | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| **`X.reshape(B, -1)`** | $\text{vec}(I): \mathbb{R}^{H \times W} \to \mathbb{R}^{HW}$ | Flattening 2D/3D images into 1D coordinate vectors. | `(B, H*W)` | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| **`A * B`** | Hadamard Product $A \odot B$ | Elementwise multiplication between matching/broadcasted shapes. | Same as broadcast | [Vector Norms & Inner Products](../../../MathsTerms/Vector_Norms_and_Inner_Products.md) |
+| **`X @ W`** | Matrix Multiply $X \cdot W$ | Dot products satisfying inner dimension $(M \times K) \cdot (K \times N)$. | $(M \times N)$ | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| **`Y = X @ W + b`** | Affine Transformation | Linear dense layer with broadcasted bias addition across batch. | $(B \times D_{\text{out}})$ | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| **`np.maximum(0, z)`** | $\text{ReLU}(z) = \max(0, z)$ | Non-linear activation zeroing negative activations. | Same shape | [Activation Functions](../../../MathsTerms/Activation_Functions.md) |
+| **`1 / (1 + exp(-z))`** | Sigmoid $\sigma(z)$ | S-curve squashing logits to $(0, 1)$ for binary decisions. | Same shape | [Activation Functions](../../../MathsTerms/Activation_Functions.md) |
+| **`exp(z) / sum(exp(z))`**| $\text{Softmax}(z)$ | Normalizing unconstrained logits to valid probability distribution. | Probs sum to $1.0$ | [Softmax](../../../MathsTerms/Softmax.md) |
+| **`np.argmax(probs, -1)`** | $\arg\max_k p_k$ | Picking the discrete class index with maximum predicted confidence. | `(B,)` integer index | [Argmax & Argmin](../../../MathsTerms/Argmax.md) |
+| **`-np.log(p_true)`** | Negative Log-Likelihood / CCE | Cross-Entropy loss evaluating model surprise on ground-truth class. | Scalar $\ge 0$ | [Loss Functions](../../../MathsTerms/Loss_Functions.md) |
+| **`patch * kernel -> sum`**| 2D Spatial Cross-Correlation | Local sliding window filter extracting translation-invariant features. | Feature Map | [Convolution & Pooling](../../../MathsTerms/Convolution_and_Pooling.md) |
+| **`h_t = tanh(Whh·h + Wxh·x)`**| RNN Hidden State Update | Sequential recurrence maintaining historical memory across time. | $(B, H)$ hidden vector | [Recurrent Neural Networks](../../../MathsTerms/Recurrent_Neural_Networks.md) |
+| **`W = W - lr * dW`** | Gradient Descent Step | Iteratively shifting parameter weights in direction of steepest descent. | Optimized $\theta^*$ | [Gradient Descent](../../../MathsTerms/Gradient_Descent.md) |
+
+---
+
+## Complete Standalone Executable Python Simulation Script
+
+This self-contained Python script implements and tests every foundational operation taught in Tutorial 02 in pure NumPy:
+1. **Array Creation & Shape Inspection:** Validates zeros, ones, randn, and shape tuples.
+2. **Flattening & Reshaping:** Simulates an MNIST batch `(4, 28, 28)` vectorized to `(4, 784)`.
+3. **Affine Linear Layer & Broadcasting:** Computes $Y = XW + b$ for multi-neuron output.
+4. **Activations & Safe Softmax:** Evaluates ReLU, Sigmoid, and shift-invariant Softmax.
+5. **Loss & Argmax:** Computes Cross-Entropy loss and discrete class predictions.
+6. **2D Convolution & Max Pooling:** Slides a $2 \times 2$ kernel across a $4 \times 4$ image grid.
+7. **Recurrent Hidden State Update:** Unrolls an RNN cell across 3 timesteps.
+8. **End-to-End Logistic Regression:** Trains a binary classifier with Gradient Descent.
+
+```python
+"""
+TUTORIAL 02: COMPLETE NUMPY NEURAL NETWORK & DL MECHANICS SUITE
+==============================================================
+Demonstrates pure NumPy implementations of tensor manipulations, linear layers,
+activations, losses, CNN convolutions, RNN recurrence, and logistic regression training.
+"""
+
+import numpy as np
+
+def run_tutorial_02_simulation():
+    print("=" * 80)
+    print("  TUTORIAL 02: INTRODUCTION TO NUMPY - COMPLETE SIMULATION")
+    print("=" * 80)
+
+    # -------------------------------------------------------------------------
+    # PART 1: ARRAY CREATION, SHAPES, AND DTYPES
+    # -------------------------------------------------------------------------
+    print("\n[PART 1] Array Creation, Shapes & Memory Layout")
+    np.random.seed(42)
+    
+    # 1D vector and 2D matrix
+    vec_1d = np.array([1.0, 2.0, 3.0, 4.0], dtype=np.float32)
+    mat_2d = np.zeros((3, 4), dtype=np.float32)
+    weights = np.random.randn(4, 2).astype(np.float32)
+
+    print(f"  * 1D Vector Shape: {vec_1d.shape}, Dtype: {vec_1d.dtype}")
+    print(f"  * 2D Matrix Shape: {mat_2d.shape}, Total Elements: {mat_2d.size}")
+    print(f"  * Weights Shape:   {weights.shape}, Total Bytes: {weights.nbytes} bytes")
+    assert vec_1d.shape == (4,), "Vector shape mismatch!"
+    assert mat_2d.shape == (3, 4), "Matrix shape mismatch!"
+
+    # -------------------------------------------------------------------------
+    # PART 2: RESHAPING & IMAGE VECTORIZATION (MNIST 28x28 -> 784)
+    # -------------------------------------------------------------------------
+    print("\n[PART 2] Image Reshaping & Vectorization for Dense Layers")
+    batch_images = np.random.rand(8, 28, 28).astype(np.float32)
+    print(f"  * Input Image Batch Shape: {batch_images.shape}")
+    
+    # Vectorize to (8, 784)
+    flattened_images = batch_images.reshape(8, -1)
+    print(f"  * Flattened Feature Shape: {flattened_images.shape}")
+    assert flattened_images.shape == (8, 784), "Image flattening failed!"
+
+    # -------------------------------------------------------------------------
+    # PART 3: AFFINE LINEAR LAYER (Y = X @ W + b) WITH BROADCASTING
+    # -------------------------------------------------------------------------
+    print("\n[PART 3] Affine Linear Transformation & Broadcasting (Y = XW + b)")
+    # Batch of 4 samples, 3 input features -> 2 output classes
+    X = np.array([[1.0, 2.0, 3.0],
+                  [4.0, 5.0, 6.0],
+                  [0.5, 1.5, 2.5],
+                  [3.0, 1.0, 2.0]], dtype=np.float32)
+    
+    W = np.array([[1.0, 0.0],
+                  [0.0, 1.0],
+                  [1.0, 1.0]], dtype=np.float32)
+    
+    b = np.array([10.0, 20.0], dtype=np.float32)
+
+    # Forward linear affine map
+    logits = X @ W + b
+    print(f"  * Input X:      (4, 3)")
+    print(f"  * Weight W:     (3, 2)")
+    print(f"  * Output Y:     {logits.shape} -> First row: {logits[0]}")
+    # Expected row 0: [1.0*1 + 2.0*0 + 3.0*1 + 10.0, 1.0*0 + 2.0*1 + 3.0*1 + 20.0] = [14, 25]
+    assert np.allclose(logits[0], np.array([14.0, 25.0])), "Affine calculation failed!"
+
+    # -------------------------------------------------------------------------
+    # PART 4: ACTIVATIONS, SAFE SOFTMAX, AND CROSS-ENTROPY LOSS
+    # -------------------------------------------------------------------------
+    print("\n[PART 4] Non-Linear Activations, Safe Softmax & Loss")
+    # Safe Softmax function
+    def softmax_safe(z):
+        c = np.max(z, axis=-1, keepdims=True)
+        exp_z = np.exp(z - c)
+        return exp_z / np.sum(exp_z, axis=-1, keepdims=True)
+
+    probs = softmax_safe(logits)
+    predictions = np.argmax(probs, axis=-1)
+    
+    # Ground truth labels: [1, 1, 1, 1]
+    true_labels = np.array([1, 1, 1, 1])
+    # Categorical Cross-Entropy Loss
+    ce_loss = -np.mean(np.log(probs[np.arange(len(true_labels)), true_labels]))
+
+    print(f"  * Predicted Probs (Row 0): {probs[0].round(4)}")
+    print(f"  * Argmax Predictions:     {predictions}")
+    print(f"  * Cross-Entropy Loss:      {ce_loss:.4f} nats")
+    assert np.allclose(np.sum(probs, axis=-1), 1.0), "Probabilities must sum to 1.0!"
+
+    # -------------------------------------------------------------------------
+    # PART 5: 2D CONVOLUTION SLIDING FILTER & MAX POOLING
+    # -------------------------------------------------------------------------
+    print("\n[PART 5] 2D Convolution Sliding Filter & Max Pooling (CNN)")
+    img_4x4 = np.array([[1, 2, 0, 1],
+                        [0, 3, 1, 0],
+                        [2, 0, 1, 2],
+                        [1, 1, 0, 3]], dtype=np.float32)
+    
+    kernel_2x2 = np.array([[1.0, 0.0],
+                           [-1.0, 2.0]], dtype=np.float32)
+
+    # 2D Cross-Correlation loop
+    H, W_dim = img_4x4.shape
+    kh, kw = kernel_2x2.shape
+    out_h, out_w = H - kh + 1, W_dim - kw + 1
+    conv_out = np.zeros((out_h, out_w), dtype=np.float32)
+
+    for i in range(out_h):
+        for j in range(out_w):
+            patch = img_4x4[i:i+kh, j:j+kw]
+            conv_out[i, j] = np.sum(patch * kernel_2x2)
+
+    print(f"  * Input Image (4x4):\n{img_4x4}")
+    print(f"  * Conv Feature Map (3x3):\n{conv_out}")
+
+    # 2x2 Max Pooling on top-left 2x2 block
+    pooled_val = np.max(conv_out[0:2, 0:2])
+    print(f"  * MaxPool (2x2) Output: {pooled_val:.1f}")
+
+    # -------------------------------------------------------------------------
+    # PART 6: RECURRENT HIDDEN STATE UNROLLING (RNN)
+    # -------------------------------------------------------------------------
+    print("\n[PART 6] Recurrent Neural Network (RNN) Hidden State Updates")
+    W_xh = 0.8
+    W_hh = 0.5
+    b_h = 0.0
+    h_t = 0.0 # Initial hidden state
+
+    # Sequence of 3 token inputs
+    x_sequence = [1.0, 0.5, -0.8]
+    print(f"  * Initial Hidden State h_0: {h_t:.4f}")
+    for t, x_val in enumerate(x_sequence):
+        h_t = np.tanh(W_xh * x_val + W_hh * h_t + b_h)
+        print(f"    - Step t={t+1} (Input x={x_val:4.1f}): Updated Hidden State h_{t+1} = {h_t:.4f}")
+
+    # -------------------------------------------------------------------------
+    # PART 7: LOGISTIC REGRESSION WITH GRADIENT DESCENT FROM SCRATCH
+    # -------------------------------------------------------------------------
+    print("\n[PART 7] Binary Logistic Regression with Gradient Descent")
+    # Synthetic dataset: 100 samples, 2 features
+    X_train = np.random.randn(100, 2)
+    y_train = (X_train[:, 0] + X_train[:, 1] > 0).astype(np.float32).reshape(-1, 1)
+
+    # Initialize parameters
+    W_log = np.zeros((2, 1), dtype=np.float32)
+    b_log = np.zeros((1,), dtype=np.float32)
+    lr = 0.1
+
+    def sigmoid(z):
+        return 1.0 / (1.0 + np.exp(-np.clip(z, -500, 500)))
+
+    # Train for 200 epochs
+    for epoch in range(200):
+        # Forward
+        z_log = X_train @ W_log + b_log
+        y_hat = sigmoid(z_log)
+        
+        # Gradients
+        error = y_hat - y_train
+        dW = (X_train.T @ error) / len(X_train)
+        db = np.mean(error)
+        
+        # Update
+        W_log -= lr * dW
+        b_log -= lr * db
+
+    train_preds = (sigmoid(X_train @ W_log + b_log) > 0.5).astype(np.float32)
+    accuracy = np.mean(train_preds == y_train) * 100.0
+    print(f"  * Trained Weights W:\n{W_log.round(4)}")
+    print(f"  * Trained Bias b:    {b_log.round(4)}")
+    print(f"  * Final Training Accuracy: {accuracy:.1f}%")
+    assert accuracy > 85.0, "Logistic regression failed to converge!"
+
+    print("\n" + "=" * 80)
+    print("  [SUCCESS] ALL TUTORIAL 02 NUMPY SIMULATION MODULES PASSED FLAWLESSLY!")
+    print("=" * 80)
+
+if __name__ == "__main__":
+    run_tutorial_02_simulation()
+```
+
+---
+
 ## Topic 1: Create arrays & shapes (00:03–05:30)
 
 ### Where this sits on the master map

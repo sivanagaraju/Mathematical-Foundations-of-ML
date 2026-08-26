@@ -180,24 +180,25 @@ The lecture establishes a fundamental divide in modern science:
 
 ## <a id="chalkboard-rosetta-stone"></a>Chalkboard & Mathematical Rosetta Stone
 
-This reference table maps every symbol, shorthand, and chalkboard notation used by Prof. Prathosh in Lecture 01.
+This reference table maps every symbol, shorthand, and chalkboard notation used by Prof. Prathosh in Lecture 01 to its plain-English meaning, Python equivalent, and dedicated guide in [`MathsTerms`](../../../MathsTerms).
 
-| Chalkboard Notation | Formal Mathematical Name | Meaning in Lecture 01 | Python / Code Analogue |
-| :--- | :--- | :--- | :--- |
-| **$\text{RE}$** | Random Experiment | A repeatable process with uncertain physical outcomes. | Data generation process / real-world environment. |
-| **$\Omega$** | Sample Space | Set of all possible mutually exclusive outcomes of the RE. | The domain of all possible unobserved physical states. |
-| **$\omega \in \Omega$** | Elementary Outcome | A single realization of the universe during one run. | A single real-world physical event. |
-| **$\mathcal{F}$** | Event Space ($\sigma$-algebra) | Collection of measurable subsets of $\Omega$ (allowed queries). | The set of all valid boolean filters. |
-| **$A \in \mathcal{F}$** | Event | A specific measurable subset $A \subseteq \Omega$. | `mask = (labels == target_class)` |
-| **$P: \mathcal{F} \to [0, 1]$** | Probability Measure | Function assigning a size score between 0 and 1 to events. | Ground-truth probability assignment function. |
-| **$(\Omega, \mathcal{F}, P)$** | Kolmogorov Triplet | The complete formal mathematical model of uncertain nature. | Abstract statistical backend of the physical universe. |
-| **$X: \Omega \to \mathbb{R}^d$** | Random Variable | Deterministic mapping from abstract outcomes to vector numbers. | `tensor = sensor.capture_scene()` |
-| **$x \in \mathbb{R}^d$** | Realization / Vector | A concrete numeric data point stored in computer memory. | `x = torch.tensor([128.0, 45.0, ...])` |
-| **$X^{-1}(B)$** | Inverse Image (Pre-Image) | Subset of $\Omega$ whose elements map into subset $B \subset \mathbb{R}^d$. | `indices = [i for i, val in enumerate(X) if val in B]` |
-| **$P_X(x)$** | Cumulative Distribution (CDF) | $P(X \le x)$: The probability mass where measurement $\le x$. | `scipy.stats.norm.cdf(x, loc=mu, scale=sigma)` |
-| **$D = \{x_1, \dots, x_n\}$** | Empirical Dataset | $n$ observed vector realizations stored on disk. | `dataset = DataLoader(training_data)` |
-| **$P_\theta(x)$** | Parametric Model Family | Distribution family parameterized by neural network weights $\theta$. | `model = GenerativeModel(weights=theta)` |
-| **$\hat{x} \sim P_\theta$** | Generative Sampling | Simulating the random experiment to create new synthetic data. | `generated_sample = model.sample(num_samples=1)` |
+| Chalkboard Notation | Formal Mathematical Name | Meaning in Lecture 01 | Python / Code Analogue | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| **$\text{RE}$** | Random Experiment | A repeatable process with uncertain physical outcomes. | Data generation process / real-world environment. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$\Omega$** | Sample Space | Set of all possible mutually exclusive outcomes of the RE. | The domain of all possible unobserved physical states. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$\omega \in \Omega$** | Elementary Outcome | A single realization of the universe during one run. | A single real-world physical event. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$\mathcal{F}$** | Event Space ($\sigma$-algebra) | Collection of measurable subsets of $\Omega$ (allowed queries). | The set of all valid boolean filters. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$A \in \mathcal{F}$** | Event | A specific measurable subset $A \subseteq \Omega$. | `mask = (labels == target_class)` | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$P: \mathcal{F} \to [0, 1]$** | Probability Measure | Function assigning a size score between 0 and 1 to events. | Ground-truth probability assignment function. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$(\Omega, \mathcal{F}, P)$** | Kolmogorov Triplet | The complete formal mathematical model of uncertain nature. | Abstract statistical backend of the physical universe. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$X: \Omega \to \mathbb{R}^d$** | Random Variable | Deterministic mapping from abstract outcomes to vector numbers. | `tensor = sensor.capture_scene()` | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| **$x \in \mathbb{R}^d$** | Realization / Vector | A concrete numeric data point stored in computer memory. | `x = torch.tensor([128.0, 45.0, ...])` | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| **$X^{-1}(B)$** | Inverse Image (Pre-Image) | Subset of $\Omega$ whose elements map into subset $B \subset \mathbb{R}^d$. | `indices = [i for i, val in enumerate(X) if val in B]` | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| **$P_X(x)$** | Cumulative Distribution (CDF) | $P(X \le x)$: The probability mass where measurement $\le x$. | `scipy.stats.norm.cdf(x, loc=mu, scale=sigma)` | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| **$D = \{x_1, \dots, x_n\}$** | Empirical Dataset | $n$ observed vector realizations stored on disk. | `dataset = DataLoader(training_data)` | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| **$P_\theta(x)$** | Parametric Model Family | Distribution family parameterized by neural network weights $\theta$. | `model = GenerativeModel(weights=theta)` | [Maximum Likelihood Estimation](../../../MathsTerms/MLE.md) |
+| **$L(\theta; D)$ / $\ell(\theta)$** | Likelihood / Log-Likelihood | Plausibility rating of parameter dials $\theta$ given fixed dataset $D$. | `loss = -torch.sum(log_probs)` | [Likelihood & Log-Likelihood](../../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
+| **$\hat{x} \sim P_\theta$** | Generative Sampling | Simulating the random experiment to create new synthetic data. | `generated_sample = model.sample(num_samples=1)` | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
 
 ---
 
@@ -234,27 +235,27 @@ def run_lecture_01_simulation():
     
     # 1. Sample Space Omega: Rolling a standard 6-sided die
     omega = {1, 2, 3, 4, 5, 6}
-    print(f"  • Sample Space Ω: {omega}")
+    print(f"  * Sample Space Omega: {omega}")
     
     # 2. Probability Measure P (Fair Die: P({k}) = 1/6)
     def P(event):
-        assert event.issubset(omega), "Event must be a subset of Ω!"
+        assert event.issubset(omega), "Event must be a subset of Omega!"
         return len(event) / len(omega)
 
     # Axiom 1: Non-negativity
     event_A = {2, 4, 6} # Even face
     event_B = {1}       # Face 1
-    print(f"  • Axiom 1 (Non-negativity): P(Even) = {P(event_A):.4f} >= 0")
+    print(f"  * Axiom 1 (Non-negativity): P(Even) = {P(event_A):.4f} >= 0")
     
     # Axiom 2: Normalization
-    print(f"  • Axiom 2 (Normalization):   P(Ω)    = {P(omega):.4f} == 1.0")
+    print(f"  * Axiom 2 (Normalization):   P(Omega) = {P(omega):.4f} == 1.0")
     assert P(omega) == 1.0, "Axiom 2 violated!"
 
-    # Axiom 3: Disjoint Additivity (Even ∩ {1} = ∅)
+    # Axiom 3: Disjoint Additivity (Even and {1} disjoint)
     assert event_A.isdisjoint(event_B), "Events must be disjoint for Axiom 3 test"
     union_AB = event_A.union(event_B)
-    print(f"  • Axiom 3 (Disjoint Additivity):")
-    print(f"    - P(Even ∪ {{1}}) = {P(union_AB):.4f}")
+    print(f"  * Axiom 3 (Disjoint Additivity):")
+    print(f"    - P(Even or {{1}}) = {P(union_AB):.4f}")
     print(f"    - P(Even) + P({{1}}) = {P(event_A) + P(event_B):.4f}")
     assert np.isclose(P(union_AB), P(event_A) + P(event_B)), "Axiom 3 violated!"
 
@@ -270,9 +271,9 @@ def run_lecture_01_simulation():
     # Pre-Image calculation: X^{-1}(B) for B = {4, 16, 36} (Even squares)
     target_B = {4, 16, 36}
     pre_image = {w for w in omega if X_sensor(w) in target_B}
-    print(f"  • Sensor codomain target B: {target_B}")
-    print(f"  • Pre-Image X^{{-1}}(B) in Ω: {pre_image}")
-    print(f"  • Probability P(X ∈ B) = P(X^{{-1}}(B)) = {P(pre_image):.4f}")
+    print(f"  * Sensor codomain target B: {target_B}")
+    print(f"  * Pre-Image X^{{-1}}(B) in Omega: {pre_image}")
+    print(f"  * Probability P(X in B) = P(X^{{-1}}(B)) = {P(pre_image):.4f}")
     assert pre_image == {2, 4, 6}, "Pre-image calculation failed!"
 
     # -------------------------------------------------------------------------

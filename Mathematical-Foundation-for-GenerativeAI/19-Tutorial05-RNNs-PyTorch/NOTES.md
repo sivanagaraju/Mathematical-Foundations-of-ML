@@ -182,18 +182,18 @@ This 38-minute tutorial transitions deep learning from static spatial image grid
 
 This reference table maps deep learning sequence symbols directly to PyTorch implementations and lecture usage.
 
-| Symbol / Syntax | Formal Concept | PyTorch Implementation | Lecture Usage & Context |
-| :--- | :--- | :--- | :--- |
-| $\mathbf{X} \in \mathbb{R}^{N \times T \times D}$ | 3D Mini-Batch Sequence Tensor | `x = torch.randn(N, T, D)` | 3D sequence layout (`batch_first=True`). |
-| $\mathbf{x}_t \in \mathbb{R}^D$ | Current Time-Step Observation | `x[:, t, :]` | Input vector at time step $t$. |
-| $\mathbf{h}_t \in \mathbb{R}^H$ | Hidden Memory State Vector | `output[:, t, :]` or `h_n` | Running recurrent memory summary at time step $t$. |
-| $\mathbf{c}_t \in \mathbb{R}^H$ | Long-Term LSTM Cell State | `c_n` (inside returned tuple) | Additive linear memory highway in LSTM. |
-| $\mathbf{W}_{xh} \in \mathbb{R}^{H \times D}$ | Input-to-Hidden Weight Matrix | `rnn.weight_ih_l0` | Transform mapping input $\mathbf{x}_t$ to hidden state. |
-| $\mathbf{W}_{hh} \in \mathbb{R}^{H \times H}$ | Hidden-to-Hidden Recurrent Matrix | `rnn.weight_hh_l0` | Recurrent transform mapping $\mathbf{h}_{t-1}$ to $\mathbf{h}_t$. |
-| $\mathbf{f}_t, \mathbf{i}_t, \mathbf{o}_t$ | LSTM Gate Activations ($\in [0, 1]$) | Computed internally in `nn.LSTM` | Sigmoid valves controlling erase, write, and read. |
-| $\mathbf{r}_t, \mathbf{z}_t$ | GRU Gate Activations ($\in [0, 1]$) | Computed internally in `nn.GRU` | Reset and update gates in GRU. |
-| $\mathbf{h}_T \in \mathbb{R}^H$ | Terminal Summary State Vector | `output[:, -1, :]` or `h_n[-1]` | Final state fed into the Linear classifier head. |
-| $\mathbf{z} \in \mathbb{R}^{N \times C}$ | Unnormalized Output Logits | `logits = model(x)` | Class score matrix fed into `nn.CrossEntropyLoss`. |
+| Symbol / Syntax | Formal Concept | PyTorch Implementation | Lecture Usage & Context | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| $\mathbf{X} \in \mathbb{R}^{N \times T \times D}$ | 3D Mini-Batch Sequence Tensor | `x = torch.randn(N, T, D)` | 3D sequence layout (`batch_first=True`). | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| $\mathbf{x}_t \in \mathbb{R}^D$ | Current Time-Step Observation | `x[:, t, :]` | Input vector at time step $t$. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
+| $\mathbf{h}_t \in \mathbb{R}^H$ | Hidden Memory State Vector | `output[:, t, :]` or `h_n` | Running recurrent memory summary at time step $t$. | [Recurrent Neural Networks](../../../MathsTerms/Recurrent_Neural_Networks.md) |
+| $\mathbf{c}_t \in \mathbb{R}^H$ | Long-Term LSTM Cell State | `c_n` (inside returned tuple) | Additive linear memory highway in LSTM. | [Recurrent Neural Networks](../../../MathsTerms/Recurrent_Neural_Networks.md) |
+| $\mathbf{W}_{xh} \in \mathbb{R}^{H \times D}$ | Input-to-Hidden Weight Matrix | `rnn.weight_ih_l0` | Transform mapping input $\mathbf{x}_t$ to hidden state. | [Recurrent Neural Networks](../../../MathsTerms/Recurrent_Neural_Networks.md) |
+| $\mathbf{W}_{hh} \in \mathbb{R}^{H \times H}$ | Hidden-to-Hidden Recurrent Matrix | `rnn.weight_hh_l0` | Recurrent transform mapping $\mathbf{h}_{t-1}$ to $\mathbf{h}_t$. | [Recurrent Neural Networks](../../../MathsTerms/Recurrent_Neural_Networks.md) |
+| $\mathbf{f}_t, \mathbf{i}_t, \mathbf{o}_t$ | LSTM Gate Activations ($\in [0, 1]$) | Computed internally in `nn.LSTM` | Sigmoid valves controlling erase, write, and read. | [Activation Functions](../../../MathsTerms/Activation_Functions.md) |
+| $\mathbf{r}_t, \mathbf{z}_t$ | GRU Gate Activations ($\in [0, 1]$) | Computed internally in `nn.GRU` | Reset and update gates in GRU. | [Activation Functions](../../../MathsTerms/Activation_Functions.md) |
+| $\mathbf{h}_T \in \mathbb{R}^H$ | Terminal Summary State Vector | `output[:, -1, :]` or `h_n[-1]` | Final state fed into the Linear classifier head. | [Recurrent Neural Networks](../../../MathsTerms/Recurrent_Neural_Networks.md) |
+| $\mathbf{z} \in \mathbb{R}^{N \times C}$ | Unnormalized Output Logits | `logits = model(x)` | Class score matrix fed into `nn.CrossEntropyLoss`. | [Softmax](../../../MathsTerms/Softmax.md) |
 
 ---
 
