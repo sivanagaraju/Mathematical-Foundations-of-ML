@@ -2,7 +2,7 @@
 
 Welcome to the **Mathematical Terms (`MathsTerms`) Knowledge Base** for the *Mathematical Foundations of Generative AI* masterclass.
 
-Every guide in this directory follows a strict **7-Section Gold Standard** bridging abstract mathematical rigor directly to intuitive physical metaphors, micro-numerical arithmetic, runnable PyTorch/NumPy code, and modern generative AI architectures (Diffusion Models, GANs, VAEs, Transformers, Flow Matching).
+Every guide in this directory follows a strict **10-Section Gold Standard** bridging abstract mathematical rigor directly to intuitive physical primitives, elementary algebraic proofs, micro-numerical arithmetic, runnable PyTorch/NumPy code, and modern generative AI architectures (Diffusion Models, GANs, VAEs, Transformers, Flow Matching).
 
 ```
  ===================================================================================================
