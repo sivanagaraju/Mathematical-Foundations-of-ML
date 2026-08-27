@@ -173,10 +173,11 @@ This hour defines a latent variable model: $p_\theta(x)$ is the marginal of a jo
 | :--- | :--- | :--- | :--- | :--- |
 | **$x \in \mathbb{R}^D$** | Observable Data Vector | `x = batch_images` | Observed high-dimensional pixel input | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
 | **$z \in \mathbb{R}^K$** | Latent Random Variable | `z = mu + std * eps` | Unobserved low-dimensional continuous code | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
-| **$p_\theta(x, z)$** | Generative Joint Measure | $p_\theta(x \mid z) p(z)$ | Joint probability of observable $x$ and hidden code $z$ | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| **$p_\theta(x, z)$** | Generative Joint Measure | $p_\theta(x \mid z) p(z)$ | Joint probability of observable $x$ and hidden code $z$ | [Latent Variable Models](../../../MathsTerms/Latent_Variable_Models.md) |
 | **$p_\theta(x) = \int p(x,z) dz$** | Marginal Likelihood (Evidence) | Incomplete log-likelihood target | Objective to maximize via lower bound | [Likelihood & Log-Likelihood](../../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
 | **$p_\theta(z \mid x)$** | True Posterior Distribution | $\frac{p_\theta(x \mid z) p(z)}{p_\theta(x)}$ | Intractable Bayesian posterior over latent variables | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
 | **$q_\phi(z \mid x)$** | Variational Posterior (Encoder) | `mu, logvar = encoder(x)` | Neural network approximation to true posterior | [ELBO & Variational Inference](../../../MathsTerms/ELBO_and_Variational_Inference.md) |
+| **$z = \mu + \sigma \odot \epsilon$** | Reparameterization Trick | `z = mu + std * eps` | Differentiable sampling enabling backpropagation through encoder | [Reparameterization Trick](../../../MathsTerms/Reparameterization_Trick.md) |
 | **$p_\theta(x \mid z)$** | Likelihood / Generator (Decoder) | `x_recon = decoder(z)` | Reconstruction probability mapping code to pixels | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
 | **$\mathcal{L}_{\text{ELBO}}(\theta, \phi)$** | Evidence Lower Bound | `loss = recon_loss + kl_loss` | Variational lower bound $\le \ln p_\theta(x)$ optimized by gradient ascent | [ELBO & Variational Inference](../../../MathsTerms/ELBO_and_Variational_Inference.md) |
 | **$\text{EM Algorithm}$** | Expectation-Maximization | Closed-form E-step $q^* = p_\theta(z \mid x)$ | Exact inference when posterior is tractable (e.g. GMM) | [Expectation-Maximization Algorithm](../../../MathsTerms/Expectation_Maximization_Algorithm.md) |
@@ -851,62 +852,166 @@ This course will use **both**. In a VAE he calls them **probabilistic neural net
 **Stop.** Next: the ELBO has an expectation **under a $q$ that is itself being optimized**. Turning that into a sample average is **non-trivial**. The trick is **reparameterization** — people say “differentiate through the sampling step.” Then one instantiation, backprop, implement on a computer — **as he did for GAN**. Thank you.
 
 The trap is coding `z = mu + sigma * eps` today and claiming it was this lecture. He named the trick and deferred it.
-
-```python
 # VAE-shaped ELBO (math he wrote). Not a training loop.
 # J = E_{z ~ q(z|x)}[ log p_theta(x|z) ]  -  KL( q(z|x) || p(z) )
 
 # Represent q(z|x) and p(x|z) by nets that output PARAMETERS
 # (e.g. Gaussian mean/var) — not GAN-style samples.
 # How to backprop through z ~ q(...)  =  NEXT lecture (reparam).
-```
 
-You can now list the three jobs, the two-term ELBO, and the two NN styles. What is still missing is the reparameterization algebra and a coded VAE — that is the leftover on purpose.
+## 🛠️ Workplace Debugging Postmortems
 
-### Analogy for this topic only
+---
 
-The shop must (1) learn recipes without a closed-form diagnosis table, (2) bake a new cake from a die roll, (3) still tell you *which bowl* an old cake probably came from.
-
-Someone asks: **does the net hand me a cake or a recipe card?** VAE: recipe card $(\mu,\sigma)$. GAN: cake.
-
-The wrong move is backpropping a VAE tonight.
-
-In lecture words: three jobs; ELBO = recon term minus KL; parameter-output nets; reparam next.
-
-### Local picture
+### Postmortem 1: VAE KL Collapse — Latent Space Becomes Unusable Noise
 
 ```
-  J =  E_q log p(x|z)   −   KL(q(z|x) || p(z))
-
-  sample path:   p(z) --> z --> p(x|z) --> new x
-  infer path:    x --> q(z|x) --> embedding / cluster weights
-
-  NN fork:  samples  |  parameters
-            GAN G      VAE q-net, decoder family
-
-  Notice: expectation under a moving q  →  reparam next hour.
+  ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+  ║ POSTMORTEM REPORT: VAE LATENT INTERPOLATION PRODUCES RANDOM NOISE                     ║
+  ╠═══════════════════════════════════════════════════════════════════════════════════════╣
+  ║ Severity: CRITICAL (P0) - Latent traversals produce garbage; generation mode unusable  ║
+  ║ Root Cause: KL weight β=50 crushed encoder to match prior exactly; q(z|x) ≈ p(z)      ║
+  ║ Affected Systems: Product design VAE for fashion item generation & style transfer      ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════════╝
 ```
 
-### Bridge
+#### 1. The Incident & Symptom
+A fashion-tech team trained a β-VAE ($\beta = 50$) for style-controllable clothing generation. Reconstructions were blurry but acceptable. However, when walking through the latent space (interpolating between two garments), the decoder produced random unstructured textures — the latent space contained no meaningful style information.
 
-The leftover problem is **differentiating through a draw from $q_\phi$**. Next lecture: reparameterization, then an instantiation you can implement — not a sixth EM proof.
+#### 2. Mathematical Root-Cause Analysis
+1. **The ELBO Trade-Off (from this lecture):**
+   $$\mathcal{L}_{\text{ELBO}} = \underbrace{\mathbb{E}_{q_\phi(z|x)}[\ln p_\theta(x|z)]}_{\text{Reconstruction}} - \underbrace{\beta \cdot D_{\text{KL}}(q_\phi(z|x) \parallel p(z))}_{\text{Regularization}}$$
+
+2. **Over-Regularization (β Too High):**
+   With $\beta = 50$, the KL penalty dominates. The encoder minimizes $D_{\text{KL}}$ by collapsing $q_\phi(z|x) \to \mathcal{N}(0, I)$ for all inputs. Every input maps to the same Gaussian — the encoder discards all information about $x$. The KL term reaches 0, and the decoder learns only the unconditional average $\mathbb{E}[x]$.
+
+3. **The Diagnostic:**
+   Monitor per-dimension KL: $D_{\text{KL}}^{(j)} = \frac{1}{2}(\mu_j^2 + \sigma_j^2 - \ln \sigma_j^2 - 1)$. If all dimensions show $D_{\text{KL}}^{(j)} < 0.01$, the encoder has collapsed.
+
+#### 3. The Production Fix (PyTorch Code)
+
+```python
+import torch
+import torch.nn.functional as F
+
+def vae_loss_with_kl_monitoring(x, x_recon, mu, log_var, beta=1.0):
+    """
+    VAE ELBO loss with per-dimension KL monitoring.
+    
+    If per-dim KL < 0.01 for most dims → encoder collapsed!
+    Fix: reduce β, use KL annealing, or free-bits minimum.
+    """
+    # Reconstruction: -E[log p(x|z)] ≈ MSE or BCE
+    recon_loss = F.mse_loss(x_recon, x, reduction='sum')
+    
+    # KL divergence: D_KL(q(z|x) || p(z)) for Gaussian q and Gaussian prior
+    # Per-dimension: 0.5 * (μ² + σ² - log(σ²) - 1)
+    kl_per_dim = 0.5 * (mu.pow(2) + log_var.exp() - log_var - 1)
+    
+    # Monitor: count active latent dimensions (KL > threshold)
+    active_dims = (kl_per_dim.mean(dim=0) > 0.01).sum().item()
+    total_dims = mu.size(1)
+    
+    # Free-bits: enforce minimum KL per dimension to prevent collapse
+    FREE_BITS = 0.1  # nats per dimension
+    kl_clamped = torch.clamp(kl_per_dim, min=FREE_BITS)
+    kl_loss = kl_clamped.sum()
+    
+    total_loss = recon_loss + beta * kl_loss
+    
+    # Diagnostic output
+    print(f"  Active latent dims: {active_dims}/{total_dims} "
+          f"(KL collapse if <{total_dims // 4})")
+    
+    return total_loss, recon_loss.item(), kl_loss.item(), active_dims
+
+# LESSON: β-VAE with β>>1 forces q(z|x) → p(z), destroying all information.
+# Fix: β=1 (standard VAE), KL annealing (β: 0→1 over epochs), or free-bits.
+```
+
+---
+
+### Postmortem 2: Posterior Collapse — Decoder Ignores Latent Code Entirely
+
+```
+  ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+  ║ POSTMORTEM REPORT: VAE DECODER PRODUCES IDENTICAL OUTPUT REGARDLESS OF z              ║
+  ╠═══════════════════════════════════════════════════════════════════════════════════════╣
+  ║ Severity: CRITICAL (P0) - All z values produce the same blurry average image          ║
+  ║ Root Cause: Autoregressive decoder (PixelCNN) learns p(x) directly, ignoring z        ║
+  ║ Affected Systems: Text-to-image VAE with PixelCNN decoder                             ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════════╝
+```
+
+#### 1. The Incident & Symptom
+A VAE with a powerful PixelCNN decoder achieved excellent log-likelihood on the test set. However, sampling $z \sim \mathcal{N}(0, I)$ and decoding produced the same blurry average regardless of $z$. The latent code was completely ignored.
+
+#### 2. Mathematical Root-Cause Analysis
+1. **Posterior Collapse (from this lecture's ELBO decomposition):**
+   The ELBO is $\mathbb{E}_{q}[\ln p_\theta(x|z)] - D_{\text{KL}}(q_\phi(z|x) \parallel p(z))$. An autoregressive decoder can model $p_\theta(x|z)$ without using $z$ at all — it directly learns the marginal $p(x) = \prod_i p(x_i | x_{<i})$ via its own autoregressive structure.
+
+2. **Why the Optimizer Loves This Trap:**
+   If the decoder ignores $z$, then $p_\theta(x|z) = p_\theta(x)$ is independent of $z$. The encoder is free to set $q_\phi(z|x) = p(z)$, making $D_{\text{KL}} = 0$. The ELBO becomes $\mathbb{E}[\ln p_\theta(x)] + 0$, which is a valid (but useless) local optimum. Professor Prathosh's key point: the encoder's job is posterior inference, but the decoder stole the show.
+
+#### 3. The Production Fix (PyTorch Code)
+
+```python
+import torch
+
+def kl_annealing_schedule(epoch, warmup_epochs=50):
+    """
+    KL annealing: gradually increase β from 0 to 1.
+    During warmup, the decoder must use z because KL is cheap.
+    After warmup, KL regularizes normally.
+    """
+    return min(1.0, epoch / warmup_epochs)
+
+# Alternative: Input dropout on the decoder's autoregressive context
+def decoder_with_word_dropout(decoder, z, target_tokens, dropout_rate=0.5):
+    """
+    Force decoder to use z by randomly dropping input tokens.
+    With 50% of context missing, the decoder MUST consult z.
+    """
+    # Randomly replace input tokens with <UNK> token
+    mask = torch.bernoulli(torch.full_like(target_tokens.float(), 1 - dropout_rate)).long()
+    UNK_TOKEN = 0
+    corrupted_input = target_tokens * mask + UNK_TOKEN * (1 - mask)
+    
+    # Decoder must rely on z to fill in the gaps
+    output = decoder(z, corrupted_input)
+    return output
+
+# LESSON: Powerful decoders can ignore z entirely (posterior collapse).
+# Fixes: (1) KL annealing, (2) input dropout, (3) weaker decoder,
+# (4) free-bits, (5) delta-VAE (minimum KL floor).
+```
 
 ---
 
 ## External references
 
-How to use: after Topics 7–9 read Kingma & Welling’s **intro** (as he said). After Topic 10, CS236 / CS231n for the same ELBO board. Implementation videos wait until the next NPTEL hour.
+How to use: after Topics 7–9 read Kingma & Welling's **intro** (as he said). After Topic 10, CS236 / CS231n for the same ELBO board. Implementation videos wait until the next NPTEL hour.
 
 | Resource | Matches lecture… | Why it helps |
 |----------|------------------|--------------|
 | Instructor notes — [Drive PDF](https://drive.google.com/file/d/1Kebb00VehPBMyleuw2ubp2qbvrBqyvZZ/view) | Whole hour | Board companion linked in the YouTube description (LVM, GMM, VAE). |
-| Kingma & Welling — *Auto-Encoding Variational Bayes* — [arXiv:1312.6114](https://arxiv.org/abs/1312.6114) | Topics 9–10 | The paper he names; title is AEVB, not “VAE”; intro = intractable posterior. |
+| Kingma & Welling — *Auto-Encoding Variational Bayes* — [arXiv:1312.6114](https://arxiv.org/abs/1312.6114) | Topics 9–10 | The paper he names; title is AEVB, not "VAE"; intro = intractable posterior. |
 | Stanford CS236 — VAE course notes — [notes/vae](https://deepgenerativemodels.github.io/notes/vae/) | Topics 5–8, 10 | ELBO, $q(z\mid x)$, why the bound exists — same map boxes. |
 | Stanford CS236 2023 Lecture 6 — VAEs — [video](https://www.youtube.com/watch?v=8cO61e_8oPY) | Topics 7–10 | University hour on ELBO and why it is called a variational autoencoder. |
 | Stanford CS231n (2026) Lecture 13 slides — VAE/ELBO — [lecture_13.pdf](https://cs231n.stanford.edu/slides/2026/lecture_13.pdf) | Topics 7, 10 | Latest CS231n ELBO derivation: $\mathbb{E}\log p(x\mid z)-\mathrm{KL}(q\|p(z))$. |
 | MIT 6.S191 Lecture 4 — Deep generative modeling — [video](https://www.youtube.com/watch?v=R8V8CbuxryI) | Topics 1, 3, 10 | Places VAE next to GAN/diffusion — the family he opened with. |
 | Doersch — *Tutorial on VAEs* — [arXiv:1606.05908](https://arxiv.org/abs/1606.05908) | Topics 6–8, 10 | Written ELBO + the two-term loss he reaches at 48:35. |
 | CS231n Spring 2025 Lecture 13 — Generative models I — [notes](https://raimbekovm.github.io/cs231n-2025-notes/lectures/13-generative-models.html) | Topics 1, 8 | VAE/ELBO in the 2025 vision course, before the diffusion lecture. |
+| Blei, Kucukelbir, McAuliffe — *Variational Inference: A Review* — [arXiv:1601.00670](https://arxiv.org/abs/1601.00670) | Topics 5–8 | Authoritative VI survey; ELBO derivation via Jensen, mean-field families, CAVI. |
+| Bishop — *Pattern Recognition and Machine Learning*, Ch. 9 & 10 — [book](https://www.microsoft.com/en-us/research/publication/pattern-recognition-machine-learning/) | Topics 1–6 | EM algorithm, mixture models, and variational inference foundations. |
+| Dempster, Laird, Rubin — *Maximum Likelihood from Incomplete Data via the EM Algorithm* (1977) — [JRSS-B](https://www.jstor.org/stable/2984875) | Topics 3–5 | The original EM paper he names; E-step = posterior, M-step = refit. |
+| Murphy — *Probabilistic Machine Learning: Advanced Topics*, Ch. 21 — [probml.ai](https://probml.github.io/pml-book/book2.html) | Topics 7–10 | Modern VAE chapter with reparameterization, β-VAE, posterior collapse. |
+| Higgins et al. — *β-VAE: Learning Basic Visual Concepts with a Constrained Variational Framework* — [ICLR 2017](https://openreview.net/forum?id=Sy2fzU9gl) | Topic 10 | The β coefficient he implicitly describes in the ELBO two-term split. |
+| Bowman et al. — *Generating Sentences from a Continuous Space* — [arXiv:1511.06349](https://arxiv.org/abs/1511.06349) | Topic 10 | Posterior collapse in text VAEs; KL annealing fix. |
+| Sønderby et al. — *Ladder VAE* — [arXiv:1602.02282](https://arxiv.org/abs/1602.02282) | Topics 9–10 | Hierarchical VAE; KL warmup; multiple stochastic layers. |
+| Stanford CS236 — Latent Variable Models notes — [notes/lvm](https://deepgenerativemodels.github.io/notes/lvm/) | Topics 1–4 | Written GMM + EM + incomplete data — the first four topics. |
+| Berkeley CS294-158 Spring 2024 — Lecture 3 (LVMs / VAEs) — [video](https://www.youtube.com/watch?v=FYBDlCaR4FE) | Topics 7–10 | University hour: ELBO, reparameterization, implementation. |
+| Ali Ghodsi — VAE Lecture — [video](https://www.youtube.com/watch?v=uaaqyVS9-rM) | Topics 5–10 | Step-by-step ELBO derivation; popular teaching video for visual learners. |
 
 ---
 

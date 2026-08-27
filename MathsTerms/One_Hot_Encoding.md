@@ -242,6 +242,29 @@ print("\n[SUCCESS] One-Hot geometric neutrality proven 100%!")
 
 ---
 
+### 8. 🩺 Diagnostic Mini-Checks & Common Traps
+
+#### ✅ Self-Test Questions
+
+1. **Q:** If we have 10,000 vocabulary words, why don't we do matrix multiplication with 10,000-dimensional one-hot vectors in PyTorch?  
+   **A:** Multiplying a 10,000-D one-hot vector $e_k$ by weight matrix $W$ wastes enormous compute multiplying by zeros. In practice, `nn.Embedding(10000, d)` treats $k$ as an index and extracts row $k$ directly in $O(1)$ memory.
+
+2. **Q:** What is the Euclidean distance between any two distinct one-hot vectors in $\mathbb{R}^K$?  
+   **A:** $\|e_i - e_j\|_2 = \sqrt{1^2 + (-1)^2} = \sqrt{2} \approx 1.4142$ regardless of dimension $K$ or which pair of classes is chosen.
+
+3. **Q:** Why do we use label smoothing instead of hard one-hot targets in modern architectures?  
+   **A:** Hard one-hot targets ($1.0$) force the model to output infinite logits ($\pm \infty$) through the softmax layer, leading to overconfidence and poor calibration. Label smoothing replaces $1.0$ with $1 - \epsilon$, encouraging robust probability margins.
+
+#### ⚠️ Common Traps
+
+| Trap | Why It Fails | Fix |
+| :--- | :--- | :--- |
+| Passing one-hot encoded vectors into `nn.CrossEntropyLoss()` | Standard PyTorch `CrossEntropyLoss` expects class integer index targets `[0, 1, 2]`, not one-hot vectors | Pass integer tensor `target = torch.tensor([0])`, or pass probabilities if using PyTorch 1.10+ target probabilities |
+| Using integer encoding for nominal categorical features | Model assumes category 3 > category 1 and category 1 + 2 = 3 | Use `F.one_hot()` or `pd.get_dummies()` for nominal categories |
+| Creating one-hot vectors without specifying `num_classes` | If the batch is missing the highest class index, the output tensor will have the wrong dimension | Always specify `num_classes=K` explicitly |
+
+---
+
 ### 🎯 Summary Checklist
 - **One-Hot Encoding** represents discrete categories as mutually orthogonal standard basis vectors $e_k \in \{0, 1\}^K$.
 - It eliminates the false numerical ordering and distance distortions created by simple integer labels.

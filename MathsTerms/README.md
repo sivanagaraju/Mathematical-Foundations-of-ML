@@ -16,7 +16,7 @@ Every guide in this directory follows a strict **7-Section Gold Standard** bridg
 
 ---
 
-## 🧭 Master Directory Index (32 Curated Guides)
+## 🧭 Master Directory Index (36 Curated Guides)
 
 ### 1. ⚡ Deep Learning, Calculus & Optimization Core
 
@@ -29,7 +29,9 @@ Every guide in this directory follows a strict **7-Section Gold Standard** bridg
 | **[Convolution & Pooling Operations](./Convolution_and_Pooling.md)** | Receptive fields, spatial downsampling, transposed convolutions, DCGAN | Tut 04, Tut 12 |
 | **[Derivatives, Gradients & Jacobians](./Derivatives_Gradients_and_Jacobians.md)** | Multivariable calculus, autograd computational graphs, Jacobian matrices | Tut 03, Lec 04, Lec 18 |
 | **[Gradient Descent & Optimizers](./Gradient_Descent.md)** | SGD, Momentum, RMSprop, Adam first/second moment updates ($\theta \leftarrow \theta - \eta \nabla L$) | Tut 03, Lec 05, Lec 19 |
+| **[Lipschitz Continuity](./Lipschitz_Continuity.md)** | Bounded gradient slope $\|f(x) - f(y)\| \le K \|x - y\|$, Kantorovich-Rubinstein dual, spectral norm | Lec 18, Tut 12 |
 | **[Logarithms & Exponential Functions](./Logarithms_and_Exponential_Functions.md)** | Numerical stability, log-space arithmetic, preventing underflow ($\ln(ab) = \ln a + \ln b$) | Tut 02, Lec 01, Tut 10 |
+| **[Loss Functions in Machine Learning](./Loss_Functions.md)** | MSE, MAE, Huber, BCE, CCE, Hinge, Wasserstein objectives | Tut 03, Tut 10, Lec 05 |
 | **[Recurrent Neural Networks & Backprop Through Time](./Recurrent_Neural_Networks.md)** | Sequence processing, hidden state recurrence, vanishing gradients in BPTT | Tut 05 |
 | **[Softmax Function](./Softmax.md)** | Probability normalization, logits squashing, temperature scaling ($\frac{e^{z_i/\tau}}{\sum e^{z_j/\tau}}$) | Lec 01, Tut 03, Tut 10 |
 | **[Tensors, Shapes & Dimensional Broadcasting](./Tensors_and_Shapes.md)** | Multidimensional arrays, PyTorch strided layouts, broadcasting arithmetic | Tut 02, Tut 03 |
@@ -62,11 +64,13 @@ Every guide in this directory follows a strict **7-Section Gold Standard** bridg
 | :--- | :--- | :--- |
 | **[Autoencoders & Latent Space Manifolds](./Autoencoders_and_Latent_Spaces.md)** | Manifold hypothesis, encoder-decoder bottlenecks, spatial latent embeddings | Tut 06, Lec 19, Lec 20 |
 | **[Autoregressive Generative Models](./Autoregressive_Models.md)** | Probability chain rule factorization ($p(x) = \prod_{t=1}^T p(x_t \mid x_{<t})$), causal masking | Lec 02, Tut 05 |
-| **[Evidence Lower Bound (ELBO) & Variational Inference](./ELBO_and_Variational_Inference.md)** | Tractable evidence bound, reparameterization trick ($z = \mu + \sigma \odot \epsilon$), VAEs | Lec 20 |
+| **[Evidence Lower Bound (ELBO) & Variational Inference](./ELBO_and_Variational_Inference.md)** | Tractable evidence bound, encoder-decoder optimization, VAEs | Lec 20 |
 | **[Expectation-Maximization (EM) Algorithm](./Expectation_Maximization_Algorithm.md)** | Incomplete likelihood, E-step responsibilities, M-step closed forms, GMM fitting | Tut 10, Lec 20 |
 | **[Fenchel Conjugate & Dual Variational Representations](./Fenchel_Conjugate_and_Dual_Representations.md)** | Legendre-Fenchel transformation ($f^*(t) = \sup_u \{tu - f(u)\}$), $f$-GAN variational dual | Lec 04, Lec 05, Lec 18 |
 | **[Fréchet Inception Distance (FID)](./Frechet_Inception_Distance.md)** | 2-Wasserstein metric on Inception Gaussians ($\|\mu_r - \mu_g\|^2 + \text{Tr}(\Sigma_r + \Sigma_g - 2(\Sigma_r \Sigma_g)^{1/2})$) | Tut 12, Lec 19 |
-| **[Loss Functions in Machine Learning](./Loss_Functions.md)** | MSE, MAE, Huber, BCE, CCE, Hinge, Wasserstein objectives | Tut 03, Tut 10, Lec 05 |
+| **[Latent Variable Models](./Latent_Variable_Models.md)** | Unobserved causes $p(x, z) = p(x \mid z)p(z)$, intractable marginals, GMMs, VAEs, DDPMs | Lec 19, Lec 20 |
+| **[Minimax Games & GANs](./Minimax_Game_and_GANs.md)** | Two-player zero-sum saddle $\min_G \max_D V(G, D)$, Nash equilibrium $D^*(x) = 0.5$, VDM origin | Lec 04, Lec 05, Tut 12 |
+| **[Reparameterization Trick](./Reparameterization_Trick.md)** | Differentiable sampling $z = \mu_\phi(x) + \sigma_\phi(x) \odot \epsilon$, enabling backpropagation in VAEs | Lec 20 |
 | **[Wasserstein Distance & Earth Mover's Distance (EMD)](./Wasserstein_Distance_and_EMD.md)** | Optimal transport, Kantorovich-Rubinstein dual ($\sup_{\|f\|_L \le 1} \mathbb{E}_P[f] - \mathbb{E}_Q[f]$), WGAN-GP | Lec 18, Tut 12 |
 
 ---
@@ -76,6 +80,10 @@ Every guide in this directory follows a strict **7-Section Gold Standard** bridg
 To link to any mathematical term from a lecture or tutorial note, use relative paths:
 ```markdown
 [Softmax Function](../../../MathsTerms/Softmax.md)
+[Lipschitz Continuity](../../../MathsTerms/Lipschitz_Continuity.md)
+[Minimax Games & GANs](../../../MathsTerms/Minimax_Game_and_GANs.md)
+[Latent Variable Models](../../../MathsTerms/Latent_Variable_Models.md)
+[Reparameterization Trick](../../../MathsTerms/Reparameterization_Trick.md)
 [Wasserstein Distance & EMD](../../../MathsTerms/Wasserstein_Distance_and_EMD.md)
 [ELBO & Variational Inference](../../../MathsTerms/ELBO_and_Variational_Inference.md)
 ```

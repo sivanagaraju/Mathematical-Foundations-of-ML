@@ -183,7 +183,7 @@ Matching $p_{\hat x}$ to $p_x$ does **not** by itself give you $E$. Pixel $W_2$ 
 | Symbol / Term | Theoretical Meaning | PyTorch / Software Implementation | Role in GAN Inversion & FID | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
 | **$x \in \mathbb{R}^D$** | Ambient Data Vector | `x = batch_images.view(B, -1)` | High-dimensional observable pixel vector ($D=784, 12288$) | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| **$z \in \mathbb{R}^K$** | Low-Dimensional Latent Code | `z = torch.randn(B, K)` | True underlying degrees of freedom on data manifold ($K \ll D$) | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| **$z \in \mathbb{R}^K$** | Low-Dimensional Latent Code | `z = torch.randn(B, K)` | True underlying degrees of freedom on data manifold ($K \ll D$) | [Latent Variable Models](../../../MathsTerms/Latent_Variable_Models.md) |
 | **$G(z)$** | Push-Forward Generator (Decoder) | `x_fake = generator(z)` | Maps low-D latent Gaussian code to high-D synthetic pixels | [Autoregressive Models](../../../MathsTerms/Autoregressive_Models.md) |
 | **$E(x)$** | Inversion Encoder Network | `z_hat = encoder(x)` | Maps high-D real images to latent feature representations | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
 | **$q(x, z)$ vs $p(x, z)$** | Joint Empirical vs Model Measures | `(x, E(x))` vs `(G(z), z)` | BiGAN / ALI joint distribution matching pairs | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
@@ -1047,6 +1047,149 @@ In lecture words: flaws of FID = Gaussian / Inception / layer; next family = LVM
 ### Bridge
 
 The leftover problem is **likelihood with a hidden $z$**: $p(x)=\int p(x\mid z)p(z)\,dz$ is incomplete if $z$ is unknown. That is the VAE hour (Lec 20), not a sixth net on this GAN.
+
+---
+
+## 🛠️ Workplace Debugging Postmortems
+
+---
+
+### Postmortem 1: FID Score Instability from Insufficient Sample Size
+
+```
+  ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+  ║ POSTMORTEM REPORT: FID SCORES JUMP ±15 BETWEEN IDENTICAL CHECKPOINTS                  ║
+  ╠═══════════════════════════════════════════════════════════════════════════════════════╣
+  ║ Severity: HIGH (P1) - Model evaluation unreliable; deployment decisions wrong 3/5 times║
+  ║ Root Cause: FID computed with 1K samples; Gaussian covariance estimate is rank-deficient║
+  ║ Affected Systems: Weekly model release pipeline for product image generation           ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════════╝
+```
+
+#### 1. The Incident & Symptom
+An ML team evaluated generative model checkpoints using FID to decide weekly releases. Identical checkpoints produced FID scores ranging from 28 to 43 across different evaluation runs, making release decisions unreliable. Three out of five releases shipped an inferior model because a random FID drop looked like improvement.
+
+#### 2. Mathematical Root-Cause Analysis
+1. **FID Formula (from this lecture):**
+   FID is the $W_2$ (Wasserstein-2) distance between two Gaussian fits on Inception-v3 features:
+   $$\text{FID} = \|\mu_r - \mu_g\|_2^2 + \text{Tr}\left(\Sigma_r + \Sigma_g - 2(\Sigma_r \Sigma_g)^{1/2}\right)$$
+
+2. **The Sample Size Problem:**
+   Inception-v3's pool3 layer outputs 2048-dimensional feature vectors. Estimating a $2048 \times 2048$ covariance matrix $\Sigma$ from only 1,000 samples yields a rank-deficient matrix (rank ≤ 999 < 2048). The matrix square root $(\Sigma_r \Sigma_g)^{1/2}$ becomes numerically unstable, and small random fluctuations in the sample dominate the trace term.
+
+3. **The Fix:**
+   The original Heusel et al. paper uses 50,000 samples. With $n = 50{,}000 \gg 2{,}048 = d$, the covariance estimate is full-rank and stable.
+
+#### 3. The Production Fix (PyTorch Code)
+
+```python
+import numpy as np
+from scipy.linalg import sqrtm
+
+def compute_fid(mu_real, sigma_real, mu_gen, sigma_gen, eps=1e-6):
+    """
+    FID = ||μ_r - μ_g||² + Tr(Σ_r + Σ_g - 2(Σ_r·Σ_g)^(1/2))
+    
+    CRITICAL: Use n ≥ 50,000 samples for stable Σ estimation!
+    With d=2048 features, n=1000 gives rank-deficient Σ → unstable FID.
+    """
+    # Mean difference term
+    diff = mu_real - mu_gen
+    mean_term = diff @ diff
+    
+    # Matrix square root with numerical stabilization
+    covmean, _ = sqrtm(sigma_real @ sigma_gen, disp=False)
+    
+    # Handle numerical imaginary components
+    if np.iscomplexobj(covmean):
+        if not np.allclose(np.diagonal(covmean).imag, 0, atol=1e-3):
+            raise ValueError(f"Imaginary component too large: {np.max(np.abs(covmean.imag))}")
+        covmean = covmean.real
+    
+    # Trace term
+    trace_term = np.trace(sigma_real + sigma_gen - 2.0 * covmean)
+    
+    return float(mean_term + trace_term)
+
+# LESSON: Always compute FID with ≥50,000 real and ≥50,000 generated samples.
+# n=1000: FID variance ≈ ±15 (useless for model comparison)
+# n=50000: FID variance ≈ ±0.5 (reliable for deployment decisions)
+```
+
+---
+
+### Postmortem 2: GAN Inversion Finds Wrong Latent Code Due to Mode Collapse
+
+```
+  ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+  ║ POSTMORTEM REPORT: FACE EDITING PRODUCES WRONG IDENTITY AFTER GAN INVERSION           ║
+  ╠═══════════════════════════════════════════════════════════════════════════════════════╣
+  ║ Severity: HIGH (P1) - Inverted z codes map to wrong faces; editing pipeline unusable   ║
+  ║ Root Cause: G(z) covers only 40% of face manifold (mode collapse); optimization-based  ║
+  ║ inversion finds nearest covered mode, not the target face                              ║
+  ║ Affected Systems: Real-image face editing app (age/expression/pose adjustment)         ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════════╝
+```
+
+#### 1. The Incident & Symptom
+A face editing application used GAN inversion to find the latent code $z^*$ for a user's photo, then modified $z^*$ along semantic directions (e.g., add smile, change age). Users reported that the "inverted" face looked like a different person — the reconstructed image had similar hair color but completely wrong facial structure.
+
+#### 2. Mathematical Root-Cause Analysis
+1. **GAN Inversion as Optimization (from this lecture):**
+   For a decoder-only generator $G_\theta$, inversion solves:
+   $$z^* = \arg\min_z \|G_\theta(z) - x_{\text{target}}\|_2^2$$
+   This requires $x_{\text{target}}$ to lie on the generator's image manifold $\{G_\theta(z) : z \in \mathbb{R}^K\}$.
+
+2. **Mode Collapse Breaks Inversion:**
+   The GAN suffered mode collapse — $G_\theta$ only generated a subset of face variations. When $x_{\text{target}}$ was outside this subset, the optimization converged to the nearest covered mode, producing a visually different face.
+
+3. **BiGAN/ALI as the Structural Fix (from this lecture):**
+   Professor Prathosh's key insight: add an encoder $E_\phi$ trained adversarially alongside $G_\theta$. The BiGAN/ALI discriminator matches joint distributions $p(x, E(x))$ vs $p(G(z), z)$. When joints match, marginals match, and the encoder learns a proper inverse.
+
+#### 3. The Production Fix (PyTorch Code)
+
+```python
+import torch
+import torch.nn as nn
+
+class BiGANInversion(nn.Module):
+    """
+    BiGAN-style inversion: use a learned encoder E(x) → z
+    instead of optimization-based inversion.
+    
+    Discriminator operates on PAIRS (x, z), not just x.
+    If D cannot tell (real_x, E(real_x)) from (G(z), z),
+    then E ≈ G^{-1} (the inversion is correct).
+    """
+    def __init__(self, encoder, generator, latent_dim=512):
+        super().__init__()
+        self.encoder = encoder      # E: x → z
+        self.generator = generator  # G: z → x
+        self.latent_dim = latent_dim
+    
+    def invert(self, x_target):
+        """Encode-then-refine: fast encoder + optional optimization"""
+        # Step 1: Fast forward pass through learned encoder
+        z_init = self.encoder(x_target)
+        
+        # Step 2: Optional refinement (hybrid approach)
+        z = z_init.clone().detach().requires_grad_(True)
+        optimizer = torch.optim.Adam([z], lr=0.01)
+        for step in range(100):
+            recon = self.generator(z)
+            loss = nn.functional.mse_loss(recon, x_target)
+            # Regularize toward encoder prediction (stay near a valid mode)
+            loss += 0.1 * torch.mean((z - z_init.detach()) ** 2)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+        
+        return z.detach()
+
+# LESSON: Pure optimization inversion fails with mode-collapsed generators.
+# BiGAN/ALI trains E alongside G so the encoder learns the correct inverse.
+# Hybrid: E(x) for initialization + short optimization for fine-tuning.
+```
 
 ---
 

@@ -17,4 +17,4 @@
 7. Centralized External References at the bottom (50+ curated citations organized by topic).
 8. Anchors matching quiz.html.
 
-Critical -- The purpose of the Notes.md and the prerequisites.md is to provide the reader to improve his skills and help to connect the dots.
+Critical -- The purpose of the Notes.md and the prerequisites.md is to provide the reader to improve his skills and help to connect the dots. Use the MathTerms folder to cover the inidivaul topic. Example lets MLE are you mentioning any where in the markdown file that you are referring to a topic in MathTerms folder. And similarly if new terms needs to be covered create a new file in the MathTerms folder and refer to it in the Notes.md. The new terms should follow the Mathterms files naming conventions and the strcuture and the connets the dots between math terms. The structure you can follow like #Softmax.md file in the MathsTerms folder. 

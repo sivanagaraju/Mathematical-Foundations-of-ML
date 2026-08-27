@@ -49,7 +49,7 @@ This hour is **theory**, not a training loop. Last lectures built a **sampler**:
 | Symbol / Term | Theoretical Concept | Plain-English Software Metaphor | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- |
 | **$x \in \mathbb{R}^D$** | Ambient Image Vector | High-dimensional pixel array ($D=784$ or $12288$) | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| **$z \in \mathbb{R}^K$** | Latent Representation Vector | Low-dimensional continuous knobs ($K \ll D$) | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| **$z \in \mathbb{R}^K$** | Latent Representation Vector | Low-dimensional continuous knobs ($K \ll D$) | [Latent Variable Models](../../../MathsTerms/Latent_Variable_Models.md) |
 | **$G(z)$** | Push-Forward Generator (Decoder) | Printing press generating photo $\hat{x}$ from code $z$ | [Autoregressive Models](../../../MathsTerms/Autoregressive_Models.md) |
 | **$E(x)$** | Inversion Encoder Network | Ingest camera mapping real photo $x$ to latent code $z$ | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
 | **$z^* = \arg\min_z \|x - G(z)\|^2$** | Direct Optimization Inversion | Gradient descent on latent code to reconstruct target photo | [Gradient Descent](../../../MathsTerms/Gradient_Descent.md) |

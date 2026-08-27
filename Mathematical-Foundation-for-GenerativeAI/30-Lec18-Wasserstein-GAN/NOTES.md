@@ -196,9 +196,9 @@ Ordinary nets already cannot hunt a global min in a trillion-parameter Hessian. 
 | **$D_f(P \parallel Q)$** | Classical $f$-divergence (KL, JSD) | Saturates on disjoint manifolds | Unstable yardstick; zero gradient when supports miss | [f-Divergence](../../../MathsTerms/f_Divergence.md) |
 | **$W_1(P, Q)$** | Wasserstein-1 Distance (Earth-Mover) | `loss = -(real_score.mean() - fake_score.mean())` | Primal transport cost; provides constant clean slope | [Wasserstein Distance & EMD](../../../MathsTerms/Wasserstein_Distance_and_EMD.md) |
 | **$\pi / \gamma$** | Joint transport plan in $\Pi(P, Q)$ | Coupling matrix with fixed marginals | Conservation of mass transport allocation | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
-| **$T_w(x)$** | 1-Lipschitz Critic Net | `critic = nn.Sequential(...)` | Unbounded scalar potential scorer; slope $\le 1$ | [Batch Normalization & Spectral Norm](../../../MathsTerms/Batch_Normalization_and_Spectral_Norm.md) |
+| **$T_w(x)$** | 1-Lipschitz Critic Net | `critic = nn.Sequential(...)` | Unbounded scalar potential scorer; slope $\le 1$ | [Lipschitz Continuity](../../../MathsTerms/Lipschitz_Continuity.md) |
 | **$\|W\|_2 \le 1$** | Spectral Norm / 1-Lipschitz Bound | `torch.nn.utils.spectral_norm(layer)` | Prevents critic gradient explosion; guarantees KR duality | [Batch Normalization & Spectral Norm](../../../MathsTerms/Batch_Normalization_and_Spectral_Norm.md) |
-| **$\text{Saddle}$** | $\min_\theta \max_{w: \|T_w\|_L \le 1} J(\theta, w)$ | WGAN Alternating Minimax Loop | Finds equilibrium between Generator and 1-Lipschitz Critic | [Fenchel Conjugate & Dual Representations](../../../MathsTerms/Fenchel_Conjugate_and_Dual_Representations.md) |
+| **$\text{Saddle}$** | $\min_\theta \max_{w: \|T_w\|_L \le 1} J(\theta, w)$ | WGAN Alternating Minimax Loop | Finds equilibrium between Generator and 1-Lipschitz Critic | [Minimax Games & GANs](../../../MathsTerms/Minimax_Game_and_GANs.md) |
 
 ---
 
@@ -902,6 +902,139 @@ Notice: “that’s it for today” — inversion / FID are a coverage STOP from
 ### Bridge
 
 The adversarial block, as uploaded, ends here: new yardstick, same saddle, one extra constraint on $T$. The leftover promised at minute one — **invert** $G$, **score** samples (FID) — is the next sitting, not a hidden appendix of this hour.
+
+---
+
+## Workplace Debugging Postmortems
+
+---
+
+### Postmortem 1: GAN Training Collapse from JSD Vanishing Gradients on Disjoint Manifolds
+
+```
+  ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+  ║ POSTMORTEM REPORT: GENERATOR GRADIENT VANISHES ON HIGH-RES IMAGE SYNTHESIS           ║
+  ╠═══════════════════════════════════════════════════════════════════════════════════════╣
+  ║ Severity: CRITICAL (P0) - Generator loss flat at ln(2) ≈ 0.693; no visual progress  ║
+  ║ Root Cause: JSD saturates to ln(2) when p_x and p_θ have disjoint manifold supports  ║
+  ║ Affected Systems: 512×512 face synthesis pipeline (vanilla GAN with BCE loss)         ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════════╝
+```
+
+#### 1. The Incident & Symptom
+A team training a vanilla GAN for high-resolution face generation (512×512 pixels) observed that after 200 epochs, the discriminator achieved 100% accuracy on both real and fake batches, yet the generator loss stayed flat at exactly $\ln(2) \approx 0.693$. Generated images remained random noise — no faces emerged.
+
+#### 2. Mathematical Root-Cause Analysis
+1. **The Manifold Hypothesis Violation:**
+   Real images occupy a thin manifold $\mathcal{M}_{\text{data}}$ embedded in $\mathbb{R}^{512 \times 512 \times 3}$. Early in training, the generator's manifold $\mathcal{M}_\theta$ is far from $\mathcal{M}_{\text{data}}$, so their intersection is empty ($\mathcal{M}_{\text{data}} \cap \mathcal{M}_\theta = \emptyset$).
+
+2. **JSD Saturation (The Two-Dirac Theorem from this lecture):**
+   When supports are disjoint, a perfect discriminator $D^*(x) = 1$ for real and $D^*(x) = 0$ for fake exists, yielding:
+   $$D_{\text{JS}}(p_x \parallel p_\theta) = \ln 2 \quad \text{(constant)} \implies \nabla_\theta D_{\text{JS}} = 0 \quad \text{(Vanishing Gradient!)}$$
+   The generator receives zero useful learning signal. This is the exact "parallel lines" failure Professor Prathosh proved on the blackboard.
+
+3. **The Wasserstein Fix:**
+   Replacing JSD with $W_1$ gives:
+   $$W_1(p_x, p_\theta) = |\theta| \implies \nabla_\theta W_1 = \text{sign}(\theta) \neq 0 \quad \text{(Constant clean gradient)}$$
+
+#### 3. The Production Fix (PyTorch Code)
+Replace the BCE-based discriminator with a WGAN critic (no sigmoid, no log) using Wasserstein loss:
+
+```python
+import torch
+import torch.nn as nn
+
+# BEFORE (Vanilla GAN — saturates on disjoint supports):
+# d_loss = F.binary_cross_entropy_with_logits(D(real), ones) +
+#          F.binary_cross_entropy_with_logits(D(fake), zeros)
+# g_loss = F.binary_cross_entropy_with_logits(D(fake), ones)  # ← gradient dies!
+
+# AFTER (WGAN — linear critic, no sigmoid):
+def wgan_critic_loss(critic, real_data, fake_data):
+    """WGAN critic loss: maximize E[D(real)] - E[D(fake)]"""
+    # Critic outputs unbounded scalar (no sigmoid!)
+    d_real = critic(real_data).mean()
+    d_fake = critic(fake_data.detach()).mean()
+    # Maximize E[D(real)] - E[D(fake)] ≡ minimize -(E[D(real)] - E[D(fake)])
+    return -(d_real - d_fake)
+
+def wgan_generator_loss(critic, fake_data):
+    """WGAN generator loss: maximize E[D(G(z))]"""
+    return -critic(fake_data).mean()
+
+def enforce_lipschitz(critic, max_norm=1.0):
+    """After each optimizer step, clamp critic weights to enforce 1-Lipschitz"""
+    for p in critic.parameters():
+        p.data.clamp_(-0.01, 0.01)  # Weight clipping (original WGAN)
+    # Or: spectral normalization / gradient penalty (WGAN-GP) preferred
+```
+
+---
+
+### Postmortem 2: WGAN Weight Clipping Destroying Critic Capacity
+
+```
+  ╔═══════════════════════════════════════════════════════════════════════════════════════╗
+  ║ POSTMORTEM REPORT: WGAN GENERATES BLURRY OUTPUTS DESPITE STABLE TRAINING             ║
+  ╠═══════════════════════════════════════════════════════════════════════════════════════╣
+  ║ Severity: HIGH (P1) - Training stable but FID scores plateau at 85+ (target: <30)    ║
+  ║ Root Cause: Aggressive weight clipping (c=0.01) collapses critic into near-linear fn  ║
+  ║ Affected Systems: CelebA-HQ 256×256 face generation with WGAN weight clipping        ║
+  ╚═══════════════════════════════════════════════════════════════════════════════════════╝
+```
+
+#### 1. The Incident & Symptom
+After switching from vanilla GAN to WGAN, training became stable — the critic loss descended smoothly — but generated faces were blurry and lacked fine detail. FID score plateaued at 85, far above the target of 30.
+
+#### 2. Mathematical Root-Cause Analysis
+1. **The 1-Lipschitz Constraint:**
+   Kantorovich-Rubinstein duality requires the critic to be 1-Lipschitz: $|f(x) - f(y)| \le \|x - y\|_2$.
+   
+2. **Weight Clipping is Too Blunt:**
+   Clamping all weights to $[-c, c]$ with $c = 0.01$ forces the critic toward a nearly linear function with very small weights. A near-linear critic cannot separate fine texture differences between real and generated images. The Wasserstein estimate becomes a loose lower bound, and the generator gets a weak learning signal.
+
+3. **The Gradient Penalty Fix (WGAN-GP):**
+   Instead of clipping weights, penalize the critic's gradient norm at interpolated points $\hat{x} = \epsilon x_{\text{real}} + (1 - \epsilon) x_{\text{fake}}$:
+   $$\mathcal{L}_{\text{GP}} = \lambda \, \mathbb{E}_{\hat{x}}\left[ \left( \|\nabla_{\hat{x}} D(\hat{x})\|_2 - 1 \right)^2 \right]$$
+
+#### 3. The Production Fix (PyTorch Code)
+
+```python
+import torch
+
+def gradient_penalty(critic, real_data, fake_data, device, lambda_gp=10.0):
+    """
+    WGAN-GP: Penalize critic gradient norm on interpolated samples.
+    Enforces 1-Lipschitz without destroying critic capacity.
+    """
+    batch_size = real_data.size(0)
+    # Random interpolation coefficient ε ~ Uniform(0, 1)
+    epsilon = torch.rand(batch_size, 1, 1, 1, device=device)
+    
+    # Interpolated sample x̂ = ε·x_real + (1-ε)·x_fake
+    x_hat = (epsilon * real_data + (1 - epsilon) * fake_data).requires_grad_(True)
+    
+    # Critic output at interpolated point
+    d_hat = critic(x_hat)
+    
+    # Compute gradient of critic output w.r.t. interpolated input
+    gradients = torch.autograd.grad(
+        outputs=d_hat, inputs=x_hat,
+        grad_outputs=torch.ones_like(d_hat),
+        create_graph=True, retain_graph=True
+    )[0]
+    
+    # Flatten gradient, compute L2 norm per sample
+    gradients = gradients.view(batch_size, -1)
+    grad_norm = gradients.norm(2, dim=1)
+    
+    # Penalty: (||∇D(x̂)||₂ - 1)²
+    gp = lambda_gp * ((grad_norm - 1.0) ** 2).mean()
+    return gp
+
+# Usage in WGAN-GP training loop:
+# critic_loss = wgan_critic_loss(critic, real, fake) + gradient_penalty(critic, real, fake, device)
+```
 
 ---
 

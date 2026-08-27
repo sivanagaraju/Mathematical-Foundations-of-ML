@@ -197,7 +197,7 @@ This reference table maps deep learning transfer symbols directly to PyTorch imp
 | $y = F(x) + x$ | Residual Skip Transformation | `out += identity` | Identity shortcut connection in ResNet residual blocks. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
 | `requires_grad = False` | Parameter Freezing Flag | `for p in model.parameters(): p.requires_grad = False` | Disables gradient computation for feature extraction. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
 | $\boldsymbol{\mu}_{\text{ImageNet}}, \boldsymbol{\sigma}_{\text{ImageNet}}$ | Standardization Statistics | `transforms.Normalize([0.485, ...], [0.229, ...])` | Per-channel color distribution centering and scaling. | [Batch Normalization & Spectral Norm](../../../MathsTerms/Batch_Normalization_and_Spectral_Norm.md) |
-| `class_to_idx` | Label Mapping Dictionary | `dataset.class_to_idx` | Mapping subfolder names (`glioma`, `meningioma`) to integers ($0, 1, 2, 3$). | [One-Hot Encoding](../../../MathsTerms/OneHot.md) |
+| `class_to_idx` | Label Mapping Dictionary | `dataset.class_to_idx` | Mapping subfolder names (`glioma`, `meningioma`) to integers ($0, 1, 2, 3$). | [One-Hot Encoding](../../../MathsTerms/One_Hot_Encoding.md) |
 | $\mathbf{z} \in \mathbb{R}^{N \times 4}$ | Unnormalized Logit Scores | `logits = model(x)` | Output tensor fed into `nn.CrossEntropyLoss(logits, targets)`. | [Softmax](../../../MathsTerms/Softmax.md) |
 
 ---
