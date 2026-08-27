@@ -24,15 +24,15 @@ Last hour’s GAN / VDM **saddle** can **saturate**: a perfect inspector leaves 
 
 | Word / Symbol | Picture / Formal Concept | This hour’s job | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- |
-| **$p_x$** | Real pile (training images) | The data distribution you wish to match | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
-| **$p_\theta$ / $p_{\hat x}$** | Fake pile from $G_\theta(z)$ | The generative push-forward law you can sample | [Autoregressive Models](../../../MathsTerms/Autoregressive_Models.md) |
-| **$\text{Support}$** | Grass that actually has sand | The subset $\mathcal{X} \subset \mathbb{R}^d$ where density is non-zero | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
-| **$\text{Manifold}$** | A thread / sheet in a 3D room | Low-dimensional geometry embedded in high-D ambient space | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
-| **$D_f$** | $f$-divergence (KL, JSD, …) | Classical divergence yardstick; saturates to $\ln 2$ on disjoint supports | [f-Divergence](../../../MathsTerms/f_Divergence.md) |
-| **$W_1(P, Q)$** | Wasserstein / Earth-Mover's Distance | Minimal shovel work $\inf_\gamma \mathbb{E}[\|x - y\|]$ between piles | [Wasserstein Distance & EMD](../../../MathsTerms/Wasserstein_Distance_and_EMD.md) |
-| **$\pi / \gamma$** | Transport plan = joint coupling table | Conservation-of-mass joint distribution coupling $P$ and $Q$ | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
-| **$T_w / D_w$** | 1-Lipschitz Critic Net | Scalar regression potential landscape; slope bounded by 1.0 | [Lipschitz Continuity](../../../MathsTerms/Lipschitz_Continuity.md) |
-| **$\text{Saddle}$** | $\min_\theta \max_w J(\theta, w)$ | Minimax optimization seeking Nash equilibrium on zero-sum landscape | [Minimax Games & GANs](../../../MathsTerms/Minimax_Game_and_GANs.md) |
+| **$p_x$** | Real pile (training images) | The data distribution you wish to match | [Common Probability Distributions](../../MathsTerms/Common_Probability_Distributions.md) |
+| **$p_\theta$ / $p_{\hat x}$** | Fake pile from $G_\theta(z)$ | The generative push-forward law you can sample | [Autoregressive Models](../../MathsTerms/Autoregressive_Models.md) |
+| **$\text{Support}$** | Grass that actually has sand | The subset $\mathcal{X} \subset \mathbb{R}^d$ where density is non-zero | [Autoencoders & Latent Spaces](../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| **$\text{Manifold}$** | A thread / sheet in a 3D room | Low-dimensional geometry embedded in high-D ambient space | [Autoencoders & Latent Spaces](../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| **$D_f$** | $f$-divergence (KL, JSD, …) | Classical divergence yardstick; saturates to $\ln 2$ on disjoint supports | [f-Divergence](../../MathsTerms/f_Divergence.md) |
+| **$W_1(P, Q)$** | Wasserstein / Earth-Mover's Distance | Minimal shovel work $\inf_\gamma \mathbb{E}[\|x - y\|]$ between piles | [Wasserstein Distance & EMD](../../MathsTerms/Wasserstein_Distance_and_EMD.md) |
+| **$\pi / \gamma$** | Transport plan = joint coupling table | Conservation-of-mass joint distribution coupling $P$ and $Q$ | [Joint, Marginal & Conditional Dist](../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| **$T_w / D_w$** | 1-Lipschitz Critic Net | Scalar regression potential landscape; slope bounded by 1.0 | [Lipschitz Continuity](../../MathsTerms/Lipschitz_Continuity.md) |
+| **$\text{Saddle}$** | $\min_\theta \max_w J(\theta, w)$ | Minimax optimization seeking Nash equilibrium on zero-sum landscape | [Minimax Games & GANs](../../MathsTerms/Minimax_Game_and_GANs.md) |
 
 ```
   §1  Saddle / minmax                 ──► Topics 1, 8–9

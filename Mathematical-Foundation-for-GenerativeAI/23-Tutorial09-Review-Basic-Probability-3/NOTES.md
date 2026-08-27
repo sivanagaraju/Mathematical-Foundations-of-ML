@@ -187,17 +187,17 @@ This quick-reference table maps every mathematical symbol used in Tutorial 9 to 
 
 | Symbol | Mathematical Object | Reading / Pronunciation | Meaning in this Lecture | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| $(X, Y)$ | Random Vector / Pair | *"Pair X comma Y"* | Vector mapping $\Omega \to \mathbb{R}^2$ from the shared experiment $\Omega$. | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
-| $F_{XY}(x, y)$ | Joint CDF | *"Joint CDF of X, Y"* | $P(X \le x, Y \le y)$: Probability mass South-West of $(x, y)$. | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
-| $p_{XY}(x, y)$ | Joint PMF / Joint PDF | *"Joint mass / density"* | Probability mass at $(x_i, y_j)$ or 3D density height at $(x, y)$. | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
-| $p_X(x)$ | Marginal Density of $X$ | *"Marginal p of X"* | $\int_{-\infty}^\infty p_{XY}(x, y)\,dy$: Probability density of $X$ alone. | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
-| $p(x \mid y)$ | Conditional Density | *"p of x given y"* | $\frac{p_{XY}(x, y)}{p_Y(y)}$: Density of $X$ on the knife-edge slice $Y = y$. | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
-| $X \perp\!\!\!\perp Y$ | Statistical Independence | *"X is independent of Y"* | $p_{XY}(x, y) = p_X(x) p_Y(y)$ for all $(x, y) \in \mathbb{R}^2$. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| $\text{IID}$ | Independent & Identically Distributed | *"I-I-D"* | Dataset samples drawn independently from the exact same underlying law. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| $\mathbf{X} \in \mathbb{R}^n$ | Random Vector of Dim $n$ | *"Vector X in R-n"* | Vector of $n$ random variables $(X_1, X_2, \dots, X_n)$ on $\Omega$. | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
-| $\mathbf{J}_h(\mathbf{y})$ | Jacobian Matrix | *"Jacobian of inverse h"* | Matrix of partial derivatives $\left[ \frac{\partial x_i}{\partial y_j} \right]$ for coordinate transform. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
-| $\lvert \det \mathbf{J} \rvert$ | Absolute Jacobian Determinant | *"Absolute det J"* | Local volume scaling factor preserving unit probability volume under transformation. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
-| $\text{GMM}$ | Gaussian Mixture Model | *"G-M-M"* | Weighted mixture of Gaussian densities: $p(x) = \sum_k \lambda_k \mathcal{N}(\mu_k, \sigma_k^2)$. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
+| $(X, Y)$ | Random Vector / Pair | *"Pair X comma Y"* | Vector mapping $\Omega \to \mathbb{R}^2$ from the shared experiment $\Omega$. | [Joint, Marginal & Conditional Dist](../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| $F_{XY}(x, y)$ | Joint CDF | *"Joint CDF of X, Y"* | $P(X \le x, Y \le y)$: Probability mass South-West of $(x, y)$. | [Joint, Marginal & Conditional Dist](../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| $p_{XY}(x, y)$ | Joint PMF / Joint PDF | *"Joint mass / density"* | Probability mass at $(x_i, y_j)$ or 3D density height at $(x, y)$. | [Joint, Marginal & Conditional Dist](../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| $p_X(x)$ | Marginal Density of $X$ | *"Marginal p of X"* | $\int_{-\infty}^\infty p_{XY}(x, y)\,dy$: Probability density of $X$ alone. | [Joint, Marginal & Conditional Dist](../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| $p(x \mid y)$ | Conditional Density | *"p of x given y"* | $\frac{p_{XY}(x, y)}{p_Y(y)}$: Density of $X$ on the knife-edge slice $Y = y$. | [Joint, Marginal & Conditional Dist](../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| $X \perp\!\!\!\perp Y$ | Statistical Independence | *"X is independent of Y"* | $p_{XY}(x, y) = p_X(x) p_Y(y)$ for all $(x, y) \in \mathbb{R}^2$. | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $\text{IID}$ | Independent & Identically Distributed | *"I-I-D"* | Dataset samples drawn independently from the exact same underlying law. | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $\mathbf{X} \in \mathbb{R}^n$ | Random Vector of Dim $n$ | *"Vector X in R-n"* | Vector of $n$ random variables $(X_1, X_2, \dots, X_n)$ on $\Omega$. | [Joint, Marginal & Conditional Dist](../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| $\mathbf{J}_h(\mathbf{y})$ | Jacobian Matrix | *"Jacobian of inverse h"* | Matrix of partial derivatives $\left[ \frac{\partial x_i}{\partial y_j} \right]$ for coordinate transform. | [Derivatives, Gradients & Jacobians](../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
+| $\lvert \det \mathbf{J} \rvert$ | Absolute Jacobian Determinant | *"Absolute det J"* | Local volume scaling factor preserving unit probability volume under transformation. | [Derivatives, Gradients & Jacobians](../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
+| $\text{GMM}$ | Gaussian Mixture Model | *"G-M-M"* | Weighted mixture of Gaussian densities: $p(x) = \sum_k \lambda_k \mathcal{N}(\mu_k, \sigma_k^2)$. | [Common Probability Distributions](../../MathsTerms/Common_Probability_Distributions.md) |
 
 ---
 

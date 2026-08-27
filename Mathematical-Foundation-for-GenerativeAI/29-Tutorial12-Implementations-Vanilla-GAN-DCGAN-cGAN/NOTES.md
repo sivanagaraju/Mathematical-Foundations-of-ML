@@ -165,16 +165,16 @@ Tutorial 12 bridges the gap between theoretical minimax saddle games and product
 
 | Symbol / Term | Theoretical Meaning | PyTorch Code Implementation | Role in Training Loop | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| **$G_\theta$** | Generator Push-Forward Network | `G = Generator().to(device)` | Maps noise $z \sim \mathcal{N}(0, I)$ to synthetic images $\hat{x}$. | [Autoregressive Models](../../../MathsTerms/Autoregressive_Models.md) |
-| **$D_w$** | Discriminator Classifier Net | `D = Discriminator().to(device)` | Maps real or fake images to raw scalar logits $A \in \mathbb{R}$. | [Jensen-Shannon Divergence](../../../MathsTerms/Jensen_Shannon_Divergence.md) |
-| **$z \in \mathbb{R}^{100}$** | Latent Noise Prior | `z = torch.randn(B, 100, device=device)` | Supplies all entropy for non-deterministic generation. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
-| **$A \in \mathbb{R}$** | Raw Discriminator Logit | `real_logits = D(real_imgs)` | Pre-sigmoid score; fed directly to `BCEWithLogitsLoss`. | [Softmax](../../../MathsTerms/Softmax.md) |
-| **$\sigma(A) \in (0, 1)$** | Probability of Real | `prob = torch.sigmoid(logits)` | Evaluation-only metric; represents $P(\text{real} \mid x)$. | [Softmax](../../../MathsTerms/Softmax.md) |
-| **`fake.detach()`** | Autograd Graph Severing | `fake_detached = fake_imgs.detach()` | Stops gradients from flowing back into $G$ during $D$-step. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
-| **$y = 1$ (On Fakes)**| Non-Saturating G Target | `criterion(D(fake), torch.ones(B, 1))` | Converts minimization of $\ln(1 - D)$ to minimization of $-\ln D$. | [Logarithms & Exponential Functions](../../../MathsTerms/Logarithms_and_Exponential_Functions.md) |
-| **`nn.Embedding`** | Learnable Categorical Map | `self.lab = nn.Embedding(10, 10)` | Converts discrete class index $y \in \{0..9\}$ to dense 10-D vector. | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
-| **`ConvTranspose2d`**| Fractionally Strided Conv | `nn.ConvTranspose2d(128, 64, 4, 2, 1)` | Upsamples spatial feature grid from $7 \times 7$ to $14 \times 14$. | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
-| **$\text{FID}$** | Fréchet Inception Distance | `FrechetInceptionDistance(feature=2048)`| Computes 2-Wasserstein distance on Inception feature Gaussians. | [Jensen-Shannon Divergence](../../../MathsTerms/Jensen_Shannon_Divergence.md) |
+| **$G_\theta$** | Generator Push-Forward Network | `G = Generator().to(device)` | Maps noise $z \sim \mathcal{N}(0, I)$ to synthetic images $\hat{x}$. | [Autoregressive Models](../../MathsTerms/Autoregressive_Models.md) |
+| **$D_w$** | Discriminator Classifier Net | `D = Discriminator().to(device)` | Maps real or fake images to raw scalar logits $A \in \mathbb{R}$. | [Jensen-Shannon Divergence](../../MathsTerms/Jensen_Shannon_Divergence.md) |
+| **$z \in \mathbb{R}^{100}$** | Latent Noise Prior | `z = torch.randn(B, 100, device=device)` | Supplies all entropy for non-deterministic generation. | [Common Probability Distributions](../../MathsTerms/Common_Probability_Distributions.md) |
+| **$A \in \mathbb{R}$** | Raw Discriminator Logit | `real_logits = D(real_imgs)` | Pre-sigmoid score; fed directly to `BCEWithLogitsLoss`. | [Softmax](../../MathsTerms/Softmax.md) |
+| **$\sigma(A) \in (0, 1)$** | Probability of Real | `prob = torch.sigmoid(logits)` | Evaluation-only metric; represents $P(\text{real} \mid x)$. | [Softmax](../../MathsTerms/Softmax.md) |
+| **`fake.detach()`** | Autograd Graph Severing | `fake_detached = fake_imgs.detach()` | Stops gradients from flowing back into $G$ during $D$-step. | [Derivatives, Gradients & Jacobians](../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
+| **$y = 1$ (On Fakes)**| Non-Saturating G Target | `criterion(D(fake), torch.ones(B, 1))` | Converts minimization of $\ln(1 - D)$ to minimization of $-\ln D$. | [Logarithms & Exponential Functions](../../MathsTerms/Logarithms_and_Exponential_Functions.md) |
+| **`nn.Embedding`** | Learnable Categorical Map | `self.lab = nn.Embedding(10, 10)` | Converts discrete class index $y \in \{0..9\}$ to dense 10-D vector. | [Joint, Marginal & Conditional Dist](../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| **`ConvTranspose2d`**| Fractionally Strided Conv | `nn.ConvTranspose2d(128, 64, 4, 2, 1)` | Upsamples spatial feature grid from $7 \times 7$ to $14 \times 14$. | [Autoencoders & Latent Spaces](../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| **$\text{FID}$** | Fréchet Inception Distance | `FrechetInceptionDistance(feature=2048)`| Computes 2-Wasserstein distance on Inception feature Gaussians. | [Jensen-Shannon Divergence](../../MathsTerms/Jensen_Shannon_Divergence.md) |
 
 ---
 

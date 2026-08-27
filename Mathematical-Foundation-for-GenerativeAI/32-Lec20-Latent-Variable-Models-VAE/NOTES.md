@@ -171,16 +171,16 @@ This hour defines a latent variable model: $p_\theta(x)$ is the marginal of a jo
 
 | Symbol / Term | Theoretical Meaning | PyTorch / Software Implementation | Role in Latent Variable Models & VAE | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| **$x \in \mathbb{R}^D$** | Observable Data Vector | `x = batch_images` | Observed high-dimensional pixel input | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| **$z \in \mathbb{R}^K$** | Latent Random Variable | `z = mu + std * eps` | Unobserved low-dimensional continuous code | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
-| **$p_\theta(x, z)$** | Generative Joint Measure | $p_\theta(x \mid z) p(z)$ | Joint probability of observable $x$ and hidden code $z$ | [Latent Variable Models](../../../MathsTerms/Latent_Variable_Models.md) |
-| **$p_\theta(x) = \int p(x,z) dz$** | Marginal Likelihood (Evidence) | Incomplete log-likelihood target | Objective to maximize via lower bound | [Likelihood & Log-Likelihood](../../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
-| **$p_\theta(z \mid x)$** | True Posterior Distribution | $\frac{p_\theta(x \mid z) p(z)}{p_\theta(x)}$ | Intractable Bayesian posterior over latent variables | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
-| **$q_\phi(z \mid x)$** | Variational Posterior (Encoder) | `mu, logvar = encoder(x)` | Neural network approximation to true posterior | [ELBO & Variational Inference](../../../MathsTerms/ELBO_and_Variational_Inference.md) |
-| **$z = \mu + \sigma \odot \epsilon$** | Reparameterization Trick | `z = mu + std * eps` | Differentiable sampling enabling backpropagation through encoder | [Reparameterization Trick](../../../MathsTerms/Reparameterization_Trick.md) |
-| **$p_\theta(x \mid z)$** | Likelihood / Generator (Decoder) | `x_recon = decoder(z)` | Reconstruction probability mapping code to pixels | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
-| **$\mathcal{L}_{\text{ELBO}}(\theta, \phi)$** | Evidence Lower Bound | `loss = recon_loss + kl_loss` | Variational lower bound $\le \ln p_\theta(x)$ optimized by gradient ascent | [ELBO & Variational Inference](../../../MathsTerms/ELBO_and_Variational_Inference.md) |
-| **$\text{EM Algorithm}$** | Expectation-Maximization | Closed-form E-step $q^* = p_\theta(z \mid x)$ | Exact inference when posterior is tractable (e.g. GMM) | [Expectation-Maximization Algorithm](../../../MathsTerms/Expectation_Maximization_Algorithm.md) |
+| **$x \in \mathbb{R}^D$** | Observable Data Vector | `x = batch_images` | Observed high-dimensional pixel input | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| **$z \in \mathbb{R}^K$** | Latent Random Variable | `z = mu + std * eps` | Unobserved low-dimensional continuous code | [Autoencoders & Latent Spaces](../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| **$p_\theta(x, z)$** | Generative Joint Measure | $p_\theta(x \mid z) p(z)$ | Joint probability of observable $x$ and hidden code $z$ | [Latent Variable Models](../../MathsTerms/Latent_Variable_Models.md) |
+| **$p_\theta(x) = \int p(x,z) dz$** | Marginal Likelihood (Evidence) | Incomplete log-likelihood target | Objective to maximize via lower bound | [Likelihood & Log-Likelihood](../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
+| **$p_\theta(z \mid x)$** | True Posterior Distribution | $\frac{p_\theta(x \mid z) p(z)}{p_\theta(x)}$ | Intractable Bayesian posterior over latent variables | [Joint, Marginal & Conditional Dist](../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| **$q_\phi(z \mid x)$** | Variational Posterior (Encoder) | `mu, logvar = encoder(x)` | Neural network approximation to true posterior | [ELBO & Variational Inference](../../MathsTerms/ELBO_and_Variational_Inference.md) |
+| **$z = \mu + \sigma \odot \epsilon$** | Reparameterization Trick | `z = mu + std * eps` | Differentiable sampling enabling backpropagation through encoder | [Reparameterization Trick](../../MathsTerms/Reparameterization_Trick.md) |
+| **$p_\theta(x \mid z)$** | Likelihood / Generator (Decoder) | `x_recon = decoder(z)` | Reconstruction probability mapping code to pixels | [Autoencoders & Latent Spaces](../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| **$\mathcal{L}_{\text{ELBO}}(\theta, \phi)$** | Evidence Lower Bound | `loss = recon_loss + kl_loss` | Variational lower bound $\le \ln p_\theta(x)$ optimized by gradient ascent | [ELBO & Variational Inference](../../MathsTerms/ELBO_and_Variational_Inference.md) |
+| **$\text{EM Algorithm}$** | Expectation-Maximization | Closed-form E-step $q^* = p_\theta(z \mid x)$ | Exact inference when posterior is tractable (e.g. GMM) | [Expectation-Maximization Algorithm](../../MathsTerms/Expectation_Maximization_Algorithm.md) |
 
 ---
 

@@ -199,18 +199,18 @@ This reference table maps statistical estimation symbols directly to Python impl
 
 | Symbol / Syntax | Formal Concept | Python / SciPy Implementation | Lecture Usage & Context | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| $\mathcal{D} = \{x_1, \dots, x_n\}$ | Observed Dataset | `x_data = np.array([...])` | The frozen empirical observations. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| $L(\theta \mid \mathcal{D})$ | Likelihood Function | `np.prod(f(x, theta))` | Compatibility score of parameter $\theta$ given frozen data $\mathcal{D}$. | [Likelihood & Log-Likelihood](../../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
-| $\ell(\theta) = \ln L(\theta)$ | Log-Likelihood Function | `np.sum(np.log(f(x, theta)))` | Numerically stable objective function maximized via derivatives. | [Likelihood & Log-Likelihood](../../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
-| $\Phi(z)$ | Standard Normal CDF | `scipy.stats.norm.cdf(z)` | Cumulative probability $P(Z \le z)$ under $\mathcal{N}(0, 1)$. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
-| $\Phi^{-1}(p)$ | Quantile (Inverse Normal CDF) | `scipy.stats.norm.ppf(p)` | Finds the cutoff threshold $z$ such that $\Phi(z) = p$. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
-| $m$ | Count of Negative Signs | `m = np.sum(x_signs == -1)` | Number of negative observations in Problem 1. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
-| $p = \Phi(-\mu)$ | Negative Sign Probability | `p_hat = m / n` | Reparameterized Bernoulli coin success probability. | [Maximum Likelihood Estimation](../../../MathsTerms/MLE.md) |
-| $\hat{\mu} = -\Phi^{-1}(m/n)$ | Recovered Gaussian Mean | `mu_hat = -stats.norm.ppf(m/n)` | Closed-form MLE for the sign-censored Gaussian. | [Maximum Likelihood Estimation](../../../MathsTerms/MLE.md) |
-| $Z_i \in \{0, 1\}$ | Latent Component Indicator | `z_latent = np.random.binomial(1, pi)` | Unobserved switch indicating which exponential component generated $x_i$. | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
-| $\gamma_i = P(Z_i=1 \mid x_i)$ | Posterior Responsibility | `gamma = (pi*f1) / (pi*f1 + (1-pi)*f2)` | Soft cluster assignment computed during the E-Step. | [Expectation-Maximization](../../../MathsTerms/Expectation_Maximization_Algorithm.md) |
-| $Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{\text{old}})$ | Expected Complete Log-Likelihood | Computed inside EM loop | Surrogate objective function maximized during the M-Step. | [Expectation-Maximization](../../../MathsTerms/Expectation_Maximization_Algorithm.md) |
-| $\pi^{\text{new}}, \beta_1^{\text{new}}, \beta_2^{\text{new}}$ | Updated Mixture Parameters | `pi = np.mean(gamma)`, `b1 = np.sum(gamma)/np.sum(gamma*x)` | Closed-form analytical updates computed in the M-Step. | [Expectation-Maximization](../../../MathsTerms/Expectation_Maximization_Algorithm.md) |
+| $\mathcal{D} = \{x_1, \dots, x_n\}$ | Observed Dataset | `x_data = np.array([...])` | The frozen empirical observations. | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $L(\theta \mid \mathcal{D})$ | Likelihood Function | `np.prod(f(x, theta))` | Compatibility score of parameter $\theta$ given frozen data $\mathcal{D}$. | [Likelihood & Log-Likelihood](../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
+| $\ell(\theta) = \ln L(\theta)$ | Log-Likelihood Function | `np.sum(np.log(f(x, theta)))` | Numerically stable objective function maximized via derivatives. | [Likelihood & Log-Likelihood](../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
+| $\Phi(z)$ | Standard Normal CDF | `scipy.stats.norm.cdf(z)` | Cumulative probability $P(Z \le z)$ under $\mathcal{N}(0, 1)$. | [Common Probability Distributions](../../MathsTerms/Common_Probability_Distributions.md) |
+| $\Phi^{-1}(p)$ | Quantile (Inverse Normal CDF) | `scipy.stats.norm.ppf(p)` | Finds the cutoff threshold $z$ such that $\Phi(z) = p$. | [Common Probability Distributions](../../MathsTerms/Common_Probability_Distributions.md) |
+| $m$ | Count of Negative Signs | `m = np.sum(x_signs == -1)` | Number of negative observations in Problem 1. | [Random Variables & Distributions](../../MathsTerms/Random_Variables_and_Distributions.md) |
+| $p = \Phi(-\mu)$ | Negative Sign Probability | `p_hat = m / n` | Reparameterized Bernoulli coin success probability. | [Maximum Likelihood Estimation](../../MathsTerms/MLE.md) |
+| $\hat{\mu} = -\Phi^{-1}(m/n)$ | Recovered Gaussian Mean | `mu_hat = -stats.norm.ppf(m/n)` | Closed-form MLE for the sign-censored Gaussian. | [Maximum Likelihood Estimation](../../MathsTerms/MLE.md) |
+| $Z_i \in \{0, 1\}$ | Latent Component Indicator | `z_latent = np.random.binomial(1, pi)` | Unobserved switch indicating which exponential component generated $x_i$. | [Autoencoders & Latent Spaces](../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| $\gamma_i = P(Z_i=1 \mid x_i)$ | Posterior Responsibility | `gamma = (pi*f1) / (pi*f1 + (1-pi)*f2)` | Soft cluster assignment computed during the E-Step. | [Expectation-Maximization](../../MathsTerms/Expectation_Maximization_Algorithm.md) |
+| $Q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{\text{old}})$ | Expected Complete Log-Likelihood | Computed inside EM loop | Surrogate objective function maximized during the M-Step. | [Expectation-Maximization](../../MathsTerms/Expectation_Maximization_Algorithm.md) |
+| $\pi^{\text{new}}, \beta_1^{\text{new}}, \beta_2^{\text{new}}$ | Updated Mixture Parameters | `pi = np.mean(gamma)`, `b1 = np.sum(gamma)/np.sum(gamma*x)` | Closed-form analytical updates computed in the M-Step. | [Expectation-Maximization](../../MathsTerms/Expectation_Maximization_Algorithm.md) |
 
 ---
 

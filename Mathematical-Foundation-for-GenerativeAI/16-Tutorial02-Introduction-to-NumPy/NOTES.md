@@ -163,24 +163,24 @@ He does **not** open a full PyTorch / autograd trainer today (preview only at th
 
 ## Chalkboard & Mathematical Rosetta Stone
 
-This reference table maps every operator, matrix transformation, and layer function used across Tutorial 02 to its plain-English software meaning, mathematical definition, and dedicated guide in [`MathsTerms`](../../../MathsTerms).
+This reference table maps every operator, matrix transformation, and layer function used across Tutorial 02 to its plain-English software meaning, mathematical definition, and dedicated guide in [`MathsTerms`](../../MathsTerms).
 
 | Chalkboard / Code Syntax | Formal Mathematical Concept | Plain-English Software Role | Output Shape / Behavior | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| **`np.ndarray`** | $T \in \mathbb{R}^{d_1 \times \dots \times d_k}$ | Homogeneous, contiguous multi-dimensional array buffer in RAM. | N-dimensional grid | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| **`arr.shape`** | Dimension Tuple $(d_1, \dots, d_k)$ | Tuple containing the exact element counts along each axis. | `(32, 784)` | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| **`X.reshape(B, -1)`** | $\text{vec}(I): \mathbb{R}^{H \times W} \to \mathbb{R}^{HW}$ | Flattening 2D/3D images into 1D coordinate vectors. | `(B, H*W)` | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| **`A * B`** | Hadamard Product $A \odot B$ | Elementwise multiplication between matching/broadcasted shapes. | Same as broadcast | [Vector Norms & Inner Products](../../../MathsTerms/Vector_Norms_and_Inner_Products.md) |
-| **`X @ W`** | Matrix Multiply $X \cdot W$ | Dot products satisfying inner dimension $(M \times K) \cdot (K \times N)$. | $(M \times N)$ | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| **`Y = X @ W + b`** | Affine Transformation | Linear dense layer with broadcasted bias addition across batch. | $(B \times D_{\text{out}})$ | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| **`np.maximum(0, z)`** | $\text{ReLU}(z) = \max(0, z)$ | Non-linear activation zeroing negative activations. | Same shape | [Activation Functions](../../../MathsTerms/Activation_Functions.md) |
-| **`1 / (1 + exp(-z))`** | Sigmoid $\sigma(z)$ | S-curve squashing logits to $(0, 1)$ for binary decisions. | Same shape | [Activation Functions](../../../MathsTerms/Activation_Functions.md) |
-| **`exp(z) / sum(exp(z))`**| $\text{Softmax}(z)$ | Normalizing unconstrained logits to valid probability distribution. | Probs sum to $1.0$ | [Softmax](../../../MathsTerms/Softmax.md) |
-| **`np.argmax(probs, -1)`** | $\arg\max_k p_k$ | Picking the discrete class index with maximum predicted confidence. | `(B,)` integer index | [Argmax & Argmin](../../../MathsTerms/Argmax.md) |
-| **`-np.log(p_true)`** | Negative Log-Likelihood / CCE | Cross-Entropy loss evaluating model surprise on ground-truth class. | Scalar $\ge 0$ | [Loss Functions](../../../MathsTerms/Loss_Functions.md) |
-| **`patch * kernel -> sum`**| 2D Spatial Cross-Correlation | Local sliding window filter extracting translation-invariant features. | Feature Map | [Convolution & Pooling](../../../MathsTerms/Convolution_and_Pooling.md) |
-| **`h_t = tanh(Whh·h + Wxh·x)`**| RNN Hidden State Update | Sequential recurrence maintaining historical memory across time. | $(B, H)$ hidden vector | [Recurrent Neural Networks](../../../MathsTerms/Recurrent_Neural_Networks.md) |
-| **`W = W - lr * dW`** | Gradient Descent Step | Iteratively shifting parameter weights in direction of steepest descent. | Optimized $\theta^*$ | [Gradient Descent](../../../MathsTerms/Gradient_Descent.md) |
+| **`np.ndarray`** | $T \in \mathbb{R}^{d_1 \times \dots \times d_k}$ | Homogeneous, contiguous multi-dimensional array buffer in RAM. | N-dimensional grid | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| **`arr.shape`** | Dimension Tuple $(d_1, \dots, d_k)$ | Tuple containing the exact element counts along each axis. | `(32, 784)` | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| **`X.reshape(B, -1)`** | $\text{vec}(I): \mathbb{R}^{H \times W} \to \mathbb{R}^{HW}$ | Flattening 2D/3D images into 1D coordinate vectors. | `(B, H*W)` | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| **`A * B`** | Hadamard Product $A \odot B$ | Elementwise multiplication between matching/broadcasted shapes. | Same as broadcast | [Vector Norms & Inner Products](../../MathsTerms/Vector_Norms_and_Inner_Products.md) |
+| **`X @ W`** | Matrix Multiply $X \cdot W$ | Dot products satisfying inner dimension $(M \times K) \cdot (K \times N)$. | $(M \times N)$ | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| **`Y = X @ W + b`** | Affine Transformation | Linear dense layer with broadcasted bias addition across batch. | $(B \times D_{\text{out}})$ | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| **`np.maximum(0, z)`** | $\text{ReLU}(z) = \max(0, z)$ | Non-linear activation zeroing negative activations. | Same shape | [Activation Functions](../../MathsTerms/Activation_Functions.md) |
+| **`1 / (1 + exp(-z))`** | Sigmoid $\sigma(z)$ | S-curve squashing logits to $(0, 1)$ for binary decisions. | Same shape | [Activation Functions](../../MathsTerms/Activation_Functions.md) |
+| **`exp(z) / sum(exp(z))`**| $\text{Softmax}(z)$ | Normalizing unconstrained logits to valid probability distribution. | Probs sum to $1.0$ | [Softmax](../../MathsTerms/Softmax.md) |
+| **`np.argmax(probs, -1)`** | $\arg\max_k p_k$ | Picking the discrete class index with maximum predicted confidence. | `(B,)` integer index | [Argmax & Argmin](../../MathsTerms/Argmax.md) |
+| **`-np.log(p_true)`** | Negative Log-Likelihood / CCE | Cross-Entropy loss evaluating model surprise on ground-truth class. | Scalar $\ge 0$ | [Loss Functions](../../MathsTerms/Loss_Functions.md) |
+| **`patch * kernel -> sum`**| 2D Spatial Cross-Correlation | Local sliding window filter extracting translation-invariant features. | Feature Map | [Convolution & Pooling](../../MathsTerms/Convolution_and_Pooling.md) |
+| **`h_t = tanh(Whh·h + Wxh·x)`**| RNN Hidden State Update | Sequential recurrence maintaining historical memory across time. | $(B, H)$ hidden vector | [Recurrent Neural Networks](../../MathsTerms/Recurrent_Neural_Networks.md) |
+| **`W = W - lr * dW`** | Gradient Descent Step | Iteratively shifting parameter weights in direction of steepest descent. | Optimized $\theta^*$ | [Gradient Descent](../../MathsTerms/Gradient_Descent.md) |
 
 ---
 

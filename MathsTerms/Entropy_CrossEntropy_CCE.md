@@ -1,5 +1,24 @@
 # Entropy, Cross-Entropy & Categorical Cross-Entropy (CCE): The Intuitive Guide
 
+> `🏷️ Tags:` `Information-Theory` `Entropy` `Cross-Entropy` `Categorical-Cross-Entropy` `KL-Divergence` `LLMs` `Classification` `Loss-Functions`  
+> `📚 Prerequisites Needed:` [Probability Basics & Axioms](./Probability_Basics_and_Axioms.md) · [Logarithms & Exponential Functions](./Logarithms_and_Exponential_Functions.md) · [Softmax](./Softmax.md)  
+> `🎯 Where Do We Use This?:` **The universal training loss of Generative AI & Deep Learning** — Next-token prediction loss in Large Language Models (GPT-4, LLaMA-3, Claude), Multi-class image classification in Vision Transformers (ViT, ResNet), Policy gradient entropy regularization in Reinforcement Learning (PPO, SAC), and Target distribution matching.  
+> `🎓 Course Module Mapping:` [Tut 08: Basic Probability 2](../Mathematical-Foundation-for-GenerativeAI/22-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Tut 04: CNNs](../Mathematical-Foundation-for-GenerativeAI/18-Tutorial04-CNNs-PyTorch/NOTES.md) · [Lec 01: Intro](../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 20: VAEs](../Mathematical-Foundation-for-GenerativeAI/32-Lec20-Latent-Variable-Models-VAE/NOTES.md)  
+> `⏱️ Difficulty Level:` ⭐⭐☆☆☆ (Foundational · 20 min read)
+
+---
+
+### 📌 Quick Navigation & Architecture Map
+- [1. 👶 Step 0: What is a "Bit" of Information?](#1--step-0-what-is-a-bit-of-information-the-20-questions-game) — 20 Questions Game & Surprise Formula
+- [2. 👶 Step 1: Shannon Entropy](#2--step-1-shannon-entropy-hp-measuring-pure-chaos) — Paid Telegram Metaphor & Fairness Checks
+- [3. 👶 Step 2: Cross-Entropy](#3--step-2-cross-entropy-hp-q-the-cost-of-bad-guesses) — The Weather Gambler & CCE in LLMs
+- [4. 👶 Step 3: Categorical Cross-Entropy (CCE)](#4--step-3-categorical-cross-entropy-cce-in-deep-learning) — Why One-Hot Encoding Simplifies Math to $- \ln(q_{\text{correct}})$
+- [5. 📐 Step 4: The 3-Line Master Proof](#5--step-4-the-3-line-master-proof-connecting-all-three-concepts) — Connecting $H(P, Q) = H(P) + D_{\text{KL}}(P \parallel Q)$
+- [6. 📚 Deep Terminology Master Glossary](#6--deep-terminology-master-glossary) — 15 Information Theory terms dissected without jargon
+- [7. 🔗 Connecting the Dots: Generative AI Architecture Blocks](#7--connecting-the-dots-how-cce-powers-modern-generative-ai) — LLM Training Loss & RLHF KL Penalty
+- [8. 💻 Standalone Executable Python/PyTorch Verification Script](#8--complete-standalone-executable-pythonpytorch-verification-script) — 6-test verification suite
+- [9. 🩺 Diagnostic Mini-Checks & Common Traps](#9--diagnostic-mini-checks--common-traps) — Self-test questions & production engineering pitfalls
+
 ---
 
 ## 🧭 The Big Picture: What Are We Actually Doing Here?
@@ -37,6 +56,7 @@ The answer comes from **Information Theory** (invented by Claude Shannon in 1948
 ---
 
 ## 1. 👶 Step 0: What is a "Bit" of Information? (The 20 Questions Game)
+> `Context:` Zero Prior ML Knowledge · Physical & Intuitive Foundations of Information and Surprise
 
 Before we can understand Entropy, we must understand how mathematicians measure **information**.
 

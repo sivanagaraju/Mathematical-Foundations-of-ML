@@ -49,24 +49,24 @@
 
 ## 🗝️ Math & Code Terminology Rosetta Stone
 
-This reference table maps abstract mathematical symbols directly to plain-English software concepts, physical analogies, and dedicated deep-dive guides in [`MathsTerms`](../../../MathsTerms).
+This reference table maps abstract mathematical symbols directly to plain-English software concepts, physical analogies, and dedicated deep-dive guides in [`MathsTerms`](../../MathsTerms).
 
 | Symbol / Term | Formal Mathematical Name | Plain-English Software Translation | Real-World Physical Analogy | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| **`ndarray`** | $n$-Dimensional Array | Fixed-type contiguous memory buffer with shape metadata. | A standardized shipping pallet holding identical boxes in a grid. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| **$\text{Shape}(A)$** | Tensor Dimension Tuple | Tuple specifying length along each axis: `(dim0, dim1, ...)`. | The blueprint measurements of a building (floors, rooms, desks). | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| **$\text{vec}(I)$ / Flatten**| Vectorization Operator | Unrolling a 2D/3D matrix into a 1D coordinate vector in $\mathbb{R}^d$. | Unrolling a rolled-up Persian rug into a single continuous strip. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| **$A \odot B$ (`*`)** | Hadamard (Elementwise) Product | Multiplying elements at identical indices: $C_{ij} = A_{ij} B_{ij}$. | Two identical egg cartons where eggs in matching cups are paired. | [Vector Norms & Inner Products](../../../MathsTerms/Vector_Norms_and_Inner_Products.md) |
-| **$A \cdot B$ (`@`)** | Matrix Multiplication | Dot products between rows of $A$ and columns of $B$: $(M \times K) \cdot (K \times N)$. | Assembly line where $M$ workers inspect $N$ parts across $K$ specs. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| **$Y = XW + b$** | Affine Transformation | Linear combination plus translation bias (dense / linear layer). | Stretching and shifting a rubber sheet in coordinate space. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| **$\text{ReLU}(z)$** | Rectified Linear Unit | Elementwise activation $\max(0, z)$ zeroing negative values. | A one-way electrical diode allowing current to flow only forward. | [Activation Functions](../../../MathsTerms/Activation_Functions.md) |
-| **$\sigma(z)$** | Sigmoid Function | S-shaped curve $\frac{1}{1 + e^{-z}}$ compressing $(-\infty, +\infty)$ into $(0, 1)$. | A smooth dimmer switch for a light bulb. | [Activation Functions](../../../MathsTerms/Activation_Functions.md) |
-| **$\text{Softmax}(z)$** | Softmax Normalizer | Exponentiating and normalizing logits to sum to $1.0$. | Dividing a single $\$100$ prize among contestants based on volume. | [Softmax](../../../MathsTerms/Softmax.md) |
-| **$\arg\max_k z_k$** | Argument of Maximum | Returning the index of the highest score (predicted class). | Finding the GPS coordinate of the highest mountain peak. | [Argmax & Argmin](../../../MathsTerms/Argmax.md) |
-| **$e_k \in \{0, 1\}^V$** | One-Hot Encoding | Sparse binary vector with a single $1$ at class index $k$. | Punching a single hole in a computer punch card. | [One-Hot Encoding](../../../MathsTerms/One_Hot_Encoding.md) |
-| **$\mathcal{L}_{\text{CE}}$** | Cross-Entropy Loss | $-\ln(\hat{p}_{\text{true}})$: Surprise penalty for wrong predictions. | The penalty points assessed by a referee for a false claim. | [Loss Functions](../../../MathsTerms/Loss_Functions.md) |
-| **$X * K$** | 2D Spatial Convolution | Sliding filter dot product extracting translation-invariant features. | Dragging a magnifying glass across a photograph to spot edges. | [Convolution & Pooling](../../../MathsTerms/Convolution_and_Pooling.md) |
-| **$h_t = f(h_{t-1}, x_t)$**| Recurrent State Update | Memory vector tracking past context through sequential time. | A detective updating their case notepad as each new clue arrives. | [Recurrent Neural Networks](../../../MathsTerms/Recurrent_Neural_Networks.md) |
+| **`ndarray`** | $n$-Dimensional Array | Fixed-type contiguous memory buffer with shape metadata. | A standardized shipping pallet holding identical boxes in a grid. | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| **$\text{Shape}(A)$** | Tensor Dimension Tuple | Tuple specifying length along each axis: `(dim0, dim1, ...)`. | The blueprint measurements of a building (floors, rooms, desks). | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| **$\text{vec}(I)$ / Flatten**| Vectorization Operator | Unrolling a 2D/3D matrix into a 1D coordinate vector in $\mathbb{R}^d$. | Unrolling a rolled-up Persian rug into a single continuous strip. | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| **$A \odot B$ (`*`)** | Hadamard (Elementwise) Product | Multiplying elements at identical indices: $C_{ij} = A_{ij} B_{ij}$. | Two identical egg cartons where eggs in matching cups are paired. | [Vector Norms & Inner Products](../../MathsTerms/Vector_Norms_and_Inner_Products.md) |
+| **$A \cdot B$ (`@`)** | Matrix Multiplication | Dot products between rows of $A$ and columns of $B$: $(M \times K) \cdot (K \times N)$. | Assembly line where $M$ workers inspect $N$ parts across $K$ specs. | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| **$Y = XW + b$** | Affine Transformation | Linear combination plus translation bias (dense / linear layer). | Stretching and shifting a rubber sheet in coordinate space. | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| **$\text{ReLU}(z)$** | Rectified Linear Unit | Elementwise activation $\max(0, z)$ zeroing negative values. | A one-way electrical diode allowing current to flow only forward. | [Activation Functions](../../MathsTerms/Activation_Functions.md) |
+| **$\sigma(z)$** | Sigmoid Function | S-shaped curve $\frac{1}{1 + e^{-z}}$ compressing $(-\infty, +\infty)$ into $(0, 1)$. | A smooth dimmer switch for a light bulb. | [Activation Functions](../../MathsTerms/Activation_Functions.md) |
+| **$\text{Softmax}(z)$** | Softmax Normalizer | Exponentiating and normalizing logits to sum to $1.0$. | Dividing a single $\$100$ prize among contestants based on volume. | [Softmax](../../MathsTerms/Softmax.md) |
+| **$\arg\max_k z_k$** | Argument of Maximum | Returning the index of the highest score (predicted class). | Finding the GPS coordinate of the highest mountain peak. | [Argmax & Argmin](../../MathsTerms/Argmax.md) |
+| **$e_k \in \{0, 1\}^V$** | One-Hot Encoding | Sparse binary vector with a single $1$ at class index $k$. | Punching a single hole in a computer punch card. | [One-Hot Encoding](../../MathsTerms/One_Hot_Encoding.md) |
+| **$\mathcal{L}_{\text{CE}}$** | Cross-Entropy Loss | $-\ln(\hat{p}_{\text{true}})$: Surprise penalty for wrong predictions. | The penalty points assessed by a referee for a false claim. | [Loss Functions](../../MathsTerms/Loss_Functions.md) |
+| **$X * K$** | 2D Spatial Convolution | Sliding filter dot product extracting translation-invariant features. | Dragging a magnifying glass across a photograph to spot edges. | [Convolution & Pooling](../../MathsTerms/Convolution_and_Pooling.md) |
+| **$h_t = f(h_{t-1}, x_t)$**| Recurrent State Update | Memory vector tracking past context through sequential time. | A detective updating their case notepad as each new clue arrives. | [Recurrent Neural Networks](../../MathsTerms/Recurrent_Neural_Networks.md) |
 
 ---
 

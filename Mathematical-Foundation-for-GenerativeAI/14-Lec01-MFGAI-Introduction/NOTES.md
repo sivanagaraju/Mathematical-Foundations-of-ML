@@ -180,25 +180,25 @@ The lecture establishes a fundamental divide in modern science:
 
 ## <a id="chalkboard-rosetta-stone"></a>Chalkboard & Mathematical Rosetta Stone
 
-This reference table maps every symbol, shorthand, and chalkboard notation used by Prof. Prathosh in Lecture 01 to its plain-English meaning, Python equivalent, and dedicated guide in [`MathsTerms`](../../../MathsTerms).
+This reference table maps every symbol, shorthand, and chalkboard notation used by Prof. Prathosh in Lecture 01 to its plain-English meaning, Python equivalent, and dedicated guide in [`MathsTerms`](../../MathsTerms).
 
 | Chalkboard Notation | Formal Mathematical Name | Meaning in Lecture 01 | Python / Code Analogue | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| **$\text{RE}$** | Random Experiment | A repeatable process with uncertain physical outcomes. | Data generation process / real-world environment. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| **$\Omega$** | Sample Space | Set of all possible mutually exclusive outcomes of the RE. | The domain of all possible unobserved physical states. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| **$\omega \in \Omega$** | Elementary Outcome | A single realization of the universe during one run. | A single real-world physical event. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| **$\mathcal{F}$** | Event Space ($\sigma$-algebra) | Collection of measurable subsets of $\Omega$ (allowed queries). | The set of all valid boolean filters. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| **$A \in \mathcal{F}$** | Event | A specific measurable subset $A \subseteq \Omega$. | `mask = (labels == target_class)` | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| **$P: \mathcal{F} \to [0, 1]$** | Probability Measure | Function assigning a size score between 0 and 1 to events. | Ground-truth probability assignment function. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| **$(\Omega, \mathcal{F}, P)$** | Kolmogorov Triplet | The complete formal mathematical model of uncertain nature. | Abstract statistical backend of the physical universe. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| **$X: \Omega \to \mathbb{R}^d$** | Random Variable | Deterministic mapping from abstract outcomes to vector numbers. | `tensor = sensor.capture_scene()` | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
-| **$x \in \mathbb{R}^d$** | Realization / Vector | A concrete numeric data point stored in computer memory. | `x = torch.tensor([128.0, 45.0, ...])` | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
-| **$X^{-1}(B)$** | Inverse Image (Pre-Image) | Subset of $\Omega$ whose elements map into subset $B \subset \mathbb{R}^d$. | `indices = [i for i, val in enumerate(X) if val in B]` | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
-| **$P_X(x)$** | Cumulative Distribution (CDF) | $P(X \le x)$: The probability mass where measurement $\le x$. | `scipy.stats.norm.cdf(x, loc=mu, scale=sigma)` | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
-| **$D = \{x_1, \dots, x_n\}$** | Empirical Dataset | $n$ observed vector realizations stored on disk. | `dataset = DataLoader(training_data)` | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
-| **$P_\theta(x)$** | Parametric Model Family | Distribution family parameterized by neural network weights $\theta$. | `model = GenerativeModel(weights=theta)` | [Maximum Likelihood Estimation](../../../MathsTerms/MLE.md) |
-| **$L(\theta; D)$ / $\ell(\theta)$** | Likelihood / Log-Likelihood | Plausibility rating of parameter dials $\theta$ given fixed dataset $D$. | `loss = -torch.sum(log_probs)` | [Likelihood & Log-Likelihood](../../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
-| **$\hat{x} \sim P_\theta$** | Generative Sampling | Simulating the random experiment to create new synthetic data. | `generated_sample = model.sample(num_samples=1)` | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
+| **$\text{RE}$** | Random Experiment | A repeatable process with uncertain physical outcomes. | Data generation process / real-world environment. | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$\Omega$** | Sample Space | Set of all possible mutually exclusive outcomes of the RE. | The domain of all possible unobserved physical states. | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$\omega \in \Omega$** | Elementary Outcome | A single realization of the universe during one run. | A single real-world physical event. | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$\mathcal{F}$** | Event Space ($\sigma$-algebra) | Collection of measurable subsets of $\Omega$ (allowed queries). | The set of all valid boolean filters. | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$A \in \mathcal{F}$** | Event | A specific measurable subset $A \subseteq \Omega$. | `mask = (labels == target_class)` | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$P: \mathcal{F} \to [0, 1]$** | Probability Measure | Function assigning a size score between 0 and 1 to events. | Ground-truth probability assignment function. | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$(\Omega, \mathcal{F}, P)$** | Kolmogorov Triplet | The complete formal mathematical model of uncertain nature. | Abstract statistical backend of the physical universe. | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| **$X: \Omega \to \mathbb{R}^d$** | Random Variable | Deterministic mapping from abstract outcomes to vector numbers. | `tensor = sensor.capture_scene()` | [Random Variables & Distributions](../../MathsTerms/Random_Variables_and_Distributions.md) |
+| **$x \in \mathbb{R}^d$** | Realization / Vector | A concrete numeric data point stored in computer memory. | `x = torch.tensor([128.0, 45.0, ...])` | [Random Variables & Distributions](../../MathsTerms/Random_Variables_and_Distributions.md) |
+| **$X^{-1}(B)$** | Inverse Image (Pre-Image) | Subset of $\Omega$ whose elements map into subset $B \subset \mathbb{R}^d$. | `indices = [i for i, val in enumerate(X) if val in B]` | [Random Variables & Distributions](../../MathsTerms/Random_Variables_and_Distributions.md) |
+| **$P_X(x)$** | Cumulative Distribution (CDF) | $P(X \le x)$: The probability mass where measurement $\le x$. | `scipy.stats.norm.cdf(x, loc=mu, scale=sigma)` | [Random Variables & Distributions](../../MathsTerms/Random_Variables_and_Distributions.md) |
+| **$D = \{x_1, \dots, x_n\}$** | Empirical Dataset | $n$ observed vector realizations stored on disk. | `dataset = DataLoader(training_data)` | [Common Probability Distributions](../../MathsTerms/Common_Probability_Distributions.md) |
+| **$P_\theta(x)$** | Parametric Model Family | Distribution family parameterized by neural network weights $\theta$. | `model = GenerativeModel(weights=theta)` | [Maximum Likelihood Estimation](../../MathsTerms/MLE.md) |
+| **$L(\theta; D)$ / $\ell(\theta)$** | Likelihood / Log-Likelihood | Plausibility rating of parameter dials $\theta$ given fixed dataset $D$. | `loss = -torch.sum(log_probs)` | [Likelihood & Log-Likelihood](../../MathsTerms/Likelihood_and_Log_Likelihood.md) |
+| **$\hat{x} \sim P_\theta$** | Generative Sampling | Simulating the random experiment to create new synthetic data. | `generated_sample = model.sample(num_samples=1)` | [Random Variables & Distributions](../../MathsTerms/Random_Variables_and_Distributions.md) |
 
 ---
 

@@ -186,16 +186,16 @@ This reference table maps deep learning vision symbols directly to PyTorch imple
 
 | Symbol / Syntax | Formal Concept | PyTorch Implementation | Lecture Usage & Context | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| $\mathbf{X} \in \mathbb{R}^{N \times C \times H \times W}$ | 4D Mini-Batch Tensor | `x = torch.randn(N, C, H, W)` | Standard 4D image layout ($N$=batch, $C$=channels, $H$=height, $W$=width). | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| $\mathbf{W} \in \mathbb{R}^{C_{\text{out}} \times C_{\text{in}} \times F \times F}$ | 4D Convolutional Weight Bank | `conv.weight` | Learnable filter weights initialized inside `nn.Conv2d`. | [Convolution & Pooling](../../../MathsTerms/Convolution_and_Pooling.md) |
-| $F$ | Spatial Kernel Size | `kernel_size=3` | Height and width of the square sliding window. | [Convolution & Pooling](../../../MathsTerms/Convolution_and_Pooling.md) |
-| $P$ | Zero-Padding Halo | `padding=1` | Zero-pixel ring added to image borders to preserve spatial size. | [Convolution & Pooling](../../../MathsTerms/Convolution_and_Pooling.md) |
-| $S$ | Stride Step Size | `stride=1` or `stride=2` | Pixel step size when sliding the filter window. | [Convolution & Pooling](../../../MathsTerms/Convolution_and_Pooling.md) |
-| $H_{\text{out}}$ | Output Spatial Height | $\lfloor \frac{H_{\text{in}} - F + 2P}{S} \rfloor + 1$ | Height of the resulting feature map. | [Convolution & Pooling](../../../MathsTerms/Convolution_and_Pooling.md) |
-| $\text{MaxPool2d}(2, 2)$ | Spatial Halving Downsampler | `nn.MaxPool2d(2, 2)` | Parameter-free operator reducing height and width by $50\%$. | [Convolution & Pooling](../../../MathsTerms/Convolution_and_Pooling.md) |
-| $\text{Flatten}$ | Multi-Axis Unrolling | `torch.flatten(x, 1)` | Flattens 3D feature cube into 1D vector ($C \cdot H \cdot W$). | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| $\mathbf{z} \in \mathbb{R}^{10}$ | Unnormalized Class Logits | `logits = model(x)` | 10-class scores fed directly to `nn.CrossEntropyLoss`. | [Softmax](../../../MathsTerms/Softmax.md) |
-| $\hat{c} = \arg\max_k z_k$ | Hard Predicted Class | `torch.argmax(logits, dim=1)` | Predicted class index used for accuracy evaluation. | [Argmax & Argmin](../../../MathsTerms/Argmax.md) |
+| $\mathbf{X} \in \mathbb{R}^{N \times C \times H \times W}$ | 4D Mini-Batch Tensor | `x = torch.randn(N, C, H, W)` | Standard 4D image layout ($N$=batch, $C$=channels, $H$=height, $W$=width). | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| $\mathbf{W} \in \mathbb{R}^{C_{\text{out}} \times C_{\text{in}} \times F \times F}$ | 4D Convolutional Weight Bank | `conv.weight` | Learnable filter weights initialized inside `nn.Conv2d`. | [Convolution & Pooling](../../MathsTerms/Convolution_and_Pooling.md) |
+| $F$ | Spatial Kernel Size | `kernel_size=3` | Height and width of the square sliding window. | [Convolution & Pooling](../../MathsTerms/Convolution_and_Pooling.md) |
+| $P$ | Zero-Padding Halo | `padding=1` | Zero-pixel ring added to image borders to preserve spatial size. | [Convolution & Pooling](../../MathsTerms/Convolution_and_Pooling.md) |
+| $S$ | Stride Step Size | `stride=1` or `stride=2` | Pixel step size when sliding the filter window. | [Convolution & Pooling](../../MathsTerms/Convolution_and_Pooling.md) |
+| $H_{\text{out}}$ | Output Spatial Height | $\lfloor \frac{H_{\text{in}} - F + 2P}{S} \rfloor + 1$ | Height of the resulting feature map. | [Convolution & Pooling](../../MathsTerms/Convolution_and_Pooling.md) |
+| $\text{MaxPool2d}(2, 2)$ | Spatial Halving Downsampler | `nn.MaxPool2d(2, 2)` | Parameter-free operator reducing height and width by $50\%$. | [Convolution & Pooling](../../MathsTerms/Convolution_and_Pooling.md) |
+| $\text{Flatten}$ | Multi-Axis Unrolling | `torch.flatten(x, 1)` | Flattens 3D feature cube into 1D vector ($C \cdot H \cdot W$). | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| $\mathbf{z} \in \mathbb{R}^{10}$ | Unnormalized Class Logits | `logits = model(x)` | 10-class scores fed directly to `nn.CrossEntropyLoss`. | [Softmax](../../MathsTerms/Softmax.md) |
+| $\hat{c} = \arg\max_k z_k$ | Hard Predicted Class | `torch.argmax(logits, dim=1)` | Predicted class index used for accuracy evaluation. | [Argmax & Argmin](../../MathsTerms/Argmax.md) |
 
 ---
 

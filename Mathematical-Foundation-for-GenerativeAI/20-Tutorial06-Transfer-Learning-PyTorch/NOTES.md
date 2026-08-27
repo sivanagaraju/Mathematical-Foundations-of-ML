@@ -191,14 +191,14 @@ This reference table maps deep learning transfer symbols directly to PyTorch imp
 
 | Symbol / Syntax | Formal Concept | PyTorch Implementation | Lecture Usage & Context | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| $\mathbf{X} \in \mathbb{R}^{N \times 3 \times 224 \times 224}$ | Standardized 4D Input Batch | `x = torch.randn(N, 3, 224, 224)` | Input image batch conforming to ImageNet spatial resolution. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| $\boldsymbol{\theta}_{\text{pre}} \in \mathbb{R}^P$ | Pretrained Source Parameters | `weights = models.ResNet18_Weights.DEFAULT` | Pre-trained feature extractor parameters loaded from torchvision. | [Convolution & Pooling](../../../MathsTerms/Convolution_and_Pooling.md) |
-| $\boldsymbol{\theta}_{\text{head}} \in \mathbb{R}^{H \times C}$ | Target Classification Head | `model.fc = nn.Linear(512, 4)` | Surgical replacement layer matching the 4 MRI diagnostic classes. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| $y = F(x) + x$ | Residual Skip Transformation | `out += identity` | Identity shortcut connection in ResNet residual blocks. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
-| `requires_grad = False` | Parameter Freezing Flag | `for p in model.parameters(): p.requires_grad = False` | Disables gradient computation for feature extraction. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
-| $\boldsymbol{\mu}_{\text{ImageNet}}, \boldsymbol{\sigma}_{\text{ImageNet}}$ | Standardization Statistics | `transforms.Normalize([0.485, ...], [0.229, ...])` | Per-channel color distribution centering and scaling. | [Batch Normalization & Spectral Norm](../../../MathsTerms/Batch_Normalization_and_Spectral_Norm.md) |
-| `class_to_idx` | Label Mapping Dictionary | `dataset.class_to_idx` | Mapping subfolder names (`glioma`, `meningioma`) to integers ($0, 1, 2, 3$). | [One-Hot Encoding](../../../MathsTerms/One_Hot_Encoding.md) |
-| $\mathbf{z} \in \mathbb{R}^{N \times 4}$ | Unnormalized Logit Scores | `logits = model(x)` | Output tensor fed into `nn.CrossEntropyLoss(logits, targets)`. | [Softmax](../../../MathsTerms/Softmax.md) |
+| $\mathbf{X} \in \mathbb{R}^{N \times 3 \times 224 \times 224}$ | Standardized 4D Input Batch | `x = torch.randn(N, 3, 224, 224)` | Input image batch conforming to ImageNet spatial resolution. | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| $\boldsymbol{\theta}_{\text{pre}} \in \mathbb{R}^P$ | Pretrained Source Parameters | `weights = models.ResNet18_Weights.DEFAULT` | Pre-trained feature extractor parameters loaded from torchvision. | [Convolution & Pooling](../../MathsTerms/Convolution_and_Pooling.md) |
+| $\boldsymbol{\theta}_{\text{head}} \in \mathbb{R}^{H \times C}$ | Target Classification Head | `model.fc = nn.Linear(512, 4)` | Surgical replacement layer matching the 4 MRI diagnostic classes. | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| $y = F(x) + x$ | Residual Skip Transformation | `out += identity` | Identity shortcut connection in ResNet residual blocks. | [Derivatives, Gradients & Jacobians](../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
+| `requires_grad = False` | Parameter Freezing Flag | `for p in model.parameters(): p.requires_grad = False` | Disables gradient computation for feature extraction. | [Derivatives, Gradients & Jacobians](../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
+| $\boldsymbol{\mu}_{\text{ImageNet}}, \boldsymbol{\sigma}_{\text{ImageNet}}$ | Standardization Statistics | `transforms.Normalize([0.485, ...], [0.229, ...])` | Per-channel color distribution centering and scaling. | [Batch Normalization & Spectral Norm](../../MathsTerms/Batch_Normalization_and_Spectral_Norm.md) |
+| `class_to_idx` | Label Mapping Dictionary | `dataset.class_to_idx` | Mapping subfolder names (`glioma`, `meningioma`) to integers ($0, 1, 2, 3$). | [One-Hot Encoding](../../MathsTerms/One_Hot_Encoding.md) |
+| $\mathbf{z} \in \mathbb{R}^{N \times 4}$ | Unnormalized Logit Scores | `logits = model(x)` | Output tensor fed into `nn.CrossEntropyLoss(logits, targets)`. | [Softmax](../../MathsTerms/Softmax.md) |
 
 ---
 

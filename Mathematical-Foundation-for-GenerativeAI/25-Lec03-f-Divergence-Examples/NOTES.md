@@ -205,18 +205,18 @@ This reference table maps statistical divergence symbols directly to Python impl
 
 | Symbol / Syntax | Formal Concept | Python / SciPy Implementation | Lecture Usage & Context | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| $p_x(x)$ or $p_{\text{data}}(x)$ | True Data Probability Density | `p_data = stats.norm.pdf(x)` | The unknown, continuous target distribution of nature. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
-| $\mathcal{D} = \{x_1, \dots, x_n\}$ | Empirical Data Cloud | `x_real = np.array([...])` | The $n$ finite IID real samples available for training. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| $Z \sim \mathcal{N}(0, \mathbf{I}_d)$ | Latent Noise Prior | `z = torch.randn(batch_size, d)` | Simple isotropic Gaussian noise injected into generator. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
-| $G_\theta(Z)$ | Neural Generator Mapping | `x_fake = generator(z)` | Differentiable deep network that maps noise $Z \to \hat{X}$. | [Autoregressive Models](../../../MathsTerms/Autoregressive_Models.md) |
-| $p_\theta(x)$ | Induced Generator Density | Implicit (No direct formula) | The continuous pushforward measure $G_\theta \sharp P_Z$. | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
-| $u = \frac{p_x(x)}{p_\theta(x)}$ | Likelihood / Density Ratio | `u = p_val / q_val` | Argument fed into the convex generator function $f(u)$. | [f-Divergence](../../../MathsTerms/f_Divergence.md) |
-| $f: \mathbb{R}_+ \to \mathbb{R}$ | $f$-Divergence Generator Function | `def f(u): return u * np.log(u)` | Convex function defining the specific divergence flavor. | [f-Divergence](../../../MathsTerms/f_Divergence.md) |
-| $D_f(P \parallel Q)$ | $f$-Divergence Discrepancy | `scipy.integrate.quad(...)` | Expected discrepancy $\mathbb{E}_{Q}[f(P/Q)]$ between two laws. | [f-Divergence](../../../MathsTerms/f_Divergence.md) |
-| $D_{\text{KL}}(P \parallel Q)$ | Forward KL Divergence | `scipy.stats.entropy(p, q)` | $f(u) = u \ln u$; penalizes missing data modes (Zero-Avoiding). | [KL Divergence](../../../MathsTerms/KL_Divergence.md) |
-| $D_{\text{RKL}}(P \parallel Q)$ | Reverse KL Divergence | `scipy.stats.entropy(q, p)` | $f(u) = -\ln u$; penalizes generating fake junk (Zero-Forcing). | [KL Divergence](../../../MathsTerms/KL_Divergence.md) |
-| $\text{JSD}(P \parallel Q)$ | Jensen-Shannon Divergence | `scipy.spatial.distance.jensenshannon(p, q)**2` | Symmetric, bounded mixture divergence ($[0, \ln 2]$). | [Jensen-Shannon Divergence](../../../MathsTerms/Jensen_Shannon_Divergence.md) |
-| $\text{TV}(P, Q)$ | Total Variation Distance | `0.5 * np.sum(np.abs(p - q))` | Half $L_1$ area difference between probability densities. | [f-Divergence](../../../MathsTerms/f_Divergence.md) |
+| $p_x(x)$ or $p_{\text{data}}(x)$ | True Data Probability Density | `p_data = stats.norm.pdf(x)` | The unknown, continuous target distribution of nature. | [Common Probability Distributions](../../MathsTerms/Common_Probability_Distributions.md) |
+| $\mathcal{D} = \{x_1, \dots, x_n\}$ | Empirical Data Cloud | `x_real = np.array([...])` | The $n$ finite IID real samples available for training. | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $Z \sim \mathcal{N}(0, \mathbf{I}_d)$ | Latent Noise Prior | `z = torch.randn(batch_size, d)` | Simple isotropic Gaussian noise injected into generator. | [Common Probability Distributions](../../MathsTerms/Common_Probability_Distributions.md) |
+| $G_\theta(Z)$ | Neural Generator Mapping | `x_fake = generator(z)` | Differentiable deep network that maps noise $Z \to \hat{X}$. | [Autoregressive Models](../../MathsTerms/Autoregressive_Models.md) |
+| $p_\theta(x)$ | Induced Generator Density | Implicit (No direct formula) | The continuous pushforward measure $G_\theta \sharp P_Z$. | [Autoencoders & Latent Spaces](../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| $u = \frac{p_x(x)}{p_\theta(x)}$ | Likelihood / Density Ratio | `u = p_val / q_val` | Argument fed into the convex generator function $f(u)$. | [f-Divergence](../../MathsTerms/f_Divergence.md) |
+| $f: \mathbb{R}_+ \to \mathbb{R}$ | $f$-Divergence Generator Function | `def f(u): return u * np.log(u)` | Convex function defining the specific divergence flavor. | [f-Divergence](../../MathsTerms/f_Divergence.md) |
+| $D_f(P \parallel Q)$ | $f$-Divergence Discrepancy | `scipy.integrate.quad(...)` | Expected discrepancy $\mathbb{E}_{Q}[f(P/Q)]$ between two laws. | [f-Divergence](../../MathsTerms/f_Divergence.md) |
+| $D_{\text{KL}}(P \parallel Q)$ | Forward KL Divergence | `scipy.stats.entropy(p, q)` | $f(u) = u \ln u$; penalizes missing data modes (Zero-Avoiding). | [KL Divergence](../../MathsTerms/KL_Divergence.md) |
+| $D_{\text{RKL}}(P \parallel Q)$ | Reverse KL Divergence | `scipy.stats.entropy(q, p)` | $f(u) = -\ln u$; penalizes generating fake junk (Zero-Forcing). | [KL Divergence](../../MathsTerms/KL_Divergence.md) |
+| $\text{JSD}(P \parallel Q)$ | Jensen-Shannon Divergence | `scipy.spatial.distance.jensenshannon(p, q)**2` | Symmetric, bounded mixture divergence ($[0, \ln 2]$). | [Jensen-Shannon Divergence](../../MathsTerms/Jensen_Shannon_Divergence.md) |
+| $\text{TV}(P, Q)$ | Total Variation Distance | `0.5 * np.sum(np.abs(p - q))` | Half $L_1$ area difference between probability densities. | [f-Divergence](../../MathsTerms/f_Divergence.md) |
 
 ---
 
@@ -1404,4 +1404,4 @@ Below is the centralized curated library of 50+ authoritative external resources
 - **Course:** Mathematical Foundations of Generative AI
 - **Instructor / Teaching Team:** NPTEL / IISc Bengaluru
 - **Prior Prerequisite:** [Lecture 2: Generative Models Problem Formulation](../15-Lec02-Generative-Models-Problem-Formulation/NOTES.md)
-- **Next Stage:** [Lecture 4: Variational f-Divergence Estimation & Fenchel Conjugates](../26-Lec04-Variational-Divergence-Minimization/NOTES.md)
+- **Next Stage:** [Lecture 4: Variational f-Divergence Estimation & Fenchel Conjugates](../27-Lec04-Variational-Divergence-Minimization/NOTES.md)

@@ -187,17 +187,17 @@ This reference table maps mathematical symbols from Lecture 4 directly to PyTorc
 
 | Mathematical Symbol | Formal Concept | PyTorch Variable / Code Representation | Lecture Role & Context | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| $\mathcal{D} = \{x_i\}_{i=1}^n$ | Real Data Sample Cloud | `real_batch = next(data_loader)` | Empirical dataset samples drawn from unknown $p_{\text{data}}(x)$. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| $z_j \sim \mathcal{N}(0, I)$ | Latent Gaussian Noise | `z = torch.randn(batch_size, latent_dim)` | Random seed vector providing all stochasticity. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
-| $G_\theta(z)$ | Deterministic Generator Network | `fake_batch = generator(z)` | Maps noise $z$ to synthetic data $\hat{x} \sim p_\theta$. | [Autoregressive Models](../../../MathsTerms/Autoregressive_Models.md) |
-| $p_{\text{data}}(x), p_\theta(x)$ | Unknown Probability Densities | *Intractable (Never evaluated directly)* | The theoretical distributions being aligned. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
-| $f(u)$ | Convex Generator Function | `f = lambda u: u * torch.log(u)` | Determines which $f$-divergence is being minimized. | [f-Divergence](../../../MathsTerms/f_Divergence.md) |
-| $f^*(t)$ | Fenchel Convex Conjugate | `f_star = lambda t: torch.exp(t - 1.0)` | Dual penalty applied to critic output on fake samples. | [Fenchel Conjugate & Dual Reps](../../../MathsTerms/Fenchel_Conjugate_and_Dual_Representations.md) |
-| $\operatorname{dom}(f^*)$ | Domain of Conjugate Function | `activation_head` (e.g. Identity, `-exp`, Tanh) | Sets the valid output range of the Critic network. | [Fenchel Conjugate & Dual Reps](../../../MathsTerms/Fenchel_Conjugate_and_Dual_Representations.md) |
-| $T_w(x)$ | Critic / Test Probe Network | `t_real = critic(real_batch)` | Parameterizes the function space $\mathcal{T}$ via weights $w$. | [Fenchel Conjugate & Dual Reps](../../../MathsTerms/Fenchel_Conjugate_and_Dual_Representations.md) |
-| $\mathbb{E}_{x \sim p_{\text{data}}}[T_w(x)]$ | Data Expectation Term | `torch.mean(critic(real_batch))` | First term in the variational lower bound. | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
-| $\mathbb{E}_{z \sim p_Z}[f^*(T_w(G_\theta(z)))]$ | Generator Expectation Term | `torch.mean(f_star(critic(generator(z))))` | Second term in variational bound (evaluated via LOTUS). | [Random Variables & Distributions](../../../MathsTerms/Random_Variables_and_Distributions.md) |
-| $\mathcal{J}(\theta, w)$ | Variational Minimax Objective | `loss_critic = -(term1 - term2)` | The two-player zero-sum score surface. | [f-Divergence](../../../MathsTerms/f_Divergence.md) |
+| $\mathcal{D} = \{x_i\}_{i=1}^n$ | Real Data Sample Cloud | `real_batch = next(data_loader)` | Empirical dataset samples drawn from unknown $p_{\text{data}}(x)$. | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $z_j \sim \mathcal{N}(0, I)$ | Latent Gaussian Noise | `z = torch.randn(batch_size, latent_dim)` | Random seed vector providing all stochasticity. | [Common Probability Distributions](../../MathsTerms/Common_Probability_Distributions.md) |
+| $G_\theta(z)$ | Deterministic Generator Network | `fake_batch = generator(z)` | Maps noise $z$ to synthetic data $\hat{x} \sim p_\theta$. | [Autoregressive Models](../../MathsTerms/Autoregressive_Models.md) |
+| $p_{\text{data}}(x), p_\theta(x)$ | Unknown Probability Densities | *Intractable (Never evaluated directly)* | The theoretical distributions being aligned. | [Common Probability Distributions](../../MathsTerms/Common_Probability_Distributions.md) |
+| $f(u)$ | Convex Generator Function | `f = lambda u: u * torch.log(u)` | Determines which $f$-divergence is being minimized. | [f-Divergence](../../MathsTerms/f_Divergence.md) |
+| $f^*(t)$ | Fenchel Convex Conjugate | `f_star = lambda t: torch.exp(t - 1.0)` | Dual penalty applied to critic output on fake samples. | [Fenchel Conjugate & Dual Reps](../../MathsTerms/Fenchel_Conjugate_and_Dual_Representations.md) |
+| $\operatorname{dom}(f^*)$ | Domain of Conjugate Function | `activation_head` (e.g. Identity, `-exp`, Tanh) | Sets the valid output range of the Critic network. | [Fenchel Conjugate & Dual Reps](../../MathsTerms/Fenchel_Conjugate_and_Dual_Representations.md) |
+| $T_w(x)$ | Critic / Test Probe Network | `t_real = critic(real_batch)` | Parameterizes the function space $\mathcal{T}$ via weights $w$. | [Fenchel Conjugate & Dual Reps](../../MathsTerms/Fenchel_Conjugate_and_Dual_Representations.md) |
+| $\mathbb{E}_{x \sim p_{\text{data}}}[T_w(x)]$ | Data Expectation Term | `torch.mean(critic(real_batch))` | First term in the variational lower bound. | [Random Variables & Distributions](../../MathsTerms/Random_Variables_and_Distributions.md) |
+| $\mathbb{E}_{z \sim p_Z}[f^*(T_w(G_\theta(z)))]$ | Generator Expectation Term | `torch.mean(f_star(critic(generator(z))))` | Second term in variational bound (evaluated via LOTUS). | [Random Variables & Distributions](../../MathsTerms/Random_Variables_and_Distributions.md) |
+| $\mathcal{J}(\theta, w)$ | Variational Minimax Objective | `loss_critic = -(term1 - term2)` | The two-player zero-sum score surface. | [f-Divergence](../../MathsTerms/f_Divergence.md) |
 
 ---
 
@@ -1377,4 +1377,4 @@ Below is the centralized curated library of 50+ authoritative external resources
 - **Course:** Mathematical Foundations of Generative AI
 - **Instructor:** Prof. Prathosh A. P. (IISc Bengaluru)
 - **Complements:** [Lecture 3: $f$-Divergence and Examples](../25-Lec03-f-Divergence-Examples/NOTES.md) & [Tutorial 11: $f$-Divergence Proofs](../26-Tutorial11-f-Divergence-Examples/NOTES.md)
-- **Next Stage:** [Lecture 5: $f$-GAN Algorithms & Gradient Dynamics](../28-Lec05-f-GAN-Training/NOTES.md)
+- **Next Stage:** [Lecture 5: $f$-GAN Algorithms & Gradient Dynamics](../28-Lec05-Generative-Adversarial-Networks/NOTES.md)

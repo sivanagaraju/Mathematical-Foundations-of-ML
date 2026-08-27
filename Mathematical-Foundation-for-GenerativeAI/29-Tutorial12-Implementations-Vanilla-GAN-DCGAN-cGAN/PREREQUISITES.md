@@ -90,18 +90,18 @@ This reference table maps scary optimization and PyTorch symbols directly to pla
 
 | Symbol / Term | Formal Concept | PyTorch Variable / Code Representation | Everyday Physical Metaphor | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| **$G_\theta(z)$** | Generator Network | `fake_imgs = generator(z)` | A printing press stamping synthetic currency notes. | [Autoregressive Models](../../../MathsTerms/Autoregressive_Models.md) |
-| **$D_w(x)$** | Discriminator Network | `logits = discriminator(imgs)` | A bank clerk inspecting bills under an ultraviolet lamp. | [Jensen-Shannon Divergence](../../../MathsTerms/Jensen_Shannon_Divergence.md) |
-| **$z \sim \mathcal{N}(0, I_k)$** | Latent Noise Tensor | `z = torch.randn(batch_size, 100)` | A bucket of raw clay ready for molding. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
-| **$\text{Logit } A \in \mathbb{R}$** | Pre-Sigmoid Real Output | `linear_head_output` (unconstrained scalar) | The raw mercury height in a thermometer tube. | [Softmax](../../../MathsTerms/Softmax.md) |
-| **$\text{BCEWithLogits}$** | Numerically Stable BCE Loss | `nn.BCEWithLogitsLoss()` | An automated digital grading machine with built-in squashing. | [Logarithms & Exponential Functions](../../../MathsTerms/Logarithms_and_Exponential_Functions.md) |
-| **$\text{fake.detach()}$** | Sever Autograd Graph Tape | `fake_detached = fake_imgs.detach()` | Photocopying a painting so the original canvas is unaffected. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
-| **$\text{Normalize}(0.5, 0.5)$** | Linear Range Rescaling | `transforms.Normalize((0.5,), (0.5,))` | Converting temperature from Celsius to Fahrenheit scale. | [Batch Normalization & Spectral Norm](../../../MathsTerms/Batch_Normalization_and_Spectral_Norm.md) |
-| **$\text{nn.Tanh()}$** | Hyperbolic Tangent Activation | `nn.Tanh()` squashing output into $[-1, 1]$ | A physical pressure regulator capped at $-1$ bar and $+1$ bar. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
-| **$\text{nn.Embedding}(10, 10)$** | Learnable Lookup Matrix | `emb = nn.Embedding(num_classes, emb_dim)` | A VIP keycard granting a customized security badge. | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
-| **$\text{ConvTranspose2d}$** | Fractionally Strided Conv | `nn.ConvTranspose2d(in_ch, out_ch, 4, 2, 1)` | An optical slide projector enlarging a tiny slide onto a wall. | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
-| **$\text{Conv2d}$** | Spatial Strided Convolution | `nn.Conv2d(in_ch, out_ch, 4, 2, 1)` | An optical lens focusing a giant image onto a tiny digital sensor. | [Autoencoders & Latent Spaces](../../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
-| **$\text{FID}$** | Fréchet Inception Distance | `torchmetrics.image.fid.FrechetInceptionDistance` | An independent museum curator scoring the statistics of two galleries. | [Jensen-Shannon Divergence](../../../MathsTerms/Jensen_Shannon_Divergence.md) |
+| **$G_\theta(z)$** | Generator Network | `fake_imgs = generator(z)` | A printing press stamping synthetic currency notes. | [Autoregressive Models](../../MathsTerms/Autoregressive_Models.md) |
+| **$D_w(x)$** | Discriminator Network | `logits = discriminator(imgs)` | A bank clerk inspecting bills under an ultraviolet lamp. | [Jensen-Shannon Divergence](../../MathsTerms/Jensen_Shannon_Divergence.md) |
+| **$z \sim \mathcal{N}(0, I_k)$** | Latent Noise Tensor | `z = torch.randn(batch_size, 100)` | A bucket of raw clay ready for molding. | [Common Probability Distributions](../../MathsTerms/Common_Probability_Distributions.md) |
+| **$\text{Logit } A \in \mathbb{R}$** | Pre-Sigmoid Real Output | `linear_head_output` (unconstrained scalar) | The raw mercury height in a thermometer tube. | [Softmax](../../MathsTerms/Softmax.md) |
+| **$\text{BCEWithLogits}$** | Numerically Stable BCE Loss | `nn.BCEWithLogitsLoss()` | An automated digital grading machine with built-in squashing. | [Logarithms & Exponential Functions](../../MathsTerms/Logarithms_and_Exponential_Functions.md) |
+| **$\text{fake.detach()}$** | Sever Autograd Graph Tape | `fake_detached = fake_imgs.detach()` | Photocopying a painting so the original canvas is unaffected. | [Derivatives, Gradients & Jacobians](../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
+| **$\text{Normalize}(0.5, 0.5)$** | Linear Range Rescaling | `transforms.Normalize((0.5,), (0.5,))` | Converting temperature from Celsius to Fahrenheit scale. | [Batch Normalization & Spectral Norm](../../MathsTerms/Batch_Normalization_and_Spectral_Norm.md) |
+| **$\text{nn.Tanh()}$** | Hyperbolic Tangent Activation | `nn.Tanh()` squashing output into $[-1, 1]$ | A physical pressure regulator capped at $-1$ bar and $+1$ bar. | [Derivatives, Gradients & Jacobians](../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
+| **$\text{nn.Embedding}(10, 10)$** | Learnable Lookup Matrix | `emb = nn.Embedding(num_classes, emb_dim)` | A VIP keycard granting a customized security badge. | [Joint, Marginal & Conditional Dist](../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| **$\text{ConvTranspose2d}$** | Fractionally Strided Conv | `nn.ConvTranspose2d(in_ch, out_ch, 4, 2, 1)` | An optical slide projector enlarging a tiny slide onto a wall. | [Autoencoders & Latent Spaces](../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| **$\text{Conv2d}$** | Spatial Strided Convolution | `nn.Conv2d(in_ch, out_ch, 4, 2, 1)` | An optical lens focusing a giant image onto a tiny digital sensor. | [Autoencoders & Latent Spaces](../../MathsTerms/Autoencoders_and_Latent_Spaces.md) |
+| **$\text{FID}$** | Fréchet Inception Distance | `torchmetrics.image.fid.FrechetInceptionDistance` | An independent museum curator scoring the statistics of two galleries. | [Jensen-Shannon Divergence](../../MathsTerms/Jensen_Shannon_Divergence.md) |
 
 ---
 

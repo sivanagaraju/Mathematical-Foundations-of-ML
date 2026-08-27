@@ -203,16 +203,16 @@ This reference table maps mathematical symbols from Lecture 5 directly to PyTorc
 
 | Mathematical Symbol | Formal Concept | PyTorch Variable / Code Representation | Lecture Role & Context | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| $\mathcal{D} = \{x_i\}_{i=1}^n$ | Real Training Dataset | `real_batch = next(train_loader)` | Authentic data cloud drawn from unknown $p_x(x)$. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| $z_j \sim \mathcal{N}(0, I_k)$ | Latent Noise Prior ($k \ll d$) | `z = torch.randn(batch_size, latent_dim)` | Low-dimensional random seed vector providing all entropy. | [Common Probability Distributions](../../../MathsTerms/Common_Probability_Distributions.md) |
-| $G_\theta(z)$ | Deterministic Generator | `fake_batch = generator(z)` | Push-forward neural network mapping noise $z \to \hat{x} \sim p_\theta$. | [Autoregressive Models](../../../MathsTerms/Autoregressive_Models.md) |
-| $V_w(x) \in \mathbb{R}$ | Penultimate Linear Head | `v_logits = critic_backbone(x)` | Unconstrained real scalar logit from critic neural net. | [Softmax](../../../MathsTerms/Softmax.md) |
-| $\sigma_f(v)$ | Lego Activation Brick | `F.logsigmoid(v_logits)` | Domain-matching activation ensuring output $\in \operatorname{dom}(f^*)$. | [Fenchel Conjugate & Dual Reps](../../../MathsTerms/Fenchel_Conjugate_and_Dual_Representations.md) |
-| $D_w(x) \in (0, 1)$ | Sigmoid Discriminator | `torch.sigmoid(v_logits)` | Binary classifier scoring probability that $x$ is real. | [Jensen-Shannon Divergence](../../../MathsTerms/Jensen_Shannon_Divergence.md) |
-| $\mathcal{J}_{\text{GAN}}(\theta, w)$ | Shared Minimax Objective | `loss_D = -(loss_real + loss_fake)` | Scalar score surface where $w$ ascends and $\theta$ descends. | [Minimax Games & GANs](../../../MathsTerms/Minimax_Game_and_GANs.md) |
-| $B_1, B_2$ | Mini-Batch Sample Sizes | `batch_size = 64` | Sizes of real and synthetic sample batches for Monte Carlo means. | [Probability Basics & Axioms](../../../MathsTerms/Probability_Basics_and_Axioms.md) |
-| $y \in \mathbb{R}^c$ | Conditioning Semantic Vector | `y_onehot = F.one_hot(labels, 10)` | Class label or text embedding concatenated into $G$ and $D$. | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
-| $[z; y], [x; y]$ | Concatenated Inputs | `torch.cat([z, y], dim=1)` | Paired representation enabling conditional co-occurrence scoring. | [Joint, Marginal & Conditional Dist](../../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| $\mathcal{D} = \{x_i\}_{i=1}^n$ | Real Training Dataset | `real_batch = next(train_loader)` | Authentic data cloud drawn from unknown $p_x(x)$. | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $z_j \sim \mathcal{N}(0, I_k)$ | Latent Noise Prior ($k \ll d$) | `z = torch.randn(batch_size, latent_dim)` | Low-dimensional random seed vector providing all entropy. | [Common Probability Distributions](../../MathsTerms/Common_Probability_Distributions.md) |
+| $G_\theta(z)$ | Deterministic Generator | `fake_batch = generator(z)` | Push-forward neural network mapping noise $z \to \hat{x} \sim p_\theta$. | [Autoregressive Models](../../MathsTerms/Autoregressive_Models.md) |
+| $V_w(x) \in \mathbb{R}$ | Penultimate Linear Head | `v_logits = critic_backbone(x)` | Unconstrained real scalar logit from critic neural net. | [Softmax](../../MathsTerms/Softmax.md) |
+| $\sigma_f(v)$ | Lego Activation Brick | `F.logsigmoid(v_logits)` | Domain-matching activation ensuring output $\in \operatorname{dom}(f^*)$. | [Fenchel Conjugate & Dual Reps](../../MathsTerms/Fenchel_Conjugate_and_Dual_Representations.md) |
+| $D_w(x) \in (0, 1)$ | Sigmoid Discriminator | `torch.sigmoid(v_logits)` | Binary classifier scoring probability that $x$ is real. | [Jensen-Shannon Divergence](../../MathsTerms/Jensen_Shannon_Divergence.md) |
+| $\mathcal{J}_{\text{GAN}}(\theta, w)$ | Shared Minimax Objective | `loss_D = -(loss_real + loss_fake)` | Scalar score surface where $w$ ascends and $\theta$ descends. | [Minimax Games & GANs](../../MathsTerms/Minimax_Game_and_GANs.md) |
+| $B_1, B_2$ | Mini-Batch Sample Sizes | `batch_size = 64` | Sizes of real and synthetic sample batches for Monte Carlo means. | [Probability Basics & Axioms](../../MathsTerms/Probability_Basics_and_Axioms.md) |
+| $y \in \mathbb{R}^c$ | Conditioning Semantic Vector | `y_onehot = F.one_hot(labels, 10)` | Class label or text embedding concatenated into $G$ and $D$. | [Joint, Marginal & Conditional Dist](../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
+| $[z; y], [x; y]$ | Concatenated Inputs | `torch.cat([z, y], dim=1)` | Paired representation enabling conditional co-occurrence scoring. | [Joint, Marginal & Conditional Dist](../../MathsTerms/Joint_Marginal_Conditional_Dist.md) |
 
 ---
 

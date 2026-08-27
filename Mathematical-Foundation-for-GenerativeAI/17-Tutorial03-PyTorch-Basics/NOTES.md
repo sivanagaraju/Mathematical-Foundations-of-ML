@@ -194,16 +194,16 @@ This reference table maps mathematical notation from deep learning literature di
 
 | Symbol / Syntax | Formal Concept | PyTorch Implementation | Lecture Usage & Context | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| $\mathbf{X} \in \mathbb{R}^{B \times D}$ | Mini-batch input matrix | `x = torch.randn(B, D)` | Batch of $B$ training examples with $D$ features. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| $\mathbf{W}, \mathbf{b}$ | Layer weights & biases | `layer.weight`, `layer.bias` | Learnable parameters initialized inside `nn.Linear`. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| $\hat{\mathbf{y}} = \mathbf{X}\mathbf{W}^\top + \mathbf{b}$ | Affine forward pass | `y_pred = self.fc(x)` | Matrix multiplication with bias broadcast. | [Tensors & Shapes](../../../MathsTerms/Tensors_and_Shapes.md) |
-| $\sigma(z) = \max(0, z)$ | Rectified Linear Unit | `F.relu(z)` or `nn.ReLU()` | Elementwise activation breaking linear collapse. | [Activation Functions](../../../MathsTerms/Activation_Functions.md) |
-| $\nabla_{\mathbf{w}} \mathcal{L}$ | Gradient of loss w.r.t weights | `w.grad` | Evaluated automatically via `loss.backward()`. | [Derivatives, Gradients & Jacobians](../../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
-| $\mathbf{w} \leftarrow \mathbf{w} - \eta \nabla_{\mathbf{w}} \mathcal{L}$ | SGD parameter update | `optimizer.step()` | Parameter optimization step with learning rate $\eta$. | [Gradient Descent](../../../MathsTerms/Gradient_Descent.md) |
-| $\mathbf{z} \in \mathbb{R}^C$ | Raw unnormalized scores | `logits = model(x)` | Multi-class outputs before softmax normalization. | [Softmax](../../../MathsTerms/Softmax.md) |
-| $\text{Softmax}(\mathbf{z})_k$ | Probability for class $k$ | `F.softmax(logits, dim=1)` | Probability distribution used for inference and sampling. | [Softmax](../../../MathsTerms/Softmax.md) |
-| $\hat{c} = \arg\max_k z_k$ | Hard class prediction | `torch.argmax(logits, dim=1)` | Selecting top predicted class index for accuracy. | [Argmax & Argmin](../../../MathsTerms/Argmax.md) |
-| $\mathcal{L}_{\text{CE}}(\mathbf{z}, y)$ | Multi-class cross-entropy | `criterion = nn.CrossEntropyLoss()` | Loss criterion penalizing incorrect logit assignments. | [Loss Functions](../../../MathsTerms/Loss_Functions.md) |
+| $\mathbf{X} \in \mathbb{R}^{B \times D}$ | Mini-batch input matrix | `x = torch.randn(B, D)` | Batch of $B$ training examples with $D$ features. | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| $\mathbf{W}, \mathbf{b}$ | Layer weights & biases | `layer.weight`, `layer.bias` | Learnable parameters initialized inside `nn.Linear`. | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| $\hat{\mathbf{y}} = \mathbf{X}\mathbf{W}^\top + \mathbf{b}$ | Affine forward pass | `y_pred = self.fc(x)` | Matrix multiplication with bias broadcast. | [Tensors & Shapes](../../MathsTerms/Tensors_and_Shapes.md) |
+| $\sigma(z) = \max(0, z)$ | Rectified Linear Unit | `F.relu(z)` or `nn.ReLU()` | Elementwise activation breaking linear collapse. | [Activation Functions](../../MathsTerms/Activation_Functions.md) |
+| $\nabla_{\mathbf{w}} \mathcal{L}$ | Gradient of loss w.r.t weights | `w.grad` | Evaluated automatically via `loss.backward()`. | [Derivatives, Gradients & Jacobians](../../MathsTerms/Derivatives_Gradients_and_Jacobians.md) |
+| $\mathbf{w} \leftarrow \mathbf{w} - \eta \nabla_{\mathbf{w}} \mathcal{L}$ | SGD parameter update | `optimizer.step()` | Parameter optimization step with learning rate $\eta$. | [Gradient Descent](../../MathsTerms/Gradient_Descent.md) |
+| $\mathbf{z} \in \mathbb{R}^C$ | Raw unnormalized scores | `logits = model(x)` | Multi-class outputs before softmax normalization. | [Softmax](../../MathsTerms/Softmax.md) |
+| $\text{Softmax}(\mathbf{z})_k$ | Probability for class $k$ | `F.softmax(logits, dim=1)` | Probability distribution used for inference and sampling. | [Softmax](../../MathsTerms/Softmax.md) |
+| $\hat{c} = \arg\max_k z_k$ | Hard class prediction | `torch.argmax(logits, dim=1)` | Selecting top predicted class index for accuracy. | [Argmax & Argmin](../../MathsTerms/Argmax.md) |
+| $\mathcal{L}_{\text{CE}}(\mathbf{z}, y)$ | Multi-class cross-entropy | `criterion = nn.CrossEntropyLoss()` | Loss criterion penalizing incorrect logit assignments. | [Loss Functions](../../MathsTerms/Loss_Functions.md) |
 
 ---
 
