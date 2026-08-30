@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>f-Divergence Master Interactive Studio</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    input[type=range] {
+      accent-color: #3b82f6;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.4);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="bg-transparent text-[var(--foreground)] antialiased p-2 sm:p-4 font-sans selection:bg-blue-500 selection:text-white">
+  <div class="bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 shadow-2xl max-w-6xl mx-auto space-y-5">
+    
+    <!-- ═══════════════════════════════════════════════════
+         HEADER & NAV TABS
+         ═══════════════════════════════════════════════════ -->
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-4 border-b border-[var(--border)]">
+      <div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20 uppercase tracking-wider">
+            Deep Mathematical Foundation
+          </span>
+          <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-[var(--foreground)]">
+            Csiszár $f$-Divergence Master Studio
+          </h1>
+        </div>
+        <p class="text-xs sm:text-sm text-[var(--muted-foreground)] mt-1">
+          The unifying mathematical umbrella of probability distances in Generative AI:
+          <span class="font-mono text-blue-400 font-medium">D_f(P ∥ Q) = ∫ Q(x) f(P(x)/Q(x)) dx</span>
+        </p>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] text-xs font-semibold overflow-x-auto custom-scrollbar">
+        <button id="tab-btn-why" onclick="setTab('why')" class="px-3 py-1.5 rounded-lg whitespace-nowrap bg-[var(--card)] text-blue-500 shadow-sm transition">1. Why We Need It</button>
+        <button id="tab-btn-bowl" onclick="setTab('bowl')" class="px-3 py-1.5 rounded-lg whitespace-nowrap text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition">2. Penalty Bowl & Dual</button>
+        <button id="tab-btn-dist" onclick="setTab('dist')" class="px-3 py-1.5 rounded-lg whitespace-nowrap text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition">3. Density Sandbox</button>
+        <button id="tab-btn-mode" onclick="setTab('mode')" class="px-3 py-1.5 rounded-lg whitespace-nowrap text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition">4. Twin Peaks (Modes)</button>
+        <button id="tab-btn-build" onclick="setTab('build')" class="px-3 py-1.5 rounded-lg whitespace-nowrap text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition">5. Algorithm Designer</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         TAB 1: WHY WE NEED f-DIVERGENCE (FIRST PRINCIPLES)
+         ═══════════════════════════════════════════════════ -->
+    <div id="tab-why" class="space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Interactive Canvas & Probe -->
+        <div class="lg:col-span-2 bg-[var(--background)] rounded-xl border border-[var(--border)] p-4 flex flex-col items-center">
+          <div class="w-full flex justify-between items-center mb-2 text-xs">
+            <span class="font-bold text-[var(--foreground)] flex items-center gap-1.5">
+              <span>🔬 Interactive Likelihood Ratio Probe</span>
+            </span>
+            <span id="why-probe-badge" class="px-2 py-0.5 rounded font-mono text-[11px] bg-blue-500/10 text-blue-500">
+              Hover/Drag mouse over chart
+            </span>
+          </div>
+
+          <canvas id="whyCanvas" width="600" height="260" class="w-full rounded-lg bg-[var(--card)] border border-[var(--border)] cursor-crosshair"></canvas>
+
+          <div class="w-full grid grid-cols-3 text-center text-[10px] sm:text-xs text-[var(--muted-foreground)] mt-3 font-mono border-t border-[var(--border)] pt-2">
+            <div><span class="text-blue-500 font-bold">● P(x) (Real Data):</span> <span id="why-val-p">0.24</span></div>
+            <div><span class="text-amber-500 font-bold">● Q(x) (AI Model):</span> <span id="why-val-q">0.12</span></div>
+            <div><span class="text-emerald-500 font-bold">Ratio u = P/Q:</span> <span id="why-val-u">2.00</span></div>
+          </div>
+        </div>
+
+        <!-- The 3 Traps & The Breakthrough -->
+        <div class="space-y-3 flex flex-col justify-between text-xs">
+          <div class="space-y-2.5">
+            <h3 class="font-bold text-sm text-[var(--foreground)]">Why Naive Distances Fail:</h3>
+            
+            <div class="p-2.5 rounded-lg bg-rose-500/5 border border-rose-500/20 space-y-1">
+              <div class="font-bold text-rose-500">❌ 1. Subtraction: ∫(P - Q)dx = 0</div>
+              <p class="text-[11px] text-[var(--muted-foreground)] leading-tight">
+                Because both valid densities integrate to 1.0, positive and negative errors cancel out to exact zero, even for garbage outputs!
+              </p>
+            </div>
+
+            <div class="p-2.5 rounded-lg bg-amber-500/5 border border-amber-500/20 space-y-1">
+              <div class="font-bold text-amber-500">⚠️ 2. Absolute Difference: ∫|P - Q|dx</div>
+              <p class="text-[11px] text-[var(--muted-foreground)] leading-tight">
+                Discontinuous step gradients (+1 or -1) lack magnitude info; backpropagation oscillates and freezes on neural network weights.
+              </p>
+            </div>
+
+            <div class="p-2.5 rounded-lg bg-emerald-500/5 border border-emerald-500/20 space-y-1">
+              <div class="font-bold text-emerald-500">✨ 3. Csiszár's Likelihood Ratio: u = P(x)/Q(x)</div>
+              <p class="text-[11px] text-[var(--muted-foreground)] leading-tight">
+                The relative scaling ratio is coordinate-invariant, detects missing modes (u ≫ 1), and punishes fake hallucinations (u ≪ 1).
+              </p>
+            </div>
+          </div>
+
+          <div class="p-3 bg-blue-500/5 border border-blue-500/20 rounded-xl">
+            <span class="font-bold text-blue-500 block mb-1">💡 The 3 Axioms of the Penalty Bowl:</span>
+            <ul class="list-disc list-inside text-[11px] text-[var(--muted-foreground)] space-y-0.5">
+              <li><strong>Zero Fine:</strong> $f(1.0) = 0$ (Match = zero penalty).</li>
+              <li><strong>Convexity:</strong> $f''(u) \ge 0$ (Deviations rise).</li>
+              <li><strong>Expectation:</strong> $D_f = \mathbb{E}_Q[f(u)] \ge 0$ (Jensen).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         TAB 2: THE CONVEX PENALTY BOWL & FENCHEL DUAL
+         ═══════════════════════════════════════════════════ -->
+    <div id="tab-bowl" class="space-y-4 hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Canvas View -->
+        <div class="lg:col-span-2 bg-[var(--background)] rounded-xl border border-[var(--border)] p-3 flex flex-col items-center">
+          <div class="w-full flex justify-between items-center mb-1 text-xs text-[var(--muted-foreground)]">
+            <span class="font-medium text-[var(--foreground)]">Convex Generator Curve $f(u)$ vs Likelihood Ratio $u = P/Q$</span>
+            <span id="bowl-status-badge" class="px-2 py-0.5 rounded text-[11px] font-mono bg-blue-500/10 text-blue-500">u = 1.40 (f(u) = 0.160)</span>
+          </div>
+          <canvas id="bowlCanvas" width="600" height="280" class="w-full rounded-lg bg-[var(--card)] border border-[var(--border)]"></canvas>
+          <div class="w-full grid grid-cols-3 text-center text-[10px] sm:text-xs text-[var(--muted-foreground)] mt-2 font-mono">
+            <span class="text-amber-500">◀ u &lt; 1 (Model Overestimates Q &gt; P)</span>
+            <span class="text-emerald-500 font-semibold">u = 1.0 (P = Q, Zero Fine)</span>
+            <span class="text-blue-500">u &gt; 1 (Model Underestimates P &gt; Q) ▶</span>
+          </div>
+        </div>
+
+        <!-- Controls & Metrics -->
+        <div class="space-y-3 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div>
+              <label class="text-xs font-semibold text-[var(--foreground)] block mb-1.5">Select Divergence Generator $f(u)$:</label>
+              <select id="divergenceSelect" onchange="updateBowl()" class="w-full text-xs bg-[var(--background)] border border-[var(--border)] rounded-lg p-2 text-[var(--foreground)] focus:ring-2 focus:ring-blue-500 outline-none">
+                <option value="fwd_kl">Forward KL: f(u) = u ln(u) [LLMs / VAEs]</option>
+                <option value="rev_kl">Reverse KL: f(u) = -ln(u) [GANs / RLHF]</option>
+                <option value="chi2" selected>Pearson Chi-Squared: f(u) = (u - 1)² [LSGAN]</option>
+                <option value="hellinger">Squared Hellinger: f(u) = (√u - 1)² [Robust]</option>
+                <option value="tv">Total Variation: f(u) = 0.5 |u - 1| [Privacy]</option>
+                <option value="jsd">Jensen-Shannon Divergence [Vanilla GAN]</option>
+                <option value="alpha">Alpha-Divergence Family (Parametric α)</option>
+              </select>
+            </div>
+
+            <!-- Alpha slider if alpha selected -->
+            <div id="alpha-ctrl" class="bg-[var(--background)] p-2.5 rounded-xl border border-[var(--border)] space-y-1 hidden">
+              <div class="flex justify-between text-xs">
+                <span class="text-[var(--muted-foreground)]">Parameter $\alpha$:</span>
+                <span id="val-alpha" class="font-mono text-purple-500 font-bold">0.50</span>
+              </div>
+              <input type="range" id="slider-alpha" min="-1.0" max="3.0" step="0.1" value="0.5" oninput="updateBowl()" class="w-full cursor-pointer">
+            </div>
+
+            <!-- Slider for u -->
+            <div class="bg-[var(--background)] p-3 rounded-xl border border-[var(--border)] space-y-2">
+              <div class="flex justify-between text-xs">
+                <span class="font-medium text-[var(--foreground)]">Likelihood Ratio ($u = P/Q$):</span>
+                <span id="u-slider-val" class="font-mono text-blue-500 font-bold">1.40</span>
+              </div>
+              <input type="range" id="u-slider" min="0.05" max="3.0" step="0.05" value="1.40" oninput="updateBowl()" class="w-full cursor-pointer">
+              <div class="flex justify-between text-[10px] text-[var(--muted-foreground)] font-mono">
+                <span>0.05 (Q ≫ P)</span>
+                <span>1.0 (Match)</span>
+                <span>3.0 (P ≫ Q)</span>
+              </div>
+            </div>
+
+            <!-- Fenchel Dual info -->
+            <div class="p-3 bg-blue-500/5 border border-blue-500/20 rounded-xl space-y-1.5 text-xs">
+              <div class="font-semibold text-blue-500 flex items-center justify-between">
+                <span>✨ Fenchel Duality (f-GAN Engine)</span>
+                <span class="text-[10px] font-normal text-[var(--muted-foreground)]">Tangent Line</span>
+              </div>
+              <div class="grid grid-cols-2 gap-1 text-[11px] font-mono text-[var(--foreground)]">
+                <div>Slope $t = f'(u)$: <span id="val-slope" class="text-emerald-500 font-bold">0.80</span></div>
+                <div>Dual $f^*(t)$: <span id="val-dual" class="text-purple-500 font-bold">0.96</span></div>
+              </div>
+              <p class="text-[10.5px] text-[var(--muted-foreground)] leading-tight">
+                $f^*(t) = \sup_u \{ tu - f(u) \}$ maps non-linear curves to linear discriminator witness bounds!
+              </p>
+            </div>
+          </div>
+
+          <!-- Interpretation card -->
+          <div id="bowl-interpretation" class="p-3 bg-[var(--background)] rounded-xl border border-[var(--border)] text-xs text-[var(--muted-foreground)] leading-relaxed">
+            Loading intuition...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         TAB 3: PROBABILITY DENSITY SANDBOX
+         ═══════════════════════════════════════════════════ -->
+    <div id="tab-dist" class="space-y-4 hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Dual Canvases -->
+        <div class="lg:col-span-2 space-y-3">
+          <div class="bg-[var(--background)] rounded-xl border border-[var(--border)] p-3">
+            <div class="flex justify-between items-center mb-1 text-xs">
+              <span class="font-medium text-[var(--foreground)]">Top: Probability Densities $P(x)$ (Real) vs $Q(x)$ (Model)</span>
+              <span class="text-[10px] text-[var(--muted-foreground)] font-mono">Area under curve = 1.0</span>
+            </div>
+            <canvas id="distCanvas" width="600" height="160" class="w-full rounded-lg bg-[var(--card)] border border-[var(--border)]"></canvas>
+          </div>
+
+          <div class="bg-[var(--background)] rounded-xl border border-[var(--border)] p-3">
+            <div class="flex justify-between items-center mb-1 text-xs">
+              <span class="font-medium text-[var(--foreground)]">Bottom: Pointwise Integrand Area $\int Q(x) f(P(x)/Q(x)) dx$</span>
+              <span id="integrand-total-badge" class="text-[11px] font-mono text-emerald-500 font-bold">D_f = 0.360</span>
+            </div>
+            <canvas id="integrandCanvas" width="600" height="110" class="w-full rounded-lg bg-[var(--card)] border border-[var(--border)]"></canvas>
+          </div>
+        </div>
+
+        <!-- Controls & Scoreboard -->
+        <div class="space-y-3">
+          <div class="bg-[var(--background)] p-3 rounded-xl border border-[var(--border)] space-y-3">
+            <span class="text-xs font-bold text-[var(--foreground)] block">Model Distribution $Q(x)$ Controls:</span>
+            
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-[var(--muted-foreground)]">Model Mean ($\mu_Q$):</span>
+                <span id="val-mu-q" class="font-mono font-bold text-amber-500">0.8</span>
+              </div>
+              <input type="range" id="slider-mu-q" min="-2.5" max="2.5" step="0.1" value="0.8" oninput="updateDistributions()" class="w-full cursor-pointer">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-[var(--muted-foreground)]">Model Variance ($\sigma_Q$):</span>
+                <span id="val-sigma-q" class="font-mono font-bold text-amber-500">1.2</span>
+              </div>
+              <input type="range" id="slider-sigma-q" min="0.5" max="2.5" step="0.1" value="1.2" oninput="updateDistributions()" class="w-full cursor-pointer">
+            </div>
+
+            <div class="pt-2 border-t border-[var(--border)] flex gap-2">
+              <button onclick="setDistPreset(0.0, 1.0)" class="flex-1 py-1 text-[11px] rounded-lg bg-[var(--card)] border border-[var(--border)] hover:border-blue-500 transition font-medium">Match $P$ (Zero Dist)</button>
+              <button onclick="setDistPreset(1.5, 0.7)" class="flex-1 py-1 text-[11px] rounded-lg bg-[var(--card)] border border-[var(--border)] hover:border-blue-500 transition font-medium">Shifted</button>
+            </div>
+          </div>
+
+          <!-- All Divergence Scoreboard -->
+          <div class="bg-[var(--background)] p-3 rounded-xl border border-[var(--border)] space-y-2">
+            <span class="text-xs font-bold text-[var(--foreground)] block">Live Multi-Divergence Scoreboard:</span>
+            <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+              <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)]">
+                <div class="text-[10px] text-[var(--muted-foreground)]">Forward KL</div>
+                <div id="score-fwd-kl" class="text-blue-500 font-bold text-sm">0.245</div>
+              </div>
+              <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)]">
+                <div class="text-[10px] text-[var(--muted-foreground)]">Reverse KL</div>
+                <div id="score-rev-kl" class="text-amber-500 font-bold text-sm">0.281</div>
+              </div>
+              <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)]">
+                <div class="text-[10px] text-[var(--muted-foreground)]">Pearson $\chi^2$</div>
+                <div id="score-chi2" class="text-emerald-500 font-bold text-sm">0.420</div>
+              </div>
+              <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)]">
+                <div class="text-[10px] text-[var(--muted-foreground)]">Hellinger $H^2$</div>
+                <div id="score-hel" class="text-purple-500 font-bold text-sm">0.115</div>
+              </div>
+              <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] col-span-2 flex justify-between items-center">
+                <span class="text-[10px] text-[var(--muted-foreground)]">Total Variation (TV):</span>
+                <span id="score-tv" class="text-rose-500 font-bold text-sm">0.312</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         TAB 4: MODE-SEEKING VS MODE-COVERING (TWIN PEAKS)
+         ═══════════════════════════════════════════════════ -->
+    <div id="tab-mode" class="space-y-4 hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Canvas -->
+        <div class="lg:col-span-2 bg-[var(--background)] rounded-xl border border-[var(--border)] p-3">
+          <div class="flex justify-between items-center mb-1 text-xs">
+            <span class="font-medium text-[var(--foreground)]">Bimodal Target $P(x)$ (Cats vs Dogs) vs Fitted Single Gaussian $Q(x)$</span>
+            <span id="mode-fit-badge" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-500/10 text-blue-500">Mode-Covering Fit</span>
+          </div>
+          <canvas id="modeCanvas" width="600" height="280" class="w-full rounded-lg bg-[var(--card)] border border-[var(--border)]"></canvas>
+        </div>
+
+        <!-- Strategy Selector -->
+        <div class="space-y-3">
+          <span class="text-xs font-bold text-[var(--foreground)] block">Select Optimization Objective:</span>
+          
+          <div class="space-y-2">
+            <button onclick="setModeStrategy('fwd_kl')" id="btn-mode-fwdkl" class="w-full text-left p-2.5 rounded-xl border border-blue-500 bg-blue-500/10 text-xs transition">
+              <div class="font-bold text-blue-500">1. Forward KL: Mode-Covering (Fog Blanket)</div>
+              <p class="text-[11px] text-[var(--muted-foreground)] mt-0.5">Used in VAEs & LLMs. Stretches wide across all modes to avoid infinite penalties on missing data.</p>
+            </button>
+
+            <button onclick="setModeStrategy('rev_kl_1')" id="btn-mode-revkl1" class="w-full text-left p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] text-xs hover:border-amber-500 transition">
+              <div class="font-bold text-amber-500">2. Reverse KL: Mode-Seeking (Mode A: Cats)</div>
+              <p class="text-[11px] text-[var(--muted-foreground)] mt-0.5">Used in RLHF & GANs. Locks tightly onto left peak; drops Dog mode completely to stay 100% crisp.</p>
+            </button>
+
+            <button onclick="setModeStrategy('rev_kl_2')" id="btn-mode-revkl2" class="w-full text-left p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] text-xs hover:border-amber-500 transition">
+              <div class="font-bold text-amber-500">3. Reverse KL: Mode-Seeking (Mode B: Dogs)</div>
+              <p class="text-[11px] text-[var(--muted-foreground)] mt-0.5">Locks tightly onto right peak; drops Cat mode to avoid generating blurry valley hybrids.</p>
+            </button>
+
+            <button onclick="setModeStrategy('chi2')" id="btn-mode-chi2" class="w-full text-left p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] text-xs hover:border-emerald-500 transition">
+              <div class="font-bold text-emerald-500">4. Pearson $\chi^2$: Balanced (LSGAN)</div>
+              <p class="text-[11px] text-[var(--muted-foreground)] mt-0.5">Linear restoring force keeps gradients flowing without saturation or mode collapse.</p>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         TAB 5: AI ALGORITHM & LOSS FUNCTION DESIGNER
+         ═══════════════════════════════════════════════════ -->
+    <div id="tab-build" class="space-y-4 hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Input Configuration Panel -->
+        <div class="space-y-3 bg-[var(--background)] p-4 rounded-xl border border-[var(--border)]">
+          <span class="text-sm font-bold text-[var(--foreground)] block">🛠️ Engineering Objective Selector:</span>
+          
+          <div>
+            <label class="text-xs text-[var(--muted-foreground)] block mb-1">What is your primary AI task?</label>
+            <select id="builder-task" onchange="updateBuilder()" class="w-full text-xs bg-[var(--card)] border border-[var(--border)] rounded-lg p-2 text-[var(--foreground)] outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="gan_ls">1. Train GAN without Vanishing Gradients (Images)</option>
+              <option value="llm_vae">2. Train Language Model / VAE (Zero False Negatives)</option>
+              <option value="rlhf_sharp">3. RLHF / Policy Alignment (Sharp Un-hallucinated text)</option>
+              <option value="robust_noise">4. Robust Learning with Outliers / Label Noise</option>
+              <option value="privacy_eval">5. Bounded Statistical Hypothesis / Privacy Audit</option>
+            </select>
+          </div>
+
+          <div class="p-3 rounded-lg bg-[var(--card)] border border-[var(--border)] space-y-2 text-xs">
+            <div class="font-semibold text-blue-500">Mathematical Specification:</div>
+            <div class="text-[11px] space-y-1">
+              <div><strong>Chosen $f(u)$:</strong> <span id="builder-fu" class="font-mono text-emerald-500">(u - 1)²</span></div>
+              <div><strong>Fenchel Dual $f^*(t)$:</strong> <span id="builder-fstar" class="font-mono text-purple-500">0.25 t² + t</span></div>
+              <div><strong>Dual Domain:</strong> <span id="builder-domain" class="font-mono text-amber-500">t ∈ ℝ (Unbounded)</span></div>
+              <div><strong>Discriminator Activation:</strong> <span id="builder-act" class="font-mono text-blue-500">Linear / Identity</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Output Code & PyTorch Implementation -->
+        <div class="lg:col-span-2 space-y-2 bg-[var(--background)] p-4 rounded-xl border border-[var(--border)] flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-bold text-[var(--foreground)]">Generated Production PyTorch Loss Module:</span>
+              <button onclick="copyCode()" id="copy-btn" class="px-2.5 py-1 text-[11px] rounded bg-[var(--card)] border border-[var(--border)] hover:border-blue-500 transition font-medium">📋 Copy PyTorch Code</button>
+            </div>
+            <pre class="p-3 rounded-lg bg-[var(--card)] border border-[var(--border)] font-mono text-[11px] text-[var(--foreground)] overflow-x-auto custom-scrollbar max-h-72"><code id="builder-code"></code></pre>
+          </div>
+          <div id="builder-summary" class="p-2.5 rounded-lg bg-blue-500/5 border border-blue-500/20 text-xs text-[var(--muted-foreground)]">
+            Summary notes loading...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         BOTTOM FOOTER / SUMMARY
+         ═══════════════════════════════════════════════════ -->
+    <div class="p-3 bg-[var(--background)] rounded-xl border border-[var(--border)] flex flex-col sm:flex-row justify-between items-center text-xs gap-2">
+      <div class="flex items-center gap-2">
+        <span class="text-base">💡</span>
+        <span class="text-[var(--muted-foreground)]">
+          <strong>Key Takeaway:</strong> $f(1)=0$ guarantees 0 distance when identical. Convexity guarantees $D_f(P \parallel Q) \ge 0$ via Jensen's inequality!
+        </span>
+      </div>
+      <div class="text-[11px] font-mono text-[var(--muted-foreground)] whitespace-nowrap">
+        Mathematical Foundations of ML
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       JAVASCRIPT ENGINE
+       ═══════════════════════════════════════════════════ -->
+  <script>
+    // ─── Theme Colors Helper ───
+    function isLightMode() {
+      return document.documentElement.classList.contains('light');
+    }
+    function getColors() {
+      const light = isLightMode();
+      return {
+        bg: light ? '#ffffff' : '#18181b',
+        grid: light ? '#e5e7eb' : '#27272a',
+        axis: light ? '#9ca3af' : '#52525b',
+        text: light ? '#374151' : '#d4d4d8',
+        blue: '#3b82f6',
+        orange: '#f59e0b',
+        green: '#10b981',
+        purple: '#a855f7',
+        red: '#ef4444'
+      };
+    }
+
+    // ─── TAB NAVIGATION ───
+    let currentTab = 'why';
+    function setTab(tab) {
+      currentTab = tab;
+      ['why', 'bowl', 'dist', 'mode', 'build'].forEach(t => {
+        const panel = document.getElementById(`tab-${t}`);
+        if (panel) panel.classList.toggle('hidden', t !== tab);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (btn) {
+          if (t === tab) {
+            btn.className = 'px-3 py-1.5 rounded-lg whitespace-nowrap bg-[var(--card)] text-blue-500 shadow-sm transition font-semibold';
+          } else {
+            btn.className = 'px-3 py-1.5 rounded-lg whitespace-nowrap text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition';
+          }
+        }
+      });
+
+      if (tab === 'why') updateWhyCanvas();
+      if (tab === 'bowl') updateBowl();
+      if (tab === 'dist') updateDistributions();
+      if (tab === 'mode') updateModePlot();
+      if (tab === 'build') updateBuilder();
+    }
+
+    // ─── TAB 1: WHY CANVAS & PROBE ───
+    let probeX = 1.0;
+    function gaussian(x, mu, sigma) {
+      return (1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
+    }
+
+    function updateWhyCanvas() {
+      const canvas = document.getElementById('whyCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const c = getColors();
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      const xMin = -4.0, xMax = 4.0, N = 300;
+      const dx = (xMax - xMin) / N;
+      const toX = (x) => ((x - xMin) / (xMax - xMin)) * (W - 60) + 35;
+      const toY = (y) => H - 35 - (y / 0.6) * (H - 55);
+
+      // Grid
+      ctx.strokeStyle = c.grid;
+      ctx.lineWidth = 1;
+      for (let gx = -3; gx <= 3; gx += 1) {
+        ctx.beginPath();
+        ctx.moveTo(toX(gx), 15);
+        ctx.lineTo(toX(gx), H - 25);
+        ctx.stroke();
+      }
+
+      // Draw P(x) (Real: N(0, 1))
+      ctx.strokeStyle = c.blue;
+      ctx.fillStyle = 'rgba(59, 130, 246, 0.12)';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(toX(xMin), toY(gaussian(xMin, 0, 1)));
+      for (let i = 1; i <= N; i++) {
+        const x = xMin + i * dx;
+        ctx.lineTo(toX(x), toY(gaussian(x, 0, 1)));
+      }
+      ctx.stroke();
+      ctx.lineTo(toX(xMax), toY(0));
+      ctx.lineTo(toX(xMin), toY(0));
+      ctx.closePath();
+      ctx.fill();
+
+      // Draw Q(x) (Model: N(1.2, 1.1))
+      ctx.strokeStyle = c.orange;
+      ctx.fillStyle = 'rgba(245, 158, 11, 0.12)';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(toX(xMin), toY(gaussian(xMin, 1.2, 1.1)));
+      for (let i = 1; i <= N; i++) {
+        const x = xMin + i * dx;
+        ctx.lineTo(toX(x), toY(gaussian(x, 1.2, 1.1)));
+      }
+      ctx.stroke();
+      ctx.lineTo(toX(xMax), toY(0));
+      ctx.lineTo(toX(xMin), toY(0));
+      ctx.closePath();
+      ctx.fill();
+
+      // Probe point calculations
+      const pVal = gaussian(probeX, 0, 1);
+      const qVal = gaussian(probeX, 1.2, 1.1);
+      const uVal = pVal / (qVal + 1e-7);
+
+      document.getElementById('why-val-p').innerText = pVal.toFixed(3);
+      document.getElementById('why-val-q').innerText = qVal.toFixed(3);
+      document.getElementById('why-val-u').innerText = uVal.toFixed(2);
+
+      const probeBadge = document.getElementById('why-probe-badge');
+      if (Math.abs(uVal - 1.0) < 0.15) {
+        probeBadge.innerText = `x = ${probeX.toFixed(2)}: Perfect Match (u ≈ 1.0)`;
+        probeBadge.className = 'px-2 py-0.5 rounded font-mono text-[11px] bg-emerald-500/10 text-emerald-500';
+      } else if (uVal > 1.0) {
+        probeBadge.innerText = `x = ${probeX.toFixed(2)}: Missing Mode / Underestimate (u = ${uVal.toFixed(2)})`;
+        probeBadge.className = 'px-2 py-0.5 rounded font-mono text-[11px] bg-blue-500/10 text-blue-500';
+      } else {
+        probeBadge.innerText = `x = ${probeX.toFixed(2)}: Fake Noise / Hallucination (u = ${uVal.toFixed(2)})`;
+        probeBadge.className = 'px-2 py-0.5 rounded font-mono text-[11px] bg-amber-500/10 text-amber-500';
+      }
+
+      // Draw vertical probe line
+      const pxX = toX(probeX);
+      ctx.strokeStyle = c.purple;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(pxX, 15);
+      ctx.lineTo(pxX, H - 25);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Draw probe points on curves
+      ctx.fillStyle = c.blue;
+      ctx.beginPath();
+      ctx.arc(pxX, toY(pVal), 5, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.fillStyle = c.orange;
+      ctx.beginPath();
+      ctx.arc(pxX, toY(qVal), 5, 0, 2 * Math.PI);
+      ctx.fill();
+
+      // Legend
+      ctx.font = '11px sans-serif';
+      ctx.fillStyle = c.blue;
+      ctx.fillText('● Real Data P(x) ~ N(0, 1)', 40, 25);
+      ctx.fillStyle = c.orange;
+      ctx.fillText('● Model Q(x) ~ N(1.2, 1.1²)', 220, 25);
+    }
+
+    // Attach probe mouse interaction
+    const whyCanvas = document.getElementById('whyCanvas');
+    if (whyCanvas) {
+      const handleProbe = (e) => {
+        const rect = whyCanvas.getBoundingClientRect();
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        if (!clientX) return;
+        const norm = (clientX - rect.left) / rect.width;
+        probeX = -4.0 + norm * 8.0;
+        probeX = Math.max(-3.8, Math.min(3.8, probeX));
+        updateWhyCanvas();
+      };
+      whyCanvas.addEventListener('mousemove', handleProbe);
+      whyCanvas.addEventListener('touchmove', handleProbe);
+    }
+
+    // ─── TAB 2: BOWL LOGIC ───
+    function getGenerator(type, u, alphaVal = 0.5) {
+      if (u <= 0.001) u = 0.001;
+      switch (type) {
+        case 'fwd_kl':
+          return { f: u * Math.log(u), df: Math.log(u) + 1, fstar: (t) => Math.exp(t - 1) };
+        case 'rev_kl':
+          return { f: -Math.log(u), df: -1 / u, fstar: (t) => t < 0 ? -1 - Math.log(-t) : NaN };
+        case 'chi2':
+          return { f: Math.pow(u - 1, 2), df: 2 * (u - 1), fstar: (t) => 0.25 * t * t + t };
+        case 'hellinger':
+          return { f: Math.pow(Math.sqrt(u) - 1, 2), df: 1 - 1 / Math.sqrt(u), fstar: (t) => t < 1 ? t / (1 - t) : NaN };
+        case 'tv':
+          return { f: 0.5 * Math.abs(u - 1), df: u >= 1 ? 0.5 : -0.5, fstar: (t) => Math.abs(t) <= 0.5 ? t : NaN };
+        case 'jsd':
+          const f_val = -(u + 1) * Math.log((u + 1) / 2) + u * Math.log(u);
+          const df_val = Math.log(u) - Math.log((u + 1) / 2);
+          return { f: f_val, df: df_val, fstar: (t) => t < Math.log(2) ? -Math.log(2 - Math.exp(t)) : NaN };
+        case 'alpha':
+          const a = alphaVal;
+          if (Math.abs(a) < 0.01) return { f: -Math.log(u), df: -1/u, fstar: (t) => t < 0 ? -1 - Math.log(-t) : NaN };
+          if (Math.abs(a - 1.0) < 0.01) return { f: u * Math.log(u), df: Math.log(u) + 1, fstar: (t) => Math.exp(t - 1) };
+          const fa = (Math.pow(u, a) - a * u + (a - 1)) / (a * (a - 1));
+          const dfa = (Math.pow(u, a - 1) - 1) / (a - 1);
+          return { f: fa, df: dfa, fstar: (t) => {
+            const inner = a - 1 + t;
+            return inner > 0 ? (Math.pow(inner, a / (a - 1)) / a) - ((a - 1) / a) : NaN;
+          }};
+      }
+      return { f: 0, df: 0, fstar: (t) => 0 };
+    }
+
+    function updateBowl() {
+      const type = document.getElementById('divergenceSelect').value;
+      const alphaCtrl = document.getElementById('alpha-ctrl');
+      if (alphaCtrl) alphaCtrl.classList.toggle('hidden', type !== 'alpha');
+      const alphaVal = parseFloat(document.getElementById('slider-alpha').value);
+      document.getElementById('val-alpha').innerText = alphaVal.toFixed(2);
+
+      const uVal = parseFloat(document.getElementById('u-slider').value);
+      document.getElementById('u-slider-val').innerText = uVal.toFixed(2);
+
+      const gen = getGenerator(type, uVal, alphaVal);
+      const fVal = gen.f;
+      const slope = gen.df;
+      const dualVal = gen.fstar(slope);
+
+      document.getElementById('bowl-status-badge').innerText = `u = ${uVal.toFixed(2)}  |  f(u) = ${fVal.toFixed(3)}`;
+      document.getElementById('val-slope').innerText = slope.toFixed(2);
+      document.getElementById('val-dual').innerText = isNaN(dualVal) ? 'Domain Out' : dualVal.toFixed(2);
+
+      // Interpretations
+      const interpBox = document.getElementById('bowl-interpretation');
+      if (Math.abs(uVal - 1.0) < 0.05) {
+        interpBox.innerHTML = `<strong>✨ Perfect Match ($u=1.0$):</strong> True data matches model ($P=Q$). Penalty is strictly $f(1)=0$.`;
+      } else if (uVal > 1.0) {
+        interpBox.innerHTML = `<strong>⚠️ Model Underestimating ($u=${uVal.toFixed(2)} &gt; 1$):</strong> Real data exists ($P > Q$), but the AI model assigned low probability. Forward KL penalizes this exponentially to force mode coverage!`;
+      } else {
+        interpBox.innerHTML = `<strong>🚨 Model Overestimating / Hallucinating ($u=${uVal.toFixed(2)} &lt; 1$):</strong> Model placed probability where real data is zero ($Q > P$). Reverse KL charges infinite penalty to eliminate fake hallucinations!`;
+      }
+
+      // Draw Canvas
+      const canvas = document.getElementById('bowlCanvas');
+      const ctx = canvas.getContext('2d');
+      const c = getColors();
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      const uMin = 0.05, uMax = 3.0;
+      const fMin = -0.5, fMax = 3.5;
+      const toX = (u) => ((u - uMin) / (uMax - uMin)) * (W - 80) + 45;
+      const toY = (f) => H - 35 - ((f - fMin) / (fMax - fMin)) * (H - 55);
+
+      // Grid
+      ctx.strokeStyle = c.grid;
+      ctx.lineWidth = 1;
+      for (let uGrid = 0.5; uGrid <= 3.0; uGrid += 0.5) {
+        ctx.beginPath();
+        ctx.moveTo(toX(uGrid), 10);
+        ctx.lineTo(toX(uGrid), H - 30);
+        ctx.stroke();
+      }
+      for (let fGrid = 0; fGrid <= 3.0; fGrid += 1.0) {
+        ctx.beginPath();
+        ctx.moveTo(40, toY(fGrid));
+        ctx.lineTo(W - 20, toY(fGrid));
+        ctx.stroke();
+      }
+
+      // Axes
+      ctx.strokeStyle = c.axis;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(40, toY(0));
+      ctx.lineTo(W - 20, toY(0));
+      ctx.moveTo(toX(uMin), 10);
+      ctx.lineTo(toX(uMin), H - 25);
+      ctx.stroke();
+
+      // Axis ticks
+      ctx.fillStyle = c.text;
+      ctx.font = '10px monospace';
+      ctx.fillText('0.0', 18, toY(0) + 3);
+      ctx.fillText('1.0', 18, toY(1) + 3);
+      ctx.fillText('2.0', 18, toY(2) + 3);
+      ctx.fillText('3.0', 18, toY(3) + 3);
+      ctx.fillText('u=1.0', toX(1.0) - 12, H - 12);
+      ctx.fillText('u=2.0', toX(2.0) - 12, H - 12);
+      ctx.fillText('u=3.0', toX(3.0) - 12, H - 12);
+
+      // Draw curve f(u)
+      ctx.strokeStyle = c.blue;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      let started = false;
+      for (let u = uMin; u <= uMax; u += 0.02) {
+        const val = getGenerator(type, u, alphaVal).f;
+        const px = toX(u);
+        const py = toY(val);
+        if (!started) {
+          ctx.moveTo(px, py);
+          started = true;
+        } else {
+          ctx.lineTo(px, py);
+        }
+      }
+      ctx.stroke();
+
+      // Tangent line (Fenchel dual)
+      const tangentLength = 0.8;
+      const uT1 = Math.max(uMin, uVal - tangentLength);
+      const uT2 = Math.min(uMax, uVal + tangentLength);
+      const fT1 = fVal + slope * (uT1 - uVal);
+      const fT2 = fVal + slope * (uT2 - uVal);
+
+      ctx.strokeStyle = c.purple;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(toX(uT1), toY(fT1));
+      ctx.lineTo(toX(uT2), toY(fT2));
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Point on curve
+      const ptX = toX(uVal);
+      const ptY = toY(fVal);
+      ctx.fillStyle = c.orange;
+      ctx.beginPath();
+      ctx.arc(ptX, ptY, 6, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Drop line
+      ctx.strokeStyle = c.orange;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([2, 2]);
+      ctx.beginPath();
+      ctx.moveTo(ptX, ptY);
+      ctx.lineTo(ptX, toY(0));
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // ─── TAB 3: DENSITY SANDBOX LOGIC ───
+    function setDistPreset(mu, sigma) {
+      document.getElementById('slider-mu-q').value = mu;
+      document.getElementById('slider-sigma-q').value = sigma;
+      updateDistributions();
+    }
+
+    function updateDistributions() {
+      const muQ = parseFloat(document.getElementById('slider-mu-q').value);
+      const sigmaQ = parseFloat(document.getElementById('slider-sigma-q').value);
+      document.getElementById('val-mu-q').innerText = muQ.toFixed(1);
+      document.getElementById('val-sigma-q').innerText = sigmaQ.toFixed(1);
+
+      const muP = 0.0, sigmaP = 1.0;
+      const xMin = -4.5, xMax = 4.5, N = 300;
+      const dx = (xMax - xMin) / N;
+
+      let dFwdKl = 0, dRevKl = 0, dChi2 = 0, dHel = 0, dTv = 0;
+      const xs = [], pVals = [], qVals = [], integrandChi2 = [];
+
+      for (let i = 0; i <= N; i++) {
+        const x = xMin + i * dx;
+        const p = gaussian(x, muP, sigmaP);
+        const q = gaussian(x, muQ, sigmaQ);
+        const u = p / (q + 1e-7);
+
+        xs.push(x);
+        pVals.push(p);
+        qVals.push(q);
+
+        dFwdKl += q * (u * Math.log(u + 1e-9)) * dx;
+        dRevKl += q * (-Math.log(u + 1e-9)) * dx;
+        const chi2_val = q * Math.pow(u - 1, 2);
+        dChi2 += chi2_val * dx;
+        integrandChi2.push(chi2_val);
+
+        dHel += q * Math.pow(Math.sqrt(u) - 1, 2) * dx;
+        dTv += 0.5 * Math.abs(p - q) * dx;
+      }
+
+      document.getElementById('score-fwd-kl').innerText = Math.max(0, dFwdKl).toFixed(3);
+      document.getElementById('score-rev-kl').innerText = Math.max(0, dRevKl).toFixed(3);
+      document.getElementById('score-chi2').innerText = Math.max(0, dChi2).toFixed(3);
+      document.getElementById('score-hel').innerText = Math.max(0, dHel).toFixed(3);
+      document.getElementById('score-tv').innerText = Math.max(0, dTv).toFixed(3);
+      document.getElementById('integrand-total-badge').innerText = `Pearson χ² Total = ${Math.max(0, dChi2).toFixed(3)}`;
+
+      const c = getColors();
+      const canvas1 = document.getElementById('distCanvas');
+      const ctx1 = canvas1.getContext('2d');
+      const W1 = canvas1.width, H1 = canvas1.height;
+      ctx1.clearRect(0, 0, W1, H1);
+
+      const toX1 = (x) => ((x - xMin) / (xMax - xMin)) * (W1 - 60) + 35;
+      const toY1 = (y) => H1 - 25 - (y / 0.8) * (H1 - 40);
+
+      // Grid
+      ctx1.strokeStyle = c.grid;
+      ctx1.lineWidth = 1;
+      for (let gx = -4; gx <= 4; gx += 2) {
+        ctx1.beginPath();
+        ctx1.moveTo(toX1(gx), 10);
+        ctx1.lineTo(toX1(gx), H1 - 25);
+        ctx1.stroke();
+      }
+
+      // Draw P(x)
+      ctx1.strokeStyle = c.blue;
+      ctx1.fillStyle = 'rgba(59, 130, 246, 0.15)';
+      ctx1.lineWidth = 2.5;
+      ctx1.beginPath();
+      ctx1.moveTo(toX1(xs[0]), toY1(pVals[0]));
+      for (let i = 1; i <= N; i++) ctx1.lineTo(toX1(xs[i]), toY1(pVals[i]));
+      ctx1.stroke();
+      ctx1.lineTo(toX1(xs[N]), toY1(0));
+      ctx1.lineTo(toX1(xs[0]), toY1(0));
+      ctx1.closePath();
+      ctx1.fill();
+
+      // Draw Q(x)
+      ctx1.strokeStyle = c.orange;
+      ctx1.fillStyle = 'rgba(245, 158, 11, 0.15)';
+      ctx1.lineWidth = 2.5;
+      ctx1.beginPath();
+      ctx1.moveTo(toX1(xs[0]), toY1(qVals[0]));
+      for (let i = 1; i <= N; i++) ctx1.lineTo(toX1(xs[i]), toY1(qVals[i]));
+      ctx1.stroke();
+      ctx1.lineTo(toX1(xs[N]), toY1(0));
+      ctx1.lineTo(toX1(xs[0]), toY1(0));
+      ctx1.closePath();
+      ctx1.fill();
+
+      // Legend
+      ctx1.font = '11px sans-serif';
+      ctx1.fillStyle = c.blue;
+      ctx1.fillText('● Real Data P(x) ~ N(0, 1)', 40, 20);
+      ctx1.fillStyle = c.orange;
+      ctx1.fillText(`● Model Q(x) ~ N(${muQ.toFixed(1)}, ${sigmaQ.toFixed(1)}²)`, 220, 20);
+
+      // Draw Bottom Canvas (Pointwise Integrand)
+      const canvas2 = document.getElementById('integrandCanvas');
+      const ctx2 = canvas2.getContext('2d');
+      const W2 = canvas2.width, H2 = canvas2.height;
+      ctx2.clearRect(0, 0, W2, H2);
+
+      const maxInt = Math.max(0.5, ...integrandChi2);
+      const toY2 = (y) => H2 - 20 - (y / maxInt) * (H2 - 35);
+
+      ctx2.strokeStyle = c.green;
+      ctx2.fillStyle = 'rgba(16, 185, 129, 0.2)';
+      ctx2.lineWidth = 2;
+      ctx2.beginPath();
+      ctx2.moveTo(toX1(xs[0]), toY2(integrandChi2[0]));
+      for (let i = 1; i <= N; i++) ctx2.lineTo(toX1(xs[i]), toY2(integrandChi2[i]));
+      ctx2.stroke();
+      ctx2.lineTo(toX1(xs[N]), toY2(0));
+      ctx2.lineTo(toX1(xs[0]), toY2(0));
+      ctx2.closePath();
+      ctx2.fill();
+
+      ctx2.fillStyle = c.green;
+      ctx2.font = '10px monospace';
+      ctx2.fillText('Shaded Area = Integrated Divergence Distance', 40, 18);
+    }
+
+    // ─── TAB 4: MODE-SEEKING VS MODE-COVERING LOGIC ───
+    let currentModeStrategy = 'fwd_kl';
+    function setModeStrategy(strat) {
+      currentModeStrategy = strat;
+      ['fwdkl', 'revkl1', 'revkl2', 'chi2'].forEach(s => {
+        const btn = document.getElementById(`btn-mode-${s}`);
+        if (!btn) return;
+        if (s === strat.replace(/_/g, '')) {
+          btn.className = 'w-full text-left p-2.5 rounded-xl border border-blue-500 bg-blue-500/10 text-xs transition font-semibold';
+        } else {
+          btn.className = 'w-full text-left p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] text-xs hover:border-blue-500/50 transition';
+        }
+      });
+      updateModePlot();
+    }
+
+    function updateModePlot() {
+      const badge = document.getElementById('mode-fit-badge');
+      let muFit = 0, sigmaFit = 2.4, title = 'Mode-Covering Fit (Forward KL)';
+      
+      if (currentModeStrategy === 'fwd_kl') {
+        muFit = 0.0; sigmaFit = 2.4;
+        badge.innerText = 'Mode-Covering Fit (VAEs / LLMs)';
+        badge.className = 'px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-500/10 text-blue-500';
+      } else if (currentModeStrategy === 'rev_kl_1') {
+        muFit = -2.0; sigmaFit = 0.7;
+        badge.innerText = 'Mode-Seeking Fit (Mode A - Left Peak)';
+        badge.className = 'px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-500/10 text-amber-500';
+      } else if (currentModeStrategy === 'rev_kl_2') {
+        muFit = 2.0; sigmaFit = 0.7;
+        badge.innerText = 'Mode-Seeking Fit (Mode B - Right Peak)';
+        badge.className = 'px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-500/10 text-amber-500';
+      } else if (currentModeStrategy === 'chi2') {
+        muFit = 0.0; sigmaFit = 2.1;
+        badge.innerText = 'Balanced Quadratic Fit (LSGAN)';
+        badge.className = 'px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/10 text-emerald-500';
+      }
+
+      const canvas = document.getElementById('modeCanvas');
+      const ctx = canvas.getContext('2d');
+      const c = getColors();
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      const xMin = -6.0, xMax = 6.0, N = 300;
+      const dx = (xMax - xMin) / N;
+      const toX = (x) => ((x - xMin) / (xMax - xMin)) * (W - 60) + 35;
+      const toY = (y) => H - 35 - (y / 0.6) * (H - 60);
+
+      // Grid
+      ctx.strokeStyle = c.grid;
+      ctx.lineWidth = 1;
+      for (let gx = -4; gx <= 4; gx += 2) {
+        ctx.beginPath();
+        ctx.moveTo(toX(gx), 15);
+        ctx.lineTo(toX(gx), H - 30);
+        ctx.stroke();
+      }
+
+      // True Bimodal Distribution P(x)
+      ctx.strokeStyle = c.text;
+      ctx.fillStyle = isLightMode() ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(toX(xMin), toY(0));
+      for (let i = 0; i <= N; i++) {
+        const x = xMin + i * dx;
+        const p = 0.5 * gaussian(x, -2.0, 0.7) + 0.5 * gaussian(x, 2.0, 0.7);
+        ctx.lineTo(toX(x), toY(p));
+      }
+      ctx.stroke();
+      ctx.lineTo(toX(xMax), toY(0));
+      ctx.closePath();
+      ctx.fill();
+
+      // Fitted Model Q(x)
+      ctx.strokeStyle = currentModeStrategy.startsWith('rev') ? c.orange : c.blue;
+      ctx.fillStyle = currentModeStrategy.startsWith('rev') ? 'rgba(245, 158, 11, 0.2)' : 'rgba(59, 130, 246, 0.2)';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(toX(xMin), toY(0));
+      for (let i = 0; i <= N; i++) {
+        const x = xMin + i * dx;
+        const q = gaussian(x, muFit, sigmaFit);
+        ctx.lineTo(toX(x), toY(q));
+      }
+      ctx.stroke();
+      ctx.lineTo(toX(xMax), toY(0));
+      ctx.closePath();
+      ctx.fill();
+
+      // Labels
+      ctx.font = '11px sans-serif';
+      ctx.fillStyle = c.text;
+      ctx.fillText('— True Data P(x) (Bimodal: Peak A Cats, Peak B Dogs)', 40, 25);
+      ctx.fillStyle = currentModeStrategy.startsWith('rev') ? c.orange : c.blue;
+      ctx.fillText(`— Fitted Model Q(x) [${title}]`, 40, 45);
+    }
+
+    // ─── TAB 5: ALGORITHM DESIGNER ───
+    const taskConfigs = {
+      'gan_ls': {
+        fu: '(u - 1)²',
+        fstar: '0.25 * t² + t',
+        domain: 't ∈ ℝ (Unbounded)',
+        act: 'Linear / Identity (nn.Identity())',
+        summary: '<strong>LSGAN Architecture:</strong> Pearson Chi-Squared solves discriminator saturation by providing linear restoring forces on outliers.',
+        code: `import torch\nimport torch.nn as nn\n\nclass PearsonChi2GANLoss(nn.Module):\n    """LSGAN loss using Pearson Chi-Squared Fenchel Conjugate"""\n    def __init__(self):\n        super().__init__()\n\n    def f_star(self, t: torch.Tensor) -> torch.Tensor:\n        # Fenchel dual: f*(t) = 0.25 * t^2 + t\n        return 0.25 * (t ** 2) + t\n\n    def forward_discriminator(self, t_real: torch.Tensor, t_fake: torch.Tensor) -> torch.Tensor:\n        # Maximize E_P[T] - E_Q[f*(T)] => Minimize -(E_P[T] - E_Q[f*(T)])\n        loss_real = torch.mean(t_real)\n        loss_fake = torch.mean(self.f_star(t_fake))\n        return -(loss_real - loss_fake)\n\n    def forward_generator(self, t_fake: torch.Tensor) -> torch.Tensor:\n        # Generator minimizes discriminator bound\n        return -torch.mean(self.f_star(t_fake))`
+      },
+      'llm_vae': {
+        fu: 'u ln(u)',
+        fstar: 'exp(t - 1)',
+        domain: 't ∈ ℝ',
+        act: 'Linear (discriminator) or direct log-ratio',
+        summary: '<strong>Forward KL Architecture:</strong> Zero-avoiding objective forces model to place non-zero mass across every real data mode.',
+        code: `import torch\nimport torch.nn as nn\n\nclass ForwardKLVariationalLoss(nn.Module):\n    """Variational f-GAN loss for Forward KL Divergence"""\n    def __init__(self):\n        super().__init__()\n\n    def f_star(self, t: torch.Tensor) -> torch.Tensor:\n        # Fenchel dual: f*(t) = exp(t - 1)\n        return torch.exp(t - 1.0)\n\n    def forward_discriminator(self, t_real: torch.Tensor, t_fake: torch.Tensor) -> torch.Tensor:\n        loss_real = torch.mean(t_real)\n        loss_fake = torch.mean(self.f_star(t_fake))\n        return -(loss_real - loss_fake)\n\n    def forward_generator(self, t_fake: torch.Tensor) -> torch.Tensor:\n        return -torch.mean(self.f_star(t_fake))`
+      },
+      'rlhf_sharp': {
+        fu: '-ln(u)',
+        fstar: '-1 - ln(-t)  (for t < 0)',
+        domain: 't < 0 (Strictly Negative)',
+        act: '-exp(x) or -softplus(x) to guarantee t < 0',
+        summary: '<strong>Reverse KL Architecture:</strong> Zero-forcing objective eliminates fake hallucinations, producing razor-sharp policy outputs.',
+        code: `import torch\nimport torch.nn as nn\n\nclass ReverseKLPolicyLoss(nn.Module):\n    """Reverse KL Variational Loss with Negative Domain Enforcement"""\n    def __init__(self):\n        super().__init__()\n\n    def activation(self, raw_logits: torch.Tensor) -> torch.Tensor:\n        # Enforce t < 0 strictly to avoid NaN in log(-t)\n        return -torch.exp(raw_logits) - 1e-6\n\n    def f_star(self, t: torch.Tensor) -> torch.Tensor:\n        # Fenchel dual: f*(t) = -1 - ln(-t)\n        return -1.0 - torch.log(-t)\n\n    def forward_discriminator(self, raw_real: torch.Tensor, raw_fake: torch.Tensor) -> torch.Tensor:\n        t_real = self.activation(raw_real)\n        t_fake = self.activation(raw_fake)\n        return -(torch.mean(t_real) - torch.mean(self.f_star(t_fake)))`
+      },
+      'robust_noise': {
+        fu: '(√u - 1)²',
+        fstar: 't / (1 - t)  (for t < 1)',
+        domain: 't < 1',
+        act: '1 - softplus(x) or 1 - exp(x)',
+        summary: '<strong>Squared Hellinger Architecture:</strong> Bounded divergence in [0, 2] provides strong immunity against explosive outlier noise.',
+        code: `import torch\nimport torch.nn as nn\n\nclass HellingerRobustLoss(nn.Module):\n    """Squared Hellinger loss for robust learning under noise"""\n    def __init__(self):\n        super().__init__()\n\n    def activation(self, raw_logits: torch.Tensor) -> torch.Tensor:\n        # Enforce t < 1 strictly\n        return 1.0 - torch.exp(raw_logits) - 1e-6\n\n    def f_star(self, t: torch.Tensor) -> torch.Tensor:\n        # Fenchel dual: f*(t) = t / (1 - t)\n        return t / (1.0 - t)\n\n    def forward_discriminator(self, raw_real: torch.Tensor, raw_fake: torch.Tensor) -> torch.Tensor:\n        t_real = self.activation(raw_real)\n        t_fake = self.activation(raw_fake)\n        return -(torch.mean(t_real) - torch.mean(self.f_star(t_fake)))`
+      },
+      'privacy_eval': {
+        fu: '0.5 * |u - 1|',
+        fstar: 't  (for |t| <= 0.5)',
+        domain: '|t| <= 0.5',
+        act: '0.5 * tanh(x)',
+        summary: '<strong>Total Variation Architecture:</strong> Directly bounds worst-case event probability deviation for privacy and security certificates.',
+        code: `import torch\nimport torch.nn as nn\n\nclass TotalVariationLoss(nn.Module):\n    """Total Variation Variational Estimator with bounded witness"""\n    def __init__(self):\n        super().__init__()\n\n    def activation(self, raw_logits: torch.Tensor) -> torch.Tensor:\n        # Enforce |t| <= 0.5\n        return 0.5 * torch.tanh(raw_logits)\n\n    def f_star(self, t: torch.Tensor) -> torch.Tensor:\n        # Fenchel dual for TV is identity t on [-0.5, 0.5]\n        return t\n\n    def forward_discriminator(self, raw_real: torch.Tensor, raw_fake: torch.Tensor) -> torch.Tensor:\n        t_real = self.activation(raw_real)\n        t_fake = self.activation(raw_fake)\n        return -(torch.mean(t_real) - torch.mean(self.f_star(t_fake)))`
+      }
+    };
+
+    function updateBuilder() {
+      const task = document.getElementById('builder-task').value;
+      const cfg = taskConfigs[task];
+      if (!cfg) return;
+
+      document.getElementById('builder-fu').innerText = cfg.fu;
+      document.getElementById('builder-fstar').innerText = cfg.fstar;
+      document.getElementById('builder-domain').innerText = cfg.domain;
+      document.getElementById('builder-act').innerText = cfg.act;
+      document.getElementById('builder-code').innerText = cfg.code;
+      document.getElementById('builder-summary').innerHTML = cfg.summary;
+    }
+
+    function copyCode() {
+      const code = document.getElementById('builder-code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.innerText = '✅ Copied!';
+        setTimeout(() => { btn.innerText = '📋 Copy PyTorch Code'; }, 2000);
+      });
+    }
+
+    // ─── INITIALIZATION ───
+    window.addEventListener('load', () => {
+      updateWhyCanvas();
+      updateBowl();
+      updateDistributions();
+      updateModePlot();
+      updateBuilder();
+    });
+  </script>
+</body>
+</html>

@@ -34,10 +34,11 @@ Start at [`NOTES.md`](./IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.
 
 ## 📚 Core Mathematical Knowledge Base (`MathsTerms/`)
 
-The repository features **32 comprehensive, standalone mathematical reference guides** strictly adhering to the 5-point pedagogical bridge (ELI5 Intuition $\iff$ Plain-English Breakdown $\iff$ Micro-Numerical Arithmetic $\iff$ Formal Proofs $\iff$ Runnable PyTorch Code):
+The repository features **46 comprehensive, standalone mathematical reference guides** strictly adhering to the 5-point pedagogical bridge (ELI5 Intuition $\iff$ Plain-English Breakdown $\iff$ Micro-Numerical Arithmetic $\iff$ Formal Proofs $\iff$ Runnable PyTorch Code):
 
-- Master Index Catalog: [`MathsTerms/README.md`](./MathsTerms/README.md)
-- Core areas covered: **Deep Learning & Optimization Calculus**, **Probability & Information Theory**, **$f$-Divergences & Optimal Transport**, **Variational Inference (ELBO/VAEs)**, and **Adversarial Learning (GANs, WGAN-GP, BiGAN, FID)**.
+- **🗺️ [Grand Unified Concept Map & Mathematical Dependency Graph](./MathsTerms/CONCEPT_MAP.md)**: End-to-end interactive Mermaid flowcharts, ASCII architectures, sub-term lineages, and 4 specialized learning tracks connecting axioms to modern Generative AI (Diffusion, LLMs, VAEs, GANs).
+- **Master Index Catalog**: [`MathsTerms/README.md`](./MathsTerms/README.md)
+- Core areas covered: **Deep Learning & Optimization Calculus**, **Linear Algebra & Embeddings**, **Probability & Information Theory**, **$f$-Divergences & Optimal Transport**, **Variational Inference (ELBO/VAEs)**, and **Adversarial Learning (GANs, WGAN-GP, BiGAN, FID)**.
 - Every guide contains a self-contained, 100% executable Python/PyTorch verification suite.
 
 ## Skill

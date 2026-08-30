@@ -57,3 +57,10 @@ TOPIC: [Insert Topic Name, e.g., "Singular Value Decomposition", "Covariance & P
 - 3 Self-Test Questions with detailed answers.
 - Common Engineering Traps table (Trap | Why It Fails | Production Fix).
 - Summary Checklist of key takeaways.
+
+
+### 🚨 MANDATORY ZERO-SUDDEN-JUMP GUARDRAILS:
+1. **Grounded First Principles:** Always start from the simplest physical primitive (a coin flip, a die roll, or a wooden ruler) BEFORE showing any neural network or latent space diagrams.
+2. **Notation Decoder Section:** Every piece of mathematical shorthand (e.g., $Z \sim \mathcal{N}(0, I)$, $\nabla$, $\partial$) MUST be broken down symbol-by-symbol with its English pronunciation, physical meaning, and practical purpose in AI.
+3. **Comprehensive Proofs (No Magic Formulas):** Never provide a proof for only one equation. Every core formula mentioned ($\mathbb{E}[X]$, $\text{Var}(X)$, Linearity of Expectation $\mathbb{E}[aX+b]$, Scaling laws $\text{Var}(aX+b) = a^2\text{Var}(X)$) must have an explicit 3–5 line elementary proof.
+4. **Contrastive "Why X, Not Y":** Explicitly explain why naive alternatives fail (e.g., *"Why can't we use simple arithmetic averages and why MUST we use probability-weighted expectations?"*).
