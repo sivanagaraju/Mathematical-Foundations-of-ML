@@ -1,0 +1,719 @@
+{
+  "duration_seconds": 2869.0,
+  "range_source": "topic-ranges",
+  "range_count": 8,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 390.0,
+      "slug": "topic-01-course-mission"
+    },
+    {
+      "index": 2,
+      "start": 390.0,
+      "end": 724.0,
+      "slug": "topic-02-function-approximation"
+    },
+    {
+      "index": 3,
+      "start": 724.0,
+      "end": 907.0,
+      "slug": "topic-03-blind-table-lookup"
+    },
+    {
+      "index": 4,
+      "start": 907.0,
+      "end": 1194.0,
+      "slug": "topic-04-model-algorithm"
+    },
+    {
+      "index": 5,
+      "start": 1194.0,
+      "end": 1730.0,
+      "slug": "topic-05-vectors-xray"
+    },
+    {
+      "index": 6,
+      "start": 1730.0,
+      "end": 1989.0,
+      "slug": "topic-06-semantic-gap"
+    },
+    {
+      "index": 7,
+      "start": 1989.0,
+      "end": 2537.0,
+      "slug": "topic-07-physics-vs-stats"
+    },
+    {
+      "index": 8,
+      "start": 2537.0,
+      "end": 2869.0,
+      "slug": "topic-08-probability-view"
+    }
+  ],
+  "raw_count": 40,
+  "composite_count": 10,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-course-mission-t0031s.png",
+      "seconds": 31.2,
+      "chapter": 1,
+      "slug": "topic-01-course-mission",
+      "label": "00:31",
+      "range_start": 0.0,
+      "range_end": 390.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-course-mission-t0140s.png",
+      "seconds": 140.4,
+      "chapter": 1,
+      "slug": "topic-01-course-mission",
+      "label": "02:20",
+      "range_start": 0.0,
+      "range_end": 390.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-course-mission-t0249s.png",
+      "seconds": 249.6,
+      "chapter": 1,
+      "slug": "topic-01-course-mission",
+      "label": "04:09",
+      "range_start": 0.0,
+      "range_end": 390.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-course-mission-t0358s.png",
+      "seconds": 358.8,
+      "chapter": 1,
+      "slug": "topic-01-course-mission",
+      "label": "05:58",
+      "range_start": 0.0,
+      "range_end": 390.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-function-approximation-t0416s.png",
+      "seconds": 416.7,
+      "chapter": 2,
+      "slug": "topic-02-function-approximation",
+      "label": "06:56",
+      "range_start": 390.0,
+      "range_end": 724.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-function-approximation-t0510s.png",
+      "seconds": 510.2,
+      "chapter": 2,
+      "slug": "topic-02-function-approximation",
+      "label": "08:30",
+      "range_start": 390.0,
+      "range_end": 724.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-function-approximation-t0603s.png",
+      "seconds": 603.8,
+      "chapter": 2,
+      "slug": "topic-02-function-approximation",
+      "label": "10:03",
+      "range_start": 390.0,
+      "range_end": 724.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-function-approximation-t0697s.png",
+      "seconds": 697.3,
+      "chapter": 2,
+      "slug": "topic-02-function-approximation",
+      "label": "11:37",
+      "range_start": 390.0,
+      "range_end": 724.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-blind-table-lookup-t0738s.png",
+      "seconds": 738.6,
+      "chapter": 3,
+      "slug": "topic-03-blind-table-lookup",
+      "label": "12:18",
+      "range_start": 724.0,
+      "range_end": 907.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-blind-table-lookup-t0789s.png",
+      "seconds": 789.9,
+      "chapter": 3,
+      "slug": "topic-03-blind-table-lookup",
+      "label": "13:09",
+      "range_start": 724.0,
+      "range_end": 907.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-blind-table-lookup-t0841s.png",
+      "seconds": 841.1,
+      "chapter": 3,
+      "slug": "topic-03-blind-table-lookup",
+      "label": "14:01",
+      "range_start": 724.0,
+      "range_end": 907.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-blind-table-lookup-t0892s.png",
+      "seconds": 892.4,
+      "chapter": 3,
+      "slug": "topic-03-blind-table-lookup",
+      "label": "14:52",
+      "range_start": 724.0,
+      "range_end": 907.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-model-algorithm-t0929s.png",
+      "seconds": 930.0,
+      "chapter": 4,
+      "slug": "topic-04-model-algorithm",
+      "label": "15:29",
+      "range_start": 907.0,
+      "range_end": 1194.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-model-algorithm-t1010s.png",
+      "seconds": 1010.3,
+      "chapter": 4,
+      "slug": "topic-04-model-algorithm",
+      "label": "16:50",
+      "range_start": 907.0,
+      "range_end": 1194.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-model-algorithm-t1090s.png",
+      "seconds": 1090.7,
+      "chapter": 4,
+      "slug": "topic-04-model-algorithm",
+      "label": "18:10",
+      "range_start": 907.0,
+      "range_end": 1194.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-model-algorithm-t1171s.png",
+      "seconds": 1171.0,
+      "chapter": 4,
+      "slug": "topic-04-model-algorithm",
+      "label": "19:31",
+      "range_start": 907.0,
+      "range_end": 1194.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-vectors-xray-t1236s.png",
+      "seconds": 1236.9,
+      "chapter": 5,
+      "slug": "topic-05-vectors-xray",
+      "label": "20:36",
+      "range_start": 1194.0,
+      "range_end": 1730.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-vectors-xray-t1301s.png",
+      "seconds": 1301.2,
+      "chapter": 5,
+      "slug": "topic-05-vectors-xray",
+      "label": "21:41",
+      "range_start": 1194.0,
+      "range_end": 1730.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-vectors-xray-t1365s.png",
+      "seconds": 1365.5,
+      "chapter": 5,
+      "slug": "topic-05-vectors-xray",
+      "label": "22:45",
+      "range_start": 1194.0,
+      "range_end": 1730.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-vectors-xray-t1429s.png",
+      "seconds": 1429.8,
+      "chapter": 5,
+      "slug": "topic-05-vectors-xray",
+      "label": "23:49",
+      "range_start": 1194.0,
+      "range_end": 1730.0
+    },
+    {
+      "file": "raw/021-ch05-topic-05-vectors-xray-t1494s.png",
+      "seconds": 1494.2,
+      "chapter": 5,
+      "slug": "topic-05-vectors-xray",
+      "label": "24:54",
+      "range_start": 1194.0,
+      "range_end": 1730.0
+    },
+    {
+      "file": "raw/022-ch05-topic-05-vectors-xray-t1558s.png",
+      "seconds": 1558.5,
+      "chapter": 5,
+      "slug": "topic-05-vectors-xray",
+      "label": "25:58",
+      "range_start": 1194.0,
+      "range_end": 1730.0
+    },
+    {
+      "file": "raw/023-ch05-topic-05-vectors-xray-t1622s.png",
+      "seconds": 1622.8,
+      "chapter": 5,
+      "slug": "topic-05-vectors-xray",
+      "label": "27:02",
+      "range_start": 1194.0,
+      "range_end": 1730.0
+    },
+    {
+      "file": "raw/024-ch05-topic-05-vectors-xray-t1687s.png",
+      "seconds": 1687.1,
+      "chapter": 5,
+      "slug": "topic-05-vectors-xray",
+      "label": "28:07",
+      "range_start": 1194.0,
+      "range_end": 1730.0
+    },
+    {
+      "file": "raw/025-ch06-topic-06-semantic-gap-t1750s.png",
+      "seconds": 1750.7,
+      "chapter": 6,
+      "slug": "topic-06-semantic-gap",
+      "label": "29:10",
+      "range_start": 1730.0,
+      "range_end": 1989.0
+    },
+    {
+      "file": "raw/026-ch06-topic-06-semantic-gap-t1823s.png",
+      "seconds": 1823.2,
+      "chapter": 6,
+      "slug": "topic-06-semantic-gap",
+      "label": "30:23",
+      "range_start": 1730.0,
+      "range_end": 1989.0
+    },
+    {
+      "file": "raw/027-ch06-topic-06-semantic-gap-t1895s.png",
+      "seconds": 1895.8,
+      "chapter": 6,
+      "slug": "topic-06-semantic-gap",
+      "label": "31:35",
+      "range_start": 1730.0,
+      "range_end": 1989.0
+    },
+    {
+      "file": "raw/028-ch06-topic-06-semantic-gap-t1968s.png",
+      "seconds": 1968.3,
+      "chapter": 6,
+      "slug": "topic-06-semantic-gap",
+      "label": "32:48",
+      "range_start": 1730.0,
+      "range_end": 1989.0
+    },
+    {
+      "file": "raw/029-ch07-topic-07-physics-vs-stats-t2032s.png",
+      "seconds": 2032.8,
+      "chapter": 7,
+      "slug": "topic-07-physics-vs-stats",
+      "label": "33:52",
+      "range_start": 1989.0,
+      "range_end": 2537.0
+    },
+    {
+      "file": "raw/030-ch07-topic-07-physics-vs-stats-t2098s.png",
+      "seconds": 2098.6,
+      "chapter": 7,
+      "slug": "topic-07-physics-vs-stats",
+      "label": "34:58",
+      "range_start": 1989.0,
+      "range_end": 2537.0
+    },
+    {
+      "file": "raw/031-ch07-topic-07-physics-vs-stats-t2164s.png",
+      "seconds": 2164.4,
+      "chapter": 7,
+      "slug": "topic-07-physics-vs-stats",
+      "label": "36:04",
+      "range_start": 1989.0,
+      "range_end": 2537.0
+    },
+    {
+      "file": "raw/032-ch07-topic-07-physics-vs-stats-t2230s.png",
+      "seconds": 2230.1,
+      "chapter": 7,
+      "slug": "topic-07-physics-vs-stats",
+      "label": "37:10",
+      "range_start": 1989.0,
+      "range_end": 2537.0
+    },
+    {
+      "file": "raw/033-ch07-topic-07-physics-vs-stats-t2295s.png",
+      "seconds": 2295.9,
+      "chapter": 7,
+      "slug": "topic-07-physics-vs-stats",
+      "label": "38:15",
+      "range_start": 1989.0,
+      "range_end": 2537.0
+    },
+    {
+      "file": "raw/034-ch07-topic-07-physics-vs-stats-t2361s.png",
+      "seconds": 2361.6,
+      "chapter": 7,
+      "slug": "topic-07-physics-vs-stats",
+      "label": "39:21",
+      "range_start": 1989.0,
+      "range_end": 2537.0
+    },
+    {
+      "file": "raw/035-ch07-topic-07-physics-vs-stats-t2427s.png",
+      "seconds": 2427.4,
+      "chapter": 7,
+      "slug": "topic-07-physics-vs-stats",
+      "label": "40:27",
+      "range_start": 1989.0,
+      "range_end": 2537.0
+    },
+    {
+      "file": "raw/036-ch07-topic-07-physics-vs-stats-t2493s.png",
+      "seconds": 2493.2,
+      "chapter": 7,
+      "slug": "topic-07-physics-vs-stats",
+      "label": "41:33",
+      "range_start": 1989.0,
+      "range_end": 2537.0
+    },
+    {
+      "file": "raw/037-ch08-topic-08-probability-view-t2563s.png",
+      "seconds": 2563.6,
+      "chapter": 8,
+      "slug": "topic-08-probability-view",
+      "label": "42:43",
+      "range_start": 2537.0,
+      "range_end": 2869.0
+    },
+    {
+      "file": "raw/038-ch08-topic-08-probability-view-t2656s.png",
+      "seconds": 2656.5,
+      "chapter": 8,
+      "slug": "topic-08-probability-view",
+      "label": "44:16",
+      "range_start": 2537.0,
+      "range_end": 2869.0
+    },
+    {
+      "file": "raw/039-ch08-topic-08-probability-view-t2749s.png",
+      "seconds": 2749.5,
+      "chapter": 8,
+      "slug": "topic-08-probability-view",
+      "label": "45:49",
+      "range_start": 2537.0,
+      "range_end": 2869.0
+    },
+    {
+      "file": "raw/040-ch08-topic-08-probability-view-t2842s.png",
+      "seconds": 2842.4,
+      "chapter": 8,
+      "slug": "topic-08-probability-view",
+      "label": "47:22",
+      "range_start": 2537.0,
+      "range_end": 2869.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-course-mission-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-course-mission",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-course-mission-t0031s.png",
+        "002-ch01-topic-01-course-mission-t0140s.png",
+        "003-ch01-topic-01-course-mission-t0249s.png",
+        "004-ch01-topic-01-course-mission-t0358s.png"
+      ],
+      "labels": [
+        "ch1 00:31",
+        "ch1 02:20",
+        "ch1 04:09",
+        "ch1 05:58"
+      ],
+      "tile_seconds": [
+        31.2,
+        140.4,
+        249.6,
+        358.8
+      ],
+      "time_start": 31.2,
+      "time_end": 358.8,
+      "range_start": 0.0,
+      "range_end": 390.0
+    },
+    {
+      "file": "composites/ch02-topic-02-function-approximation-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-function-approximation",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-function-approximation-t0416s.png",
+        "006-ch02-topic-02-function-approximation-t0510s.png",
+        "007-ch02-topic-02-function-approximation-t0603s.png",
+        "008-ch02-topic-02-function-approximation-t0697s.png"
+      ],
+      "labels": [
+        "ch2 06:56",
+        "ch2 08:30",
+        "ch2 10:03",
+        "ch2 11:37"
+      ],
+      "tile_seconds": [
+        416.7,
+        510.2,
+        603.8,
+        697.3
+      ],
+      "time_start": 416.7,
+      "time_end": 697.3,
+      "range_start": 390.0,
+      "range_end": 724.0
+    },
+    {
+      "file": "composites/ch03-topic-03-blind-table-lookup-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-blind-table-lookup",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-blind-table-lookup-t0738s.png",
+        "010-ch03-topic-03-blind-table-lookup-t0789s.png",
+        "011-ch03-topic-03-blind-table-lookup-t0841s.png",
+        "012-ch03-topic-03-blind-table-lookup-t0892s.png"
+      ],
+      "labels": [
+        "ch3 12:18",
+        "ch3 13:09",
+        "ch3 14:01",
+        "ch3 14:52"
+      ],
+      "tile_seconds": [
+        738.6,
+        789.9,
+        841.1,
+        892.4
+      ],
+      "time_start": 738.6,
+      "time_end": 892.4,
+      "range_start": 724.0,
+      "range_end": 907.0
+    },
+    {
+      "file": "composites/ch04-topic-04-model-algorithm-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-model-algorithm",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-model-algorithm-t0929s.png",
+        "014-ch04-topic-04-model-algorithm-t1010s.png",
+        "015-ch04-topic-04-model-algorithm-t1090s.png",
+        "016-ch04-topic-04-model-algorithm-t1171s.png"
+      ],
+      "labels": [
+        "ch4 15:29",
+        "ch4 16:50",
+        "ch4 18:10",
+        "ch4 19:31"
+      ],
+      "tile_seconds": [
+        930.0,
+        1010.3,
+        1090.7,
+        1171.0
+      ],
+      "time_start": 930.0,
+      "time_end": 1171.0,
+      "range_start": 907.0,
+      "range_end": 1194.0
+    },
+    {
+      "file": "composites/ch05-topic-05-vectors-xray-panel1of2.png",
+      "chapter": 5,
+      "slug": "topic-05-vectors-xray",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "017-ch05-topic-05-vectors-xray-t1236s.png",
+        "018-ch05-topic-05-vectors-xray-t1301s.png",
+        "019-ch05-topic-05-vectors-xray-t1365s.png",
+        "020-ch05-topic-05-vectors-xray-t1429s.png"
+      ],
+      "labels": [
+        "ch5 20:36",
+        "ch5 21:41",
+        "ch5 22:45",
+        "ch5 23:49"
+      ],
+      "tile_seconds": [
+        1236.9,
+        1301.2,
+        1365.5,
+        1429.8
+      ],
+      "time_start": 1236.9,
+      "time_end": 1429.8,
+      "range_start": 1194.0,
+      "range_end": 1730.0
+    },
+    {
+      "file": "composites/ch05-topic-05-vectors-xray-panel2of2.png",
+      "chapter": 5,
+      "slug": "topic-05-vectors-xray",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "021-ch05-topic-05-vectors-xray-t1494s.png",
+        "022-ch05-topic-05-vectors-xray-t1558s.png",
+        "023-ch05-topic-05-vectors-xray-t1622s.png",
+        "024-ch05-topic-05-vectors-xray-t1687s.png"
+      ],
+      "labels": [
+        "ch5 24:54",
+        "ch5 25:58",
+        "ch5 27:02",
+        "ch5 28:07"
+      ],
+      "tile_seconds": [
+        1494.2,
+        1558.5,
+        1622.8,
+        1687.1
+      ],
+      "time_start": 1494.2,
+      "time_end": 1687.1,
+      "range_start": 1194.0,
+      "range_end": 1730.0
+    },
+    {
+      "file": "composites/ch06-topic-06-semantic-gap-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-semantic-gap",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch06-topic-06-semantic-gap-t1750s.png",
+        "026-ch06-topic-06-semantic-gap-t1823s.png",
+        "027-ch06-topic-06-semantic-gap-t1895s.png",
+        "028-ch06-topic-06-semantic-gap-t1968s.png"
+      ],
+      "labels": [
+        "ch6 29:10",
+        "ch6 30:23",
+        "ch6 31:35",
+        "ch6 32:48"
+      ],
+      "tile_seconds": [
+        1750.7,
+        1823.2,
+        1895.8,
+        1968.3
+      ],
+      "time_start": 1750.7,
+      "time_end": 1968.3,
+      "range_start": 1730.0,
+      "range_end": 1989.0
+    },
+    {
+      "file": "composites/ch07-topic-07-physics-vs-stats-panel1of2.png",
+      "chapter": 7,
+      "slug": "topic-07-physics-vs-stats",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "029-ch07-topic-07-physics-vs-stats-t2032s.png",
+        "030-ch07-topic-07-physics-vs-stats-t2098s.png",
+        "031-ch07-topic-07-physics-vs-stats-t2164s.png",
+        "032-ch07-topic-07-physics-vs-stats-t2230s.png"
+      ],
+      "labels": [
+        "ch7 33:52",
+        "ch7 34:58",
+        "ch7 36:04",
+        "ch7 37:10"
+      ],
+      "tile_seconds": [
+        2032.8,
+        2098.6,
+        2164.4,
+        2230.1
+      ],
+      "time_start": 2032.8,
+      "time_end": 2230.1,
+      "range_start": 1989.0,
+      "range_end": 2537.0
+    },
+    {
+      "file": "composites/ch07-topic-07-physics-vs-stats-panel2of2.png",
+      "chapter": 7,
+      "slug": "topic-07-physics-vs-stats",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "033-ch07-topic-07-physics-vs-stats-t2295s.png",
+        "034-ch07-topic-07-physics-vs-stats-t2361s.png",
+        "035-ch07-topic-07-physics-vs-stats-t2427s.png",
+        "036-ch07-topic-07-physics-vs-stats-t2493s.png"
+      ],
+      "labels": [
+        "ch7 38:15",
+        "ch7 39:21",
+        "ch7 40:27",
+        "ch7 41:33"
+      ],
+      "tile_seconds": [
+        2295.9,
+        2361.6,
+        2427.4,
+        2493.2
+      ],
+      "time_start": 2295.9,
+      "time_end": 2493.2,
+      "range_start": 1989.0,
+      "range_end": 2537.0
+    },
+    {
+      "file": "composites/ch08-topic-08-probability-view-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-probability-view",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "037-ch08-topic-08-probability-view-t2563s.png",
+        "038-ch08-topic-08-probability-view-t2656s.png",
+        "039-ch08-topic-08-probability-view-t2749s.png",
+        "040-ch08-topic-08-probability-view-t2842s.png"
+      ],
+      "labels": [
+        "ch8 42:43",
+        "ch8 44:16",
+        "ch8 45:49",
+        "ch8 47:22"
+      ],
+      "tile_seconds": [
+        2563.6,
+        2656.5,
+        2749.5,
+        2842.4
+      ],
+      "time_start": 2563.6,
+      "time_end": 2842.4,
+      "range_start": 2537.0,
+      "range_end": 2869.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

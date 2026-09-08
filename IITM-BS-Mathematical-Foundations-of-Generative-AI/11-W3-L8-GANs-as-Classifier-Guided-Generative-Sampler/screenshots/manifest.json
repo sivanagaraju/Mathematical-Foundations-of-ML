@@ -1,0 +1,654 @@
+{
+  "duration_seconds": 2489.0,
+  "range_source": "topic-ranges",
+  "range_count": 8,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 200.0,
+      "slug": "vdm-to-classifier"
+    },
+    {
+      "index": 2,
+      "start": 200.0,
+      "end": 517.0,
+      "slug": "fixed-classifier"
+    },
+    {
+      "index": 3,
+      "start": 517.0,
+      "end": 887.0,
+      "slug": "logical-trap-2d"
+    },
+    {
+      "index": 4,
+      "start": 887.0,
+      "end": 1187.0,
+      "slug": "co-evolution-updates"
+    },
+    {
+      "index": 5,
+      "start": 1187.0,
+      "end": 1384.0,
+      "slug": "mode-collapse-cycles"
+    },
+    {
+      "index": 6,
+      "start": 1384.0,
+      "end": 1717.0,
+      "slug": "classifier-objectives"
+    },
+    {
+      "index": 7,
+      "start": 1717.0,
+      "end": 1985.0,
+      "slug": "unified-value-vdm"
+    },
+    {
+      "index": 8,
+      "start": 1985.0,
+      "end": 2489.0,
+      "slug": "minimax-js-divergence"
+    }
+  ],
+  "raw_count": 36,
+  "composite_count": 9,
+  "raw": [
+    {
+      "file": "raw/001-ch01-vdm-to-classifier-t0016s.png",
+      "seconds": 16.0,
+      "chapter": 1,
+      "slug": "vdm-to-classifier",
+      "label": "00:16",
+      "range_start": 0.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "raw/002-ch01-vdm-to-classifier-t0072s.png",
+      "seconds": 72.0,
+      "chapter": 1,
+      "slug": "vdm-to-classifier",
+      "label": "01:12",
+      "range_start": 0.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "raw/003-ch01-vdm-to-classifier-t0128s.png",
+      "seconds": 128.0,
+      "chapter": 1,
+      "slug": "vdm-to-classifier",
+      "label": "02:08",
+      "range_start": 0.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "raw/004-ch01-vdm-to-classifier-t0184s.png",
+      "seconds": 184.0,
+      "chapter": 1,
+      "slug": "vdm-to-classifier",
+      "label": "03:04",
+      "range_start": 0.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "raw/005-ch02-fixed-classifier-t0225s.png",
+      "seconds": 225.4,
+      "chapter": 2,
+      "slug": "fixed-classifier",
+      "label": "03:45",
+      "range_start": 200.0,
+      "range_end": 517.0
+    },
+    {
+      "file": "raw/006-ch02-fixed-classifier-t0314s.png",
+      "seconds": 314.1,
+      "chapter": 2,
+      "slug": "fixed-classifier",
+      "label": "05:14",
+      "range_start": 200.0,
+      "range_end": 517.0
+    },
+    {
+      "file": "raw/007-ch02-fixed-classifier-t0402s.png",
+      "seconds": 402.9,
+      "chapter": 2,
+      "slug": "fixed-classifier",
+      "label": "06:42",
+      "range_start": 200.0,
+      "range_end": 517.0
+    },
+    {
+      "file": "raw/008-ch02-fixed-classifier-t0491s.png",
+      "seconds": 491.6,
+      "chapter": 2,
+      "slug": "fixed-classifier",
+      "label": "08:11",
+      "range_start": 200.0,
+      "range_end": 517.0
+    },
+    {
+      "file": "raw/009-ch03-logical-trap-2d-t0546s.png",
+      "seconds": 546.6,
+      "chapter": 3,
+      "slug": "logical-trap-2d",
+      "label": "09:06",
+      "range_start": 517.0,
+      "range_end": 887.0
+    },
+    {
+      "file": "raw/010-ch03-logical-trap-2d-t0650s.png",
+      "seconds": 650.2,
+      "chapter": 3,
+      "slug": "logical-trap-2d",
+      "label": "10:50",
+      "range_start": 517.0,
+      "range_end": 887.0
+    },
+    {
+      "file": "raw/011-ch03-logical-trap-2d-t0753s.png",
+      "seconds": 753.8,
+      "chapter": 3,
+      "slug": "logical-trap-2d",
+      "label": "12:33",
+      "range_start": 517.0,
+      "range_end": 887.0
+    },
+    {
+      "file": "raw/012-ch03-logical-trap-2d-t0857s.png",
+      "seconds": 857.4,
+      "chapter": 3,
+      "slug": "logical-trap-2d",
+      "label": "14:17",
+      "range_start": 517.0,
+      "range_end": 887.0
+    },
+    {
+      "file": "raw/013-ch04-co-evolution-updates-t0911s.png",
+      "seconds": 911.0,
+      "chapter": 4,
+      "slug": "co-evolution-updates",
+      "label": "15:11",
+      "range_start": 887.0,
+      "range_end": 1187.0
+    },
+    {
+      "file": "raw/014-ch04-co-evolution-updates-t0995s.png",
+      "seconds": 995.0,
+      "chapter": 4,
+      "slug": "co-evolution-updates",
+      "label": "16:35",
+      "range_start": 887.0,
+      "range_end": 1187.0
+    },
+    {
+      "file": "raw/015-ch04-co-evolution-updates-t1079s.png",
+      "seconds": 1079.0,
+      "chapter": 4,
+      "slug": "co-evolution-updates",
+      "label": "17:59",
+      "range_start": 887.0,
+      "range_end": 1187.0
+    },
+    {
+      "file": "raw/016-ch04-co-evolution-updates-t1163s.png",
+      "seconds": 1163.0,
+      "chapter": 4,
+      "slug": "co-evolution-updates",
+      "label": "19:23",
+      "range_start": 887.0,
+      "range_end": 1187.0
+    },
+    {
+      "file": "raw/017-ch05-mode-collapse-cycles-t1202s.png",
+      "seconds": 1202.8,
+      "chapter": 5,
+      "slug": "mode-collapse-cycles",
+      "label": "20:02",
+      "range_start": 1187.0,
+      "range_end": 1384.0
+    },
+    {
+      "file": "raw/018-ch05-mode-collapse-cycles-t1257s.png",
+      "seconds": 1257.9,
+      "chapter": 5,
+      "slug": "mode-collapse-cycles",
+      "label": "20:57",
+      "range_start": 1187.0,
+      "range_end": 1384.0
+    },
+    {
+      "file": "raw/019-ch05-mode-collapse-cycles-t1313s.png",
+      "seconds": 1313.1,
+      "chapter": 5,
+      "slug": "mode-collapse-cycles",
+      "label": "21:53",
+      "range_start": 1187.0,
+      "range_end": 1384.0
+    },
+    {
+      "file": "raw/020-ch05-mode-collapse-cycles-t1368s.png",
+      "seconds": 1368.2,
+      "chapter": 5,
+      "slug": "mode-collapse-cycles",
+      "label": "22:48",
+      "range_start": 1187.0,
+      "range_end": 1384.0
+    },
+    {
+      "file": "raw/021-ch06-classifier-objectives-t1410s.png",
+      "seconds": 1410.6,
+      "chapter": 6,
+      "slug": "classifier-objectives",
+      "label": "23:30",
+      "range_start": 1384.0,
+      "range_end": 1717.0
+    },
+    {
+      "file": "raw/022-ch06-classifier-objectives-t1503s.png",
+      "seconds": 1503.9,
+      "chapter": 6,
+      "slug": "classifier-objectives",
+      "label": "25:03",
+      "range_start": 1384.0,
+      "range_end": 1717.0
+    },
+    {
+      "file": "raw/023-ch06-classifier-objectives-t1597s.png",
+      "seconds": 1597.1,
+      "chapter": 6,
+      "slug": "classifier-objectives",
+      "label": "26:37",
+      "range_start": 1384.0,
+      "range_end": 1717.0
+    },
+    {
+      "file": "raw/024-ch06-classifier-objectives-t1690s.png",
+      "seconds": 1690.4,
+      "chapter": 6,
+      "slug": "classifier-objectives",
+      "label": "28:10",
+      "range_start": 1384.0,
+      "range_end": 1717.0
+    },
+    {
+      "file": "raw/025-ch07-unified-value-vdm-t1738s.png",
+      "seconds": 1738.4,
+      "chapter": 7,
+      "slug": "unified-value-vdm",
+      "label": "28:58",
+      "range_start": 1717.0,
+      "range_end": 1985.0
+    },
+    {
+      "file": "raw/026-ch07-unified-value-vdm-t1813s.png",
+      "seconds": 1813.5,
+      "chapter": 7,
+      "slug": "unified-value-vdm",
+      "label": "30:13",
+      "range_start": 1717.0,
+      "range_end": 1985.0
+    },
+    {
+      "file": "raw/027-ch07-unified-value-vdm-t1888s.png",
+      "seconds": 1888.5,
+      "chapter": 7,
+      "slug": "unified-value-vdm",
+      "label": "31:28",
+      "range_start": 1717.0,
+      "range_end": 1985.0
+    },
+    {
+      "file": "raw/028-ch07-unified-value-vdm-t1963s.png",
+      "seconds": 1963.6,
+      "chapter": 7,
+      "slug": "unified-value-vdm",
+      "label": "32:43",
+      "range_start": 1717.0,
+      "range_end": 1985.0
+    },
+    {
+      "file": "raw/029-ch08-minimax-js-divergence-t2025s.png",
+      "seconds": 2025.3,
+      "chapter": 8,
+      "slug": "minimax-js-divergence",
+      "label": "33:45",
+      "range_start": 1985.0,
+      "range_end": 2489.0
+    },
+    {
+      "file": "raw/030-ch08-minimax-js-divergence-t2085s.png",
+      "seconds": 2085.8,
+      "chapter": 8,
+      "slug": "minimax-js-divergence",
+      "label": "34:45",
+      "range_start": 1985.0,
+      "range_end": 2489.0
+    },
+    {
+      "file": "raw/031-ch08-minimax-js-divergence-t2146s.png",
+      "seconds": 2146.3,
+      "chapter": 8,
+      "slug": "minimax-js-divergence",
+      "label": "35:46",
+      "range_start": 1985.0,
+      "range_end": 2489.0
+    },
+    {
+      "file": "raw/032-ch08-minimax-js-divergence-t2206s.png",
+      "seconds": 2206.8,
+      "chapter": 8,
+      "slug": "minimax-js-divergence",
+      "label": "36:46",
+      "range_start": 1985.0,
+      "range_end": 2489.0
+    },
+    {
+      "file": "raw/033-ch08-minimax-js-divergence-t2267s.png",
+      "seconds": 2267.2,
+      "chapter": 8,
+      "slug": "minimax-js-divergence",
+      "label": "37:47",
+      "range_start": 1985.0,
+      "range_end": 2489.0
+    },
+    {
+      "file": "raw/034-ch08-minimax-js-divergence-t2327s.png",
+      "seconds": 2327.7,
+      "chapter": 8,
+      "slug": "minimax-js-divergence",
+      "label": "38:47",
+      "range_start": 1985.0,
+      "range_end": 2489.0
+    },
+    {
+      "file": "raw/035-ch08-minimax-js-divergence-t2388s.png",
+      "seconds": 2388.2,
+      "chapter": 8,
+      "slug": "minimax-js-divergence",
+      "label": "39:48",
+      "range_start": 1985.0,
+      "range_end": 2489.0
+    },
+    {
+      "file": "raw/036-ch08-minimax-js-divergence-t2448s.png",
+      "seconds": 2448.7,
+      "chapter": 8,
+      "slug": "minimax-js-divergence",
+      "label": "40:48",
+      "range_start": 1985.0,
+      "range_end": 2489.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-vdm-to-classifier-panel1of1.png",
+      "chapter": 1,
+      "slug": "vdm-to-classifier",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-vdm-to-classifier-t0016s.png",
+        "002-ch01-vdm-to-classifier-t0072s.png",
+        "003-ch01-vdm-to-classifier-t0128s.png",
+        "004-ch01-vdm-to-classifier-t0184s.png"
+      ],
+      "labels": [
+        "ch1 00:16",
+        "ch1 01:12",
+        "ch1 02:08",
+        "ch1 03:04"
+      ],
+      "tile_seconds": [
+        16.0,
+        72.0,
+        128.0,
+        184.0
+      ],
+      "time_start": 16.0,
+      "time_end": 184.0,
+      "range_start": 0.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "composites/ch02-fixed-classifier-panel1of1.png",
+      "chapter": 2,
+      "slug": "fixed-classifier",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-fixed-classifier-t0225s.png",
+        "006-ch02-fixed-classifier-t0314s.png",
+        "007-ch02-fixed-classifier-t0402s.png",
+        "008-ch02-fixed-classifier-t0491s.png"
+      ],
+      "labels": [
+        "ch2 03:45",
+        "ch2 05:14",
+        "ch2 06:42",
+        "ch2 08:11"
+      ],
+      "tile_seconds": [
+        225.4,
+        314.1,
+        402.9,
+        491.6
+      ],
+      "time_start": 225.4,
+      "time_end": 491.6,
+      "range_start": 200.0,
+      "range_end": 517.0
+    },
+    {
+      "file": "composites/ch03-logical-trap-2d-panel1of1.png",
+      "chapter": 3,
+      "slug": "logical-trap-2d",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-logical-trap-2d-t0546s.png",
+        "010-ch03-logical-trap-2d-t0650s.png",
+        "011-ch03-logical-trap-2d-t0753s.png",
+        "012-ch03-logical-trap-2d-t0857s.png"
+      ],
+      "labels": [
+        "ch3 09:06",
+        "ch3 10:50",
+        "ch3 12:33",
+        "ch3 14:17"
+      ],
+      "tile_seconds": [
+        546.6,
+        650.2,
+        753.8,
+        857.4
+      ],
+      "time_start": 546.6,
+      "time_end": 857.4,
+      "range_start": 517.0,
+      "range_end": 887.0
+    },
+    {
+      "file": "composites/ch04-co-evolution-updates-panel1of1.png",
+      "chapter": 4,
+      "slug": "co-evolution-updates",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-co-evolution-updates-t0911s.png",
+        "014-ch04-co-evolution-updates-t0995s.png",
+        "015-ch04-co-evolution-updates-t1079s.png",
+        "016-ch04-co-evolution-updates-t1163s.png"
+      ],
+      "labels": [
+        "ch4 15:11",
+        "ch4 16:35",
+        "ch4 17:59",
+        "ch4 19:23"
+      ],
+      "tile_seconds": [
+        911.0,
+        995.0,
+        1079.0,
+        1163.0
+      ],
+      "time_start": 911.0,
+      "time_end": 1163.0,
+      "range_start": 887.0,
+      "range_end": 1187.0
+    },
+    {
+      "file": "composites/ch05-mode-collapse-cycles-panel1of1.png",
+      "chapter": 5,
+      "slug": "mode-collapse-cycles",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-mode-collapse-cycles-t1202s.png",
+        "018-ch05-mode-collapse-cycles-t1257s.png",
+        "019-ch05-mode-collapse-cycles-t1313s.png",
+        "020-ch05-mode-collapse-cycles-t1368s.png"
+      ],
+      "labels": [
+        "ch5 20:02",
+        "ch5 20:57",
+        "ch5 21:53",
+        "ch5 22:48"
+      ],
+      "tile_seconds": [
+        1202.8,
+        1257.9,
+        1313.1,
+        1368.2
+      ],
+      "time_start": 1202.8,
+      "time_end": 1368.2,
+      "range_start": 1187.0,
+      "range_end": 1384.0
+    },
+    {
+      "file": "composites/ch06-classifier-objectives-panel1of1.png",
+      "chapter": 6,
+      "slug": "classifier-objectives",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-classifier-objectives-t1410s.png",
+        "022-ch06-classifier-objectives-t1503s.png",
+        "023-ch06-classifier-objectives-t1597s.png",
+        "024-ch06-classifier-objectives-t1690s.png"
+      ],
+      "labels": [
+        "ch6 23:30",
+        "ch6 25:03",
+        "ch6 26:37",
+        "ch6 28:10"
+      ],
+      "tile_seconds": [
+        1410.6,
+        1503.9,
+        1597.1,
+        1690.4
+      ],
+      "time_start": 1410.6,
+      "time_end": 1690.4,
+      "range_start": 1384.0,
+      "range_end": 1717.0
+    },
+    {
+      "file": "composites/ch07-unified-value-vdm-panel1of1.png",
+      "chapter": 7,
+      "slug": "unified-value-vdm",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-unified-value-vdm-t1738s.png",
+        "026-ch07-unified-value-vdm-t1813s.png",
+        "027-ch07-unified-value-vdm-t1888s.png",
+        "028-ch07-unified-value-vdm-t1963s.png"
+      ],
+      "labels": [
+        "ch7 28:58",
+        "ch7 30:13",
+        "ch7 31:28",
+        "ch7 32:43"
+      ],
+      "tile_seconds": [
+        1738.4,
+        1813.5,
+        1888.5,
+        1963.6
+      ],
+      "time_start": 1738.4,
+      "time_end": 1963.6,
+      "range_start": 1717.0,
+      "range_end": 1985.0
+    },
+    {
+      "file": "composites/ch08-minimax-js-divergence-panel1of2.png",
+      "chapter": 8,
+      "slug": "minimax-js-divergence",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "029-ch08-minimax-js-divergence-t2025s.png",
+        "030-ch08-minimax-js-divergence-t2085s.png",
+        "031-ch08-minimax-js-divergence-t2146s.png",
+        "032-ch08-minimax-js-divergence-t2206s.png"
+      ],
+      "labels": [
+        "ch8 33:45",
+        "ch8 34:45",
+        "ch8 35:46",
+        "ch8 36:46"
+      ],
+      "tile_seconds": [
+        2025.3,
+        2085.8,
+        2146.3,
+        2206.8
+      ],
+      "time_start": 2025.3,
+      "time_end": 2206.8,
+      "range_start": 1985.0,
+      "range_end": 2489.0
+    },
+    {
+      "file": "composites/ch08-minimax-js-divergence-panel2of2.png",
+      "chapter": 8,
+      "slug": "minimax-js-divergence",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "033-ch08-minimax-js-divergence-t2267s.png",
+        "034-ch08-minimax-js-divergence-t2327s.png",
+        "035-ch08-minimax-js-divergence-t2388s.png",
+        "036-ch08-minimax-js-divergence-t2448s.png"
+      ],
+      "labels": [
+        "ch8 37:47",
+        "ch8 38:47",
+        "ch8 39:48",
+        "ch8 40:48"
+      ],
+      "tile_seconds": [
+        2267.2,
+        2327.7,
+        2388.2,
+        2448.7
+      ],
+      "time_start": 2267.2,
+      "time_end": 2448.7,
+      "range_start": 1985.0,
+      "range_end": 2489.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

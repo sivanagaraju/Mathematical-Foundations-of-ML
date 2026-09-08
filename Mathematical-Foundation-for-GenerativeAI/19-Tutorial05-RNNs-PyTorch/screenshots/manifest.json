@@ -1,0 +1,731 @@
+{
+  "duration_seconds": 2295.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 70.0,
+      "end": 120.0,
+      "slug": "topic-01-recap-sequences"
+    },
+    {
+      "index": 2,
+      "start": 130.0,
+      "end": 269.0,
+      "slug": "topic-02-sequence-tensor"
+    },
+    {
+      "index": 3,
+      "start": 280.0,
+      "end": 564.0,
+      "slug": "topic-03-rnn-cell-math"
+    },
+    {
+      "index": 4,
+      "start": 575.0,
+      "end": 661.0,
+      "slug": "topic-04-rnn-shapes"
+    },
+    {
+      "index": 5,
+      "start": 680.0,
+      "end": 1019.0,
+      "slug": "topic-05-lstm-gates"
+    },
+    {
+      "index": 6,
+      "start": 1030.0,
+      "end": 1166.0,
+      "slug": "topic-06-nn-lstm-api"
+    },
+    {
+      "index": 7,
+      "start": 1180.0,
+      "end": 1462.0,
+      "slug": "topic-07-gru"
+    },
+    {
+      "index": 8,
+      "start": 1470.0,
+      "end": 1582.0,
+      "slug": "topic-08-classifier-dummy"
+    },
+    {
+      "index": 9,
+      "start": 1590.0,
+      "end": 1791.0,
+      "slug": "topic-09-toy-train"
+    },
+    {
+      "index": 10,
+      "start": 1850.0,
+      "end": 2290.0,
+      "slug": "topic-10-save-load-recap"
+    }
+  ],
+  "raw_count": 40,
+  "composite_count": 10,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-recap-sequences-t0074s.png",
+      "seconds": 74.0,
+      "chapter": 1,
+      "slug": "topic-01-recap-sequences",
+      "label": "01:14",
+      "range_start": 70.0,
+      "range_end": 120.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-recap-sequences-t0088s.png",
+      "seconds": 88.0,
+      "chapter": 1,
+      "slug": "topic-01-recap-sequences",
+      "label": "01:28",
+      "range_start": 70.0,
+      "range_end": 120.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-recap-sequences-t0102s.png",
+      "seconds": 102.0,
+      "chapter": 1,
+      "slug": "topic-01-recap-sequences",
+      "label": "01:42",
+      "range_start": 70.0,
+      "range_end": 120.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-recap-sequences-t0116s.png",
+      "seconds": 116.0,
+      "chapter": 1,
+      "slug": "topic-01-recap-sequences",
+      "label": "01:56",
+      "range_start": 70.0,
+      "range_end": 120.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-sequence-tensor-t0141s.png",
+      "seconds": 141.1,
+      "chapter": 2,
+      "slug": "topic-02-sequence-tensor",
+      "label": "02:21",
+      "range_start": 130.0,
+      "range_end": 269.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-sequence-tensor-t0180s.png",
+      "seconds": 180.0,
+      "chapter": 2,
+      "slug": "topic-02-sequence-tensor",
+      "label": "03:00",
+      "range_start": 130.0,
+      "range_end": 269.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-sequence-tensor-t0218s.png",
+      "seconds": 219.0,
+      "chapter": 2,
+      "slug": "topic-02-sequence-tensor",
+      "label": "03:38",
+      "range_start": 130.0,
+      "range_end": 269.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-sequence-tensor-t0257s.png",
+      "seconds": 257.9,
+      "chapter": 2,
+      "slug": "topic-02-sequence-tensor",
+      "label": "04:17",
+      "range_start": 130.0,
+      "range_end": 269.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-rnn-cell-math-t0302s.png",
+      "seconds": 302.7,
+      "chapter": 3,
+      "slug": "topic-03-rnn-cell-math",
+      "label": "05:02",
+      "range_start": 280.0,
+      "range_end": 564.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-rnn-cell-math-t0382s.png",
+      "seconds": 382.2,
+      "chapter": 3,
+      "slug": "topic-03-rnn-cell-math",
+      "label": "06:22",
+      "range_start": 280.0,
+      "range_end": 564.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-rnn-cell-math-t0461s.png",
+      "seconds": 461.8,
+      "chapter": 3,
+      "slug": "topic-03-rnn-cell-math",
+      "label": "07:41",
+      "range_start": 280.0,
+      "range_end": 564.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-rnn-cell-math-t0541s.png",
+      "seconds": 541.3,
+      "chapter": 3,
+      "slug": "topic-03-rnn-cell-math",
+      "label": "09:01",
+      "range_start": 280.0,
+      "range_end": 564.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-rnn-shapes-t0581s.png",
+      "seconds": 581.9,
+      "chapter": 4,
+      "slug": "topic-04-rnn-shapes",
+      "label": "09:41",
+      "range_start": 575.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-rnn-shapes-t0605s.png",
+      "seconds": 606.0,
+      "chapter": 4,
+      "slug": "topic-04-rnn-shapes",
+      "label": "10:05",
+      "range_start": 575.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-rnn-shapes-t0630s.png",
+      "seconds": 630.0,
+      "chapter": 4,
+      "slug": "topic-04-rnn-shapes",
+      "label": "10:30",
+      "range_start": 575.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-rnn-shapes-t0654s.png",
+      "seconds": 654.1,
+      "chapter": 4,
+      "slug": "topic-04-rnn-shapes",
+      "label": "10:54",
+      "range_start": 575.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-lstm-gates-t0707s.png",
+      "seconds": 707.1,
+      "chapter": 5,
+      "slug": "topic-05-lstm-gates",
+      "label": "11:47",
+      "range_start": 680.0,
+      "range_end": 1019.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-lstm-gates-t0802s.png",
+      "seconds": 802.0,
+      "chapter": 5,
+      "slug": "topic-05-lstm-gates",
+      "label": "13:22",
+      "range_start": 680.0,
+      "range_end": 1019.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-lstm-gates-t0896s.png",
+      "seconds": 897.0,
+      "chapter": 5,
+      "slug": "topic-05-lstm-gates",
+      "label": "14:56",
+      "range_start": 680.0,
+      "range_end": 1019.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-lstm-gates-t0991s.png",
+      "seconds": 991.9,
+      "chapter": 5,
+      "slug": "topic-05-lstm-gates",
+      "label": "16:31",
+      "range_start": 680.0,
+      "range_end": 1019.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-nn-lstm-api-t1040s.png",
+      "seconds": 1040.9,
+      "chapter": 6,
+      "slug": "topic-06-nn-lstm-api",
+      "label": "17:20",
+      "range_start": 1030.0,
+      "range_end": 1166.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-nn-lstm-api-t1078s.png",
+      "seconds": 1079.0,
+      "chapter": 6,
+      "slug": "topic-06-nn-lstm-api",
+      "label": "17:58",
+      "range_start": 1030.0,
+      "range_end": 1166.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-nn-lstm-api-t1117s.png",
+      "seconds": 1117.0,
+      "chapter": 6,
+      "slug": "topic-06-nn-lstm-api",
+      "label": "18:37",
+      "range_start": 1030.0,
+      "range_end": 1166.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-nn-lstm-api-t1155s.png",
+      "seconds": 1155.1,
+      "chapter": 6,
+      "slug": "topic-06-nn-lstm-api",
+      "label": "19:15",
+      "range_start": 1030.0,
+      "range_end": 1166.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-gru-t1202s.png",
+      "seconds": 1202.6,
+      "chapter": 7,
+      "slug": "topic-07-gru",
+      "label": "20:02",
+      "range_start": 1180.0,
+      "range_end": 1462.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-gru-t1281s.png",
+      "seconds": 1281.5,
+      "chapter": 7,
+      "slug": "topic-07-gru",
+      "label": "21:21",
+      "range_start": 1180.0,
+      "range_end": 1462.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-gru-t1360s.png",
+      "seconds": 1360.5,
+      "chapter": 7,
+      "slug": "topic-07-gru",
+      "label": "22:40",
+      "range_start": 1180.0,
+      "range_end": 1462.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-gru-t1439s.png",
+      "seconds": 1439.4,
+      "chapter": 7,
+      "slug": "topic-07-gru",
+      "label": "23:59",
+      "range_start": 1180.0,
+      "range_end": 1462.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-classifier-dummy-t1478s.png",
+      "seconds": 1479.0,
+      "chapter": 8,
+      "slug": "topic-08-classifier-dummy",
+      "label": "24:38",
+      "range_start": 1470.0,
+      "range_end": 1582.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-classifier-dummy-t1510s.png",
+      "seconds": 1510.3,
+      "chapter": 8,
+      "slug": "topic-08-classifier-dummy",
+      "label": "25:10",
+      "range_start": 1470.0,
+      "range_end": 1582.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-classifier-dummy-t1541s.png",
+      "seconds": 1541.7,
+      "chapter": 8,
+      "slug": "topic-08-classifier-dummy",
+      "label": "25:41",
+      "range_start": 1470.0,
+      "range_end": 1582.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-classifier-dummy-t1573s.png",
+      "seconds": 1573.0,
+      "chapter": 8,
+      "slug": "topic-08-classifier-dummy",
+      "label": "26:13",
+      "range_start": 1470.0,
+      "range_end": 1582.0
+    },
+    {
+      "file": "raw/033-ch09-topic-09-toy-train-t1606s.png",
+      "seconds": 1606.1,
+      "chapter": 9,
+      "slug": "topic-09-toy-train",
+      "label": "26:46",
+      "range_start": 1590.0,
+      "range_end": 1791.0
+    },
+    {
+      "file": "raw/034-ch09-topic-09-toy-train-t1662s.png",
+      "seconds": 1662.4,
+      "chapter": 9,
+      "slug": "topic-09-toy-train",
+      "label": "27:42",
+      "range_start": 1590.0,
+      "range_end": 1791.0
+    },
+    {
+      "file": "raw/035-ch09-topic-09-toy-train-t1718s.png",
+      "seconds": 1718.6,
+      "chapter": 9,
+      "slug": "topic-09-toy-train",
+      "label": "28:38",
+      "range_start": 1590.0,
+      "range_end": 1791.0
+    },
+    {
+      "file": "raw/036-ch09-topic-09-toy-train-t1774s.png",
+      "seconds": 1774.9,
+      "chapter": 9,
+      "slug": "topic-09-toy-train",
+      "label": "29:34",
+      "range_start": 1590.0,
+      "range_end": 1791.0
+    },
+    {
+      "file": "raw/037-ch10-topic-10-save-load-recap-t1885s.png",
+      "seconds": 1885.2,
+      "chapter": 10,
+      "slug": "topic-10-save-load-recap",
+      "label": "31:25",
+      "range_start": 1850.0,
+      "range_end": 2290.0
+    },
+    {
+      "file": "raw/038-ch10-topic-10-save-load-recap-t2008s.png",
+      "seconds": 2008.4,
+      "chapter": 10,
+      "slug": "topic-10-save-load-recap",
+      "label": "33:28",
+      "range_start": 1850.0,
+      "range_end": 2290.0
+    },
+    {
+      "file": "raw/039-ch10-topic-10-save-load-recap-t2131s.png",
+      "seconds": 2131.6,
+      "chapter": 10,
+      "slug": "topic-10-save-load-recap",
+      "label": "35:31",
+      "range_start": 1850.0,
+      "range_end": 2290.0
+    },
+    {
+      "file": "raw/040-ch10-topic-10-save-load-recap-t2254s.png",
+      "seconds": 2254.8,
+      "chapter": 10,
+      "slug": "topic-10-save-load-recap",
+      "label": "37:34",
+      "range_start": 1850.0,
+      "range_end": 2290.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-recap-sequences-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-recap-sequences",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-recap-sequences-t0074s.png",
+        "002-ch01-topic-01-recap-sequences-t0088s.png",
+        "003-ch01-topic-01-recap-sequences-t0102s.png",
+        "004-ch01-topic-01-recap-sequences-t0116s.png"
+      ],
+      "labels": [
+        "ch1 01:14",
+        "ch1 01:28",
+        "ch1 01:42",
+        "ch1 01:56"
+      ],
+      "tile_seconds": [
+        74.0,
+        88.0,
+        102.0,
+        116.0
+      ],
+      "time_start": 74.0,
+      "time_end": 116.0,
+      "range_start": 70.0,
+      "range_end": 120.0
+    },
+    {
+      "file": "composites/ch02-topic-02-sequence-tensor-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-sequence-tensor",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-sequence-tensor-t0141s.png",
+        "006-ch02-topic-02-sequence-tensor-t0180s.png",
+        "007-ch02-topic-02-sequence-tensor-t0218s.png",
+        "008-ch02-topic-02-sequence-tensor-t0257s.png"
+      ],
+      "labels": [
+        "ch2 02:21",
+        "ch2 03:00",
+        "ch2 03:38",
+        "ch2 04:17"
+      ],
+      "tile_seconds": [
+        141.1,
+        180.0,
+        219.0,
+        257.9
+      ],
+      "time_start": 141.1,
+      "time_end": 257.9,
+      "range_start": 130.0,
+      "range_end": 269.0
+    },
+    {
+      "file": "composites/ch03-topic-03-rnn-cell-math-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-rnn-cell-math",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-rnn-cell-math-t0302s.png",
+        "010-ch03-topic-03-rnn-cell-math-t0382s.png",
+        "011-ch03-topic-03-rnn-cell-math-t0461s.png",
+        "012-ch03-topic-03-rnn-cell-math-t0541s.png"
+      ],
+      "labels": [
+        "ch3 05:02",
+        "ch3 06:22",
+        "ch3 07:41",
+        "ch3 09:01"
+      ],
+      "tile_seconds": [
+        302.7,
+        382.2,
+        461.8,
+        541.3
+      ],
+      "time_start": 302.7,
+      "time_end": 541.3,
+      "range_start": 280.0,
+      "range_end": 564.0
+    },
+    {
+      "file": "composites/ch04-topic-04-rnn-shapes-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-rnn-shapes",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-rnn-shapes-t0581s.png",
+        "014-ch04-topic-04-rnn-shapes-t0605s.png",
+        "015-ch04-topic-04-rnn-shapes-t0630s.png",
+        "016-ch04-topic-04-rnn-shapes-t0654s.png"
+      ],
+      "labels": [
+        "ch4 09:41",
+        "ch4 10:05",
+        "ch4 10:30",
+        "ch4 10:54"
+      ],
+      "tile_seconds": [
+        581.9,
+        606.0,
+        630.0,
+        654.1
+      ],
+      "time_start": 581.9,
+      "time_end": 654.1,
+      "range_start": 575.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "composites/ch05-topic-05-lstm-gates-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-lstm-gates",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-lstm-gates-t0707s.png",
+        "018-ch05-topic-05-lstm-gates-t0802s.png",
+        "019-ch05-topic-05-lstm-gates-t0896s.png",
+        "020-ch05-topic-05-lstm-gates-t0991s.png"
+      ],
+      "labels": [
+        "ch5 11:47",
+        "ch5 13:22",
+        "ch5 14:56",
+        "ch5 16:31"
+      ],
+      "tile_seconds": [
+        707.1,
+        802.0,
+        897.0,
+        991.9
+      ],
+      "time_start": 707.1,
+      "time_end": 991.9,
+      "range_start": 680.0,
+      "range_end": 1019.0
+    },
+    {
+      "file": "composites/ch06-topic-06-nn-lstm-api-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-nn-lstm-api",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-nn-lstm-api-t1040s.png",
+        "022-ch06-topic-06-nn-lstm-api-t1078s.png",
+        "023-ch06-topic-06-nn-lstm-api-t1117s.png",
+        "024-ch06-topic-06-nn-lstm-api-t1155s.png"
+      ],
+      "labels": [
+        "ch6 17:20",
+        "ch6 17:58",
+        "ch6 18:37",
+        "ch6 19:15"
+      ],
+      "tile_seconds": [
+        1040.9,
+        1079.0,
+        1117.0,
+        1155.1
+      ],
+      "time_start": 1040.9,
+      "time_end": 1155.1,
+      "range_start": 1030.0,
+      "range_end": 1166.0
+    },
+    {
+      "file": "composites/ch07-topic-07-gru-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-gru",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-gru-t1202s.png",
+        "026-ch07-topic-07-gru-t1281s.png",
+        "027-ch07-topic-07-gru-t1360s.png",
+        "028-ch07-topic-07-gru-t1439s.png"
+      ],
+      "labels": [
+        "ch7 20:02",
+        "ch7 21:21",
+        "ch7 22:40",
+        "ch7 23:59"
+      ],
+      "tile_seconds": [
+        1202.6,
+        1281.5,
+        1360.5,
+        1439.4
+      ],
+      "time_start": 1202.6,
+      "time_end": 1439.4,
+      "range_start": 1180.0,
+      "range_end": 1462.0
+    },
+    {
+      "file": "composites/ch08-topic-08-classifier-dummy-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-classifier-dummy",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-classifier-dummy-t1478s.png",
+        "030-ch08-topic-08-classifier-dummy-t1510s.png",
+        "031-ch08-topic-08-classifier-dummy-t1541s.png",
+        "032-ch08-topic-08-classifier-dummy-t1573s.png"
+      ],
+      "labels": [
+        "ch8 24:38",
+        "ch8 25:10",
+        "ch8 25:41",
+        "ch8 26:13"
+      ],
+      "tile_seconds": [
+        1479.0,
+        1510.3,
+        1541.7,
+        1573.0
+      ],
+      "time_start": 1479.0,
+      "time_end": 1573.0,
+      "range_start": 1470.0,
+      "range_end": 1582.0
+    },
+    {
+      "file": "composites/ch09-topic-09-toy-train-panel1of1.png",
+      "chapter": 9,
+      "slug": "topic-09-toy-train",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch09-topic-09-toy-train-t1606s.png",
+        "034-ch09-topic-09-toy-train-t1662s.png",
+        "035-ch09-topic-09-toy-train-t1718s.png",
+        "036-ch09-topic-09-toy-train-t1774s.png"
+      ],
+      "labels": [
+        "ch9 26:46",
+        "ch9 27:42",
+        "ch9 28:38",
+        "ch9 29:34"
+      ],
+      "tile_seconds": [
+        1606.1,
+        1662.4,
+        1718.6,
+        1774.9
+      ],
+      "time_start": 1606.1,
+      "time_end": 1774.9,
+      "range_start": 1590.0,
+      "range_end": 1791.0
+    },
+    {
+      "file": "composites/ch10-topic-10-save-load-recap-panel1of1.png",
+      "chapter": 10,
+      "slug": "topic-10-save-load-recap",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "037-ch10-topic-10-save-load-recap-t1885s.png",
+        "038-ch10-topic-10-save-load-recap-t2008s.png",
+        "039-ch10-topic-10-save-load-recap-t2131s.png",
+        "040-ch10-topic-10-save-load-recap-t2254s.png"
+      ],
+      "labels": [
+        "ch10 31:25",
+        "ch10 33:28",
+        "ch10 35:31",
+        "ch10 37:34"
+      ],
+      "tile_seconds": [
+        1885.2,
+        2008.4,
+        2131.6,
+        2254.8
+      ],
+      "time_start": 1885.2,
+      "time_end": 2254.8,
+      "range_start": 1850.0,
+      "range_end": 2290.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

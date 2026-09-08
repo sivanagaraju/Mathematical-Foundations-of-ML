@@ -1,0 +1,518 @@
+{
+  "duration_seconds": 1726.0,
+  "range_source": "topic-ranges",
+  "range_count": 7,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 269.0,
+      "slug": "topic-01-setup"
+    },
+    {
+      "index": 2,
+      "start": 269.0,
+      "end": 529.0,
+      "slug": "topic-02-worldview-iid"
+    },
+    {
+      "index": 3,
+      "start": 529.0,
+      "end": 717.0,
+      "slug": "topic-03-core-problem"
+    },
+    {
+      "index": 4,
+      "start": 717.0,
+      "end": 1002.0,
+      "slug": "topic-04-targets"
+    },
+    {
+      "index": 5,
+      "start": 1002.0,
+      "end": 1261.0,
+      "slug": "topic-05-use-cases"
+    },
+    {
+      "index": 6,
+      "start": 1261.0,
+      "end": 1486.0,
+      "slug": "topic-06-nomenclature"
+    },
+    {
+      "index": 7,
+      "start": 1486.0,
+      "end": 1726.0,
+      "slug": "topic-07-notation-stop"
+    }
+  ],
+  "raw_count": 28,
+  "composite_count": 7,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-setup-t0021s.png",
+      "seconds": 21.5,
+      "chapter": 1,
+      "slug": "topic-01-setup",
+      "label": "00:21",
+      "range_start": 0.0,
+      "range_end": 269.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-setup-t0096s.png",
+      "seconds": 96.8,
+      "chapter": 1,
+      "slug": "topic-01-setup",
+      "label": "01:36",
+      "range_start": 0.0,
+      "range_end": 269.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-setup-t0172s.png",
+      "seconds": 172.2,
+      "chapter": 1,
+      "slug": "topic-01-setup",
+      "label": "02:52",
+      "range_start": 0.0,
+      "range_end": 269.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-setup-t0247s.png",
+      "seconds": 247.5,
+      "chapter": 1,
+      "slug": "topic-01-setup",
+      "label": "04:07",
+      "range_start": 0.0,
+      "range_end": 269.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-worldview-iid-t0289s.png",
+      "seconds": 289.8,
+      "chapter": 2,
+      "slug": "topic-02-worldview-iid",
+      "label": "04:49",
+      "range_start": 269.0,
+      "range_end": 529.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-worldview-iid-t0362s.png",
+      "seconds": 362.6,
+      "chapter": 2,
+      "slug": "topic-02-worldview-iid",
+      "label": "06:02",
+      "range_start": 269.0,
+      "range_end": 529.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-worldview-iid-t0435s.png",
+      "seconds": 435.4,
+      "chapter": 2,
+      "slug": "topic-02-worldview-iid",
+      "label": "07:15",
+      "range_start": 269.0,
+      "range_end": 529.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-worldview-iid-t0508s.png",
+      "seconds": 508.2,
+      "chapter": 2,
+      "slug": "topic-02-worldview-iid",
+      "label": "08:28",
+      "range_start": 269.0,
+      "range_end": 529.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-core-problem-t0544s.png",
+      "seconds": 544.0,
+      "chapter": 3,
+      "slug": "topic-03-core-problem",
+      "label": "09:04",
+      "range_start": 529.0,
+      "range_end": 717.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-core-problem-t0596s.png",
+      "seconds": 596.7,
+      "chapter": 3,
+      "slug": "topic-03-core-problem",
+      "label": "09:56",
+      "range_start": 529.0,
+      "range_end": 717.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-core-problem-t0649s.png",
+      "seconds": 649.3,
+      "chapter": 3,
+      "slug": "topic-03-core-problem",
+      "label": "10:49",
+      "range_start": 529.0,
+      "range_end": 717.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-core-problem-t0701s.png",
+      "seconds": 702.0,
+      "chapter": 3,
+      "slug": "topic-03-core-problem",
+      "label": "11:41",
+      "range_start": 529.0,
+      "range_end": 717.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-targets-t0739s.png",
+      "seconds": 739.8,
+      "chapter": 4,
+      "slug": "topic-04-targets",
+      "label": "12:19",
+      "range_start": 717.0,
+      "range_end": 1002.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-targets-t0819s.png",
+      "seconds": 819.6,
+      "chapter": 4,
+      "slug": "topic-04-targets",
+      "label": "13:39",
+      "range_start": 717.0,
+      "range_end": 1002.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-targets-t0899s.png",
+      "seconds": 899.4,
+      "chapter": 4,
+      "slug": "topic-04-targets",
+      "label": "14:59",
+      "range_start": 717.0,
+      "range_end": 1002.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-targets-t0979s.png",
+      "seconds": 979.2,
+      "chapter": 4,
+      "slug": "topic-04-targets",
+      "label": "16:19",
+      "range_start": 717.0,
+      "range_end": 1002.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-use-cases-t1022s.png",
+      "seconds": 1022.7,
+      "chapter": 5,
+      "slug": "topic-05-use-cases",
+      "label": "17:02",
+      "range_start": 1002.0,
+      "range_end": 1261.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-use-cases-t1095s.png",
+      "seconds": 1095.2,
+      "chapter": 5,
+      "slug": "topic-05-use-cases",
+      "label": "18:15",
+      "range_start": 1002.0,
+      "range_end": 1261.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-use-cases-t1167s.png",
+      "seconds": 1167.8,
+      "chapter": 5,
+      "slug": "topic-05-use-cases",
+      "label": "19:27",
+      "range_start": 1002.0,
+      "range_end": 1261.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-use-cases-t1240s.png",
+      "seconds": 1240.3,
+      "chapter": 5,
+      "slug": "topic-05-use-cases",
+      "label": "20:40",
+      "range_start": 1002.0,
+      "range_end": 1261.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-nomenclature-t1279s.png",
+      "seconds": 1279.0,
+      "chapter": 6,
+      "slug": "topic-06-nomenclature",
+      "label": "21:19",
+      "range_start": 1261.0,
+      "range_end": 1486.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-nomenclature-t1342s.png",
+      "seconds": 1342.0,
+      "chapter": 6,
+      "slug": "topic-06-nomenclature",
+      "label": "22:22",
+      "range_start": 1261.0,
+      "range_end": 1486.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-nomenclature-t1405s.png",
+      "seconds": 1405.0,
+      "chapter": 6,
+      "slug": "topic-06-nomenclature",
+      "label": "23:25",
+      "range_start": 1261.0,
+      "range_end": 1486.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-nomenclature-t1468s.png",
+      "seconds": 1468.0,
+      "chapter": 6,
+      "slug": "topic-06-nomenclature",
+      "label": "24:28",
+      "range_start": 1261.0,
+      "range_end": 1486.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-notation-stop-t1505s.png",
+      "seconds": 1505.2,
+      "chapter": 7,
+      "slug": "topic-07-notation-stop",
+      "label": "25:05",
+      "range_start": 1486.0,
+      "range_end": 1726.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-notation-stop-t1572s.png",
+      "seconds": 1572.4,
+      "chapter": 7,
+      "slug": "topic-07-notation-stop",
+      "label": "26:12",
+      "range_start": 1486.0,
+      "range_end": 1726.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-notation-stop-t1639s.png",
+      "seconds": 1639.6,
+      "chapter": 7,
+      "slug": "topic-07-notation-stop",
+      "label": "27:19",
+      "range_start": 1486.0,
+      "range_end": 1726.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-notation-stop-t1706s.png",
+      "seconds": 1706.8,
+      "chapter": 7,
+      "slug": "topic-07-notation-stop",
+      "label": "28:26",
+      "range_start": 1486.0,
+      "range_end": 1726.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-setup-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-setup",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-setup-t0021s.png",
+        "002-ch01-topic-01-setup-t0096s.png",
+        "003-ch01-topic-01-setup-t0172s.png",
+        "004-ch01-topic-01-setup-t0247s.png"
+      ],
+      "labels": [
+        "ch1 00:21",
+        "ch1 01:36",
+        "ch1 02:52",
+        "ch1 04:07"
+      ],
+      "tile_seconds": [
+        21.5,
+        96.8,
+        172.2,
+        247.5
+      ],
+      "time_start": 21.5,
+      "time_end": 247.5,
+      "range_start": 0.0,
+      "range_end": 269.0
+    },
+    {
+      "file": "composites/ch02-topic-02-worldview-iid-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-worldview-iid",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-worldview-iid-t0289s.png",
+        "006-ch02-topic-02-worldview-iid-t0362s.png",
+        "007-ch02-topic-02-worldview-iid-t0435s.png",
+        "008-ch02-topic-02-worldview-iid-t0508s.png"
+      ],
+      "labels": [
+        "ch2 04:49",
+        "ch2 06:02",
+        "ch2 07:15",
+        "ch2 08:28"
+      ],
+      "tile_seconds": [
+        289.8,
+        362.6,
+        435.4,
+        508.2
+      ],
+      "time_start": 289.8,
+      "time_end": 508.2,
+      "range_start": 269.0,
+      "range_end": 529.0
+    },
+    {
+      "file": "composites/ch03-topic-03-core-problem-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-core-problem",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-core-problem-t0544s.png",
+        "010-ch03-topic-03-core-problem-t0596s.png",
+        "011-ch03-topic-03-core-problem-t0649s.png",
+        "012-ch03-topic-03-core-problem-t0701s.png"
+      ],
+      "labels": [
+        "ch3 09:04",
+        "ch3 09:56",
+        "ch3 10:49",
+        "ch3 11:41"
+      ],
+      "tile_seconds": [
+        544.0,
+        596.7,
+        649.3,
+        702.0
+      ],
+      "time_start": 544.0,
+      "time_end": 702.0,
+      "range_start": 529.0,
+      "range_end": 717.0
+    },
+    {
+      "file": "composites/ch04-topic-04-targets-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-targets",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-targets-t0739s.png",
+        "014-ch04-topic-04-targets-t0819s.png",
+        "015-ch04-topic-04-targets-t0899s.png",
+        "016-ch04-topic-04-targets-t0979s.png"
+      ],
+      "labels": [
+        "ch4 12:19",
+        "ch4 13:39",
+        "ch4 14:59",
+        "ch4 16:19"
+      ],
+      "tile_seconds": [
+        739.8,
+        819.6,
+        899.4,
+        979.2
+      ],
+      "time_start": 739.8,
+      "time_end": 979.2,
+      "range_start": 717.0,
+      "range_end": 1002.0
+    },
+    {
+      "file": "composites/ch05-topic-05-use-cases-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-use-cases",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-use-cases-t1022s.png",
+        "018-ch05-topic-05-use-cases-t1095s.png",
+        "019-ch05-topic-05-use-cases-t1167s.png",
+        "020-ch05-topic-05-use-cases-t1240s.png"
+      ],
+      "labels": [
+        "ch5 17:02",
+        "ch5 18:15",
+        "ch5 19:27",
+        "ch5 20:40"
+      ],
+      "tile_seconds": [
+        1022.7,
+        1095.2,
+        1167.8,
+        1240.3
+      ],
+      "time_start": 1022.7,
+      "time_end": 1240.3,
+      "range_start": 1002.0,
+      "range_end": 1261.0
+    },
+    {
+      "file": "composites/ch06-topic-06-nomenclature-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-nomenclature",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-nomenclature-t1279s.png",
+        "022-ch06-topic-06-nomenclature-t1342s.png",
+        "023-ch06-topic-06-nomenclature-t1405s.png",
+        "024-ch06-topic-06-nomenclature-t1468s.png"
+      ],
+      "labels": [
+        "ch6 21:19",
+        "ch6 22:22",
+        "ch6 23:25",
+        "ch6 24:28"
+      ],
+      "tile_seconds": [
+        1279.0,
+        1342.0,
+        1405.0,
+        1468.0
+      ],
+      "time_start": 1279.0,
+      "time_end": 1468.0,
+      "range_start": 1261.0,
+      "range_end": 1486.0
+    },
+    {
+      "file": "composites/ch07-topic-07-notation-stop-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-notation-stop",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-notation-stop-t1505s.png",
+        "026-ch07-topic-07-notation-stop-t1572s.png",
+        "027-ch07-topic-07-notation-stop-t1639s.png",
+        "028-ch07-topic-07-notation-stop-t1706s.png"
+      ],
+      "labels": [
+        "ch7 25:05",
+        "ch7 26:12",
+        "ch7 27:19",
+        "ch7 28:26"
+      ],
+      "tile_seconds": [
+        1505.2,
+        1572.4,
+        1639.6,
+        1706.8
+      ],
+      "time_start": 1505.2,
+      "time_end": 1706.8,
+      "range_start": 1486.0,
+      "range_end": 1726.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

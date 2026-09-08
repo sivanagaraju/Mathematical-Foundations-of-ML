@@ -1,0 +1,861 @@
+{
+  "duration_seconds": 2120.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 22.0,
+      "end": 148.0,
+      "slug": "topic-01-two-nets-n-iid-architecture-agnostic"
+    },
+    {
+      "index": 2,
+      "start": 148.0,
+      "end": 267.0,
+      "slug": "topic-02-d-sigmoid-jgan-alternate"
+    },
+    {
+      "index": 3,
+      "start": 267.0,
+      "end": 396.0,
+      "slug": "topic-03-batch-averages-d-ascent"
+    },
+    {
+      "index": 4,
+      "start": 396.0,
+      "end": 574.0,
+      "slug": "topic-04-g-min-xhat-gz-drop-first-term"
+    },
+    {
+      "index": 5,
+      "start": 574.0,
+      "end": 697.0,
+      "slug": "topic-05-freeze-ascent-vs-descent"
+    },
+    {
+      "index": 6,
+      "start": 697.0,
+      "end": 1238.0,
+      "slug": "topic-06-train-d-real-batch-frozen-g"
+    },
+    {
+      "index": 7,
+      "start": 1238.0,
+      "end": 1721.0,
+      "slug": "topic-07-train-g-no-real-grads-through-d"
+    },
+    {
+      "index": 8,
+      "start": 1721.0,
+      "end": 1808.0,
+      "slug": "topic-08-k-to-1-no-stopping-metrics"
+    },
+    {
+      "index": 9,
+      "start": 1808.0,
+      "end": 1949.0,
+      "slug": "topic-09-vdm-special-case-why-it-works"
+    },
+    {
+      "index": 10,
+      "start": 1949.0,
+      "end": 2120.0,
+      "slug": "topic-10-recap-next-classifier-inference"
+    }
+  ],
+  "raw_count": 48,
+  "composite_count": 12,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-two-nets-n-iid-architecture-agnostic-t0032s.png",
+      "seconds": 32.1,
+      "chapter": 1,
+      "slug": "topic-01-two-nets-n-iid-architecture-agnostic",
+      "label": "00:32",
+      "range_start": 22.0,
+      "range_end": 148.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-two-nets-n-iid-architecture-agnostic-t0067s.png",
+      "seconds": 67.4,
+      "chapter": 1,
+      "slug": "topic-01-two-nets-n-iid-architecture-agnostic",
+      "label": "01:07",
+      "range_start": 22.0,
+      "range_end": 148.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-two-nets-n-iid-architecture-agnostic-t0102s.png",
+      "seconds": 102.6,
+      "chapter": 1,
+      "slug": "topic-01-two-nets-n-iid-architecture-agnostic",
+      "label": "01:42",
+      "range_start": 22.0,
+      "range_end": 148.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-two-nets-n-iid-architecture-agnostic-t0137s.png",
+      "seconds": 137.9,
+      "chapter": 1,
+      "slug": "topic-01-two-nets-n-iid-architecture-agnostic",
+      "label": "02:17",
+      "range_start": 22.0,
+      "range_end": 148.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-d-sigmoid-jgan-alternate-t0157s.png",
+      "seconds": 157.5,
+      "chapter": 2,
+      "slug": "topic-02-d-sigmoid-jgan-alternate",
+      "label": "02:37",
+      "range_start": 148.0,
+      "range_end": 267.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-d-sigmoid-jgan-alternate-t0190s.png",
+      "seconds": 190.8,
+      "chapter": 2,
+      "slug": "topic-02-d-sigmoid-jgan-alternate",
+      "label": "03:10",
+      "range_start": 148.0,
+      "range_end": 267.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-d-sigmoid-jgan-alternate-t0224s.png",
+      "seconds": 224.2,
+      "chapter": 2,
+      "slug": "topic-02-d-sigmoid-jgan-alternate",
+      "label": "03:44",
+      "range_start": 148.0,
+      "range_end": 267.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-d-sigmoid-jgan-alternate-t0257s.png",
+      "seconds": 257.5,
+      "chapter": 2,
+      "slug": "topic-02-d-sigmoid-jgan-alternate",
+      "label": "04:17",
+      "range_start": 148.0,
+      "range_end": 267.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-batch-averages-d-ascent-t0277s.png",
+      "seconds": 277.3,
+      "chapter": 3,
+      "slug": "topic-03-batch-averages-d-ascent",
+      "label": "04:37",
+      "range_start": 267.0,
+      "range_end": 396.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-batch-averages-d-ascent-t0313s.png",
+      "seconds": 313.4,
+      "chapter": 3,
+      "slug": "topic-03-batch-averages-d-ascent",
+      "label": "05:13",
+      "range_start": 267.0,
+      "range_end": 396.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-batch-averages-d-ascent-t0349s.png",
+      "seconds": 349.6,
+      "chapter": 3,
+      "slug": "topic-03-batch-averages-d-ascent",
+      "label": "05:49",
+      "range_start": 267.0,
+      "range_end": 396.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-batch-averages-d-ascent-t0385s.png",
+      "seconds": 385.7,
+      "chapter": 3,
+      "slug": "topic-03-batch-averages-d-ascent",
+      "label": "06:25",
+      "range_start": 267.0,
+      "range_end": 396.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-g-min-xhat-gz-drop-first-term-t0410s.png",
+      "seconds": 410.2,
+      "chapter": 4,
+      "slug": "topic-04-g-min-xhat-gz-drop-first-term",
+      "label": "06:50",
+      "range_start": 396.0,
+      "range_end": 574.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-g-min-xhat-gz-drop-first-term-t0460s.png",
+      "seconds": 460.1,
+      "chapter": 4,
+      "slug": "topic-04-g-min-xhat-gz-drop-first-term",
+      "label": "07:40",
+      "range_start": 396.0,
+      "range_end": 574.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-g-min-xhat-gz-drop-first-term-t0509s.png",
+      "seconds": 509.9,
+      "chapter": 4,
+      "slug": "topic-04-g-min-xhat-gz-drop-first-term",
+      "label": "08:29",
+      "range_start": 396.0,
+      "range_end": 574.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-g-min-xhat-gz-drop-first-term-t0559s.png",
+      "seconds": 559.8,
+      "chapter": 4,
+      "slug": "topic-04-g-min-xhat-gz-drop-first-term",
+      "label": "09:19",
+      "range_start": 396.0,
+      "range_end": 574.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-freeze-ascent-vs-descent-t0583s.png",
+      "seconds": 583.8,
+      "chapter": 5,
+      "slug": "topic-05-freeze-ascent-vs-descent",
+      "label": "09:43",
+      "range_start": 574.0,
+      "range_end": 697.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-freeze-ascent-vs-descent-t0618s.png",
+      "seconds": 618.3,
+      "chapter": 5,
+      "slug": "topic-05-freeze-ascent-vs-descent",
+      "label": "10:18",
+      "range_start": 574.0,
+      "range_end": 697.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-freeze-ascent-vs-descent-t0652s.png",
+      "seconds": 652.7,
+      "chapter": 5,
+      "slug": "topic-05-freeze-ascent-vs-descent",
+      "label": "10:52",
+      "range_start": 574.0,
+      "range_end": 697.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-freeze-ascent-vs-descent-t0687s.png",
+      "seconds": 687.2,
+      "chapter": 5,
+      "slug": "topic-05-freeze-ascent-vs-descent",
+      "label": "11:27",
+      "range_start": 574.0,
+      "range_end": 697.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-train-d-real-batch-frozen-g-t0740s.png",
+      "seconds": 740.3,
+      "chapter": 6,
+      "slug": "topic-06-train-d-real-batch-frozen-g",
+      "label": "12:20",
+      "range_start": 697.0,
+      "range_end": 1238.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-train-d-real-batch-frozen-g-t0805s.png",
+      "seconds": 805.2,
+      "chapter": 6,
+      "slug": "topic-06-train-d-real-batch-frozen-g",
+      "label": "13:25",
+      "range_start": 697.0,
+      "range_end": 1238.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-train-d-real-batch-frozen-g-t0870s.png",
+      "seconds": 870.1,
+      "chapter": 6,
+      "slug": "topic-06-train-d-real-batch-frozen-g",
+      "label": "14:30",
+      "range_start": 697.0,
+      "range_end": 1238.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-train-d-real-batch-frozen-g-t0935s.png",
+      "seconds": 935.0,
+      "chapter": 6,
+      "slug": "topic-06-train-d-real-batch-frozen-g",
+      "label": "15:35",
+      "range_start": 697.0,
+      "range_end": 1238.0
+    },
+    {
+      "file": "raw/025-ch06-topic-06-train-d-real-batch-frozen-g-t0999s.png",
+      "seconds": 1000.0,
+      "chapter": 6,
+      "slug": "topic-06-train-d-real-batch-frozen-g",
+      "label": "16:39",
+      "range_start": 697.0,
+      "range_end": 1238.0
+    },
+    {
+      "file": "raw/026-ch06-topic-06-train-d-real-batch-frozen-g-t1064s.png",
+      "seconds": 1064.9,
+      "chapter": 6,
+      "slug": "topic-06-train-d-real-batch-frozen-g",
+      "label": "17:44",
+      "range_start": 697.0,
+      "range_end": 1238.0
+    },
+    {
+      "file": "raw/027-ch06-topic-06-train-d-real-batch-frozen-g-t1129s.png",
+      "seconds": 1129.8,
+      "chapter": 6,
+      "slug": "topic-06-train-d-real-batch-frozen-g",
+      "label": "18:49",
+      "range_start": 697.0,
+      "range_end": 1238.0
+    },
+    {
+      "file": "raw/028-ch06-topic-06-train-d-real-batch-frozen-g-t1194s.png",
+      "seconds": 1194.7,
+      "chapter": 6,
+      "slug": "topic-06-train-d-real-batch-frozen-g",
+      "label": "19:54",
+      "range_start": 697.0,
+      "range_end": 1238.0
+    },
+    {
+      "file": "raw/029-ch07-topic-07-train-g-no-real-grads-through-d-t1276s.png",
+      "seconds": 1276.6,
+      "chapter": 7,
+      "slug": "topic-07-train-g-no-real-grads-through-d",
+      "label": "21:16",
+      "range_start": 1238.0,
+      "range_end": 1721.0
+    },
+    {
+      "file": "raw/030-ch07-topic-07-train-g-no-real-grads-through-d-t1334s.png",
+      "seconds": 1334.6,
+      "chapter": 7,
+      "slug": "topic-07-train-g-no-real-grads-through-d",
+      "label": "22:14",
+      "range_start": 1238.0,
+      "range_end": 1721.0
+    },
+    {
+      "file": "raw/031-ch07-topic-07-train-g-no-real-grads-through-d-t1392s.png",
+      "seconds": 1392.6,
+      "chapter": 7,
+      "slug": "topic-07-train-g-no-real-grads-through-d",
+      "label": "23:12",
+      "range_start": 1238.0,
+      "range_end": 1721.0
+    },
+    {
+      "file": "raw/032-ch07-topic-07-train-g-no-real-grads-through-d-t1450s.png",
+      "seconds": 1450.5,
+      "chapter": 7,
+      "slug": "topic-07-train-g-no-real-grads-through-d",
+      "label": "24:10",
+      "range_start": 1238.0,
+      "range_end": 1721.0
+    },
+    {
+      "file": "raw/033-ch07-topic-07-train-g-no-real-grads-through-d-t1508s.png",
+      "seconds": 1508.5,
+      "chapter": 7,
+      "slug": "topic-07-train-g-no-real-grads-through-d",
+      "label": "25:08",
+      "range_start": 1238.0,
+      "range_end": 1721.0
+    },
+    {
+      "file": "raw/034-ch07-topic-07-train-g-no-real-grads-through-d-t1566s.png",
+      "seconds": 1566.4,
+      "chapter": 7,
+      "slug": "topic-07-train-g-no-real-grads-through-d",
+      "label": "26:06",
+      "range_start": 1238.0,
+      "range_end": 1721.0
+    },
+    {
+      "file": "raw/035-ch07-topic-07-train-g-no-real-grads-through-d-t1624s.png",
+      "seconds": 1624.4,
+      "chapter": 7,
+      "slug": "topic-07-train-g-no-real-grads-through-d",
+      "label": "27:04",
+      "range_start": 1238.0,
+      "range_end": 1721.0
+    },
+    {
+      "file": "raw/036-ch07-topic-07-train-g-no-real-grads-through-d-t1682s.png",
+      "seconds": 1682.4,
+      "chapter": 7,
+      "slug": "topic-07-train-g-no-real-grads-through-d",
+      "label": "28:02",
+      "range_start": 1238.0,
+      "range_end": 1721.0
+    },
+    {
+      "file": "raw/037-ch08-topic-08-k-to-1-no-stopping-metrics-t1727s.png",
+      "seconds": 1728.0,
+      "chapter": 8,
+      "slug": "topic-08-k-to-1-no-stopping-metrics",
+      "label": "28:47",
+      "range_start": 1721.0,
+      "range_end": 1808.0
+    },
+    {
+      "file": "raw/038-ch08-topic-08-k-to-1-no-stopping-metrics-t1752s.png",
+      "seconds": 1752.3,
+      "chapter": 8,
+      "slug": "topic-08-k-to-1-no-stopping-metrics",
+      "label": "29:12",
+      "range_start": 1721.0,
+      "range_end": 1808.0
+    },
+    {
+      "file": "raw/039-ch08-topic-08-k-to-1-no-stopping-metrics-t1776s.png",
+      "seconds": 1776.7,
+      "chapter": 8,
+      "slug": "topic-08-k-to-1-no-stopping-metrics",
+      "label": "29:36",
+      "range_start": 1721.0,
+      "range_end": 1808.0
+    },
+    {
+      "file": "raw/040-ch08-topic-08-k-to-1-no-stopping-metrics-t1801s.png",
+      "seconds": 1801.0,
+      "chapter": 8,
+      "slug": "topic-08-k-to-1-no-stopping-metrics",
+      "label": "30:01",
+      "range_start": 1721.0,
+      "range_end": 1808.0
+    },
+    {
+      "file": "raw/041-ch09-topic-09-vdm-special-case-why-it-works-t1819s.png",
+      "seconds": 1819.3,
+      "chapter": 9,
+      "slug": "topic-09-vdm-special-case-why-it-works",
+      "label": "30:19",
+      "range_start": 1808.0,
+      "range_end": 1949.0
+    },
+    {
+      "file": "raw/042-ch09-topic-09-vdm-special-case-why-it-works-t1858s.png",
+      "seconds": 1858.8,
+      "chapter": 9,
+      "slug": "topic-09-vdm-special-case-why-it-works",
+      "label": "30:58",
+      "range_start": 1808.0,
+      "range_end": 1949.0
+    },
+    {
+      "file": "raw/043-ch09-topic-09-vdm-special-case-why-it-works-t1898s.png",
+      "seconds": 1898.2,
+      "chapter": 9,
+      "slug": "topic-09-vdm-special-case-why-it-works",
+      "label": "31:38",
+      "range_start": 1808.0,
+      "range_end": 1949.0
+    },
+    {
+      "file": "raw/044-ch09-topic-09-vdm-special-case-why-it-works-t1937s.png",
+      "seconds": 1937.7,
+      "chapter": 9,
+      "slug": "topic-09-vdm-special-case-why-it-works",
+      "label": "32:17",
+      "range_start": 1808.0,
+      "range_end": 1949.0
+    },
+    {
+      "file": "raw/045-ch10-topic-10-recap-next-classifier-inference-t1962s.png",
+      "seconds": 1962.7,
+      "chapter": 10,
+      "slug": "topic-10-recap-next-classifier-inference",
+      "label": "32:42",
+      "range_start": 1949.0,
+      "range_end": 2120.0
+    },
+    {
+      "file": "raw/046-ch10-topic-10-recap-next-classifier-inference-t2010s.png",
+      "seconds": 2010.6,
+      "chapter": 10,
+      "slug": "topic-10-recap-next-classifier-inference",
+      "label": "33:30",
+      "range_start": 1949.0,
+      "range_end": 2120.0
+    },
+    {
+      "file": "raw/047-ch10-topic-10-recap-next-classifier-inference-t2058s.png",
+      "seconds": 2058.4,
+      "chapter": 10,
+      "slug": "topic-10-recap-next-classifier-inference",
+      "label": "34:18",
+      "range_start": 1949.0,
+      "range_end": 2120.0
+    },
+    {
+      "file": "raw/048-ch10-topic-10-recap-next-classifier-inference-t2106s.png",
+      "seconds": 2106.3,
+      "chapter": 10,
+      "slug": "topic-10-recap-next-classifier-inference",
+      "label": "35:06",
+      "range_start": 1949.0,
+      "range_end": 2120.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-two-nets-n-iid-architecture-agnostic-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-two-nets-n-iid-architecture-agnostic",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-two-nets-n-iid-architecture-agnostic-t0032s.png",
+        "002-ch01-topic-01-two-nets-n-iid-architecture-agnostic-t0067s.png",
+        "003-ch01-topic-01-two-nets-n-iid-architecture-agnostic-t0102s.png",
+        "004-ch01-topic-01-two-nets-n-iid-architecture-agnostic-t0137s.png"
+      ],
+      "labels": [
+        "ch1 00:32",
+        "ch1 01:07",
+        "ch1 01:42",
+        "ch1 02:17"
+      ],
+      "tile_seconds": [
+        32.1,
+        67.4,
+        102.6,
+        137.9
+      ],
+      "time_start": 32.1,
+      "time_end": 137.9,
+      "range_start": 22.0,
+      "range_end": 148.0
+    },
+    {
+      "file": "composites/ch02-topic-02-d-sigmoid-jgan-alternate-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-d-sigmoid-jgan-alternate",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-d-sigmoid-jgan-alternate-t0157s.png",
+        "006-ch02-topic-02-d-sigmoid-jgan-alternate-t0190s.png",
+        "007-ch02-topic-02-d-sigmoid-jgan-alternate-t0224s.png",
+        "008-ch02-topic-02-d-sigmoid-jgan-alternate-t0257s.png"
+      ],
+      "labels": [
+        "ch2 02:37",
+        "ch2 03:10",
+        "ch2 03:44",
+        "ch2 04:17"
+      ],
+      "tile_seconds": [
+        157.5,
+        190.8,
+        224.2,
+        257.5
+      ],
+      "time_start": 157.5,
+      "time_end": 257.5,
+      "range_start": 148.0,
+      "range_end": 267.0
+    },
+    {
+      "file": "composites/ch03-topic-03-batch-averages-d-ascent-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-batch-averages-d-ascent",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-batch-averages-d-ascent-t0277s.png",
+        "010-ch03-topic-03-batch-averages-d-ascent-t0313s.png",
+        "011-ch03-topic-03-batch-averages-d-ascent-t0349s.png",
+        "012-ch03-topic-03-batch-averages-d-ascent-t0385s.png"
+      ],
+      "labels": [
+        "ch3 04:37",
+        "ch3 05:13",
+        "ch3 05:49",
+        "ch3 06:25"
+      ],
+      "tile_seconds": [
+        277.3,
+        313.4,
+        349.6,
+        385.7
+      ],
+      "time_start": 277.3,
+      "time_end": 385.7,
+      "range_start": 267.0,
+      "range_end": 396.0
+    },
+    {
+      "file": "composites/ch04-topic-04-g-min-xhat-gz-drop-first-term-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-g-min-xhat-gz-drop-first-term",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-g-min-xhat-gz-drop-first-term-t0410s.png",
+        "014-ch04-topic-04-g-min-xhat-gz-drop-first-term-t0460s.png",
+        "015-ch04-topic-04-g-min-xhat-gz-drop-first-term-t0509s.png",
+        "016-ch04-topic-04-g-min-xhat-gz-drop-first-term-t0559s.png"
+      ],
+      "labels": [
+        "ch4 06:50",
+        "ch4 07:40",
+        "ch4 08:29",
+        "ch4 09:19"
+      ],
+      "tile_seconds": [
+        410.2,
+        460.1,
+        509.9,
+        559.8
+      ],
+      "time_start": 410.2,
+      "time_end": 559.8,
+      "range_start": 396.0,
+      "range_end": 574.0
+    },
+    {
+      "file": "composites/ch05-topic-05-freeze-ascent-vs-descent-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-freeze-ascent-vs-descent",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-freeze-ascent-vs-descent-t0583s.png",
+        "018-ch05-topic-05-freeze-ascent-vs-descent-t0618s.png",
+        "019-ch05-topic-05-freeze-ascent-vs-descent-t0652s.png",
+        "020-ch05-topic-05-freeze-ascent-vs-descent-t0687s.png"
+      ],
+      "labels": [
+        "ch5 09:43",
+        "ch5 10:18",
+        "ch5 10:52",
+        "ch5 11:27"
+      ],
+      "tile_seconds": [
+        583.8,
+        618.3,
+        652.7,
+        687.2
+      ],
+      "time_start": 583.8,
+      "time_end": 687.2,
+      "range_start": 574.0,
+      "range_end": 697.0
+    },
+    {
+      "file": "composites/ch06-topic-06-train-d-real-batch-frozen-g-panel1of2.png",
+      "chapter": 6,
+      "slug": "topic-06-train-d-real-batch-frozen-g",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "021-ch06-topic-06-train-d-real-batch-frozen-g-t0740s.png",
+        "022-ch06-topic-06-train-d-real-batch-frozen-g-t0805s.png",
+        "023-ch06-topic-06-train-d-real-batch-frozen-g-t0870s.png",
+        "024-ch06-topic-06-train-d-real-batch-frozen-g-t0935s.png"
+      ],
+      "labels": [
+        "ch6 12:20",
+        "ch6 13:25",
+        "ch6 14:30",
+        "ch6 15:35"
+      ],
+      "tile_seconds": [
+        740.3,
+        805.2,
+        870.1,
+        935.0
+      ],
+      "time_start": 740.3,
+      "time_end": 935.0,
+      "range_start": 697.0,
+      "range_end": 1238.0
+    },
+    {
+      "file": "composites/ch06-topic-06-train-d-real-batch-frozen-g-panel2of2.png",
+      "chapter": 6,
+      "slug": "topic-06-train-d-real-batch-frozen-g",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "025-ch06-topic-06-train-d-real-batch-frozen-g-t0999s.png",
+        "026-ch06-topic-06-train-d-real-batch-frozen-g-t1064s.png",
+        "027-ch06-topic-06-train-d-real-batch-frozen-g-t1129s.png",
+        "028-ch06-topic-06-train-d-real-batch-frozen-g-t1194s.png"
+      ],
+      "labels": [
+        "ch6 16:39",
+        "ch6 17:44",
+        "ch6 18:49",
+        "ch6 19:54"
+      ],
+      "tile_seconds": [
+        1000.0,
+        1064.9,
+        1129.8,
+        1194.7
+      ],
+      "time_start": 1000.0,
+      "time_end": 1194.7,
+      "range_start": 697.0,
+      "range_end": 1238.0
+    },
+    {
+      "file": "composites/ch07-topic-07-train-g-no-real-grads-through-d-panel1of2.png",
+      "chapter": 7,
+      "slug": "topic-07-train-g-no-real-grads-through-d",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "029-ch07-topic-07-train-g-no-real-grads-through-d-t1276s.png",
+        "030-ch07-topic-07-train-g-no-real-grads-through-d-t1334s.png",
+        "031-ch07-topic-07-train-g-no-real-grads-through-d-t1392s.png",
+        "032-ch07-topic-07-train-g-no-real-grads-through-d-t1450s.png"
+      ],
+      "labels": [
+        "ch7 21:16",
+        "ch7 22:14",
+        "ch7 23:12",
+        "ch7 24:10"
+      ],
+      "tile_seconds": [
+        1276.6,
+        1334.6,
+        1392.6,
+        1450.5
+      ],
+      "time_start": 1276.6,
+      "time_end": 1450.5,
+      "range_start": 1238.0,
+      "range_end": 1721.0
+    },
+    {
+      "file": "composites/ch07-topic-07-train-g-no-real-grads-through-d-panel2of2.png",
+      "chapter": 7,
+      "slug": "topic-07-train-g-no-real-grads-through-d",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "033-ch07-topic-07-train-g-no-real-grads-through-d-t1508s.png",
+        "034-ch07-topic-07-train-g-no-real-grads-through-d-t1566s.png",
+        "035-ch07-topic-07-train-g-no-real-grads-through-d-t1624s.png",
+        "036-ch07-topic-07-train-g-no-real-grads-through-d-t1682s.png"
+      ],
+      "labels": [
+        "ch7 25:08",
+        "ch7 26:06",
+        "ch7 27:04",
+        "ch7 28:02"
+      ],
+      "tile_seconds": [
+        1508.5,
+        1566.4,
+        1624.4,
+        1682.4
+      ],
+      "time_start": 1508.5,
+      "time_end": 1682.4,
+      "range_start": 1238.0,
+      "range_end": 1721.0
+    },
+    {
+      "file": "composites/ch08-topic-08-k-to-1-no-stopping-metrics-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-k-to-1-no-stopping-metrics",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "037-ch08-topic-08-k-to-1-no-stopping-metrics-t1727s.png",
+        "038-ch08-topic-08-k-to-1-no-stopping-metrics-t1752s.png",
+        "039-ch08-topic-08-k-to-1-no-stopping-metrics-t1776s.png",
+        "040-ch08-topic-08-k-to-1-no-stopping-metrics-t1801s.png"
+      ],
+      "labels": [
+        "ch8 28:47",
+        "ch8 29:12",
+        "ch8 29:36",
+        "ch8 30:01"
+      ],
+      "tile_seconds": [
+        1728.0,
+        1752.3,
+        1776.7,
+        1801.0
+      ],
+      "time_start": 1728.0,
+      "time_end": 1801.0,
+      "range_start": 1721.0,
+      "range_end": 1808.0
+    },
+    {
+      "file": "composites/ch09-topic-09-vdm-special-case-why-it-works-panel1of1.png",
+      "chapter": 9,
+      "slug": "topic-09-vdm-special-case-why-it-works",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "041-ch09-topic-09-vdm-special-case-why-it-works-t1819s.png",
+        "042-ch09-topic-09-vdm-special-case-why-it-works-t1858s.png",
+        "043-ch09-topic-09-vdm-special-case-why-it-works-t1898s.png",
+        "044-ch09-topic-09-vdm-special-case-why-it-works-t1937s.png"
+      ],
+      "labels": [
+        "ch9 30:19",
+        "ch9 30:58",
+        "ch9 31:38",
+        "ch9 32:17"
+      ],
+      "tile_seconds": [
+        1819.3,
+        1858.8,
+        1898.2,
+        1937.7
+      ],
+      "time_start": 1819.3,
+      "time_end": 1937.7,
+      "range_start": 1808.0,
+      "range_end": 1949.0
+    },
+    {
+      "file": "composites/ch10-topic-10-recap-next-classifier-inference-panel1of1.png",
+      "chapter": 10,
+      "slug": "topic-10-recap-next-classifier-inference",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "045-ch10-topic-10-recap-next-classifier-inference-t1962s.png",
+        "046-ch10-topic-10-recap-next-classifier-inference-t2010s.png",
+        "047-ch10-topic-10-recap-next-classifier-inference-t2058s.png",
+        "048-ch10-topic-10-recap-next-classifier-inference-t2106s.png"
+      ],
+      "labels": [
+        "ch10 32:42",
+        "ch10 33:30",
+        "ch10 34:18",
+        "ch10 35:06"
+      ],
+      "tile_seconds": [
+        1962.7,
+        2010.6,
+        2058.4,
+        2106.3
+      ],
+      "time_start": 1962.7,
+      "time_end": 2106.3,
+      "range_start": 1949.0,
+      "range_end": 2120.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

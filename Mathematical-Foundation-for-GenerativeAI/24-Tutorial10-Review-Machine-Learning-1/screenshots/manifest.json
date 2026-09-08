@@ -1,0 +1,731 @@
+{
+  "duration_seconds": 2853.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 8.0,
+      "end": 85.0,
+      "slug": "topic-01-tutorial-mission"
+    },
+    {
+      "index": 2,
+      "start": 95.0,
+      "end": 258.0,
+      "slug": "topic-02-sign-censored-normal"
+    },
+    {
+      "index": 3,
+      "start": 268.0,
+      "end": 528.0,
+      "slug": "topic-03-standardize-likelihood"
+    },
+    {
+      "index": 4,
+      "start": 668.0,
+      "end": 841.0,
+      "slug": "topic-04-bernoulli-mle-p"
+    },
+    {
+      "index": 5,
+      "start": 848.0,
+      "end": 1108.0,
+      "slug": "topic-05-invert-phi-intuition"
+    },
+    {
+      "index": 6,
+      "start": 1190.0,
+      "end": 1370.0,
+      "slug": "topic-06-two-exp-mixture-latent"
+    },
+    {
+      "index": 7,
+      "start": 1378.0,
+      "end": 1715.0,
+      "slug": "topic-07-complete-data-ll"
+    },
+    {
+      "index": 8,
+      "start": 1725.0,
+      "end": 2055.0,
+      "slug": "topic-08-estep-bayes"
+    },
+    {
+      "index": 9,
+      "start": 2065.0,
+      "end": 2352.0,
+      "slug": "topic-09-q-function"
+    },
+    {
+      "index": 10,
+      "start": 2365.0,
+      "end": 2825.0,
+      "slug": "topic-10-mstep-iterate-recap"
+    }
+  ],
+  "raw_count": 40,
+  "composite_count": 10,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-tutorial-mission-t0014s.png",
+      "seconds": 14.2,
+      "chapter": 1,
+      "slug": "topic-01-tutorial-mission",
+      "label": "00:14",
+      "range_start": 8.0,
+      "range_end": 85.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-tutorial-mission-t0035s.png",
+      "seconds": 35.7,
+      "chapter": 1,
+      "slug": "topic-01-tutorial-mission",
+      "label": "00:35",
+      "range_start": 8.0,
+      "range_end": 85.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-tutorial-mission-t0057s.png",
+      "seconds": 57.3,
+      "chapter": 1,
+      "slug": "topic-01-tutorial-mission",
+      "label": "00:57",
+      "range_start": 8.0,
+      "range_end": 85.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-tutorial-mission-t0078s.png",
+      "seconds": 78.8,
+      "chapter": 1,
+      "slug": "topic-01-tutorial-mission",
+      "label": "01:18",
+      "range_start": 8.0,
+      "range_end": 85.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-sign-censored-normal-t0108s.png",
+      "seconds": 108.0,
+      "chapter": 2,
+      "slug": "topic-02-sign-censored-normal",
+      "label": "01:48",
+      "range_start": 95.0,
+      "range_end": 258.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-sign-censored-normal-t0153s.png",
+      "seconds": 153.7,
+      "chapter": 2,
+      "slug": "topic-02-sign-censored-normal",
+      "label": "02:33",
+      "range_start": 95.0,
+      "range_end": 258.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-sign-censored-normal-t0199s.png",
+      "seconds": 199.3,
+      "chapter": 2,
+      "slug": "topic-02-sign-censored-normal",
+      "label": "03:19",
+      "range_start": 95.0,
+      "range_end": 258.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-sign-censored-normal-t0244s.png",
+      "seconds": 245.0,
+      "chapter": 2,
+      "slug": "topic-02-sign-censored-normal",
+      "label": "04:04",
+      "range_start": 95.0,
+      "range_end": 258.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-standardize-likelihood-t0288s.png",
+      "seconds": 288.8,
+      "chapter": 3,
+      "slug": "topic-03-standardize-likelihood",
+      "label": "04:48",
+      "range_start": 268.0,
+      "range_end": 528.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-standardize-likelihood-t0361s.png",
+      "seconds": 361.6,
+      "chapter": 3,
+      "slug": "topic-03-standardize-likelihood",
+      "label": "06:01",
+      "range_start": 268.0,
+      "range_end": 528.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-standardize-likelihood-t0434s.png",
+      "seconds": 434.4,
+      "chapter": 3,
+      "slug": "topic-03-standardize-likelihood",
+      "label": "07:14",
+      "range_start": 268.0,
+      "range_end": 528.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-standardize-likelihood-t0507s.png",
+      "seconds": 507.2,
+      "chapter": 3,
+      "slug": "topic-03-standardize-likelihood",
+      "label": "08:27",
+      "range_start": 268.0,
+      "range_end": 528.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-bernoulli-mle-p-t0681s.png",
+      "seconds": 681.8,
+      "chapter": 4,
+      "slug": "topic-04-bernoulli-mle-p",
+      "label": "11:21",
+      "range_start": 668.0,
+      "range_end": 841.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-bernoulli-mle-p-t0730s.png",
+      "seconds": 730.3,
+      "chapter": 4,
+      "slug": "topic-04-bernoulli-mle-p",
+      "label": "12:10",
+      "range_start": 668.0,
+      "range_end": 841.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-bernoulli-mle-p-t0778s.png",
+      "seconds": 778.7,
+      "chapter": 4,
+      "slug": "topic-04-bernoulli-mle-p",
+      "label": "12:58",
+      "range_start": 668.0,
+      "range_end": 841.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-bernoulli-mle-p-t0827s.png",
+      "seconds": 827.2,
+      "chapter": 4,
+      "slug": "topic-04-bernoulli-mle-p",
+      "label": "13:47",
+      "range_start": 668.0,
+      "range_end": 841.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-invert-phi-intuition-t0868s.png",
+      "seconds": 868.8,
+      "chapter": 5,
+      "slug": "topic-05-invert-phi-intuition",
+      "label": "14:28",
+      "range_start": 848.0,
+      "range_end": 1108.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-invert-phi-intuition-t0941s.png",
+      "seconds": 941.6,
+      "chapter": 5,
+      "slug": "topic-05-invert-phi-intuition",
+      "label": "15:41",
+      "range_start": 848.0,
+      "range_end": 1108.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-invert-phi-intuition-t1014s.png",
+      "seconds": 1014.4,
+      "chapter": 5,
+      "slug": "topic-05-invert-phi-intuition",
+      "label": "16:54",
+      "range_start": 848.0,
+      "range_end": 1108.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-invert-phi-intuition-t1087s.png",
+      "seconds": 1087.2,
+      "chapter": 5,
+      "slug": "topic-05-invert-phi-intuition",
+      "label": "18:07",
+      "range_start": 848.0,
+      "range_end": 1108.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-two-exp-mixture-latent-t1204s.png",
+      "seconds": 1204.4,
+      "chapter": 6,
+      "slug": "topic-06-two-exp-mixture-latent",
+      "label": "20:04",
+      "range_start": 1190.0,
+      "range_end": 1370.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-two-exp-mixture-latent-t1254s.png",
+      "seconds": 1254.8,
+      "chapter": 6,
+      "slug": "topic-06-two-exp-mixture-latent",
+      "label": "20:54",
+      "range_start": 1190.0,
+      "range_end": 1370.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-two-exp-mixture-latent-t1305s.png",
+      "seconds": 1305.2,
+      "chapter": 6,
+      "slug": "topic-06-two-exp-mixture-latent",
+      "label": "21:45",
+      "range_start": 1190.0,
+      "range_end": 1370.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-two-exp-mixture-latent-t1355s.png",
+      "seconds": 1355.6,
+      "chapter": 6,
+      "slug": "topic-06-two-exp-mixture-latent",
+      "label": "22:35",
+      "range_start": 1190.0,
+      "range_end": 1370.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-complete-data-ll-t1404s.png",
+      "seconds": 1405.0,
+      "chapter": 7,
+      "slug": "topic-07-complete-data-ll",
+      "label": "23:24",
+      "range_start": 1378.0,
+      "range_end": 1715.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-complete-data-ll-t1499s.png",
+      "seconds": 1499.3,
+      "chapter": 7,
+      "slug": "topic-07-complete-data-ll",
+      "label": "24:59",
+      "range_start": 1378.0,
+      "range_end": 1715.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-complete-data-ll-t1593s.png",
+      "seconds": 1593.7,
+      "chapter": 7,
+      "slug": "topic-07-complete-data-ll",
+      "label": "26:33",
+      "range_start": 1378.0,
+      "range_end": 1715.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-complete-data-ll-t1688s.png",
+      "seconds": 1688.0,
+      "chapter": 7,
+      "slug": "topic-07-complete-data-ll",
+      "label": "28:08",
+      "range_start": 1378.0,
+      "range_end": 1715.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-estep-bayes-t1751s.png",
+      "seconds": 1751.4,
+      "chapter": 8,
+      "slug": "topic-08-estep-bayes",
+      "label": "29:11",
+      "range_start": 1725.0,
+      "range_end": 2055.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-estep-bayes-t1843s.png",
+      "seconds": 1843.8,
+      "chapter": 8,
+      "slug": "topic-08-estep-bayes",
+      "label": "30:43",
+      "range_start": 1725.0,
+      "range_end": 2055.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-estep-bayes-t1936s.png",
+      "seconds": 1936.2,
+      "chapter": 8,
+      "slug": "topic-08-estep-bayes",
+      "label": "32:16",
+      "range_start": 1725.0,
+      "range_end": 2055.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-estep-bayes-t2028s.png",
+      "seconds": 2028.6,
+      "chapter": 8,
+      "slug": "topic-08-estep-bayes",
+      "label": "33:48",
+      "range_start": 1725.0,
+      "range_end": 2055.0
+    },
+    {
+      "file": "raw/033-ch09-topic-09-q-function-t2087s.png",
+      "seconds": 2088.0,
+      "chapter": 9,
+      "slug": "topic-09-q-function",
+      "label": "34:47",
+      "range_start": 2065.0,
+      "range_end": 2352.0
+    },
+    {
+      "file": "raw/034-ch09-topic-09-q-function-t2168s.png",
+      "seconds": 2168.3,
+      "chapter": 9,
+      "slug": "topic-09-q-function",
+      "label": "36:08",
+      "range_start": 2065.0,
+      "range_end": 2352.0
+    },
+    {
+      "file": "raw/035-ch09-topic-09-q-function-t2248s.png",
+      "seconds": 2248.7,
+      "chapter": 9,
+      "slug": "topic-09-q-function",
+      "label": "37:28",
+      "range_start": 2065.0,
+      "range_end": 2352.0
+    },
+    {
+      "file": "raw/036-ch09-topic-09-q-function-t2329s.png",
+      "seconds": 2329.0,
+      "chapter": 9,
+      "slug": "topic-09-q-function",
+      "label": "38:49",
+      "range_start": 2065.0,
+      "range_end": 2352.0
+    },
+    {
+      "file": "raw/037-ch10-topic-10-mstep-iterate-recap-t2401s.png",
+      "seconds": 2401.8,
+      "chapter": 10,
+      "slug": "topic-10-mstep-iterate-recap",
+      "label": "40:01",
+      "range_start": 2365.0,
+      "range_end": 2825.0
+    },
+    {
+      "file": "raw/038-ch10-topic-10-mstep-iterate-recap-t2530s.png",
+      "seconds": 2530.6,
+      "chapter": 10,
+      "slug": "topic-10-mstep-iterate-recap",
+      "label": "42:10",
+      "range_start": 2365.0,
+      "range_end": 2825.0
+    },
+    {
+      "file": "raw/039-ch10-topic-10-mstep-iterate-recap-t2659s.png",
+      "seconds": 2659.4,
+      "chapter": 10,
+      "slug": "topic-10-mstep-iterate-recap",
+      "label": "44:19",
+      "range_start": 2365.0,
+      "range_end": 2825.0
+    },
+    {
+      "file": "raw/040-ch10-topic-10-mstep-iterate-recap-t2788s.png",
+      "seconds": 2788.2,
+      "chapter": 10,
+      "slug": "topic-10-mstep-iterate-recap",
+      "label": "46:28",
+      "range_start": 2365.0,
+      "range_end": 2825.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-tutorial-mission-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-tutorial-mission",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-tutorial-mission-t0014s.png",
+        "002-ch01-topic-01-tutorial-mission-t0035s.png",
+        "003-ch01-topic-01-tutorial-mission-t0057s.png",
+        "004-ch01-topic-01-tutorial-mission-t0078s.png"
+      ],
+      "labels": [
+        "ch1 00:14",
+        "ch1 00:35",
+        "ch1 00:57",
+        "ch1 01:18"
+      ],
+      "tile_seconds": [
+        14.2,
+        35.7,
+        57.3,
+        78.8
+      ],
+      "time_start": 14.2,
+      "time_end": 78.8,
+      "range_start": 8.0,
+      "range_end": 85.0
+    },
+    {
+      "file": "composites/ch02-topic-02-sign-censored-normal-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-sign-censored-normal",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-sign-censored-normal-t0108s.png",
+        "006-ch02-topic-02-sign-censored-normal-t0153s.png",
+        "007-ch02-topic-02-sign-censored-normal-t0199s.png",
+        "008-ch02-topic-02-sign-censored-normal-t0244s.png"
+      ],
+      "labels": [
+        "ch2 01:48",
+        "ch2 02:33",
+        "ch2 03:19",
+        "ch2 04:04"
+      ],
+      "tile_seconds": [
+        108.0,
+        153.7,
+        199.3,
+        245.0
+      ],
+      "time_start": 108.0,
+      "time_end": 245.0,
+      "range_start": 95.0,
+      "range_end": 258.0
+    },
+    {
+      "file": "composites/ch03-topic-03-standardize-likelihood-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-standardize-likelihood",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-standardize-likelihood-t0288s.png",
+        "010-ch03-topic-03-standardize-likelihood-t0361s.png",
+        "011-ch03-topic-03-standardize-likelihood-t0434s.png",
+        "012-ch03-topic-03-standardize-likelihood-t0507s.png"
+      ],
+      "labels": [
+        "ch3 04:48",
+        "ch3 06:01",
+        "ch3 07:14",
+        "ch3 08:27"
+      ],
+      "tile_seconds": [
+        288.8,
+        361.6,
+        434.4,
+        507.2
+      ],
+      "time_start": 288.8,
+      "time_end": 507.2,
+      "range_start": 268.0,
+      "range_end": 528.0
+    },
+    {
+      "file": "composites/ch04-topic-04-bernoulli-mle-p-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-bernoulli-mle-p",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-bernoulli-mle-p-t0681s.png",
+        "014-ch04-topic-04-bernoulli-mle-p-t0730s.png",
+        "015-ch04-topic-04-bernoulli-mle-p-t0778s.png",
+        "016-ch04-topic-04-bernoulli-mle-p-t0827s.png"
+      ],
+      "labels": [
+        "ch4 11:21",
+        "ch4 12:10",
+        "ch4 12:58",
+        "ch4 13:47"
+      ],
+      "tile_seconds": [
+        681.8,
+        730.3,
+        778.7,
+        827.2
+      ],
+      "time_start": 681.8,
+      "time_end": 827.2,
+      "range_start": 668.0,
+      "range_end": 841.0
+    },
+    {
+      "file": "composites/ch05-topic-05-invert-phi-intuition-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-invert-phi-intuition",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-invert-phi-intuition-t0868s.png",
+        "018-ch05-topic-05-invert-phi-intuition-t0941s.png",
+        "019-ch05-topic-05-invert-phi-intuition-t1014s.png",
+        "020-ch05-topic-05-invert-phi-intuition-t1087s.png"
+      ],
+      "labels": [
+        "ch5 14:28",
+        "ch5 15:41",
+        "ch5 16:54",
+        "ch5 18:07"
+      ],
+      "tile_seconds": [
+        868.8,
+        941.6,
+        1014.4,
+        1087.2
+      ],
+      "time_start": 868.8,
+      "time_end": 1087.2,
+      "range_start": 848.0,
+      "range_end": 1108.0
+    },
+    {
+      "file": "composites/ch06-topic-06-two-exp-mixture-latent-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-two-exp-mixture-latent",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-two-exp-mixture-latent-t1204s.png",
+        "022-ch06-topic-06-two-exp-mixture-latent-t1254s.png",
+        "023-ch06-topic-06-two-exp-mixture-latent-t1305s.png",
+        "024-ch06-topic-06-two-exp-mixture-latent-t1355s.png"
+      ],
+      "labels": [
+        "ch6 20:04",
+        "ch6 20:54",
+        "ch6 21:45",
+        "ch6 22:35"
+      ],
+      "tile_seconds": [
+        1204.4,
+        1254.8,
+        1305.2,
+        1355.6
+      ],
+      "time_start": 1204.4,
+      "time_end": 1355.6,
+      "range_start": 1190.0,
+      "range_end": 1370.0
+    },
+    {
+      "file": "composites/ch07-topic-07-complete-data-ll-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-complete-data-ll",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-complete-data-ll-t1404s.png",
+        "026-ch07-topic-07-complete-data-ll-t1499s.png",
+        "027-ch07-topic-07-complete-data-ll-t1593s.png",
+        "028-ch07-topic-07-complete-data-ll-t1688s.png"
+      ],
+      "labels": [
+        "ch7 23:24",
+        "ch7 24:59",
+        "ch7 26:33",
+        "ch7 28:08"
+      ],
+      "tile_seconds": [
+        1405.0,
+        1499.3,
+        1593.7,
+        1688.0
+      ],
+      "time_start": 1405.0,
+      "time_end": 1688.0,
+      "range_start": 1378.0,
+      "range_end": 1715.0
+    },
+    {
+      "file": "composites/ch08-topic-08-estep-bayes-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-estep-bayes",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-estep-bayes-t1751s.png",
+        "030-ch08-topic-08-estep-bayes-t1843s.png",
+        "031-ch08-topic-08-estep-bayes-t1936s.png",
+        "032-ch08-topic-08-estep-bayes-t2028s.png"
+      ],
+      "labels": [
+        "ch8 29:11",
+        "ch8 30:43",
+        "ch8 32:16",
+        "ch8 33:48"
+      ],
+      "tile_seconds": [
+        1751.4,
+        1843.8,
+        1936.2,
+        2028.6
+      ],
+      "time_start": 1751.4,
+      "time_end": 2028.6,
+      "range_start": 1725.0,
+      "range_end": 2055.0
+    },
+    {
+      "file": "composites/ch09-topic-09-q-function-panel1of1.png",
+      "chapter": 9,
+      "slug": "topic-09-q-function",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch09-topic-09-q-function-t2087s.png",
+        "034-ch09-topic-09-q-function-t2168s.png",
+        "035-ch09-topic-09-q-function-t2248s.png",
+        "036-ch09-topic-09-q-function-t2329s.png"
+      ],
+      "labels": [
+        "ch9 34:47",
+        "ch9 36:08",
+        "ch9 37:28",
+        "ch9 38:49"
+      ],
+      "tile_seconds": [
+        2088.0,
+        2168.3,
+        2248.7,
+        2329.0
+      ],
+      "time_start": 2088.0,
+      "time_end": 2329.0,
+      "range_start": 2065.0,
+      "range_end": 2352.0
+    },
+    {
+      "file": "composites/ch10-topic-10-mstep-iterate-recap-panel1of1.png",
+      "chapter": 10,
+      "slug": "topic-10-mstep-iterate-recap",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "037-ch10-topic-10-mstep-iterate-recap-t2401s.png",
+        "038-ch10-topic-10-mstep-iterate-recap-t2530s.png",
+        "039-ch10-topic-10-mstep-iterate-recap-t2659s.png",
+        "040-ch10-topic-10-mstep-iterate-recap-t2788s.png"
+      ],
+      "labels": [
+        "ch10 40:01",
+        "ch10 42:10",
+        "ch10 44:19",
+        "ch10 46:28"
+      ],
+      "tile_seconds": [
+        2401.8,
+        2530.6,
+        2659.4,
+        2788.2
+      ],
+      "time_start": 2401.8,
+      "time_end": 2788.2,
+      "range_start": 2365.0,
+      "range_end": 2825.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

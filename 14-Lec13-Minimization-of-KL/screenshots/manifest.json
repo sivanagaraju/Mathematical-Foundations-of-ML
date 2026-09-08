@@ -1,0 +1,518 @@
+{
+  "duration_seconds": 1491.0,
+  "range_source": "topic-ranges",
+  "range_count": 7,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 110.0,
+      "end": 185.0,
+      "slug": "topic-01-recipe-data-setup"
+    },
+    {
+      "index": 2,
+      "start": 196.0,
+      "end": 330.0,
+      "slug": "topic-02-kl-objective"
+    },
+    {
+      "index": 3,
+      "start": 330.0,
+      "end": 400.0,
+      "slug": "topic-03-drop-entropy"
+    },
+    {
+      "index": 4,
+      "start": 400.0,
+      "end": 470.0,
+      "slug": "topic-04-expectation-obstacle"
+    },
+    {
+      "index": 5,
+      "start": 490.0,
+      "end": 730.0,
+      "slug": "topic-05-lln-sample-mean"
+    },
+    {
+      "index": 6,
+      "start": 740.0,
+      "end": 1020.0,
+      "slug": "topic-06-min-kl-forward-lotus"
+    },
+    {
+      "index": 7,
+      "start": 1050.0,
+      "end": 1491.0,
+      "slug": "topic-07-mle-equals-min-kl"
+    }
+  ],
+  "raw_count": 28,
+  "composite_count": 7,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-recipe-data-setup-t0116s.png",
+      "seconds": 116.0,
+      "chapter": 1,
+      "slug": "topic-01-recipe-data-setup",
+      "label": "01:56",
+      "range_start": 110.0,
+      "range_end": 185.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-recipe-data-setup-t0137s.png",
+      "seconds": 137.0,
+      "chapter": 1,
+      "slug": "topic-01-recipe-data-setup",
+      "label": "02:17",
+      "range_start": 110.0,
+      "range_end": 185.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-recipe-data-setup-t0158s.png",
+      "seconds": 158.0,
+      "chapter": 1,
+      "slug": "topic-01-recipe-data-setup",
+      "label": "02:38",
+      "range_start": 110.0,
+      "range_end": 185.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-recipe-data-setup-t0179s.png",
+      "seconds": 179.0,
+      "chapter": 1,
+      "slug": "topic-01-recipe-data-setup",
+      "label": "02:59",
+      "range_start": 110.0,
+      "range_end": 185.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-kl-objective-t0206s.png",
+      "seconds": 206.7,
+      "chapter": 2,
+      "slug": "topic-02-kl-objective",
+      "label": "03:26",
+      "range_start": 196.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-kl-objective-t0244s.png",
+      "seconds": 244.2,
+      "chapter": 2,
+      "slug": "topic-02-kl-objective",
+      "label": "04:04",
+      "range_start": 196.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-kl-objective-t0281s.png",
+      "seconds": 281.8,
+      "chapter": 2,
+      "slug": "topic-02-kl-objective",
+      "label": "04:41",
+      "range_start": 196.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-kl-objective-t0319s.png",
+      "seconds": 319.3,
+      "chapter": 2,
+      "slug": "topic-02-kl-objective",
+      "label": "05:19",
+      "range_start": 196.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-drop-entropy-t0335s.png",
+      "seconds": 335.6,
+      "chapter": 3,
+      "slug": "topic-03-drop-entropy",
+      "label": "05:35",
+      "range_start": 330.0,
+      "range_end": 400.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-drop-entropy-t0355s.png",
+      "seconds": 355.2,
+      "chapter": 3,
+      "slug": "topic-03-drop-entropy",
+      "label": "05:55",
+      "range_start": 330.0,
+      "range_end": 400.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-drop-entropy-t0374s.png",
+      "seconds": 374.8,
+      "chapter": 3,
+      "slug": "topic-03-drop-entropy",
+      "label": "06:14",
+      "range_start": 330.0,
+      "range_end": 400.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-drop-entropy-t0394s.png",
+      "seconds": 394.4,
+      "chapter": 3,
+      "slug": "topic-03-drop-entropy",
+      "label": "06:34",
+      "range_start": 330.0,
+      "range_end": 400.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-expectation-obstacle-t0405s.png",
+      "seconds": 405.6,
+      "chapter": 4,
+      "slug": "topic-04-expectation-obstacle",
+      "label": "06:45",
+      "range_start": 400.0,
+      "range_end": 470.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-expectation-obstacle-t0425s.png",
+      "seconds": 425.2,
+      "chapter": 4,
+      "slug": "topic-04-expectation-obstacle",
+      "label": "07:05",
+      "range_start": 400.0,
+      "range_end": 470.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-expectation-obstacle-t0444s.png",
+      "seconds": 444.8,
+      "chapter": 4,
+      "slug": "topic-04-expectation-obstacle",
+      "label": "07:24",
+      "range_start": 400.0,
+      "range_end": 470.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-expectation-obstacle-t0464s.png",
+      "seconds": 464.4,
+      "chapter": 4,
+      "slug": "topic-04-expectation-obstacle",
+      "label": "07:44",
+      "range_start": 400.0,
+      "range_end": 470.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-lln-sample-mean-t0509s.png",
+      "seconds": 509.2,
+      "chapter": 5,
+      "slug": "topic-05-lln-sample-mean",
+      "label": "08:29",
+      "range_start": 490.0,
+      "range_end": 730.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-lln-sample-mean-t0576s.png",
+      "seconds": 576.4,
+      "chapter": 5,
+      "slug": "topic-05-lln-sample-mean",
+      "label": "09:36",
+      "range_start": 490.0,
+      "range_end": 730.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-lln-sample-mean-t0643s.png",
+      "seconds": 643.6,
+      "chapter": 5,
+      "slug": "topic-05-lln-sample-mean",
+      "label": "10:43",
+      "range_start": 490.0,
+      "range_end": 730.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-lln-sample-mean-t0710s.png",
+      "seconds": 710.8,
+      "chapter": 5,
+      "slug": "topic-05-lln-sample-mean",
+      "label": "11:50",
+      "range_start": 490.0,
+      "range_end": 730.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-min-kl-forward-lotus-t0762s.png",
+      "seconds": 762.4,
+      "chapter": 6,
+      "slug": "topic-06-min-kl-forward-lotus",
+      "label": "12:42",
+      "range_start": 740.0,
+      "range_end": 1020.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-min-kl-forward-lotus-t0840s.png",
+      "seconds": 840.8,
+      "chapter": 6,
+      "slug": "topic-06-min-kl-forward-lotus",
+      "label": "14:00",
+      "range_start": 740.0,
+      "range_end": 1020.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-min-kl-forward-lotus-t0919s.png",
+      "seconds": 919.2,
+      "chapter": 6,
+      "slug": "topic-06-min-kl-forward-lotus",
+      "label": "15:19",
+      "range_start": 740.0,
+      "range_end": 1020.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-min-kl-forward-lotus-t0997s.png",
+      "seconds": 997.6,
+      "chapter": 6,
+      "slug": "topic-06-min-kl-forward-lotus",
+      "label": "16:37",
+      "range_start": 740.0,
+      "range_end": 1020.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-mle-equals-min-kl-t1085s.png",
+      "seconds": 1085.3,
+      "chapter": 7,
+      "slug": "topic-07-mle-equals-min-kl",
+      "label": "18:05",
+      "range_start": 1050.0,
+      "range_end": 1491.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-mle-equals-min-kl-t1208s.png",
+      "seconds": 1208.8,
+      "chapter": 7,
+      "slug": "topic-07-mle-equals-min-kl",
+      "label": "20:08",
+      "range_start": 1050.0,
+      "range_end": 1491.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-mle-equals-min-kl-t1332s.png",
+      "seconds": 1332.2,
+      "chapter": 7,
+      "slug": "topic-07-mle-equals-min-kl",
+      "label": "22:12",
+      "range_start": 1050.0,
+      "range_end": 1491.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-mle-equals-min-kl-t1455s.png",
+      "seconds": 1455.7,
+      "chapter": 7,
+      "slug": "topic-07-mle-equals-min-kl",
+      "label": "24:15",
+      "range_start": 1050.0,
+      "range_end": 1491.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-recipe-data-setup-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-recipe-data-setup",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-recipe-data-setup-t0116s.png",
+        "002-ch01-topic-01-recipe-data-setup-t0137s.png",
+        "003-ch01-topic-01-recipe-data-setup-t0158s.png",
+        "004-ch01-topic-01-recipe-data-setup-t0179s.png"
+      ],
+      "labels": [
+        "ch1 01:56",
+        "ch1 02:17",
+        "ch1 02:38",
+        "ch1 02:59"
+      ],
+      "tile_seconds": [
+        116.0,
+        137.0,
+        158.0,
+        179.0
+      ],
+      "time_start": 116.0,
+      "time_end": 179.0,
+      "range_start": 110.0,
+      "range_end": 185.0
+    },
+    {
+      "file": "composites/ch02-topic-02-kl-objective-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-kl-objective",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-kl-objective-t0206s.png",
+        "006-ch02-topic-02-kl-objective-t0244s.png",
+        "007-ch02-topic-02-kl-objective-t0281s.png",
+        "008-ch02-topic-02-kl-objective-t0319s.png"
+      ],
+      "labels": [
+        "ch2 03:26",
+        "ch2 04:04",
+        "ch2 04:41",
+        "ch2 05:19"
+      ],
+      "tile_seconds": [
+        206.7,
+        244.2,
+        281.8,
+        319.3
+      ],
+      "time_start": 206.7,
+      "time_end": 319.3,
+      "range_start": 196.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "composites/ch03-topic-03-drop-entropy-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-drop-entropy",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-drop-entropy-t0335s.png",
+        "010-ch03-topic-03-drop-entropy-t0355s.png",
+        "011-ch03-topic-03-drop-entropy-t0374s.png",
+        "012-ch03-topic-03-drop-entropy-t0394s.png"
+      ],
+      "labels": [
+        "ch3 05:35",
+        "ch3 05:55",
+        "ch3 06:14",
+        "ch3 06:34"
+      ],
+      "tile_seconds": [
+        335.6,
+        355.2,
+        374.8,
+        394.4
+      ],
+      "time_start": 335.6,
+      "time_end": 394.4,
+      "range_start": 330.0,
+      "range_end": 400.0
+    },
+    {
+      "file": "composites/ch04-topic-04-expectation-obstacle-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-expectation-obstacle",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-expectation-obstacle-t0405s.png",
+        "014-ch04-topic-04-expectation-obstacle-t0425s.png",
+        "015-ch04-topic-04-expectation-obstacle-t0444s.png",
+        "016-ch04-topic-04-expectation-obstacle-t0464s.png"
+      ],
+      "labels": [
+        "ch4 06:45",
+        "ch4 07:05",
+        "ch4 07:24",
+        "ch4 07:44"
+      ],
+      "tile_seconds": [
+        405.6,
+        425.2,
+        444.8,
+        464.4
+      ],
+      "time_start": 405.6,
+      "time_end": 464.4,
+      "range_start": 400.0,
+      "range_end": 470.0
+    },
+    {
+      "file": "composites/ch05-topic-05-lln-sample-mean-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-lln-sample-mean",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-lln-sample-mean-t0509s.png",
+        "018-ch05-topic-05-lln-sample-mean-t0576s.png",
+        "019-ch05-topic-05-lln-sample-mean-t0643s.png",
+        "020-ch05-topic-05-lln-sample-mean-t0710s.png"
+      ],
+      "labels": [
+        "ch5 08:29",
+        "ch5 09:36",
+        "ch5 10:43",
+        "ch5 11:50"
+      ],
+      "tile_seconds": [
+        509.2,
+        576.4,
+        643.6,
+        710.8
+      ],
+      "time_start": 509.2,
+      "time_end": 710.8,
+      "range_start": 490.0,
+      "range_end": 730.0
+    },
+    {
+      "file": "composites/ch06-topic-06-min-kl-forward-lotus-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-min-kl-forward-lotus",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-min-kl-forward-lotus-t0762s.png",
+        "022-ch06-topic-06-min-kl-forward-lotus-t0840s.png",
+        "023-ch06-topic-06-min-kl-forward-lotus-t0919s.png",
+        "024-ch06-topic-06-min-kl-forward-lotus-t0997s.png"
+      ],
+      "labels": [
+        "ch6 12:42",
+        "ch6 14:00",
+        "ch6 15:19",
+        "ch6 16:37"
+      ],
+      "tile_seconds": [
+        762.4,
+        840.8,
+        919.2,
+        997.6
+      ],
+      "time_start": 762.4,
+      "time_end": 997.6,
+      "range_start": 740.0,
+      "range_end": 1020.0
+    },
+    {
+      "file": "composites/ch07-topic-07-mle-equals-min-kl-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-mle-equals-min-kl",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-mle-equals-min-kl-t1085s.png",
+        "026-ch07-topic-07-mle-equals-min-kl-t1208s.png",
+        "027-ch07-topic-07-mle-equals-min-kl-t1332s.png",
+        "028-ch07-topic-07-mle-equals-min-kl-t1455s.png"
+      ],
+      "labels": [
+        "ch7 18:05",
+        "ch7 20:08",
+        "ch7 22:12",
+        "ch7 24:15"
+      ],
+      "tile_seconds": [
+        1085.3,
+        1208.8,
+        1332.2,
+        1455.7
+      ],
+      "time_start": 1085.3,
+      "time_end": 1455.7,
+      "range_start": 1050.0,
+      "range_end": 1491.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

@@ -1,0 +1,583 @@
+{
+  "duration_seconds": 1841.0,
+  "range_source": "topic-ranges",
+  "range_count": 7,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 120.0,
+      "slug": "topic-01-identical"
+    },
+    {
+      "index": 2,
+      "start": 120.0,
+      "end": 262.0,
+      "slug": "topic-02-noniid-events"
+    },
+    {
+      "index": 3,
+      "start": 262.0,
+      "end": 456.0,
+      "slug": "topic-03-indep-axes"
+    },
+    {
+      "index": 4,
+      "start": 456.0,
+      "end": 661.0,
+      "slug": "topic-04-two-views-sample"
+    },
+    {
+      "index": 5,
+      "start": 661.0,
+      "end": 929.0,
+      "slug": "topic-05-design-test"
+    },
+    {
+      "index": 6,
+      "start": 929.0,
+      "end": 1263.0,
+      "slug": "topic-06-ml-definition"
+    },
+    {
+      "index": 7,
+      "start": 1263.0,
+      "end": 1841.0,
+      "slug": "topic-07-semantics-formal"
+    }
+  ],
+  "raw_count": 32,
+  "composite_count": 8,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-identical-t0009s.png",
+      "seconds": 9.6,
+      "chapter": 1,
+      "slug": "topic-01-identical",
+      "label": "00:09",
+      "range_start": 0.0,
+      "range_end": 120.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-identical-t0043s.png",
+      "seconds": 43.2,
+      "chapter": 1,
+      "slug": "topic-01-identical",
+      "label": "00:43",
+      "range_start": 0.0,
+      "range_end": 120.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-identical-t0076s.png",
+      "seconds": 76.8,
+      "chapter": 1,
+      "slug": "topic-01-identical",
+      "label": "01:16",
+      "range_start": 0.0,
+      "range_end": 120.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-identical-t0110s.png",
+      "seconds": 110.4,
+      "chapter": 1,
+      "slug": "topic-01-identical",
+      "label": "01:50",
+      "range_start": 0.0,
+      "range_end": 120.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-noniid-events-t0131s.png",
+      "seconds": 131.4,
+      "chapter": 2,
+      "slug": "topic-02-noniid-events",
+      "label": "02:11",
+      "range_start": 120.0,
+      "range_end": 262.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-noniid-events-t0171s.png",
+      "seconds": 171.1,
+      "chapter": 2,
+      "slug": "topic-02-noniid-events",
+      "label": "02:51",
+      "range_start": 120.0,
+      "range_end": 262.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-noniid-events-t0210s.png",
+      "seconds": 210.9,
+      "chapter": 2,
+      "slug": "topic-02-noniid-events",
+      "label": "03:30",
+      "range_start": 120.0,
+      "range_end": 262.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-noniid-events-t0250s.png",
+      "seconds": 250.6,
+      "chapter": 2,
+      "slug": "topic-02-noniid-events",
+      "label": "04:10",
+      "range_start": 120.0,
+      "range_end": 262.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-indep-axes-t0277s.png",
+      "seconds": 277.5,
+      "chapter": 3,
+      "slug": "topic-03-indep-axes",
+      "label": "04:37",
+      "range_start": 262.0,
+      "range_end": 456.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-indep-axes-t0331s.png",
+      "seconds": 331.8,
+      "chapter": 3,
+      "slug": "topic-03-indep-axes",
+      "label": "05:31",
+      "range_start": 262.0,
+      "range_end": 456.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-indep-axes-t0386s.png",
+      "seconds": 386.2,
+      "chapter": 3,
+      "slug": "topic-03-indep-axes",
+      "label": "06:26",
+      "range_start": 262.0,
+      "range_end": 456.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-indep-axes-t0440s.png",
+      "seconds": 440.5,
+      "chapter": 3,
+      "slug": "topic-03-indep-axes",
+      "label": "07:20",
+      "range_start": 262.0,
+      "range_end": 456.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-two-views-sample-t0472s.png",
+      "seconds": 472.4,
+      "chapter": 4,
+      "slug": "topic-04-two-views-sample",
+      "label": "07:52",
+      "range_start": 456.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-two-views-sample-t0529s.png",
+      "seconds": 529.8,
+      "chapter": 4,
+      "slug": "topic-04-two-views-sample",
+      "label": "08:49",
+      "range_start": 456.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-two-views-sample-t0587s.png",
+      "seconds": 587.2,
+      "chapter": 4,
+      "slug": "topic-04-two-views-sample",
+      "label": "09:47",
+      "range_start": 456.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-two-views-sample-t0644s.png",
+      "seconds": 644.6,
+      "chapter": 4,
+      "slug": "topic-04-two-views-sample",
+      "label": "10:44",
+      "range_start": 456.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-design-test-t0682s.png",
+      "seconds": 682.4,
+      "chapter": 5,
+      "slug": "topic-05-design-test",
+      "label": "11:22",
+      "range_start": 661.0,
+      "range_end": 929.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-design-test-t0757s.png",
+      "seconds": 757.5,
+      "chapter": 5,
+      "slug": "topic-05-design-test",
+      "label": "12:37",
+      "range_start": 661.0,
+      "range_end": 929.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-design-test-t0832s.png",
+      "seconds": 832.5,
+      "chapter": 5,
+      "slug": "topic-05-design-test",
+      "label": "13:52",
+      "range_start": 661.0,
+      "range_end": 929.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-design-test-t0907s.png",
+      "seconds": 907.6,
+      "chapter": 5,
+      "slug": "topic-05-design-test",
+      "label": "15:07",
+      "range_start": 661.0,
+      "range_end": 929.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-ml-definition-t0955s.png",
+      "seconds": 955.7,
+      "chapter": 6,
+      "slug": "topic-06-ml-definition",
+      "label": "15:55",
+      "range_start": 929.0,
+      "range_end": 1263.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-ml-definition-t1049s.png",
+      "seconds": 1049.2,
+      "chapter": 6,
+      "slug": "topic-06-ml-definition",
+      "label": "17:29",
+      "range_start": 929.0,
+      "range_end": 1263.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-ml-definition-t1142s.png",
+      "seconds": 1142.8,
+      "chapter": 6,
+      "slug": "topic-06-ml-definition",
+      "label": "19:02",
+      "range_start": 929.0,
+      "range_end": 1263.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-ml-definition-t1236s.png",
+      "seconds": 1236.3,
+      "chapter": 6,
+      "slug": "topic-06-ml-definition",
+      "label": "20:36",
+      "range_start": 929.0,
+      "range_end": 1263.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-semantics-formal-t1309s.png",
+      "seconds": 1309.2,
+      "chapter": 7,
+      "slug": "topic-07-semantics-formal",
+      "label": "21:49",
+      "range_start": 1263.0,
+      "range_end": 1841.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-semantics-formal-t1378s.png",
+      "seconds": 1378.6,
+      "chapter": 7,
+      "slug": "topic-07-semantics-formal",
+      "label": "22:58",
+      "range_start": 1263.0,
+      "range_end": 1841.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-semantics-formal-t1447s.png",
+      "seconds": 1448.0,
+      "chapter": 7,
+      "slug": "topic-07-semantics-formal",
+      "label": "24:07",
+      "range_start": 1263.0,
+      "range_end": 1841.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-semantics-formal-t1517s.png",
+      "seconds": 1517.3,
+      "chapter": 7,
+      "slug": "topic-07-semantics-formal",
+      "label": "25:17",
+      "range_start": 1263.0,
+      "range_end": 1841.0
+    },
+    {
+      "file": "raw/029-ch07-topic-07-semantics-formal-t1586s.png",
+      "seconds": 1586.7,
+      "chapter": 7,
+      "slug": "topic-07-semantics-formal",
+      "label": "26:26",
+      "range_start": 1263.0,
+      "range_end": 1841.0
+    },
+    {
+      "file": "raw/030-ch07-topic-07-semantics-formal-t1656s.png",
+      "seconds": 1656.0,
+      "chapter": 7,
+      "slug": "topic-07-semantics-formal",
+      "label": "27:36",
+      "range_start": 1263.0,
+      "range_end": 1841.0
+    },
+    {
+      "file": "raw/031-ch07-topic-07-semantics-formal-t1725s.png",
+      "seconds": 1725.4,
+      "chapter": 7,
+      "slug": "topic-07-semantics-formal",
+      "label": "28:45",
+      "range_start": 1263.0,
+      "range_end": 1841.0
+    },
+    {
+      "file": "raw/032-ch07-topic-07-semantics-formal-t1794s.png",
+      "seconds": 1794.8,
+      "chapter": 7,
+      "slug": "topic-07-semantics-formal",
+      "label": "29:54",
+      "range_start": 1263.0,
+      "range_end": 1841.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-identical-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-identical",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-identical-t0009s.png",
+        "002-ch01-topic-01-identical-t0043s.png",
+        "003-ch01-topic-01-identical-t0076s.png",
+        "004-ch01-topic-01-identical-t0110s.png"
+      ],
+      "labels": [
+        "ch1 00:09",
+        "ch1 00:43",
+        "ch1 01:16",
+        "ch1 01:50"
+      ],
+      "tile_seconds": [
+        9.6,
+        43.2,
+        76.8,
+        110.4
+      ],
+      "time_start": 9.6,
+      "time_end": 110.4,
+      "range_start": 0.0,
+      "range_end": 120.0
+    },
+    {
+      "file": "composites/ch02-topic-02-noniid-events-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-noniid-events",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-noniid-events-t0131s.png",
+        "006-ch02-topic-02-noniid-events-t0171s.png",
+        "007-ch02-topic-02-noniid-events-t0210s.png",
+        "008-ch02-topic-02-noniid-events-t0250s.png"
+      ],
+      "labels": [
+        "ch2 02:11",
+        "ch2 02:51",
+        "ch2 03:30",
+        "ch2 04:10"
+      ],
+      "tile_seconds": [
+        131.4,
+        171.1,
+        210.9,
+        250.6
+      ],
+      "time_start": 131.4,
+      "time_end": 250.6,
+      "range_start": 120.0,
+      "range_end": 262.0
+    },
+    {
+      "file": "composites/ch03-topic-03-indep-axes-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-indep-axes",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-indep-axes-t0277s.png",
+        "010-ch03-topic-03-indep-axes-t0331s.png",
+        "011-ch03-topic-03-indep-axes-t0386s.png",
+        "012-ch03-topic-03-indep-axes-t0440s.png"
+      ],
+      "labels": [
+        "ch3 04:37",
+        "ch3 05:31",
+        "ch3 06:26",
+        "ch3 07:20"
+      ],
+      "tile_seconds": [
+        277.5,
+        331.8,
+        386.2,
+        440.5
+      ],
+      "time_start": 277.5,
+      "time_end": 440.5,
+      "range_start": 262.0,
+      "range_end": 456.0
+    },
+    {
+      "file": "composites/ch04-topic-04-two-views-sample-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-two-views-sample",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-two-views-sample-t0472s.png",
+        "014-ch04-topic-04-two-views-sample-t0529s.png",
+        "015-ch04-topic-04-two-views-sample-t0587s.png",
+        "016-ch04-topic-04-two-views-sample-t0644s.png"
+      ],
+      "labels": [
+        "ch4 07:52",
+        "ch4 08:49",
+        "ch4 09:47",
+        "ch4 10:44"
+      ],
+      "tile_seconds": [
+        472.4,
+        529.8,
+        587.2,
+        644.6
+      ],
+      "time_start": 472.4,
+      "time_end": 644.6,
+      "range_start": 456.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "composites/ch05-topic-05-design-test-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-design-test",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-design-test-t0682s.png",
+        "018-ch05-topic-05-design-test-t0757s.png",
+        "019-ch05-topic-05-design-test-t0832s.png",
+        "020-ch05-topic-05-design-test-t0907s.png"
+      ],
+      "labels": [
+        "ch5 11:22",
+        "ch5 12:37",
+        "ch5 13:52",
+        "ch5 15:07"
+      ],
+      "tile_seconds": [
+        682.4,
+        757.5,
+        832.5,
+        907.6
+      ],
+      "time_start": 682.4,
+      "time_end": 907.6,
+      "range_start": 661.0,
+      "range_end": 929.0
+    },
+    {
+      "file": "composites/ch06-topic-06-ml-definition-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-ml-definition",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-ml-definition-t0955s.png",
+        "022-ch06-topic-06-ml-definition-t1049s.png",
+        "023-ch06-topic-06-ml-definition-t1142s.png",
+        "024-ch06-topic-06-ml-definition-t1236s.png"
+      ],
+      "labels": [
+        "ch6 15:55",
+        "ch6 17:29",
+        "ch6 19:02",
+        "ch6 20:36"
+      ],
+      "tile_seconds": [
+        955.7,
+        1049.2,
+        1142.8,
+        1236.3
+      ],
+      "time_start": 955.7,
+      "time_end": 1236.3,
+      "range_start": 929.0,
+      "range_end": 1263.0
+    },
+    {
+      "file": "composites/ch07-topic-07-semantics-formal-panel1of2.png",
+      "chapter": 7,
+      "slug": "topic-07-semantics-formal",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "025-ch07-topic-07-semantics-formal-t1309s.png",
+        "026-ch07-topic-07-semantics-formal-t1378s.png",
+        "027-ch07-topic-07-semantics-formal-t1447s.png",
+        "028-ch07-topic-07-semantics-formal-t1517s.png"
+      ],
+      "labels": [
+        "ch7 21:49",
+        "ch7 22:58",
+        "ch7 24:07",
+        "ch7 25:17"
+      ],
+      "tile_seconds": [
+        1309.2,
+        1378.6,
+        1448.0,
+        1517.3
+      ],
+      "time_start": 1309.2,
+      "time_end": 1517.3,
+      "range_start": 1263.0,
+      "range_end": 1841.0
+    },
+    {
+      "file": "composites/ch07-topic-07-semantics-formal-panel2of2.png",
+      "chapter": 7,
+      "slug": "topic-07-semantics-formal",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "029-ch07-topic-07-semantics-formal-t1586s.png",
+        "030-ch07-topic-07-semantics-formal-t1656s.png",
+        "031-ch07-topic-07-semantics-formal-t1725s.png",
+        "032-ch07-topic-07-semantics-formal-t1794s.png"
+      ],
+      "labels": [
+        "ch7 26:26",
+        "ch7 27:36",
+        "ch7 28:45",
+        "ch7 29:54"
+      ],
+      "tile_seconds": [
+        1586.7,
+        1656.0,
+        1725.4,
+        1794.8
+      ],
+      "time_start": 1586.7,
+      "time_end": 1794.8,
+      "range_start": 1263.0,
+      "range_end": 1841.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

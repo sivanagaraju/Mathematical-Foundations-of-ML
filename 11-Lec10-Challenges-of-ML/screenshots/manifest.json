@@ -1,0 +1,518 @@
+{
+  "duration_seconds": 2131.0,
+  "range_source": "topic-ranges",
+  "range_count": 7,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 11.0,
+      "end": 266.0,
+      "slug": "topic-01-central-problem"
+    },
+    {
+      "index": 2,
+      "start": 266.0,
+      "end": 472.0,
+      "slug": "topic-02-setup-fa-path"
+    },
+    {
+      "index": 3,
+      "start": 472.0,
+      "end": 840.0,
+      "slug": "topic-03-model-p-theta"
+    },
+    {
+      "index": 4,
+      "start": 840.0,
+      "end": 1248.0,
+      "slug": "topic-04-distance-metric"
+    },
+    {
+      "index": 5,
+      "start": 1248.0,
+      "end": 1538.0,
+      "slug": "topic-05-training-argmin"
+    },
+    {
+      "index": 6,
+      "start": 1538.0,
+      "end": 1874.0,
+      "slug": "topic-06-scale-agi-instances"
+    },
+    {
+      "index": 7,
+      "start": 1874.0,
+      "end": 2131.0,
+      "slug": "topic-07-erm-next-recap"
+    }
+  ],
+  "raw_count": 28,
+  "composite_count": 7,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-central-problem-t0031s.png",
+      "seconds": 31.4,
+      "chapter": 1,
+      "slug": "topic-01-central-problem",
+      "label": "00:31",
+      "range_start": 11.0,
+      "range_end": 266.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-central-problem-t0102s.png",
+      "seconds": 102.8,
+      "chapter": 1,
+      "slug": "topic-01-central-problem",
+      "label": "01:42",
+      "range_start": 11.0,
+      "range_end": 266.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-central-problem-t0174s.png",
+      "seconds": 174.2,
+      "chapter": 1,
+      "slug": "topic-01-central-problem",
+      "label": "02:54",
+      "range_start": 11.0,
+      "range_end": 266.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-central-problem-t0245s.png",
+      "seconds": 245.6,
+      "chapter": 1,
+      "slug": "topic-01-central-problem",
+      "label": "04:05",
+      "range_start": 11.0,
+      "range_end": 266.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-setup-fa-path-t0282s.png",
+      "seconds": 282.5,
+      "chapter": 2,
+      "slug": "topic-02-setup-fa-path",
+      "label": "04:42",
+      "range_start": 266.0,
+      "range_end": 472.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-setup-fa-path-t0340s.png",
+      "seconds": 340.2,
+      "chapter": 2,
+      "slug": "topic-02-setup-fa-path",
+      "label": "05:40",
+      "range_start": 266.0,
+      "range_end": 472.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-setup-fa-path-t0397s.png",
+      "seconds": 397.8,
+      "chapter": 2,
+      "slug": "topic-02-setup-fa-path",
+      "label": "06:37",
+      "range_start": 266.0,
+      "range_end": 472.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-setup-fa-path-t0455s.png",
+      "seconds": 455.5,
+      "chapter": 2,
+      "slug": "topic-02-setup-fa-path",
+      "label": "07:35",
+      "range_start": 266.0,
+      "range_end": 472.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-model-p-theta-t0501s.png",
+      "seconds": 501.4,
+      "chapter": 3,
+      "slug": "topic-03-model-p-theta",
+      "label": "08:21",
+      "range_start": 472.0,
+      "range_end": 840.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-model-p-theta-t0604s.png",
+      "seconds": 604.5,
+      "chapter": 3,
+      "slug": "topic-03-model-p-theta",
+      "label": "10:04",
+      "range_start": 472.0,
+      "range_end": 840.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-model-p-theta-t0707s.png",
+      "seconds": 707.5,
+      "chapter": 3,
+      "slug": "topic-03-model-p-theta",
+      "label": "11:47",
+      "range_start": 472.0,
+      "range_end": 840.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-model-p-theta-t0810s.png",
+      "seconds": 810.6,
+      "chapter": 3,
+      "slug": "topic-03-model-p-theta",
+      "label": "13:30",
+      "range_start": 472.0,
+      "range_end": 840.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-distance-metric-t0872s.png",
+      "seconds": 872.6,
+      "chapter": 4,
+      "slug": "topic-04-distance-metric",
+      "label": "14:32",
+      "range_start": 840.0,
+      "range_end": 1248.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-distance-metric-t0986s.png",
+      "seconds": 986.9,
+      "chapter": 4,
+      "slug": "topic-04-distance-metric",
+      "label": "16:26",
+      "range_start": 840.0,
+      "range_end": 1248.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-distance-metric-t1101s.png",
+      "seconds": 1101.1,
+      "chapter": 4,
+      "slug": "topic-04-distance-metric",
+      "label": "18:21",
+      "range_start": 840.0,
+      "range_end": 1248.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-distance-metric-t1215s.png",
+      "seconds": 1215.4,
+      "chapter": 4,
+      "slug": "topic-04-distance-metric",
+      "label": "20:15",
+      "range_start": 840.0,
+      "range_end": 1248.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-training-argmin-t1271s.png",
+      "seconds": 1271.2,
+      "chapter": 5,
+      "slug": "topic-05-training-argmin",
+      "label": "21:11",
+      "range_start": 1248.0,
+      "range_end": 1538.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-training-argmin-t1352s.png",
+      "seconds": 1352.4,
+      "chapter": 5,
+      "slug": "topic-05-training-argmin",
+      "label": "22:32",
+      "range_start": 1248.0,
+      "range_end": 1538.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-training-argmin-t1433s.png",
+      "seconds": 1433.6,
+      "chapter": 5,
+      "slug": "topic-05-training-argmin",
+      "label": "23:53",
+      "range_start": 1248.0,
+      "range_end": 1538.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-training-argmin-t1514s.png",
+      "seconds": 1514.8,
+      "chapter": 5,
+      "slug": "topic-05-training-argmin",
+      "label": "25:14",
+      "range_start": 1248.0,
+      "range_end": 1538.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-scale-agi-instances-t1564s.png",
+      "seconds": 1564.9,
+      "chapter": 6,
+      "slug": "topic-06-scale-agi-instances",
+      "label": "26:04",
+      "range_start": 1538.0,
+      "range_end": 1874.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-scale-agi-instances-t1658s.png",
+      "seconds": 1659.0,
+      "chapter": 6,
+      "slug": "topic-06-scale-agi-instances",
+      "label": "27:38",
+      "range_start": 1538.0,
+      "range_end": 1874.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-scale-agi-instances-t1753s.png",
+      "seconds": 1753.0,
+      "chapter": 6,
+      "slug": "topic-06-scale-agi-instances",
+      "label": "29:13",
+      "range_start": 1538.0,
+      "range_end": 1874.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-scale-agi-instances-t1847s.png",
+      "seconds": 1847.1,
+      "chapter": 6,
+      "slug": "topic-06-scale-agi-instances",
+      "label": "30:47",
+      "range_start": 1538.0,
+      "range_end": 1874.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-erm-next-recap-t1894s.png",
+      "seconds": 1894.6,
+      "chapter": 7,
+      "slug": "topic-07-erm-next-recap",
+      "label": "31:34",
+      "range_start": 1874.0,
+      "range_end": 2131.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-erm-next-recap-t1966s.png",
+      "seconds": 1966.5,
+      "chapter": 7,
+      "slug": "topic-07-erm-next-recap",
+      "label": "32:46",
+      "range_start": 1874.0,
+      "range_end": 2131.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-erm-next-recap-t2038s.png",
+      "seconds": 2038.5,
+      "chapter": 7,
+      "slug": "topic-07-erm-next-recap",
+      "label": "33:58",
+      "range_start": 1874.0,
+      "range_end": 2131.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-erm-next-recap-t2110s.png",
+      "seconds": 2110.4,
+      "chapter": 7,
+      "slug": "topic-07-erm-next-recap",
+      "label": "35:10",
+      "range_start": 1874.0,
+      "range_end": 2131.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-central-problem-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-central-problem",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-central-problem-t0031s.png",
+        "002-ch01-topic-01-central-problem-t0102s.png",
+        "003-ch01-topic-01-central-problem-t0174s.png",
+        "004-ch01-topic-01-central-problem-t0245s.png"
+      ],
+      "labels": [
+        "ch1 00:31",
+        "ch1 01:42",
+        "ch1 02:54",
+        "ch1 04:05"
+      ],
+      "tile_seconds": [
+        31.4,
+        102.8,
+        174.2,
+        245.6
+      ],
+      "time_start": 31.4,
+      "time_end": 245.6,
+      "range_start": 11.0,
+      "range_end": 266.0
+    },
+    {
+      "file": "composites/ch02-topic-02-setup-fa-path-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-setup-fa-path",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-setup-fa-path-t0282s.png",
+        "006-ch02-topic-02-setup-fa-path-t0340s.png",
+        "007-ch02-topic-02-setup-fa-path-t0397s.png",
+        "008-ch02-topic-02-setup-fa-path-t0455s.png"
+      ],
+      "labels": [
+        "ch2 04:42",
+        "ch2 05:40",
+        "ch2 06:37",
+        "ch2 07:35"
+      ],
+      "tile_seconds": [
+        282.5,
+        340.2,
+        397.8,
+        455.5
+      ],
+      "time_start": 282.5,
+      "time_end": 455.5,
+      "range_start": 266.0,
+      "range_end": 472.0
+    },
+    {
+      "file": "composites/ch03-topic-03-model-p-theta-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-model-p-theta",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-model-p-theta-t0501s.png",
+        "010-ch03-topic-03-model-p-theta-t0604s.png",
+        "011-ch03-topic-03-model-p-theta-t0707s.png",
+        "012-ch03-topic-03-model-p-theta-t0810s.png"
+      ],
+      "labels": [
+        "ch3 08:21",
+        "ch3 10:04",
+        "ch3 11:47",
+        "ch3 13:30"
+      ],
+      "tile_seconds": [
+        501.4,
+        604.5,
+        707.5,
+        810.6
+      ],
+      "time_start": 501.4,
+      "time_end": 810.6,
+      "range_start": 472.0,
+      "range_end": 840.0
+    },
+    {
+      "file": "composites/ch04-topic-04-distance-metric-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-distance-metric",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-distance-metric-t0872s.png",
+        "014-ch04-topic-04-distance-metric-t0986s.png",
+        "015-ch04-topic-04-distance-metric-t1101s.png",
+        "016-ch04-topic-04-distance-metric-t1215s.png"
+      ],
+      "labels": [
+        "ch4 14:32",
+        "ch4 16:26",
+        "ch4 18:21",
+        "ch4 20:15"
+      ],
+      "tile_seconds": [
+        872.6,
+        986.9,
+        1101.1,
+        1215.4
+      ],
+      "time_start": 872.6,
+      "time_end": 1215.4,
+      "range_start": 840.0,
+      "range_end": 1248.0
+    },
+    {
+      "file": "composites/ch05-topic-05-training-argmin-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-training-argmin",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-training-argmin-t1271s.png",
+        "018-ch05-topic-05-training-argmin-t1352s.png",
+        "019-ch05-topic-05-training-argmin-t1433s.png",
+        "020-ch05-topic-05-training-argmin-t1514s.png"
+      ],
+      "labels": [
+        "ch5 21:11",
+        "ch5 22:32",
+        "ch5 23:53",
+        "ch5 25:14"
+      ],
+      "tile_seconds": [
+        1271.2,
+        1352.4,
+        1433.6,
+        1514.8
+      ],
+      "time_start": 1271.2,
+      "time_end": 1514.8,
+      "range_start": 1248.0,
+      "range_end": 1538.0
+    },
+    {
+      "file": "composites/ch06-topic-06-scale-agi-instances-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-scale-agi-instances",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-scale-agi-instances-t1564s.png",
+        "022-ch06-topic-06-scale-agi-instances-t1658s.png",
+        "023-ch06-topic-06-scale-agi-instances-t1753s.png",
+        "024-ch06-topic-06-scale-agi-instances-t1847s.png"
+      ],
+      "labels": [
+        "ch6 26:04",
+        "ch6 27:38",
+        "ch6 29:13",
+        "ch6 30:47"
+      ],
+      "tile_seconds": [
+        1564.9,
+        1659.0,
+        1753.0,
+        1847.1
+      ],
+      "time_start": 1564.9,
+      "time_end": 1847.1,
+      "range_start": 1538.0,
+      "range_end": 1874.0
+    },
+    {
+      "file": "composites/ch07-topic-07-erm-next-recap-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-erm-next-recap",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-erm-next-recap-t1894s.png",
+        "026-ch07-topic-07-erm-next-recap-t1966s.png",
+        "027-ch07-topic-07-erm-next-recap-t2038s.png",
+        "028-ch07-topic-07-erm-next-recap-t2110s.png"
+      ],
+      "labels": [
+        "ch7 31:34",
+        "ch7 32:46",
+        "ch7 33:58",
+        "ch7 35:10"
+      ],
+      "tile_seconds": [
+        1894.6,
+        1966.5,
+        2038.5,
+        2110.4
+      ],
+      "time_start": 1894.6,
+      "time_end": 2110.4,
+      "range_start": 1874.0,
+      "range_end": 2131.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

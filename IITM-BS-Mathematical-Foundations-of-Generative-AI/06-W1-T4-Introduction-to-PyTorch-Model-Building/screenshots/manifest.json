@@ -1,0 +1,731 @@
+{
+  "duration_seconds": 2646.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 16.0,
+      "end": 169.0,
+      "slug": "topic-01-transforms-then-build-mlp-cnn-vit"
+    },
+    {
+      "index": 2,
+      "start": 169.0,
+      "end": 346.0,
+      "slug": "topic-02-imports-colab-gpu-cuda"
+    },
+    {
+      "index": 3,
+      "start": 346.0,
+      "end": 551.0,
+      "slug": "topic-03-nn-module-flatten-784-10"
+    },
+    {
+      "index": 4,
+      "start": 551.0,
+      "end": 787.0,
+      "slug": "topic-04-sequential-linear-wx-b"
+    },
+    {
+      "index": 5,
+      "start": 787.0,
+      "end": 1056.0,
+      "slug": "topic-05-relu-stack-logits-softmax"
+    },
+    {
+      "index": 6,
+      "start": 1056.0,
+      "end": 1198.0,
+      "slug": "topic-06-forward-to-device-dummy-predict"
+    },
+    {
+      "index": 7,
+      "start": 1198.0,
+      "end": 1434.0,
+      "slug": "topic-07-sgd-adam-ce-hyperparams"
+    },
+    {
+      "index": 8,
+      "start": 1434.0,
+      "end": 1718.0,
+      "slug": "topic-08-train-loop-four-steps"
+    },
+    {
+      "index": 9,
+      "start": 1718.0,
+      "end": 2191.0,
+      "slug": "topic-09-test-loop-accuracy-curves"
+    },
+    {
+      "index": 10,
+      "start": 2191.0,
+      "end": 2646.0,
+      "slug": "topic-10-save-load-cnn-recap-gans"
+    }
+  ],
+  "raw_count": 40,
+  "composite_count": 10,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-transforms-then-build-mlp-cnn-vit-t0028s.png",
+      "seconds": 28.2,
+      "chapter": 1,
+      "slug": "topic-01-transforms-then-build-mlp-cnn-vit",
+      "label": "00:28",
+      "range_start": 16.0,
+      "range_end": 169.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-transforms-then-build-mlp-cnn-vit-t0071s.png",
+      "seconds": 71.1,
+      "chapter": 1,
+      "slug": "topic-01-transforms-then-build-mlp-cnn-vit",
+      "label": "01:11",
+      "range_start": 16.0,
+      "range_end": 169.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-transforms-then-build-mlp-cnn-vit-t0113s.png",
+      "seconds": 113.9,
+      "chapter": 1,
+      "slug": "topic-01-transforms-then-build-mlp-cnn-vit",
+      "label": "01:53",
+      "range_start": 16.0,
+      "range_end": 169.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-transforms-then-build-mlp-cnn-vit-t0156s.png",
+      "seconds": 156.8,
+      "chapter": 1,
+      "slug": "topic-01-transforms-then-build-mlp-cnn-vit",
+      "label": "02:36",
+      "range_start": 16.0,
+      "range_end": 169.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-imports-colab-gpu-cuda-t0183s.png",
+      "seconds": 183.2,
+      "chapter": 2,
+      "slug": "topic-02-imports-colab-gpu-cuda",
+      "label": "03:03",
+      "range_start": 169.0,
+      "range_end": 346.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-imports-colab-gpu-cuda-t0232s.png",
+      "seconds": 232.7,
+      "chapter": 2,
+      "slug": "topic-02-imports-colab-gpu-cuda",
+      "label": "03:52",
+      "range_start": 169.0,
+      "range_end": 346.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-imports-colab-gpu-cuda-t0282s.png",
+      "seconds": 282.3,
+      "chapter": 2,
+      "slug": "topic-02-imports-colab-gpu-cuda",
+      "label": "04:42",
+      "range_start": 169.0,
+      "range_end": 346.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-imports-colab-gpu-cuda-t0331s.png",
+      "seconds": 331.8,
+      "chapter": 2,
+      "slug": "topic-02-imports-colab-gpu-cuda",
+      "label": "05:31",
+      "range_start": 169.0,
+      "range_end": 346.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-nn-module-flatten-784-10-t0362s.png",
+      "seconds": 362.4,
+      "chapter": 3,
+      "slug": "topic-03-nn-module-flatten-784-10",
+      "label": "06:02",
+      "range_start": 346.0,
+      "range_end": 551.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-nn-module-flatten-784-10-t0419s.png",
+      "seconds": 419.8,
+      "chapter": 3,
+      "slug": "topic-03-nn-module-flatten-784-10",
+      "label": "06:59",
+      "range_start": 346.0,
+      "range_end": 551.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-nn-module-flatten-784-10-t0477s.png",
+      "seconds": 477.2,
+      "chapter": 3,
+      "slug": "topic-03-nn-module-flatten-784-10",
+      "label": "07:57",
+      "range_start": 346.0,
+      "range_end": 551.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-nn-module-flatten-784-10-t0534s.png",
+      "seconds": 534.6,
+      "chapter": 3,
+      "slug": "topic-03-nn-module-flatten-784-10",
+      "label": "08:54",
+      "range_start": 346.0,
+      "range_end": 551.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-sequential-linear-wx-b-t0569s.png",
+      "seconds": 569.9,
+      "chapter": 4,
+      "slug": "topic-04-sequential-linear-wx-b",
+      "label": "09:29",
+      "range_start": 551.0,
+      "range_end": 787.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-sequential-linear-wx-b-t0635s.png",
+      "seconds": 636.0,
+      "chapter": 4,
+      "slug": "topic-04-sequential-linear-wx-b",
+      "label": "10:35",
+      "range_start": 551.0,
+      "range_end": 787.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-sequential-linear-wx-b-t0702s.png",
+      "seconds": 702.0,
+      "chapter": 4,
+      "slug": "topic-04-sequential-linear-wx-b",
+      "label": "11:42",
+      "range_start": 551.0,
+      "range_end": 787.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-sequential-linear-wx-b-t0768s.png",
+      "seconds": 768.1,
+      "chapter": 4,
+      "slug": "topic-04-sequential-linear-wx-b",
+      "label": "12:48",
+      "range_start": 551.0,
+      "range_end": 787.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-relu-stack-logits-softmax-t0808s.png",
+      "seconds": 808.5,
+      "chapter": 5,
+      "slug": "topic-05-relu-stack-logits-softmax",
+      "label": "13:28",
+      "range_start": 787.0,
+      "range_end": 1056.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-relu-stack-logits-softmax-t0883s.png",
+      "seconds": 883.8,
+      "chapter": 5,
+      "slug": "topic-05-relu-stack-logits-softmax",
+      "label": "14:43",
+      "range_start": 787.0,
+      "range_end": 1056.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-relu-stack-logits-softmax-t0959s.png",
+      "seconds": 959.2,
+      "chapter": 5,
+      "slug": "topic-05-relu-stack-logits-softmax",
+      "label": "15:59",
+      "range_start": 787.0,
+      "range_end": 1056.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-relu-stack-logits-softmax-t1034s.png",
+      "seconds": 1034.5,
+      "chapter": 5,
+      "slug": "topic-05-relu-stack-logits-softmax",
+      "label": "17:14",
+      "range_start": 787.0,
+      "range_end": 1056.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-forward-to-device-dummy-predict-t1067s.png",
+      "seconds": 1067.4,
+      "chapter": 6,
+      "slug": "topic-06-forward-to-device-dummy-predict",
+      "label": "17:47",
+      "range_start": 1056.0,
+      "range_end": 1198.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-forward-to-device-dummy-predict-t1107s.png",
+      "seconds": 1107.1,
+      "chapter": 6,
+      "slug": "topic-06-forward-to-device-dummy-predict",
+      "label": "18:27",
+      "range_start": 1056.0,
+      "range_end": 1198.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-forward-to-device-dummy-predict-t1146s.png",
+      "seconds": 1146.9,
+      "chapter": 6,
+      "slug": "topic-06-forward-to-device-dummy-predict",
+      "label": "19:06",
+      "range_start": 1056.0,
+      "range_end": 1198.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-forward-to-device-dummy-predict-t1186s.png",
+      "seconds": 1186.6,
+      "chapter": 6,
+      "slug": "topic-06-forward-to-device-dummy-predict",
+      "label": "19:46",
+      "range_start": 1056.0,
+      "range_end": 1198.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-sgd-adam-ce-hyperparams-t1216s.png",
+      "seconds": 1216.9,
+      "chapter": 7,
+      "slug": "topic-07-sgd-adam-ce-hyperparams",
+      "label": "20:16",
+      "range_start": 1198.0,
+      "range_end": 1434.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-sgd-adam-ce-hyperparams-t1282s.png",
+      "seconds": 1283.0,
+      "chapter": 7,
+      "slug": "topic-07-sgd-adam-ce-hyperparams",
+      "label": "21:22",
+      "range_start": 1198.0,
+      "range_end": 1434.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-sgd-adam-ce-hyperparams-t1349s.png",
+      "seconds": 1349.0,
+      "chapter": 7,
+      "slug": "topic-07-sgd-adam-ce-hyperparams",
+      "label": "22:29",
+      "range_start": 1198.0,
+      "range_end": 1434.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-sgd-adam-ce-hyperparams-t1415s.png",
+      "seconds": 1415.1,
+      "chapter": 7,
+      "slug": "topic-07-sgd-adam-ce-hyperparams",
+      "label": "23:35",
+      "range_start": 1198.0,
+      "range_end": 1434.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-train-loop-four-steps-t1456s.png",
+      "seconds": 1456.7,
+      "chapter": 8,
+      "slug": "topic-08-train-loop-four-steps",
+      "label": "24:16",
+      "range_start": 1434.0,
+      "range_end": 1718.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-train-loop-four-steps-t1536s.png",
+      "seconds": 1536.2,
+      "chapter": 8,
+      "slug": "topic-08-train-loop-four-steps",
+      "label": "25:36",
+      "range_start": 1434.0,
+      "range_end": 1718.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-train-loop-four-steps-t1615s.png",
+      "seconds": 1615.8,
+      "chapter": 8,
+      "slug": "topic-08-train-loop-four-steps",
+      "label": "26:55",
+      "range_start": 1434.0,
+      "range_end": 1718.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-train-loop-four-steps-t1695s.png",
+      "seconds": 1695.3,
+      "chapter": 8,
+      "slug": "topic-08-train-loop-four-steps",
+      "label": "28:15",
+      "range_start": 1434.0,
+      "range_end": 1718.0
+    },
+    {
+      "file": "raw/033-ch09-topic-09-test-loop-accuracy-curves-t1755s.png",
+      "seconds": 1755.8,
+      "chapter": 9,
+      "slug": "topic-09-test-loop-accuracy-curves",
+      "label": "29:15",
+      "range_start": 1718.0,
+      "range_end": 2191.0
+    },
+    {
+      "file": "raw/034-ch09-topic-09-test-loop-accuracy-curves-t1888s.png",
+      "seconds": 1888.3,
+      "chapter": 9,
+      "slug": "topic-09-test-loop-accuracy-curves",
+      "label": "31:28",
+      "range_start": 1718.0,
+      "range_end": 2191.0
+    },
+    {
+      "file": "raw/035-ch09-topic-09-test-loop-accuracy-curves-t2020s.png",
+      "seconds": 2020.7,
+      "chapter": 9,
+      "slug": "topic-09-test-loop-accuracy-curves",
+      "label": "33:40",
+      "range_start": 1718.0,
+      "range_end": 2191.0
+    },
+    {
+      "file": "raw/036-ch09-topic-09-test-loop-accuracy-curves-t2153s.png",
+      "seconds": 2153.2,
+      "chapter": 9,
+      "slug": "topic-09-test-loop-accuracy-curves",
+      "label": "35:53",
+      "range_start": 1718.0,
+      "range_end": 2191.0
+    },
+    {
+      "file": "raw/037-ch10-topic-10-save-load-cnn-recap-gans-t2227s.png",
+      "seconds": 2227.4,
+      "chapter": 10,
+      "slug": "topic-10-save-load-cnn-recap-gans",
+      "label": "37:07",
+      "range_start": 2191.0,
+      "range_end": 2646.0
+    },
+    {
+      "file": "raw/038-ch10-topic-10-save-load-cnn-recap-gans-t2354s.png",
+      "seconds": 2354.8,
+      "chapter": 10,
+      "slug": "topic-10-save-load-cnn-recap-gans",
+      "label": "39:14",
+      "range_start": 2191.0,
+      "range_end": 2646.0
+    },
+    {
+      "file": "raw/039-ch10-topic-10-save-load-cnn-recap-gans-t2482s.png",
+      "seconds": 2482.2,
+      "chapter": 10,
+      "slug": "topic-10-save-load-cnn-recap-gans",
+      "label": "41:22",
+      "range_start": 2191.0,
+      "range_end": 2646.0
+    },
+    {
+      "file": "raw/040-ch10-topic-10-save-load-cnn-recap-gans-t2609s.png",
+      "seconds": 2609.6,
+      "chapter": 10,
+      "slug": "topic-10-save-load-cnn-recap-gans",
+      "label": "43:29",
+      "range_start": 2191.0,
+      "range_end": 2646.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-transforms-then-build-mlp-cnn-vit-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-transforms-then-build-mlp-cnn-vit",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-transforms-then-build-mlp-cnn-vit-t0028s.png",
+        "002-ch01-topic-01-transforms-then-build-mlp-cnn-vit-t0071s.png",
+        "003-ch01-topic-01-transforms-then-build-mlp-cnn-vit-t0113s.png",
+        "004-ch01-topic-01-transforms-then-build-mlp-cnn-vit-t0156s.png"
+      ],
+      "labels": [
+        "ch1 00:28",
+        "ch1 01:11",
+        "ch1 01:53",
+        "ch1 02:36"
+      ],
+      "tile_seconds": [
+        28.2,
+        71.1,
+        113.9,
+        156.8
+      ],
+      "time_start": 28.2,
+      "time_end": 156.8,
+      "range_start": 16.0,
+      "range_end": 169.0
+    },
+    {
+      "file": "composites/ch02-topic-02-imports-colab-gpu-cuda-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-imports-colab-gpu-cuda",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-imports-colab-gpu-cuda-t0183s.png",
+        "006-ch02-topic-02-imports-colab-gpu-cuda-t0232s.png",
+        "007-ch02-topic-02-imports-colab-gpu-cuda-t0282s.png",
+        "008-ch02-topic-02-imports-colab-gpu-cuda-t0331s.png"
+      ],
+      "labels": [
+        "ch2 03:03",
+        "ch2 03:52",
+        "ch2 04:42",
+        "ch2 05:31"
+      ],
+      "tile_seconds": [
+        183.2,
+        232.7,
+        282.3,
+        331.8
+      ],
+      "time_start": 183.2,
+      "time_end": 331.8,
+      "range_start": 169.0,
+      "range_end": 346.0
+    },
+    {
+      "file": "composites/ch03-topic-03-nn-module-flatten-784-10-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-nn-module-flatten-784-10",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-nn-module-flatten-784-10-t0362s.png",
+        "010-ch03-topic-03-nn-module-flatten-784-10-t0419s.png",
+        "011-ch03-topic-03-nn-module-flatten-784-10-t0477s.png",
+        "012-ch03-topic-03-nn-module-flatten-784-10-t0534s.png"
+      ],
+      "labels": [
+        "ch3 06:02",
+        "ch3 06:59",
+        "ch3 07:57",
+        "ch3 08:54"
+      ],
+      "tile_seconds": [
+        362.4,
+        419.8,
+        477.2,
+        534.6
+      ],
+      "time_start": 362.4,
+      "time_end": 534.6,
+      "range_start": 346.0,
+      "range_end": 551.0
+    },
+    {
+      "file": "composites/ch04-topic-04-sequential-linear-wx-b-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-sequential-linear-wx-b",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-sequential-linear-wx-b-t0569s.png",
+        "014-ch04-topic-04-sequential-linear-wx-b-t0635s.png",
+        "015-ch04-topic-04-sequential-linear-wx-b-t0702s.png",
+        "016-ch04-topic-04-sequential-linear-wx-b-t0768s.png"
+      ],
+      "labels": [
+        "ch4 09:29",
+        "ch4 10:35",
+        "ch4 11:42",
+        "ch4 12:48"
+      ],
+      "tile_seconds": [
+        569.9,
+        636.0,
+        702.0,
+        768.1
+      ],
+      "time_start": 569.9,
+      "time_end": 768.1,
+      "range_start": 551.0,
+      "range_end": 787.0
+    },
+    {
+      "file": "composites/ch05-topic-05-relu-stack-logits-softmax-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-relu-stack-logits-softmax",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-relu-stack-logits-softmax-t0808s.png",
+        "018-ch05-topic-05-relu-stack-logits-softmax-t0883s.png",
+        "019-ch05-topic-05-relu-stack-logits-softmax-t0959s.png",
+        "020-ch05-topic-05-relu-stack-logits-softmax-t1034s.png"
+      ],
+      "labels": [
+        "ch5 13:28",
+        "ch5 14:43",
+        "ch5 15:59",
+        "ch5 17:14"
+      ],
+      "tile_seconds": [
+        808.5,
+        883.8,
+        959.2,
+        1034.5
+      ],
+      "time_start": 808.5,
+      "time_end": 1034.5,
+      "range_start": 787.0,
+      "range_end": 1056.0
+    },
+    {
+      "file": "composites/ch06-topic-06-forward-to-device-dummy-predict-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-forward-to-device-dummy-predict",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-forward-to-device-dummy-predict-t1067s.png",
+        "022-ch06-topic-06-forward-to-device-dummy-predict-t1107s.png",
+        "023-ch06-topic-06-forward-to-device-dummy-predict-t1146s.png",
+        "024-ch06-topic-06-forward-to-device-dummy-predict-t1186s.png"
+      ],
+      "labels": [
+        "ch6 17:47",
+        "ch6 18:27",
+        "ch6 19:06",
+        "ch6 19:46"
+      ],
+      "tile_seconds": [
+        1067.4,
+        1107.1,
+        1146.9,
+        1186.6
+      ],
+      "time_start": 1067.4,
+      "time_end": 1186.6,
+      "range_start": 1056.0,
+      "range_end": 1198.0
+    },
+    {
+      "file": "composites/ch07-topic-07-sgd-adam-ce-hyperparams-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-sgd-adam-ce-hyperparams",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-sgd-adam-ce-hyperparams-t1216s.png",
+        "026-ch07-topic-07-sgd-adam-ce-hyperparams-t1282s.png",
+        "027-ch07-topic-07-sgd-adam-ce-hyperparams-t1349s.png",
+        "028-ch07-topic-07-sgd-adam-ce-hyperparams-t1415s.png"
+      ],
+      "labels": [
+        "ch7 20:16",
+        "ch7 21:22",
+        "ch7 22:29",
+        "ch7 23:35"
+      ],
+      "tile_seconds": [
+        1216.9,
+        1283.0,
+        1349.0,
+        1415.1
+      ],
+      "time_start": 1216.9,
+      "time_end": 1415.1,
+      "range_start": 1198.0,
+      "range_end": 1434.0
+    },
+    {
+      "file": "composites/ch08-topic-08-train-loop-four-steps-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-train-loop-four-steps",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-train-loop-four-steps-t1456s.png",
+        "030-ch08-topic-08-train-loop-four-steps-t1536s.png",
+        "031-ch08-topic-08-train-loop-four-steps-t1615s.png",
+        "032-ch08-topic-08-train-loop-four-steps-t1695s.png"
+      ],
+      "labels": [
+        "ch8 24:16",
+        "ch8 25:36",
+        "ch8 26:55",
+        "ch8 28:15"
+      ],
+      "tile_seconds": [
+        1456.7,
+        1536.2,
+        1615.8,
+        1695.3
+      ],
+      "time_start": 1456.7,
+      "time_end": 1695.3,
+      "range_start": 1434.0,
+      "range_end": 1718.0
+    },
+    {
+      "file": "composites/ch09-topic-09-test-loop-accuracy-curves-panel1of1.png",
+      "chapter": 9,
+      "slug": "topic-09-test-loop-accuracy-curves",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch09-topic-09-test-loop-accuracy-curves-t1755s.png",
+        "034-ch09-topic-09-test-loop-accuracy-curves-t1888s.png",
+        "035-ch09-topic-09-test-loop-accuracy-curves-t2020s.png",
+        "036-ch09-topic-09-test-loop-accuracy-curves-t2153s.png"
+      ],
+      "labels": [
+        "ch9 29:15",
+        "ch9 31:28",
+        "ch9 33:40",
+        "ch9 35:53"
+      ],
+      "tile_seconds": [
+        1755.8,
+        1888.3,
+        2020.7,
+        2153.2
+      ],
+      "time_start": 1755.8,
+      "time_end": 2153.2,
+      "range_start": 1718.0,
+      "range_end": 2191.0
+    },
+    {
+      "file": "composites/ch10-topic-10-save-load-cnn-recap-gans-panel1of1.png",
+      "chapter": 10,
+      "slug": "topic-10-save-load-cnn-recap-gans",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "037-ch10-topic-10-save-load-cnn-recap-gans-t2227s.png",
+        "038-ch10-topic-10-save-load-cnn-recap-gans-t2354s.png",
+        "039-ch10-topic-10-save-load-cnn-recap-gans-t2482s.png",
+        "040-ch10-topic-10-save-load-cnn-recap-gans-t2609s.png"
+      ],
+      "labels": [
+        "ch10 37:07",
+        "ch10 39:14",
+        "ch10 41:22",
+        "ch10 43:29"
+      ],
+      "tile_seconds": [
+        2227.4,
+        2354.8,
+        2482.2,
+        2609.6
+      ],
+      "time_start": 2227.4,
+      "time_end": 2609.6,
+      "range_start": 2191.0,
+      "range_end": 2646.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

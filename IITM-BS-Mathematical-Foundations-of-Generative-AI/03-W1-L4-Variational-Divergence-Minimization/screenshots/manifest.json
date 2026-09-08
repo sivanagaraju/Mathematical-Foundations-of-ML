@@ -1,0 +1,660 @@
+{
+  "duration_seconds": 1568.0,
+  "range_source": "topic-ranges",
+  "range_count": 9,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 11.0,
+      "end": 192.0,
+      "slug": "topic-01-recap-estimate-sample-recipe"
+    },
+    {
+      "index": 2,
+      "start": 192.0,
+      "end": 399.0,
+      "slug": "topic-02-push-forward-gtheta-samples-not-law"
+    },
+    {
+      "index": 3,
+      "start": 399.0,
+      "end": 551.0,
+      "slug": "topic-03-four-questions-vdm-is-same-recipe"
+    },
+    {
+      "index": 4,
+      "start": 551.0,
+      "end": 1011.0,
+      "slug": "topic-04-f-divergence-definition"
+    },
+    {
+      "index": 5,
+      "start": 1011.0,
+      "end": 1133.0,
+      "slug": "topic-05-f-div-nonneg-zero-iff-equal"
+    },
+    {
+      "index": 6,
+      "start": 1133.0,
+      "end": 1315.0,
+      "slug": "topic-06-kl-is-f-of-u-log-u"
+    },
+    {
+      "index": 7,
+      "start": 1315.0,
+      "end": 1402.0,
+      "slug": "topic-07-kl-not-symmetric-forward-reverse"
+    },
+    {
+      "index": 8,
+      "start": 1402.0,
+      "end": 1528.0,
+      "slug": "topic-08-js-tv-different-f-different-properties"
+    },
+    {
+      "index": 9,
+      "start": 1528.0,
+      "end": 1568.0,
+      "slug": "topic-09-next-generic-algorithm-then-gan"
+    }
+  ],
+  "raw_count": 36,
+  "composite_count": 9,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-recap-estimate-sample-recipe-t0025s.png",
+      "seconds": 25.5,
+      "chapter": 1,
+      "slug": "topic-01-recap-estimate-sample-recipe",
+      "label": "00:25",
+      "range_start": 11.0,
+      "range_end": 192.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-recap-estimate-sample-recipe-t0076s.png",
+      "seconds": 76.2,
+      "chapter": 1,
+      "slug": "topic-01-recap-estimate-sample-recipe",
+      "label": "01:16",
+      "range_start": 11.0,
+      "range_end": 192.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-recap-estimate-sample-recipe-t0126s.png",
+      "seconds": 126.8,
+      "chapter": 1,
+      "slug": "topic-01-recap-estimate-sample-recipe",
+      "label": "02:06",
+      "range_start": 11.0,
+      "range_end": 192.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-recap-estimate-sample-recipe-t0177s.png",
+      "seconds": 177.5,
+      "chapter": 1,
+      "slug": "topic-01-recap-estimate-sample-recipe",
+      "label": "02:57",
+      "range_start": 11.0,
+      "range_end": 192.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-push-forward-gtheta-samples-not-law-t0208s.png",
+      "seconds": 208.6,
+      "chapter": 2,
+      "slug": "topic-02-push-forward-gtheta-samples-not-law",
+      "label": "03:28",
+      "range_start": 192.0,
+      "range_end": 399.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-push-forward-gtheta-samples-not-law-t0266s.png",
+      "seconds": 266.5,
+      "chapter": 2,
+      "slug": "topic-02-push-forward-gtheta-samples-not-law",
+      "label": "04:26",
+      "range_start": 192.0,
+      "range_end": 399.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-push-forward-gtheta-samples-not-law-t0324s.png",
+      "seconds": 324.5,
+      "chapter": 2,
+      "slug": "topic-02-push-forward-gtheta-samples-not-law",
+      "label": "05:24",
+      "range_start": 192.0,
+      "range_end": 399.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-push-forward-gtheta-samples-not-law-t0382s.png",
+      "seconds": 382.4,
+      "chapter": 2,
+      "slug": "topic-02-push-forward-gtheta-samples-not-law",
+      "label": "06:22",
+      "range_start": 192.0,
+      "range_end": 399.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-four-questions-vdm-is-same-recipe-t0411s.png",
+      "seconds": 411.2,
+      "chapter": 3,
+      "slug": "topic-03-four-questions-vdm-is-same-recipe",
+      "label": "06:51",
+      "range_start": 399.0,
+      "range_end": 551.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-four-questions-vdm-is-same-recipe-t0453s.png",
+      "seconds": 453.7,
+      "chapter": 3,
+      "slug": "topic-03-four-questions-vdm-is-same-recipe",
+      "label": "07:33",
+      "range_start": 399.0,
+      "range_end": 551.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-four-questions-vdm-is-same-recipe-t0496s.png",
+      "seconds": 496.3,
+      "chapter": 3,
+      "slug": "topic-03-four-questions-vdm-is-same-recipe",
+      "label": "08:16",
+      "range_start": 399.0,
+      "range_end": 551.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-four-questions-vdm-is-same-recipe-t0538s.png",
+      "seconds": 538.8,
+      "chapter": 3,
+      "slug": "topic-03-four-questions-vdm-is-same-recipe",
+      "label": "08:58",
+      "range_start": 399.0,
+      "range_end": 551.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-f-divergence-definition-t0587s.png",
+      "seconds": 587.8,
+      "chapter": 4,
+      "slug": "topic-04-f-divergence-definition",
+      "label": "09:47",
+      "range_start": 551.0,
+      "range_end": 1011.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-f-divergence-definition-t0716s.png",
+      "seconds": 716.6,
+      "chapter": 4,
+      "slug": "topic-04-f-divergence-definition",
+      "label": "11:56",
+      "range_start": 551.0,
+      "range_end": 1011.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-f-divergence-definition-t0845s.png",
+      "seconds": 845.4,
+      "chapter": 4,
+      "slug": "topic-04-f-divergence-definition",
+      "label": "14:05",
+      "range_start": 551.0,
+      "range_end": 1011.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-f-divergence-definition-t0974s.png",
+      "seconds": 974.2,
+      "chapter": 4,
+      "slug": "topic-04-f-divergence-definition",
+      "label": "16:14",
+      "range_start": 551.0,
+      "range_end": 1011.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-f-div-nonneg-zero-iff-equal-t1020s.png",
+      "seconds": 1020.8,
+      "chapter": 5,
+      "slug": "topic-05-f-div-nonneg-zero-iff-equal",
+      "label": "17:00",
+      "range_start": 1011.0,
+      "range_end": 1133.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-f-div-nonneg-zero-iff-equal-t1054s.png",
+      "seconds": 1054.9,
+      "chapter": 5,
+      "slug": "topic-05-f-div-nonneg-zero-iff-equal",
+      "label": "17:34",
+      "range_start": 1011.0,
+      "range_end": 1133.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-f-div-nonneg-zero-iff-equal-t1089s.png",
+      "seconds": 1089.1,
+      "chapter": 5,
+      "slug": "topic-05-f-div-nonneg-zero-iff-equal",
+      "label": "18:09",
+      "range_start": 1011.0,
+      "range_end": 1133.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-f-div-nonneg-zero-iff-equal-t1123s.png",
+      "seconds": 1123.2,
+      "chapter": 5,
+      "slug": "topic-05-f-div-nonneg-zero-iff-equal",
+      "label": "18:43",
+      "range_start": 1011.0,
+      "range_end": 1133.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-kl-is-f-of-u-log-u-t1147s.png",
+      "seconds": 1147.6,
+      "chapter": 6,
+      "slug": "topic-06-kl-is-f-of-u-log-u",
+      "label": "19:07",
+      "range_start": 1133.0,
+      "range_end": 1315.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-kl-is-f-of-u-log-u-t1198s.png",
+      "seconds": 1198.5,
+      "chapter": 6,
+      "slug": "topic-06-kl-is-f-of-u-log-u",
+      "label": "19:58",
+      "range_start": 1133.0,
+      "range_end": 1315.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-kl-is-f-of-u-log-u-t1249s.png",
+      "seconds": 1249.5,
+      "chapter": 6,
+      "slug": "topic-06-kl-is-f-of-u-log-u",
+      "label": "20:49",
+      "range_start": 1133.0,
+      "range_end": 1315.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-kl-is-f-of-u-log-u-t1300s.png",
+      "seconds": 1300.4,
+      "chapter": 6,
+      "slug": "topic-06-kl-is-f-of-u-log-u",
+      "label": "21:40",
+      "range_start": 1133.0,
+      "range_end": 1315.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-kl-not-symmetric-forward-reverse-t1321s.png",
+      "seconds": 1322.0,
+      "chapter": 7,
+      "slug": "topic-07-kl-not-symmetric-forward-reverse",
+      "label": "22:01",
+      "range_start": 1315.0,
+      "range_end": 1402.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-kl-not-symmetric-forward-reverse-t1346s.png",
+      "seconds": 1346.3,
+      "chapter": 7,
+      "slug": "topic-07-kl-not-symmetric-forward-reverse",
+      "label": "22:26",
+      "range_start": 1315.0,
+      "range_end": 1402.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-kl-not-symmetric-forward-reverse-t1370s.png",
+      "seconds": 1370.7,
+      "chapter": 7,
+      "slug": "topic-07-kl-not-symmetric-forward-reverse",
+      "label": "22:50",
+      "range_start": 1315.0,
+      "range_end": 1402.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-kl-not-symmetric-forward-reverse-t1395s.png",
+      "seconds": 1395.0,
+      "chapter": 7,
+      "slug": "topic-07-kl-not-symmetric-forward-reverse",
+      "label": "23:15",
+      "range_start": 1315.0,
+      "range_end": 1402.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-js-tv-different-f-different-properties-t1412s.png",
+      "seconds": 1412.1,
+      "chapter": 8,
+      "slug": "topic-08-js-tv-different-f-different-properties",
+      "label": "23:32",
+      "range_start": 1402.0,
+      "range_end": 1528.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-js-tv-different-f-different-properties-t1447s.png",
+      "seconds": 1447.4,
+      "chapter": 8,
+      "slug": "topic-08-js-tv-different-f-different-properties",
+      "label": "24:07",
+      "range_start": 1402.0,
+      "range_end": 1528.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-js-tv-different-f-different-properties-t1482s.png",
+      "seconds": 1482.6,
+      "chapter": 8,
+      "slug": "topic-08-js-tv-different-f-different-properties",
+      "label": "24:42",
+      "range_start": 1402.0,
+      "range_end": 1528.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-js-tv-different-f-different-properties-t1517s.png",
+      "seconds": 1517.9,
+      "chapter": 8,
+      "slug": "topic-08-js-tv-different-f-different-properties",
+      "label": "25:17",
+      "range_start": 1402.0,
+      "range_end": 1528.0
+    },
+    {
+      "file": "raw/033-ch09-topic-09-next-generic-algorithm-then-gan-t1531s.png",
+      "seconds": 1531.2,
+      "chapter": 9,
+      "slug": "topic-09-next-generic-algorithm-then-gan",
+      "label": "25:31",
+      "range_start": 1528.0,
+      "range_end": 1568.0
+    },
+    {
+      "file": "raw/034-ch09-topic-09-next-generic-algorithm-then-gan-t1542s.png",
+      "seconds": 1542.4,
+      "chapter": 9,
+      "slug": "topic-09-next-generic-algorithm-then-gan",
+      "label": "25:42",
+      "range_start": 1528.0,
+      "range_end": 1568.0
+    },
+    {
+      "file": "raw/035-ch09-topic-09-next-generic-algorithm-then-gan-t1553s.png",
+      "seconds": 1553.6,
+      "chapter": 9,
+      "slug": "topic-09-next-generic-algorithm-then-gan",
+      "label": "25:53",
+      "range_start": 1528.0,
+      "range_end": 1568.0
+    },
+    {
+      "file": "raw/036-ch09-topic-09-next-generic-algorithm-then-gan-t1564s.png",
+      "seconds": 1564.8,
+      "chapter": 9,
+      "slug": "topic-09-next-generic-algorithm-then-gan",
+      "label": "26:04",
+      "range_start": 1528.0,
+      "range_end": 1568.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-recap-estimate-sample-recipe-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-recap-estimate-sample-recipe",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-recap-estimate-sample-recipe-t0025s.png",
+        "002-ch01-topic-01-recap-estimate-sample-recipe-t0076s.png",
+        "003-ch01-topic-01-recap-estimate-sample-recipe-t0126s.png",
+        "004-ch01-topic-01-recap-estimate-sample-recipe-t0177s.png"
+      ],
+      "labels": [
+        "ch1 00:25",
+        "ch1 01:16",
+        "ch1 02:06",
+        "ch1 02:57"
+      ],
+      "tile_seconds": [
+        25.5,
+        76.2,
+        126.8,
+        177.5
+      ],
+      "time_start": 25.5,
+      "time_end": 177.5,
+      "range_start": 11.0,
+      "range_end": 192.0
+    },
+    {
+      "file": "composites/ch02-topic-02-push-forward-gtheta-samples-not-law-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-push-forward-gtheta-samples-not-law",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-push-forward-gtheta-samples-not-law-t0208s.png",
+        "006-ch02-topic-02-push-forward-gtheta-samples-not-law-t0266s.png",
+        "007-ch02-topic-02-push-forward-gtheta-samples-not-law-t0324s.png",
+        "008-ch02-topic-02-push-forward-gtheta-samples-not-law-t0382s.png"
+      ],
+      "labels": [
+        "ch2 03:28",
+        "ch2 04:26",
+        "ch2 05:24",
+        "ch2 06:22"
+      ],
+      "tile_seconds": [
+        208.6,
+        266.5,
+        324.5,
+        382.4
+      ],
+      "time_start": 208.6,
+      "time_end": 382.4,
+      "range_start": 192.0,
+      "range_end": 399.0
+    },
+    {
+      "file": "composites/ch03-topic-03-four-questions-vdm-is-same-recipe-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-four-questions-vdm-is-same-recipe",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-four-questions-vdm-is-same-recipe-t0411s.png",
+        "010-ch03-topic-03-four-questions-vdm-is-same-recipe-t0453s.png",
+        "011-ch03-topic-03-four-questions-vdm-is-same-recipe-t0496s.png",
+        "012-ch03-topic-03-four-questions-vdm-is-same-recipe-t0538s.png"
+      ],
+      "labels": [
+        "ch3 06:51",
+        "ch3 07:33",
+        "ch3 08:16",
+        "ch3 08:58"
+      ],
+      "tile_seconds": [
+        411.2,
+        453.7,
+        496.3,
+        538.8
+      ],
+      "time_start": 411.2,
+      "time_end": 538.8,
+      "range_start": 399.0,
+      "range_end": 551.0
+    },
+    {
+      "file": "composites/ch04-topic-04-f-divergence-definition-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-f-divergence-definition",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-f-divergence-definition-t0587s.png",
+        "014-ch04-topic-04-f-divergence-definition-t0716s.png",
+        "015-ch04-topic-04-f-divergence-definition-t0845s.png",
+        "016-ch04-topic-04-f-divergence-definition-t0974s.png"
+      ],
+      "labels": [
+        "ch4 09:47",
+        "ch4 11:56",
+        "ch4 14:05",
+        "ch4 16:14"
+      ],
+      "tile_seconds": [
+        587.8,
+        716.6,
+        845.4,
+        974.2
+      ],
+      "time_start": 587.8,
+      "time_end": 974.2,
+      "range_start": 551.0,
+      "range_end": 1011.0
+    },
+    {
+      "file": "composites/ch05-topic-05-f-div-nonneg-zero-iff-equal-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-f-div-nonneg-zero-iff-equal",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-f-div-nonneg-zero-iff-equal-t1020s.png",
+        "018-ch05-topic-05-f-div-nonneg-zero-iff-equal-t1054s.png",
+        "019-ch05-topic-05-f-div-nonneg-zero-iff-equal-t1089s.png",
+        "020-ch05-topic-05-f-div-nonneg-zero-iff-equal-t1123s.png"
+      ],
+      "labels": [
+        "ch5 17:00",
+        "ch5 17:34",
+        "ch5 18:09",
+        "ch5 18:43"
+      ],
+      "tile_seconds": [
+        1020.8,
+        1054.9,
+        1089.1,
+        1123.2
+      ],
+      "time_start": 1020.8,
+      "time_end": 1123.2,
+      "range_start": 1011.0,
+      "range_end": 1133.0
+    },
+    {
+      "file": "composites/ch06-topic-06-kl-is-f-of-u-log-u-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-kl-is-f-of-u-log-u",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-kl-is-f-of-u-log-u-t1147s.png",
+        "022-ch06-topic-06-kl-is-f-of-u-log-u-t1198s.png",
+        "023-ch06-topic-06-kl-is-f-of-u-log-u-t1249s.png",
+        "024-ch06-topic-06-kl-is-f-of-u-log-u-t1300s.png"
+      ],
+      "labels": [
+        "ch6 19:07",
+        "ch6 19:58",
+        "ch6 20:49",
+        "ch6 21:40"
+      ],
+      "tile_seconds": [
+        1147.6,
+        1198.5,
+        1249.5,
+        1300.4
+      ],
+      "time_start": 1147.6,
+      "time_end": 1300.4,
+      "range_start": 1133.0,
+      "range_end": 1315.0
+    },
+    {
+      "file": "composites/ch07-topic-07-kl-not-symmetric-forward-reverse-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-kl-not-symmetric-forward-reverse",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-kl-not-symmetric-forward-reverse-t1321s.png",
+        "026-ch07-topic-07-kl-not-symmetric-forward-reverse-t1346s.png",
+        "027-ch07-topic-07-kl-not-symmetric-forward-reverse-t1370s.png",
+        "028-ch07-topic-07-kl-not-symmetric-forward-reverse-t1395s.png"
+      ],
+      "labels": [
+        "ch7 22:01",
+        "ch7 22:26",
+        "ch7 22:50",
+        "ch7 23:15"
+      ],
+      "tile_seconds": [
+        1322.0,
+        1346.3,
+        1370.7,
+        1395.0
+      ],
+      "time_start": 1322.0,
+      "time_end": 1395.0,
+      "range_start": 1315.0,
+      "range_end": 1402.0
+    },
+    {
+      "file": "composites/ch08-topic-08-js-tv-different-f-different-properties-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-js-tv-different-f-different-properties",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-js-tv-different-f-different-properties-t1412s.png",
+        "030-ch08-topic-08-js-tv-different-f-different-properties-t1447s.png",
+        "031-ch08-topic-08-js-tv-different-f-different-properties-t1482s.png",
+        "032-ch08-topic-08-js-tv-different-f-different-properties-t1517s.png"
+      ],
+      "labels": [
+        "ch8 23:32",
+        "ch8 24:07",
+        "ch8 24:42",
+        "ch8 25:17"
+      ],
+      "tile_seconds": [
+        1412.1,
+        1447.4,
+        1482.6,
+        1517.9
+      ],
+      "time_start": 1412.1,
+      "time_end": 1517.9,
+      "range_start": 1402.0,
+      "range_end": 1528.0
+    },
+    {
+      "file": "composites/ch09-topic-09-next-generic-algorithm-then-gan-panel1of1.png",
+      "chapter": 9,
+      "slug": "topic-09-next-generic-algorithm-then-gan",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch09-topic-09-next-generic-algorithm-then-gan-t1531s.png",
+        "034-ch09-topic-09-next-generic-algorithm-then-gan-t1542s.png",
+        "035-ch09-topic-09-next-generic-algorithm-then-gan-t1553s.png",
+        "036-ch09-topic-09-next-generic-algorithm-then-gan-t1564s.png"
+      ],
+      "labels": [
+        "ch9 25:31",
+        "ch9 25:42",
+        "ch9 25:53",
+        "ch9 26:04"
+      ],
+      "tile_seconds": [
+        1531.2,
+        1542.4,
+        1553.6,
+        1564.8
+      ],
+      "time_start": 1531.2,
+      "time_end": 1564.8,
+      "range_start": 1528.0,
+      "range_end": 1568.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

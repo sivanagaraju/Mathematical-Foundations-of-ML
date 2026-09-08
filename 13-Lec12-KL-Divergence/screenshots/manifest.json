@@ -1,0 +1,376 @@
+{
+  "duration_seconds": 1009.0,
+  "range_source": "topic-ranges",
+  "range_count": 5,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 3.0,
+      "end": 92.0,
+      "slug": "topic-01-setup-pair-pmf"
+    },
+    {
+      "index": 2,
+      "start": 92.0,
+      "end": 297.0,
+      "slug": "topic-02-cross-entropy"
+    },
+    {
+      "index": 3,
+      "start": 297.0,
+      "end": 538.0,
+      "slug": "topic-03-kl-definition"
+    },
+    {
+      "index": 4,
+      "start": 538.0,
+      "end": 622.0,
+      "slug": "topic-04-properties-not-metric"
+    },
+    {
+      "index": 5,
+      "start": 622.0,
+      "end": 1009.0,
+      "slug": "topic-05-continuous-notation-stop"
+    }
+  ],
+  "raw_count": 20,
+  "composite_count": 5,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-setup-pair-pmf-t0010s.png",
+      "seconds": 10.1,
+      "chapter": 1,
+      "slug": "topic-01-setup-pair-pmf",
+      "label": "00:10",
+      "range_start": 3.0,
+      "range_end": 92.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-setup-pair-pmf-t0035s.png",
+      "seconds": 35.0,
+      "chapter": 1,
+      "slug": "topic-01-setup-pair-pmf",
+      "label": "00:35",
+      "range_start": 3.0,
+      "range_end": 92.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-setup-pair-pmf-t0059s.png",
+      "seconds": 60.0,
+      "chapter": 1,
+      "slug": "topic-01-setup-pair-pmf",
+      "label": "00:59",
+      "range_start": 3.0,
+      "range_end": 92.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-setup-pair-pmf-t0084s.png",
+      "seconds": 84.9,
+      "chapter": 1,
+      "slug": "topic-01-setup-pair-pmf",
+      "label": "01:24",
+      "range_start": 3.0,
+      "range_end": 92.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-cross-entropy-t0108s.png",
+      "seconds": 108.4,
+      "chapter": 2,
+      "slug": "topic-02-cross-entropy",
+      "label": "01:48",
+      "range_start": 92.0,
+      "range_end": 297.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-cross-entropy-t0165s.png",
+      "seconds": 165.8,
+      "chapter": 2,
+      "slug": "topic-02-cross-entropy",
+      "label": "02:45",
+      "range_start": 92.0,
+      "range_end": 297.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-cross-entropy-t0223s.png",
+      "seconds": 223.2,
+      "chapter": 2,
+      "slug": "topic-02-cross-entropy",
+      "label": "03:43",
+      "range_start": 92.0,
+      "range_end": 297.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-cross-entropy-t0280s.png",
+      "seconds": 280.6,
+      "chapter": 2,
+      "slug": "topic-02-cross-entropy",
+      "label": "04:40",
+      "range_start": 92.0,
+      "range_end": 297.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-kl-definition-t0316s.png",
+      "seconds": 316.3,
+      "chapter": 3,
+      "slug": "topic-03-kl-definition",
+      "label": "05:16",
+      "range_start": 297.0,
+      "range_end": 538.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-kl-definition-t0383s.png",
+      "seconds": 383.8,
+      "chapter": 3,
+      "slug": "topic-03-kl-definition",
+      "label": "06:23",
+      "range_start": 297.0,
+      "range_end": 538.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-kl-definition-t0451s.png",
+      "seconds": 451.2,
+      "chapter": 3,
+      "slug": "topic-03-kl-definition",
+      "label": "07:31",
+      "range_start": 297.0,
+      "range_end": 538.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-kl-definition-t0518s.png",
+      "seconds": 518.7,
+      "chapter": 3,
+      "slug": "topic-03-kl-definition",
+      "label": "08:38",
+      "range_start": 297.0,
+      "range_end": 538.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-properties-not-metric-t0544s.png",
+      "seconds": 544.7,
+      "chapter": 4,
+      "slug": "topic-04-properties-not-metric",
+      "label": "09:04",
+      "range_start": 538.0,
+      "range_end": 622.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-properties-not-metric-t0568s.png",
+      "seconds": 568.2,
+      "chapter": 4,
+      "slug": "topic-04-properties-not-metric",
+      "label": "09:28",
+      "range_start": 538.0,
+      "range_end": 622.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-properties-not-metric-t0591s.png",
+      "seconds": 591.8,
+      "chapter": 4,
+      "slug": "topic-04-properties-not-metric",
+      "label": "09:51",
+      "range_start": 538.0,
+      "range_end": 622.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-properties-not-metric-t0615s.png",
+      "seconds": 615.3,
+      "chapter": 4,
+      "slug": "topic-04-properties-not-metric",
+      "label": "10:15",
+      "range_start": 538.0,
+      "range_end": 622.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-continuous-notation-stop-t0652s.png",
+      "seconds": 653.0,
+      "chapter": 5,
+      "slug": "topic-05-continuous-notation-stop",
+      "label": "10:52",
+      "range_start": 622.0,
+      "range_end": 1009.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-continuous-notation-stop-t0761s.png",
+      "seconds": 761.3,
+      "chapter": 5,
+      "slug": "topic-05-continuous-notation-stop",
+      "label": "12:41",
+      "range_start": 622.0,
+      "range_end": 1009.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-continuous-notation-stop-t0869s.png",
+      "seconds": 869.7,
+      "chapter": 5,
+      "slug": "topic-05-continuous-notation-stop",
+      "label": "14:29",
+      "range_start": 622.0,
+      "range_end": 1009.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-continuous-notation-stop-t0978s.png",
+      "seconds": 978.0,
+      "chapter": 5,
+      "slug": "topic-05-continuous-notation-stop",
+      "label": "16:18",
+      "range_start": 622.0,
+      "range_end": 1009.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-setup-pair-pmf-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-setup-pair-pmf",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-setup-pair-pmf-t0010s.png",
+        "002-ch01-topic-01-setup-pair-pmf-t0035s.png",
+        "003-ch01-topic-01-setup-pair-pmf-t0059s.png",
+        "004-ch01-topic-01-setup-pair-pmf-t0084s.png"
+      ],
+      "labels": [
+        "ch1 00:10",
+        "ch1 00:35",
+        "ch1 00:59",
+        "ch1 01:24"
+      ],
+      "tile_seconds": [
+        10.1,
+        35.0,
+        60.0,
+        84.9
+      ],
+      "time_start": 10.1,
+      "time_end": 84.9,
+      "range_start": 3.0,
+      "range_end": 92.0
+    },
+    {
+      "file": "composites/ch02-topic-02-cross-entropy-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-cross-entropy",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-cross-entropy-t0108s.png",
+        "006-ch02-topic-02-cross-entropy-t0165s.png",
+        "007-ch02-topic-02-cross-entropy-t0223s.png",
+        "008-ch02-topic-02-cross-entropy-t0280s.png"
+      ],
+      "labels": [
+        "ch2 01:48",
+        "ch2 02:45",
+        "ch2 03:43",
+        "ch2 04:40"
+      ],
+      "tile_seconds": [
+        108.4,
+        165.8,
+        223.2,
+        280.6
+      ],
+      "time_start": 108.4,
+      "time_end": 280.6,
+      "range_start": 92.0,
+      "range_end": 297.0
+    },
+    {
+      "file": "composites/ch03-topic-03-kl-definition-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-kl-definition",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-kl-definition-t0316s.png",
+        "010-ch03-topic-03-kl-definition-t0383s.png",
+        "011-ch03-topic-03-kl-definition-t0451s.png",
+        "012-ch03-topic-03-kl-definition-t0518s.png"
+      ],
+      "labels": [
+        "ch3 05:16",
+        "ch3 06:23",
+        "ch3 07:31",
+        "ch3 08:38"
+      ],
+      "tile_seconds": [
+        316.3,
+        383.8,
+        451.2,
+        518.7
+      ],
+      "time_start": 316.3,
+      "time_end": 518.7,
+      "range_start": 297.0,
+      "range_end": 538.0
+    },
+    {
+      "file": "composites/ch04-topic-04-properties-not-metric-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-properties-not-metric",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-properties-not-metric-t0544s.png",
+        "014-ch04-topic-04-properties-not-metric-t0568s.png",
+        "015-ch04-topic-04-properties-not-metric-t0591s.png",
+        "016-ch04-topic-04-properties-not-metric-t0615s.png"
+      ],
+      "labels": [
+        "ch4 09:04",
+        "ch4 09:28",
+        "ch4 09:51",
+        "ch4 10:15"
+      ],
+      "tile_seconds": [
+        544.7,
+        568.2,
+        591.8,
+        615.3
+      ],
+      "time_start": 544.7,
+      "time_end": 615.3,
+      "range_start": 538.0,
+      "range_end": 622.0
+    },
+    {
+      "file": "composites/ch05-topic-05-continuous-notation-stop-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-continuous-notation-stop",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-continuous-notation-stop-t0652s.png",
+        "018-ch05-topic-05-continuous-notation-stop-t0761s.png",
+        "019-ch05-topic-05-continuous-notation-stop-t0869s.png",
+        "020-ch05-topic-05-continuous-notation-stop-t0978s.png"
+      ],
+      "labels": [
+        "ch5 10:52",
+        "ch5 12:41",
+        "ch5 14:29",
+        "ch5 16:18"
+      ],
+      "tile_seconds": [
+        653.0,
+        761.3,
+        869.7,
+        978.0
+      ],
+      "time_start": 653.0,
+      "time_end": 978.0,
+      "range_start": 622.0,
+      "range_end": 1009.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

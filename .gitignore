@@ -1,5 +1,7 @@
 *.png
 raw/
-screenshots/
-TRANSCRIPT.md
+screenshots/raw/
+screenshots/composites/
+screenshots/manifest.json
 GenAI-IITM.pdf
+.agents

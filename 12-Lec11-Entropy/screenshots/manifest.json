@@ -1,0 +1,376 @@
+{
+  "duration_seconds": 1076.0,
+  "range_source": "topic-ranges",
+  "range_count": 5,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 3.0,
+      "end": 213.0,
+      "slug": "topic-01-recap-recipe"
+    },
+    {
+      "index": 2,
+      "start": 213.0,
+      "end": 364.0,
+      "slug": "topic-02-need-divergences"
+    },
+    {
+      "index": 3,
+      "start": 364.0,
+      "end": 632.0,
+      "slug": "topic-03-surprisal"
+    },
+    {
+      "index": 4,
+      "start": 632.0,
+      "end": 952.0,
+      "slug": "topic-04-average-entropy-formula"
+    },
+    {
+      "index": 5,
+      "start": 952.0,
+      "end": 1076.0,
+      "slug": "topic-05-entropy-name-aside"
+    }
+  ],
+  "raw_count": 20,
+  "composite_count": 5,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-recap-recipe-t0019s.png",
+      "seconds": 19.8,
+      "chapter": 1,
+      "slug": "topic-01-recap-recipe",
+      "label": "00:19",
+      "range_start": 3.0,
+      "range_end": 213.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-recap-recipe-t0078s.png",
+      "seconds": 78.6,
+      "chapter": 1,
+      "slug": "topic-01-recap-recipe",
+      "label": "01:18",
+      "range_start": 3.0,
+      "range_end": 213.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-recap-recipe-t0137s.png",
+      "seconds": 137.4,
+      "chapter": 1,
+      "slug": "topic-01-recap-recipe",
+      "label": "02:17",
+      "range_start": 3.0,
+      "range_end": 213.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-recap-recipe-t0196s.png",
+      "seconds": 196.2,
+      "chapter": 1,
+      "slug": "topic-01-recap-recipe",
+      "label": "03:16",
+      "range_start": 3.0,
+      "range_end": 213.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-need-divergences-t0225s.png",
+      "seconds": 225.1,
+      "chapter": 2,
+      "slug": "topic-02-need-divergences",
+      "label": "03:45",
+      "range_start": 213.0,
+      "range_end": 364.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-need-divergences-t0267s.png",
+      "seconds": 267.4,
+      "chapter": 2,
+      "slug": "topic-02-need-divergences",
+      "label": "04:27",
+      "range_start": 213.0,
+      "range_end": 364.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-need-divergences-t0309s.png",
+      "seconds": 309.6,
+      "chapter": 2,
+      "slug": "topic-02-need-divergences",
+      "label": "05:09",
+      "range_start": 213.0,
+      "range_end": 364.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-need-divergences-t0351s.png",
+      "seconds": 351.9,
+      "chapter": 2,
+      "slug": "topic-02-need-divergences",
+      "label": "05:51",
+      "range_start": 213.0,
+      "range_end": 364.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-surprisal-t0385s.png",
+      "seconds": 385.4,
+      "chapter": 3,
+      "slug": "topic-03-surprisal",
+      "label": "06:25",
+      "range_start": 364.0,
+      "range_end": 632.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-surprisal-t0460s.png",
+      "seconds": 460.5,
+      "chapter": 3,
+      "slug": "topic-03-surprisal",
+      "label": "07:40",
+      "range_start": 364.0,
+      "range_end": 632.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-surprisal-t0535s.png",
+      "seconds": 535.5,
+      "chapter": 3,
+      "slug": "topic-03-surprisal",
+      "label": "08:55",
+      "range_start": 364.0,
+      "range_end": 632.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-surprisal-t0610s.png",
+      "seconds": 610.6,
+      "chapter": 3,
+      "slug": "topic-03-surprisal",
+      "label": "10:10",
+      "range_start": 364.0,
+      "range_end": 632.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-average-entropy-formula-t0657s.png",
+      "seconds": 657.6,
+      "chapter": 4,
+      "slug": "topic-04-average-entropy-formula",
+      "label": "10:57",
+      "range_start": 632.0,
+      "range_end": 952.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-average-entropy-formula-t0747s.png",
+      "seconds": 747.2,
+      "chapter": 4,
+      "slug": "topic-04-average-entropy-formula",
+      "label": "12:27",
+      "range_start": 632.0,
+      "range_end": 952.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-average-entropy-formula-t0836s.png",
+      "seconds": 836.8,
+      "chapter": 4,
+      "slug": "topic-04-average-entropy-formula",
+      "label": "13:56",
+      "range_start": 632.0,
+      "range_end": 952.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-average-entropy-formula-t0926s.png",
+      "seconds": 926.4,
+      "chapter": 4,
+      "slug": "topic-04-average-entropy-formula",
+      "label": "15:26",
+      "range_start": 632.0,
+      "range_end": 952.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-entropy-name-aside-t0961s.png",
+      "seconds": 961.9,
+      "chapter": 5,
+      "slug": "topic-05-entropy-name-aside",
+      "label": "16:01",
+      "range_start": 952.0,
+      "range_end": 1076.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-entropy-name-aside-t0996s.png",
+      "seconds": 996.6,
+      "chapter": 5,
+      "slug": "topic-05-entropy-name-aside",
+      "label": "16:36",
+      "range_start": 952.0,
+      "range_end": 1076.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-entropy-name-aside-t1031s.png",
+      "seconds": 1031.4,
+      "chapter": 5,
+      "slug": "topic-05-entropy-name-aside",
+      "label": "17:11",
+      "range_start": 952.0,
+      "range_end": 1076.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-entropy-name-aside-t1066s.png",
+      "seconds": 1066.1,
+      "chapter": 5,
+      "slug": "topic-05-entropy-name-aside",
+      "label": "17:46",
+      "range_start": 952.0,
+      "range_end": 1076.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-recap-recipe-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-recap-recipe",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-recap-recipe-t0019s.png",
+        "002-ch01-topic-01-recap-recipe-t0078s.png",
+        "003-ch01-topic-01-recap-recipe-t0137s.png",
+        "004-ch01-topic-01-recap-recipe-t0196s.png"
+      ],
+      "labels": [
+        "ch1 00:19",
+        "ch1 01:18",
+        "ch1 02:17",
+        "ch1 03:16"
+      ],
+      "tile_seconds": [
+        19.8,
+        78.6,
+        137.4,
+        196.2
+      ],
+      "time_start": 19.8,
+      "time_end": 196.2,
+      "range_start": 3.0,
+      "range_end": 213.0
+    },
+    {
+      "file": "composites/ch02-topic-02-need-divergences-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-need-divergences",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-need-divergences-t0225s.png",
+        "006-ch02-topic-02-need-divergences-t0267s.png",
+        "007-ch02-topic-02-need-divergences-t0309s.png",
+        "008-ch02-topic-02-need-divergences-t0351s.png"
+      ],
+      "labels": [
+        "ch2 03:45",
+        "ch2 04:27",
+        "ch2 05:09",
+        "ch2 05:51"
+      ],
+      "tile_seconds": [
+        225.1,
+        267.4,
+        309.6,
+        351.9
+      ],
+      "time_start": 225.1,
+      "time_end": 351.9,
+      "range_start": 213.0,
+      "range_end": 364.0
+    },
+    {
+      "file": "composites/ch03-topic-03-surprisal-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-surprisal",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-surprisal-t0385s.png",
+        "010-ch03-topic-03-surprisal-t0460s.png",
+        "011-ch03-topic-03-surprisal-t0535s.png",
+        "012-ch03-topic-03-surprisal-t0610s.png"
+      ],
+      "labels": [
+        "ch3 06:25",
+        "ch3 07:40",
+        "ch3 08:55",
+        "ch3 10:10"
+      ],
+      "tile_seconds": [
+        385.4,
+        460.5,
+        535.5,
+        610.6
+      ],
+      "time_start": 385.4,
+      "time_end": 610.6,
+      "range_start": 364.0,
+      "range_end": 632.0
+    },
+    {
+      "file": "composites/ch04-topic-04-average-entropy-formula-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-average-entropy-formula",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-average-entropy-formula-t0657s.png",
+        "014-ch04-topic-04-average-entropy-formula-t0747s.png",
+        "015-ch04-topic-04-average-entropy-formula-t0836s.png",
+        "016-ch04-topic-04-average-entropy-formula-t0926s.png"
+      ],
+      "labels": [
+        "ch4 10:57",
+        "ch4 12:27",
+        "ch4 13:56",
+        "ch4 15:26"
+      ],
+      "tile_seconds": [
+        657.6,
+        747.2,
+        836.8,
+        926.4
+      ],
+      "time_start": 657.6,
+      "time_end": 926.4,
+      "range_start": 632.0,
+      "range_end": 952.0
+    },
+    {
+      "file": "composites/ch05-topic-05-entropy-name-aside-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-entropy-name-aside",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-entropy-name-aside-t0961s.png",
+        "018-ch05-topic-05-entropy-name-aside-t0996s.png",
+        "019-ch05-topic-05-entropy-name-aside-t1031s.png",
+        "020-ch05-topic-05-entropy-name-aside-t1066s.png"
+      ],
+      "labels": [
+        "ch5 16:01",
+        "ch5 16:36",
+        "ch5 17:11",
+        "ch5 17:46"
+      ],
+      "tile_seconds": [
+        961.9,
+        996.6,
+        1031.4,
+        1066.1
+      ],
+      "time_start": 961.9,
+      "time_end": 1066.1,
+      "range_start": 952.0,
+      "range_end": 1076.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

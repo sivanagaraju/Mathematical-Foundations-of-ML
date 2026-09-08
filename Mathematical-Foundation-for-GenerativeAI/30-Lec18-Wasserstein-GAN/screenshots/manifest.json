@@ -1,0 +1,725 @@
+{
+  "duration_seconds": 2688.0,
+  "range_source": "topic-ranges",
+  "range_count": 9,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 2.0,
+      "end": 513.0,
+      "slug": "topic-01-agenda-saddle-hessian-unstable"
+    },
+    {
+      "index": 2,
+      "start": 513.0,
+      "end": 853.0,
+      "slug": "topic-02-manifold-hypothesis"
+    },
+    {
+      "index": 3,
+      "start": 853.0,
+      "end": 1088.0,
+      "slug": "topic-03-perfect-discriminator-saturates"
+    },
+    {
+      "index": 4,
+      "start": 1088.0,
+      "end": 1291.0,
+      "slug": "topic-04-two-diracs-fdiv-maxes-out"
+    },
+    {
+      "index": 5,
+      "start": 1291.0,
+      "end": 1611.0,
+      "slug": "topic-05-wasserstein-definition"
+    },
+    {
+      "index": 6,
+      "start": 1611.0,
+      "end": 1920.0,
+      "slug": "topic-06-transport-plan-is-a-joint"
+    },
+    {
+      "index": 7,
+      "start": 1920.0,
+      "end": 2201.0,
+      "slug": "topic-07-earth-mover-work-w-proportional-theta"
+    },
+    {
+      "index": 8,
+      "start": 2201.0,
+      "end": 2428.0,
+      "slug": "topic-08-kantorovich-rubinstein-dual"
+    },
+    {
+      "index": 9,
+      "start": 2428.0,
+      "end": 2688.0,
+      "slug": "topic-09-wgan-one-lipschitz-weight-norm"
+    }
+  ],
+  "raw_count": 40,
+  "composite_count": 10,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-agenda-saddle-hessian-unstable-t0042s.png",
+      "seconds": 42.9,
+      "chapter": 1,
+      "slug": "topic-01-agenda-saddle-hessian-unstable",
+      "label": "00:42",
+      "range_start": 2.0,
+      "range_end": 513.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-agenda-saddle-hessian-unstable-t0104s.png",
+      "seconds": 104.2,
+      "chapter": 1,
+      "slug": "topic-01-agenda-saddle-hessian-unstable",
+      "label": "01:44",
+      "range_start": 2.0,
+      "range_end": 513.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-agenda-saddle-hessian-unstable-t0165s.png",
+      "seconds": 165.5,
+      "chapter": 1,
+      "slug": "topic-01-agenda-saddle-hessian-unstable",
+      "label": "02:45",
+      "range_start": 2.0,
+      "range_end": 513.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-agenda-saddle-hessian-unstable-t0226s.png",
+      "seconds": 226.8,
+      "chapter": 1,
+      "slug": "topic-01-agenda-saddle-hessian-unstable",
+      "label": "03:46",
+      "range_start": 2.0,
+      "range_end": 513.0
+    },
+    {
+      "file": "raw/005-ch01-topic-01-agenda-saddle-hessian-unstable-t0288s.png",
+      "seconds": 288.2,
+      "chapter": 1,
+      "slug": "topic-01-agenda-saddle-hessian-unstable",
+      "label": "04:48",
+      "range_start": 2.0,
+      "range_end": 513.0
+    },
+    {
+      "file": "raw/006-ch01-topic-01-agenda-saddle-hessian-unstable-t0349s.png",
+      "seconds": 349.5,
+      "chapter": 1,
+      "slug": "topic-01-agenda-saddle-hessian-unstable",
+      "label": "05:49",
+      "range_start": 2.0,
+      "range_end": 513.0
+    },
+    {
+      "file": "raw/007-ch01-topic-01-agenda-saddle-hessian-unstable-t0410s.png",
+      "seconds": 410.8,
+      "chapter": 1,
+      "slug": "topic-01-agenda-saddle-hessian-unstable",
+      "label": "06:50",
+      "range_start": 2.0,
+      "range_end": 513.0
+    },
+    {
+      "file": "raw/008-ch01-topic-01-agenda-saddle-hessian-unstable-t0472s.png",
+      "seconds": 472.1,
+      "chapter": 1,
+      "slug": "topic-01-agenda-saddle-hessian-unstable",
+      "label": "07:52",
+      "range_start": 2.0,
+      "range_end": 513.0
+    },
+    {
+      "file": "raw/009-ch02-topic-02-manifold-hypothesis-t0540s.png",
+      "seconds": 540.2,
+      "chapter": 2,
+      "slug": "topic-02-manifold-hypothesis",
+      "label": "09:00",
+      "range_start": 513.0,
+      "range_end": 853.0
+    },
+    {
+      "file": "raw/010-ch02-topic-02-manifold-hypothesis-t0635s.png",
+      "seconds": 635.4,
+      "chapter": 2,
+      "slug": "topic-02-manifold-hypothesis",
+      "label": "10:35",
+      "range_start": 513.0,
+      "range_end": 853.0
+    },
+    {
+      "file": "raw/011-ch02-topic-02-manifold-hypothesis-t0730s.png",
+      "seconds": 730.6,
+      "chapter": 2,
+      "slug": "topic-02-manifold-hypothesis",
+      "label": "12:10",
+      "range_start": 513.0,
+      "range_end": 853.0
+    },
+    {
+      "file": "raw/012-ch02-topic-02-manifold-hypothesis-t0825s.png",
+      "seconds": 825.8,
+      "chapter": 2,
+      "slug": "topic-02-manifold-hypothesis",
+      "label": "13:45",
+      "range_start": 513.0,
+      "range_end": 853.0
+    },
+    {
+      "file": "raw/013-ch03-topic-03-perfect-discriminator-saturates-t0871s.png",
+      "seconds": 871.8,
+      "chapter": 3,
+      "slug": "topic-03-perfect-discriminator-saturates",
+      "label": "14:31",
+      "range_start": 853.0,
+      "range_end": 1088.0
+    },
+    {
+      "file": "raw/014-ch03-topic-03-perfect-discriminator-saturates-t0937s.png",
+      "seconds": 937.6,
+      "chapter": 3,
+      "slug": "topic-03-perfect-discriminator-saturates",
+      "label": "15:37",
+      "range_start": 853.0,
+      "range_end": 1088.0
+    },
+    {
+      "file": "raw/015-ch03-topic-03-perfect-discriminator-saturates-t1003s.png",
+      "seconds": 1003.4,
+      "chapter": 3,
+      "slug": "topic-03-perfect-discriminator-saturates",
+      "label": "16:43",
+      "range_start": 853.0,
+      "range_end": 1088.0
+    },
+    {
+      "file": "raw/016-ch03-topic-03-perfect-discriminator-saturates-t1069s.png",
+      "seconds": 1069.2,
+      "chapter": 3,
+      "slug": "topic-03-perfect-discriminator-saturates",
+      "label": "17:49",
+      "range_start": 853.0,
+      "range_end": 1088.0
+    },
+    {
+      "file": "raw/017-ch04-topic-04-two-diracs-fdiv-maxes-out-t1104s.png",
+      "seconds": 1104.2,
+      "chapter": 4,
+      "slug": "topic-04-two-diracs-fdiv-maxes-out",
+      "label": "18:24",
+      "range_start": 1088.0,
+      "range_end": 1291.0
+    },
+    {
+      "file": "raw/018-ch04-topic-04-two-diracs-fdiv-maxes-out-t1161s.png",
+      "seconds": 1161.1,
+      "chapter": 4,
+      "slug": "topic-04-two-diracs-fdiv-maxes-out",
+      "label": "19:21",
+      "range_start": 1088.0,
+      "range_end": 1291.0
+    },
+    {
+      "file": "raw/019-ch04-topic-04-two-diracs-fdiv-maxes-out-t1217s.png",
+      "seconds": 1217.9,
+      "chapter": 4,
+      "slug": "topic-04-two-diracs-fdiv-maxes-out",
+      "label": "20:17",
+      "range_start": 1088.0,
+      "range_end": 1291.0
+    },
+    {
+      "file": "raw/020-ch04-topic-04-two-diracs-fdiv-maxes-out-t1274s.png",
+      "seconds": 1274.8,
+      "chapter": 4,
+      "slug": "topic-04-two-diracs-fdiv-maxes-out",
+      "label": "21:14",
+      "range_start": 1088.0,
+      "range_end": 1291.0
+    },
+    {
+      "file": "raw/021-ch05-topic-05-wasserstein-definition-t1316s.png",
+      "seconds": 1316.6,
+      "chapter": 5,
+      "slug": "topic-05-wasserstein-definition",
+      "label": "21:56",
+      "range_start": 1291.0,
+      "range_end": 1611.0
+    },
+    {
+      "file": "raw/022-ch05-topic-05-wasserstein-definition-t1406s.png",
+      "seconds": 1406.2,
+      "chapter": 5,
+      "slug": "topic-05-wasserstein-definition",
+      "label": "23:26",
+      "range_start": 1291.0,
+      "range_end": 1611.0
+    },
+    {
+      "file": "raw/023-ch05-topic-05-wasserstein-definition-t1495s.png",
+      "seconds": 1495.8,
+      "chapter": 5,
+      "slug": "topic-05-wasserstein-definition",
+      "label": "24:55",
+      "range_start": 1291.0,
+      "range_end": 1611.0
+    },
+    {
+      "file": "raw/024-ch05-topic-05-wasserstein-definition-t1585s.png",
+      "seconds": 1585.4,
+      "chapter": 5,
+      "slug": "topic-05-wasserstein-definition",
+      "label": "26:25",
+      "range_start": 1291.0,
+      "range_end": 1611.0
+    },
+    {
+      "file": "raw/025-ch06-topic-06-transport-plan-is-a-joint-t1635s.png",
+      "seconds": 1635.7,
+      "chapter": 6,
+      "slug": "topic-06-transport-plan-is-a-joint",
+      "label": "27:15",
+      "range_start": 1611.0,
+      "range_end": 1920.0
+    },
+    {
+      "file": "raw/026-ch06-topic-06-transport-plan-is-a-joint-t1722s.png",
+      "seconds": 1722.2,
+      "chapter": 6,
+      "slug": "topic-06-transport-plan-is-a-joint",
+      "label": "28:42",
+      "range_start": 1611.0,
+      "range_end": 1920.0
+    },
+    {
+      "file": "raw/027-ch06-topic-06-transport-plan-is-a-joint-t1808s.png",
+      "seconds": 1808.8,
+      "chapter": 6,
+      "slug": "topic-06-transport-plan-is-a-joint",
+      "label": "30:08",
+      "range_start": 1611.0,
+      "range_end": 1920.0
+    },
+    {
+      "file": "raw/028-ch06-topic-06-transport-plan-is-a-joint-t1895s.png",
+      "seconds": 1895.3,
+      "chapter": 6,
+      "slug": "topic-06-transport-plan-is-a-joint",
+      "label": "31:35",
+      "range_start": 1611.0,
+      "range_end": 1920.0
+    },
+    {
+      "file": "raw/029-ch07-topic-07-earth-mover-work-w-proportional-theta-t1942s.png",
+      "seconds": 1942.5,
+      "chapter": 7,
+      "slug": "topic-07-earth-mover-work-w-proportional-theta",
+      "label": "32:22",
+      "range_start": 1920.0,
+      "range_end": 2201.0
+    },
+    {
+      "file": "raw/030-ch07-topic-07-earth-mover-work-w-proportional-theta-t2021s.png",
+      "seconds": 2021.2,
+      "chapter": 7,
+      "slug": "topic-07-earth-mover-work-w-proportional-theta",
+      "label": "33:41",
+      "range_start": 1920.0,
+      "range_end": 2201.0
+    },
+    {
+      "file": "raw/031-ch07-topic-07-earth-mover-work-w-proportional-theta-t2099s.png",
+      "seconds": 2099.8,
+      "chapter": 7,
+      "slug": "topic-07-earth-mover-work-w-proportional-theta",
+      "label": "34:59",
+      "range_start": 1920.0,
+      "range_end": 2201.0
+    },
+    {
+      "file": "raw/032-ch07-topic-07-earth-mover-work-w-proportional-theta-t2178s.png",
+      "seconds": 2178.5,
+      "chapter": 7,
+      "slug": "topic-07-earth-mover-work-w-proportional-theta",
+      "label": "36:18",
+      "range_start": 1920.0,
+      "range_end": 2201.0
+    },
+    {
+      "file": "raw/033-ch08-topic-08-kantorovich-rubinstein-dual-t2219s.png",
+      "seconds": 2219.2,
+      "chapter": 8,
+      "slug": "topic-08-kantorovich-rubinstein-dual",
+      "label": "36:59",
+      "range_start": 2201.0,
+      "range_end": 2428.0
+    },
+    {
+      "file": "raw/034-ch08-topic-08-kantorovich-rubinstein-dual-t2282s.png",
+      "seconds": 2282.7,
+      "chapter": 8,
+      "slug": "topic-08-kantorovich-rubinstein-dual",
+      "label": "38:02",
+      "range_start": 2201.0,
+      "range_end": 2428.0
+    },
+    {
+      "file": "raw/035-ch08-topic-08-kantorovich-rubinstein-dual-t2346s.png",
+      "seconds": 2346.3,
+      "chapter": 8,
+      "slug": "topic-08-kantorovich-rubinstein-dual",
+      "label": "39:06",
+      "range_start": 2201.0,
+      "range_end": 2428.0
+    },
+    {
+      "file": "raw/036-ch08-topic-08-kantorovich-rubinstein-dual-t2409s.png",
+      "seconds": 2409.8,
+      "chapter": 8,
+      "slug": "topic-08-kantorovich-rubinstein-dual",
+      "label": "40:09",
+      "range_start": 2201.0,
+      "range_end": 2428.0
+    },
+    {
+      "file": "raw/037-ch09-topic-09-wgan-one-lipschitz-weight-norm-t2448s.png",
+      "seconds": 2448.8,
+      "chapter": 9,
+      "slug": "topic-09-wgan-one-lipschitz-weight-norm",
+      "label": "40:48",
+      "range_start": 2428.0,
+      "range_end": 2688.0
+    },
+    {
+      "file": "raw/038-ch09-topic-09-wgan-one-lipschitz-weight-norm-t2521s.png",
+      "seconds": 2521.6,
+      "chapter": 9,
+      "slug": "topic-09-wgan-one-lipschitz-weight-norm",
+      "label": "42:01",
+      "range_start": 2428.0,
+      "range_end": 2688.0
+    },
+    {
+      "file": "raw/039-ch09-topic-09-wgan-one-lipschitz-weight-norm-t2594s.png",
+      "seconds": 2594.4,
+      "chapter": 9,
+      "slug": "topic-09-wgan-one-lipschitz-weight-norm",
+      "label": "43:14",
+      "range_start": 2428.0,
+      "range_end": 2688.0
+    },
+    {
+      "file": "raw/040-ch09-topic-09-wgan-one-lipschitz-weight-norm-t2667s.png",
+      "seconds": 2667.2,
+      "chapter": 9,
+      "slug": "topic-09-wgan-one-lipschitz-weight-norm",
+      "label": "44:27",
+      "range_start": 2428.0,
+      "range_end": 2688.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-agenda-saddle-hessian-unstable-panel1of2.png",
+      "chapter": 1,
+      "slug": "topic-01-agenda-saddle-hessian-unstable",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "001-ch01-topic-01-agenda-saddle-hessian-unstable-t0042s.png",
+        "002-ch01-topic-01-agenda-saddle-hessian-unstable-t0104s.png",
+        "003-ch01-topic-01-agenda-saddle-hessian-unstable-t0165s.png",
+        "004-ch01-topic-01-agenda-saddle-hessian-unstable-t0226s.png"
+      ],
+      "labels": [
+        "ch1 00:42",
+        "ch1 01:44",
+        "ch1 02:45",
+        "ch1 03:46"
+      ],
+      "tile_seconds": [
+        42.9,
+        104.2,
+        165.5,
+        226.8
+      ],
+      "time_start": 42.9,
+      "time_end": 226.8,
+      "range_start": 2.0,
+      "range_end": 513.0
+    },
+    {
+      "file": "composites/ch01-topic-01-agenda-saddle-hessian-unstable-panel2of2.png",
+      "chapter": 1,
+      "slug": "topic-01-agenda-saddle-hessian-unstable",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "005-ch01-topic-01-agenda-saddle-hessian-unstable-t0288s.png",
+        "006-ch01-topic-01-agenda-saddle-hessian-unstable-t0349s.png",
+        "007-ch01-topic-01-agenda-saddle-hessian-unstable-t0410s.png",
+        "008-ch01-topic-01-agenda-saddle-hessian-unstable-t0472s.png"
+      ],
+      "labels": [
+        "ch1 04:48",
+        "ch1 05:49",
+        "ch1 06:50",
+        "ch1 07:52"
+      ],
+      "tile_seconds": [
+        288.2,
+        349.5,
+        410.8,
+        472.1
+      ],
+      "time_start": 288.2,
+      "time_end": 472.1,
+      "range_start": 2.0,
+      "range_end": 513.0
+    },
+    {
+      "file": "composites/ch02-topic-02-manifold-hypothesis-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-manifold-hypothesis",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch02-topic-02-manifold-hypothesis-t0540s.png",
+        "010-ch02-topic-02-manifold-hypothesis-t0635s.png",
+        "011-ch02-topic-02-manifold-hypothesis-t0730s.png",
+        "012-ch02-topic-02-manifold-hypothesis-t0825s.png"
+      ],
+      "labels": [
+        "ch2 09:00",
+        "ch2 10:35",
+        "ch2 12:10",
+        "ch2 13:45"
+      ],
+      "tile_seconds": [
+        540.2,
+        635.4,
+        730.6,
+        825.8
+      ],
+      "time_start": 540.2,
+      "time_end": 825.8,
+      "range_start": 513.0,
+      "range_end": 853.0
+    },
+    {
+      "file": "composites/ch03-topic-03-perfect-discriminator-saturates-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-perfect-discriminator-saturates",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch03-topic-03-perfect-discriminator-saturates-t0871s.png",
+        "014-ch03-topic-03-perfect-discriminator-saturates-t0937s.png",
+        "015-ch03-topic-03-perfect-discriminator-saturates-t1003s.png",
+        "016-ch03-topic-03-perfect-discriminator-saturates-t1069s.png"
+      ],
+      "labels": [
+        "ch3 14:31",
+        "ch3 15:37",
+        "ch3 16:43",
+        "ch3 17:49"
+      ],
+      "tile_seconds": [
+        871.8,
+        937.6,
+        1003.4,
+        1069.2
+      ],
+      "time_start": 871.8,
+      "time_end": 1069.2,
+      "range_start": 853.0,
+      "range_end": 1088.0
+    },
+    {
+      "file": "composites/ch04-topic-04-two-diracs-fdiv-maxes-out-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-two-diracs-fdiv-maxes-out",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch04-topic-04-two-diracs-fdiv-maxes-out-t1104s.png",
+        "018-ch04-topic-04-two-diracs-fdiv-maxes-out-t1161s.png",
+        "019-ch04-topic-04-two-diracs-fdiv-maxes-out-t1217s.png",
+        "020-ch04-topic-04-two-diracs-fdiv-maxes-out-t1274s.png"
+      ],
+      "labels": [
+        "ch4 18:24",
+        "ch4 19:21",
+        "ch4 20:17",
+        "ch4 21:14"
+      ],
+      "tile_seconds": [
+        1104.2,
+        1161.1,
+        1217.9,
+        1274.8
+      ],
+      "time_start": 1104.2,
+      "time_end": 1274.8,
+      "range_start": 1088.0,
+      "range_end": 1291.0
+    },
+    {
+      "file": "composites/ch05-topic-05-wasserstein-definition-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-wasserstein-definition",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch05-topic-05-wasserstein-definition-t1316s.png",
+        "022-ch05-topic-05-wasserstein-definition-t1406s.png",
+        "023-ch05-topic-05-wasserstein-definition-t1495s.png",
+        "024-ch05-topic-05-wasserstein-definition-t1585s.png"
+      ],
+      "labels": [
+        "ch5 21:56",
+        "ch5 23:26",
+        "ch5 24:55",
+        "ch5 26:25"
+      ],
+      "tile_seconds": [
+        1316.6,
+        1406.2,
+        1495.8,
+        1585.4
+      ],
+      "time_start": 1316.6,
+      "time_end": 1585.4,
+      "range_start": 1291.0,
+      "range_end": 1611.0
+    },
+    {
+      "file": "composites/ch06-topic-06-transport-plan-is-a-joint-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-transport-plan-is-a-joint",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch06-topic-06-transport-plan-is-a-joint-t1635s.png",
+        "026-ch06-topic-06-transport-plan-is-a-joint-t1722s.png",
+        "027-ch06-topic-06-transport-plan-is-a-joint-t1808s.png",
+        "028-ch06-topic-06-transport-plan-is-a-joint-t1895s.png"
+      ],
+      "labels": [
+        "ch6 27:15",
+        "ch6 28:42",
+        "ch6 30:08",
+        "ch6 31:35"
+      ],
+      "tile_seconds": [
+        1635.7,
+        1722.2,
+        1808.8,
+        1895.3
+      ],
+      "time_start": 1635.7,
+      "time_end": 1895.3,
+      "range_start": 1611.0,
+      "range_end": 1920.0
+    },
+    {
+      "file": "composites/ch07-topic-07-earth-mover-work-w-proportional-theta-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-earth-mover-work-w-proportional-theta",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch07-topic-07-earth-mover-work-w-proportional-theta-t1942s.png",
+        "030-ch07-topic-07-earth-mover-work-w-proportional-theta-t2021s.png",
+        "031-ch07-topic-07-earth-mover-work-w-proportional-theta-t2099s.png",
+        "032-ch07-topic-07-earth-mover-work-w-proportional-theta-t2178s.png"
+      ],
+      "labels": [
+        "ch7 32:22",
+        "ch7 33:41",
+        "ch7 34:59",
+        "ch7 36:18"
+      ],
+      "tile_seconds": [
+        1942.5,
+        2021.2,
+        2099.8,
+        2178.5
+      ],
+      "time_start": 1942.5,
+      "time_end": 2178.5,
+      "range_start": 1920.0,
+      "range_end": 2201.0
+    },
+    {
+      "file": "composites/ch08-topic-08-kantorovich-rubinstein-dual-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-kantorovich-rubinstein-dual",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch08-topic-08-kantorovich-rubinstein-dual-t2219s.png",
+        "034-ch08-topic-08-kantorovich-rubinstein-dual-t2282s.png",
+        "035-ch08-topic-08-kantorovich-rubinstein-dual-t2346s.png",
+        "036-ch08-topic-08-kantorovich-rubinstein-dual-t2409s.png"
+      ],
+      "labels": [
+        "ch8 36:59",
+        "ch8 38:02",
+        "ch8 39:06",
+        "ch8 40:09"
+      ],
+      "tile_seconds": [
+        2219.2,
+        2282.7,
+        2346.3,
+        2409.8
+      ],
+      "time_start": 2219.2,
+      "time_end": 2409.8,
+      "range_start": 2201.0,
+      "range_end": 2428.0
+    },
+    {
+      "file": "composites/ch09-topic-09-wgan-one-lipschitz-weight-norm-panel1of1.png",
+      "chapter": 9,
+      "slug": "topic-09-wgan-one-lipschitz-weight-norm",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "037-ch09-topic-09-wgan-one-lipschitz-weight-norm-t2448s.png",
+        "038-ch09-topic-09-wgan-one-lipschitz-weight-norm-t2521s.png",
+        "039-ch09-topic-09-wgan-one-lipschitz-weight-norm-t2594s.png",
+        "040-ch09-topic-09-wgan-one-lipschitz-weight-norm-t2667s.png"
+      ],
+      "labels": [
+        "ch9 40:48",
+        "ch9 42:01",
+        "ch9 43:14",
+        "ch9 44:27"
+      ],
+      "tile_seconds": [
+        2448.8,
+        2521.6,
+        2594.4,
+        2667.2
+      ],
+      "time_start": 2448.8,
+      "time_end": 2667.2,
+      "range_start": 2428.0,
+      "range_end": 2688.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

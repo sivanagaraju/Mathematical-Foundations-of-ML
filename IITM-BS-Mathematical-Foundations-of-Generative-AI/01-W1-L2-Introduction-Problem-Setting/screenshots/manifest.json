@@ -1,0 +1,861 @@
+{
+  "duration_seconds": 3512.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 11.0,
+      "end": 293.0,
+      "slug": "topic-01-conditional-generators"
+    },
+    {
+      "index": 2,
+      "start": 293.0,
+      "end": 414.0,
+      "slug": "topic-02-data-iid-px"
+    },
+    {
+      "index": 3,
+      "start": 414.0,
+      "end": 562.0,
+      "slug": "topic-03-high-d-images"
+    },
+    {
+      "index": 4,
+      "start": 562.0,
+      "end": 1005.0,
+      "slug": "topic-04-vector-rv-iid"
+    },
+    {
+      "index": 5,
+      "start": 1005.0,
+      "end": 1187.0,
+      "slug": "topic-05-estimate-and-sample"
+    },
+    {
+      "index": 6,
+      "start": 1187.0,
+      "end": 1459.0,
+      "slug": "topic-06-parametric-family-dnn"
+    },
+    {
+      "index": 7,
+      "start": 1459.0,
+      "end": 1711.0,
+      "slug": "topic-07-divergence-optimize"
+    },
+    {
+      "index": 8,
+      "start": 1711.0,
+      "end": 2186.0,
+      "slug": "topic-08-z-gtheta-sampling"
+    },
+    {
+      "index": 9,
+      "start": 2186.0,
+      "end": 2874.0,
+      "slug": "topic-09-train-then-sample"
+    },
+    {
+      "index": 10,
+      "start": 2874.0,
+      "end": 3512.0,
+      "slug": "topic-10-open-questions-recap"
+    }
+  ],
+  "raw_count": 48,
+  "composite_count": 12,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-conditional-generators-t0033s.png",
+      "seconds": 33.6,
+      "chapter": 1,
+      "slug": "topic-01-conditional-generators",
+      "label": "00:33",
+      "range_start": 11.0,
+      "range_end": 293.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-conditional-generators-t0112s.png",
+      "seconds": 112.5,
+      "chapter": 1,
+      "slug": "topic-01-conditional-generators",
+      "label": "01:52",
+      "range_start": 11.0,
+      "range_end": 293.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-conditional-generators-t0191s.png",
+      "seconds": 191.5,
+      "chapter": 1,
+      "slug": "topic-01-conditional-generators",
+      "label": "03:11",
+      "range_start": 11.0,
+      "range_end": 293.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-conditional-generators-t0270s.png",
+      "seconds": 270.4,
+      "chapter": 1,
+      "slug": "topic-01-conditional-generators",
+      "label": "04:30",
+      "range_start": 11.0,
+      "range_end": 293.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-data-iid-px-t0302s.png",
+      "seconds": 302.7,
+      "chapter": 2,
+      "slug": "topic-02-data-iid-px",
+      "label": "05:02",
+      "range_start": 293.0,
+      "range_end": 414.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-data-iid-px-t0336s.png",
+      "seconds": 336.6,
+      "chapter": 2,
+      "slug": "topic-02-data-iid-px",
+      "label": "05:36",
+      "range_start": 293.0,
+      "range_end": 414.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-data-iid-px-t0370s.png",
+      "seconds": 370.4,
+      "chapter": 2,
+      "slug": "topic-02-data-iid-px",
+      "label": "06:10",
+      "range_start": 293.0,
+      "range_end": 414.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-data-iid-px-t0404s.png",
+      "seconds": 404.3,
+      "chapter": 2,
+      "slug": "topic-02-data-iid-px",
+      "label": "06:44",
+      "range_start": 293.0,
+      "range_end": 414.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-high-d-images-t0425s.png",
+      "seconds": 425.8,
+      "chapter": 3,
+      "slug": "topic-03-high-d-images",
+      "label": "07:05",
+      "range_start": 414.0,
+      "range_end": 562.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-high-d-images-t0467s.png",
+      "seconds": 467.3,
+      "chapter": 3,
+      "slug": "topic-03-high-d-images",
+      "label": "07:47",
+      "range_start": 414.0,
+      "range_end": 562.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-high-d-images-t0508s.png",
+      "seconds": 508.7,
+      "chapter": 3,
+      "slug": "topic-03-high-d-images",
+      "label": "08:28",
+      "range_start": 414.0,
+      "range_end": 562.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-high-d-images-t0550s.png",
+      "seconds": 550.2,
+      "chapter": 3,
+      "slug": "topic-03-high-d-images",
+      "label": "09:10",
+      "range_start": 414.0,
+      "range_end": 562.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-vector-rv-iid-t0597s.png",
+      "seconds": 597.4,
+      "chapter": 4,
+      "slug": "topic-04-vector-rv-iid",
+      "label": "09:57",
+      "range_start": 562.0,
+      "range_end": 1005.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-vector-rv-iid-t0721s.png",
+      "seconds": 721.5,
+      "chapter": 4,
+      "slug": "topic-04-vector-rv-iid",
+      "label": "12:01",
+      "range_start": 562.0,
+      "range_end": 1005.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-vector-rv-iid-t0845s.png",
+      "seconds": 845.5,
+      "chapter": 4,
+      "slug": "topic-04-vector-rv-iid",
+      "label": "14:05",
+      "range_start": 562.0,
+      "range_end": 1005.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-vector-rv-iid-t0969s.png",
+      "seconds": 969.6,
+      "chapter": 4,
+      "slug": "topic-04-vector-rv-iid",
+      "label": "16:09",
+      "range_start": 562.0,
+      "range_end": 1005.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-estimate-and-sample-t1019s.png",
+      "seconds": 1019.6,
+      "chapter": 5,
+      "slug": "topic-05-estimate-and-sample",
+      "label": "16:59",
+      "range_start": 1005.0,
+      "range_end": 1187.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-estimate-and-sample-t1070s.png",
+      "seconds": 1070.5,
+      "chapter": 5,
+      "slug": "topic-05-estimate-and-sample",
+      "label": "17:50",
+      "range_start": 1005.0,
+      "range_end": 1187.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-estimate-and-sample-t1121s.png",
+      "seconds": 1121.5,
+      "chapter": 5,
+      "slug": "topic-05-estimate-and-sample",
+      "label": "18:41",
+      "range_start": 1005.0,
+      "range_end": 1187.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-estimate-and-sample-t1172s.png",
+      "seconds": 1172.4,
+      "chapter": 5,
+      "slug": "topic-05-estimate-and-sample",
+      "label": "19:32",
+      "range_start": 1005.0,
+      "range_end": 1187.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-parametric-family-dnn-t1208s.png",
+      "seconds": 1208.8,
+      "chapter": 6,
+      "slug": "topic-06-parametric-family-dnn",
+      "label": "20:08",
+      "range_start": 1187.0,
+      "range_end": 1459.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-parametric-family-dnn-t1284s.png",
+      "seconds": 1284.9,
+      "chapter": 6,
+      "slug": "topic-06-parametric-family-dnn",
+      "label": "21:24",
+      "range_start": 1187.0,
+      "range_end": 1459.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-parametric-family-dnn-t1361s.png",
+      "seconds": 1361.1,
+      "chapter": 6,
+      "slug": "topic-06-parametric-family-dnn",
+      "label": "22:41",
+      "range_start": 1187.0,
+      "range_end": 1459.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-parametric-family-dnn-t1437s.png",
+      "seconds": 1437.2,
+      "chapter": 6,
+      "slug": "topic-06-parametric-family-dnn",
+      "label": "23:57",
+      "range_start": 1187.0,
+      "range_end": 1459.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-divergence-optimize-t1479s.png",
+      "seconds": 1479.2,
+      "chapter": 7,
+      "slug": "topic-07-divergence-optimize",
+      "label": "24:39",
+      "range_start": 1459.0,
+      "range_end": 1711.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-divergence-optimize-t1549s.png",
+      "seconds": 1549.7,
+      "chapter": 7,
+      "slug": "topic-07-divergence-optimize",
+      "label": "25:49",
+      "range_start": 1459.0,
+      "range_end": 1711.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-divergence-optimize-t1620s.png",
+      "seconds": 1620.3,
+      "chapter": 7,
+      "slug": "topic-07-divergence-optimize",
+      "label": "27:00",
+      "range_start": 1459.0,
+      "range_end": 1711.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-divergence-optimize-t1690s.png",
+      "seconds": 1690.8,
+      "chapter": 7,
+      "slug": "topic-07-divergence-optimize",
+      "label": "28:10",
+      "range_start": 1459.0,
+      "range_end": 1711.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-z-gtheta-sampling-t1749s.png",
+      "seconds": 1749.0,
+      "chapter": 8,
+      "slug": "topic-08-z-gtheta-sampling",
+      "label": "29:09",
+      "range_start": 1711.0,
+      "range_end": 2186.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-z-gtheta-sampling-t1882s.png",
+      "seconds": 1882.0,
+      "chapter": 8,
+      "slug": "topic-08-z-gtheta-sampling",
+      "label": "31:22",
+      "range_start": 1711.0,
+      "range_end": 2186.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-z-gtheta-sampling-t2015s.png",
+      "seconds": 2015.0,
+      "chapter": 8,
+      "slug": "topic-08-z-gtheta-sampling",
+      "label": "33:35",
+      "range_start": 1711.0,
+      "range_end": 2186.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-z-gtheta-sampling-t2148s.png",
+      "seconds": 2148.0,
+      "chapter": 8,
+      "slug": "topic-08-z-gtheta-sampling",
+      "label": "35:48",
+      "range_start": 1711.0,
+      "range_end": 2186.0
+    },
+    {
+      "file": "raw/033-ch09-topic-09-train-then-sample-t2241s.png",
+      "seconds": 2241.0,
+      "chapter": 9,
+      "slug": "topic-09-train-then-sample",
+      "label": "37:21",
+      "range_start": 2186.0,
+      "range_end": 2874.0
+    },
+    {
+      "file": "raw/034-ch09-topic-09-train-then-sample-t2323s.png",
+      "seconds": 2323.6,
+      "chapter": 9,
+      "slug": "topic-09-train-then-sample",
+      "label": "38:43",
+      "range_start": 2186.0,
+      "range_end": 2874.0
+    },
+    {
+      "file": "raw/035-ch09-topic-09-train-then-sample-t2406s.png",
+      "seconds": 2406.2,
+      "chapter": 9,
+      "slug": "topic-09-train-then-sample",
+      "label": "40:06",
+      "range_start": 2186.0,
+      "range_end": 2874.0
+    },
+    {
+      "file": "raw/036-ch09-topic-09-train-then-sample-t2488s.png",
+      "seconds": 2488.7,
+      "chapter": 9,
+      "slug": "topic-09-train-then-sample",
+      "label": "41:28",
+      "range_start": 2186.0,
+      "range_end": 2874.0
+    },
+    {
+      "file": "raw/037-ch09-topic-09-train-then-sample-t2571s.png",
+      "seconds": 2571.3,
+      "chapter": 9,
+      "slug": "topic-09-train-then-sample",
+      "label": "42:51",
+      "range_start": 2186.0,
+      "range_end": 2874.0
+    },
+    {
+      "file": "raw/038-ch09-topic-09-train-then-sample-t2653s.png",
+      "seconds": 2653.8,
+      "chapter": 9,
+      "slug": "topic-09-train-then-sample",
+      "label": "44:13",
+      "range_start": 2186.0,
+      "range_end": 2874.0
+    },
+    {
+      "file": "raw/039-ch09-topic-09-train-then-sample-t2736s.png",
+      "seconds": 2736.4,
+      "chapter": 9,
+      "slug": "topic-09-train-then-sample",
+      "label": "45:36",
+      "range_start": 2186.0,
+      "range_end": 2874.0
+    },
+    {
+      "file": "raw/040-ch09-topic-09-train-then-sample-t2818s.png",
+      "seconds": 2819.0,
+      "chapter": 9,
+      "slug": "topic-09-train-then-sample",
+      "label": "46:58",
+      "range_start": 2186.0,
+      "range_end": 2874.0
+    },
+    {
+      "file": "raw/041-ch10-topic-10-open-questions-recap-t2925s.png",
+      "seconds": 2925.0,
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "label": "48:45",
+      "range_start": 2874.0,
+      "range_end": 3512.0
+    },
+    {
+      "file": "raw/042-ch10-topic-10-open-questions-recap-t3001s.png",
+      "seconds": 3001.6,
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "label": "50:01",
+      "range_start": 2874.0,
+      "range_end": 3512.0
+    },
+    {
+      "file": "raw/043-ch10-topic-10-open-questions-recap-t3078s.png",
+      "seconds": 3078.2,
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "label": "51:18",
+      "range_start": 2874.0,
+      "range_end": 3512.0
+    },
+    {
+      "file": "raw/044-ch10-topic-10-open-questions-recap-t3154s.png",
+      "seconds": 3154.7,
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "label": "52:34",
+      "range_start": 2874.0,
+      "range_end": 3512.0
+    },
+    {
+      "file": "raw/045-ch10-topic-10-open-questions-recap-t3231s.png",
+      "seconds": 3231.3,
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "label": "53:51",
+      "range_start": 2874.0,
+      "range_end": 3512.0
+    },
+    {
+      "file": "raw/046-ch10-topic-10-open-questions-recap-t3307s.png",
+      "seconds": 3307.8,
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "label": "55:07",
+      "range_start": 2874.0,
+      "range_end": 3512.0
+    },
+    {
+      "file": "raw/047-ch10-topic-10-open-questions-recap-t3384s.png",
+      "seconds": 3384.4,
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "label": "56:24",
+      "range_start": 2874.0,
+      "range_end": 3512.0
+    },
+    {
+      "file": "raw/048-ch10-topic-10-open-questions-recap-t3460s.png",
+      "seconds": 3461.0,
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "label": "57:40",
+      "range_start": 2874.0,
+      "range_end": 3512.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-conditional-generators-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-conditional-generators",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-conditional-generators-t0033s.png",
+        "002-ch01-topic-01-conditional-generators-t0112s.png",
+        "003-ch01-topic-01-conditional-generators-t0191s.png",
+        "004-ch01-topic-01-conditional-generators-t0270s.png"
+      ],
+      "labels": [
+        "ch1 00:33",
+        "ch1 01:52",
+        "ch1 03:11",
+        "ch1 04:30"
+      ],
+      "tile_seconds": [
+        33.6,
+        112.5,
+        191.5,
+        270.4
+      ],
+      "time_start": 33.6,
+      "time_end": 270.4,
+      "range_start": 11.0,
+      "range_end": 293.0
+    },
+    {
+      "file": "composites/ch02-topic-02-data-iid-px-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-data-iid-px",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-data-iid-px-t0302s.png",
+        "006-ch02-topic-02-data-iid-px-t0336s.png",
+        "007-ch02-topic-02-data-iid-px-t0370s.png",
+        "008-ch02-topic-02-data-iid-px-t0404s.png"
+      ],
+      "labels": [
+        "ch2 05:02",
+        "ch2 05:36",
+        "ch2 06:10",
+        "ch2 06:44"
+      ],
+      "tile_seconds": [
+        302.7,
+        336.6,
+        370.4,
+        404.3
+      ],
+      "time_start": 302.7,
+      "time_end": 404.3,
+      "range_start": 293.0,
+      "range_end": 414.0
+    },
+    {
+      "file": "composites/ch03-topic-03-high-d-images-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-high-d-images",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-high-d-images-t0425s.png",
+        "010-ch03-topic-03-high-d-images-t0467s.png",
+        "011-ch03-topic-03-high-d-images-t0508s.png",
+        "012-ch03-topic-03-high-d-images-t0550s.png"
+      ],
+      "labels": [
+        "ch3 07:05",
+        "ch3 07:47",
+        "ch3 08:28",
+        "ch3 09:10"
+      ],
+      "tile_seconds": [
+        425.8,
+        467.3,
+        508.7,
+        550.2
+      ],
+      "time_start": 425.8,
+      "time_end": 550.2,
+      "range_start": 414.0,
+      "range_end": 562.0
+    },
+    {
+      "file": "composites/ch04-topic-04-vector-rv-iid-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-vector-rv-iid",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-vector-rv-iid-t0597s.png",
+        "014-ch04-topic-04-vector-rv-iid-t0721s.png",
+        "015-ch04-topic-04-vector-rv-iid-t0845s.png",
+        "016-ch04-topic-04-vector-rv-iid-t0969s.png"
+      ],
+      "labels": [
+        "ch4 09:57",
+        "ch4 12:01",
+        "ch4 14:05",
+        "ch4 16:09"
+      ],
+      "tile_seconds": [
+        597.4,
+        721.5,
+        845.5,
+        969.6
+      ],
+      "time_start": 597.4,
+      "time_end": 969.6,
+      "range_start": 562.0,
+      "range_end": 1005.0
+    },
+    {
+      "file": "composites/ch05-topic-05-estimate-and-sample-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-estimate-and-sample",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-estimate-and-sample-t1019s.png",
+        "018-ch05-topic-05-estimate-and-sample-t1070s.png",
+        "019-ch05-topic-05-estimate-and-sample-t1121s.png",
+        "020-ch05-topic-05-estimate-and-sample-t1172s.png"
+      ],
+      "labels": [
+        "ch5 16:59",
+        "ch5 17:50",
+        "ch5 18:41",
+        "ch5 19:32"
+      ],
+      "tile_seconds": [
+        1019.6,
+        1070.5,
+        1121.5,
+        1172.4
+      ],
+      "time_start": 1019.6,
+      "time_end": 1172.4,
+      "range_start": 1005.0,
+      "range_end": 1187.0
+    },
+    {
+      "file": "composites/ch06-topic-06-parametric-family-dnn-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-parametric-family-dnn",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-parametric-family-dnn-t1208s.png",
+        "022-ch06-topic-06-parametric-family-dnn-t1284s.png",
+        "023-ch06-topic-06-parametric-family-dnn-t1361s.png",
+        "024-ch06-topic-06-parametric-family-dnn-t1437s.png"
+      ],
+      "labels": [
+        "ch6 20:08",
+        "ch6 21:24",
+        "ch6 22:41",
+        "ch6 23:57"
+      ],
+      "tile_seconds": [
+        1208.8,
+        1284.9,
+        1361.1,
+        1437.2
+      ],
+      "time_start": 1208.8,
+      "time_end": 1437.2,
+      "range_start": 1187.0,
+      "range_end": 1459.0
+    },
+    {
+      "file": "composites/ch07-topic-07-divergence-optimize-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-divergence-optimize",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-divergence-optimize-t1479s.png",
+        "026-ch07-topic-07-divergence-optimize-t1549s.png",
+        "027-ch07-topic-07-divergence-optimize-t1620s.png",
+        "028-ch07-topic-07-divergence-optimize-t1690s.png"
+      ],
+      "labels": [
+        "ch7 24:39",
+        "ch7 25:49",
+        "ch7 27:00",
+        "ch7 28:10"
+      ],
+      "tile_seconds": [
+        1479.2,
+        1549.7,
+        1620.3,
+        1690.8
+      ],
+      "time_start": 1479.2,
+      "time_end": 1690.8,
+      "range_start": 1459.0,
+      "range_end": 1711.0
+    },
+    {
+      "file": "composites/ch08-topic-08-z-gtheta-sampling-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-z-gtheta-sampling",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-z-gtheta-sampling-t1749s.png",
+        "030-ch08-topic-08-z-gtheta-sampling-t1882s.png",
+        "031-ch08-topic-08-z-gtheta-sampling-t2015s.png",
+        "032-ch08-topic-08-z-gtheta-sampling-t2148s.png"
+      ],
+      "labels": [
+        "ch8 29:09",
+        "ch8 31:22",
+        "ch8 33:35",
+        "ch8 35:48"
+      ],
+      "tile_seconds": [
+        1749.0,
+        1882.0,
+        2015.0,
+        2148.0
+      ],
+      "time_start": 1749.0,
+      "time_end": 2148.0,
+      "range_start": 1711.0,
+      "range_end": 2186.0
+    },
+    {
+      "file": "composites/ch09-topic-09-train-then-sample-panel1of2.png",
+      "chapter": 9,
+      "slug": "topic-09-train-then-sample",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "033-ch09-topic-09-train-then-sample-t2241s.png",
+        "034-ch09-topic-09-train-then-sample-t2323s.png",
+        "035-ch09-topic-09-train-then-sample-t2406s.png",
+        "036-ch09-topic-09-train-then-sample-t2488s.png"
+      ],
+      "labels": [
+        "ch9 37:21",
+        "ch9 38:43",
+        "ch9 40:06",
+        "ch9 41:28"
+      ],
+      "tile_seconds": [
+        2241.0,
+        2323.6,
+        2406.2,
+        2488.7
+      ],
+      "time_start": 2241.0,
+      "time_end": 2488.7,
+      "range_start": 2186.0,
+      "range_end": 2874.0
+    },
+    {
+      "file": "composites/ch09-topic-09-train-then-sample-panel2of2.png",
+      "chapter": 9,
+      "slug": "topic-09-train-then-sample",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "037-ch09-topic-09-train-then-sample-t2571s.png",
+        "038-ch09-topic-09-train-then-sample-t2653s.png",
+        "039-ch09-topic-09-train-then-sample-t2736s.png",
+        "040-ch09-topic-09-train-then-sample-t2818s.png"
+      ],
+      "labels": [
+        "ch9 42:51",
+        "ch9 44:13",
+        "ch9 45:36",
+        "ch9 46:58"
+      ],
+      "tile_seconds": [
+        2571.3,
+        2653.8,
+        2736.4,
+        2819.0
+      ],
+      "time_start": 2571.3,
+      "time_end": 2819.0,
+      "range_start": 2186.0,
+      "range_end": 2874.0
+    },
+    {
+      "file": "composites/ch10-topic-10-open-questions-recap-panel1of2.png",
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "041-ch10-topic-10-open-questions-recap-t2925s.png",
+        "042-ch10-topic-10-open-questions-recap-t3001s.png",
+        "043-ch10-topic-10-open-questions-recap-t3078s.png",
+        "044-ch10-topic-10-open-questions-recap-t3154s.png"
+      ],
+      "labels": [
+        "ch10 48:45",
+        "ch10 50:01",
+        "ch10 51:18",
+        "ch10 52:34"
+      ],
+      "tile_seconds": [
+        2925.0,
+        3001.6,
+        3078.2,
+        3154.7
+      ],
+      "time_start": 2925.0,
+      "time_end": 3154.7,
+      "range_start": 2874.0,
+      "range_end": 3512.0
+    },
+    {
+      "file": "composites/ch10-topic-10-open-questions-recap-panel2of2.png",
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "045-ch10-topic-10-open-questions-recap-t3231s.png",
+        "046-ch10-topic-10-open-questions-recap-t3307s.png",
+        "047-ch10-topic-10-open-questions-recap-t3384s.png",
+        "048-ch10-topic-10-open-questions-recap-t3460s.png"
+      ],
+      "labels": [
+        "ch10 53:51",
+        "ch10 55:07",
+        "ch10 56:24",
+        "ch10 57:40"
+      ],
+      "tile_seconds": [
+        3231.3,
+        3307.8,
+        3384.4,
+        3461.0
+      ],
+      "time_start": 3231.3,
+      "time_end": 3461.0,
+      "range_start": 2874.0,
+      "range_end": 3512.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

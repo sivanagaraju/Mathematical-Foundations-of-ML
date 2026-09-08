@@ -1,0 +1,589 @@
+{
+  "duration_seconds": 1106.0,
+  "range_source": "topic-ranges",
+  "range_count": 8,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 12.0,
+      "end": 113.0,
+      "slug": "topic-01-tensors-then-dataloader-sheet"
+    },
+    {
+      "index": 2,
+      "start": 113.0,
+      "end": 200.0,
+      "slug": "topic-02-torchvision-datasets-fashionmnist"
+    },
+    {
+      "index": 3,
+      "start": 200.0,
+      "end": 257.0,
+      "slug": "topic-03-imports-dataset-transforms-plt"
+    },
+    {
+      "index": 4,
+      "start": 257.0,
+      "end": 369.0,
+      "slug": "topic-04-fashionmnist-train-test-totensor"
+    },
+    {
+      "index": 5,
+      "start": 369.0,
+      "end": 461.0,
+      "slug": "topic-05-labels-when-builtin-fails"
+    },
+    {
+      "index": 6,
+      "start": 461.0,
+      "end": 621.0,
+      "slug": "topic-06-custom-folder-plus-csv"
+    },
+    {
+      "index": 7,
+      "start": 621.0,
+      "end": 906.0,
+      "slug": "topic-07-customimagedataset-class"
+    },
+    {
+      "index": 8,
+      "start": 906.0,
+      "end": 1106.0,
+      "slug": "topic-08-dataloader-batch-shuffle"
+    }
+  ],
+  "raw_count": 32,
+  "composite_count": 8,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-tensors-then-dataloader-sheet-t0020s.png",
+      "seconds": 20.1,
+      "chapter": 1,
+      "slug": "topic-01-tensors-then-dataloader-sheet",
+      "label": "00:20",
+      "range_start": 12.0,
+      "range_end": 113.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-tensors-then-dataloader-sheet-t0048s.png",
+      "seconds": 48.4,
+      "chapter": 1,
+      "slug": "topic-01-tensors-then-dataloader-sheet",
+      "label": "00:48",
+      "range_start": 12.0,
+      "range_end": 113.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-tensors-then-dataloader-sheet-t0076s.png",
+      "seconds": 76.6,
+      "chapter": 1,
+      "slug": "topic-01-tensors-then-dataloader-sheet",
+      "label": "01:16",
+      "range_start": 12.0,
+      "range_end": 113.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-tensors-then-dataloader-sheet-t0104s.png",
+      "seconds": 104.9,
+      "chapter": 1,
+      "slug": "topic-01-tensors-then-dataloader-sheet",
+      "label": "01:44",
+      "range_start": 12.0,
+      "range_end": 113.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-torchvision-datasets-fashionmnist-t0119s.png",
+      "seconds": 120.0,
+      "chapter": 2,
+      "slug": "topic-02-torchvision-datasets-fashionmnist",
+      "label": "01:59",
+      "range_start": 113.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-torchvision-datasets-fashionmnist-t0144s.png",
+      "seconds": 144.3,
+      "chapter": 2,
+      "slug": "topic-02-torchvision-datasets-fashionmnist",
+      "label": "02:24",
+      "range_start": 113.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-torchvision-datasets-fashionmnist-t0168s.png",
+      "seconds": 168.7,
+      "chapter": 2,
+      "slug": "topic-02-torchvision-datasets-fashionmnist",
+      "label": "02:48",
+      "range_start": 113.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-torchvision-datasets-fashionmnist-t0193s.png",
+      "seconds": 193.0,
+      "chapter": 2,
+      "slug": "topic-02-torchvision-datasets-fashionmnist",
+      "label": "03:13",
+      "range_start": 113.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-imports-dataset-transforms-plt-t0204s.png",
+      "seconds": 204.6,
+      "chapter": 3,
+      "slug": "topic-03-imports-dataset-transforms-plt",
+      "label": "03:24",
+      "range_start": 200.0,
+      "range_end": 257.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-imports-dataset-transforms-plt-t0220s.png",
+      "seconds": 220.5,
+      "chapter": 3,
+      "slug": "topic-03-imports-dataset-transforms-plt",
+      "label": "03:40",
+      "range_start": 200.0,
+      "range_end": 257.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-imports-dataset-transforms-plt-t0236s.png",
+      "seconds": 236.5,
+      "chapter": 3,
+      "slug": "topic-03-imports-dataset-transforms-plt",
+      "label": "03:56",
+      "range_start": 200.0,
+      "range_end": 257.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-imports-dataset-transforms-plt-t0252s.png",
+      "seconds": 252.4,
+      "chapter": 3,
+      "slug": "topic-03-imports-dataset-transforms-plt",
+      "label": "04:12",
+      "range_start": 200.0,
+      "range_end": 257.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-fashionmnist-train-test-totensor-t0265s.png",
+      "seconds": 266.0,
+      "chapter": 4,
+      "slug": "topic-04-fashionmnist-train-test-totensor",
+      "label": "04:25",
+      "range_start": 257.0,
+      "range_end": 369.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-fashionmnist-train-test-totensor-t0297s.png",
+      "seconds": 297.3,
+      "chapter": 4,
+      "slug": "topic-04-fashionmnist-train-test-totensor",
+      "label": "04:57",
+      "range_start": 257.0,
+      "range_end": 369.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-fashionmnist-train-test-totensor-t0328s.png",
+      "seconds": 328.7,
+      "chapter": 4,
+      "slug": "topic-04-fashionmnist-train-test-totensor",
+      "label": "05:28",
+      "range_start": 257.0,
+      "range_end": 369.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-fashionmnist-train-test-totensor-t0360s.png",
+      "seconds": 360.0,
+      "chapter": 4,
+      "slug": "topic-04-fashionmnist-train-test-totensor",
+      "label": "06:00",
+      "range_start": 257.0,
+      "range_end": 369.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-labels-when-builtin-fails-t0376s.png",
+      "seconds": 376.4,
+      "chapter": 5,
+      "slug": "topic-05-labels-when-builtin-fails",
+      "label": "06:16",
+      "range_start": 369.0,
+      "range_end": 461.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-labels-when-builtin-fails-t0402s.png",
+      "seconds": 402.1,
+      "chapter": 5,
+      "slug": "topic-05-labels-when-builtin-fails",
+      "label": "06:42",
+      "range_start": 369.0,
+      "range_end": 461.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-labels-when-builtin-fails-t0427s.png",
+      "seconds": 427.9,
+      "chapter": 5,
+      "slug": "topic-05-labels-when-builtin-fails",
+      "label": "07:07",
+      "range_start": 369.0,
+      "range_end": 461.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-labels-when-builtin-fails-t0453s.png",
+      "seconds": 453.6,
+      "chapter": 5,
+      "slug": "topic-05-labels-when-builtin-fails",
+      "label": "07:33",
+      "range_start": 369.0,
+      "range_end": 461.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-custom-folder-plus-csv-t0473s.png",
+      "seconds": 473.8,
+      "chapter": 6,
+      "slug": "topic-06-custom-folder-plus-csv",
+      "label": "07:53",
+      "range_start": 461.0,
+      "range_end": 621.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-custom-folder-plus-csv-t0518s.png",
+      "seconds": 518.6,
+      "chapter": 6,
+      "slug": "topic-06-custom-folder-plus-csv",
+      "label": "08:38",
+      "range_start": 461.0,
+      "range_end": 621.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-custom-folder-plus-csv-t0563s.png",
+      "seconds": 563.4,
+      "chapter": 6,
+      "slug": "topic-06-custom-folder-plus-csv",
+      "label": "09:23",
+      "range_start": 461.0,
+      "range_end": 621.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-custom-folder-plus-csv-t0608s.png",
+      "seconds": 608.2,
+      "chapter": 6,
+      "slug": "topic-06-custom-folder-plus-csv",
+      "label": "10:08",
+      "range_start": 461.0,
+      "range_end": 621.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-customimagedataset-class-t0643s.png",
+      "seconds": 643.8,
+      "chapter": 7,
+      "slug": "topic-07-customimagedataset-class",
+      "label": "10:43",
+      "range_start": 621.0,
+      "range_end": 906.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-customimagedataset-class-t0723s.png",
+      "seconds": 723.6,
+      "chapter": 7,
+      "slug": "topic-07-customimagedataset-class",
+      "label": "12:03",
+      "range_start": 621.0,
+      "range_end": 906.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-customimagedataset-class-t0803s.png",
+      "seconds": 803.4,
+      "chapter": 7,
+      "slug": "topic-07-customimagedataset-class",
+      "label": "13:23",
+      "range_start": 621.0,
+      "range_end": 906.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-customimagedataset-class-t0883s.png",
+      "seconds": 883.2,
+      "chapter": 7,
+      "slug": "topic-07-customimagedataset-class",
+      "label": "14:43",
+      "range_start": 621.0,
+      "range_end": 906.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-dataloader-batch-shuffle-t0922s.png",
+      "seconds": 922.0,
+      "chapter": 8,
+      "slug": "topic-08-dataloader-batch-shuffle",
+      "label": "15:22",
+      "range_start": 906.0,
+      "range_end": 1106.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-dataloader-batch-shuffle-t0978s.png",
+      "seconds": 978.0,
+      "chapter": 8,
+      "slug": "topic-08-dataloader-batch-shuffle",
+      "label": "16:18",
+      "range_start": 906.0,
+      "range_end": 1106.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-dataloader-batch-shuffle-t1034s.png",
+      "seconds": 1034.0,
+      "chapter": 8,
+      "slug": "topic-08-dataloader-batch-shuffle",
+      "label": "17:14",
+      "range_start": 906.0,
+      "range_end": 1106.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-dataloader-batch-shuffle-t1090s.png",
+      "seconds": 1090.0,
+      "chapter": 8,
+      "slug": "topic-08-dataloader-batch-shuffle",
+      "label": "18:10",
+      "range_start": 906.0,
+      "range_end": 1106.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-tensors-then-dataloader-sheet-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-tensors-then-dataloader-sheet",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-tensors-then-dataloader-sheet-t0020s.png",
+        "002-ch01-topic-01-tensors-then-dataloader-sheet-t0048s.png",
+        "003-ch01-topic-01-tensors-then-dataloader-sheet-t0076s.png",
+        "004-ch01-topic-01-tensors-then-dataloader-sheet-t0104s.png"
+      ],
+      "labels": [
+        "ch1 00:20",
+        "ch1 00:48",
+        "ch1 01:16",
+        "ch1 01:44"
+      ],
+      "tile_seconds": [
+        20.1,
+        48.4,
+        76.6,
+        104.9
+      ],
+      "time_start": 20.1,
+      "time_end": 104.9,
+      "range_start": 12.0,
+      "range_end": 113.0
+    },
+    {
+      "file": "composites/ch02-topic-02-torchvision-datasets-fashionmnist-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-torchvision-datasets-fashionmnist",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-torchvision-datasets-fashionmnist-t0119s.png",
+        "006-ch02-topic-02-torchvision-datasets-fashionmnist-t0144s.png",
+        "007-ch02-topic-02-torchvision-datasets-fashionmnist-t0168s.png",
+        "008-ch02-topic-02-torchvision-datasets-fashionmnist-t0193s.png"
+      ],
+      "labels": [
+        "ch2 01:59",
+        "ch2 02:24",
+        "ch2 02:48",
+        "ch2 03:13"
+      ],
+      "tile_seconds": [
+        120.0,
+        144.3,
+        168.7,
+        193.0
+      ],
+      "time_start": 120.0,
+      "time_end": 193.0,
+      "range_start": 113.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "composites/ch03-topic-03-imports-dataset-transforms-plt-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-imports-dataset-transforms-plt",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-imports-dataset-transforms-plt-t0204s.png",
+        "010-ch03-topic-03-imports-dataset-transforms-plt-t0220s.png",
+        "011-ch03-topic-03-imports-dataset-transforms-plt-t0236s.png",
+        "012-ch03-topic-03-imports-dataset-transforms-plt-t0252s.png"
+      ],
+      "labels": [
+        "ch3 03:24",
+        "ch3 03:40",
+        "ch3 03:56",
+        "ch3 04:12"
+      ],
+      "tile_seconds": [
+        204.6,
+        220.5,
+        236.5,
+        252.4
+      ],
+      "time_start": 204.6,
+      "time_end": 252.4,
+      "range_start": 200.0,
+      "range_end": 257.0
+    },
+    {
+      "file": "composites/ch04-topic-04-fashionmnist-train-test-totensor-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-fashionmnist-train-test-totensor",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-fashionmnist-train-test-totensor-t0265s.png",
+        "014-ch04-topic-04-fashionmnist-train-test-totensor-t0297s.png",
+        "015-ch04-topic-04-fashionmnist-train-test-totensor-t0328s.png",
+        "016-ch04-topic-04-fashionmnist-train-test-totensor-t0360s.png"
+      ],
+      "labels": [
+        "ch4 04:25",
+        "ch4 04:57",
+        "ch4 05:28",
+        "ch4 06:00"
+      ],
+      "tile_seconds": [
+        266.0,
+        297.3,
+        328.7,
+        360.0
+      ],
+      "time_start": 266.0,
+      "time_end": 360.0,
+      "range_start": 257.0,
+      "range_end": 369.0
+    },
+    {
+      "file": "composites/ch05-topic-05-labels-when-builtin-fails-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-labels-when-builtin-fails",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-labels-when-builtin-fails-t0376s.png",
+        "018-ch05-topic-05-labels-when-builtin-fails-t0402s.png",
+        "019-ch05-topic-05-labels-when-builtin-fails-t0427s.png",
+        "020-ch05-topic-05-labels-when-builtin-fails-t0453s.png"
+      ],
+      "labels": [
+        "ch5 06:16",
+        "ch5 06:42",
+        "ch5 07:07",
+        "ch5 07:33"
+      ],
+      "tile_seconds": [
+        376.4,
+        402.1,
+        427.9,
+        453.6
+      ],
+      "time_start": 376.4,
+      "time_end": 453.6,
+      "range_start": 369.0,
+      "range_end": 461.0
+    },
+    {
+      "file": "composites/ch06-topic-06-custom-folder-plus-csv-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-custom-folder-plus-csv",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-custom-folder-plus-csv-t0473s.png",
+        "022-ch06-topic-06-custom-folder-plus-csv-t0518s.png",
+        "023-ch06-topic-06-custom-folder-plus-csv-t0563s.png",
+        "024-ch06-topic-06-custom-folder-plus-csv-t0608s.png"
+      ],
+      "labels": [
+        "ch6 07:53",
+        "ch6 08:38",
+        "ch6 09:23",
+        "ch6 10:08"
+      ],
+      "tile_seconds": [
+        473.8,
+        518.6,
+        563.4,
+        608.2
+      ],
+      "time_start": 473.8,
+      "time_end": 608.2,
+      "range_start": 461.0,
+      "range_end": 621.0
+    },
+    {
+      "file": "composites/ch07-topic-07-customimagedataset-class-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-customimagedataset-class",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-customimagedataset-class-t0643s.png",
+        "026-ch07-topic-07-customimagedataset-class-t0723s.png",
+        "027-ch07-topic-07-customimagedataset-class-t0803s.png",
+        "028-ch07-topic-07-customimagedataset-class-t0883s.png"
+      ],
+      "labels": [
+        "ch7 10:43",
+        "ch7 12:03",
+        "ch7 13:23",
+        "ch7 14:43"
+      ],
+      "tile_seconds": [
+        643.8,
+        723.6,
+        803.4,
+        883.2
+      ],
+      "time_start": 643.8,
+      "time_end": 883.2,
+      "range_start": 621.0,
+      "range_end": 906.0
+    },
+    {
+      "file": "composites/ch08-topic-08-dataloader-batch-shuffle-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-dataloader-batch-shuffle",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-dataloader-batch-shuffle-t0922s.png",
+        "030-ch08-topic-08-dataloader-batch-shuffle-t0978s.png",
+        "031-ch08-topic-08-dataloader-batch-shuffle-t1034s.png",
+        "032-ch08-topic-08-dataloader-batch-shuffle-t1090s.png"
+      ],
+      "labels": [
+        "ch8 15:22",
+        "ch8 16:18",
+        "ch8 17:14",
+        "ch8 18:10"
+      ],
+      "tile_seconds": [
+        922.0,
+        978.0,
+        1034.0,
+        1090.0
+      ],
+      "time_start": 922.0,
+      "time_end": 1090.0,
+      "range_start": 906.0,
+      "range_end": 1106.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

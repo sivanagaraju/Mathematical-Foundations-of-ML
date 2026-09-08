@@ -1,0 +1,518 @@
+{
+  "duration_seconds": 1746.0,
+  "range_source": "topic-ranges",
+  "range_count": 7,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 202.0,
+      "slug": "topic-01-pushforward"
+    },
+    {
+      "index": 2,
+      "start": 202.0,
+      "end": 560.0,
+      "slug": "topic-02-cdf-definition"
+    },
+    {
+      "index": 3,
+      "start": 560.0,
+      "end": 672.0,
+      "slug": "topic-03-estimation-goal"
+    },
+    {
+      "index": 4,
+      "start": 672.0,
+      "end": 850.0,
+      "slug": "topic-04-range-triplet"
+    },
+    {
+      "index": 5,
+      "start": 850.0,
+      "end": 1120.0,
+      "slug": "topic-05-vector-rv"
+    },
+    {
+      "index": 6,
+      "start": 1120.0,
+      "end": 1330.0,
+      "slug": "topic-06-cdf-vs-density"
+    },
+    {
+      "index": 7,
+      "start": 1330.0,
+      "end": 1746.0,
+      "slug": "topic-07-multi-rv-review"
+    }
+  ],
+  "raw_count": 28,
+  "composite_count": 7,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-pushforward-t0016s.png",
+      "seconds": 16.2,
+      "chapter": 1,
+      "slug": "topic-01-pushforward",
+      "label": "00:16",
+      "range_start": 0.0,
+      "range_end": 202.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-pushforward-t0072s.png",
+      "seconds": 72.7,
+      "chapter": 1,
+      "slug": "topic-01-pushforward",
+      "label": "01:12",
+      "range_start": 0.0,
+      "range_end": 202.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-pushforward-t0129s.png",
+      "seconds": 129.3,
+      "chapter": 1,
+      "slug": "topic-01-pushforward",
+      "label": "02:09",
+      "range_start": 0.0,
+      "range_end": 202.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-pushforward-t0185s.png",
+      "seconds": 185.8,
+      "chapter": 1,
+      "slug": "topic-01-pushforward",
+      "label": "03:05",
+      "range_start": 0.0,
+      "range_end": 202.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-cdf-definition-t0230s.png",
+      "seconds": 230.6,
+      "chapter": 2,
+      "slug": "topic-02-cdf-definition",
+      "label": "03:50",
+      "range_start": 202.0,
+      "range_end": 560.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-cdf-definition-t0330s.png",
+      "seconds": 330.9,
+      "chapter": 2,
+      "slug": "topic-02-cdf-definition",
+      "label": "05:30",
+      "range_start": 202.0,
+      "range_end": 560.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-cdf-definition-t0431s.png",
+      "seconds": 431.1,
+      "chapter": 2,
+      "slug": "topic-02-cdf-definition",
+      "label": "07:11",
+      "range_start": 202.0,
+      "range_end": 560.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-cdf-definition-t0531s.png",
+      "seconds": 531.4,
+      "chapter": 2,
+      "slug": "topic-02-cdf-definition",
+      "label": "08:51",
+      "range_start": 202.0,
+      "range_end": 560.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-estimation-goal-t0568s.png",
+      "seconds": 569.0,
+      "chapter": 3,
+      "slug": "topic-03-estimation-goal",
+      "label": "09:28",
+      "range_start": 560.0,
+      "range_end": 672.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-estimation-goal-t0600s.png",
+      "seconds": 600.3,
+      "chapter": 3,
+      "slug": "topic-03-estimation-goal",
+      "label": "10:00",
+      "range_start": 560.0,
+      "range_end": 672.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-estimation-goal-t0631s.png",
+      "seconds": 631.7,
+      "chapter": 3,
+      "slug": "topic-03-estimation-goal",
+      "label": "10:31",
+      "range_start": 560.0,
+      "range_end": 672.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-estimation-goal-t0663s.png",
+      "seconds": 663.0,
+      "chapter": 3,
+      "slug": "topic-03-estimation-goal",
+      "label": "11:03",
+      "range_start": 560.0,
+      "range_end": 672.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-range-triplet-t0686s.png",
+      "seconds": 686.2,
+      "chapter": 4,
+      "slug": "topic-04-range-triplet",
+      "label": "11:26",
+      "range_start": 672.0,
+      "range_end": 850.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-range-triplet-t0736s.png",
+      "seconds": 736.1,
+      "chapter": 4,
+      "slug": "topic-04-range-triplet",
+      "label": "12:16",
+      "range_start": 672.0,
+      "range_end": 850.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-range-triplet-t0785s.png",
+      "seconds": 785.9,
+      "chapter": 4,
+      "slug": "topic-04-range-triplet",
+      "label": "13:05",
+      "range_start": 672.0,
+      "range_end": 850.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-range-triplet-t0835s.png",
+      "seconds": 835.8,
+      "chapter": 4,
+      "slug": "topic-04-range-triplet",
+      "label": "13:55",
+      "range_start": 672.0,
+      "range_end": 850.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-vector-rv-t0871s.png",
+      "seconds": 871.6,
+      "chapter": 5,
+      "slug": "topic-05-vector-rv",
+      "label": "14:31",
+      "range_start": 850.0,
+      "range_end": 1120.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-vector-rv-t0947s.png",
+      "seconds": 947.2,
+      "chapter": 5,
+      "slug": "topic-05-vector-rv",
+      "label": "15:47",
+      "range_start": 850.0,
+      "range_end": 1120.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-vector-rv-t1022s.png",
+      "seconds": 1022.8,
+      "chapter": 5,
+      "slug": "topic-05-vector-rv",
+      "label": "17:02",
+      "range_start": 850.0,
+      "range_end": 1120.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-vector-rv-t1098s.png",
+      "seconds": 1098.4,
+      "chapter": 5,
+      "slug": "topic-05-vector-rv",
+      "label": "18:18",
+      "range_start": 850.0,
+      "range_end": 1120.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-cdf-vs-density-t1136s.png",
+      "seconds": 1136.8,
+      "chapter": 6,
+      "slug": "topic-06-cdf-vs-density",
+      "label": "18:56",
+      "range_start": 1120.0,
+      "range_end": 1330.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-cdf-vs-density-t1195s.png",
+      "seconds": 1195.6,
+      "chapter": 6,
+      "slug": "topic-06-cdf-vs-density",
+      "label": "19:55",
+      "range_start": 1120.0,
+      "range_end": 1330.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-cdf-vs-density-t1254s.png",
+      "seconds": 1254.4,
+      "chapter": 6,
+      "slug": "topic-06-cdf-vs-density",
+      "label": "20:54",
+      "range_start": 1120.0,
+      "range_end": 1330.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-cdf-vs-density-t1313s.png",
+      "seconds": 1313.2,
+      "chapter": 6,
+      "slug": "topic-06-cdf-vs-density",
+      "label": "21:53",
+      "range_start": 1120.0,
+      "range_end": 1330.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-multi-rv-review-t1363s.png",
+      "seconds": 1363.3,
+      "chapter": 7,
+      "slug": "topic-07-multi-rv-review",
+      "label": "22:43",
+      "range_start": 1330.0,
+      "range_end": 1746.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-multi-rv-review-t1479s.png",
+      "seconds": 1479.8,
+      "chapter": 7,
+      "slug": "topic-07-multi-rv-review",
+      "label": "24:39",
+      "range_start": 1330.0,
+      "range_end": 1746.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-multi-rv-review-t1596s.png",
+      "seconds": 1596.2,
+      "chapter": 7,
+      "slug": "topic-07-multi-rv-review",
+      "label": "26:36",
+      "range_start": 1330.0,
+      "range_end": 1746.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-multi-rv-review-t1712s.png",
+      "seconds": 1712.7,
+      "chapter": 7,
+      "slug": "topic-07-multi-rv-review",
+      "label": "28:32",
+      "range_start": 1330.0,
+      "range_end": 1746.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-pushforward-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-pushforward",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-pushforward-t0016s.png",
+        "002-ch01-topic-01-pushforward-t0072s.png",
+        "003-ch01-topic-01-pushforward-t0129s.png",
+        "004-ch01-topic-01-pushforward-t0185s.png"
+      ],
+      "labels": [
+        "ch1 00:16",
+        "ch1 01:12",
+        "ch1 02:09",
+        "ch1 03:05"
+      ],
+      "tile_seconds": [
+        16.2,
+        72.7,
+        129.3,
+        185.8
+      ],
+      "time_start": 16.2,
+      "time_end": 185.8,
+      "range_start": 0.0,
+      "range_end": 202.0
+    },
+    {
+      "file": "composites/ch02-topic-02-cdf-definition-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-cdf-definition",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-cdf-definition-t0230s.png",
+        "006-ch02-topic-02-cdf-definition-t0330s.png",
+        "007-ch02-topic-02-cdf-definition-t0431s.png",
+        "008-ch02-topic-02-cdf-definition-t0531s.png"
+      ],
+      "labels": [
+        "ch2 03:50",
+        "ch2 05:30",
+        "ch2 07:11",
+        "ch2 08:51"
+      ],
+      "tile_seconds": [
+        230.6,
+        330.9,
+        431.1,
+        531.4
+      ],
+      "time_start": 230.6,
+      "time_end": 531.4,
+      "range_start": 202.0,
+      "range_end": 560.0
+    },
+    {
+      "file": "composites/ch03-topic-03-estimation-goal-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-estimation-goal",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-estimation-goal-t0568s.png",
+        "010-ch03-topic-03-estimation-goal-t0600s.png",
+        "011-ch03-topic-03-estimation-goal-t0631s.png",
+        "012-ch03-topic-03-estimation-goal-t0663s.png"
+      ],
+      "labels": [
+        "ch3 09:28",
+        "ch3 10:00",
+        "ch3 10:31",
+        "ch3 11:03"
+      ],
+      "tile_seconds": [
+        569.0,
+        600.3,
+        631.7,
+        663.0
+      ],
+      "time_start": 569.0,
+      "time_end": 663.0,
+      "range_start": 560.0,
+      "range_end": 672.0
+    },
+    {
+      "file": "composites/ch04-topic-04-range-triplet-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-range-triplet",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-range-triplet-t0686s.png",
+        "014-ch04-topic-04-range-triplet-t0736s.png",
+        "015-ch04-topic-04-range-triplet-t0785s.png",
+        "016-ch04-topic-04-range-triplet-t0835s.png"
+      ],
+      "labels": [
+        "ch4 11:26",
+        "ch4 12:16",
+        "ch4 13:05",
+        "ch4 13:55"
+      ],
+      "tile_seconds": [
+        686.2,
+        736.1,
+        785.9,
+        835.8
+      ],
+      "time_start": 686.2,
+      "time_end": 835.8,
+      "range_start": 672.0,
+      "range_end": 850.0
+    },
+    {
+      "file": "composites/ch05-topic-05-vector-rv-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-vector-rv",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-vector-rv-t0871s.png",
+        "018-ch05-topic-05-vector-rv-t0947s.png",
+        "019-ch05-topic-05-vector-rv-t1022s.png",
+        "020-ch05-topic-05-vector-rv-t1098s.png"
+      ],
+      "labels": [
+        "ch5 14:31",
+        "ch5 15:47",
+        "ch5 17:02",
+        "ch5 18:18"
+      ],
+      "tile_seconds": [
+        871.6,
+        947.2,
+        1022.8,
+        1098.4
+      ],
+      "time_start": 871.6,
+      "time_end": 1098.4,
+      "range_start": 850.0,
+      "range_end": 1120.0
+    },
+    {
+      "file": "composites/ch06-topic-06-cdf-vs-density-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-cdf-vs-density",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-cdf-vs-density-t1136s.png",
+        "022-ch06-topic-06-cdf-vs-density-t1195s.png",
+        "023-ch06-topic-06-cdf-vs-density-t1254s.png",
+        "024-ch06-topic-06-cdf-vs-density-t1313s.png"
+      ],
+      "labels": [
+        "ch6 18:56",
+        "ch6 19:55",
+        "ch6 20:54",
+        "ch6 21:53"
+      ],
+      "tile_seconds": [
+        1136.8,
+        1195.6,
+        1254.4,
+        1313.2
+      ],
+      "time_start": 1136.8,
+      "time_end": 1313.2,
+      "range_start": 1120.0,
+      "range_end": 1330.0
+    },
+    {
+      "file": "composites/ch07-topic-07-multi-rv-review-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-multi-rv-review",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-multi-rv-review-t1363s.png",
+        "026-ch07-topic-07-multi-rv-review-t1479s.png",
+        "027-ch07-topic-07-multi-rv-review-t1596s.png",
+        "028-ch07-topic-07-multi-rv-review-t1712s.png"
+      ],
+      "labels": [
+        "ch7 22:43",
+        "ch7 24:39",
+        "ch7 26:36",
+        "ch7 28:32"
+      ],
+      "tile_seconds": [
+        1363.3,
+        1479.8,
+        1596.2,
+        1712.7
+      ],
+      "time_start": 1363.3,
+      "time_end": 1712.7,
+      "range_start": 1330.0,
+      "range_end": 1746.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

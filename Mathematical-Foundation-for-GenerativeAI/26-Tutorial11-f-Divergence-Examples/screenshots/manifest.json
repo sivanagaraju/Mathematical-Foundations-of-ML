@@ -1,0 +1,796 @@
+{
+  "duration_seconds": 2889.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 10.0,
+      "end": 210.0,
+      "slug": "topic-01-redefine-fdiv"
+    },
+    {
+      "index": 2,
+      "start": 220.0,
+      "end": 400.0,
+      "slug": "topic-02-ratio-f-of-one"
+    },
+    {
+      "index": 3,
+      "start": 410.0,
+      "end": 608.0,
+      "slug": "topic-03-jensen-nonneg"
+    },
+    {
+      "index": 4,
+      "start": 618.0,
+      "end": 935.0,
+      "slug": "topic-04-zero-iff-equal"
+    },
+    {
+      "index": 5,
+      "start": 948.0,
+      "end": 1135.0,
+      "slug": "topic-05-kl-mle"
+    },
+    {
+      "index": 6,
+      "start": 1142.0,
+      "end": 1250.0,
+      "slug": "topic-06-reverse-kl"
+    },
+    {
+      "index": 7,
+      "start": 1258.0,
+      "end": 1372.0,
+      "slug": "topic-07-total-variation"
+    },
+    {
+      "index": 8,
+      "start": 1382.0,
+      "end": 1805.0,
+      "slug": "topic-08-jsd-gan-zoo"
+    },
+    {
+      "index": 9,
+      "start": 1815.0,
+      "end": 2475.0,
+      "slug": "topic-09-metric-axioms-symmetry"
+    },
+    {
+      "index": 10,
+      "start": 2488.0,
+      "end": 2875.0,
+      "slug": "topic-10-triangle-tv-homework"
+    }
+  ],
+  "raw_count": 44,
+  "composite_count": 11,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-redefine-fdiv-t0026s.png",
+      "seconds": 26.0,
+      "chapter": 1,
+      "slug": "topic-01-redefine-fdiv",
+      "label": "00:26",
+      "range_start": 10.0,
+      "range_end": 210.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-redefine-fdiv-t0082s.png",
+      "seconds": 82.0,
+      "chapter": 1,
+      "slug": "topic-01-redefine-fdiv",
+      "label": "01:22",
+      "range_start": 10.0,
+      "range_end": 210.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-redefine-fdiv-t0138s.png",
+      "seconds": 138.0,
+      "chapter": 1,
+      "slug": "topic-01-redefine-fdiv",
+      "label": "02:18",
+      "range_start": 10.0,
+      "range_end": 210.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-redefine-fdiv-t0194s.png",
+      "seconds": 194.0,
+      "chapter": 1,
+      "slug": "topic-01-redefine-fdiv",
+      "label": "03:14",
+      "range_start": 10.0,
+      "range_end": 210.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-ratio-f-of-one-t0234s.png",
+      "seconds": 234.4,
+      "chapter": 2,
+      "slug": "topic-02-ratio-f-of-one",
+      "label": "03:54",
+      "range_start": 220.0,
+      "range_end": 400.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-ratio-f-of-one-t0284s.png",
+      "seconds": 284.8,
+      "chapter": 2,
+      "slug": "topic-02-ratio-f-of-one",
+      "label": "04:44",
+      "range_start": 220.0,
+      "range_end": 400.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-ratio-f-of-one-t0335s.png",
+      "seconds": 335.2,
+      "chapter": 2,
+      "slug": "topic-02-ratio-f-of-one",
+      "label": "05:35",
+      "range_start": 220.0,
+      "range_end": 400.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-ratio-f-of-one-t0385s.png",
+      "seconds": 385.6,
+      "chapter": 2,
+      "slug": "topic-02-ratio-f-of-one",
+      "label": "06:25",
+      "range_start": 220.0,
+      "range_end": 400.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-jensen-nonneg-t0425s.png",
+      "seconds": 425.8,
+      "chapter": 3,
+      "slug": "topic-03-jensen-nonneg",
+      "label": "07:05",
+      "range_start": 410.0,
+      "range_end": 608.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-jensen-nonneg-t0481s.png",
+      "seconds": 481.3,
+      "chapter": 3,
+      "slug": "topic-03-jensen-nonneg",
+      "label": "08:01",
+      "range_start": 410.0,
+      "range_end": 608.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-jensen-nonneg-t0536s.png",
+      "seconds": 536.7,
+      "chapter": 3,
+      "slug": "topic-03-jensen-nonneg",
+      "label": "08:56",
+      "range_start": 410.0,
+      "range_end": 608.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-jensen-nonneg-t0592s.png",
+      "seconds": 592.2,
+      "chapter": 3,
+      "slug": "topic-03-jensen-nonneg",
+      "label": "09:52",
+      "range_start": 410.0,
+      "range_end": 608.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-zero-iff-equal-t0643s.png",
+      "seconds": 643.4,
+      "chapter": 4,
+      "slug": "topic-04-zero-iff-equal",
+      "label": "10:43",
+      "range_start": 618.0,
+      "range_end": 935.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-zero-iff-equal-t0732s.png",
+      "seconds": 732.1,
+      "chapter": 4,
+      "slug": "topic-04-zero-iff-equal",
+      "label": "12:12",
+      "range_start": 618.0,
+      "range_end": 935.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-zero-iff-equal-t0820s.png",
+      "seconds": 820.9,
+      "chapter": 4,
+      "slug": "topic-04-zero-iff-equal",
+      "label": "13:40",
+      "range_start": 618.0,
+      "range_end": 935.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-zero-iff-equal-t0909s.png",
+      "seconds": 909.6,
+      "chapter": 4,
+      "slug": "topic-04-zero-iff-equal",
+      "label": "15:09",
+      "range_start": 618.0,
+      "range_end": 935.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-kl-mle-t0962s.png",
+      "seconds": 963.0,
+      "chapter": 5,
+      "slug": "topic-05-kl-mle",
+      "label": "16:02",
+      "range_start": 948.0,
+      "range_end": 1135.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-kl-mle-t1015s.png",
+      "seconds": 1015.3,
+      "chapter": 5,
+      "slug": "topic-05-kl-mle",
+      "label": "16:55",
+      "range_start": 948.0,
+      "range_end": 1135.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-kl-mle-t1067s.png",
+      "seconds": 1067.7,
+      "chapter": 5,
+      "slug": "topic-05-kl-mle",
+      "label": "17:47",
+      "range_start": 948.0,
+      "range_end": 1135.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-kl-mle-t1120s.png",
+      "seconds": 1120.0,
+      "chapter": 5,
+      "slug": "topic-05-kl-mle",
+      "label": "18:40",
+      "range_start": 948.0,
+      "range_end": 1135.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-reverse-kl-t1150s.png",
+      "seconds": 1150.6,
+      "chapter": 6,
+      "slug": "topic-06-reverse-kl",
+      "label": "19:10",
+      "range_start": 1142.0,
+      "range_end": 1250.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-reverse-kl-t1180s.png",
+      "seconds": 1180.9,
+      "chapter": 6,
+      "slug": "topic-06-reverse-kl",
+      "label": "19:40",
+      "range_start": 1142.0,
+      "range_end": 1250.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-reverse-kl-t1211s.png",
+      "seconds": 1211.1,
+      "chapter": 6,
+      "slug": "topic-06-reverse-kl",
+      "label": "20:11",
+      "range_start": 1142.0,
+      "range_end": 1250.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-reverse-kl-t1241s.png",
+      "seconds": 1241.4,
+      "chapter": 6,
+      "slug": "topic-06-reverse-kl",
+      "label": "20:41",
+      "range_start": 1142.0,
+      "range_end": 1250.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-total-variation-t1267s.png",
+      "seconds": 1267.1,
+      "chapter": 7,
+      "slug": "topic-07-total-variation",
+      "label": "21:07",
+      "range_start": 1258.0,
+      "range_end": 1372.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-total-variation-t1299s.png",
+      "seconds": 1299.0,
+      "chapter": 7,
+      "slug": "topic-07-total-variation",
+      "label": "21:39",
+      "range_start": 1258.0,
+      "range_end": 1372.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-total-variation-t1330s.png",
+      "seconds": 1331.0,
+      "chapter": 7,
+      "slug": "topic-07-total-variation",
+      "label": "22:10",
+      "range_start": 1258.0,
+      "range_end": 1372.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-total-variation-t1362s.png",
+      "seconds": 1362.9,
+      "chapter": 7,
+      "slug": "topic-07-total-variation",
+      "label": "22:42",
+      "range_start": 1258.0,
+      "range_end": 1372.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-jsd-gan-zoo-t1415s.png",
+      "seconds": 1415.8,
+      "chapter": 8,
+      "slug": "topic-08-jsd-gan-zoo",
+      "label": "23:35",
+      "range_start": 1382.0,
+      "range_end": 1805.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-jsd-gan-zoo-t1534s.png",
+      "seconds": 1534.3,
+      "chapter": 8,
+      "slug": "topic-08-jsd-gan-zoo",
+      "label": "25:34",
+      "range_start": 1382.0,
+      "range_end": 1805.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-jsd-gan-zoo-t1652s.png",
+      "seconds": 1652.7,
+      "chapter": 8,
+      "slug": "topic-08-jsd-gan-zoo",
+      "label": "27:32",
+      "range_start": 1382.0,
+      "range_end": 1805.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-jsd-gan-zoo-t1771s.png",
+      "seconds": 1771.2,
+      "chapter": 8,
+      "slug": "topic-08-jsd-gan-zoo",
+      "label": "29:31",
+      "range_start": 1382.0,
+      "range_end": 1805.0
+    },
+    {
+      "file": "raw/033-ch09-topic-09-metric-axioms-symmetry-t1867s.png",
+      "seconds": 1867.8,
+      "chapter": 9,
+      "slug": "topic-09-metric-axioms-symmetry",
+      "label": "31:07",
+      "range_start": 1815.0,
+      "range_end": 2475.0
+    },
+    {
+      "file": "raw/034-ch09-topic-09-metric-axioms-symmetry-t1947s.png",
+      "seconds": 1947.0,
+      "chapter": 9,
+      "slug": "topic-09-metric-axioms-symmetry",
+      "label": "32:27",
+      "range_start": 1815.0,
+      "range_end": 2475.0
+    },
+    {
+      "file": "raw/035-ch09-topic-09-metric-axioms-symmetry-t2026s.png",
+      "seconds": 2026.2,
+      "chapter": 9,
+      "slug": "topic-09-metric-axioms-symmetry",
+      "label": "33:46",
+      "range_start": 1815.0,
+      "range_end": 2475.0
+    },
+    {
+      "file": "raw/036-ch09-topic-09-metric-axioms-symmetry-t2105s.png",
+      "seconds": 2105.4,
+      "chapter": 9,
+      "slug": "topic-09-metric-axioms-symmetry",
+      "label": "35:05",
+      "range_start": 1815.0,
+      "range_end": 2475.0
+    },
+    {
+      "file": "raw/037-ch09-topic-09-metric-axioms-symmetry-t2184s.png",
+      "seconds": 2184.6,
+      "chapter": 9,
+      "slug": "topic-09-metric-axioms-symmetry",
+      "label": "36:24",
+      "range_start": 1815.0,
+      "range_end": 2475.0
+    },
+    {
+      "file": "raw/038-ch09-topic-09-metric-axioms-symmetry-t2263s.png",
+      "seconds": 2263.8,
+      "chapter": 9,
+      "slug": "topic-09-metric-axioms-symmetry",
+      "label": "37:43",
+      "range_start": 1815.0,
+      "range_end": 2475.0
+    },
+    {
+      "file": "raw/039-ch09-topic-09-metric-axioms-symmetry-t2343s.png",
+      "seconds": 2343.0,
+      "chapter": 9,
+      "slug": "topic-09-metric-axioms-symmetry",
+      "label": "39:03",
+      "range_start": 1815.0,
+      "range_end": 2475.0
+    },
+    {
+      "file": "raw/040-ch09-topic-09-metric-axioms-symmetry-t2422s.png",
+      "seconds": 2422.2,
+      "chapter": 9,
+      "slug": "topic-09-metric-axioms-symmetry",
+      "label": "40:22",
+      "range_start": 1815.0,
+      "range_end": 2475.0
+    },
+    {
+      "file": "raw/041-ch10-topic-10-triangle-tv-homework-t2518s.png",
+      "seconds": 2519.0,
+      "chapter": 10,
+      "slug": "topic-10-triangle-tv-homework",
+      "label": "41:58",
+      "range_start": 2488.0,
+      "range_end": 2875.0
+    },
+    {
+      "file": "raw/042-ch10-topic-10-triangle-tv-homework-t2627s.png",
+      "seconds": 2627.3,
+      "chapter": 10,
+      "slug": "topic-10-triangle-tv-homework",
+      "label": "43:47",
+      "range_start": 2488.0,
+      "range_end": 2875.0
+    },
+    {
+      "file": "raw/043-ch10-topic-10-triangle-tv-homework-t2735s.png",
+      "seconds": 2735.7,
+      "chapter": 10,
+      "slug": "topic-10-triangle-tv-homework",
+      "label": "45:35",
+      "range_start": 2488.0,
+      "range_end": 2875.0
+    },
+    {
+      "file": "raw/044-ch10-topic-10-triangle-tv-homework-t2844s.png",
+      "seconds": 2844.0,
+      "chapter": 10,
+      "slug": "topic-10-triangle-tv-homework",
+      "label": "47:24",
+      "range_start": 2488.0,
+      "range_end": 2875.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-redefine-fdiv-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-redefine-fdiv",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-redefine-fdiv-t0026s.png",
+        "002-ch01-topic-01-redefine-fdiv-t0082s.png",
+        "003-ch01-topic-01-redefine-fdiv-t0138s.png",
+        "004-ch01-topic-01-redefine-fdiv-t0194s.png"
+      ],
+      "labels": [
+        "ch1 00:26",
+        "ch1 01:22",
+        "ch1 02:18",
+        "ch1 03:14"
+      ],
+      "tile_seconds": [
+        26.0,
+        82.0,
+        138.0,
+        194.0
+      ],
+      "time_start": 26.0,
+      "time_end": 194.0,
+      "range_start": 10.0,
+      "range_end": 210.0
+    },
+    {
+      "file": "composites/ch02-topic-02-ratio-f-of-one-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-ratio-f-of-one",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-ratio-f-of-one-t0234s.png",
+        "006-ch02-topic-02-ratio-f-of-one-t0284s.png",
+        "007-ch02-topic-02-ratio-f-of-one-t0335s.png",
+        "008-ch02-topic-02-ratio-f-of-one-t0385s.png"
+      ],
+      "labels": [
+        "ch2 03:54",
+        "ch2 04:44",
+        "ch2 05:35",
+        "ch2 06:25"
+      ],
+      "tile_seconds": [
+        234.4,
+        284.8,
+        335.2,
+        385.6
+      ],
+      "time_start": 234.4,
+      "time_end": 385.6,
+      "range_start": 220.0,
+      "range_end": 400.0
+    },
+    {
+      "file": "composites/ch03-topic-03-jensen-nonneg-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-jensen-nonneg",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-jensen-nonneg-t0425s.png",
+        "010-ch03-topic-03-jensen-nonneg-t0481s.png",
+        "011-ch03-topic-03-jensen-nonneg-t0536s.png",
+        "012-ch03-topic-03-jensen-nonneg-t0592s.png"
+      ],
+      "labels": [
+        "ch3 07:05",
+        "ch3 08:01",
+        "ch3 08:56",
+        "ch3 09:52"
+      ],
+      "tile_seconds": [
+        425.8,
+        481.3,
+        536.7,
+        592.2
+      ],
+      "time_start": 425.8,
+      "time_end": 592.2,
+      "range_start": 410.0,
+      "range_end": 608.0
+    },
+    {
+      "file": "composites/ch04-topic-04-zero-iff-equal-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-zero-iff-equal",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-zero-iff-equal-t0643s.png",
+        "014-ch04-topic-04-zero-iff-equal-t0732s.png",
+        "015-ch04-topic-04-zero-iff-equal-t0820s.png",
+        "016-ch04-topic-04-zero-iff-equal-t0909s.png"
+      ],
+      "labels": [
+        "ch4 10:43",
+        "ch4 12:12",
+        "ch4 13:40",
+        "ch4 15:09"
+      ],
+      "tile_seconds": [
+        643.4,
+        732.1,
+        820.9,
+        909.6
+      ],
+      "time_start": 643.4,
+      "time_end": 909.6,
+      "range_start": 618.0,
+      "range_end": 935.0
+    },
+    {
+      "file": "composites/ch05-topic-05-kl-mle-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-kl-mle",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-kl-mle-t0962s.png",
+        "018-ch05-topic-05-kl-mle-t1015s.png",
+        "019-ch05-topic-05-kl-mle-t1067s.png",
+        "020-ch05-topic-05-kl-mle-t1120s.png"
+      ],
+      "labels": [
+        "ch5 16:02",
+        "ch5 16:55",
+        "ch5 17:47",
+        "ch5 18:40"
+      ],
+      "tile_seconds": [
+        963.0,
+        1015.3,
+        1067.7,
+        1120.0
+      ],
+      "time_start": 963.0,
+      "time_end": 1120.0,
+      "range_start": 948.0,
+      "range_end": 1135.0
+    },
+    {
+      "file": "composites/ch06-topic-06-reverse-kl-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-reverse-kl",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-reverse-kl-t1150s.png",
+        "022-ch06-topic-06-reverse-kl-t1180s.png",
+        "023-ch06-topic-06-reverse-kl-t1211s.png",
+        "024-ch06-topic-06-reverse-kl-t1241s.png"
+      ],
+      "labels": [
+        "ch6 19:10",
+        "ch6 19:40",
+        "ch6 20:11",
+        "ch6 20:41"
+      ],
+      "tile_seconds": [
+        1150.6,
+        1180.9,
+        1211.1,
+        1241.4
+      ],
+      "time_start": 1150.6,
+      "time_end": 1241.4,
+      "range_start": 1142.0,
+      "range_end": 1250.0
+    },
+    {
+      "file": "composites/ch07-topic-07-total-variation-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-total-variation",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-total-variation-t1267s.png",
+        "026-ch07-topic-07-total-variation-t1299s.png",
+        "027-ch07-topic-07-total-variation-t1330s.png",
+        "028-ch07-topic-07-total-variation-t1362s.png"
+      ],
+      "labels": [
+        "ch7 21:07",
+        "ch7 21:39",
+        "ch7 22:10",
+        "ch7 22:42"
+      ],
+      "tile_seconds": [
+        1267.1,
+        1299.0,
+        1331.0,
+        1362.9
+      ],
+      "time_start": 1267.1,
+      "time_end": 1362.9,
+      "range_start": 1258.0,
+      "range_end": 1372.0
+    },
+    {
+      "file": "composites/ch08-topic-08-jsd-gan-zoo-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-jsd-gan-zoo",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-jsd-gan-zoo-t1415s.png",
+        "030-ch08-topic-08-jsd-gan-zoo-t1534s.png",
+        "031-ch08-topic-08-jsd-gan-zoo-t1652s.png",
+        "032-ch08-topic-08-jsd-gan-zoo-t1771s.png"
+      ],
+      "labels": [
+        "ch8 23:35",
+        "ch8 25:34",
+        "ch8 27:32",
+        "ch8 29:31"
+      ],
+      "tile_seconds": [
+        1415.8,
+        1534.3,
+        1652.7,
+        1771.2
+      ],
+      "time_start": 1415.8,
+      "time_end": 1771.2,
+      "range_start": 1382.0,
+      "range_end": 1805.0
+    },
+    {
+      "file": "composites/ch09-topic-09-metric-axioms-symmetry-panel1of2.png",
+      "chapter": 9,
+      "slug": "topic-09-metric-axioms-symmetry",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "033-ch09-topic-09-metric-axioms-symmetry-t1867s.png",
+        "034-ch09-topic-09-metric-axioms-symmetry-t1947s.png",
+        "035-ch09-topic-09-metric-axioms-symmetry-t2026s.png",
+        "036-ch09-topic-09-metric-axioms-symmetry-t2105s.png"
+      ],
+      "labels": [
+        "ch9 31:07",
+        "ch9 32:27",
+        "ch9 33:46",
+        "ch9 35:05"
+      ],
+      "tile_seconds": [
+        1867.8,
+        1947.0,
+        2026.2,
+        2105.4
+      ],
+      "time_start": 1867.8,
+      "time_end": 2105.4,
+      "range_start": 1815.0,
+      "range_end": 2475.0
+    },
+    {
+      "file": "composites/ch09-topic-09-metric-axioms-symmetry-panel2of2.png",
+      "chapter": 9,
+      "slug": "topic-09-metric-axioms-symmetry",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "037-ch09-topic-09-metric-axioms-symmetry-t2184s.png",
+        "038-ch09-topic-09-metric-axioms-symmetry-t2263s.png",
+        "039-ch09-topic-09-metric-axioms-symmetry-t2343s.png",
+        "040-ch09-topic-09-metric-axioms-symmetry-t2422s.png"
+      ],
+      "labels": [
+        "ch9 36:24",
+        "ch9 37:43",
+        "ch9 39:03",
+        "ch9 40:22"
+      ],
+      "tile_seconds": [
+        2184.6,
+        2263.8,
+        2343.0,
+        2422.2
+      ],
+      "time_start": 2184.6,
+      "time_end": 2422.2,
+      "range_start": 1815.0,
+      "range_end": 2475.0
+    },
+    {
+      "file": "composites/ch10-topic-10-triangle-tv-homework-panel1of1.png",
+      "chapter": 10,
+      "slug": "topic-10-triangle-tv-homework",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "041-ch10-topic-10-triangle-tv-homework-t2518s.png",
+        "042-ch10-topic-10-triangle-tv-homework-t2627s.png",
+        "043-ch10-topic-10-triangle-tv-homework-t2735s.png",
+        "044-ch10-topic-10-triangle-tv-homework-t2844s.png"
+      ],
+      "labels": [
+        "ch10 41:58",
+        "ch10 43:47",
+        "ch10 45:35",
+        "ch10 47:24"
+      ],
+      "tile_seconds": [
+        2519.0,
+        2627.3,
+        2735.7,
+        2844.0
+      ],
+      "time_start": 2519.0,
+      "time_end": 2844.0,
+      "range_start": 2488.0,
+      "range_end": 2875.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

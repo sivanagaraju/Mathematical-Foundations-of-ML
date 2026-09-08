@@ -1,0 +1,660 @@
+{
+  "duration_seconds": 1333.0,
+  "range_source": "topic-ranges",
+  "range_count": 9,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 34.0,
+      "end": 74.0,
+      "slug": "topic-01-t-range-must-be-dom-fstar"
+    },
+    {
+      "index": 2,
+      "start": 74.0,
+      "end": 221.0,
+      "slug": "topic-02-tw-composite-sigma-f-vw"
+    },
+    {
+      "index": 3,
+      "start": 221.0,
+      "end": 338.0,
+      "slug": "topic-03-rewrite-j-with-composition"
+    },
+    {
+      "index": 4,
+      "start": 338.0,
+      "end": 459.0,
+      "slug": "topic-04-gan-is-vdm-choose-f-like-js"
+    },
+    {
+      "index": 5,
+      "start": 459.0,
+      "end": 637.0,
+      "slug": "topic-05-fstar-and-sigma-f-for-gan"
+    },
+    {
+      "index": 6,
+      "start": 637.0,
+      "end": 875.0,
+      "slug": "topic-06-jgan-dw-sigmoid-algebra"
+    },
+    {
+      "index": 7,
+      "start": 875.0,
+      "end": 1060.0,
+      "slug": "topic-07-architecture-g-v-sigmoid"
+    },
+    {
+      "index": 8,
+      "start": 1125.0,
+      "end": 1249.0,
+      "slug": "topic-08-combine-as-one-d-network"
+    },
+    {
+      "index": 9,
+      "start": 1249.0,
+      "end": 1333.0,
+      "slug": "topic-09-d-not-t-j-is-bound-next"
+    }
+  ],
+  "raw_count": 36,
+  "composite_count": 9,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-t-range-must-be-dom-fstar-t0037s.png",
+      "seconds": 37.2,
+      "chapter": 1,
+      "slug": "topic-01-t-range-must-be-dom-fstar",
+      "label": "00:37",
+      "range_start": 34.0,
+      "range_end": 74.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-t-range-must-be-dom-fstar-t0048s.png",
+      "seconds": 48.4,
+      "chapter": 1,
+      "slug": "topic-01-t-range-must-be-dom-fstar",
+      "label": "00:48",
+      "range_start": 34.0,
+      "range_end": 74.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-t-range-must-be-dom-fstar-t0059s.png",
+      "seconds": 59.6,
+      "chapter": 1,
+      "slug": "topic-01-t-range-must-be-dom-fstar",
+      "label": "00:59",
+      "range_start": 34.0,
+      "range_end": 74.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-t-range-must-be-dom-fstar-t0070s.png",
+      "seconds": 70.8,
+      "chapter": 1,
+      "slug": "topic-01-t-range-must-be-dom-fstar",
+      "label": "01:10",
+      "range_start": 34.0,
+      "range_end": 74.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-tw-composite-sigma-f-vw-t0085s.png",
+      "seconds": 85.8,
+      "chapter": 2,
+      "slug": "topic-02-tw-composite-sigma-f-vw",
+      "label": "01:25",
+      "range_start": 74.0,
+      "range_end": 221.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-tw-composite-sigma-f-vw-t0126s.png",
+      "seconds": 126.9,
+      "chapter": 2,
+      "slug": "topic-02-tw-composite-sigma-f-vw",
+      "label": "02:06",
+      "range_start": 74.0,
+      "range_end": 221.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-tw-composite-sigma-f-vw-t0168s.png",
+      "seconds": 168.1,
+      "chapter": 2,
+      "slug": "topic-02-tw-composite-sigma-f-vw",
+      "label": "02:48",
+      "range_start": 74.0,
+      "range_end": 221.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-tw-composite-sigma-f-vw-t0209s.png",
+      "seconds": 209.2,
+      "chapter": 2,
+      "slug": "topic-02-tw-composite-sigma-f-vw",
+      "label": "03:29",
+      "range_start": 74.0,
+      "range_end": 221.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-rewrite-j-with-composition-t0230s.png",
+      "seconds": 230.4,
+      "chapter": 3,
+      "slug": "topic-03-rewrite-j-with-composition",
+      "label": "03:50",
+      "range_start": 221.0,
+      "range_end": 338.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-rewrite-j-with-composition-t0263s.png",
+      "seconds": 263.1,
+      "chapter": 3,
+      "slug": "topic-03-rewrite-j-with-composition",
+      "label": "04:23",
+      "range_start": 221.0,
+      "range_end": 338.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-rewrite-j-with-composition-t0295s.png",
+      "seconds": 295.9,
+      "chapter": 3,
+      "slug": "topic-03-rewrite-j-with-composition",
+      "label": "04:55",
+      "range_start": 221.0,
+      "range_end": 338.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-rewrite-j-with-composition-t0328s.png",
+      "seconds": 328.6,
+      "chapter": 3,
+      "slug": "topic-03-rewrite-j-with-composition",
+      "label": "05:28",
+      "range_start": 221.0,
+      "range_end": 338.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-gan-is-vdm-choose-f-like-js-t0347s.png",
+      "seconds": 347.7,
+      "chapter": 4,
+      "slug": "topic-04-gan-is-vdm-choose-f-like-js",
+      "label": "05:47",
+      "range_start": 338.0,
+      "range_end": 459.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-gan-is-vdm-choose-f-like-js-t0381s.png",
+      "seconds": 381.6,
+      "chapter": 4,
+      "slug": "topic-04-gan-is-vdm-choose-f-like-js",
+      "label": "06:21",
+      "range_start": 338.0,
+      "range_end": 459.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-gan-is-vdm-choose-f-like-js-t0415s.png",
+      "seconds": 415.4,
+      "chapter": 4,
+      "slug": "topic-04-gan-is-vdm-choose-f-like-js",
+      "label": "06:55",
+      "range_start": 338.0,
+      "range_end": 459.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-gan-is-vdm-choose-f-like-js-t0449s.png",
+      "seconds": 449.3,
+      "chapter": 4,
+      "slug": "topic-04-gan-is-vdm-choose-f-like-js",
+      "label": "07:29",
+      "range_start": 338.0,
+      "range_end": 459.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-fstar-and-sigma-f-for-gan-t0473s.png",
+      "seconds": 473.2,
+      "chapter": 5,
+      "slug": "topic-05-fstar-and-sigma-f-for-gan",
+      "label": "07:53",
+      "range_start": 459.0,
+      "range_end": 637.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-fstar-and-sigma-f-for-gan-t0523s.png",
+      "seconds": 523.1,
+      "chapter": 5,
+      "slug": "topic-05-fstar-and-sigma-f-for-gan",
+      "label": "08:43",
+      "range_start": 459.0,
+      "range_end": 637.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-fstar-and-sigma-f-for-gan-t0572s.png",
+      "seconds": 572.9,
+      "chapter": 5,
+      "slug": "topic-05-fstar-and-sigma-f-for-gan",
+      "label": "09:32",
+      "range_start": 459.0,
+      "range_end": 637.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-fstar-and-sigma-f-for-gan-t0622s.png",
+      "seconds": 622.8,
+      "chapter": 5,
+      "slug": "topic-05-fstar-and-sigma-f-for-gan",
+      "label": "10:22",
+      "range_start": 459.0,
+      "range_end": 637.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-jgan-dw-sigmoid-algebra-t0656s.png",
+      "seconds": 656.0,
+      "chapter": 6,
+      "slug": "topic-06-jgan-dw-sigmoid-algebra",
+      "label": "10:56",
+      "range_start": 637.0,
+      "range_end": 875.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-jgan-dw-sigmoid-algebra-t0722s.png",
+      "seconds": 722.7,
+      "chapter": 6,
+      "slug": "topic-06-jgan-dw-sigmoid-algebra",
+      "label": "12:02",
+      "range_start": 637.0,
+      "range_end": 875.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-jgan-dw-sigmoid-algebra-t0789s.png",
+      "seconds": 789.3,
+      "chapter": 6,
+      "slug": "topic-06-jgan-dw-sigmoid-algebra",
+      "label": "13:09",
+      "range_start": 637.0,
+      "range_end": 875.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-jgan-dw-sigmoid-algebra-t0855s.png",
+      "seconds": 856.0,
+      "chapter": 6,
+      "slug": "topic-06-jgan-dw-sigmoid-algebra",
+      "label": "14:15",
+      "range_start": 637.0,
+      "range_end": 875.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-architecture-g-v-sigmoid-t0889s.png",
+      "seconds": 889.8,
+      "chapter": 7,
+      "slug": "topic-07-architecture-g-v-sigmoid",
+      "label": "14:49",
+      "range_start": 875.0,
+      "range_end": 1060.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-architecture-g-v-sigmoid-t0941s.png",
+      "seconds": 941.6,
+      "chapter": 7,
+      "slug": "topic-07-architecture-g-v-sigmoid",
+      "label": "15:41",
+      "range_start": 875.0,
+      "range_end": 1060.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-architecture-g-v-sigmoid-t0993s.png",
+      "seconds": 993.4,
+      "chapter": 7,
+      "slug": "topic-07-architecture-g-v-sigmoid",
+      "label": "16:33",
+      "range_start": 875.0,
+      "range_end": 1060.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-architecture-g-v-sigmoid-t1045s.png",
+      "seconds": 1045.2,
+      "chapter": 7,
+      "slug": "topic-07-architecture-g-v-sigmoid",
+      "label": "17:25",
+      "range_start": 875.0,
+      "range_end": 1060.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-combine-as-one-d-network-t1134s.png",
+      "seconds": 1134.9,
+      "chapter": 8,
+      "slug": "topic-08-combine-as-one-d-network",
+      "label": "18:54",
+      "range_start": 1125.0,
+      "range_end": 1249.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-combine-as-one-d-network-t1169s.png",
+      "seconds": 1169.6,
+      "chapter": 8,
+      "slug": "topic-08-combine-as-one-d-network",
+      "label": "19:29",
+      "range_start": 1125.0,
+      "range_end": 1249.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-combine-as-one-d-network-t1204s.png",
+      "seconds": 1204.4,
+      "chapter": 8,
+      "slug": "topic-08-combine-as-one-d-network",
+      "label": "20:04",
+      "range_start": 1125.0,
+      "range_end": 1249.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-combine-as-one-d-network-t1239s.png",
+      "seconds": 1239.1,
+      "chapter": 8,
+      "slug": "topic-08-combine-as-one-d-network",
+      "label": "20:39",
+      "range_start": 1125.0,
+      "range_end": 1249.0
+    },
+    {
+      "file": "raw/033-ch09-topic-09-d-not-t-j-is-bound-next-t1255s.png",
+      "seconds": 1255.7,
+      "chapter": 9,
+      "slug": "topic-09-d-not-t-j-is-bound-next",
+      "label": "20:55",
+      "range_start": 1249.0,
+      "range_end": 1333.0
+    },
+    {
+      "file": "raw/034-ch09-topic-09-d-not-t-j-is-bound-next-t1279s.png",
+      "seconds": 1279.2,
+      "chapter": 9,
+      "slug": "topic-09-d-not-t-j-is-bound-next",
+      "label": "21:19",
+      "range_start": 1249.0,
+      "range_end": 1333.0
+    },
+    {
+      "file": "raw/035-ch09-topic-09-d-not-t-j-is-bound-next-t1302s.png",
+      "seconds": 1302.8,
+      "chapter": 9,
+      "slug": "topic-09-d-not-t-j-is-bound-next",
+      "label": "21:42",
+      "range_start": 1249.0,
+      "range_end": 1333.0
+    },
+    {
+      "file": "raw/036-ch09-topic-09-d-not-t-j-is-bound-next-t1326s.png",
+      "seconds": 1326.3,
+      "chapter": 9,
+      "slug": "topic-09-d-not-t-j-is-bound-next",
+      "label": "22:06",
+      "range_start": 1249.0,
+      "range_end": 1333.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-t-range-must-be-dom-fstar-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-t-range-must-be-dom-fstar",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-t-range-must-be-dom-fstar-t0037s.png",
+        "002-ch01-topic-01-t-range-must-be-dom-fstar-t0048s.png",
+        "003-ch01-topic-01-t-range-must-be-dom-fstar-t0059s.png",
+        "004-ch01-topic-01-t-range-must-be-dom-fstar-t0070s.png"
+      ],
+      "labels": [
+        "ch1 00:37",
+        "ch1 00:48",
+        "ch1 00:59",
+        "ch1 01:10"
+      ],
+      "tile_seconds": [
+        37.2,
+        48.4,
+        59.6,
+        70.8
+      ],
+      "time_start": 37.2,
+      "time_end": 70.8,
+      "range_start": 34.0,
+      "range_end": 74.0
+    },
+    {
+      "file": "composites/ch02-topic-02-tw-composite-sigma-f-vw-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-tw-composite-sigma-f-vw",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-tw-composite-sigma-f-vw-t0085s.png",
+        "006-ch02-topic-02-tw-composite-sigma-f-vw-t0126s.png",
+        "007-ch02-topic-02-tw-composite-sigma-f-vw-t0168s.png",
+        "008-ch02-topic-02-tw-composite-sigma-f-vw-t0209s.png"
+      ],
+      "labels": [
+        "ch2 01:25",
+        "ch2 02:06",
+        "ch2 02:48",
+        "ch2 03:29"
+      ],
+      "tile_seconds": [
+        85.8,
+        126.9,
+        168.1,
+        209.2
+      ],
+      "time_start": 85.8,
+      "time_end": 209.2,
+      "range_start": 74.0,
+      "range_end": 221.0
+    },
+    {
+      "file": "composites/ch03-topic-03-rewrite-j-with-composition-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-rewrite-j-with-composition",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-rewrite-j-with-composition-t0230s.png",
+        "010-ch03-topic-03-rewrite-j-with-composition-t0263s.png",
+        "011-ch03-topic-03-rewrite-j-with-composition-t0295s.png",
+        "012-ch03-topic-03-rewrite-j-with-composition-t0328s.png"
+      ],
+      "labels": [
+        "ch3 03:50",
+        "ch3 04:23",
+        "ch3 04:55",
+        "ch3 05:28"
+      ],
+      "tile_seconds": [
+        230.4,
+        263.1,
+        295.9,
+        328.6
+      ],
+      "time_start": 230.4,
+      "time_end": 328.6,
+      "range_start": 221.0,
+      "range_end": 338.0
+    },
+    {
+      "file": "composites/ch04-topic-04-gan-is-vdm-choose-f-like-js-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-gan-is-vdm-choose-f-like-js",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-gan-is-vdm-choose-f-like-js-t0347s.png",
+        "014-ch04-topic-04-gan-is-vdm-choose-f-like-js-t0381s.png",
+        "015-ch04-topic-04-gan-is-vdm-choose-f-like-js-t0415s.png",
+        "016-ch04-topic-04-gan-is-vdm-choose-f-like-js-t0449s.png"
+      ],
+      "labels": [
+        "ch4 05:47",
+        "ch4 06:21",
+        "ch4 06:55",
+        "ch4 07:29"
+      ],
+      "tile_seconds": [
+        347.7,
+        381.6,
+        415.4,
+        449.3
+      ],
+      "time_start": 347.7,
+      "time_end": 449.3,
+      "range_start": 338.0,
+      "range_end": 459.0
+    },
+    {
+      "file": "composites/ch05-topic-05-fstar-and-sigma-f-for-gan-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-fstar-and-sigma-f-for-gan",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-fstar-and-sigma-f-for-gan-t0473s.png",
+        "018-ch05-topic-05-fstar-and-sigma-f-for-gan-t0523s.png",
+        "019-ch05-topic-05-fstar-and-sigma-f-for-gan-t0572s.png",
+        "020-ch05-topic-05-fstar-and-sigma-f-for-gan-t0622s.png"
+      ],
+      "labels": [
+        "ch5 07:53",
+        "ch5 08:43",
+        "ch5 09:32",
+        "ch5 10:22"
+      ],
+      "tile_seconds": [
+        473.2,
+        523.1,
+        572.9,
+        622.8
+      ],
+      "time_start": 473.2,
+      "time_end": 622.8,
+      "range_start": 459.0,
+      "range_end": 637.0
+    },
+    {
+      "file": "composites/ch06-topic-06-jgan-dw-sigmoid-algebra-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-jgan-dw-sigmoid-algebra",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-jgan-dw-sigmoid-algebra-t0656s.png",
+        "022-ch06-topic-06-jgan-dw-sigmoid-algebra-t0722s.png",
+        "023-ch06-topic-06-jgan-dw-sigmoid-algebra-t0789s.png",
+        "024-ch06-topic-06-jgan-dw-sigmoid-algebra-t0855s.png"
+      ],
+      "labels": [
+        "ch6 10:56",
+        "ch6 12:02",
+        "ch6 13:09",
+        "ch6 14:15"
+      ],
+      "tile_seconds": [
+        656.0,
+        722.7,
+        789.3,
+        856.0
+      ],
+      "time_start": 656.0,
+      "time_end": 856.0,
+      "range_start": 637.0,
+      "range_end": 875.0
+    },
+    {
+      "file": "composites/ch07-topic-07-architecture-g-v-sigmoid-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-architecture-g-v-sigmoid",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-architecture-g-v-sigmoid-t0889s.png",
+        "026-ch07-topic-07-architecture-g-v-sigmoid-t0941s.png",
+        "027-ch07-topic-07-architecture-g-v-sigmoid-t0993s.png",
+        "028-ch07-topic-07-architecture-g-v-sigmoid-t1045s.png"
+      ],
+      "labels": [
+        "ch7 14:49",
+        "ch7 15:41",
+        "ch7 16:33",
+        "ch7 17:25"
+      ],
+      "tile_seconds": [
+        889.8,
+        941.6,
+        993.4,
+        1045.2
+      ],
+      "time_start": 889.8,
+      "time_end": 1045.2,
+      "range_start": 875.0,
+      "range_end": 1060.0
+    },
+    {
+      "file": "composites/ch08-topic-08-combine-as-one-d-network-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-combine-as-one-d-network",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-combine-as-one-d-network-t1134s.png",
+        "030-ch08-topic-08-combine-as-one-d-network-t1169s.png",
+        "031-ch08-topic-08-combine-as-one-d-network-t1204s.png",
+        "032-ch08-topic-08-combine-as-one-d-network-t1239s.png"
+      ],
+      "labels": [
+        "ch8 18:54",
+        "ch8 19:29",
+        "ch8 20:04",
+        "ch8 20:39"
+      ],
+      "tile_seconds": [
+        1134.9,
+        1169.6,
+        1204.4,
+        1239.1
+      ],
+      "time_start": 1134.9,
+      "time_end": 1239.1,
+      "range_start": 1125.0,
+      "range_end": 1249.0
+    },
+    {
+      "file": "composites/ch09-topic-09-d-not-t-j-is-bound-next-panel1of1.png",
+      "chapter": 9,
+      "slug": "topic-09-d-not-t-j-is-bound-next",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch09-topic-09-d-not-t-j-is-bound-next-t1255s.png",
+        "034-ch09-topic-09-d-not-t-j-is-bound-next-t1279s.png",
+        "035-ch09-topic-09-d-not-t-j-is-bound-next-t1302s.png",
+        "036-ch09-topic-09-d-not-t-j-is-bound-next-t1326s.png"
+      ],
+      "labels": [
+        "ch9 20:55",
+        "ch9 21:19",
+        "ch9 21:42",
+        "ch9 22:06"
+      ],
+      "tile_seconds": [
+        1255.7,
+        1279.2,
+        1302.8,
+        1326.3
+      ],
+      "time_start": 1255.7,
+      "time_end": 1326.3,
+      "range_start": 1249.0,
+      "range_end": 1333.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

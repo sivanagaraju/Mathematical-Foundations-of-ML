@@ -1,0 +1,731 @@
+{
+  "duration_seconds": 2466.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 11.0,
+      "end": 165.0,
+      "slug": "topic-01-vanilla-gan-mnist-why-small"
+    },
+    {
+      "index": 2,
+      "start": 165.0,
+      "end": 335.0,
+      "slug": "topic-02-g-d-mlp-z100-784"
+    },
+    {
+      "index": 3,
+      "start": 335.0,
+      "end": 663.0,
+      "slug": "topic-03-js-style-loss-batches-g-of-z"
+    },
+    {
+      "index": 4,
+      "start": 663.0,
+      "end": 1054.0,
+      "slug": "topic-04-d-ascent-freeze-g-bce-two-terms"
+    },
+    {
+      "index": 5,
+      "start": 1054.0,
+      "end": 1372.0,
+      "slug": "topic-05-g-descent-drop-term1-trick-real-labels"
+    },
+    {
+      "index": 6,
+      "start": 1372.0,
+      "end": 1547.0,
+      "slug": "topic-06-colab-imports-normalize-mnist-128"
+    },
+    {
+      "index": 7,
+      "start": 1547.0,
+      "end": 1717.0,
+      "slug": "topic-07-generator-tanh-disc-leaky-sigmoid"
+    },
+    {
+      "index": 8,
+      "start": 1717.0,
+      "end": 1837.0,
+      "slug": "topic-08-two-adams-bce-fixed-noise"
+    },
+    {
+      "index": 9,
+      "start": 1837.0,
+      "end": 2284.0,
+      "slug": "topic-09-train-loop-detach-modes"
+    },
+    {
+      "index": 10,
+      "start": 2284.0,
+      "end": 2466.0,
+      "slug": "topic-10-grids-50-epochs-cnn-exercise"
+    }
+  ],
+  "raw_count": 40,
+  "composite_count": 10,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-vanilla-gan-mnist-why-small-t0023s.png",
+      "seconds": 23.3,
+      "chapter": 1,
+      "slug": "topic-01-vanilla-gan-mnist-why-small",
+      "label": "00:23",
+      "range_start": 11.0,
+      "range_end": 165.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-vanilla-gan-mnist-why-small-t0066s.png",
+      "seconds": 66.4,
+      "chapter": 1,
+      "slug": "topic-01-vanilla-gan-mnist-why-small",
+      "label": "01:06",
+      "range_start": 11.0,
+      "range_end": 165.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-vanilla-gan-mnist-why-small-t0109s.png",
+      "seconds": 109.6,
+      "chapter": 1,
+      "slug": "topic-01-vanilla-gan-mnist-why-small",
+      "label": "01:49",
+      "range_start": 11.0,
+      "range_end": 165.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-vanilla-gan-mnist-why-small-t0152s.png",
+      "seconds": 152.7,
+      "chapter": 1,
+      "slug": "topic-01-vanilla-gan-mnist-why-small",
+      "label": "02:32",
+      "range_start": 11.0,
+      "range_end": 165.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-g-d-mlp-z100-784-t0178s.png",
+      "seconds": 178.6,
+      "chapter": 2,
+      "slug": "topic-02-g-d-mlp-z100-784",
+      "label": "02:58",
+      "range_start": 165.0,
+      "range_end": 335.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-g-d-mlp-z100-784-t0226s.png",
+      "seconds": 226.2,
+      "chapter": 2,
+      "slug": "topic-02-g-d-mlp-z100-784",
+      "label": "03:46",
+      "range_start": 165.0,
+      "range_end": 335.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-g-d-mlp-z100-784-t0273s.png",
+      "seconds": 273.8,
+      "chapter": 2,
+      "slug": "topic-02-g-d-mlp-z100-784",
+      "label": "04:33",
+      "range_start": 165.0,
+      "range_end": 335.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-g-d-mlp-z100-784-t0321s.png",
+      "seconds": 321.4,
+      "chapter": 2,
+      "slug": "topic-02-g-d-mlp-z100-784",
+      "label": "05:21",
+      "range_start": 165.0,
+      "range_end": 335.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-js-style-loss-batches-g-of-z-t0361s.png",
+      "seconds": 361.2,
+      "chapter": 3,
+      "slug": "topic-03-js-style-loss-batches-g-of-z",
+      "label": "06:01",
+      "range_start": 335.0,
+      "range_end": 663.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-js-style-loss-batches-g-of-z-t0453s.png",
+      "seconds": 453.1,
+      "chapter": 3,
+      "slug": "topic-03-js-style-loss-batches-g-of-z",
+      "label": "07:33",
+      "range_start": 335.0,
+      "range_end": 663.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-js-style-loss-batches-g-of-z-t0544s.png",
+      "seconds": 544.9,
+      "chapter": 3,
+      "slug": "topic-03-js-style-loss-batches-g-of-z",
+      "label": "09:04",
+      "range_start": 335.0,
+      "range_end": 663.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-js-style-loss-batches-g-of-z-t0636s.png",
+      "seconds": 636.8,
+      "chapter": 3,
+      "slug": "topic-03-js-style-loss-batches-g-of-z",
+      "label": "10:36",
+      "range_start": 335.0,
+      "range_end": 663.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-d-ascent-freeze-g-bce-two-terms-t0694s.png",
+      "seconds": 694.3,
+      "chapter": 4,
+      "slug": "topic-04-d-ascent-freeze-g-bce-two-terms",
+      "label": "11:34",
+      "range_start": 663.0,
+      "range_end": 1054.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-d-ascent-freeze-g-bce-two-terms-t0803s.png",
+      "seconds": 803.8,
+      "chapter": 4,
+      "slug": "topic-04-d-ascent-freeze-g-bce-two-terms",
+      "label": "13:23",
+      "range_start": 663.0,
+      "range_end": 1054.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-d-ascent-freeze-g-bce-two-terms-t0913s.png",
+      "seconds": 913.2,
+      "chapter": 4,
+      "slug": "topic-04-d-ascent-freeze-g-bce-two-terms",
+      "label": "15:13",
+      "range_start": 663.0,
+      "range_end": 1054.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-d-ascent-freeze-g-bce-two-terms-t1022s.png",
+      "seconds": 1022.7,
+      "chapter": 4,
+      "slug": "topic-04-d-ascent-freeze-g-bce-two-terms",
+      "label": "17:02",
+      "range_start": 663.0,
+      "range_end": 1054.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-g-descent-drop-term1-trick-real-labels-t1079s.png",
+      "seconds": 1079.4,
+      "chapter": 5,
+      "slug": "topic-05-g-descent-drop-term1-trick-real-labels",
+      "label": "17:59",
+      "range_start": 1054.0,
+      "range_end": 1372.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-g-descent-drop-term1-trick-real-labels-t1168s.png",
+      "seconds": 1168.5,
+      "chapter": 5,
+      "slug": "topic-05-g-descent-drop-term1-trick-real-labels",
+      "label": "19:28",
+      "range_start": 1054.0,
+      "range_end": 1372.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-g-descent-drop-term1-trick-real-labels-t1257s.png",
+      "seconds": 1257.5,
+      "chapter": 5,
+      "slug": "topic-05-g-descent-drop-term1-trick-real-labels",
+      "label": "20:57",
+      "range_start": 1054.0,
+      "range_end": 1372.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-g-descent-drop-term1-trick-real-labels-t1346s.png",
+      "seconds": 1346.6,
+      "chapter": 5,
+      "slug": "topic-05-g-descent-drop-term1-trick-real-labels",
+      "label": "22:26",
+      "range_start": 1054.0,
+      "range_end": 1372.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-colab-imports-normalize-mnist-128-t1386s.png",
+      "seconds": 1386.0,
+      "chapter": 6,
+      "slug": "topic-06-colab-imports-normalize-mnist-128",
+      "label": "23:06",
+      "range_start": 1372.0,
+      "range_end": 1547.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-colab-imports-normalize-mnist-128-t1435s.png",
+      "seconds": 1435.0,
+      "chapter": 6,
+      "slug": "topic-06-colab-imports-normalize-mnist-128",
+      "label": "23:55",
+      "range_start": 1372.0,
+      "range_end": 1547.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-colab-imports-normalize-mnist-128-t1484s.png",
+      "seconds": 1484.0,
+      "chapter": 6,
+      "slug": "topic-06-colab-imports-normalize-mnist-128",
+      "label": "24:44",
+      "range_start": 1372.0,
+      "range_end": 1547.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-colab-imports-normalize-mnist-128-t1533s.png",
+      "seconds": 1533.0,
+      "chapter": 6,
+      "slug": "topic-06-colab-imports-normalize-mnist-128",
+      "label": "25:33",
+      "range_start": 1372.0,
+      "range_end": 1547.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-generator-tanh-disc-leaky-sigmoid-t1560s.png",
+      "seconds": 1560.6,
+      "chapter": 7,
+      "slug": "topic-07-generator-tanh-disc-leaky-sigmoid",
+      "label": "26:00",
+      "range_start": 1547.0,
+      "range_end": 1717.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-generator-tanh-disc-leaky-sigmoid-t1608s.png",
+      "seconds": 1608.2,
+      "chapter": 7,
+      "slug": "topic-07-generator-tanh-disc-leaky-sigmoid",
+      "label": "26:48",
+      "range_start": 1547.0,
+      "range_end": 1717.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-generator-tanh-disc-leaky-sigmoid-t1655s.png",
+      "seconds": 1655.8,
+      "chapter": 7,
+      "slug": "topic-07-generator-tanh-disc-leaky-sigmoid",
+      "label": "27:35",
+      "range_start": 1547.0,
+      "range_end": 1717.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-generator-tanh-disc-leaky-sigmoid-t1703s.png",
+      "seconds": 1703.4,
+      "chapter": 7,
+      "slug": "topic-07-generator-tanh-disc-leaky-sigmoid",
+      "label": "28:23",
+      "range_start": 1547.0,
+      "range_end": 1717.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-two-adams-bce-fixed-noise-t1726s.png",
+      "seconds": 1726.6,
+      "chapter": 8,
+      "slug": "topic-08-two-adams-bce-fixed-noise",
+      "label": "28:46",
+      "range_start": 1717.0,
+      "range_end": 1837.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-two-adams-bce-fixed-noise-t1760s.png",
+      "seconds": 1760.2,
+      "chapter": 8,
+      "slug": "topic-08-two-adams-bce-fixed-noise",
+      "label": "29:20",
+      "range_start": 1717.0,
+      "range_end": 1837.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-two-adams-bce-fixed-noise-t1793s.png",
+      "seconds": 1793.8,
+      "chapter": 8,
+      "slug": "topic-08-two-adams-bce-fixed-noise",
+      "label": "29:53",
+      "range_start": 1717.0,
+      "range_end": 1837.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-two-adams-bce-fixed-noise-t1827s.png",
+      "seconds": 1827.4,
+      "chapter": 8,
+      "slug": "topic-08-two-adams-bce-fixed-noise",
+      "label": "30:27",
+      "range_start": 1717.0,
+      "range_end": 1837.0
+    },
+    {
+      "file": "raw/033-ch09-topic-09-train-loop-detach-modes-t1872s.png",
+      "seconds": 1872.8,
+      "chapter": 9,
+      "slug": "topic-09-train-loop-detach-modes",
+      "label": "31:12",
+      "range_start": 1837.0,
+      "range_end": 2284.0
+    },
+    {
+      "file": "raw/034-ch09-topic-09-train-loop-detach-modes-t1997s.png",
+      "seconds": 1997.9,
+      "chapter": 9,
+      "slug": "topic-09-train-loop-detach-modes",
+      "label": "33:17",
+      "range_start": 1837.0,
+      "range_end": 2284.0
+    },
+    {
+      "file": "raw/035-ch09-topic-09-train-loop-detach-modes-t2123s.png",
+      "seconds": 2123.1,
+      "chapter": 9,
+      "slug": "topic-09-train-loop-detach-modes",
+      "label": "35:23",
+      "range_start": 1837.0,
+      "range_end": 2284.0
+    },
+    {
+      "file": "raw/036-ch09-topic-09-train-loop-detach-modes-t2248s.png",
+      "seconds": 2248.2,
+      "chapter": 9,
+      "slug": "topic-09-train-loop-detach-modes",
+      "label": "37:28",
+      "range_start": 1837.0,
+      "range_end": 2284.0
+    },
+    {
+      "file": "raw/037-ch10-topic-10-grids-50-epochs-cnn-exercise-t2298s.png",
+      "seconds": 2298.6,
+      "chapter": 10,
+      "slug": "topic-10-grids-50-epochs-cnn-exercise",
+      "label": "38:18",
+      "range_start": 2284.0,
+      "range_end": 2466.0
+    },
+    {
+      "file": "raw/038-ch10-topic-10-grids-50-epochs-cnn-exercise-t2349s.png",
+      "seconds": 2349.5,
+      "chapter": 10,
+      "slug": "topic-10-grids-50-epochs-cnn-exercise",
+      "label": "39:09",
+      "range_start": 2284.0,
+      "range_end": 2466.0
+    },
+    {
+      "file": "raw/039-ch10-topic-10-grids-50-epochs-cnn-exercise-t2400s.png",
+      "seconds": 2400.5,
+      "chapter": 10,
+      "slug": "topic-10-grids-50-epochs-cnn-exercise",
+      "label": "40:00",
+      "range_start": 2284.0,
+      "range_end": 2466.0
+    },
+    {
+      "file": "raw/040-ch10-topic-10-grids-50-epochs-cnn-exercise-t2451s.png",
+      "seconds": 2451.4,
+      "chapter": 10,
+      "slug": "topic-10-grids-50-epochs-cnn-exercise",
+      "label": "40:51",
+      "range_start": 2284.0,
+      "range_end": 2466.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-vanilla-gan-mnist-why-small-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-vanilla-gan-mnist-why-small",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-vanilla-gan-mnist-why-small-t0023s.png",
+        "002-ch01-topic-01-vanilla-gan-mnist-why-small-t0066s.png",
+        "003-ch01-topic-01-vanilla-gan-mnist-why-small-t0109s.png",
+        "004-ch01-topic-01-vanilla-gan-mnist-why-small-t0152s.png"
+      ],
+      "labels": [
+        "ch1 00:23",
+        "ch1 01:06",
+        "ch1 01:49",
+        "ch1 02:32"
+      ],
+      "tile_seconds": [
+        23.3,
+        66.4,
+        109.6,
+        152.7
+      ],
+      "time_start": 23.3,
+      "time_end": 152.7,
+      "range_start": 11.0,
+      "range_end": 165.0
+    },
+    {
+      "file": "composites/ch02-topic-02-g-d-mlp-z100-784-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-g-d-mlp-z100-784",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-g-d-mlp-z100-784-t0178s.png",
+        "006-ch02-topic-02-g-d-mlp-z100-784-t0226s.png",
+        "007-ch02-topic-02-g-d-mlp-z100-784-t0273s.png",
+        "008-ch02-topic-02-g-d-mlp-z100-784-t0321s.png"
+      ],
+      "labels": [
+        "ch2 02:58",
+        "ch2 03:46",
+        "ch2 04:33",
+        "ch2 05:21"
+      ],
+      "tile_seconds": [
+        178.6,
+        226.2,
+        273.8,
+        321.4
+      ],
+      "time_start": 178.6,
+      "time_end": 321.4,
+      "range_start": 165.0,
+      "range_end": 335.0
+    },
+    {
+      "file": "composites/ch03-topic-03-js-style-loss-batches-g-of-z-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-js-style-loss-batches-g-of-z",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-js-style-loss-batches-g-of-z-t0361s.png",
+        "010-ch03-topic-03-js-style-loss-batches-g-of-z-t0453s.png",
+        "011-ch03-topic-03-js-style-loss-batches-g-of-z-t0544s.png",
+        "012-ch03-topic-03-js-style-loss-batches-g-of-z-t0636s.png"
+      ],
+      "labels": [
+        "ch3 06:01",
+        "ch3 07:33",
+        "ch3 09:04",
+        "ch3 10:36"
+      ],
+      "tile_seconds": [
+        361.2,
+        453.1,
+        544.9,
+        636.8
+      ],
+      "time_start": 361.2,
+      "time_end": 636.8,
+      "range_start": 335.0,
+      "range_end": 663.0
+    },
+    {
+      "file": "composites/ch04-topic-04-d-ascent-freeze-g-bce-two-terms-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-d-ascent-freeze-g-bce-two-terms",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-d-ascent-freeze-g-bce-two-terms-t0694s.png",
+        "014-ch04-topic-04-d-ascent-freeze-g-bce-two-terms-t0803s.png",
+        "015-ch04-topic-04-d-ascent-freeze-g-bce-two-terms-t0913s.png",
+        "016-ch04-topic-04-d-ascent-freeze-g-bce-two-terms-t1022s.png"
+      ],
+      "labels": [
+        "ch4 11:34",
+        "ch4 13:23",
+        "ch4 15:13",
+        "ch4 17:02"
+      ],
+      "tile_seconds": [
+        694.3,
+        803.8,
+        913.2,
+        1022.7
+      ],
+      "time_start": 694.3,
+      "time_end": 1022.7,
+      "range_start": 663.0,
+      "range_end": 1054.0
+    },
+    {
+      "file": "composites/ch05-topic-05-g-descent-drop-term1-trick-real-labels-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-g-descent-drop-term1-trick-real-labels",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-g-descent-drop-term1-trick-real-labels-t1079s.png",
+        "018-ch05-topic-05-g-descent-drop-term1-trick-real-labels-t1168s.png",
+        "019-ch05-topic-05-g-descent-drop-term1-trick-real-labels-t1257s.png",
+        "020-ch05-topic-05-g-descent-drop-term1-trick-real-labels-t1346s.png"
+      ],
+      "labels": [
+        "ch5 17:59",
+        "ch5 19:28",
+        "ch5 20:57",
+        "ch5 22:26"
+      ],
+      "tile_seconds": [
+        1079.4,
+        1168.5,
+        1257.5,
+        1346.6
+      ],
+      "time_start": 1079.4,
+      "time_end": 1346.6,
+      "range_start": 1054.0,
+      "range_end": 1372.0
+    },
+    {
+      "file": "composites/ch06-topic-06-colab-imports-normalize-mnist-128-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-colab-imports-normalize-mnist-128",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-colab-imports-normalize-mnist-128-t1386s.png",
+        "022-ch06-topic-06-colab-imports-normalize-mnist-128-t1435s.png",
+        "023-ch06-topic-06-colab-imports-normalize-mnist-128-t1484s.png",
+        "024-ch06-topic-06-colab-imports-normalize-mnist-128-t1533s.png"
+      ],
+      "labels": [
+        "ch6 23:06",
+        "ch6 23:55",
+        "ch6 24:44",
+        "ch6 25:33"
+      ],
+      "tile_seconds": [
+        1386.0,
+        1435.0,
+        1484.0,
+        1533.0
+      ],
+      "time_start": 1386.0,
+      "time_end": 1533.0,
+      "range_start": 1372.0,
+      "range_end": 1547.0
+    },
+    {
+      "file": "composites/ch07-topic-07-generator-tanh-disc-leaky-sigmoid-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-generator-tanh-disc-leaky-sigmoid",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-generator-tanh-disc-leaky-sigmoid-t1560s.png",
+        "026-ch07-topic-07-generator-tanh-disc-leaky-sigmoid-t1608s.png",
+        "027-ch07-topic-07-generator-tanh-disc-leaky-sigmoid-t1655s.png",
+        "028-ch07-topic-07-generator-tanh-disc-leaky-sigmoid-t1703s.png"
+      ],
+      "labels": [
+        "ch7 26:00",
+        "ch7 26:48",
+        "ch7 27:35",
+        "ch7 28:23"
+      ],
+      "tile_seconds": [
+        1560.6,
+        1608.2,
+        1655.8,
+        1703.4
+      ],
+      "time_start": 1560.6,
+      "time_end": 1703.4,
+      "range_start": 1547.0,
+      "range_end": 1717.0
+    },
+    {
+      "file": "composites/ch08-topic-08-two-adams-bce-fixed-noise-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-two-adams-bce-fixed-noise",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-two-adams-bce-fixed-noise-t1726s.png",
+        "030-ch08-topic-08-two-adams-bce-fixed-noise-t1760s.png",
+        "031-ch08-topic-08-two-adams-bce-fixed-noise-t1793s.png",
+        "032-ch08-topic-08-two-adams-bce-fixed-noise-t1827s.png"
+      ],
+      "labels": [
+        "ch8 28:46",
+        "ch8 29:20",
+        "ch8 29:53",
+        "ch8 30:27"
+      ],
+      "tile_seconds": [
+        1726.6,
+        1760.2,
+        1793.8,
+        1827.4
+      ],
+      "time_start": 1726.6,
+      "time_end": 1827.4,
+      "range_start": 1717.0,
+      "range_end": 1837.0
+    },
+    {
+      "file": "composites/ch09-topic-09-train-loop-detach-modes-panel1of1.png",
+      "chapter": 9,
+      "slug": "topic-09-train-loop-detach-modes",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch09-topic-09-train-loop-detach-modes-t1872s.png",
+        "034-ch09-topic-09-train-loop-detach-modes-t1997s.png",
+        "035-ch09-topic-09-train-loop-detach-modes-t2123s.png",
+        "036-ch09-topic-09-train-loop-detach-modes-t2248s.png"
+      ],
+      "labels": [
+        "ch9 31:12",
+        "ch9 33:17",
+        "ch9 35:23",
+        "ch9 37:28"
+      ],
+      "tile_seconds": [
+        1872.8,
+        1997.9,
+        2123.1,
+        2248.2
+      ],
+      "time_start": 1872.8,
+      "time_end": 2248.2,
+      "range_start": 1837.0,
+      "range_end": 2284.0
+    },
+    {
+      "file": "composites/ch10-topic-10-grids-50-epochs-cnn-exercise-panel1of1.png",
+      "chapter": 10,
+      "slug": "topic-10-grids-50-epochs-cnn-exercise",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "037-ch10-topic-10-grids-50-epochs-cnn-exercise-t2298s.png",
+        "038-ch10-topic-10-grids-50-epochs-cnn-exercise-t2349s.png",
+        "039-ch10-topic-10-grids-50-epochs-cnn-exercise-t2400s.png",
+        "040-ch10-topic-10-grids-50-epochs-cnn-exercise-t2451s.png"
+      ],
+      "labels": [
+        "ch10 38:18",
+        "ch10 39:09",
+        "ch10 40:00",
+        "ch10 40:51"
+      ],
+      "tile_seconds": [
+        2298.6,
+        2349.5,
+        2400.5,
+        2451.4
+      ],
+      "time_start": 2298.6,
+      "time_end": 2451.4,
+      "range_start": 2284.0,
+      "range_end": 2466.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

@@ -1,0 +1,731 @@
+{
+  "duration_seconds": 3839.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 100.0,
+      "end": 380.0,
+      "slug": "topic-01-recap-triplet-rv"
+    },
+    {
+      "index": 2,
+      "start": 400.0,
+      "end": 660.0,
+      "slug": "topic-02-images-as-vectors"
+    },
+    {
+      "index": 3,
+      "start": 680.0,
+      "end": 975.0,
+      "slug": "topic-03-modalities-agnostic"
+    },
+    {
+      "index": 4,
+      "start": 1000.0,
+      "end": 1290.0,
+      "slug": "topic-04-data-as-range-of-rv"
+    },
+    {
+      "index": 5,
+      "start": 1320.0,
+      "end": 1770.0,
+      "slug": "topic-05-know-p-estimate-px"
+    },
+    {
+      "index": 6,
+      "start": 1800.0,
+      "end": 2145.0,
+      "slug": "topic-06-data-oil-dataset"
+    },
+    {
+      "index": 7,
+      "start": 2170.0,
+      "end": 2490.0,
+      "slug": "topic-07-central-ml-estimate-px"
+    },
+    {
+      "index": 8,
+      "start": 2520.0,
+      "end": 2970.0,
+      "slug": "topic-08-sampling-genai-problem"
+    },
+    {
+      "index": 9,
+      "start": 3120.0,
+      "end": 3560.0,
+      "slug": "topic-09-recipe-model-divergence-train"
+    },
+    {
+      "index": 10,
+      "start": 3580.0,
+      "end": 3839.0,
+      "slug": "topic-10-open-questions-recap"
+    }
+  ],
+  "raw_count": 40,
+  "composite_count": 10,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-recap-triplet-rv-t0122s.png",
+      "seconds": 122.4,
+      "chapter": 1,
+      "slug": "topic-01-recap-triplet-rv",
+      "label": "02:02",
+      "range_start": 100.0,
+      "range_end": 380.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-recap-triplet-rv-t0200s.png",
+      "seconds": 200.8,
+      "chapter": 1,
+      "slug": "topic-01-recap-triplet-rv",
+      "label": "03:20",
+      "range_start": 100.0,
+      "range_end": 380.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-recap-triplet-rv-t0279s.png",
+      "seconds": 279.2,
+      "chapter": 1,
+      "slug": "topic-01-recap-triplet-rv",
+      "label": "04:39",
+      "range_start": 100.0,
+      "range_end": 380.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-recap-triplet-rv-t0357s.png",
+      "seconds": 357.6,
+      "chapter": 1,
+      "slug": "topic-01-recap-triplet-rv",
+      "label": "05:57",
+      "range_start": 100.0,
+      "range_end": 380.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-images-as-vectors-t0420s.png",
+      "seconds": 420.8,
+      "chapter": 2,
+      "slug": "topic-02-images-as-vectors",
+      "label": "07:00",
+      "range_start": 400.0,
+      "range_end": 660.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-images-as-vectors-t0493s.png",
+      "seconds": 493.6,
+      "chapter": 2,
+      "slug": "topic-02-images-as-vectors",
+      "label": "08:13",
+      "range_start": 400.0,
+      "range_end": 660.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-images-as-vectors-t0566s.png",
+      "seconds": 566.4,
+      "chapter": 2,
+      "slug": "topic-02-images-as-vectors",
+      "label": "09:26",
+      "range_start": 400.0,
+      "range_end": 660.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-images-as-vectors-t0639s.png",
+      "seconds": 639.2,
+      "chapter": 2,
+      "slug": "topic-02-images-as-vectors",
+      "label": "10:39",
+      "range_start": 400.0,
+      "range_end": 660.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-modalities-agnostic-t0703s.png",
+      "seconds": 703.6,
+      "chapter": 3,
+      "slug": "topic-03-modalities-agnostic",
+      "label": "11:43",
+      "range_start": 680.0,
+      "range_end": 975.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-modalities-agnostic-t0786s.png",
+      "seconds": 786.2,
+      "chapter": 3,
+      "slug": "topic-03-modalities-agnostic",
+      "label": "13:06",
+      "range_start": 680.0,
+      "range_end": 975.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-modalities-agnostic-t0868s.png",
+      "seconds": 868.8,
+      "chapter": 3,
+      "slug": "topic-03-modalities-agnostic",
+      "label": "14:28",
+      "range_start": 680.0,
+      "range_end": 975.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-modalities-agnostic-t0951s.png",
+      "seconds": 951.4,
+      "chapter": 3,
+      "slug": "topic-03-modalities-agnostic",
+      "label": "15:51",
+      "range_start": 680.0,
+      "range_end": 975.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-data-as-range-of-rv-t1023s.png",
+      "seconds": 1023.2,
+      "chapter": 4,
+      "slug": "topic-04-data-as-range-of-rv",
+      "label": "17:03",
+      "range_start": 1000.0,
+      "range_end": 1290.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-data-as-range-of-rv-t1104s.png",
+      "seconds": 1104.4,
+      "chapter": 4,
+      "slug": "topic-04-data-as-range-of-rv",
+      "label": "18:24",
+      "range_start": 1000.0,
+      "range_end": 1290.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-data-as-range-of-rv-t1185s.png",
+      "seconds": 1185.6,
+      "chapter": 4,
+      "slug": "topic-04-data-as-range-of-rv",
+      "label": "19:45",
+      "range_start": 1000.0,
+      "range_end": 1290.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-data-as-range-of-rv-t1266s.png",
+      "seconds": 1266.8,
+      "chapter": 4,
+      "slug": "topic-04-data-as-range-of-rv",
+      "label": "21:06",
+      "range_start": 1000.0,
+      "range_end": 1290.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-know-p-estimate-px-t1356s.png",
+      "seconds": 1356.0,
+      "chapter": 5,
+      "slug": "topic-05-know-p-estimate-px",
+      "label": "22:36",
+      "range_start": 1320.0,
+      "range_end": 1770.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-know-p-estimate-px-t1482s.png",
+      "seconds": 1482.0,
+      "chapter": 5,
+      "slug": "topic-05-know-p-estimate-px",
+      "label": "24:42",
+      "range_start": 1320.0,
+      "range_end": 1770.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-know-p-estimate-px-t1608s.png",
+      "seconds": 1608.0,
+      "chapter": 5,
+      "slug": "topic-05-know-p-estimate-px",
+      "label": "26:48",
+      "range_start": 1320.0,
+      "range_end": 1770.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-know-p-estimate-px-t1734s.png",
+      "seconds": 1734.0,
+      "chapter": 5,
+      "slug": "topic-05-know-p-estimate-px",
+      "label": "28:54",
+      "range_start": 1320.0,
+      "range_end": 1770.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-data-oil-dataset-t1827s.png",
+      "seconds": 1827.6,
+      "chapter": 6,
+      "slug": "topic-06-data-oil-dataset",
+      "label": "30:27",
+      "range_start": 1800.0,
+      "range_end": 2145.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-data-oil-dataset-t1924s.png",
+      "seconds": 1924.2,
+      "chapter": 6,
+      "slug": "topic-06-data-oil-dataset",
+      "label": "32:04",
+      "range_start": 1800.0,
+      "range_end": 2145.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-data-oil-dataset-t2020s.png",
+      "seconds": 2020.8,
+      "chapter": 6,
+      "slug": "topic-06-data-oil-dataset",
+      "label": "33:40",
+      "range_start": 1800.0,
+      "range_end": 2145.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-data-oil-dataset-t2117s.png",
+      "seconds": 2117.4,
+      "chapter": 6,
+      "slug": "topic-06-data-oil-dataset",
+      "label": "35:17",
+      "range_start": 1800.0,
+      "range_end": 2145.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-central-ml-estimate-px-t2195s.png",
+      "seconds": 2195.6,
+      "chapter": 7,
+      "slug": "topic-07-central-ml-estimate-px",
+      "label": "36:35",
+      "range_start": 2170.0,
+      "range_end": 2490.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-central-ml-estimate-px-t2285s.png",
+      "seconds": 2285.2,
+      "chapter": 7,
+      "slug": "topic-07-central-ml-estimate-px",
+      "label": "38:05",
+      "range_start": 2170.0,
+      "range_end": 2490.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-central-ml-estimate-px-t2374s.png",
+      "seconds": 2374.8,
+      "chapter": 7,
+      "slug": "topic-07-central-ml-estimate-px",
+      "label": "39:34",
+      "range_start": 2170.0,
+      "range_end": 2490.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-central-ml-estimate-px-t2464s.png",
+      "seconds": 2464.4,
+      "chapter": 7,
+      "slug": "topic-07-central-ml-estimate-px",
+      "label": "41:04",
+      "range_start": 2170.0,
+      "range_end": 2490.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-sampling-genai-problem-t2556s.png",
+      "seconds": 2556.0,
+      "chapter": 8,
+      "slug": "topic-08-sampling-genai-problem",
+      "label": "42:36",
+      "range_start": 2520.0,
+      "range_end": 2970.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-sampling-genai-problem-t2682s.png",
+      "seconds": 2682.0,
+      "chapter": 8,
+      "slug": "topic-08-sampling-genai-problem",
+      "label": "44:42",
+      "range_start": 2520.0,
+      "range_end": 2970.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-sampling-genai-problem-t2808s.png",
+      "seconds": 2808.0,
+      "chapter": 8,
+      "slug": "topic-08-sampling-genai-problem",
+      "label": "46:48",
+      "range_start": 2520.0,
+      "range_end": 2970.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-sampling-genai-problem-t2934s.png",
+      "seconds": 2934.0,
+      "chapter": 8,
+      "slug": "topic-08-sampling-genai-problem",
+      "label": "48:54",
+      "range_start": 2520.0,
+      "range_end": 2970.0
+    },
+    {
+      "file": "raw/033-ch09-topic-09-recipe-model-divergence-train-t3155s.png",
+      "seconds": 3155.2,
+      "chapter": 9,
+      "slug": "topic-09-recipe-model-divergence-train",
+      "label": "52:35",
+      "range_start": 3120.0,
+      "range_end": 3560.0
+    },
+    {
+      "file": "raw/034-ch09-topic-09-recipe-model-divergence-train-t3278s.png",
+      "seconds": 3278.4,
+      "chapter": 9,
+      "slug": "topic-09-recipe-model-divergence-train",
+      "label": "54:38",
+      "range_start": 3120.0,
+      "range_end": 3560.0
+    },
+    {
+      "file": "raw/035-ch09-topic-09-recipe-model-divergence-train-t3401s.png",
+      "seconds": 3401.6,
+      "chapter": 9,
+      "slug": "topic-09-recipe-model-divergence-train",
+      "label": "56:41",
+      "range_start": 3120.0,
+      "range_end": 3560.0
+    },
+    {
+      "file": "raw/036-ch09-topic-09-recipe-model-divergence-train-t3524s.png",
+      "seconds": 3524.8,
+      "chapter": 9,
+      "slug": "topic-09-recipe-model-divergence-train",
+      "label": "58:44",
+      "range_start": 3120.0,
+      "range_end": 3560.0
+    },
+    {
+      "file": "raw/037-ch10-topic-10-open-questions-recap-t3600s.png",
+      "seconds": 3600.7,
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "label": "60:00",
+      "range_start": 3580.0,
+      "range_end": 3839.0
+    },
+    {
+      "file": "raw/038-ch10-topic-10-open-questions-recap-t3673s.png",
+      "seconds": 3673.2,
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "label": "61:13",
+      "range_start": 3580.0,
+      "range_end": 3839.0
+    },
+    {
+      "file": "raw/039-ch10-topic-10-open-questions-recap-t3745s.png",
+      "seconds": 3745.8,
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "label": "62:25",
+      "range_start": 3580.0,
+      "range_end": 3839.0
+    },
+    {
+      "file": "raw/040-ch10-topic-10-open-questions-recap-t3818s.png",
+      "seconds": 3818.3,
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "label": "63:38",
+      "range_start": 3580.0,
+      "range_end": 3839.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-recap-triplet-rv-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-recap-triplet-rv",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-recap-triplet-rv-t0122s.png",
+        "002-ch01-topic-01-recap-triplet-rv-t0200s.png",
+        "003-ch01-topic-01-recap-triplet-rv-t0279s.png",
+        "004-ch01-topic-01-recap-triplet-rv-t0357s.png"
+      ],
+      "labels": [
+        "ch1 02:02",
+        "ch1 03:20",
+        "ch1 04:39",
+        "ch1 05:57"
+      ],
+      "tile_seconds": [
+        122.4,
+        200.8,
+        279.2,
+        357.6
+      ],
+      "time_start": 122.4,
+      "time_end": 357.6,
+      "range_start": 100.0,
+      "range_end": 380.0
+    },
+    {
+      "file": "composites/ch02-topic-02-images-as-vectors-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-images-as-vectors",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-images-as-vectors-t0420s.png",
+        "006-ch02-topic-02-images-as-vectors-t0493s.png",
+        "007-ch02-topic-02-images-as-vectors-t0566s.png",
+        "008-ch02-topic-02-images-as-vectors-t0639s.png"
+      ],
+      "labels": [
+        "ch2 07:00",
+        "ch2 08:13",
+        "ch2 09:26",
+        "ch2 10:39"
+      ],
+      "tile_seconds": [
+        420.8,
+        493.6,
+        566.4,
+        639.2
+      ],
+      "time_start": 420.8,
+      "time_end": 639.2,
+      "range_start": 400.0,
+      "range_end": 660.0
+    },
+    {
+      "file": "composites/ch03-topic-03-modalities-agnostic-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-modalities-agnostic",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-modalities-agnostic-t0703s.png",
+        "010-ch03-topic-03-modalities-agnostic-t0786s.png",
+        "011-ch03-topic-03-modalities-agnostic-t0868s.png",
+        "012-ch03-topic-03-modalities-agnostic-t0951s.png"
+      ],
+      "labels": [
+        "ch3 11:43",
+        "ch3 13:06",
+        "ch3 14:28",
+        "ch3 15:51"
+      ],
+      "tile_seconds": [
+        703.6,
+        786.2,
+        868.8,
+        951.4
+      ],
+      "time_start": 703.6,
+      "time_end": 951.4,
+      "range_start": 680.0,
+      "range_end": 975.0
+    },
+    {
+      "file": "composites/ch04-topic-04-data-as-range-of-rv-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-data-as-range-of-rv",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-data-as-range-of-rv-t1023s.png",
+        "014-ch04-topic-04-data-as-range-of-rv-t1104s.png",
+        "015-ch04-topic-04-data-as-range-of-rv-t1185s.png",
+        "016-ch04-topic-04-data-as-range-of-rv-t1266s.png"
+      ],
+      "labels": [
+        "ch4 17:03",
+        "ch4 18:24",
+        "ch4 19:45",
+        "ch4 21:06"
+      ],
+      "tile_seconds": [
+        1023.2,
+        1104.4,
+        1185.6,
+        1266.8
+      ],
+      "time_start": 1023.2,
+      "time_end": 1266.8,
+      "range_start": 1000.0,
+      "range_end": 1290.0
+    },
+    {
+      "file": "composites/ch05-topic-05-know-p-estimate-px-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-know-p-estimate-px",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-know-p-estimate-px-t1356s.png",
+        "018-ch05-topic-05-know-p-estimate-px-t1482s.png",
+        "019-ch05-topic-05-know-p-estimate-px-t1608s.png",
+        "020-ch05-topic-05-know-p-estimate-px-t1734s.png"
+      ],
+      "labels": [
+        "ch5 22:36",
+        "ch5 24:42",
+        "ch5 26:48",
+        "ch5 28:54"
+      ],
+      "tile_seconds": [
+        1356.0,
+        1482.0,
+        1608.0,
+        1734.0
+      ],
+      "time_start": 1356.0,
+      "time_end": 1734.0,
+      "range_start": 1320.0,
+      "range_end": 1770.0
+    },
+    {
+      "file": "composites/ch06-topic-06-data-oil-dataset-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-data-oil-dataset",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-data-oil-dataset-t1827s.png",
+        "022-ch06-topic-06-data-oil-dataset-t1924s.png",
+        "023-ch06-topic-06-data-oil-dataset-t2020s.png",
+        "024-ch06-topic-06-data-oil-dataset-t2117s.png"
+      ],
+      "labels": [
+        "ch6 30:27",
+        "ch6 32:04",
+        "ch6 33:40",
+        "ch6 35:17"
+      ],
+      "tile_seconds": [
+        1827.6,
+        1924.2,
+        2020.8,
+        2117.4
+      ],
+      "time_start": 1827.6,
+      "time_end": 2117.4,
+      "range_start": 1800.0,
+      "range_end": 2145.0
+    },
+    {
+      "file": "composites/ch07-topic-07-central-ml-estimate-px-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-central-ml-estimate-px",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-central-ml-estimate-px-t2195s.png",
+        "026-ch07-topic-07-central-ml-estimate-px-t2285s.png",
+        "027-ch07-topic-07-central-ml-estimate-px-t2374s.png",
+        "028-ch07-topic-07-central-ml-estimate-px-t2464s.png"
+      ],
+      "labels": [
+        "ch7 36:35",
+        "ch7 38:05",
+        "ch7 39:34",
+        "ch7 41:04"
+      ],
+      "tile_seconds": [
+        2195.6,
+        2285.2,
+        2374.8,
+        2464.4
+      ],
+      "time_start": 2195.6,
+      "time_end": 2464.4,
+      "range_start": 2170.0,
+      "range_end": 2490.0
+    },
+    {
+      "file": "composites/ch08-topic-08-sampling-genai-problem-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-sampling-genai-problem",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-sampling-genai-problem-t2556s.png",
+        "030-ch08-topic-08-sampling-genai-problem-t2682s.png",
+        "031-ch08-topic-08-sampling-genai-problem-t2808s.png",
+        "032-ch08-topic-08-sampling-genai-problem-t2934s.png"
+      ],
+      "labels": [
+        "ch8 42:36",
+        "ch8 44:42",
+        "ch8 46:48",
+        "ch8 48:54"
+      ],
+      "tile_seconds": [
+        2556.0,
+        2682.0,
+        2808.0,
+        2934.0
+      ],
+      "time_start": 2556.0,
+      "time_end": 2934.0,
+      "range_start": 2520.0,
+      "range_end": 2970.0
+    },
+    {
+      "file": "composites/ch09-topic-09-recipe-model-divergence-train-panel1of1.png",
+      "chapter": 9,
+      "slug": "topic-09-recipe-model-divergence-train",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch09-topic-09-recipe-model-divergence-train-t3155s.png",
+        "034-ch09-topic-09-recipe-model-divergence-train-t3278s.png",
+        "035-ch09-topic-09-recipe-model-divergence-train-t3401s.png",
+        "036-ch09-topic-09-recipe-model-divergence-train-t3524s.png"
+      ],
+      "labels": [
+        "ch9 52:35",
+        "ch9 54:38",
+        "ch9 56:41",
+        "ch9 58:44"
+      ],
+      "tile_seconds": [
+        3155.2,
+        3278.4,
+        3401.6,
+        3524.8
+      ],
+      "time_start": 3155.2,
+      "time_end": 3524.8,
+      "range_start": 3120.0,
+      "range_end": 3560.0
+    },
+    {
+      "file": "composites/ch10-topic-10-open-questions-recap-panel1of1.png",
+      "chapter": 10,
+      "slug": "topic-10-open-questions-recap",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "037-ch10-topic-10-open-questions-recap-t3600s.png",
+        "038-ch10-topic-10-open-questions-recap-t3673s.png",
+        "039-ch10-topic-10-open-questions-recap-t3745s.png",
+        "040-ch10-topic-10-open-questions-recap-t3818s.png"
+      ],
+      "labels": [
+        "ch10 60:00",
+        "ch10 61:13",
+        "ch10 62:25",
+        "ch10 63:38"
+      ],
+      "tile_seconds": [
+        3600.7,
+        3673.2,
+        3745.8,
+        3818.3
+      ],
+      "time_start": 3600.7,
+      "time_end": 3818.3,
+      "range_start": 3580.0,
+      "range_end": 3839.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mathematical Foundation Visualizer Template | Black & White Design System</title>
+  
+  <!-- 1. Local Standalone Tailwind CSS Engine -->
+  <script src="./assets/css/tailwind.min.js"></script>
+  
+  <!-- 2. Master High-Contrast Visible-Border Theme -->
+  <link rel="stylesheet" href="./assets/css/template-theme.css">
+
+  <!-- 3. KaTeX for Textbook-Quality Mathematical Typography -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <!-- 4. Shared Visualizer Utilities (Canvas scaling, Animations, Theme) -->
+  <script src="./assets/js/template-utils.js"></script>
+</head>
+<body class="bg-black text-zinc-100 antialiased p-3 sm:p-6 font-sans selection:bg-white selection:text-black">
+
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <!-- ═══════════════════════════════════════════════════
+         HEADER: HIGH-CONTRAST CARD WITH VISIBLE BORDERS
+         ═══════════════════════════════════════════════════ -->
+    <header class="bg-zinc-950 border-2 border-zinc-700 rounded-2xl p-5 sm:p-7 shadow-2xl">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-zinc-900 text-zinc-300 border border-zinc-600 uppercase tracking-wider">
+              Mathematical Foundations of Generative AI
+            </span>
+            <span class="px-2.5 py-0.5 text-xs font-mono rounded-full bg-zinc-900 text-emerald-400 border border-zinc-700 font-semibold">
+              Interactive Template
+            </span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mt-1.5">
+            Interactive Visualizer Master Template
+          </h1>
+          <p class="text-xs sm:text-sm text-zinc-400 mt-1 max-w-4xl leading-relaxed">
+            Clean Black & White layout, visible high-contrast borders, and rich colorful visualizations.
+          </p>
+        </div>
+
+        <!-- Metric Badge Indicator -->
+        <div class="flex items-center gap-3 bg-zinc-900/90 p-3 rounded-xl border border-zinc-600">
+          <div class="text-right">
+            <div class="text-[10px] text-zinc-400 uppercase tracking-wider font-mono">Module Status</div>
+            <div class="text-sm font-bold text-white">Active Interactive Lab</div>
+          </div>
+          <div class="w-10 h-10 rounded-lg bg-black border border-zinc-600 flex items-center justify-center text-emerald-400 font-bold font-mono text-base">
+            ✓
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════
+         MAIN INTERACTIVE CARD
+         ═══════════════════════════════════════════════════ -->
+    <section class="chapter-card p-5 sm:p-7 space-y-6">
+      
+      <!-- Card Title & Equation Badge -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-700 pb-4">
+        <div>
+          <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider">Laboratory Demonstration</span>
+          <h2 class="text-xl font-bold text-white mt-0.5">Function Trajectory & Sensitivity Canvas</h2>
+        </div>
+        <div class="font-mono text-xs bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-600 text-zinc-200">
+          Formula: $f(x) = x^2$
+        </div>
+      </div>
+
+      <!-- Main Layout: 7-col Canvas + 5-col HUD -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Canvas & Controls (7 Cols) -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="relative rounded-xl border-2 border-zinc-700 overflow-hidden bg-[#09090b]">
+            <canvas id="mainCanvas" width="700" height="340" class="interactive-canvas"></canvas>
+          </div>
+
+          <!-- Controls Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-zinc-900/60 border border-zinc-700 text-xs">
+            <div>
+              <div class="flex justify-between font-mono mb-1.5">
+                <span class="text-zinc-400">Parameter Knob X ($x_0$):</span>
+                <span id="label-x0" class="text-sky-300 font-bold font-mono">1.00</span>
+              </div>
+              <input id="slider-x0" type="range" min="-2.0" max="2.0" step="0.05" value="1.0" class="w-full">
+            </div>
+
+            <div>
+              <div class="flex justify-between font-mono mb-1.5">
+                <span class="text-zinc-400">Interval Window ($h$):</span>
+                <span id="label-h" class="text-amber-300 font-bold font-mono">1.50</span>
+              </div>
+              <input id="slider-h" type="range" min="0.01" max="2.5" step="0.01" value="1.50" class="w-full">
+            </div>
+          </div>
+
+          <!-- Action Buttons & Presets -->
+          <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-zinc-900/40 border border-zinc-700 flex-wrap text-xs">
+            <div class="flex items-center gap-2 flex-wrap">
+              <button onclick="setStep(2.0)" class="px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-700 font-mono text-[11px]">h = 2.0</button>
+              <button onclick="setStep(1.0)" class="px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-700 font-mono text-[11px]">h = 1.0</button>
+              <button onclick="setStep(0.1)" class="px-2.5 py-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-700 font-mono text-[11px]">h = 0.1</button>
+              <button onclick="setStep(0.01)" class="px-2.5 py-1 rounded bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold font-mono text-[11px] shadow-sm">Limit h → 0.01</button>
+            </div>
+            <button id="btn-animate" onclick="toggleAnimate()" class="px-3.5 py-1.5 rounded-lg bg-white text-black hover:bg-zinc-200 font-bold font-mono transition shadow">
+              ▶ Animate Limit
+            </button>
+          </div>
+        </div>
+
+        <!-- Telemetry HUD & Insight (5 Cols) -->
+        <div class="lg:col-span-5 space-y-4 flex flex-col justify-between text-xs">
+          
+          <div class="p-4 rounded-xl bg-zinc-900/60 border-2 border-zinc-700 space-y-4">
+            <div class="flex items-center justify-between border-b border-zinc-700 pb-2">
+              <h3 class="font-bold text-white text-sm">📊 Live Telemetry HUD</h3>
+              <span class="font-mono text-zinc-400 text-[11px]">Real-time Calculation</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <!-- Secant Readout (Amber) -->
+              <div class="p-3 rounded-lg bg-zinc-950 border-2 border-amber-500/60 shadow-lg shadow-amber-950/20">
+                <div class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">✂️ Secant Slope</div>
+                <div id="stat-secant" class="text-2xl font-mono font-extrabold text-amber-300 mt-1">3.50</div>
+                <div class="text-[10px] text-zinc-400 font-mono mt-0.5">$m_{\text{sec}} = \frac{\Delta y}{h}$</div>
+              </div>
+
+              <!-- Tangent Readout (Emerald) -->
+              <div class="p-3 rounded-lg bg-zinc-950 border-2 border-emerald-500/60 shadow-lg shadow-emerald-950/20">
+                <div class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">✨ Tangent Slope</div>
+                <div id="stat-tangent" class="text-2xl font-mono font-extrabold text-emerald-300 mt-1">2.00</div>
+                <div class="text-[10px] text-zinc-400 font-mono mt-0.5">$f'(x_0) = 2x_0$</div>
+              </div>
+            </div>
+
+            <!-- Error Metric (Rose) -->
+            <div class="p-3 rounded-lg bg-zinc-950 border-2 border-rose-500/50 font-mono text-[11px] flex justify-between items-center shadow-lg shadow-rose-950/20">
+              <span class="text-rose-400 font-semibold flex items-center gap-1.5">⚠️ Truncation Gap:</span>
+              <span id="stat-error" class="text-rose-300 font-bold">1.50 (75.0%)</span>
+            </div>
+
+            <!-- Point-Slope Equations -->
+            <div class="p-3 rounded-lg bg-black border border-zinc-700 space-y-1.5 font-mono text-[11px]">
+              <div class="text-zinc-400 text-[10px] uppercase font-bold tracking-wider">Dynamic Equations:</div>
+              <div id="eq-secant" class="text-amber-300 flex justify-between">
+                <span class="text-zinc-400">Secant:</span>
+                <span>$y - y_0 = m_{\text{sec}}(x - x_0)$</span>
+              </div>
+              <div id="eq-tangent" class="text-emerald-300 flex justify-between">
+                <span class="text-zinc-400">Tangent:</span>
+                <span>$y - y_0 = m_{\text{tan}}(x - x_0)$</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Theory Callout -->
+          <div class="p-4 rounded-xl bg-zinc-900/60 border-2 border-zinc-700 text-xs text-zinc-300 space-y-1.5">
+            <div class="font-bold text-white flex items-center gap-1.5">
+              <span>💡 First Principles Note:</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 leading-relaxed">
+              As $h \to 0$, the secant line rotates into the true tangent line. 
+              The approximation error vanishes at rate $\mathcal{O}(h)$.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // --- Canvas Rendering & State Logic ---
+    let x0 = 1.0;
+    let h = 1.5;
+    let isAnimating = false;
+    let cancelAnim = null;
+
+    const canvas = document.getElementById('mainCanvas');
+    const ctx = VisualizerTheme.setupCanvas(canvas, 340);
+
+    function f(x) { return x * x; }
+    function df(x) { return 2 * x; }
+
+    function updateHUD() {
+      const y0 = f(x0);
+      const y1 = f(x0 + h);
+      const secant = (y1 - y0) / h;
+      const tangent = df(x0);
+      const err = Math.abs(secant - tangent);
+      const pct = tangent !== 0 ? (err / Math.abs(tangent)) * 100 : 0;
+
+      document.getElementById('label-x0').innerText = x0.toFixed(2);
+      document.getElementById('label-h').innerText = h.toFixed(2);
+      document.getElementById('stat-secant').innerText = secant.toFixed(2);
+      document.getElementById('stat-tangent').innerText = tangent.toFixed(2);
+      document.getElementById('stat-error').innerText = `${err.toFixed(2)} (${pct.toFixed(1)}%)`;
+
+      document.getElementById('eq-secant').innerHTML = `
+        <span class="text-zinc-400">Secant:</span>
+        <span>y - ${y0.toFixed(2)} = <strong>${secant.toFixed(2)}</strong>(x - ${x0.toFixed(2)})</span>
+      `;
+      document.getElementById('eq-tangent').innerHTML = `
+        <span class="text-zinc-400">Tangent:</span>
+        <span>y - ${y0.toFixed(2)} = <strong>${tangent.toFixed(2)}</strong>(x - ${x0.toFixed(2)})</span>
+      `;
+    }
+
+    function render() {
+      const width = canvas.getBoundingClientRect().width;
+      const height = 340;
+      
+      const xMin = -2.5, xMax = 4.5, yMin = -1.5, yMax = 12.0;
+      const toX = (x) => ((x - xMin) / (xMax - xMin)) * width;
+      const toY = (y) => height - ((y - yMin) / (yMax - yMin)) * height;
+
+      ctx.fillStyle = VisualizerTheme.colors.background;
+      ctx.fillRect(0, 0, width, height);
+
+      // Grid
+      ctx.strokeStyle = VisualizerTheme.colors.grid;
+      ctx.lineWidth = 1;
+      for (let x = -2; x <= 4; x++) {
+        ctx.beginPath();
+        ctx.moveTo(toX(x), 0);
+        ctx.lineTo(toX(x), height);
+        ctx.stroke();
+      }
+      for (let y = 0; y <= 10; y += 2) {
+        ctx.beginPath();
+        ctx.moveTo(0, toY(y));
+        ctx.lineTo(width, toY(y));
+        ctx.stroke();
+      }
+
+      // Parabola Curve (Sky Blue)
+      ctx.strokeStyle = VisualizerTheme.colors.curve;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let i = 0; i <= 200; i++) {
+        const x = xMin + (i / 200) * (xMax - xMin);
+        const y = f(x);
+        if (i === 0) ctx.moveTo(toX(x), toY(y));
+        else ctx.lineTo(toX(x), toY(y));
+      }
+      ctx.stroke();
+
+      // Secant Line (Amber)
+      const y0 = f(x0);
+      const y1 = f(x0 + h);
+      const mSec = (y1 - y0) / h;
+      ctx.strokeStyle = VisualizerTheme.colors.secant;
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(toX(xMin), toY(y0 + mSec * (xMin - x0)));
+      ctx.lineTo(toX(xMax), toY(y0 + mSec * (xMax - x0)));
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Tangent Line (Emerald)
+      const mTan = df(x0);
+      ctx.strokeStyle = VisualizerTheme.colors.tangent;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(toX(xMin), toY(y0 + mTan * (xMin - x0)));
+      ctx.lineTo(toX(xMax), toY(y0 + mTan * (xMax - x0)));
+      ctx.stroke();
+
+      // Points P and Q
+      ctx.fillStyle = VisualizerTheme.colors.curve;
+      ctx.beginPath();
+      ctx.arc(toX(x0), toY(y0), 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.stroke();
+
+      ctx.fillStyle = VisualizerTheme.colors.secant;
+      ctx.beginPath();
+      ctx.arc(toX(x0 + h), toY(y1), 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      updateHUD();
+    }
+
+    function setStep(newH) {
+      if (cancelAnim) cancelAnim();
+      h = newH;
+      document.getElementById('slider-h').value = newH;
+      render();
+    }
+
+    function toggleAnimate() {
+      if (isAnimating) {
+        if (cancelAnim) cancelAnim();
+        isAnimating = false;
+        document.getElementById('btn-animate').innerText = '▶ Animate Limit';
+        return;
+      }
+
+      if (h <= 0.05) h = 2.0;
+      isAnimating = true;
+      document.getElementById('btn-animate').innerText = '⏸ Pause';
+
+      cancelAnim = VisualizerTheme.animateLimit(
+        h, 0.01,
+        (currentH) => {
+          h = currentH;
+          document.getElementById('slider-h').value = currentH;
+          render();
+        },
+        () => {
+          isAnimating = false;
+          document.getElementById('btn-animate').innerText = '▶ Animate Limit';
+        }
+      );
+    }
+
+    // Sliders event listeners
+    document.getElementById('slider-x0').addEventListener('input', (e) => {
+      x0 = parseFloat(e.target.value);
+      render();
+    });
+    document.getElementById('slider-h').addEventListener('input', (e) => {
+      h = parseFloat(e.target.value);
+      render();
+    });
+
+    // Window resize
+    window.addEventListener('resize', () => {
+      VisualizerTheme.setupCanvas(canvas, 340);
+      render();
+    });
+
+    // Initialize
+    VisualizerTheme.initKaTeX();
+    render();
+  </script>
+</body>
+</html>

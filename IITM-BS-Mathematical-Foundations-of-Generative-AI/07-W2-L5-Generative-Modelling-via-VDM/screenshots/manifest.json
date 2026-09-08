@@ -1,0 +1,796 @@
+{
+  "duration_seconds": 3293.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 11.0,
+      "end": 341.0,
+      "slug": "topic-01-supervised-setup-d-f-loss"
+    },
+    {
+      "index": 2,
+      "start": 341.0,
+      "end": 534.0,
+      "slug": "topic-02-football-forward-vs-backprop"
+    },
+    {
+      "index": 3,
+      "start": 534.0,
+      "end": 786.0,
+      "slug": "topic-03-mlp-diagram-activation-names"
+    },
+    {
+      "index": 4,
+      "start": 786.0,
+      "end": 966.0,
+      "slug": "topic-04-weight-indices-wij-k"
+    },
+    {
+      "index": 5,
+      "start": 966.0,
+      "end": 1348.0,
+      "slug": "topic-05-forward-pass-sigmoid-relu"
+    },
+    {
+      "index": 6,
+      "start": 1348.0,
+      "end": 1663.0,
+      "slug": "topic-06-theta-mse-one-point"
+    },
+    {
+      "index": 7,
+      "start": 1663.0,
+      "end": 2000.0,
+      "slug": "topic-07-gradient-descent-learning-rate"
+    },
+    {
+      "index": 8,
+      "start": 2000.0,
+      "end": 2338.0,
+      "slug": "topic-08-chain-path-w111-numeric"
+    },
+    {
+      "index": 9,
+      "start": 2338.0,
+      "end": 2898.0,
+      "slug": "topic-09-five-factors-one-weight"
+    },
+    {
+      "index": 10,
+      "start": 2898.0,
+      "end": 3293.0,
+      "slug": "topic-10-batch-epoch-python-loop"
+    }
+  ],
+  "raw_count": 44,
+  "composite_count": 11,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-supervised-setup-d-f-loss-t0037s.png",
+      "seconds": 37.4,
+      "chapter": 1,
+      "slug": "topic-01-supervised-setup-d-f-loss",
+      "label": "00:37",
+      "range_start": 11.0,
+      "range_end": 341.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-supervised-setup-d-f-loss-t0129s.png",
+      "seconds": 129.8,
+      "chapter": 1,
+      "slug": "topic-01-supervised-setup-d-f-loss",
+      "label": "02:09",
+      "range_start": 11.0,
+      "range_end": 341.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-supervised-setup-d-f-loss-t0222s.png",
+      "seconds": 222.2,
+      "chapter": 1,
+      "slug": "topic-01-supervised-setup-d-f-loss",
+      "label": "03:42",
+      "range_start": 11.0,
+      "range_end": 341.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-supervised-setup-d-f-loss-t0314s.png",
+      "seconds": 314.6,
+      "chapter": 1,
+      "slug": "topic-01-supervised-setup-d-f-loss",
+      "label": "05:14",
+      "range_start": 11.0,
+      "range_end": 341.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-football-forward-vs-backprop-t0356s.png",
+      "seconds": 356.4,
+      "chapter": 2,
+      "slug": "topic-02-football-forward-vs-backprop",
+      "label": "05:56",
+      "range_start": 341.0,
+      "range_end": 534.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-football-forward-vs-backprop-t0410s.png",
+      "seconds": 410.5,
+      "chapter": 2,
+      "slug": "topic-02-football-forward-vs-backprop",
+      "label": "06:50",
+      "range_start": 341.0,
+      "range_end": 534.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-football-forward-vs-backprop-t0464s.png",
+      "seconds": 464.5,
+      "chapter": 2,
+      "slug": "topic-02-football-forward-vs-backprop",
+      "label": "07:44",
+      "range_start": 341.0,
+      "range_end": 534.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-football-forward-vs-backprop-t0518s.png",
+      "seconds": 518.6,
+      "chapter": 2,
+      "slug": "topic-02-football-forward-vs-backprop",
+      "label": "08:38",
+      "range_start": 341.0,
+      "range_end": 534.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-mlp-diagram-activation-names-t0554s.png",
+      "seconds": 554.2,
+      "chapter": 3,
+      "slug": "topic-03-mlp-diagram-activation-names",
+      "label": "09:14",
+      "range_start": 534.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-mlp-diagram-activation-names-t0624s.png",
+      "seconds": 624.7,
+      "chapter": 3,
+      "slug": "topic-03-mlp-diagram-activation-names",
+      "label": "10:24",
+      "range_start": 534.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-mlp-diagram-activation-names-t0695s.png",
+      "seconds": 695.3,
+      "chapter": 3,
+      "slug": "topic-03-mlp-diagram-activation-names",
+      "label": "11:35",
+      "range_start": 534.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-mlp-diagram-activation-names-t0765s.png",
+      "seconds": 765.8,
+      "chapter": 3,
+      "slug": "topic-03-mlp-diagram-activation-names",
+      "label": "12:45",
+      "range_start": 534.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-weight-indices-wij-k-t0800s.png",
+      "seconds": 800.4,
+      "chapter": 4,
+      "slug": "topic-04-weight-indices-wij-k",
+      "label": "13:20",
+      "range_start": 786.0,
+      "range_end": 966.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-weight-indices-wij-k-t0850s.png",
+      "seconds": 850.8,
+      "chapter": 4,
+      "slug": "topic-04-weight-indices-wij-k",
+      "label": "14:10",
+      "range_start": 786.0,
+      "range_end": 966.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-weight-indices-wij-k-t0901s.png",
+      "seconds": 901.2,
+      "chapter": 4,
+      "slug": "topic-04-weight-indices-wij-k",
+      "label": "15:01",
+      "range_start": 786.0,
+      "range_end": 966.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-weight-indices-wij-k-t0951s.png",
+      "seconds": 951.6,
+      "chapter": 4,
+      "slug": "topic-04-weight-indices-wij-k",
+      "label": "15:51",
+      "range_start": 786.0,
+      "range_end": 966.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-forward-pass-sigmoid-relu-t0996s.png",
+      "seconds": 996.6,
+      "chapter": 5,
+      "slug": "topic-05-forward-pass-sigmoid-relu",
+      "label": "16:36",
+      "range_start": 966.0,
+      "range_end": 1348.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-forward-pass-sigmoid-relu-t1103s.png",
+      "seconds": 1103.5,
+      "chapter": 5,
+      "slug": "topic-05-forward-pass-sigmoid-relu",
+      "label": "18:23",
+      "range_start": 966.0,
+      "range_end": 1348.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-forward-pass-sigmoid-relu-t1210s.png",
+      "seconds": 1210.5,
+      "chapter": 5,
+      "slug": "topic-05-forward-pass-sigmoid-relu",
+      "label": "20:10",
+      "range_start": 966.0,
+      "range_end": 1348.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-forward-pass-sigmoid-relu-t1317s.png",
+      "seconds": 1317.4,
+      "chapter": 5,
+      "slug": "topic-05-forward-pass-sigmoid-relu",
+      "label": "21:57",
+      "range_start": 966.0,
+      "range_end": 1348.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-theta-mse-one-point-t1373s.png",
+      "seconds": 1373.2,
+      "chapter": 6,
+      "slug": "topic-06-theta-mse-one-point",
+      "label": "22:53",
+      "range_start": 1348.0,
+      "range_end": 1663.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-theta-mse-one-point-t1461s.png",
+      "seconds": 1461.4,
+      "chapter": 6,
+      "slug": "topic-06-theta-mse-one-point",
+      "label": "24:21",
+      "range_start": 1348.0,
+      "range_end": 1663.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-theta-mse-one-point-t1549s.png",
+      "seconds": 1549.6,
+      "chapter": 6,
+      "slug": "topic-06-theta-mse-one-point",
+      "label": "25:49",
+      "range_start": 1348.0,
+      "range_end": 1663.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-theta-mse-one-point-t1637s.png",
+      "seconds": 1637.8,
+      "chapter": 6,
+      "slug": "topic-06-theta-mse-one-point",
+      "label": "27:17",
+      "range_start": 1348.0,
+      "range_end": 1663.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-gradient-descent-learning-rate-t1689s.png",
+      "seconds": 1690.0,
+      "chapter": 7,
+      "slug": "topic-07-gradient-descent-learning-rate",
+      "label": "28:09",
+      "range_start": 1663.0,
+      "range_end": 2000.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-gradient-descent-learning-rate-t1784s.png",
+      "seconds": 1784.3,
+      "chapter": 7,
+      "slug": "topic-07-gradient-descent-learning-rate",
+      "label": "29:44",
+      "range_start": 1663.0,
+      "range_end": 2000.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-gradient-descent-learning-rate-t1878s.png",
+      "seconds": 1878.7,
+      "chapter": 7,
+      "slug": "topic-07-gradient-descent-learning-rate",
+      "label": "31:18",
+      "range_start": 1663.0,
+      "range_end": 2000.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-gradient-descent-learning-rate-t1973s.png",
+      "seconds": 1973.0,
+      "chapter": 7,
+      "slug": "topic-07-gradient-descent-learning-rate",
+      "label": "32:53",
+      "range_start": 1663.0,
+      "range_end": 2000.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-chain-path-w111-numeric-t2027s.png",
+      "seconds": 2027.0,
+      "chapter": 8,
+      "slug": "topic-08-chain-path-w111-numeric",
+      "label": "33:47",
+      "range_start": 2000.0,
+      "range_end": 2338.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-chain-path-w111-numeric-t2121s.png",
+      "seconds": 2121.7,
+      "chapter": 8,
+      "slug": "topic-08-chain-path-w111-numeric",
+      "label": "35:21",
+      "range_start": 2000.0,
+      "range_end": 2338.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-chain-path-w111-numeric-t2216s.png",
+      "seconds": 2216.3,
+      "chapter": 8,
+      "slug": "topic-08-chain-path-w111-numeric",
+      "label": "36:56",
+      "range_start": 2000.0,
+      "range_end": 2338.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-chain-path-w111-numeric-t2310s.png",
+      "seconds": 2311.0,
+      "chapter": 8,
+      "slug": "topic-08-chain-path-w111-numeric",
+      "label": "38:30",
+      "range_start": 2000.0,
+      "range_end": 2338.0
+    },
+    {
+      "file": "raw/033-ch09-topic-09-five-factors-one-weight-t2382s.png",
+      "seconds": 2382.8,
+      "chapter": 9,
+      "slug": "topic-09-five-factors-one-weight",
+      "label": "39:42",
+      "range_start": 2338.0,
+      "range_end": 2898.0
+    },
+    {
+      "file": "raw/034-ch09-topic-09-five-factors-one-weight-t2450s.png",
+      "seconds": 2450.0,
+      "chapter": 9,
+      "slug": "topic-09-five-factors-one-weight",
+      "label": "40:50",
+      "range_start": 2338.0,
+      "range_end": 2898.0
+    },
+    {
+      "file": "raw/035-ch09-topic-09-five-factors-one-weight-t2517s.png",
+      "seconds": 2517.2,
+      "chapter": 9,
+      "slug": "topic-09-five-factors-one-weight",
+      "label": "41:57",
+      "range_start": 2338.0,
+      "range_end": 2898.0
+    },
+    {
+      "file": "raw/036-ch09-topic-09-five-factors-one-weight-t2584s.png",
+      "seconds": 2584.4,
+      "chapter": 9,
+      "slug": "topic-09-five-factors-one-weight",
+      "label": "43:04",
+      "range_start": 2338.0,
+      "range_end": 2898.0
+    },
+    {
+      "file": "raw/037-ch09-topic-09-five-factors-one-weight-t2651s.png",
+      "seconds": 2651.6,
+      "chapter": 9,
+      "slug": "topic-09-five-factors-one-weight",
+      "label": "44:11",
+      "range_start": 2338.0,
+      "range_end": 2898.0
+    },
+    {
+      "file": "raw/038-ch09-topic-09-five-factors-one-weight-t2718s.png",
+      "seconds": 2718.8,
+      "chapter": 9,
+      "slug": "topic-09-five-factors-one-weight",
+      "label": "45:18",
+      "range_start": 2338.0,
+      "range_end": 2898.0
+    },
+    {
+      "file": "raw/039-ch09-topic-09-five-factors-one-weight-t2786s.png",
+      "seconds": 2786.0,
+      "chapter": 9,
+      "slug": "topic-09-five-factors-one-weight",
+      "label": "46:26",
+      "range_start": 2338.0,
+      "range_end": 2898.0
+    },
+    {
+      "file": "raw/040-ch09-topic-09-five-factors-one-weight-t2853s.png",
+      "seconds": 2853.2,
+      "chapter": 9,
+      "slug": "topic-09-five-factors-one-weight",
+      "label": "47:33",
+      "range_start": 2338.0,
+      "range_end": 2898.0
+    },
+    {
+      "file": "raw/041-ch10-topic-10-batch-epoch-python-loop-t2929s.png",
+      "seconds": 2929.6,
+      "chapter": 10,
+      "slug": "topic-10-batch-epoch-python-loop",
+      "label": "48:49",
+      "range_start": 2898.0,
+      "range_end": 3293.0
+    },
+    {
+      "file": "raw/042-ch10-topic-10-batch-epoch-python-loop-t3040s.png",
+      "seconds": 3040.2,
+      "chapter": 10,
+      "slug": "topic-10-batch-epoch-python-loop",
+      "label": "50:40",
+      "range_start": 2898.0,
+      "range_end": 3293.0
+    },
+    {
+      "file": "raw/043-ch10-topic-10-batch-epoch-python-loop-t3150s.png",
+      "seconds": 3150.8,
+      "chapter": 10,
+      "slug": "topic-10-batch-epoch-python-loop",
+      "label": "52:30",
+      "range_start": 2898.0,
+      "range_end": 3293.0
+    },
+    {
+      "file": "raw/044-ch10-topic-10-batch-epoch-python-loop-t3261s.png",
+      "seconds": 3261.4,
+      "chapter": 10,
+      "slug": "topic-10-batch-epoch-python-loop",
+      "label": "54:21",
+      "range_start": 2898.0,
+      "range_end": 3293.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-supervised-setup-d-f-loss-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-supervised-setup-d-f-loss",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-supervised-setup-d-f-loss-t0037s.png",
+        "002-ch01-topic-01-supervised-setup-d-f-loss-t0129s.png",
+        "003-ch01-topic-01-supervised-setup-d-f-loss-t0222s.png",
+        "004-ch01-topic-01-supervised-setup-d-f-loss-t0314s.png"
+      ],
+      "labels": [
+        "ch1 00:37",
+        "ch1 02:09",
+        "ch1 03:42",
+        "ch1 05:14"
+      ],
+      "tile_seconds": [
+        37.4,
+        129.8,
+        222.2,
+        314.6
+      ],
+      "time_start": 37.4,
+      "time_end": 314.6,
+      "range_start": 11.0,
+      "range_end": 341.0
+    },
+    {
+      "file": "composites/ch02-topic-02-football-forward-vs-backprop-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-football-forward-vs-backprop",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-football-forward-vs-backprop-t0356s.png",
+        "006-ch02-topic-02-football-forward-vs-backprop-t0410s.png",
+        "007-ch02-topic-02-football-forward-vs-backprop-t0464s.png",
+        "008-ch02-topic-02-football-forward-vs-backprop-t0518s.png"
+      ],
+      "labels": [
+        "ch2 05:56",
+        "ch2 06:50",
+        "ch2 07:44",
+        "ch2 08:38"
+      ],
+      "tile_seconds": [
+        356.4,
+        410.5,
+        464.5,
+        518.6
+      ],
+      "time_start": 356.4,
+      "time_end": 518.6,
+      "range_start": 341.0,
+      "range_end": 534.0
+    },
+    {
+      "file": "composites/ch03-topic-03-mlp-diagram-activation-names-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-mlp-diagram-activation-names",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-mlp-diagram-activation-names-t0554s.png",
+        "010-ch03-topic-03-mlp-diagram-activation-names-t0624s.png",
+        "011-ch03-topic-03-mlp-diagram-activation-names-t0695s.png",
+        "012-ch03-topic-03-mlp-diagram-activation-names-t0765s.png"
+      ],
+      "labels": [
+        "ch3 09:14",
+        "ch3 10:24",
+        "ch3 11:35",
+        "ch3 12:45"
+      ],
+      "tile_seconds": [
+        554.2,
+        624.7,
+        695.3,
+        765.8
+      ],
+      "time_start": 554.2,
+      "time_end": 765.8,
+      "range_start": 534.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "composites/ch04-topic-04-weight-indices-wij-k-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-weight-indices-wij-k",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-weight-indices-wij-k-t0800s.png",
+        "014-ch04-topic-04-weight-indices-wij-k-t0850s.png",
+        "015-ch04-topic-04-weight-indices-wij-k-t0901s.png",
+        "016-ch04-topic-04-weight-indices-wij-k-t0951s.png"
+      ],
+      "labels": [
+        "ch4 13:20",
+        "ch4 14:10",
+        "ch4 15:01",
+        "ch4 15:51"
+      ],
+      "tile_seconds": [
+        800.4,
+        850.8,
+        901.2,
+        951.6
+      ],
+      "time_start": 800.4,
+      "time_end": 951.6,
+      "range_start": 786.0,
+      "range_end": 966.0
+    },
+    {
+      "file": "composites/ch05-topic-05-forward-pass-sigmoid-relu-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-forward-pass-sigmoid-relu",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-forward-pass-sigmoid-relu-t0996s.png",
+        "018-ch05-topic-05-forward-pass-sigmoid-relu-t1103s.png",
+        "019-ch05-topic-05-forward-pass-sigmoid-relu-t1210s.png",
+        "020-ch05-topic-05-forward-pass-sigmoid-relu-t1317s.png"
+      ],
+      "labels": [
+        "ch5 16:36",
+        "ch5 18:23",
+        "ch5 20:10",
+        "ch5 21:57"
+      ],
+      "tile_seconds": [
+        996.6,
+        1103.5,
+        1210.5,
+        1317.4
+      ],
+      "time_start": 996.6,
+      "time_end": 1317.4,
+      "range_start": 966.0,
+      "range_end": 1348.0
+    },
+    {
+      "file": "composites/ch06-topic-06-theta-mse-one-point-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-theta-mse-one-point",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-theta-mse-one-point-t1373s.png",
+        "022-ch06-topic-06-theta-mse-one-point-t1461s.png",
+        "023-ch06-topic-06-theta-mse-one-point-t1549s.png",
+        "024-ch06-topic-06-theta-mse-one-point-t1637s.png"
+      ],
+      "labels": [
+        "ch6 22:53",
+        "ch6 24:21",
+        "ch6 25:49",
+        "ch6 27:17"
+      ],
+      "tile_seconds": [
+        1373.2,
+        1461.4,
+        1549.6,
+        1637.8
+      ],
+      "time_start": 1373.2,
+      "time_end": 1637.8,
+      "range_start": 1348.0,
+      "range_end": 1663.0
+    },
+    {
+      "file": "composites/ch07-topic-07-gradient-descent-learning-rate-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-gradient-descent-learning-rate",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-gradient-descent-learning-rate-t1689s.png",
+        "026-ch07-topic-07-gradient-descent-learning-rate-t1784s.png",
+        "027-ch07-topic-07-gradient-descent-learning-rate-t1878s.png",
+        "028-ch07-topic-07-gradient-descent-learning-rate-t1973s.png"
+      ],
+      "labels": [
+        "ch7 28:09",
+        "ch7 29:44",
+        "ch7 31:18",
+        "ch7 32:53"
+      ],
+      "tile_seconds": [
+        1690.0,
+        1784.3,
+        1878.7,
+        1973.0
+      ],
+      "time_start": 1690.0,
+      "time_end": 1973.0,
+      "range_start": 1663.0,
+      "range_end": 2000.0
+    },
+    {
+      "file": "composites/ch08-topic-08-chain-path-w111-numeric-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-chain-path-w111-numeric",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-chain-path-w111-numeric-t2027s.png",
+        "030-ch08-topic-08-chain-path-w111-numeric-t2121s.png",
+        "031-ch08-topic-08-chain-path-w111-numeric-t2216s.png",
+        "032-ch08-topic-08-chain-path-w111-numeric-t2310s.png"
+      ],
+      "labels": [
+        "ch8 33:47",
+        "ch8 35:21",
+        "ch8 36:56",
+        "ch8 38:30"
+      ],
+      "tile_seconds": [
+        2027.0,
+        2121.7,
+        2216.3,
+        2311.0
+      ],
+      "time_start": 2027.0,
+      "time_end": 2311.0,
+      "range_start": 2000.0,
+      "range_end": 2338.0
+    },
+    {
+      "file": "composites/ch09-topic-09-five-factors-one-weight-panel1of2.png",
+      "chapter": 9,
+      "slug": "topic-09-five-factors-one-weight",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "033-ch09-topic-09-five-factors-one-weight-t2382s.png",
+        "034-ch09-topic-09-five-factors-one-weight-t2450s.png",
+        "035-ch09-topic-09-five-factors-one-weight-t2517s.png",
+        "036-ch09-topic-09-five-factors-one-weight-t2584s.png"
+      ],
+      "labels": [
+        "ch9 39:42",
+        "ch9 40:50",
+        "ch9 41:57",
+        "ch9 43:04"
+      ],
+      "tile_seconds": [
+        2382.8,
+        2450.0,
+        2517.2,
+        2584.4
+      ],
+      "time_start": 2382.8,
+      "time_end": 2584.4,
+      "range_start": 2338.0,
+      "range_end": 2898.0
+    },
+    {
+      "file": "composites/ch09-topic-09-five-factors-one-weight-panel2of2.png",
+      "chapter": 9,
+      "slug": "topic-09-five-factors-one-weight",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "037-ch09-topic-09-five-factors-one-weight-t2651s.png",
+        "038-ch09-topic-09-five-factors-one-weight-t2718s.png",
+        "039-ch09-topic-09-five-factors-one-weight-t2786s.png",
+        "040-ch09-topic-09-five-factors-one-weight-t2853s.png"
+      ],
+      "labels": [
+        "ch9 44:11",
+        "ch9 45:18",
+        "ch9 46:26",
+        "ch9 47:33"
+      ],
+      "tile_seconds": [
+        2651.6,
+        2718.8,
+        2786.0,
+        2853.2
+      ],
+      "time_start": 2651.6,
+      "time_end": 2853.2,
+      "range_start": 2338.0,
+      "range_end": 2898.0
+    },
+    {
+      "file": "composites/ch10-topic-10-batch-epoch-python-loop-panel1of1.png",
+      "chapter": 10,
+      "slug": "topic-10-batch-epoch-python-loop",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "041-ch10-topic-10-batch-epoch-python-loop-t2929s.png",
+        "042-ch10-topic-10-batch-epoch-python-loop-t3040s.png",
+        "043-ch10-topic-10-batch-epoch-python-loop-t3150s.png",
+        "044-ch10-topic-10-batch-epoch-python-loop-t3261s.png"
+      ],
+      "labels": [
+        "ch10 48:49",
+        "ch10 50:40",
+        "ch10 52:30",
+        "ch10 54:21"
+      ],
+      "tile_seconds": [
+        2929.6,
+        3040.2,
+        3150.8,
+        3261.4
+      ],
+      "time_start": 2929.6,
+      "time_end": 3261.4,
+      "range_start": 2898.0,
+      "range_end": 3293.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

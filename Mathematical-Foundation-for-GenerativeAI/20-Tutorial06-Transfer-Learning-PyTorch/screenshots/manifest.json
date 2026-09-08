@@ -1,0 +1,731 @@
+{
+  "duration_seconds": 1768.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 88.0,
+      "end": 112.0,
+      "slug": "topic-01-lego-pretrained-intro"
+    },
+    {
+      "index": 2,
+      "start": 130.0,
+      "end": 292.0,
+      "slug": "topic-02-lenet-alexnet"
+    },
+    {
+      "index": 3,
+      "start": 300.0,
+      "end": 360.0,
+      "slug": "topic-03-head-swap-resize"
+    },
+    {
+      "index": 4,
+      "start": 370.0,
+      "end": 530.0,
+      "slug": "topic-04-vgg"
+    },
+    {
+      "index": 5,
+      "start": 545.0,
+      "end": 754.0,
+      "slug": "topic-05-resnet"
+    },
+    {
+      "index": 6,
+      "start": 770.0,
+      "end": 954.0,
+      "slug": "topic-06-transfer-finetune"
+    },
+    {
+      "index": 7,
+      "start": 970.0,
+      "end": 1080.0,
+      "slug": "topic-07-mri-baselines"
+    },
+    {
+      "index": 8,
+      "start": 1090.0,
+      "end": 1270.0,
+      "slug": "topic-08-load-transforms"
+    },
+    {
+      "index": 9,
+      "start": 1280.0,
+      "end": 1473.0,
+      "slug": "topic-09-imagefolder-head"
+    },
+    {
+      "index": 10,
+      "start": 1490.0,
+      "end": 1765.0,
+      "slug": "topic-10-train-recap"
+    }
+  ],
+  "raw_count": 40,
+  "composite_count": 10,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-lego-pretrained-intro-t0089s.png",
+      "seconds": 89.9,
+      "chapter": 1,
+      "slug": "topic-01-lego-pretrained-intro",
+      "label": "01:29",
+      "range_start": 88.0,
+      "range_end": 112.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-lego-pretrained-intro-t0096s.png",
+      "seconds": 96.6,
+      "chapter": 1,
+      "slug": "topic-01-lego-pretrained-intro",
+      "label": "01:36",
+      "range_start": 88.0,
+      "range_end": 112.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-lego-pretrained-intro-t0103s.png",
+      "seconds": 103.4,
+      "chapter": 1,
+      "slug": "topic-01-lego-pretrained-intro",
+      "label": "01:43",
+      "range_start": 88.0,
+      "range_end": 112.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-lego-pretrained-intro-t0110s.png",
+      "seconds": 110.1,
+      "chapter": 1,
+      "slug": "topic-01-lego-pretrained-intro",
+      "label": "01:50",
+      "range_start": 88.0,
+      "range_end": 112.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-lenet-alexnet-t0142s.png",
+      "seconds": 143.0,
+      "chapter": 2,
+      "slug": "topic-02-lenet-alexnet",
+      "label": "02:22",
+      "range_start": 130.0,
+      "range_end": 292.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-lenet-alexnet-t0188s.png",
+      "seconds": 188.3,
+      "chapter": 2,
+      "slug": "topic-02-lenet-alexnet",
+      "label": "03:08",
+      "range_start": 130.0,
+      "range_end": 292.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-lenet-alexnet-t0233s.png",
+      "seconds": 233.7,
+      "chapter": 2,
+      "slug": "topic-02-lenet-alexnet",
+      "label": "03:53",
+      "range_start": 130.0,
+      "range_end": 292.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-lenet-alexnet-t0279s.png",
+      "seconds": 279.0,
+      "chapter": 2,
+      "slug": "topic-02-lenet-alexnet",
+      "label": "04:39",
+      "range_start": 130.0,
+      "range_end": 292.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-head-swap-resize-t0304s.png",
+      "seconds": 304.8,
+      "chapter": 3,
+      "slug": "topic-03-head-swap-resize",
+      "label": "05:04",
+      "range_start": 300.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-head-swap-resize-t0321s.png",
+      "seconds": 321.6,
+      "chapter": 3,
+      "slug": "topic-03-head-swap-resize",
+      "label": "05:21",
+      "range_start": 300.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-head-swap-resize-t0338s.png",
+      "seconds": 338.4,
+      "chapter": 3,
+      "slug": "topic-03-head-swap-resize",
+      "label": "05:38",
+      "range_start": 300.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-head-swap-resize-t0355s.png",
+      "seconds": 355.2,
+      "chapter": 3,
+      "slug": "topic-03-head-swap-resize",
+      "label": "05:55",
+      "range_start": 300.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-vgg-t0382s.png",
+      "seconds": 382.8,
+      "chapter": 4,
+      "slug": "topic-04-vgg",
+      "label": "06:22",
+      "range_start": 370.0,
+      "range_end": 530.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-vgg-t0427s.png",
+      "seconds": 427.6,
+      "chapter": 4,
+      "slug": "topic-04-vgg",
+      "label": "07:07",
+      "range_start": 370.0,
+      "range_end": 530.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-vgg-t0472s.png",
+      "seconds": 472.4,
+      "chapter": 4,
+      "slug": "topic-04-vgg",
+      "label": "07:52",
+      "range_start": 370.0,
+      "range_end": 530.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-vgg-t0517s.png",
+      "seconds": 517.2,
+      "chapter": 4,
+      "slug": "topic-04-vgg",
+      "label": "08:37",
+      "range_start": 370.0,
+      "range_end": 530.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-resnet-t0561s.png",
+      "seconds": 561.7,
+      "chapter": 5,
+      "slug": "topic-05-resnet",
+      "label": "09:21",
+      "range_start": 545.0,
+      "range_end": 754.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-resnet-t0620s.png",
+      "seconds": 620.2,
+      "chapter": 5,
+      "slug": "topic-05-resnet",
+      "label": "10:20",
+      "range_start": 545.0,
+      "range_end": 754.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-resnet-t0678s.png",
+      "seconds": 678.8,
+      "chapter": 5,
+      "slug": "topic-05-resnet",
+      "label": "11:18",
+      "range_start": 545.0,
+      "range_end": 754.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-resnet-t0737s.png",
+      "seconds": 737.3,
+      "chapter": 5,
+      "slug": "topic-05-resnet",
+      "label": "12:17",
+      "range_start": 545.0,
+      "range_end": 754.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-transfer-finetune-t0784s.png",
+      "seconds": 784.7,
+      "chapter": 6,
+      "slug": "topic-06-transfer-finetune",
+      "label": "13:04",
+      "range_start": 770.0,
+      "range_end": 954.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-transfer-finetune-t0836s.png",
+      "seconds": 836.2,
+      "chapter": 6,
+      "slug": "topic-06-transfer-finetune",
+      "label": "13:56",
+      "range_start": 770.0,
+      "range_end": 954.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-transfer-finetune-t0887s.png",
+      "seconds": 887.8,
+      "chapter": 6,
+      "slug": "topic-06-transfer-finetune",
+      "label": "14:47",
+      "range_start": 770.0,
+      "range_end": 954.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-transfer-finetune-t0939s.png",
+      "seconds": 939.3,
+      "chapter": 6,
+      "slug": "topic-06-transfer-finetune",
+      "label": "15:39",
+      "range_start": 770.0,
+      "range_end": 954.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-mri-baselines-t0978s.png",
+      "seconds": 978.8,
+      "chapter": 7,
+      "slug": "topic-07-mri-baselines",
+      "label": "16:18",
+      "range_start": 970.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-mri-baselines-t1009s.png",
+      "seconds": 1009.6,
+      "chapter": 7,
+      "slug": "topic-07-mri-baselines",
+      "label": "16:49",
+      "range_start": 970.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-mri-baselines-t1040s.png",
+      "seconds": 1040.4,
+      "chapter": 7,
+      "slug": "topic-07-mri-baselines",
+      "label": "17:20",
+      "range_start": 970.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-mri-baselines-t1071s.png",
+      "seconds": 1071.2,
+      "chapter": 7,
+      "slug": "topic-07-mri-baselines",
+      "label": "17:51",
+      "range_start": 970.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-load-transforms-t1104s.png",
+      "seconds": 1104.4,
+      "chapter": 8,
+      "slug": "topic-08-load-transforms",
+      "label": "18:24",
+      "range_start": 1090.0,
+      "range_end": 1270.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-load-transforms-t1154s.png",
+      "seconds": 1154.8,
+      "chapter": 8,
+      "slug": "topic-08-load-transforms",
+      "label": "19:14",
+      "range_start": 1090.0,
+      "range_end": 1270.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-load-transforms-t1205s.png",
+      "seconds": 1205.2,
+      "chapter": 8,
+      "slug": "topic-08-load-transforms",
+      "label": "20:05",
+      "range_start": 1090.0,
+      "range_end": 1270.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-load-transforms-t1255s.png",
+      "seconds": 1255.6,
+      "chapter": 8,
+      "slug": "topic-08-load-transforms",
+      "label": "20:55",
+      "range_start": 1090.0,
+      "range_end": 1270.0
+    },
+    {
+      "file": "raw/033-ch09-topic-09-imagefolder-head-t1295s.png",
+      "seconds": 1295.4,
+      "chapter": 9,
+      "slug": "topic-09-imagefolder-head",
+      "label": "21:35",
+      "range_start": 1280.0,
+      "range_end": 1473.0
+    },
+    {
+      "file": "raw/034-ch09-topic-09-imagefolder-head-t1349s.png",
+      "seconds": 1349.5,
+      "chapter": 9,
+      "slug": "topic-09-imagefolder-head",
+      "label": "22:29",
+      "range_start": 1280.0,
+      "range_end": 1473.0
+    },
+    {
+      "file": "raw/035-ch09-topic-09-imagefolder-head-t1403s.png",
+      "seconds": 1403.5,
+      "chapter": 9,
+      "slug": "topic-09-imagefolder-head",
+      "label": "23:23",
+      "range_start": 1280.0,
+      "range_end": 1473.0
+    },
+    {
+      "file": "raw/036-ch09-topic-09-imagefolder-head-t1457s.png",
+      "seconds": 1457.6,
+      "chapter": 9,
+      "slug": "topic-09-imagefolder-head",
+      "label": "24:17",
+      "range_start": 1280.0,
+      "range_end": 1473.0
+    },
+    {
+      "file": "raw/037-ch10-topic-10-train-recap-t1512s.png",
+      "seconds": 1512.0,
+      "chapter": 10,
+      "slug": "topic-10-train-recap",
+      "label": "25:12",
+      "range_start": 1490.0,
+      "range_end": 1765.0
+    },
+    {
+      "file": "raw/038-ch10-topic-10-train-recap-t1589s.png",
+      "seconds": 1589.0,
+      "chapter": 10,
+      "slug": "topic-10-train-recap",
+      "label": "26:29",
+      "range_start": 1490.0,
+      "range_end": 1765.0
+    },
+    {
+      "file": "raw/039-ch10-topic-10-train-recap-t1666s.png",
+      "seconds": 1666.0,
+      "chapter": 10,
+      "slug": "topic-10-train-recap",
+      "label": "27:46",
+      "range_start": 1490.0,
+      "range_end": 1765.0
+    },
+    {
+      "file": "raw/040-ch10-topic-10-train-recap-t1743s.png",
+      "seconds": 1743.0,
+      "chapter": 10,
+      "slug": "topic-10-train-recap",
+      "label": "29:03",
+      "range_start": 1490.0,
+      "range_end": 1765.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-lego-pretrained-intro-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-lego-pretrained-intro",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-lego-pretrained-intro-t0089s.png",
+        "002-ch01-topic-01-lego-pretrained-intro-t0096s.png",
+        "003-ch01-topic-01-lego-pretrained-intro-t0103s.png",
+        "004-ch01-topic-01-lego-pretrained-intro-t0110s.png"
+      ],
+      "labels": [
+        "ch1 01:29",
+        "ch1 01:36",
+        "ch1 01:43",
+        "ch1 01:50"
+      ],
+      "tile_seconds": [
+        89.9,
+        96.6,
+        103.4,
+        110.1
+      ],
+      "time_start": 89.9,
+      "time_end": 110.1,
+      "range_start": 88.0,
+      "range_end": 112.0
+    },
+    {
+      "file": "composites/ch02-topic-02-lenet-alexnet-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-lenet-alexnet",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-lenet-alexnet-t0142s.png",
+        "006-ch02-topic-02-lenet-alexnet-t0188s.png",
+        "007-ch02-topic-02-lenet-alexnet-t0233s.png",
+        "008-ch02-topic-02-lenet-alexnet-t0279s.png"
+      ],
+      "labels": [
+        "ch2 02:22",
+        "ch2 03:08",
+        "ch2 03:53",
+        "ch2 04:39"
+      ],
+      "tile_seconds": [
+        143.0,
+        188.3,
+        233.7,
+        279.0
+      ],
+      "time_start": 143.0,
+      "time_end": 279.0,
+      "range_start": 130.0,
+      "range_end": 292.0
+    },
+    {
+      "file": "composites/ch03-topic-03-head-swap-resize-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-head-swap-resize",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-head-swap-resize-t0304s.png",
+        "010-ch03-topic-03-head-swap-resize-t0321s.png",
+        "011-ch03-topic-03-head-swap-resize-t0338s.png",
+        "012-ch03-topic-03-head-swap-resize-t0355s.png"
+      ],
+      "labels": [
+        "ch3 05:04",
+        "ch3 05:21",
+        "ch3 05:38",
+        "ch3 05:55"
+      ],
+      "tile_seconds": [
+        304.8,
+        321.6,
+        338.4,
+        355.2
+      ],
+      "time_start": 304.8,
+      "time_end": 355.2,
+      "range_start": 300.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "composites/ch04-topic-04-vgg-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-vgg",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-vgg-t0382s.png",
+        "014-ch04-topic-04-vgg-t0427s.png",
+        "015-ch04-topic-04-vgg-t0472s.png",
+        "016-ch04-topic-04-vgg-t0517s.png"
+      ],
+      "labels": [
+        "ch4 06:22",
+        "ch4 07:07",
+        "ch4 07:52",
+        "ch4 08:37"
+      ],
+      "tile_seconds": [
+        382.8,
+        427.6,
+        472.4,
+        517.2
+      ],
+      "time_start": 382.8,
+      "time_end": 517.2,
+      "range_start": 370.0,
+      "range_end": 530.0
+    },
+    {
+      "file": "composites/ch05-topic-05-resnet-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-resnet",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-resnet-t0561s.png",
+        "018-ch05-topic-05-resnet-t0620s.png",
+        "019-ch05-topic-05-resnet-t0678s.png",
+        "020-ch05-topic-05-resnet-t0737s.png"
+      ],
+      "labels": [
+        "ch5 09:21",
+        "ch5 10:20",
+        "ch5 11:18",
+        "ch5 12:17"
+      ],
+      "tile_seconds": [
+        561.7,
+        620.2,
+        678.8,
+        737.3
+      ],
+      "time_start": 561.7,
+      "time_end": 737.3,
+      "range_start": 545.0,
+      "range_end": 754.0
+    },
+    {
+      "file": "composites/ch06-topic-06-transfer-finetune-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-transfer-finetune",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-transfer-finetune-t0784s.png",
+        "022-ch06-topic-06-transfer-finetune-t0836s.png",
+        "023-ch06-topic-06-transfer-finetune-t0887s.png",
+        "024-ch06-topic-06-transfer-finetune-t0939s.png"
+      ],
+      "labels": [
+        "ch6 13:04",
+        "ch6 13:56",
+        "ch6 14:47",
+        "ch6 15:39"
+      ],
+      "tile_seconds": [
+        784.7,
+        836.2,
+        887.8,
+        939.3
+      ],
+      "time_start": 784.7,
+      "time_end": 939.3,
+      "range_start": 770.0,
+      "range_end": 954.0
+    },
+    {
+      "file": "composites/ch07-topic-07-mri-baselines-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-mri-baselines",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-mri-baselines-t0978s.png",
+        "026-ch07-topic-07-mri-baselines-t1009s.png",
+        "027-ch07-topic-07-mri-baselines-t1040s.png",
+        "028-ch07-topic-07-mri-baselines-t1071s.png"
+      ],
+      "labels": [
+        "ch7 16:18",
+        "ch7 16:49",
+        "ch7 17:20",
+        "ch7 17:51"
+      ],
+      "tile_seconds": [
+        978.8,
+        1009.6,
+        1040.4,
+        1071.2
+      ],
+      "time_start": 978.8,
+      "time_end": 1071.2,
+      "range_start": 970.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "composites/ch08-topic-08-load-transforms-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-load-transforms",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-load-transforms-t1104s.png",
+        "030-ch08-topic-08-load-transforms-t1154s.png",
+        "031-ch08-topic-08-load-transforms-t1205s.png",
+        "032-ch08-topic-08-load-transforms-t1255s.png"
+      ],
+      "labels": [
+        "ch8 18:24",
+        "ch8 19:14",
+        "ch8 20:05",
+        "ch8 20:55"
+      ],
+      "tile_seconds": [
+        1104.4,
+        1154.8,
+        1205.2,
+        1255.6
+      ],
+      "time_start": 1104.4,
+      "time_end": 1255.6,
+      "range_start": 1090.0,
+      "range_end": 1270.0
+    },
+    {
+      "file": "composites/ch09-topic-09-imagefolder-head-panel1of1.png",
+      "chapter": 9,
+      "slug": "topic-09-imagefolder-head",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch09-topic-09-imagefolder-head-t1295s.png",
+        "034-ch09-topic-09-imagefolder-head-t1349s.png",
+        "035-ch09-topic-09-imagefolder-head-t1403s.png",
+        "036-ch09-topic-09-imagefolder-head-t1457s.png"
+      ],
+      "labels": [
+        "ch9 21:35",
+        "ch9 22:29",
+        "ch9 23:23",
+        "ch9 24:17"
+      ],
+      "tile_seconds": [
+        1295.4,
+        1349.5,
+        1403.5,
+        1457.6
+      ],
+      "time_start": 1295.4,
+      "time_end": 1457.6,
+      "range_start": 1280.0,
+      "range_end": 1473.0
+    },
+    {
+      "file": "composites/ch10-topic-10-train-recap-panel1of1.png",
+      "chapter": 10,
+      "slug": "topic-10-train-recap",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "037-ch10-topic-10-train-recap-t1512s.png",
+        "038-ch10-topic-10-train-recap-t1589s.png",
+        "039-ch10-topic-10-train-recap-t1666s.png",
+        "040-ch10-topic-10-train-recap-t1743s.png"
+      ],
+      "labels": [
+        "ch10 25:12",
+        "ch10 26:29",
+        "ch10 27:46",
+        "ch10 29:03"
+      ],
+      "tile_seconds": [
+        1512.0,
+        1589.0,
+        1666.0,
+        1743.0
+      ],
+      "time_start": 1512.0,
+      "time_end": 1743.0,
+      "range_start": 1490.0,
+      "range_end": 1765.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

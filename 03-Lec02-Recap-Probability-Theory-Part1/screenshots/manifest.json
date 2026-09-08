@@ -1,0 +1,589 @@
+{
+  "duration_seconds": 1933.0,
+  "range_source": "topic-ranges",
+  "range_count": 8,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 354.0,
+      "slug": "topic-01-fa-to-stats"
+    },
+    {
+      "index": 2,
+      "start": 354.0,
+      "end": 558.0,
+      "slug": "topic-02-uncertainty-re"
+    },
+    {
+      "index": 3,
+      "start": 558.0,
+      "end": 731.0,
+      "slug": "topic-03-re-in-ml"
+    },
+    {
+      "index": 4,
+      "start": 731.0,
+      "end": 853.0,
+      "slug": "topic-04-sample-space"
+    },
+    {
+      "index": 5,
+      "start": 853.0,
+      "end": 1023.0,
+      "slug": "topic-05-why-measure"
+    },
+    {
+      "index": 6,
+      "start": 1023.0,
+      "end": 1270.0,
+      "slug": "topic-06-nonnumeric-omega"
+    },
+    {
+      "index": 7,
+      "start": 1270.0,
+      "end": 1600.0,
+      "slug": "topic-07-probability-measure"
+    },
+    {
+      "index": 8,
+      "start": 1600.0,
+      "end": 1933.0,
+      "slug": "topic-08-meaning-abstraction"
+    }
+  ],
+  "raw_count": 32,
+  "composite_count": 8,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-fa-to-stats-t0028s.png",
+      "seconds": 28.3,
+      "chapter": 1,
+      "slug": "topic-01-fa-to-stats",
+      "label": "00:28",
+      "range_start": 0.0,
+      "range_end": 354.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-fa-to-stats-t0127s.png",
+      "seconds": 127.4,
+      "chapter": 1,
+      "slug": "topic-01-fa-to-stats",
+      "label": "02:07",
+      "range_start": 0.0,
+      "range_end": 354.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-fa-to-stats-t0226s.png",
+      "seconds": 226.6,
+      "chapter": 1,
+      "slug": "topic-01-fa-to-stats",
+      "label": "03:46",
+      "range_start": 0.0,
+      "range_end": 354.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-fa-to-stats-t0325s.png",
+      "seconds": 325.7,
+      "chapter": 1,
+      "slug": "topic-01-fa-to-stats",
+      "label": "05:25",
+      "range_start": 0.0,
+      "range_end": 354.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-uncertainty-re-t0370s.png",
+      "seconds": 370.3,
+      "chapter": 2,
+      "slug": "topic-02-uncertainty-re",
+      "label": "06:10",
+      "range_start": 354.0,
+      "range_end": 558.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-uncertainty-re-t0427s.png",
+      "seconds": 427.4,
+      "chapter": 2,
+      "slug": "topic-02-uncertainty-re",
+      "label": "07:07",
+      "range_start": 354.0,
+      "range_end": 558.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-uncertainty-re-t0484s.png",
+      "seconds": 484.6,
+      "chapter": 2,
+      "slug": "topic-02-uncertainty-re",
+      "label": "08:04",
+      "range_start": 354.0,
+      "range_end": 558.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-uncertainty-re-t0541s.png",
+      "seconds": 541.7,
+      "chapter": 2,
+      "slug": "topic-02-uncertainty-re",
+      "label": "09:01",
+      "range_start": 354.0,
+      "range_end": 558.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-re-in-ml-t0571s.png",
+      "seconds": 571.8,
+      "chapter": 3,
+      "slug": "topic-03-re-in-ml",
+      "label": "09:31",
+      "range_start": 558.0,
+      "range_end": 731.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-re-in-ml-t0620s.png",
+      "seconds": 620.3,
+      "chapter": 3,
+      "slug": "topic-03-re-in-ml",
+      "label": "10:20",
+      "range_start": 558.0,
+      "range_end": 731.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-re-in-ml-t0668s.png",
+      "seconds": 668.7,
+      "chapter": 3,
+      "slug": "topic-03-re-in-ml",
+      "label": "11:08",
+      "range_start": 558.0,
+      "range_end": 731.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-re-in-ml-t0717s.png",
+      "seconds": 717.2,
+      "chapter": 3,
+      "slug": "topic-03-re-in-ml",
+      "label": "11:57",
+      "range_start": 558.0,
+      "range_end": 731.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-sample-space-t0740s.png",
+      "seconds": 740.8,
+      "chapter": 4,
+      "slug": "topic-04-sample-space",
+      "label": "12:20",
+      "range_start": 731.0,
+      "range_end": 853.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-sample-space-t0774s.png",
+      "seconds": 774.9,
+      "chapter": 4,
+      "slug": "topic-04-sample-space",
+      "label": "12:54",
+      "range_start": 731.0,
+      "range_end": 853.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-sample-space-t0809s.png",
+      "seconds": 809.1,
+      "chapter": 4,
+      "slug": "topic-04-sample-space",
+      "label": "13:29",
+      "range_start": 731.0,
+      "range_end": 853.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-sample-space-t0843s.png",
+      "seconds": 843.2,
+      "chapter": 4,
+      "slug": "topic-04-sample-space",
+      "label": "14:03",
+      "range_start": 731.0,
+      "range_end": 853.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-why-measure-t0866s.png",
+      "seconds": 866.6,
+      "chapter": 5,
+      "slug": "topic-05-why-measure",
+      "label": "14:26",
+      "range_start": 853.0,
+      "range_end": 1023.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-why-measure-t0914s.png",
+      "seconds": 914.2,
+      "chapter": 5,
+      "slug": "topic-05-why-measure",
+      "label": "15:14",
+      "range_start": 853.0,
+      "range_end": 1023.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-why-measure-t0961s.png",
+      "seconds": 961.8,
+      "chapter": 5,
+      "slug": "topic-05-why-measure",
+      "label": "16:01",
+      "range_start": 853.0,
+      "range_end": 1023.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-why-measure-t1009s.png",
+      "seconds": 1009.4,
+      "chapter": 5,
+      "slug": "topic-05-why-measure",
+      "label": "16:49",
+      "range_start": 853.0,
+      "range_end": 1023.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-nonnumeric-omega-t1042s.png",
+      "seconds": 1042.8,
+      "chapter": 6,
+      "slug": "topic-06-nonnumeric-omega",
+      "label": "17:22",
+      "range_start": 1023.0,
+      "range_end": 1270.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-nonnumeric-omega-t1111s.png",
+      "seconds": 1111.9,
+      "chapter": 6,
+      "slug": "topic-06-nonnumeric-omega",
+      "label": "18:31",
+      "range_start": 1023.0,
+      "range_end": 1270.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-nonnumeric-omega-t1181s.png",
+      "seconds": 1181.1,
+      "chapter": 6,
+      "slug": "topic-06-nonnumeric-omega",
+      "label": "19:41",
+      "range_start": 1023.0,
+      "range_end": 1270.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-nonnumeric-omega-t1250s.png",
+      "seconds": 1250.2,
+      "chapter": 6,
+      "slug": "topic-06-nonnumeric-omega",
+      "label": "20:50",
+      "range_start": 1023.0,
+      "range_end": 1270.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-probability-measure-t1296s.png",
+      "seconds": 1296.4,
+      "chapter": 7,
+      "slug": "topic-07-probability-measure",
+      "label": "21:36",
+      "range_start": 1270.0,
+      "range_end": 1600.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-probability-measure-t1388s.png",
+      "seconds": 1388.8,
+      "chapter": 7,
+      "slug": "topic-07-probability-measure",
+      "label": "23:08",
+      "range_start": 1270.0,
+      "range_end": 1600.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-probability-measure-t1481s.png",
+      "seconds": 1481.2,
+      "chapter": 7,
+      "slug": "topic-07-probability-measure",
+      "label": "24:41",
+      "range_start": 1270.0,
+      "range_end": 1600.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-probability-measure-t1573s.png",
+      "seconds": 1573.6,
+      "chapter": 7,
+      "slug": "topic-07-probability-measure",
+      "label": "26:13",
+      "range_start": 1270.0,
+      "range_end": 1600.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-meaning-abstraction-t1626s.png",
+      "seconds": 1626.6,
+      "chapter": 8,
+      "slug": "topic-08-meaning-abstraction",
+      "label": "27:06",
+      "range_start": 1600.0,
+      "range_end": 1933.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-meaning-abstraction-t1719s.png",
+      "seconds": 1719.9,
+      "chapter": 8,
+      "slug": "topic-08-meaning-abstraction",
+      "label": "28:39",
+      "range_start": 1600.0,
+      "range_end": 1933.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-meaning-abstraction-t1813s.png",
+      "seconds": 1813.1,
+      "chapter": 8,
+      "slug": "topic-08-meaning-abstraction",
+      "label": "30:13",
+      "range_start": 1600.0,
+      "range_end": 1933.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-meaning-abstraction-t1906s.png",
+      "seconds": 1906.4,
+      "chapter": 8,
+      "slug": "topic-08-meaning-abstraction",
+      "label": "31:46",
+      "range_start": 1600.0,
+      "range_end": 1933.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-fa-to-stats-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-fa-to-stats",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-fa-to-stats-t0028s.png",
+        "002-ch01-topic-01-fa-to-stats-t0127s.png",
+        "003-ch01-topic-01-fa-to-stats-t0226s.png",
+        "004-ch01-topic-01-fa-to-stats-t0325s.png"
+      ],
+      "labels": [
+        "ch1 00:28",
+        "ch1 02:07",
+        "ch1 03:46",
+        "ch1 05:25"
+      ],
+      "tile_seconds": [
+        28.3,
+        127.4,
+        226.6,
+        325.7
+      ],
+      "time_start": 28.3,
+      "time_end": 325.7,
+      "range_start": 0.0,
+      "range_end": 354.0
+    },
+    {
+      "file": "composites/ch02-topic-02-uncertainty-re-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-uncertainty-re",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-uncertainty-re-t0370s.png",
+        "006-ch02-topic-02-uncertainty-re-t0427s.png",
+        "007-ch02-topic-02-uncertainty-re-t0484s.png",
+        "008-ch02-topic-02-uncertainty-re-t0541s.png"
+      ],
+      "labels": [
+        "ch2 06:10",
+        "ch2 07:07",
+        "ch2 08:04",
+        "ch2 09:01"
+      ],
+      "tile_seconds": [
+        370.3,
+        427.4,
+        484.6,
+        541.7
+      ],
+      "time_start": 370.3,
+      "time_end": 541.7,
+      "range_start": 354.0,
+      "range_end": 558.0
+    },
+    {
+      "file": "composites/ch03-topic-03-re-in-ml-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-re-in-ml",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-re-in-ml-t0571s.png",
+        "010-ch03-topic-03-re-in-ml-t0620s.png",
+        "011-ch03-topic-03-re-in-ml-t0668s.png",
+        "012-ch03-topic-03-re-in-ml-t0717s.png"
+      ],
+      "labels": [
+        "ch3 09:31",
+        "ch3 10:20",
+        "ch3 11:08",
+        "ch3 11:57"
+      ],
+      "tile_seconds": [
+        571.8,
+        620.3,
+        668.7,
+        717.2
+      ],
+      "time_start": 571.8,
+      "time_end": 717.2,
+      "range_start": 558.0,
+      "range_end": 731.0
+    },
+    {
+      "file": "composites/ch04-topic-04-sample-space-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-sample-space",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-sample-space-t0740s.png",
+        "014-ch04-topic-04-sample-space-t0774s.png",
+        "015-ch04-topic-04-sample-space-t0809s.png",
+        "016-ch04-topic-04-sample-space-t0843s.png"
+      ],
+      "labels": [
+        "ch4 12:20",
+        "ch4 12:54",
+        "ch4 13:29",
+        "ch4 14:03"
+      ],
+      "tile_seconds": [
+        740.8,
+        774.9,
+        809.1,
+        843.2
+      ],
+      "time_start": 740.8,
+      "time_end": 843.2,
+      "range_start": 731.0,
+      "range_end": 853.0
+    },
+    {
+      "file": "composites/ch05-topic-05-why-measure-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-why-measure",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-why-measure-t0866s.png",
+        "018-ch05-topic-05-why-measure-t0914s.png",
+        "019-ch05-topic-05-why-measure-t0961s.png",
+        "020-ch05-topic-05-why-measure-t1009s.png"
+      ],
+      "labels": [
+        "ch5 14:26",
+        "ch5 15:14",
+        "ch5 16:01",
+        "ch5 16:49"
+      ],
+      "tile_seconds": [
+        866.6,
+        914.2,
+        961.8,
+        1009.4
+      ],
+      "time_start": 866.6,
+      "time_end": 1009.4,
+      "range_start": 853.0,
+      "range_end": 1023.0
+    },
+    {
+      "file": "composites/ch06-topic-06-nonnumeric-omega-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-nonnumeric-omega",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-nonnumeric-omega-t1042s.png",
+        "022-ch06-topic-06-nonnumeric-omega-t1111s.png",
+        "023-ch06-topic-06-nonnumeric-omega-t1181s.png",
+        "024-ch06-topic-06-nonnumeric-omega-t1250s.png"
+      ],
+      "labels": [
+        "ch6 17:22",
+        "ch6 18:31",
+        "ch6 19:41",
+        "ch6 20:50"
+      ],
+      "tile_seconds": [
+        1042.8,
+        1111.9,
+        1181.1,
+        1250.2
+      ],
+      "time_start": 1042.8,
+      "time_end": 1250.2,
+      "range_start": 1023.0,
+      "range_end": 1270.0
+    },
+    {
+      "file": "composites/ch07-topic-07-probability-measure-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-probability-measure",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-probability-measure-t1296s.png",
+        "026-ch07-topic-07-probability-measure-t1388s.png",
+        "027-ch07-topic-07-probability-measure-t1481s.png",
+        "028-ch07-topic-07-probability-measure-t1573s.png"
+      ],
+      "labels": [
+        "ch7 21:36",
+        "ch7 23:08",
+        "ch7 24:41",
+        "ch7 26:13"
+      ],
+      "tile_seconds": [
+        1296.4,
+        1388.8,
+        1481.2,
+        1573.6
+      ],
+      "time_start": 1296.4,
+      "time_end": 1573.6,
+      "range_start": 1270.0,
+      "range_end": 1600.0
+    },
+    {
+      "file": "composites/ch08-topic-08-meaning-abstraction-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-meaning-abstraction",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-meaning-abstraction-t1626s.png",
+        "030-ch08-topic-08-meaning-abstraction-t1719s.png",
+        "031-ch08-topic-08-meaning-abstraction-t1813s.png",
+        "032-ch08-topic-08-meaning-abstraction-t1906s.png"
+      ],
+      "labels": [
+        "ch8 27:06",
+        "ch8 28:39",
+        "ch8 30:13",
+        "ch8 31:46"
+      ],
+      "tile_seconds": [
+        1626.6,
+        1719.9,
+        1813.1,
+        1906.4
+      ],
+      "time_start": 1626.6,
+      "time_end": 1906.4,
+      "range_start": 1600.0,
+      "range_end": 1933.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

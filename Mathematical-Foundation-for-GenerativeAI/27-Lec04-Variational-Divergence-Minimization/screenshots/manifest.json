@@ -1,0 +1,861 @@
+{
+  "duration_seconds": 3533.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 366.0,
+      "slug": "topic-01-recap-two-sample-clouds"
+    },
+    {
+      "index": 2,
+      "start": 366.0,
+      "end": 599.0,
+      "slug": "topic-02-integrals-expectations-lln"
+    },
+    {
+      "index": 3,
+      "start": 599.0,
+      "end": 909.0,
+      "slug": "topic-03-lotus-sample-averages"
+    },
+    {
+      "index": 4,
+      "start": 909.0,
+      "end": 1470.0,
+      "slug": "topic-04-iid-gaussian-z-prompts"
+    },
+    {
+      "index": 5,
+      "start": 1470.0,
+      "end": 1812.0,
+      "slug": "topic-05-convex-conjugate"
+    },
+    {
+      "index": 6,
+      "start": 1812.0,
+      "end": 2015.0,
+      "slug": "topic-06-plug-conjugate-into-df"
+    },
+    {
+      "index": 7,
+      "start": 2015.0,
+      "end": 2535.0,
+      "slug": "topic-07-sup-out-function-class-t"
+    },
+    {
+      "index": 8,
+      "start": 2535.0,
+      "end": 2791.0,
+      "slug": "topic-08-two-expectations-gan-bound"
+    },
+    {
+      "index": 9,
+      "start": 2791.0,
+      "end": 3161.0,
+      "slug": "topic-09-why-variational"
+    },
+    {
+      "index": 10,
+      "start": 3161.0,
+      "end": 3533.0,
+      "slug": "topic-10-minmax-saddle-next"
+    }
+  ],
+  "raw_count": 48,
+  "composite_count": 12,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-recap-two-sample-clouds-t0029s.png",
+      "seconds": 29.3,
+      "chapter": 1,
+      "slug": "topic-01-recap-two-sample-clouds",
+      "label": "00:29",
+      "range_start": 0.0,
+      "range_end": 366.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-recap-two-sample-clouds-t0131s.png",
+      "seconds": 131.8,
+      "chapter": 1,
+      "slug": "topic-01-recap-two-sample-clouds",
+      "label": "02:11",
+      "range_start": 0.0,
+      "range_end": 366.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-recap-two-sample-clouds-t0234s.png",
+      "seconds": 234.2,
+      "chapter": 1,
+      "slug": "topic-01-recap-two-sample-clouds",
+      "label": "03:54",
+      "range_start": 0.0,
+      "range_end": 366.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-recap-two-sample-clouds-t0336s.png",
+      "seconds": 336.7,
+      "chapter": 1,
+      "slug": "topic-01-recap-two-sample-clouds",
+      "label": "05:36",
+      "range_start": 0.0,
+      "range_end": 366.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-integrals-expectations-lln-t0384s.png",
+      "seconds": 384.6,
+      "chapter": 2,
+      "slug": "topic-02-integrals-expectations-lln",
+      "label": "06:24",
+      "range_start": 366.0,
+      "range_end": 599.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-integrals-expectations-lln-t0449s.png",
+      "seconds": 449.9,
+      "chapter": 2,
+      "slug": "topic-02-integrals-expectations-lln",
+      "label": "07:29",
+      "range_start": 366.0,
+      "range_end": 599.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-integrals-expectations-lln-t0515s.png",
+      "seconds": 515.1,
+      "chapter": 2,
+      "slug": "topic-02-integrals-expectations-lln",
+      "label": "08:35",
+      "range_start": 366.0,
+      "range_end": 599.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-integrals-expectations-lln-t0580s.png",
+      "seconds": 580.4,
+      "chapter": 2,
+      "slug": "topic-02-integrals-expectations-lln",
+      "label": "09:40",
+      "range_start": 366.0,
+      "range_end": 599.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-lotus-sample-averages-t0623s.png",
+      "seconds": 623.8,
+      "chapter": 3,
+      "slug": "topic-03-lotus-sample-averages",
+      "label": "10:23",
+      "range_start": 599.0,
+      "range_end": 909.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-lotus-sample-averages-t0710s.png",
+      "seconds": 710.6,
+      "chapter": 3,
+      "slug": "topic-03-lotus-sample-averages",
+      "label": "11:50",
+      "range_start": 599.0,
+      "range_end": 909.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-lotus-sample-averages-t0797s.png",
+      "seconds": 797.4,
+      "chapter": 3,
+      "slug": "topic-03-lotus-sample-averages",
+      "label": "13:17",
+      "range_start": 599.0,
+      "range_end": 909.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-lotus-sample-averages-t0884s.png",
+      "seconds": 884.2,
+      "chapter": 3,
+      "slug": "topic-03-lotus-sample-averages",
+      "label": "14:44",
+      "range_start": 599.0,
+      "range_end": 909.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-iid-gaussian-z-prompts-t0953s.png",
+      "seconds": 953.9,
+      "chapter": 4,
+      "slug": "topic-04-iid-gaussian-z-prompts",
+      "label": "15:53",
+      "range_start": 909.0,
+      "range_end": 1470.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-iid-gaussian-z-prompts-t1021s.png",
+      "seconds": 1021.2,
+      "chapter": 4,
+      "slug": "topic-04-iid-gaussian-z-prompts",
+      "label": "17:01",
+      "range_start": 909.0,
+      "range_end": 1470.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-iid-gaussian-z-prompts-t1088s.png",
+      "seconds": 1088.5,
+      "chapter": 4,
+      "slug": "topic-04-iid-gaussian-z-prompts",
+      "label": "18:08",
+      "range_start": 909.0,
+      "range_end": 1470.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-iid-gaussian-z-prompts-t1155s.png",
+      "seconds": 1155.8,
+      "chapter": 4,
+      "slug": "topic-04-iid-gaussian-z-prompts",
+      "label": "19:15",
+      "range_start": 909.0,
+      "range_end": 1470.0
+    },
+    {
+      "file": "raw/017-ch04-topic-04-iid-gaussian-z-prompts-t1223s.png",
+      "seconds": 1223.2,
+      "chapter": 4,
+      "slug": "topic-04-iid-gaussian-z-prompts",
+      "label": "20:23",
+      "range_start": 909.0,
+      "range_end": 1470.0
+    },
+    {
+      "file": "raw/018-ch04-topic-04-iid-gaussian-z-prompts-t1290s.png",
+      "seconds": 1290.5,
+      "chapter": 4,
+      "slug": "topic-04-iid-gaussian-z-prompts",
+      "label": "21:30",
+      "range_start": 909.0,
+      "range_end": 1470.0
+    },
+    {
+      "file": "raw/019-ch04-topic-04-iid-gaussian-z-prompts-t1357s.png",
+      "seconds": 1357.8,
+      "chapter": 4,
+      "slug": "topic-04-iid-gaussian-z-prompts",
+      "label": "22:37",
+      "range_start": 909.0,
+      "range_end": 1470.0
+    },
+    {
+      "file": "raw/020-ch04-topic-04-iid-gaussian-z-prompts-t1425s.png",
+      "seconds": 1425.1,
+      "chapter": 4,
+      "slug": "topic-04-iid-gaussian-z-prompts",
+      "label": "23:45",
+      "range_start": 909.0,
+      "range_end": 1470.0
+    },
+    {
+      "file": "raw/021-ch05-topic-05-convex-conjugate-t1497s.png",
+      "seconds": 1497.4,
+      "chapter": 5,
+      "slug": "topic-05-convex-conjugate",
+      "label": "24:57",
+      "range_start": 1470.0,
+      "range_end": 1812.0
+    },
+    {
+      "file": "raw/022-ch05-topic-05-convex-conjugate-t1593s.png",
+      "seconds": 1593.1,
+      "chapter": 5,
+      "slug": "topic-05-convex-conjugate",
+      "label": "26:33",
+      "range_start": 1470.0,
+      "range_end": 1812.0
+    },
+    {
+      "file": "raw/023-ch05-topic-05-convex-conjugate-t1688s.png",
+      "seconds": 1688.9,
+      "chapter": 5,
+      "slug": "topic-05-convex-conjugate",
+      "label": "28:08",
+      "range_start": 1470.0,
+      "range_end": 1812.0
+    },
+    {
+      "file": "raw/024-ch05-topic-05-convex-conjugate-t1784s.png",
+      "seconds": 1784.6,
+      "chapter": 5,
+      "slug": "topic-05-convex-conjugate",
+      "label": "29:44",
+      "range_start": 1470.0,
+      "range_end": 1812.0
+    },
+    {
+      "file": "raw/025-ch06-topic-06-plug-conjugate-into-df-t1828s.png",
+      "seconds": 1828.2,
+      "chapter": 6,
+      "slug": "topic-06-plug-conjugate-into-df",
+      "label": "30:28",
+      "range_start": 1812.0,
+      "range_end": 2015.0
+    },
+    {
+      "file": "raw/026-ch06-topic-06-plug-conjugate-into-df-t1885s.png",
+      "seconds": 1885.1,
+      "chapter": 6,
+      "slug": "topic-06-plug-conjugate-into-df",
+      "label": "31:25",
+      "range_start": 1812.0,
+      "range_end": 2015.0
+    },
+    {
+      "file": "raw/027-ch06-topic-06-plug-conjugate-into-df-t1941s.png",
+      "seconds": 1941.9,
+      "chapter": 6,
+      "slug": "topic-06-plug-conjugate-into-df",
+      "label": "32:21",
+      "range_start": 1812.0,
+      "range_end": 2015.0
+    },
+    {
+      "file": "raw/028-ch06-topic-06-plug-conjugate-into-df-t1998s.png",
+      "seconds": 1998.8,
+      "chapter": 6,
+      "slug": "topic-06-plug-conjugate-into-df",
+      "label": "33:18",
+      "range_start": 1812.0,
+      "range_end": 2015.0
+    },
+    {
+      "file": "raw/029-ch07-topic-07-sup-out-function-class-t-t2056s.png",
+      "seconds": 2056.6,
+      "chapter": 7,
+      "slug": "topic-07-sup-out-function-class-t",
+      "label": "34:16",
+      "range_start": 2015.0,
+      "range_end": 2535.0
+    },
+    {
+      "file": "raw/030-ch07-topic-07-sup-out-function-class-t-t2119s.png",
+      "seconds": 2119.0,
+      "chapter": 7,
+      "slug": "topic-07-sup-out-function-class-t",
+      "label": "35:19",
+      "range_start": 2015.0,
+      "range_end": 2535.0
+    },
+    {
+      "file": "raw/031-ch07-topic-07-sup-out-function-class-t-t2181s.png",
+      "seconds": 2181.4,
+      "chapter": 7,
+      "slug": "topic-07-sup-out-function-class-t",
+      "label": "36:21",
+      "range_start": 2015.0,
+      "range_end": 2535.0
+    },
+    {
+      "file": "raw/032-ch07-topic-07-sup-out-function-class-t-t2243s.png",
+      "seconds": 2243.8,
+      "chapter": 7,
+      "slug": "topic-07-sup-out-function-class-t",
+      "label": "37:23",
+      "range_start": 2015.0,
+      "range_end": 2535.0
+    },
+    {
+      "file": "raw/033-ch07-topic-07-sup-out-function-class-t-t2306s.png",
+      "seconds": 2306.2,
+      "chapter": 7,
+      "slug": "topic-07-sup-out-function-class-t",
+      "label": "38:26",
+      "range_start": 2015.0,
+      "range_end": 2535.0
+    },
+    {
+      "file": "raw/034-ch07-topic-07-sup-out-function-class-t-t2368s.png",
+      "seconds": 2368.6,
+      "chapter": 7,
+      "slug": "topic-07-sup-out-function-class-t",
+      "label": "39:28",
+      "range_start": 2015.0,
+      "range_end": 2535.0
+    },
+    {
+      "file": "raw/035-ch07-topic-07-sup-out-function-class-t-t2431s.png",
+      "seconds": 2431.0,
+      "chapter": 7,
+      "slug": "topic-07-sup-out-function-class-t",
+      "label": "40:31",
+      "range_start": 2015.0,
+      "range_end": 2535.0
+    },
+    {
+      "file": "raw/036-ch07-topic-07-sup-out-function-class-t-t2493s.png",
+      "seconds": 2493.4,
+      "chapter": 7,
+      "slug": "topic-07-sup-out-function-class-t",
+      "label": "41:33",
+      "range_start": 2015.0,
+      "range_end": 2535.0
+    },
+    {
+      "file": "raw/037-ch08-topic-08-two-expectations-gan-bound-t2555s.png",
+      "seconds": 2555.5,
+      "chapter": 8,
+      "slug": "topic-08-two-expectations-gan-bound",
+      "label": "42:35",
+      "range_start": 2535.0,
+      "range_end": 2791.0
+    },
+    {
+      "file": "raw/038-ch08-topic-08-two-expectations-gan-bound-t2627s.png",
+      "seconds": 2627.2,
+      "chapter": 8,
+      "slug": "topic-08-two-expectations-gan-bound",
+      "label": "43:47",
+      "range_start": 2535.0,
+      "range_end": 2791.0
+    },
+    {
+      "file": "raw/039-ch08-topic-08-two-expectations-gan-bound-t2698s.png",
+      "seconds": 2698.8,
+      "chapter": 8,
+      "slug": "topic-08-two-expectations-gan-bound",
+      "label": "44:58",
+      "range_start": 2535.0,
+      "range_end": 2791.0
+    },
+    {
+      "file": "raw/040-ch08-topic-08-two-expectations-gan-bound-t2770s.png",
+      "seconds": 2770.5,
+      "chapter": 8,
+      "slug": "topic-08-two-expectations-gan-bound",
+      "label": "46:10",
+      "range_start": 2535.0,
+      "range_end": 2791.0
+    },
+    {
+      "file": "raw/041-ch09-topic-09-why-variational-t2820s.png",
+      "seconds": 2820.6,
+      "chapter": 9,
+      "slug": "topic-09-why-variational",
+      "label": "47:00",
+      "range_start": 2791.0,
+      "range_end": 3161.0
+    },
+    {
+      "file": "raw/042-ch09-topic-09-why-variational-t2924s.png",
+      "seconds": 2924.2,
+      "chapter": 9,
+      "slug": "topic-09-why-variational",
+      "label": "48:44",
+      "range_start": 2791.0,
+      "range_end": 3161.0
+    },
+    {
+      "file": "raw/043-ch09-topic-09-why-variational-t3027s.png",
+      "seconds": 3027.8,
+      "chapter": 9,
+      "slug": "topic-09-why-variational",
+      "label": "50:27",
+      "range_start": 2791.0,
+      "range_end": 3161.0
+    },
+    {
+      "file": "raw/044-ch09-topic-09-why-variational-t3131s.png",
+      "seconds": 3131.4,
+      "chapter": 9,
+      "slug": "topic-09-why-variational",
+      "label": "52:11",
+      "range_start": 2791.0,
+      "range_end": 3161.0
+    },
+    {
+      "file": "raw/045-ch10-topic-10-minmax-saddle-next-t3190s.png",
+      "seconds": 3190.8,
+      "chapter": 10,
+      "slug": "topic-10-minmax-saddle-next",
+      "label": "53:10",
+      "range_start": 3161.0,
+      "range_end": 3533.0
+    },
+    {
+      "file": "raw/046-ch10-topic-10-minmax-saddle-next-t3294s.png",
+      "seconds": 3294.9,
+      "chapter": 10,
+      "slug": "topic-10-minmax-saddle-next",
+      "label": "54:54",
+      "range_start": 3161.0,
+      "range_end": 3533.0
+    },
+    {
+      "file": "raw/047-ch10-topic-10-minmax-saddle-next-t3399s.png",
+      "seconds": 3399.1,
+      "chapter": 10,
+      "slug": "topic-10-minmax-saddle-next",
+      "label": "56:39",
+      "range_start": 3161.0,
+      "range_end": 3533.0
+    },
+    {
+      "file": "raw/048-ch10-topic-10-minmax-saddle-next-t3503s.png",
+      "seconds": 3503.2,
+      "chapter": 10,
+      "slug": "topic-10-minmax-saddle-next",
+      "label": "58:23",
+      "range_start": 3161.0,
+      "range_end": 3533.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-recap-two-sample-clouds-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-recap-two-sample-clouds",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-recap-two-sample-clouds-t0029s.png",
+        "002-ch01-topic-01-recap-two-sample-clouds-t0131s.png",
+        "003-ch01-topic-01-recap-two-sample-clouds-t0234s.png",
+        "004-ch01-topic-01-recap-two-sample-clouds-t0336s.png"
+      ],
+      "labels": [
+        "ch1 00:29",
+        "ch1 02:11",
+        "ch1 03:54",
+        "ch1 05:36"
+      ],
+      "tile_seconds": [
+        29.3,
+        131.8,
+        234.2,
+        336.7
+      ],
+      "time_start": 29.3,
+      "time_end": 336.7,
+      "range_start": 0.0,
+      "range_end": 366.0
+    },
+    {
+      "file": "composites/ch02-topic-02-integrals-expectations-lln-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-integrals-expectations-lln",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-integrals-expectations-lln-t0384s.png",
+        "006-ch02-topic-02-integrals-expectations-lln-t0449s.png",
+        "007-ch02-topic-02-integrals-expectations-lln-t0515s.png",
+        "008-ch02-topic-02-integrals-expectations-lln-t0580s.png"
+      ],
+      "labels": [
+        "ch2 06:24",
+        "ch2 07:29",
+        "ch2 08:35",
+        "ch2 09:40"
+      ],
+      "tile_seconds": [
+        384.6,
+        449.9,
+        515.1,
+        580.4
+      ],
+      "time_start": 384.6,
+      "time_end": 580.4,
+      "range_start": 366.0,
+      "range_end": 599.0
+    },
+    {
+      "file": "composites/ch03-topic-03-lotus-sample-averages-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-lotus-sample-averages",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-lotus-sample-averages-t0623s.png",
+        "010-ch03-topic-03-lotus-sample-averages-t0710s.png",
+        "011-ch03-topic-03-lotus-sample-averages-t0797s.png",
+        "012-ch03-topic-03-lotus-sample-averages-t0884s.png"
+      ],
+      "labels": [
+        "ch3 10:23",
+        "ch3 11:50",
+        "ch3 13:17",
+        "ch3 14:44"
+      ],
+      "tile_seconds": [
+        623.8,
+        710.6,
+        797.4,
+        884.2
+      ],
+      "time_start": 623.8,
+      "time_end": 884.2,
+      "range_start": 599.0,
+      "range_end": 909.0
+    },
+    {
+      "file": "composites/ch04-topic-04-iid-gaussian-z-prompts-panel1of2.png",
+      "chapter": 4,
+      "slug": "topic-04-iid-gaussian-z-prompts",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "013-ch04-topic-04-iid-gaussian-z-prompts-t0953s.png",
+        "014-ch04-topic-04-iid-gaussian-z-prompts-t1021s.png",
+        "015-ch04-topic-04-iid-gaussian-z-prompts-t1088s.png",
+        "016-ch04-topic-04-iid-gaussian-z-prompts-t1155s.png"
+      ],
+      "labels": [
+        "ch4 15:53",
+        "ch4 17:01",
+        "ch4 18:08",
+        "ch4 19:15"
+      ],
+      "tile_seconds": [
+        953.9,
+        1021.2,
+        1088.5,
+        1155.8
+      ],
+      "time_start": 953.9,
+      "time_end": 1155.8,
+      "range_start": 909.0,
+      "range_end": 1470.0
+    },
+    {
+      "file": "composites/ch04-topic-04-iid-gaussian-z-prompts-panel2of2.png",
+      "chapter": 4,
+      "slug": "topic-04-iid-gaussian-z-prompts",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "017-ch04-topic-04-iid-gaussian-z-prompts-t1223s.png",
+        "018-ch04-topic-04-iid-gaussian-z-prompts-t1290s.png",
+        "019-ch04-topic-04-iid-gaussian-z-prompts-t1357s.png",
+        "020-ch04-topic-04-iid-gaussian-z-prompts-t1425s.png"
+      ],
+      "labels": [
+        "ch4 20:23",
+        "ch4 21:30",
+        "ch4 22:37",
+        "ch4 23:45"
+      ],
+      "tile_seconds": [
+        1223.2,
+        1290.5,
+        1357.8,
+        1425.1
+      ],
+      "time_start": 1223.2,
+      "time_end": 1425.1,
+      "range_start": 909.0,
+      "range_end": 1470.0
+    },
+    {
+      "file": "composites/ch05-topic-05-convex-conjugate-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-convex-conjugate",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch05-topic-05-convex-conjugate-t1497s.png",
+        "022-ch05-topic-05-convex-conjugate-t1593s.png",
+        "023-ch05-topic-05-convex-conjugate-t1688s.png",
+        "024-ch05-topic-05-convex-conjugate-t1784s.png"
+      ],
+      "labels": [
+        "ch5 24:57",
+        "ch5 26:33",
+        "ch5 28:08",
+        "ch5 29:44"
+      ],
+      "tile_seconds": [
+        1497.4,
+        1593.1,
+        1688.9,
+        1784.6
+      ],
+      "time_start": 1497.4,
+      "time_end": 1784.6,
+      "range_start": 1470.0,
+      "range_end": 1812.0
+    },
+    {
+      "file": "composites/ch06-topic-06-plug-conjugate-into-df-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-plug-conjugate-into-df",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch06-topic-06-plug-conjugate-into-df-t1828s.png",
+        "026-ch06-topic-06-plug-conjugate-into-df-t1885s.png",
+        "027-ch06-topic-06-plug-conjugate-into-df-t1941s.png",
+        "028-ch06-topic-06-plug-conjugate-into-df-t1998s.png"
+      ],
+      "labels": [
+        "ch6 30:28",
+        "ch6 31:25",
+        "ch6 32:21",
+        "ch6 33:18"
+      ],
+      "tile_seconds": [
+        1828.2,
+        1885.1,
+        1941.9,
+        1998.8
+      ],
+      "time_start": 1828.2,
+      "time_end": 1998.8,
+      "range_start": 1812.0,
+      "range_end": 2015.0
+    },
+    {
+      "file": "composites/ch07-topic-07-sup-out-function-class-t-panel1of2.png",
+      "chapter": 7,
+      "slug": "topic-07-sup-out-function-class-t",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "029-ch07-topic-07-sup-out-function-class-t-t2056s.png",
+        "030-ch07-topic-07-sup-out-function-class-t-t2119s.png",
+        "031-ch07-topic-07-sup-out-function-class-t-t2181s.png",
+        "032-ch07-topic-07-sup-out-function-class-t-t2243s.png"
+      ],
+      "labels": [
+        "ch7 34:16",
+        "ch7 35:19",
+        "ch7 36:21",
+        "ch7 37:23"
+      ],
+      "tile_seconds": [
+        2056.6,
+        2119.0,
+        2181.4,
+        2243.8
+      ],
+      "time_start": 2056.6,
+      "time_end": 2243.8,
+      "range_start": 2015.0,
+      "range_end": 2535.0
+    },
+    {
+      "file": "composites/ch07-topic-07-sup-out-function-class-t-panel2of2.png",
+      "chapter": 7,
+      "slug": "topic-07-sup-out-function-class-t",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "033-ch07-topic-07-sup-out-function-class-t-t2306s.png",
+        "034-ch07-topic-07-sup-out-function-class-t-t2368s.png",
+        "035-ch07-topic-07-sup-out-function-class-t-t2431s.png",
+        "036-ch07-topic-07-sup-out-function-class-t-t2493s.png"
+      ],
+      "labels": [
+        "ch7 38:26",
+        "ch7 39:28",
+        "ch7 40:31",
+        "ch7 41:33"
+      ],
+      "tile_seconds": [
+        2306.2,
+        2368.6,
+        2431.0,
+        2493.4
+      ],
+      "time_start": 2306.2,
+      "time_end": 2493.4,
+      "range_start": 2015.0,
+      "range_end": 2535.0
+    },
+    {
+      "file": "composites/ch08-topic-08-two-expectations-gan-bound-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-two-expectations-gan-bound",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "037-ch08-topic-08-two-expectations-gan-bound-t2555s.png",
+        "038-ch08-topic-08-two-expectations-gan-bound-t2627s.png",
+        "039-ch08-topic-08-two-expectations-gan-bound-t2698s.png",
+        "040-ch08-topic-08-two-expectations-gan-bound-t2770s.png"
+      ],
+      "labels": [
+        "ch8 42:35",
+        "ch8 43:47",
+        "ch8 44:58",
+        "ch8 46:10"
+      ],
+      "tile_seconds": [
+        2555.5,
+        2627.2,
+        2698.8,
+        2770.5
+      ],
+      "time_start": 2555.5,
+      "time_end": 2770.5,
+      "range_start": 2535.0,
+      "range_end": 2791.0
+    },
+    {
+      "file": "composites/ch09-topic-09-why-variational-panel1of1.png",
+      "chapter": 9,
+      "slug": "topic-09-why-variational",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "041-ch09-topic-09-why-variational-t2820s.png",
+        "042-ch09-topic-09-why-variational-t2924s.png",
+        "043-ch09-topic-09-why-variational-t3027s.png",
+        "044-ch09-topic-09-why-variational-t3131s.png"
+      ],
+      "labels": [
+        "ch9 47:00",
+        "ch9 48:44",
+        "ch9 50:27",
+        "ch9 52:11"
+      ],
+      "tile_seconds": [
+        2820.6,
+        2924.2,
+        3027.8,
+        3131.4
+      ],
+      "time_start": 2820.6,
+      "time_end": 3131.4,
+      "range_start": 2791.0,
+      "range_end": 3161.0
+    },
+    {
+      "file": "composites/ch10-topic-10-minmax-saddle-next-panel1of1.png",
+      "chapter": 10,
+      "slug": "topic-10-minmax-saddle-next",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "045-ch10-topic-10-minmax-saddle-next-t3190s.png",
+        "046-ch10-topic-10-minmax-saddle-next-t3294s.png",
+        "047-ch10-topic-10-minmax-saddle-next-t3399s.png",
+        "048-ch10-topic-10-minmax-saddle-next-t3503s.png"
+      ],
+      "labels": [
+        "ch10 53:10",
+        "ch10 54:54",
+        "ch10 56:39",
+        "ch10 58:23"
+      ],
+      "tile_seconds": [
+        3190.8,
+        3294.9,
+        3399.1,
+        3503.2
+      ],
+      "time_start": 3190.8,
+      "time_end": 3503.2,
+      "range_start": 3161.0,
+      "range_end": 3533.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

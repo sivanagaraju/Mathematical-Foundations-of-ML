@@ -1,0 +1,518 @@
+{
+  "duration_seconds": 1302.0,
+  "range_source": "topic-ranges",
+  "range_count": 7,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 124.0,
+      "slug": "topic-01-recap"
+    },
+    {
+      "index": 2,
+      "start": 124.0,
+      "end": 233.0,
+      "slug": "topic-02-vector-rv"
+    },
+    {
+      "index": 3,
+      "start": 233.0,
+      "end": 444.0,
+      "slug": "topic-03-multi-rv"
+    },
+    {
+      "index": 4,
+      "start": 444.0,
+      "end": 677.0,
+      "slug": "topic-04-joint"
+    },
+    {
+      "index": 5,
+      "start": 677.0,
+      "end": 791.0,
+      "slug": "topic-05-equivalence"
+    },
+    {
+      "index": 6,
+      "start": 791.0,
+      "end": 1041.0,
+      "slug": "topic-06-conditional"
+    },
+    {
+      "index": 7,
+      "start": 1041.0,
+      "end": 1302.0,
+      "slug": "topic-07-marginal-xray"
+    }
+  ],
+  "raw_count": 28,
+  "composite_count": 7,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-recap-t0009s.png",
+      "seconds": 9.9,
+      "chapter": 1,
+      "slug": "topic-01-recap",
+      "label": "00:09",
+      "range_start": 0.0,
+      "range_end": 124.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-recap-t0044s.png",
+      "seconds": 44.6,
+      "chapter": 1,
+      "slug": "topic-01-recap",
+      "label": "00:44",
+      "range_start": 0.0,
+      "range_end": 124.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-recap-t0079s.png",
+      "seconds": 79.4,
+      "chapter": 1,
+      "slug": "topic-01-recap",
+      "label": "01:19",
+      "range_start": 0.0,
+      "range_end": 124.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-recap-t0114s.png",
+      "seconds": 114.1,
+      "chapter": 1,
+      "slug": "topic-01-recap",
+      "label": "01:54",
+      "range_start": 0.0,
+      "range_end": 124.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-vector-rv-t0132s.png",
+      "seconds": 132.7,
+      "chapter": 2,
+      "slug": "topic-02-vector-rv",
+      "label": "02:12",
+      "range_start": 124.0,
+      "range_end": 233.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-vector-rv-t0163s.png",
+      "seconds": 163.2,
+      "chapter": 2,
+      "slug": "topic-02-vector-rv",
+      "label": "02:43",
+      "range_start": 124.0,
+      "range_end": 233.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-vector-rv-t0193s.png",
+      "seconds": 193.8,
+      "chapter": 2,
+      "slug": "topic-02-vector-rv",
+      "label": "03:13",
+      "range_start": 124.0,
+      "range_end": 233.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-vector-rv-t0224s.png",
+      "seconds": 224.3,
+      "chapter": 2,
+      "slug": "topic-02-vector-rv",
+      "label": "03:44",
+      "range_start": 124.0,
+      "range_end": 233.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-multi-rv-t0249s.png",
+      "seconds": 249.9,
+      "chapter": 3,
+      "slug": "topic-03-multi-rv",
+      "label": "04:09",
+      "range_start": 233.0,
+      "range_end": 444.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-multi-rv-t0308s.png",
+      "seconds": 309.0,
+      "chapter": 3,
+      "slug": "topic-03-multi-rv",
+      "label": "05:08",
+      "range_start": 233.0,
+      "range_end": 444.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-multi-rv-t0368s.png",
+      "seconds": 368.0,
+      "chapter": 3,
+      "slug": "topic-03-multi-rv",
+      "label": "06:08",
+      "range_start": 233.0,
+      "range_end": 444.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-multi-rv-t0427s.png",
+      "seconds": 427.1,
+      "chapter": 3,
+      "slug": "topic-03-multi-rv",
+      "label": "07:07",
+      "range_start": 233.0,
+      "range_end": 444.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-joint-t0462s.png",
+      "seconds": 462.6,
+      "chapter": 4,
+      "slug": "topic-04-joint",
+      "label": "07:42",
+      "range_start": 444.0,
+      "range_end": 677.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-joint-t0527s.png",
+      "seconds": 527.9,
+      "chapter": 4,
+      "slug": "topic-04-joint",
+      "label": "08:47",
+      "range_start": 444.0,
+      "range_end": 677.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-joint-t0593s.png",
+      "seconds": 593.1,
+      "chapter": 4,
+      "slug": "topic-04-joint",
+      "label": "09:53",
+      "range_start": 444.0,
+      "range_end": 677.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-joint-t0658s.png",
+      "seconds": 658.4,
+      "chapter": 4,
+      "slug": "topic-04-joint",
+      "label": "10:58",
+      "range_start": 444.0,
+      "range_end": 677.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-equivalence-t0686s.png",
+      "seconds": 686.1,
+      "chapter": 5,
+      "slug": "topic-05-equivalence",
+      "label": "11:26",
+      "range_start": 677.0,
+      "range_end": 791.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-equivalence-t0718s.png",
+      "seconds": 718.0,
+      "chapter": 5,
+      "slug": "topic-05-equivalence",
+      "label": "11:58",
+      "range_start": 677.0,
+      "range_end": 791.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-equivalence-t0749s.png",
+      "seconds": 750.0,
+      "chapter": 5,
+      "slug": "topic-05-equivalence",
+      "label": "12:29",
+      "range_start": 677.0,
+      "range_end": 791.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-equivalence-t0781s.png",
+      "seconds": 781.9,
+      "chapter": 5,
+      "slug": "topic-05-equivalence",
+      "label": "13:01",
+      "range_start": 677.0,
+      "range_end": 791.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-conditional-t0811s.png",
+      "seconds": 811.0,
+      "chapter": 6,
+      "slug": "topic-06-conditional",
+      "label": "13:31",
+      "range_start": 791.0,
+      "range_end": 1041.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-conditional-t0881s.png",
+      "seconds": 881.0,
+      "chapter": 6,
+      "slug": "topic-06-conditional",
+      "label": "14:41",
+      "range_start": 791.0,
+      "range_end": 1041.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-conditional-t0951s.png",
+      "seconds": 951.0,
+      "chapter": 6,
+      "slug": "topic-06-conditional",
+      "label": "15:51",
+      "range_start": 791.0,
+      "range_end": 1041.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-conditional-t1021s.png",
+      "seconds": 1021.0,
+      "chapter": 6,
+      "slug": "topic-06-conditional",
+      "label": "17:01",
+      "range_start": 791.0,
+      "range_end": 1041.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-marginal-xray-t1061s.png",
+      "seconds": 1061.9,
+      "chapter": 7,
+      "slug": "topic-07-marginal-xray",
+      "label": "17:41",
+      "range_start": 1041.0,
+      "range_end": 1302.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-marginal-xray-t1134s.png",
+      "seconds": 1135.0,
+      "chapter": 7,
+      "slug": "topic-07-marginal-xray",
+      "label": "18:54",
+      "range_start": 1041.0,
+      "range_end": 1302.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-marginal-xray-t1208s.png",
+      "seconds": 1208.0,
+      "chapter": 7,
+      "slug": "topic-07-marginal-xray",
+      "label": "20:08",
+      "range_start": 1041.0,
+      "range_end": 1302.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-marginal-xray-t1281s.png",
+      "seconds": 1281.1,
+      "chapter": 7,
+      "slug": "topic-07-marginal-xray",
+      "label": "21:21",
+      "range_start": 1041.0,
+      "range_end": 1302.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-recap-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-recap",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-recap-t0009s.png",
+        "002-ch01-topic-01-recap-t0044s.png",
+        "003-ch01-topic-01-recap-t0079s.png",
+        "004-ch01-topic-01-recap-t0114s.png"
+      ],
+      "labels": [
+        "ch1 00:09",
+        "ch1 00:44",
+        "ch1 01:19",
+        "ch1 01:54"
+      ],
+      "tile_seconds": [
+        9.9,
+        44.6,
+        79.4,
+        114.1
+      ],
+      "time_start": 9.9,
+      "time_end": 114.1,
+      "range_start": 0.0,
+      "range_end": 124.0
+    },
+    {
+      "file": "composites/ch02-topic-02-vector-rv-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-vector-rv",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-vector-rv-t0132s.png",
+        "006-ch02-topic-02-vector-rv-t0163s.png",
+        "007-ch02-topic-02-vector-rv-t0193s.png",
+        "008-ch02-topic-02-vector-rv-t0224s.png"
+      ],
+      "labels": [
+        "ch2 02:12",
+        "ch2 02:43",
+        "ch2 03:13",
+        "ch2 03:44"
+      ],
+      "tile_seconds": [
+        132.7,
+        163.2,
+        193.8,
+        224.3
+      ],
+      "time_start": 132.7,
+      "time_end": 224.3,
+      "range_start": 124.0,
+      "range_end": 233.0
+    },
+    {
+      "file": "composites/ch03-topic-03-multi-rv-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-multi-rv",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-multi-rv-t0249s.png",
+        "010-ch03-topic-03-multi-rv-t0308s.png",
+        "011-ch03-topic-03-multi-rv-t0368s.png",
+        "012-ch03-topic-03-multi-rv-t0427s.png"
+      ],
+      "labels": [
+        "ch3 04:09",
+        "ch3 05:08",
+        "ch3 06:08",
+        "ch3 07:07"
+      ],
+      "tile_seconds": [
+        249.9,
+        309.0,
+        368.0,
+        427.1
+      ],
+      "time_start": 249.9,
+      "time_end": 427.1,
+      "range_start": 233.0,
+      "range_end": 444.0
+    },
+    {
+      "file": "composites/ch04-topic-04-joint-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-joint",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-joint-t0462s.png",
+        "014-ch04-topic-04-joint-t0527s.png",
+        "015-ch04-topic-04-joint-t0593s.png",
+        "016-ch04-topic-04-joint-t0658s.png"
+      ],
+      "labels": [
+        "ch4 07:42",
+        "ch4 08:47",
+        "ch4 09:53",
+        "ch4 10:58"
+      ],
+      "tile_seconds": [
+        462.6,
+        527.9,
+        593.1,
+        658.4
+      ],
+      "time_start": 462.6,
+      "time_end": 658.4,
+      "range_start": 444.0,
+      "range_end": 677.0
+    },
+    {
+      "file": "composites/ch05-topic-05-equivalence-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-equivalence",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-equivalence-t0686s.png",
+        "018-ch05-topic-05-equivalence-t0718s.png",
+        "019-ch05-topic-05-equivalence-t0749s.png",
+        "020-ch05-topic-05-equivalence-t0781s.png"
+      ],
+      "labels": [
+        "ch5 11:26",
+        "ch5 11:58",
+        "ch5 12:29",
+        "ch5 13:01"
+      ],
+      "tile_seconds": [
+        686.1,
+        718.0,
+        750.0,
+        781.9
+      ],
+      "time_start": 686.1,
+      "time_end": 781.9,
+      "range_start": 677.0,
+      "range_end": 791.0
+    },
+    {
+      "file": "composites/ch06-topic-06-conditional-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-conditional",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-conditional-t0811s.png",
+        "022-ch06-topic-06-conditional-t0881s.png",
+        "023-ch06-topic-06-conditional-t0951s.png",
+        "024-ch06-topic-06-conditional-t1021s.png"
+      ],
+      "labels": [
+        "ch6 13:31",
+        "ch6 14:41",
+        "ch6 15:51",
+        "ch6 17:01"
+      ],
+      "tile_seconds": [
+        811.0,
+        881.0,
+        951.0,
+        1021.0
+      ],
+      "time_start": 811.0,
+      "time_end": 1021.0,
+      "range_start": 791.0,
+      "range_end": 1041.0
+    },
+    {
+      "file": "composites/ch07-topic-07-marginal-xray-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-marginal-xray",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-marginal-xray-t1061s.png",
+        "026-ch07-topic-07-marginal-xray-t1134s.png",
+        "027-ch07-topic-07-marginal-xray-t1208s.png",
+        "028-ch07-topic-07-marginal-xray-t1281s.png"
+      ],
+      "labels": [
+        "ch7 17:41",
+        "ch7 18:54",
+        "ch7 20:08",
+        "ch7 21:21"
+      ],
+      "tile_seconds": [
+        1061.9,
+        1135.0,
+        1208.0,
+        1281.1
+      ],
+      "time_start": 1061.9,
+      "time_end": 1281.1,
+      "range_start": 1041.0,
+      "range_end": 1302.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

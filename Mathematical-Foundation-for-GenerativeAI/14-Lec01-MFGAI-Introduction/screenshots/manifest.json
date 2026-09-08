@@ -1,0 +1,926 @@
+{
+  "duration_seconds": 4252.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 2.0,
+      "end": 352.0,
+      "slug": "topic-01-mission"
+    },
+    {
+      "index": 2,
+      "start": 352.0,
+      "end": 692.0,
+      "slug": "topic-02-roadmap"
+    },
+    {
+      "index": 3,
+      "start": 692.0,
+      "end": 839.0,
+      "slug": "topic-03-background"
+    },
+    {
+      "index": 4,
+      "start": 839.0,
+      "end": 1203.0,
+      "slug": "topic-04-physics-nonmeasurable"
+    },
+    {
+      "index": 5,
+      "start": 1203.0,
+      "end": 1412.0,
+      "slug": "topic-05-repeated-obs"
+    },
+    {
+      "index": 6,
+      "start": 1412.0,
+      "end": 1897.0,
+      "slug": "topic-06-re-omega"
+    },
+    {
+      "index": 7,
+      "start": 1897.0,
+      "end": 2312.0,
+      "slug": "topic-07-measure-events"
+    },
+    {
+      "index": 8,
+      "start": 2312.0,
+      "end": 2698.0,
+      "slug": "topic-08-p-axioms"
+    },
+    {
+      "index": 9,
+      "start": 2698.0,
+      "end": 3241.0,
+      "slug": "topic-09-triplet-surrogates"
+    },
+    {
+      "index": 10,
+      "start": 3241.0,
+      "end": 4252.0,
+      "slug": "topic-10-rv-estimate"
+    }
+  ],
+  "raw_count": 52,
+  "composite_count": 13,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-mission-t0030s.png",
+      "seconds": 30.0,
+      "chapter": 1,
+      "slug": "topic-01-mission",
+      "label": "00:30",
+      "range_start": 2.0,
+      "range_end": 352.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-mission-t0128s.png",
+      "seconds": 128.0,
+      "chapter": 1,
+      "slug": "topic-01-mission",
+      "label": "02:08",
+      "range_start": 2.0,
+      "range_end": 352.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-mission-t0226s.png",
+      "seconds": 226.0,
+      "chapter": 1,
+      "slug": "topic-01-mission",
+      "label": "03:46",
+      "range_start": 2.0,
+      "range_end": 352.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-mission-t0324s.png",
+      "seconds": 324.0,
+      "chapter": 1,
+      "slug": "topic-01-mission",
+      "label": "05:24",
+      "range_start": 2.0,
+      "range_end": 352.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-roadmap-t0379s.png",
+      "seconds": 379.2,
+      "chapter": 2,
+      "slug": "topic-02-roadmap",
+      "label": "06:19",
+      "range_start": 352.0,
+      "range_end": 692.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-roadmap-t0474s.png",
+      "seconds": 474.4,
+      "chapter": 2,
+      "slug": "topic-02-roadmap",
+      "label": "07:54",
+      "range_start": 352.0,
+      "range_end": 692.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-roadmap-t0569s.png",
+      "seconds": 569.6,
+      "chapter": 2,
+      "slug": "topic-02-roadmap",
+      "label": "09:29",
+      "range_start": 352.0,
+      "range_end": 692.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-roadmap-t0664s.png",
+      "seconds": 664.8,
+      "chapter": 2,
+      "slug": "topic-02-roadmap",
+      "label": "11:04",
+      "range_start": 352.0,
+      "range_end": 692.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-background-t0703s.png",
+      "seconds": 703.8,
+      "chapter": 3,
+      "slug": "topic-03-background",
+      "label": "11:43",
+      "range_start": 692.0,
+      "range_end": 839.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-background-t0744s.png",
+      "seconds": 744.9,
+      "chapter": 3,
+      "slug": "topic-03-background",
+      "label": "12:24",
+      "range_start": 692.0,
+      "range_end": 839.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-background-t0786s.png",
+      "seconds": 786.1,
+      "chapter": 3,
+      "slug": "topic-03-background",
+      "label": "13:06",
+      "range_start": 692.0,
+      "range_end": 839.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-background-t0827s.png",
+      "seconds": 827.2,
+      "chapter": 3,
+      "slug": "topic-03-background",
+      "label": "13:47",
+      "range_start": 692.0,
+      "range_end": 839.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-physics-nonmeasurable-t0868s.png",
+      "seconds": 868.1,
+      "chapter": 4,
+      "slug": "topic-04-physics-nonmeasurable",
+      "label": "14:28",
+      "range_start": 839.0,
+      "range_end": 1203.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-physics-nonmeasurable-t0970s.png",
+      "seconds": 970.0,
+      "chapter": 4,
+      "slug": "topic-04-physics-nonmeasurable",
+      "label": "16:10",
+      "range_start": 839.0,
+      "range_end": 1203.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-physics-nonmeasurable-t1071s.png",
+      "seconds": 1072.0,
+      "chapter": 4,
+      "slug": "topic-04-physics-nonmeasurable",
+      "label": "17:51",
+      "range_start": 839.0,
+      "range_end": 1203.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-physics-nonmeasurable-t1173s.png",
+      "seconds": 1173.9,
+      "chapter": 4,
+      "slug": "topic-04-physics-nonmeasurable",
+      "label": "19:33",
+      "range_start": 839.0,
+      "range_end": 1203.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-repeated-obs-t1219s.png",
+      "seconds": 1219.7,
+      "chapter": 5,
+      "slug": "topic-05-repeated-obs",
+      "label": "20:19",
+      "range_start": 1203.0,
+      "range_end": 1412.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-repeated-obs-t1278s.png",
+      "seconds": 1278.2,
+      "chapter": 5,
+      "slug": "topic-05-repeated-obs",
+      "label": "21:18",
+      "range_start": 1203.0,
+      "range_end": 1412.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-repeated-obs-t1336s.png",
+      "seconds": 1336.8,
+      "chapter": 5,
+      "slug": "topic-05-repeated-obs",
+      "label": "22:16",
+      "range_start": 1203.0,
+      "range_end": 1412.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-repeated-obs-t1395s.png",
+      "seconds": 1395.3,
+      "chapter": 5,
+      "slug": "topic-05-repeated-obs",
+      "label": "23:15",
+      "range_start": 1203.0,
+      "range_end": 1412.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-re-omega-t1450s.png",
+      "seconds": 1450.8,
+      "chapter": 6,
+      "slug": "topic-06-re-omega",
+      "label": "24:10",
+      "range_start": 1412.0,
+      "range_end": 1897.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-re-omega-t1509s.png",
+      "seconds": 1509.0,
+      "chapter": 6,
+      "slug": "topic-06-re-omega",
+      "label": "25:09",
+      "range_start": 1412.0,
+      "range_end": 1897.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-re-omega-t1567s.png",
+      "seconds": 1567.2,
+      "chapter": 6,
+      "slug": "topic-06-re-omega",
+      "label": "26:07",
+      "range_start": 1412.0,
+      "range_end": 1897.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-re-omega-t1625s.png",
+      "seconds": 1625.4,
+      "chapter": 6,
+      "slug": "topic-06-re-omega",
+      "label": "27:05",
+      "range_start": 1412.0,
+      "range_end": 1897.0
+    },
+    {
+      "file": "raw/025-ch06-topic-06-re-omega-t1683s.png",
+      "seconds": 1683.6,
+      "chapter": 6,
+      "slug": "topic-06-re-omega",
+      "label": "28:03",
+      "range_start": 1412.0,
+      "range_end": 1897.0
+    },
+    {
+      "file": "raw/026-ch06-topic-06-re-omega-t1741s.png",
+      "seconds": 1741.8,
+      "chapter": 6,
+      "slug": "topic-06-re-omega",
+      "label": "29:01",
+      "range_start": 1412.0,
+      "range_end": 1897.0
+    },
+    {
+      "file": "raw/027-ch06-topic-06-re-omega-t1800s.png",
+      "seconds": 1800.0,
+      "chapter": 6,
+      "slug": "topic-06-re-omega",
+      "label": "30:00",
+      "range_start": 1412.0,
+      "range_end": 1897.0
+    },
+    {
+      "file": "raw/028-ch06-topic-06-re-omega-t1858s.png",
+      "seconds": 1858.2,
+      "chapter": 6,
+      "slug": "topic-06-re-omega",
+      "label": "30:58",
+      "range_start": 1412.0,
+      "range_end": 1897.0
+    },
+    {
+      "file": "raw/029-ch07-topic-07-measure-events-t1930s.png",
+      "seconds": 1930.2,
+      "chapter": 7,
+      "slug": "topic-07-measure-events",
+      "label": "32:10",
+      "range_start": 1897.0,
+      "range_end": 2312.0
+    },
+    {
+      "file": "raw/030-ch07-topic-07-measure-events-t2046s.png",
+      "seconds": 2046.4,
+      "chapter": 7,
+      "slug": "topic-07-measure-events",
+      "label": "34:06",
+      "range_start": 1897.0,
+      "range_end": 2312.0
+    },
+    {
+      "file": "raw/031-ch07-topic-07-measure-events-t2162s.png",
+      "seconds": 2162.6,
+      "chapter": 7,
+      "slug": "topic-07-measure-events",
+      "label": "36:02",
+      "range_start": 1897.0,
+      "range_end": 2312.0
+    },
+    {
+      "file": "raw/032-ch07-topic-07-measure-events-t2278s.png",
+      "seconds": 2278.8,
+      "chapter": 7,
+      "slug": "topic-07-measure-events",
+      "label": "37:58",
+      "range_start": 1897.0,
+      "range_end": 2312.0
+    },
+    {
+      "file": "raw/033-ch08-topic-08-p-axioms-t2342s.png",
+      "seconds": 2342.9,
+      "chapter": 8,
+      "slug": "topic-08-p-axioms",
+      "label": "39:02",
+      "range_start": 2312.0,
+      "range_end": 2698.0
+    },
+    {
+      "file": "raw/034-ch08-topic-08-p-axioms-t2450s.png",
+      "seconds": 2451.0,
+      "chapter": 8,
+      "slug": "topic-08-p-axioms",
+      "label": "40:50",
+      "range_start": 2312.0,
+      "range_end": 2698.0
+    },
+    {
+      "file": "raw/035-ch08-topic-08-p-axioms-t2559s.png",
+      "seconds": 2559.0,
+      "chapter": 8,
+      "slug": "topic-08-p-axioms",
+      "label": "42:39",
+      "range_start": 2312.0,
+      "range_end": 2698.0
+    },
+    {
+      "file": "raw/036-ch08-topic-08-p-axioms-t2667s.png",
+      "seconds": 2667.1,
+      "chapter": 8,
+      "slug": "topic-08-p-axioms",
+      "label": "44:27",
+      "range_start": 2312.0,
+      "range_end": 2698.0
+    },
+    {
+      "file": "raw/037-ch09-topic-09-triplet-surrogates-t2741s.png",
+      "seconds": 2741.4,
+      "chapter": 9,
+      "slug": "topic-09-triplet-surrogates",
+      "label": "45:41",
+      "range_start": 2698.0,
+      "range_end": 3241.0
+    },
+    {
+      "file": "raw/038-ch09-topic-09-triplet-surrogates-t2806s.png",
+      "seconds": 2806.6,
+      "chapter": 9,
+      "slug": "topic-09-triplet-surrogates",
+      "label": "46:46",
+      "range_start": 2698.0,
+      "range_end": 3241.0
+    },
+    {
+      "file": "raw/039-ch09-topic-09-triplet-surrogates-t2871s.png",
+      "seconds": 2871.8,
+      "chapter": 9,
+      "slug": "topic-09-triplet-surrogates",
+      "label": "47:51",
+      "range_start": 2698.0,
+      "range_end": 3241.0
+    },
+    {
+      "file": "raw/040-ch09-topic-09-triplet-surrogates-t2936s.png",
+      "seconds": 2936.9,
+      "chapter": 9,
+      "slug": "topic-09-triplet-surrogates",
+      "label": "48:56",
+      "range_start": 2698.0,
+      "range_end": 3241.0
+    },
+    {
+      "file": "raw/041-ch09-topic-09-triplet-surrogates-t3002s.png",
+      "seconds": 3002.1,
+      "chapter": 9,
+      "slug": "topic-09-triplet-surrogates",
+      "label": "50:02",
+      "range_start": 2698.0,
+      "range_end": 3241.0
+    },
+    {
+      "file": "raw/042-ch09-topic-09-triplet-surrogates-t3067s.png",
+      "seconds": 3067.2,
+      "chapter": 9,
+      "slug": "topic-09-triplet-surrogates",
+      "label": "51:07",
+      "range_start": 2698.0,
+      "range_end": 3241.0
+    },
+    {
+      "file": "raw/043-ch09-topic-09-triplet-surrogates-t3132s.png",
+      "seconds": 3132.4,
+      "chapter": 9,
+      "slug": "topic-09-triplet-surrogates",
+      "label": "52:12",
+      "range_start": 2698.0,
+      "range_end": 3241.0
+    },
+    {
+      "file": "raw/044-ch09-topic-09-triplet-surrogates-t3197s.png",
+      "seconds": 3197.6,
+      "chapter": 9,
+      "slug": "topic-09-triplet-surrogates",
+      "label": "53:17",
+      "range_start": 2698.0,
+      "range_end": 3241.0
+    },
+    {
+      "file": "raw/045-ch10-topic-10-rv-estimate-t3321s.png",
+      "seconds": 3321.9,
+      "chapter": 10,
+      "slug": "topic-10-rv-estimate",
+      "label": "55:21",
+      "range_start": 3241.0,
+      "range_end": 4252.0
+    },
+    {
+      "file": "raw/046-ch10-topic-10-rv-estimate-t3443s.png",
+      "seconds": 3443.2,
+      "chapter": 10,
+      "slug": "topic-10-rv-estimate",
+      "label": "57:23",
+      "range_start": 3241.0,
+      "range_end": 4252.0
+    },
+    {
+      "file": "raw/047-ch10-topic-10-rv-estimate-t3564s.png",
+      "seconds": 3564.5,
+      "chapter": 10,
+      "slug": "topic-10-rv-estimate",
+      "label": "59:24",
+      "range_start": 3241.0,
+      "range_end": 4252.0
+    },
+    {
+      "file": "raw/048-ch10-topic-10-rv-estimate-t3685s.png",
+      "seconds": 3685.8,
+      "chapter": 10,
+      "slug": "topic-10-rv-estimate",
+      "label": "61:25",
+      "range_start": 3241.0,
+      "range_end": 4252.0
+    },
+    {
+      "file": "raw/049-ch10-topic-10-rv-estimate-t3807s.png",
+      "seconds": 3807.2,
+      "chapter": 10,
+      "slug": "topic-10-rv-estimate",
+      "label": "63:27",
+      "range_start": 3241.0,
+      "range_end": 4252.0
+    },
+    {
+      "file": "raw/050-ch10-topic-10-rv-estimate-t3928s.png",
+      "seconds": 3928.5,
+      "chapter": 10,
+      "slug": "topic-10-rv-estimate",
+      "label": "65:28",
+      "range_start": 3241.0,
+      "range_end": 4252.0
+    },
+    {
+      "file": "raw/051-ch10-topic-10-rv-estimate-t4049s.png",
+      "seconds": 4049.8,
+      "chapter": 10,
+      "slug": "topic-10-rv-estimate",
+      "label": "67:29",
+      "range_start": 3241.0,
+      "range_end": 4252.0
+    },
+    {
+      "file": "raw/052-ch10-topic-10-rv-estimate-t4171s.png",
+      "seconds": 4171.1,
+      "chapter": 10,
+      "slug": "topic-10-rv-estimate",
+      "label": "69:31",
+      "range_start": 3241.0,
+      "range_end": 4252.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-mission-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-mission",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-mission-t0030s.png",
+        "002-ch01-topic-01-mission-t0128s.png",
+        "003-ch01-topic-01-mission-t0226s.png",
+        "004-ch01-topic-01-mission-t0324s.png"
+      ],
+      "labels": [
+        "ch1 00:30",
+        "ch1 02:08",
+        "ch1 03:46",
+        "ch1 05:24"
+      ],
+      "tile_seconds": [
+        30.0,
+        128.0,
+        226.0,
+        324.0
+      ],
+      "time_start": 30.0,
+      "time_end": 324.0,
+      "range_start": 2.0,
+      "range_end": 352.0
+    },
+    {
+      "file": "composites/ch02-topic-02-roadmap-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-roadmap",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-roadmap-t0379s.png",
+        "006-ch02-topic-02-roadmap-t0474s.png",
+        "007-ch02-topic-02-roadmap-t0569s.png",
+        "008-ch02-topic-02-roadmap-t0664s.png"
+      ],
+      "labels": [
+        "ch2 06:19",
+        "ch2 07:54",
+        "ch2 09:29",
+        "ch2 11:04"
+      ],
+      "tile_seconds": [
+        379.2,
+        474.4,
+        569.6,
+        664.8
+      ],
+      "time_start": 379.2,
+      "time_end": 664.8,
+      "range_start": 352.0,
+      "range_end": 692.0
+    },
+    {
+      "file": "composites/ch03-topic-03-background-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-background",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-background-t0703s.png",
+        "010-ch03-topic-03-background-t0744s.png",
+        "011-ch03-topic-03-background-t0786s.png",
+        "012-ch03-topic-03-background-t0827s.png"
+      ],
+      "labels": [
+        "ch3 11:43",
+        "ch3 12:24",
+        "ch3 13:06",
+        "ch3 13:47"
+      ],
+      "tile_seconds": [
+        703.8,
+        744.9,
+        786.1,
+        827.2
+      ],
+      "time_start": 703.8,
+      "time_end": 827.2,
+      "range_start": 692.0,
+      "range_end": 839.0
+    },
+    {
+      "file": "composites/ch04-topic-04-physics-nonmeasurable-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-physics-nonmeasurable",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-physics-nonmeasurable-t0868s.png",
+        "014-ch04-topic-04-physics-nonmeasurable-t0970s.png",
+        "015-ch04-topic-04-physics-nonmeasurable-t1071s.png",
+        "016-ch04-topic-04-physics-nonmeasurable-t1173s.png"
+      ],
+      "labels": [
+        "ch4 14:28",
+        "ch4 16:10",
+        "ch4 17:51",
+        "ch4 19:33"
+      ],
+      "tile_seconds": [
+        868.1,
+        970.0,
+        1072.0,
+        1173.9
+      ],
+      "time_start": 868.1,
+      "time_end": 1173.9,
+      "range_start": 839.0,
+      "range_end": 1203.0
+    },
+    {
+      "file": "composites/ch05-topic-05-repeated-obs-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-repeated-obs",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-repeated-obs-t1219s.png",
+        "018-ch05-topic-05-repeated-obs-t1278s.png",
+        "019-ch05-topic-05-repeated-obs-t1336s.png",
+        "020-ch05-topic-05-repeated-obs-t1395s.png"
+      ],
+      "labels": [
+        "ch5 20:19",
+        "ch5 21:18",
+        "ch5 22:16",
+        "ch5 23:15"
+      ],
+      "tile_seconds": [
+        1219.7,
+        1278.2,
+        1336.8,
+        1395.3
+      ],
+      "time_start": 1219.7,
+      "time_end": 1395.3,
+      "range_start": 1203.0,
+      "range_end": 1412.0
+    },
+    {
+      "file": "composites/ch06-topic-06-re-omega-panel1of2.png",
+      "chapter": 6,
+      "slug": "topic-06-re-omega",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "021-ch06-topic-06-re-omega-t1450s.png",
+        "022-ch06-topic-06-re-omega-t1509s.png",
+        "023-ch06-topic-06-re-omega-t1567s.png",
+        "024-ch06-topic-06-re-omega-t1625s.png"
+      ],
+      "labels": [
+        "ch6 24:10",
+        "ch6 25:09",
+        "ch6 26:07",
+        "ch6 27:05"
+      ],
+      "tile_seconds": [
+        1450.8,
+        1509.0,
+        1567.2,
+        1625.4
+      ],
+      "time_start": 1450.8,
+      "time_end": 1625.4,
+      "range_start": 1412.0,
+      "range_end": 1897.0
+    },
+    {
+      "file": "composites/ch06-topic-06-re-omega-panel2of2.png",
+      "chapter": 6,
+      "slug": "topic-06-re-omega",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "025-ch06-topic-06-re-omega-t1683s.png",
+        "026-ch06-topic-06-re-omega-t1741s.png",
+        "027-ch06-topic-06-re-omega-t1800s.png",
+        "028-ch06-topic-06-re-omega-t1858s.png"
+      ],
+      "labels": [
+        "ch6 28:03",
+        "ch6 29:01",
+        "ch6 30:00",
+        "ch6 30:58"
+      ],
+      "tile_seconds": [
+        1683.6,
+        1741.8,
+        1800.0,
+        1858.2
+      ],
+      "time_start": 1683.6,
+      "time_end": 1858.2,
+      "range_start": 1412.0,
+      "range_end": 1897.0
+    },
+    {
+      "file": "composites/ch07-topic-07-measure-events-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-measure-events",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch07-topic-07-measure-events-t1930s.png",
+        "030-ch07-topic-07-measure-events-t2046s.png",
+        "031-ch07-topic-07-measure-events-t2162s.png",
+        "032-ch07-topic-07-measure-events-t2278s.png"
+      ],
+      "labels": [
+        "ch7 32:10",
+        "ch7 34:06",
+        "ch7 36:02",
+        "ch7 37:58"
+      ],
+      "tile_seconds": [
+        1930.2,
+        2046.4,
+        2162.6,
+        2278.8
+      ],
+      "time_start": 1930.2,
+      "time_end": 2278.8,
+      "range_start": 1897.0,
+      "range_end": 2312.0
+    },
+    {
+      "file": "composites/ch08-topic-08-p-axioms-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-p-axioms",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch08-topic-08-p-axioms-t2342s.png",
+        "034-ch08-topic-08-p-axioms-t2450s.png",
+        "035-ch08-topic-08-p-axioms-t2559s.png",
+        "036-ch08-topic-08-p-axioms-t2667s.png"
+      ],
+      "labels": [
+        "ch8 39:02",
+        "ch8 40:50",
+        "ch8 42:39",
+        "ch8 44:27"
+      ],
+      "tile_seconds": [
+        2342.9,
+        2451.0,
+        2559.0,
+        2667.1
+      ],
+      "time_start": 2342.9,
+      "time_end": 2667.1,
+      "range_start": 2312.0,
+      "range_end": 2698.0
+    },
+    {
+      "file": "composites/ch09-topic-09-triplet-surrogates-panel1of2.png",
+      "chapter": 9,
+      "slug": "topic-09-triplet-surrogates",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "037-ch09-topic-09-triplet-surrogates-t2741s.png",
+        "038-ch09-topic-09-triplet-surrogates-t2806s.png",
+        "039-ch09-topic-09-triplet-surrogates-t2871s.png",
+        "040-ch09-topic-09-triplet-surrogates-t2936s.png"
+      ],
+      "labels": [
+        "ch9 45:41",
+        "ch9 46:46",
+        "ch9 47:51",
+        "ch9 48:56"
+      ],
+      "tile_seconds": [
+        2741.4,
+        2806.6,
+        2871.8,
+        2936.9
+      ],
+      "time_start": 2741.4,
+      "time_end": 2936.9,
+      "range_start": 2698.0,
+      "range_end": 3241.0
+    },
+    {
+      "file": "composites/ch09-topic-09-triplet-surrogates-panel2of2.png",
+      "chapter": 9,
+      "slug": "topic-09-triplet-surrogates",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "041-ch09-topic-09-triplet-surrogates-t3002s.png",
+        "042-ch09-topic-09-triplet-surrogates-t3067s.png",
+        "043-ch09-topic-09-triplet-surrogates-t3132s.png",
+        "044-ch09-topic-09-triplet-surrogates-t3197s.png"
+      ],
+      "labels": [
+        "ch9 50:02",
+        "ch9 51:07",
+        "ch9 52:12",
+        "ch9 53:17"
+      ],
+      "tile_seconds": [
+        3002.1,
+        3067.2,
+        3132.4,
+        3197.6
+      ],
+      "time_start": 3002.1,
+      "time_end": 3197.6,
+      "range_start": 2698.0,
+      "range_end": 3241.0
+    },
+    {
+      "file": "composites/ch10-topic-10-rv-estimate-panel1of2.png",
+      "chapter": 10,
+      "slug": "topic-10-rv-estimate",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "045-ch10-topic-10-rv-estimate-t3321s.png",
+        "046-ch10-topic-10-rv-estimate-t3443s.png",
+        "047-ch10-topic-10-rv-estimate-t3564s.png",
+        "048-ch10-topic-10-rv-estimate-t3685s.png"
+      ],
+      "labels": [
+        "ch10 55:21",
+        "ch10 57:23",
+        "ch10 59:24",
+        "ch10 61:25"
+      ],
+      "tile_seconds": [
+        3321.9,
+        3443.2,
+        3564.5,
+        3685.8
+      ],
+      "time_start": 3321.9,
+      "time_end": 3685.8,
+      "range_start": 3241.0,
+      "range_end": 4252.0
+    },
+    {
+      "file": "composites/ch10-topic-10-rv-estimate-panel2of2.png",
+      "chapter": 10,
+      "slug": "topic-10-rv-estimate",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "049-ch10-topic-10-rv-estimate-t3807s.png",
+        "050-ch10-topic-10-rv-estimate-t3928s.png",
+        "051-ch10-topic-10-rv-estimate-t4049s.png",
+        "052-ch10-topic-10-rv-estimate-t4171s.png"
+      ],
+      "labels": [
+        "ch10 63:27",
+        "ch10 65:28",
+        "ch10 67:29",
+        "ch10 69:31"
+      ],
+      "tile_seconds": [
+        3807.2,
+        3928.5,
+        4049.8,
+        4171.1
+      ],
+      "time_start": 3807.2,
+      "time_end": 4171.1,
+      "range_start": 3241.0,
+      "range_end": 4252.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

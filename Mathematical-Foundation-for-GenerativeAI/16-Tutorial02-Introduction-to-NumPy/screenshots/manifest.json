@@ -1,0 +1,861 @@
+{
+  "duration_seconds": 4157.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 90.0,
+      "end": 330.0,
+      "slug": "topic-01-create-arrays"
+    },
+    {
+      "index": 2,
+      "start": 340.0,
+      "end": 600.0,
+      "slug": "topic-02-indexing-slicing"
+    },
+    {
+      "index": 3,
+      "start": 610.0,
+      "end": 840.0,
+      "slug": "topic-03-reshape-flatten"
+    },
+    {
+      "index": 4,
+      "start": 860.0,
+      "end": 1230.0,
+      "slug": "topic-04-broadcast-matmul-linear"
+    },
+    {
+      "index": 5,
+      "start": 1250.0,
+      "end": 1680.0,
+      "slug": "topic-05-relu-softmax"
+    },
+    {
+      "index": 6,
+      "start": 1700.0,
+      "end": 2040.0,
+      "slug": "topic-06-ce-loss"
+    },
+    {
+      "index": 7,
+      "start": 2060.0,
+      "end": 2520.0,
+      "slug": "topic-07-conv-pool"
+    },
+    {
+      "index": 8,
+      "start": 2540.0,
+      "end": 2880.0,
+      "slug": "topic-08-one-hot"
+    },
+    {
+      "index": 9,
+      "start": 2900.0,
+      "end": 3480.0,
+      "slug": "topic-09-rnn-split"
+    },
+    {
+      "index": 10,
+      "start": 3520.0,
+      "end": 4157.0,
+      "slug": "topic-10-logistic-mlp-recap"
+    }
+  ],
+  "raw_count": 48,
+  "composite_count": 12,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-create-arrays-t0109s.png",
+      "seconds": 109.2,
+      "chapter": 1,
+      "slug": "topic-01-create-arrays",
+      "label": "01:49",
+      "range_start": 90.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-create-arrays-t0176s.png",
+      "seconds": 176.4,
+      "chapter": 1,
+      "slug": "topic-01-create-arrays",
+      "label": "02:56",
+      "range_start": 90.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-create-arrays-t0243s.png",
+      "seconds": 243.6,
+      "chapter": 1,
+      "slug": "topic-01-create-arrays",
+      "label": "04:03",
+      "range_start": 90.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-create-arrays-t0310s.png",
+      "seconds": 310.8,
+      "chapter": 1,
+      "slug": "topic-01-create-arrays",
+      "label": "05:10",
+      "range_start": 90.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-indexing-slicing-t0360s.png",
+      "seconds": 360.8,
+      "chapter": 2,
+      "slug": "topic-02-indexing-slicing",
+      "label": "06:00",
+      "range_start": 340.0,
+      "range_end": 600.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-indexing-slicing-t0433s.png",
+      "seconds": 433.6,
+      "chapter": 2,
+      "slug": "topic-02-indexing-slicing",
+      "label": "07:13",
+      "range_start": 340.0,
+      "range_end": 600.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-indexing-slicing-t0506s.png",
+      "seconds": 506.4,
+      "chapter": 2,
+      "slug": "topic-02-indexing-slicing",
+      "label": "08:26",
+      "range_start": 340.0,
+      "range_end": 600.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-indexing-slicing-t0579s.png",
+      "seconds": 579.2,
+      "chapter": 2,
+      "slug": "topic-02-indexing-slicing",
+      "label": "09:39",
+      "range_start": 340.0,
+      "range_end": 600.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-reshape-flatten-t0628s.png",
+      "seconds": 628.4,
+      "chapter": 3,
+      "slug": "topic-03-reshape-flatten",
+      "label": "10:28",
+      "range_start": 610.0,
+      "range_end": 840.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-reshape-flatten-t0692s.png",
+      "seconds": 692.8,
+      "chapter": 3,
+      "slug": "topic-03-reshape-flatten",
+      "label": "11:32",
+      "range_start": 610.0,
+      "range_end": 840.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-reshape-flatten-t0757s.png",
+      "seconds": 757.2,
+      "chapter": 3,
+      "slug": "topic-03-reshape-flatten",
+      "label": "12:37",
+      "range_start": 610.0,
+      "range_end": 840.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-reshape-flatten-t0821s.png",
+      "seconds": 821.6,
+      "chapter": 3,
+      "slug": "topic-03-reshape-flatten",
+      "label": "13:41",
+      "range_start": 610.0,
+      "range_end": 840.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-broadcast-matmul-linear-t0889s.png",
+      "seconds": 889.6,
+      "chapter": 4,
+      "slug": "topic-04-broadcast-matmul-linear",
+      "label": "14:49",
+      "range_start": 860.0,
+      "range_end": 1230.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-broadcast-matmul-linear-t0993s.png",
+      "seconds": 993.2,
+      "chapter": 4,
+      "slug": "topic-04-broadcast-matmul-linear",
+      "label": "16:33",
+      "range_start": 860.0,
+      "range_end": 1230.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-broadcast-matmul-linear-t1096s.png",
+      "seconds": 1096.8,
+      "chapter": 4,
+      "slug": "topic-04-broadcast-matmul-linear",
+      "label": "18:16",
+      "range_start": 860.0,
+      "range_end": 1230.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-broadcast-matmul-linear-t1200s.png",
+      "seconds": 1200.4,
+      "chapter": 4,
+      "slug": "topic-04-broadcast-matmul-linear",
+      "label": "20:00",
+      "range_start": 860.0,
+      "range_end": 1230.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-relu-softmax-t1284s.png",
+      "seconds": 1284.4,
+      "chapter": 5,
+      "slug": "topic-05-relu-softmax",
+      "label": "21:24",
+      "range_start": 1250.0,
+      "range_end": 1680.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-relu-softmax-t1404s.png",
+      "seconds": 1404.8,
+      "chapter": 5,
+      "slug": "topic-05-relu-softmax",
+      "label": "23:24",
+      "range_start": 1250.0,
+      "range_end": 1680.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-relu-softmax-t1525s.png",
+      "seconds": 1525.2,
+      "chapter": 5,
+      "slug": "topic-05-relu-softmax",
+      "label": "25:25",
+      "range_start": 1250.0,
+      "range_end": 1680.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-relu-softmax-t1645s.png",
+      "seconds": 1645.6,
+      "chapter": 5,
+      "slug": "topic-05-relu-softmax",
+      "label": "27:25",
+      "range_start": 1250.0,
+      "range_end": 1680.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-ce-loss-t1727s.png",
+      "seconds": 1727.2,
+      "chapter": 6,
+      "slug": "topic-06-ce-loss",
+      "label": "28:47",
+      "range_start": 1700.0,
+      "range_end": 2040.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-ce-loss-t1822s.png",
+      "seconds": 1822.4,
+      "chapter": 6,
+      "slug": "topic-06-ce-loss",
+      "label": "30:22",
+      "range_start": 1700.0,
+      "range_end": 2040.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-ce-loss-t1917s.png",
+      "seconds": 1917.6,
+      "chapter": 6,
+      "slug": "topic-06-ce-loss",
+      "label": "31:57",
+      "range_start": 1700.0,
+      "range_end": 2040.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-ce-loss-t2012s.png",
+      "seconds": 2012.8,
+      "chapter": 6,
+      "slug": "topic-06-ce-loss",
+      "label": "33:32",
+      "range_start": 1700.0,
+      "range_end": 2040.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-conv-pool-t2096s.png",
+      "seconds": 2096.8,
+      "chapter": 7,
+      "slug": "topic-07-conv-pool",
+      "label": "34:56",
+      "range_start": 2060.0,
+      "range_end": 2520.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-conv-pool-t2225s.png",
+      "seconds": 2225.6,
+      "chapter": 7,
+      "slug": "topic-07-conv-pool",
+      "label": "37:05",
+      "range_start": 2060.0,
+      "range_end": 2520.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-conv-pool-t2354s.png",
+      "seconds": 2354.4,
+      "chapter": 7,
+      "slug": "topic-07-conv-pool",
+      "label": "39:14",
+      "range_start": 2060.0,
+      "range_end": 2520.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-conv-pool-t2483s.png",
+      "seconds": 2483.2,
+      "chapter": 7,
+      "slug": "topic-07-conv-pool",
+      "label": "41:23",
+      "range_start": 2060.0,
+      "range_end": 2520.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-one-hot-t2567s.png",
+      "seconds": 2567.2,
+      "chapter": 8,
+      "slug": "topic-08-one-hot",
+      "label": "42:47",
+      "range_start": 2540.0,
+      "range_end": 2880.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-one-hot-t2662s.png",
+      "seconds": 2662.4,
+      "chapter": 8,
+      "slug": "topic-08-one-hot",
+      "label": "44:22",
+      "range_start": 2540.0,
+      "range_end": 2880.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-one-hot-t2757s.png",
+      "seconds": 2757.6,
+      "chapter": 8,
+      "slug": "topic-08-one-hot",
+      "label": "45:57",
+      "range_start": 2540.0,
+      "range_end": 2880.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-one-hot-t2852s.png",
+      "seconds": 2852.8,
+      "chapter": 8,
+      "slug": "topic-08-one-hot",
+      "label": "47:32",
+      "range_start": 2540.0,
+      "range_end": 2880.0
+    },
+    {
+      "file": "raw/033-ch09-topic-09-rnn-split-t2946s.png",
+      "seconds": 2946.4,
+      "chapter": 9,
+      "slug": "topic-09-rnn-split",
+      "label": "49:06",
+      "range_start": 2900.0,
+      "range_end": 3480.0
+    },
+    {
+      "file": "raw/034-ch09-topic-09-rnn-split-t3016s.png",
+      "seconds": 3016.0,
+      "chapter": 9,
+      "slug": "topic-09-rnn-split",
+      "label": "50:16",
+      "range_start": 2900.0,
+      "range_end": 3480.0
+    },
+    {
+      "file": "raw/035-ch09-topic-09-rnn-split-t3085s.png",
+      "seconds": 3085.6,
+      "chapter": 9,
+      "slug": "topic-09-rnn-split",
+      "label": "51:25",
+      "range_start": 2900.0,
+      "range_end": 3480.0
+    },
+    {
+      "file": "raw/036-ch09-topic-09-rnn-split-t3155s.png",
+      "seconds": 3155.2,
+      "chapter": 9,
+      "slug": "topic-09-rnn-split",
+      "label": "52:35",
+      "range_start": 2900.0,
+      "range_end": 3480.0
+    },
+    {
+      "file": "raw/037-ch09-topic-09-rnn-split-t3224s.png",
+      "seconds": 3224.8,
+      "chapter": 9,
+      "slug": "topic-09-rnn-split",
+      "label": "53:44",
+      "range_start": 2900.0,
+      "range_end": 3480.0
+    },
+    {
+      "file": "raw/038-ch09-topic-09-rnn-split-t3294s.png",
+      "seconds": 3294.4,
+      "chapter": 9,
+      "slug": "topic-09-rnn-split",
+      "label": "54:54",
+      "range_start": 2900.0,
+      "range_end": 3480.0
+    },
+    {
+      "file": "raw/039-ch09-topic-09-rnn-split-t3364s.png",
+      "seconds": 3364.0,
+      "chapter": 9,
+      "slug": "topic-09-rnn-split",
+      "label": "56:04",
+      "range_start": 2900.0,
+      "range_end": 3480.0
+    },
+    {
+      "file": "raw/040-ch09-topic-09-rnn-split-t3433s.png",
+      "seconds": 3433.6,
+      "chapter": 9,
+      "slug": "topic-09-rnn-split",
+      "label": "57:13",
+      "range_start": 2900.0,
+      "range_end": 3480.0
+    },
+    {
+      "file": "raw/041-ch10-topic-10-logistic-mlp-recap-t3570s.png",
+      "seconds": 3571.0,
+      "chapter": 10,
+      "slug": "topic-10-logistic-mlp-recap",
+      "label": "59:30",
+      "range_start": 3520.0,
+      "range_end": 4157.0
+    },
+    {
+      "file": "raw/042-ch10-topic-10-logistic-mlp-recap-t3647s.png",
+      "seconds": 3647.4,
+      "chapter": 10,
+      "slug": "topic-10-logistic-mlp-recap",
+      "label": "60:47",
+      "range_start": 3520.0,
+      "range_end": 4157.0
+    },
+    {
+      "file": "raw/043-ch10-topic-10-logistic-mlp-recap-t3723s.png",
+      "seconds": 3723.8,
+      "chapter": 10,
+      "slug": "topic-10-logistic-mlp-recap",
+      "label": "62:03",
+      "range_start": 3520.0,
+      "range_end": 4157.0
+    },
+    {
+      "file": "raw/044-ch10-topic-10-logistic-mlp-recap-t3800s.png",
+      "seconds": 3800.3,
+      "chapter": 10,
+      "slug": "topic-10-logistic-mlp-recap",
+      "label": "63:20",
+      "range_start": 3520.0,
+      "range_end": 4157.0
+    },
+    {
+      "file": "raw/045-ch10-topic-10-logistic-mlp-recap-t3876s.png",
+      "seconds": 3876.7,
+      "chapter": 10,
+      "slug": "topic-10-logistic-mlp-recap",
+      "label": "64:36",
+      "range_start": 3520.0,
+      "range_end": 4157.0
+    },
+    {
+      "file": "raw/046-ch10-topic-10-logistic-mlp-recap-t3953s.png",
+      "seconds": 3953.2,
+      "chapter": 10,
+      "slug": "topic-10-logistic-mlp-recap",
+      "label": "65:53",
+      "range_start": 3520.0,
+      "range_end": 4157.0
+    },
+    {
+      "file": "raw/047-ch10-topic-10-logistic-mlp-recap-t4029s.png",
+      "seconds": 4029.6,
+      "chapter": 10,
+      "slug": "topic-10-logistic-mlp-recap",
+      "label": "67:09",
+      "range_start": 3520.0,
+      "range_end": 4157.0
+    },
+    {
+      "file": "raw/048-ch10-topic-10-logistic-mlp-recap-t4106s.png",
+      "seconds": 4106.0,
+      "chapter": 10,
+      "slug": "topic-10-logistic-mlp-recap",
+      "label": "68:26",
+      "range_start": 3520.0,
+      "range_end": 4157.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-create-arrays-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-create-arrays",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-create-arrays-t0109s.png",
+        "002-ch01-topic-01-create-arrays-t0176s.png",
+        "003-ch01-topic-01-create-arrays-t0243s.png",
+        "004-ch01-topic-01-create-arrays-t0310s.png"
+      ],
+      "labels": [
+        "ch1 01:49",
+        "ch1 02:56",
+        "ch1 04:03",
+        "ch1 05:10"
+      ],
+      "tile_seconds": [
+        109.2,
+        176.4,
+        243.6,
+        310.8
+      ],
+      "time_start": 109.2,
+      "time_end": 310.8,
+      "range_start": 90.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "composites/ch02-topic-02-indexing-slicing-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-indexing-slicing",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-indexing-slicing-t0360s.png",
+        "006-ch02-topic-02-indexing-slicing-t0433s.png",
+        "007-ch02-topic-02-indexing-slicing-t0506s.png",
+        "008-ch02-topic-02-indexing-slicing-t0579s.png"
+      ],
+      "labels": [
+        "ch2 06:00",
+        "ch2 07:13",
+        "ch2 08:26",
+        "ch2 09:39"
+      ],
+      "tile_seconds": [
+        360.8,
+        433.6,
+        506.4,
+        579.2
+      ],
+      "time_start": 360.8,
+      "time_end": 579.2,
+      "range_start": 340.0,
+      "range_end": 600.0
+    },
+    {
+      "file": "composites/ch03-topic-03-reshape-flatten-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-reshape-flatten",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-reshape-flatten-t0628s.png",
+        "010-ch03-topic-03-reshape-flatten-t0692s.png",
+        "011-ch03-topic-03-reshape-flatten-t0757s.png",
+        "012-ch03-topic-03-reshape-flatten-t0821s.png"
+      ],
+      "labels": [
+        "ch3 10:28",
+        "ch3 11:32",
+        "ch3 12:37",
+        "ch3 13:41"
+      ],
+      "tile_seconds": [
+        628.4,
+        692.8,
+        757.2,
+        821.6
+      ],
+      "time_start": 628.4,
+      "time_end": 821.6,
+      "range_start": 610.0,
+      "range_end": 840.0
+    },
+    {
+      "file": "composites/ch04-topic-04-broadcast-matmul-linear-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-broadcast-matmul-linear",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-broadcast-matmul-linear-t0889s.png",
+        "014-ch04-topic-04-broadcast-matmul-linear-t0993s.png",
+        "015-ch04-topic-04-broadcast-matmul-linear-t1096s.png",
+        "016-ch04-topic-04-broadcast-matmul-linear-t1200s.png"
+      ],
+      "labels": [
+        "ch4 14:49",
+        "ch4 16:33",
+        "ch4 18:16",
+        "ch4 20:00"
+      ],
+      "tile_seconds": [
+        889.6,
+        993.2,
+        1096.8,
+        1200.4
+      ],
+      "time_start": 889.6,
+      "time_end": 1200.4,
+      "range_start": 860.0,
+      "range_end": 1230.0
+    },
+    {
+      "file": "composites/ch05-topic-05-relu-softmax-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-relu-softmax",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-relu-softmax-t1284s.png",
+        "018-ch05-topic-05-relu-softmax-t1404s.png",
+        "019-ch05-topic-05-relu-softmax-t1525s.png",
+        "020-ch05-topic-05-relu-softmax-t1645s.png"
+      ],
+      "labels": [
+        "ch5 21:24",
+        "ch5 23:24",
+        "ch5 25:25",
+        "ch5 27:25"
+      ],
+      "tile_seconds": [
+        1284.4,
+        1404.8,
+        1525.2,
+        1645.6
+      ],
+      "time_start": 1284.4,
+      "time_end": 1645.6,
+      "range_start": 1250.0,
+      "range_end": 1680.0
+    },
+    {
+      "file": "composites/ch06-topic-06-ce-loss-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-ce-loss",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-ce-loss-t1727s.png",
+        "022-ch06-topic-06-ce-loss-t1822s.png",
+        "023-ch06-topic-06-ce-loss-t1917s.png",
+        "024-ch06-topic-06-ce-loss-t2012s.png"
+      ],
+      "labels": [
+        "ch6 28:47",
+        "ch6 30:22",
+        "ch6 31:57",
+        "ch6 33:32"
+      ],
+      "tile_seconds": [
+        1727.2,
+        1822.4,
+        1917.6,
+        2012.8
+      ],
+      "time_start": 1727.2,
+      "time_end": 2012.8,
+      "range_start": 1700.0,
+      "range_end": 2040.0
+    },
+    {
+      "file": "composites/ch07-topic-07-conv-pool-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-conv-pool",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-conv-pool-t2096s.png",
+        "026-ch07-topic-07-conv-pool-t2225s.png",
+        "027-ch07-topic-07-conv-pool-t2354s.png",
+        "028-ch07-topic-07-conv-pool-t2483s.png"
+      ],
+      "labels": [
+        "ch7 34:56",
+        "ch7 37:05",
+        "ch7 39:14",
+        "ch7 41:23"
+      ],
+      "tile_seconds": [
+        2096.8,
+        2225.6,
+        2354.4,
+        2483.2
+      ],
+      "time_start": 2096.8,
+      "time_end": 2483.2,
+      "range_start": 2060.0,
+      "range_end": 2520.0
+    },
+    {
+      "file": "composites/ch08-topic-08-one-hot-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-one-hot",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-one-hot-t2567s.png",
+        "030-ch08-topic-08-one-hot-t2662s.png",
+        "031-ch08-topic-08-one-hot-t2757s.png",
+        "032-ch08-topic-08-one-hot-t2852s.png"
+      ],
+      "labels": [
+        "ch8 42:47",
+        "ch8 44:22",
+        "ch8 45:57",
+        "ch8 47:32"
+      ],
+      "tile_seconds": [
+        2567.2,
+        2662.4,
+        2757.6,
+        2852.8
+      ],
+      "time_start": 2567.2,
+      "time_end": 2852.8,
+      "range_start": 2540.0,
+      "range_end": 2880.0
+    },
+    {
+      "file": "composites/ch09-topic-09-rnn-split-panel1of2.png",
+      "chapter": 9,
+      "slug": "topic-09-rnn-split",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "033-ch09-topic-09-rnn-split-t2946s.png",
+        "034-ch09-topic-09-rnn-split-t3016s.png",
+        "035-ch09-topic-09-rnn-split-t3085s.png",
+        "036-ch09-topic-09-rnn-split-t3155s.png"
+      ],
+      "labels": [
+        "ch9 49:06",
+        "ch9 50:16",
+        "ch9 51:25",
+        "ch9 52:35"
+      ],
+      "tile_seconds": [
+        2946.4,
+        3016.0,
+        3085.6,
+        3155.2
+      ],
+      "time_start": 2946.4,
+      "time_end": 3155.2,
+      "range_start": 2900.0,
+      "range_end": 3480.0
+    },
+    {
+      "file": "composites/ch09-topic-09-rnn-split-panel2of2.png",
+      "chapter": 9,
+      "slug": "topic-09-rnn-split",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "037-ch09-topic-09-rnn-split-t3224s.png",
+        "038-ch09-topic-09-rnn-split-t3294s.png",
+        "039-ch09-topic-09-rnn-split-t3364s.png",
+        "040-ch09-topic-09-rnn-split-t3433s.png"
+      ],
+      "labels": [
+        "ch9 53:44",
+        "ch9 54:54",
+        "ch9 56:04",
+        "ch9 57:13"
+      ],
+      "tile_seconds": [
+        3224.8,
+        3294.4,
+        3364.0,
+        3433.6
+      ],
+      "time_start": 3224.8,
+      "time_end": 3433.6,
+      "range_start": 2900.0,
+      "range_end": 3480.0
+    },
+    {
+      "file": "composites/ch10-topic-10-logistic-mlp-recap-panel1of2.png",
+      "chapter": 10,
+      "slug": "topic-10-logistic-mlp-recap",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "041-ch10-topic-10-logistic-mlp-recap-t3570s.png",
+        "042-ch10-topic-10-logistic-mlp-recap-t3647s.png",
+        "043-ch10-topic-10-logistic-mlp-recap-t3723s.png",
+        "044-ch10-topic-10-logistic-mlp-recap-t3800s.png"
+      ],
+      "labels": [
+        "ch10 59:30",
+        "ch10 60:47",
+        "ch10 62:03",
+        "ch10 63:20"
+      ],
+      "tile_seconds": [
+        3571.0,
+        3647.4,
+        3723.8,
+        3800.3
+      ],
+      "time_start": 3571.0,
+      "time_end": 3800.3,
+      "range_start": 3520.0,
+      "range_end": 4157.0
+    },
+    {
+      "file": "composites/ch10-topic-10-logistic-mlp-recap-panel2of2.png",
+      "chapter": 10,
+      "slug": "topic-10-logistic-mlp-recap",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "045-ch10-topic-10-logistic-mlp-recap-t3876s.png",
+        "046-ch10-topic-10-logistic-mlp-recap-t3953s.png",
+        "047-ch10-topic-10-logistic-mlp-recap-t4029s.png",
+        "048-ch10-topic-10-logistic-mlp-recap-t4106s.png"
+      ],
+      "labels": [
+        "ch10 64:36",
+        "ch10 65:53",
+        "ch10 67:09",
+        "ch10 68:26"
+      ],
+      "tile_seconds": [
+        3876.7,
+        3953.2,
+        4029.6,
+        4106.0
+      ],
+      "time_start": 3876.7,
+      "time_end": 4106.0,
+      "range_start": 3520.0,
+      "range_end": 4157.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

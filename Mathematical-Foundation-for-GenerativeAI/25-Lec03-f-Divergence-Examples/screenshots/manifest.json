@@ -1,0 +1,731 @@
+{
+  "duration_seconds": 2580.0,
+  "range_source": "topic-ranges",
+  "range_count": 10,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 15.0,
+      "end": 190.0,
+      "slug": "topic-01-two-jobs-estimate-sample"
+    },
+    {
+      "index": 2,
+      "start": 200.0,
+      "end": 495.0,
+      "slug": "topic-02-implicit-neural-any-law"
+    },
+    {
+      "index": 3,
+      "start": 510.0,
+      "end": 800.0,
+      "slug": "topic-03-recipe-model-div-train"
+    },
+    {
+      "index": 4,
+      "start": 812.0,
+      "end": 918.0,
+      "slug": "topic-04-hole-d-without-densities"
+    },
+    {
+      "index": 5,
+      "start": 928.0,
+      "end": 1228.0,
+      "slug": "topic-05-generator-z-gtheta"
+    },
+    {
+      "index": 6,
+      "start": 1238.0,
+      "end": 1395.0,
+      "slug": "topic-06-samples-not-law"
+    },
+    {
+      "index": 7,
+      "start": 1408.0,
+      "end": 1615.0,
+      "slug": "topic-07-support-multimodal-z"
+    },
+    {
+      "index": 8,
+      "start": 1630.0,
+      "end": 1895.0,
+      "slug": "topic-08-vdm-fdiv-definition"
+    },
+    {
+      "index": 9,
+      "start": 1910.0,
+      "end": 2170.0,
+      "slug": "topic-09-properties-named-family"
+    },
+    {
+      "index": 10,
+      "start": 2185.0,
+      "end": 2540.0,
+      "slug": "topic-10-modes-jsd-variational-next"
+    }
+  ],
+  "raw_count": 40,
+  "composite_count": 10,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-two-jobs-estimate-sample-t0029s.png",
+      "seconds": 29.0,
+      "chapter": 1,
+      "slug": "topic-01-two-jobs-estimate-sample",
+      "label": "00:29",
+      "range_start": 15.0,
+      "range_end": 190.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-two-jobs-estimate-sample-t0078s.png",
+      "seconds": 78.0,
+      "chapter": 1,
+      "slug": "topic-01-two-jobs-estimate-sample",
+      "label": "01:18",
+      "range_start": 15.0,
+      "range_end": 190.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-two-jobs-estimate-sample-t0127s.png",
+      "seconds": 127.0,
+      "chapter": 1,
+      "slug": "topic-01-two-jobs-estimate-sample",
+      "label": "02:07",
+      "range_start": 15.0,
+      "range_end": 190.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-two-jobs-estimate-sample-t0176s.png",
+      "seconds": 176.0,
+      "chapter": 1,
+      "slug": "topic-01-two-jobs-estimate-sample",
+      "label": "02:56",
+      "range_start": 15.0,
+      "range_end": 190.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-implicit-neural-any-law-t0223s.png",
+      "seconds": 223.6,
+      "chapter": 2,
+      "slug": "topic-02-implicit-neural-any-law",
+      "label": "03:43",
+      "range_start": 200.0,
+      "range_end": 495.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-implicit-neural-any-law-t0306s.png",
+      "seconds": 306.2,
+      "chapter": 2,
+      "slug": "topic-02-implicit-neural-any-law",
+      "label": "05:06",
+      "range_start": 200.0,
+      "range_end": 495.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-implicit-neural-any-law-t0388s.png",
+      "seconds": 388.8,
+      "chapter": 2,
+      "slug": "topic-02-implicit-neural-any-law",
+      "label": "06:28",
+      "range_start": 200.0,
+      "range_end": 495.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-implicit-neural-any-law-t0471s.png",
+      "seconds": 471.4,
+      "chapter": 2,
+      "slug": "topic-02-implicit-neural-any-law",
+      "label": "07:51",
+      "range_start": 200.0,
+      "range_end": 495.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-recipe-model-div-train-t0533s.png",
+      "seconds": 533.2,
+      "chapter": 3,
+      "slug": "topic-03-recipe-model-div-train",
+      "label": "08:53",
+      "range_start": 510.0,
+      "range_end": 800.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-recipe-model-div-train-t0614s.png",
+      "seconds": 614.4,
+      "chapter": 3,
+      "slug": "topic-03-recipe-model-div-train",
+      "label": "10:14",
+      "range_start": 510.0,
+      "range_end": 800.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-recipe-model-div-train-t0695s.png",
+      "seconds": 695.6,
+      "chapter": 3,
+      "slug": "topic-03-recipe-model-div-train",
+      "label": "11:35",
+      "range_start": 510.0,
+      "range_end": 800.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-recipe-model-div-train-t0776s.png",
+      "seconds": 776.8,
+      "chapter": 3,
+      "slug": "topic-03-recipe-model-div-train",
+      "label": "12:56",
+      "range_start": 510.0,
+      "range_end": 800.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-hole-d-without-densities-t0820s.png",
+      "seconds": 820.5,
+      "chapter": 4,
+      "slug": "topic-04-hole-d-without-densities",
+      "label": "13:40",
+      "range_start": 812.0,
+      "range_end": 918.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-hole-d-without-densities-t0850s.png",
+      "seconds": 850.2,
+      "chapter": 4,
+      "slug": "topic-04-hole-d-without-densities",
+      "label": "14:10",
+      "range_start": 812.0,
+      "range_end": 918.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-hole-d-without-densities-t0879s.png",
+      "seconds": 879.8,
+      "chapter": 4,
+      "slug": "topic-04-hole-d-without-densities",
+      "label": "14:39",
+      "range_start": 812.0,
+      "range_end": 918.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-hole-d-without-densities-t0909s.png",
+      "seconds": 909.5,
+      "chapter": 4,
+      "slug": "topic-04-hole-d-without-densities",
+      "label": "15:09",
+      "range_start": 812.0,
+      "range_end": 918.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-generator-z-gtheta-t0952s.png",
+      "seconds": 952.0,
+      "chapter": 5,
+      "slug": "topic-05-generator-z-gtheta",
+      "label": "15:52",
+      "range_start": 928.0,
+      "range_end": 1228.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-generator-z-gtheta-t1036s.png",
+      "seconds": 1036.0,
+      "chapter": 5,
+      "slug": "topic-05-generator-z-gtheta",
+      "label": "17:16",
+      "range_start": 928.0,
+      "range_end": 1228.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-generator-z-gtheta-t1120s.png",
+      "seconds": 1120.0,
+      "chapter": 5,
+      "slug": "topic-05-generator-z-gtheta",
+      "label": "18:40",
+      "range_start": 928.0,
+      "range_end": 1228.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-generator-z-gtheta-t1204s.png",
+      "seconds": 1204.0,
+      "chapter": 5,
+      "slug": "topic-05-generator-z-gtheta",
+      "label": "20:04",
+      "range_start": 928.0,
+      "range_end": 1228.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-samples-not-law-t1250s.png",
+      "seconds": 1250.6,
+      "chapter": 6,
+      "slug": "topic-06-samples-not-law",
+      "label": "20:50",
+      "range_start": 1238.0,
+      "range_end": 1395.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-samples-not-law-t1294s.png",
+      "seconds": 1294.5,
+      "chapter": 6,
+      "slug": "topic-06-samples-not-law",
+      "label": "21:34",
+      "range_start": 1238.0,
+      "range_end": 1395.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-samples-not-law-t1338s.png",
+      "seconds": 1338.5,
+      "chapter": 6,
+      "slug": "topic-06-samples-not-law",
+      "label": "22:18",
+      "range_start": 1238.0,
+      "range_end": 1395.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-samples-not-law-t1382s.png",
+      "seconds": 1382.4,
+      "chapter": 6,
+      "slug": "topic-06-samples-not-law",
+      "label": "23:02",
+      "range_start": 1238.0,
+      "range_end": 1395.0
+    },
+    {
+      "file": "raw/025-ch07-topic-07-support-multimodal-z-t1424s.png",
+      "seconds": 1424.6,
+      "chapter": 7,
+      "slug": "topic-07-support-multimodal-z",
+      "label": "23:44",
+      "range_start": 1408.0,
+      "range_end": 1615.0
+    },
+    {
+      "file": "raw/026-ch07-topic-07-support-multimodal-z-t1482s.png",
+      "seconds": 1482.5,
+      "chapter": 7,
+      "slug": "topic-07-support-multimodal-z",
+      "label": "24:42",
+      "range_start": 1408.0,
+      "range_end": 1615.0
+    },
+    {
+      "file": "raw/027-ch07-topic-07-support-multimodal-z-t1540s.png",
+      "seconds": 1540.5,
+      "chapter": 7,
+      "slug": "topic-07-support-multimodal-z",
+      "label": "25:40",
+      "range_start": 1408.0,
+      "range_end": 1615.0
+    },
+    {
+      "file": "raw/028-ch07-topic-07-support-multimodal-z-t1598s.png",
+      "seconds": 1598.4,
+      "chapter": 7,
+      "slug": "topic-07-support-multimodal-z",
+      "label": "26:38",
+      "range_start": 1408.0,
+      "range_end": 1615.0
+    },
+    {
+      "file": "raw/029-ch08-topic-08-vdm-fdiv-definition-t1651s.png",
+      "seconds": 1651.2,
+      "chapter": 8,
+      "slug": "topic-08-vdm-fdiv-definition",
+      "label": "27:31",
+      "range_start": 1630.0,
+      "range_end": 1895.0
+    },
+    {
+      "file": "raw/030-ch08-topic-08-vdm-fdiv-definition-t1725s.png",
+      "seconds": 1725.4,
+      "chapter": 8,
+      "slug": "topic-08-vdm-fdiv-definition",
+      "label": "28:45",
+      "range_start": 1630.0,
+      "range_end": 1895.0
+    },
+    {
+      "file": "raw/031-ch08-topic-08-vdm-fdiv-definition-t1799s.png",
+      "seconds": 1799.6,
+      "chapter": 8,
+      "slug": "topic-08-vdm-fdiv-definition",
+      "label": "29:59",
+      "range_start": 1630.0,
+      "range_end": 1895.0
+    },
+    {
+      "file": "raw/032-ch08-topic-08-vdm-fdiv-definition-t1873s.png",
+      "seconds": 1873.8,
+      "chapter": 8,
+      "slug": "topic-08-vdm-fdiv-definition",
+      "label": "31:13",
+      "range_start": 1630.0,
+      "range_end": 1895.0
+    },
+    {
+      "file": "raw/033-ch09-topic-09-properties-named-family-t1930s.png",
+      "seconds": 1930.8,
+      "chapter": 9,
+      "slug": "topic-09-properties-named-family",
+      "label": "32:10",
+      "range_start": 1910.0,
+      "range_end": 2170.0
+    },
+    {
+      "file": "raw/034-ch09-topic-09-properties-named-family-t2003s.png",
+      "seconds": 2003.6,
+      "chapter": 9,
+      "slug": "topic-09-properties-named-family",
+      "label": "33:23",
+      "range_start": 1910.0,
+      "range_end": 2170.0
+    },
+    {
+      "file": "raw/035-ch09-topic-09-properties-named-family-t2076s.png",
+      "seconds": 2076.4,
+      "chapter": 9,
+      "slug": "topic-09-properties-named-family",
+      "label": "34:36",
+      "range_start": 1910.0,
+      "range_end": 2170.0
+    },
+    {
+      "file": "raw/036-ch09-topic-09-properties-named-family-t2149s.png",
+      "seconds": 2149.2,
+      "chapter": 9,
+      "slug": "topic-09-properties-named-family",
+      "label": "35:49",
+      "range_start": 1910.0,
+      "range_end": 2170.0
+    },
+    {
+      "file": "raw/037-ch10-topic-10-modes-jsd-variational-next-t2213s.png",
+      "seconds": 2213.4,
+      "chapter": 10,
+      "slug": "topic-10-modes-jsd-variational-next",
+      "label": "36:53",
+      "range_start": 2185.0,
+      "range_end": 2540.0
+    },
+    {
+      "file": "raw/038-ch10-topic-10-modes-jsd-variational-next-t2312s.png",
+      "seconds": 2312.8,
+      "chapter": 10,
+      "slug": "topic-10-modes-jsd-variational-next",
+      "label": "38:32",
+      "range_start": 2185.0,
+      "range_end": 2540.0
+    },
+    {
+      "file": "raw/039-ch10-topic-10-modes-jsd-variational-next-t2412s.png",
+      "seconds": 2412.2,
+      "chapter": 10,
+      "slug": "topic-10-modes-jsd-variational-next",
+      "label": "40:12",
+      "range_start": 2185.0,
+      "range_end": 2540.0
+    },
+    {
+      "file": "raw/040-ch10-topic-10-modes-jsd-variational-next-t2511s.png",
+      "seconds": 2511.6,
+      "chapter": 10,
+      "slug": "topic-10-modes-jsd-variational-next",
+      "label": "41:51",
+      "range_start": 2185.0,
+      "range_end": 2540.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-two-jobs-estimate-sample-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-two-jobs-estimate-sample",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-two-jobs-estimate-sample-t0029s.png",
+        "002-ch01-topic-01-two-jobs-estimate-sample-t0078s.png",
+        "003-ch01-topic-01-two-jobs-estimate-sample-t0127s.png",
+        "004-ch01-topic-01-two-jobs-estimate-sample-t0176s.png"
+      ],
+      "labels": [
+        "ch1 00:29",
+        "ch1 01:18",
+        "ch1 02:07",
+        "ch1 02:56"
+      ],
+      "tile_seconds": [
+        29.0,
+        78.0,
+        127.0,
+        176.0
+      ],
+      "time_start": 29.0,
+      "time_end": 176.0,
+      "range_start": 15.0,
+      "range_end": 190.0
+    },
+    {
+      "file": "composites/ch02-topic-02-implicit-neural-any-law-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-implicit-neural-any-law",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-implicit-neural-any-law-t0223s.png",
+        "006-ch02-topic-02-implicit-neural-any-law-t0306s.png",
+        "007-ch02-topic-02-implicit-neural-any-law-t0388s.png",
+        "008-ch02-topic-02-implicit-neural-any-law-t0471s.png"
+      ],
+      "labels": [
+        "ch2 03:43",
+        "ch2 05:06",
+        "ch2 06:28",
+        "ch2 07:51"
+      ],
+      "tile_seconds": [
+        223.6,
+        306.2,
+        388.8,
+        471.4
+      ],
+      "time_start": 223.6,
+      "time_end": 471.4,
+      "range_start": 200.0,
+      "range_end": 495.0
+    },
+    {
+      "file": "composites/ch03-topic-03-recipe-model-div-train-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-recipe-model-div-train",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-recipe-model-div-train-t0533s.png",
+        "010-ch03-topic-03-recipe-model-div-train-t0614s.png",
+        "011-ch03-topic-03-recipe-model-div-train-t0695s.png",
+        "012-ch03-topic-03-recipe-model-div-train-t0776s.png"
+      ],
+      "labels": [
+        "ch3 08:53",
+        "ch3 10:14",
+        "ch3 11:35",
+        "ch3 12:56"
+      ],
+      "tile_seconds": [
+        533.2,
+        614.4,
+        695.6,
+        776.8
+      ],
+      "time_start": 533.2,
+      "time_end": 776.8,
+      "range_start": 510.0,
+      "range_end": 800.0
+    },
+    {
+      "file": "composites/ch04-topic-04-hole-d-without-densities-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-hole-d-without-densities",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-hole-d-without-densities-t0820s.png",
+        "014-ch04-topic-04-hole-d-without-densities-t0850s.png",
+        "015-ch04-topic-04-hole-d-without-densities-t0879s.png",
+        "016-ch04-topic-04-hole-d-without-densities-t0909s.png"
+      ],
+      "labels": [
+        "ch4 13:40",
+        "ch4 14:10",
+        "ch4 14:39",
+        "ch4 15:09"
+      ],
+      "tile_seconds": [
+        820.5,
+        850.2,
+        879.8,
+        909.5
+      ],
+      "time_start": 820.5,
+      "time_end": 909.5,
+      "range_start": 812.0,
+      "range_end": 918.0
+    },
+    {
+      "file": "composites/ch05-topic-05-generator-z-gtheta-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-generator-z-gtheta",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-generator-z-gtheta-t0952s.png",
+        "018-ch05-topic-05-generator-z-gtheta-t1036s.png",
+        "019-ch05-topic-05-generator-z-gtheta-t1120s.png",
+        "020-ch05-topic-05-generator-z-gtheta-t1204s.png"
+      ],
+      "labels": [
+        "ch5 15:52",
+        "ch5 17:16",
+        "ch5 18:40",
+        "ch5 20:04"
+      ],
+      "tile_seconds": [
+        952.0,
+        1036.0,
+        1120.0,
+        1204.0
+      ],
+      "time_start": 952.0,
+      "time_end": 1204.0,
+      "range_start": 928.0,
+      "range_end": 1228.0
+    },
+    {
+      "file": "composites/ch06-topic-06-samples-not-law-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-samples-not-law",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-samples-not-law-t1250s.png",
+        "022-ch06-topic-06-samples-not-law-t1294s.png",
+        "023-ch06-topic-06-samples-not-law-t1338s.png",
+        "024-ch06-topic-06-samples-not-law-t1382s.png"
+      ],
+      "labels": [
+        "ch6 20:50",
+        "ch6 21:34",
+        "ch6 22:18",
+        "ch6 23:02"
+      ],
+      "tile_seconds": [
+        1250.6,
+        1294.5,
+        1338.5,
+        1382.4
+      ],
+      "time_start": 1250.6,
+      "time_end": 1382.4,
+      "range_start": 1238.0,
+      "range_end": 1395.0
+    },
+    {
+      "file": "composites/ch07-topic-07-support-multimodal-z-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-support-multimodal-z",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-topic-07-support-multimodal-z-t1424s.png",
+        "026-ch07-topic-07-support-multimodal-z-t1482s.png",
+        "027-ch07-topic-07-support-multimodal-z-t1540s.png",
+        "028-ch07-topic-07-support-multimodal-z-t1598s.png"
+      ],
+      "labels": [
+        "ch7 23:44",
+        "ch7 24:42",
+        "ch7 25:40",
+        "ch7 26:38"
+      ],
+      "tile_seconds": [
+        1424.6,
+        1482.5,
+        1540.5,
+        1598.4
+      ],
+      "time_start": 1424.6,
+      "time_end": 1598.4,
+      "range_start": 1408.0,
+      "range_end": 1615.0
+    },
+    {
+      "file": "composites/ch08-topic-08-vdm-fdiv-definition-panel1of1.png",
+      "chapter": 8,
+      "slug": "topic-08-vdm-fdiv-definition",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch08-topic-08-vdm-fdiv-definition-t1651s.png",
+        "030-ch08-topic-08-vdm-fdiv-definition-t1725s.png",
+        "031-ch08-topic-08-vdm-fdiv-definition-t1799s.png",
+        "032-ch08-topic-08-vdm-fdiv-definition-t1873s.png"
+      ],
+      "labels": [
+        "ch8 27:31",
+        "ch8 28:45",
+        "ch8 29:59",
+        "ch8 31:13"
+      ],
+      "tile_seconds": [
+        1651.2,
+        1725.4,
+        1799.6,
+        1873.8
+      ],
+      "time_start": 1651.2,
+      "time_end": 1873.8,
+      "range_start": 1630.0,
+      "range_end": 1895.0
+    },
+    {
+      "file": "composites/ch09-topic-09-properties-named-family-panel1of1.png",
+      "chapter": 9,
+      "slug": "topic-09-properties-named-family",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch09-topic-09-properties-named-family-t1930s.png",
+        "034-ch09-topic-09-properties-named-family-t2003s.png",
+        "035-ch09-topic-09-properties-named-family-t2076s.png",
+        "036-ch09-topic-09-properties-named-family-t2149s.png"
+      ],
+      "labels": [
+        "ch9 32:10",
+        "ch9 33:23",
+        "ch9 34:36",
+        "ch9 35:49"
+      ],
+      "tile_seconds": [
+        1930.8,
+        2003.6,
+        2076.4,
+        2149.2
+      ],
+      "time_start": 1930.8,
+      "time_end": 2149.2,
+      "range_start": 1910.0,
+      "range_end": 2170.0
+    },
+    {
+      "file": "composites/ch10-topic-10-modes-jsd-variational-next-panel1of1.png",
+      "chapter": 10,
+      "slug": "topic-10-modes-jsd-variational-next",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "037-ch10-topic-10-modes-jsd-variational-next-t2213s.png",
+        "038-ch10-topic-10-modes-jsd-variational-next-t2312s.png",
+        "039-ch10-topic-10-modes-jsd-variational-next-t2412s.png",
+        "040-ch10-topic-10-modes-jsd-variational-next-t2511s.png"
+      ],
+      "labels": [
+        "ch10 36:53",
+        "ch10 38:32",
+        "ch10 40:12",
+        "ch10 41:51"
+      ],
+      "tile_seconds": [
+        2213.4,
+        2312.8,
+        2412.2,
+        2511.6
+      ],
+      "time_start": 2213.4,
+      "time_end": 2511.6,
+      "range_start": 2185.0,
+      "range_end": 2540.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

@@ -1,0 +1,376 @@
+{
+  "duration_seconds": 485.0,
+  "range_source": "topic-ranges",
+  "range_count": 5,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 89.0,
+      "slug": "topic-01-define-density"
+    },
+    {
+      "index": 2,
+      "start": 89.0,
+      "end": 178.0,
+      "slug": "topic-02-trap-not-prob"
+    },
+    {
+      "index": 3,
+      "start": 178.0,
+      "end": 240.0,
+      "slug": "topic-03-uniform-likelihood"
+    },
+    {
+      "index": 4,
+      "start": 240.0,
+      "end": 326.0,
+      "slug": "topic-04-why-pmf"
+    },
+    {
+      "index": 5,
+      "start": 326.0,
+      "end": 485.0,
+      "slug": "topic-05-course-shift"
+    }
+  ],
+  "raw_count": 20,
+  "composite_count": 5,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-define-density-t0007s.png",
+      "seconds": 7.1,
+      "chapter": 1,
+      "slug": "topic-01-define-density",
+      "label": "00:07",
+      "range_start": 0.0,
+      "range_end": 89.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-define-density-t0032s.png",
+      "seconds": 32.0,
+      "chapter": 1,
+      "slug": "topic-01-define-density",
+      "label": "00:32",
+      "range_start": 0.0,
+      "range_end": 89.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-define-density-t0056s.png",
+      "seconds": 57.0,
+      "chapter": 1,
+      "slug": "topic-01-define-density",
+      "label": "00:56",
+      "range_start": 0.0,
+      "range_end": 89.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-define-density-t0081s.png",
+      "seconds": 81.9,
+      "chapter": 1,
+      "slug": "topic-01-define-density",
+      "label": "01:21",
+      "range_start": 0.0,
+      "range_end": 89.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-trap-not-prob-t0096s.png",
+      "seconds": 96.1,
+      "chapter": 2,
+      "slug": "topic-02-trap-not-prob",
+      "label": "01:36",
+      "range_start": 89.0,
+      "range_end": 178.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-trap-not-prob-t0121s.png",
+      "seconds": 121.0,
+      "chapter": 2,
+      "slug": "topic-02-trap-not-prob",
+      "label": "02:01",
+      "range_start": 89.0,
+      "range_end": 178.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-trap-not-prob-t0145s.png",
+      "seconds": 146.0,
+      "chapter": 2,
+      "slug": "topic-02-trap-not-prob",
+      "label": "02:25",
+      "range_start": 89.0,
+      "range_end": 178.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-trap-not-prob-t0170s.png",
+      "seconds": 170.9,
+      "chapter": 2,
+      "slug": "topic-02-trap-not-prob",
+      "label": "02:50",
+      "range_start": 89.0,
+      "range_end": 178.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-uniform-likelihood-t0182s.png",
+      "seconds": 183.0,
+      "chapter": 3,
+      "slug": "topic-03-uniform-likelihood",
+      "label": "03:02",
+      "range_start": 178.0,
+      "range_end": 240.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-uniform-likelihood-t0200s.png",
+      "seconds": 200.3,
+      "chapter": 3,
+      "slug": "topic-03-uniform-likelihood",
+      "label": "03:20",
+      "range_start": 178.0,
+      "range_end": 240.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-uniform-likelihood-t0217s.png",
+      "seconds": 217.7,
+      "chapter": 3,
+      "slug": "topic-03-uniform-likelihood",
+      "label": "03:37",
+      "range_start": 178.0,
+      "range_end": 240.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-uniform-likelihood-t0235s.png",
+      "seconds": 235.0,
+      "chapter": 3,
+      "slug": "topic-03-uniform-likelihood",
+      "label": "03:55",
+      "range_start": 178.0,
+      "range_end": 240.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-why-pmf-t0246s.png",
+      "seconds": 246.9,
+      "chapter": 4,
+      "slug": "topic-04-why-pmf",
+      "label": "04:06",
+      "range_start": 240.0,
+      "range_end": 326.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-why-pmf-t0270s.png",
+      "seconds": 271.0,
+      "chapter": 4,
+      "slug": "topic-04-why-pmf",
+      "label": "04:30",
+      "range_start": 240.0,
+      "range_end": 326.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-why-pmf-t0295s.png",
+      "seconds": 295.0,
+      "chapter": 4,
+      "slug": "topic-04-why-pmf",
+      "label": "04:55",
+      "range_start": 240.0,
+      "range_end": 326.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-why-pmf-t0319s.png",
+      "seconds": 319.1,
+      "chapter": 4,
+      "slug": "topic-04-why-pmf",
+      "label": "05:19",
+      "range_start": 240.0,
+      "range_end": 326.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-course-shift-t0338s.png",
+      "seconds": 338.7,
+      "chapter": 5,
+      "slug": "topic-05-course-shift",
+      "label": "05:38",
+      "range_start": 326.0,
+      "range_end": 485.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-course-shift-t0383s.png",
+      "seconds": 383.2,
+      "chapter": 5,
+      "slug": "topic-05-course-shift",
+      "label": "06:23",
+      "range_start": 326.0,
+      "range_end": 485.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-course-shift-t0427s.png",
+      "seconds": 427.8,
+      "chapter": 5,
+      "slug": "topic-05-course-shift",
+      "label": "07:07",
+      "range_start": 326.0,
+      "range_end": 485.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-course-shift-t0472s.png",
+      "seconds": 472.3,
+      "chapter": 5,
+      "slug": "topic-05-course-shift",
+      "label": "07:52",
+      "range_start": 326.0,
+      "range_end": 485.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-define-density-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-define-density",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-define-density-t0007s.png",
+        "002-ch01-topic-01-define-density-t0032s.png",
+        "003-ch01-topic-01-define-density-t0056s.png",
+        "004-ch01-topic-01-define-density-t0081s.png"
+      ],
+      "labels": [
+        "ch1 00:07",
+        "ch1 00:32",
+        "ch1 00:56",
+        "ch1 01:21"
+      ],
+      "tile_seconds": [
+        7.1,
+        32.0,
+        57.0,
+        81.9
+      ],
+      "time_start": 7.1,
+      "time_end": 81.9,
+      "range_start": 0.0,
+      "range_end": 89.0
+    },
+    {
+      "file": "composites/ch02-topic-02-trap-not-prob-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-trap-not-prob",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-trap-not-prob-t0096s.png",
+        "006-ch02-topic-02-trap-not-prob-t0121s.png",
+        "007-ch02-topic-02-trap-not-prob-t0145s.png",
+        "008-ch02-topic-02-trap-not-prob-t0170s.png"
+      ],
+      "labels": [
+        "ch2 01:36",
+        "ch2 02:01",
+        "ch2 02:25",
+        "ch2 02:50"
+      ],
+      "tile_seconds": [
+        96.1,
+        121.0,
+        146.0,
+        170.9
+      ],
+      "time_start": 96.1,
+      "time_end": 170.9,
+      "range_start": 89.0,
+      "range_end": 178.0
+    },
+    {
+      "file": "composites/ch03-topic-03-uniform-likelihood-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-uniform-likelihood",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-uniform-likelihood-t0182s.png",
+        "010-ch03-topic-03-uniform-likelihood-t0200s.png",
+        "011-ch03-topic-03-uniform-likelihood-t0217s.png",
+        "012-ch03-topic-03-uniform-likelihood-t0235s.png"
+      ],
+      "labels": [
+        "ch3 03:02",
+        "ch3 03:20",
+        "ch3 03:37",
+        "ch3 03:55"
+      ],
+      "tile_seconds": [
+        183.0,
+        200.3,
+        217.7,
+        235.0
+      ],
+      "time_start": 183.0,
+      "time_end": 235.0,
+      "range_start": 178.0,
+      "range_end": 240.0
+    },
+    {
+      "file": "composites/ch04-topic-04-why-pmf-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-why-pmf",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-why-pmf-t0246s.png",
+        "014-ch04-topic-04-why-pmf-t0270s.png",
+        "015-ch04-topic-04-why-pmf-t0295s.png",
+        "016-ch04-topic-04-why-pmf-t0319s.png"
+      ],
+      "labels": [
+        "ch4 04:06",
+        "ch4 04:30",
+        "ch4 04:55",
+        "ch4 05:19"
+      ],
+      "tile_seconds": [
+        246.9,
+        271.0,
+        295.0,
+        319.1
+      ],
+      "time_start": 246.9,
+      "time_end": 319.1,
+      "range_start": 240.0,
+      "range_end": 326.0
+    },
+    {
+      "file": "composites/ch05-topic-05-course-shift-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-course-shift",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-course-shift-t0338s.png",
+        "018-ch05-topic-05-course-shift-t0383s.png",
+        "019-ch05-topic-05-course-shift-t0427s.png",
+        "020-ch05-topic-05-course-shift-t0472s.png"
+      ],
+      "labels": [
+        "ch5 05:38",
+        "ch5 06:23",
+        "ch5 07:07",
+        "ch5 07:52"
+      ],
+      "tile_seconds": [
+        338.7,
+        383.2,
+        427.8,
+        472.3
+      ],
+      "time_start": 338.7,
+      "time_end": 472.3,
+      "range_start": 326.0,
+      "range_end": 485.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

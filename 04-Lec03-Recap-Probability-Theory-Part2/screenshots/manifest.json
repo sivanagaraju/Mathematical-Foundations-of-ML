@@ -1,0 +1,447 @@
+{
+  "duration_seconds": 870.0,
+  "range_source": "topic-ranges",
+  "range_count": 6,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 57.0,
+      "slug": "topic-01-triplet"
+    },
+    {
+      "index": 2,
+      "start": 57.0,
+      "end": 200.0,
+      "slug": "topic-02-need-numbers"
+    },
+    {
+      "index": 3,
+      "start": 200.0,
+      "end": 287.0,
+      "slug": "topic-03-sensors-vectors"
+    },
+    {
+      "index": 4,
+      "start": 287.0,
+      "end": 460.0,
+      "slug": "topic-04-rv-definition"
+    },
+    {
+      "index": 5,
+      "start": 460.0,
+      "end": 694.0,
+      "slug": "topic-05-rd-images"
+    },
+    {
+      "index": 6,
+      "start": 694.0,
+      "end": 870.0,
+      "slug": "topic-06-data-story-cliffhanger"
+    }
+  ],
+  "raw_count": 24,
+  "composite_count": 6,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-triplet-t0004s.png",
+      "seconds": 4.6,
+      "chapter": 1,
+      "slug": "topic-01-triplet",
+      "label": "00:04",
+      "range_start": 0.0,
+      "range_end": 57.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-triplet-t0020s.png",
+      "seconds": 20.5,
+      "chapter": 1,
+      "slug": "topic-01-triplet",
+      "label": "00:20",
+      "range_start": 0.0,
+      "range_end": 57.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-triplet-t0036s.png",
+      "seconds": 36.5,
+      "chapter": 1,
+      "slug": "topic-01-triplet",
+      "label": "00:36",
+      "range_start": 0.0,
+      "range_end": 57.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-triplet-t0052s.png",
+      "seconds": 52.4,
+      "chapter": 1,
+      "slug": "topic-01-triplet",
+      "label": "00:52",
+      "range_start": 0.0,
+      "range_end": 57.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-need-numbers-t0068s.png",
+      "seconds": 68.4,
+      "chapter": 2,
+      "slug": "topic-02-need-numbers",
+      "label": "01:08",
+      "range_start": 57.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-need-numbers-t0108s.png",
+      "seconds": 108.5,
+      "chapter": 2,
+      "slug": "topic-02-need-numbers",
+      "label": "01:48",
+      "range_start": 57.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-need-numbers-t0148s.png",
+      "seconds": 148.5,
+      "chapter": 2,
+      "slug": "topic-02-need-numbers",
+      "label": "02:28",
+      "range_start": 57.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-need-numbers-t0188s.png",
+      "seconds": 188.6,
+      "chapter": 2,
+      "slug": "topic-02-need-numbers",
+      "label": "03:08",
+      "range_start": 57.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "raw/009-ch03-topic-03-sensors-vectors-t0206s.png",
+      "seconds": 207.0,
+      "chapter": 3,
+      "slug": "topic-03-sensors-vectors",
+      "label": "03:26",
+      "range_start": 200.0,
+      "range_end": 287.0
+    },
+    {
+      "file": "raw/010-ch03-topic-03-sensors-vectors-t0231s.png",
+      "seconds": 231.3,
+      "chapter": 3,
+      "slug": "topic-03-sensors-vectors",
+      "label": "03:51",
+      "range_start": 200.0,
+      "range_end": 287.0
+    },
+    {
+      "file": "raw/011-ch03-topic-03-sensors-vectors-t0255s.png",
+      "seconds": 255.7,
+      "chapter": 3,
+      "slug": "topic-03-sensors-vectors",
+      "label": "04:15",
+      "range_start": 200.0,
+      "range_end": 287.0
+    },
+    {
+      "file": "raw/012-ch03-topic-03-sensors-vectors-t0280s.png",
+      "seconds": 280.0,
+      "chapter": 3,
+      "slug": "topic-03-sensors-vectors",
+      "label": "04:40",
+      "range_start": 200.0,
+      "range_end": 287.0
+    },
+    {
+      "file": "raw/013-ch04-topic-04-rv-definition-t0300s.png",
+      "seconds": 300.8,
+      "chapter": 4,
+      "slug": "topic-04-rv-definition",
+      "label": "05:00",
+      "range_start": 287.0,
+      "range_end": 460.0
+    },
+    {
+      "file": "raw/014-ch04-topic-04-rv-definition-t0349s.png",
+      "seconds": 349.3,
+      "chapter": 4,
+      "slug": "topic-04-rv-definition",
+      "label": "05:49",
+      "range_start": 287.0,
+      "range_end": 460.0
+    },
+    {
+      "file": "raw/015-ch04-topic-04-rv-definition-t0397s.png",
+      "seconds": 397.7,
+      "chapter": 4,
+      "slug": "topic-04-rv-definition",
+      "label": "06:37",
+      "range_start": 287.0,
+      "range_end": 460.0
+    },
+    {
+      "file": "raw/016-ch04-topic-04-rv-definition-t0446s.png",
+      "seconds": 446.2,
+      "chapter": 4,
+      "slug": "topic-04-rv-definition",
+      "label": "07:26",
+      "range_start": 287.0,
+      "range_end": 460.0
+    },
+    {
+      "file": "raw/017-ch05-topic-05-rd-images-t0478s.png",
+      "seconds": 478.7,
+      "chapter": 5,
+      "slug": "topic-05-rd-images",
+      "label": "07:58",
+      "range_start": 460.0,
+      "range_end": 694.0
+    },
+    {
+      "file": "raw/018-ch05-topic-05-rd-images-t0544s.png",
+      "seconds": 544.2,
+      "chapter": 5,
+      "slug": "topic-05-rd-images",
+      "label": "09:04",
+      "range_start": 460.0,
+      "range_end": 694.0
+    },
+    {
+      "file": "raw/019-ch05-topic-05-rd-images-t0609s.png",
+      "seconds": 609.8,
+      "chapter": 5,
+      "slug": "topic-05-rd-images",
+      "label": "10:09",
+      "range_start": 460.0,
+      "range_end": 694.0
+    },
+    {
+      "file": "raw/020-ch05-topic-05-rd-images-t0675s.png",
+      "seconds": 675.3,
+      "chapter": 5,
+      "slug": "topic-05-rd-images",
+      "label": "11:15",
+      "range_start": 460.0,
+      "range_end": 694.0
+    },
+    {
+      "file": "raw/021-ch06-topic-06-data-story-cliffhanger-t0708s.png",
+      "seconds": 708.1,
+      "chapter": 6,
+      "slug": "topic-06-data-story-cliffhanger",
+      "label": "11:48",
+      "range_start": 694.0,
+      "range_end": 870.0
+    },
+    {
+      "file": "raw/022-ch06-topic-06-data-story-cliffhanger-t0757s.png",
+      "seconds": 757.4,
+      "chapter": 6,
+      "slug": "topic-06-data-story-cliffhanger",
+      "label": "12:37",
+      "range_start": 694.0,
+      "range_end": 870.0
+    },
+    {
+      "file": "raw/023-ch06-topic-06-data-story-cliffhanger-t0806s.png",
+      "seconds": 806.6,
+      "chapter": 6,
+      "slug": "topic-06-data-story-cliffhanger",
+      "label": "13:26",
+      "range_start": 694.0,
+      "range_end": 870.0
+    },
+    {
+      "file": "raw/024-ch06-topic-06-data-story-cliffhanger-t0855s.png",
+      "seconds": 855.9,
+      "chapter": 6,
+      "slug": "topic-06-data-story-cliffhanger",
+      "label": "14:15",
+      "range_start": 694.0,
+      "range_end": 870.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-triplet-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-triplet",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-triplet-t0004s.png",
+        "002-ch01-topic-01-triplet-t0020s.png",
+        "003-ch01-topic-01-triplet-t0036s.png",
+        "004-ch01-topic-01-triplet-t0052s.png"
+      ],
+      "labels": [
+        "ch1 00:04",
+        "ch1 00:20",
+        "ch1 00:36",
+        "ch1 00:52"
+      ],
+      "tile_seconds": [
+        4.6,
+        20.5,
+        36.5,
+        52.4
+      ],
+      "time_start": 4.6,
+      "time_end": 52.4,
+      "range_start": 0.0,
+      "range_end": 57.0
+    },
+    {
+      "file": "composites/ch02-topic-02-need-numbers-panel1of1.png",
+      "chapter": 2,
+      "slug": "topic-02-need-numbers",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-topic-02-need-numbers-t0068s.png",
+        "006-ch02-topic-02-need-numbers-t0108s.png",
+        "007-ch02-topic-02-need-numbers-t0148s.png",
+        "008-ch02-topic-02-need-numbers-t0188s.png"
+      ],
+      "labels": [
+        "ch2 01:08",
+        "ch2 01:48",
+        "ch2 02:28",
+        "ch2 03:08"
+      ],
+      "tile_seconds": [
+        68.4,
+        108.5,
+        148.5,
+        188.6
+      ],
+      "time_start": 68.4,
+      "time_end": 188.6,
+      "range_start": 57.0,
+      "range_end": 200.0
+    },
+    {
+      "file": "composites/ch03-topic-03-sensors-vectors-panel1of1.png",
+      "chapter": 3,
+      "slug": "topic-03-sensors-vectors",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-topic-03-sensors-vectors-t0206s.png",
+        "010-ch03-topic-03-sensors-vectors-t0231s.png",
+        "011-ch03-topic-03-sensors-vectors-t0255s.png",
+        "012-ch03-topic-03-sensors-vectors-t0280s.png"
+      ],
+      "labels": [
+        "ch3 03:26",
+        "ch3 03:51",
+        "ch3 04:15",
+        "ch3 04:40"
+      ],
+      "tile_seconds": [
+        207.0,
+        231.3,
+        255.7,
+        280.0
+      ],
+      "time_start": 207.0,
+      "time_end": 280.0,
+      "range_start": 200.0,
+      "range_end": 287.0
+    },
+    {
+      "file": "composites/ch04-topic-04-rv-definition-panel1of1.png",
+      "chapter": 4,
+      "slug": "topic-04-rv-definition",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-topic-04-rv-definition-t0300s.png",
+        "014-ch04-topic-04-rv-definition-t0349s.png",
+        "015-ch04-topic-04-rv-definition-t0397s.png",
+        "016-ch04-topic-04-rv-definition-t0446s.png"
+      ],
+      "labels": [
+        "ch4 05:00",
+        "ch4 05:49",
+        "ch4 06:37",
+        "ch4 07:26"
+      ],
+      "tile_seconds": [
+        300.8,
+        349.3,
+        397.7,
+        446.2
+      ],
+      "time_start": 300.8,
+      "time_end": 446.2,
+      "range_start": 287.0,
+      "range_end": 460.0
+    },
+    {
+      "file": "composites/ch05-topic-05-rd-images-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-rd-images",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-topic-05-rd-images-t0478s.png",
+        "018-ch05-topic-05-rd-images-t0544s.png",
+        "019-ch05-topic-05-rd-images-t0609s.png",
+        "020-ch05-topic-05-rd-images-t0675s.png"
+      ],
+      "labels": [
+        "ch5 07:58",
+        "ch5 09:04",
+        "ch5 10:09",
+        "ch5 11:15"
+      ],
+      "tile_seconds": [
+        478.7,
+        544.2,
+        609.8,
+        675.3
+      ],
+      "time_start": 478.7,
+      "time_end": 675.3,
+      "range_start": 460.0,
+      "range_end": 694.0
+    },
+    {
+      "file": "composites/ch06-topic-06-data-story-cliffhanger-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-data-story-cliffhanger",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-topic-06-data-story-cliffhanger-t0708s.png",
+        "022-ch06-topic-06-data-story-cliffhanger-t0757s.png",
+        "023-ch06-topic-06-data-story-cliffhanger-t0806s.png",
+        "024-ch06-topic-06-data-story-cliffhanger-t0855s.png"
+      ],
+      "labels": [
+        "ch6 11:48",
+        "ch6 12:37",
+        "ch6 13:26",
+        "ch6 14:15"
+      ],
+      "tile_seconds": [
+        708.1,
+        757.4,
+        806.6,
+        855.9
+      ],
+      "time_start": 708.1,
+      "time_end": 855.9,
+      "range_start": 694.0,
+      "range_end": 870.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}
