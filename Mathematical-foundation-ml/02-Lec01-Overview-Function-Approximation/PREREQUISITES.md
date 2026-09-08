@@ -175,3 +175,20 @@ You did not solve the fluid dynamics. You still got a useful number. The lecture
 
 Ready → [NOTES.md](./NOTES.md) (start at **Executive Summary**).  
 Quiz later: [quiz.html](./quiz.html) Part A = this file.
+
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Functions, Derivatives & Rules** | [Functions, Derivatives & Rules](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Function approximation fundamentals, domain, range, and unknown mapping $f: X \to Y$ |
+| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Vector representations of physical observations and data points |
+| **Tensors, Dimensions & Shapes** | [Tensors, Dimensions & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Image stacking into high-dimensional coordinate vectors $\mathbb{R}^{PQ}$ |
+| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Transitioning from deterministic function approximation to probabilistic modeling |
+
+---

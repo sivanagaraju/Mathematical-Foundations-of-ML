@@ -596,6 +596,23 @@ print(f"Labels batch shape:  {train_labels.shape}")    # [64]
 
 ---
 
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Tensors, Dimensions & Shapes** | [Tensors, Dimensions & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Tensor buffers, dimension manipulation (`view`, `reshape`, `unsqueeze`) |
+| **Tensor Broadcasting Semantics** | [Tensor Broadcasting Semantics](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/05-Tensor_Broadcasting.md) | Broadcasting rules across singleton and mismatched axes |
+| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Vector dot products, matrix algebra, and affine projections |
+| **Matrix Operations & Eigenvalues** | [Matrix Operations & Eigenvalues](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md) | Linear algebraic operations on multi-dimensional tensors |
+
+---
+
 ## External References
 
 > Comprehensive multi-source learning materials curated for every subtopic in this tutorial.

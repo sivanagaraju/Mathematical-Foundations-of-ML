@@ -12,11 +12,11 @@
 
 | # | Guide Title | Core Mathematical Concept | Key Upstream Prerequisites | Modern Generative AI Application |
 | :-: | :--- | :--- | :--- | :--- |
-| **01** | **[Entropy CrossEntropy CCE](./Entropy_CrossEntropy_CCE.md)** | Fundamental theory & proofs | [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/Logarithms_and_Exponential_Functions.md), [Random Variables & Distributions](../04-Probability-and-Statistical-Estimation/Random_Variables_and_Distributions.md), [Probability Basics & Axioms](../01-Primal-Analysis-and-Foundations/Probability_Basics_and_Axioms.md) | Direct implementation |
-| **02** | **[Jensen Shannon Divergence](./Jensen_Shannon_Divergence.md)** | Fundamental theory & proofs | [KL Divergence](./KL_Divergence.md), [Entropy, Cross-Entropy & CCE](./Entropy_CrossEntropy_CCE.md) | Direct implementation |
-| **03** | **[KL Divergence](./KL_Divergence.md)** | Fundamental theory & proofs | [Entropy, Cross-Entropy & CCE](./Entropy_CrossEntropy_CCE.md), [Convexity & Jensen's Inequality](../01-Primal-Analysis-and-Foundations/Convexity_and_Jensens_Inequality.md), [Likelihood & Log-Likelihood](../04-Probability-and-Statistical-Estimation/Likelihood_and_Log_Likelihood.md) | Direct implementation |
-| **04** | **[Wasserstein Distance and EMD](./Wasserstein_Distance_and_EMD.md)** | Fundamental theory & proofs | [Lipschitz Continuity](../01-Primal-Analysis-and-Foundations/Lipschitz_Continuity.md), [Common Probability Distributions](../04-Probability-and-Statistical-Estimation/Common_Probability_Distributions.md), [Vector Norms & Inner Products](../02-Linear-Algebra-Geometry-and-Tensors/Vector_Norms_and_Inner_Products.md) | Direct implementation |
-| **05** | **[f Divergence](./f_Divergence.md)** | Fundamental theory & proofs | [Convexity & Jensen's Inequality](../01-Primal-Analysis-and-Foundations/Convexity_and_Jensens_Inequality.md), [KL Divergence](./KL_Divergence.md), [Fenchel Conjugate & Duality](../01-Primal-Analysis-and-Foundations/Fenchel_Conjugate_and_Dual_Representations.md) | Direct implementation |
+| **01** | **[Entropy CrossEntropy CCE](./01-Entropy_CrossEntropy_CCE.md)** | Fundamental theory & proofs | [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md), [Random Variables & Distributions](../04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md), [Probability Basics & Axioms](../01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) | Direct implementation |
+| **02** | **[Jensen Shannon Divergence](./03-Jensen_Shannon_Divergence.md)** | Fundamental theory & proofs | [KL Divergence](./02-KL_Divergence.md), [Entropy, Cross-Entropy & CCE](./01-Entropy_CrossEntropy_CCE.md) | Direct implementation |
+| **03** | **[KL Divergence](./02-KL_Divergence.md)** | Fundamental theory & proofs | [Entropy, Cross-Entropy & CCE](./01-Entropy_CrossEntropy_CCE.md), [Convexity & Jensen's Inequality](../01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md), [Likelihood & Log-Likelihood](../04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Direct implementation |
+| **04** | **[Wasserstein Distance and EMD](./05-Wasserstein_Distance_and_EMD.md)** | Fundamental theory & proofs | [Lipschitz Continuity](../01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md), [Common Probability Distributions](../04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md), [Vector Norms & Inner Products](../02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md) | Direct implementation |
+| **05** | **[f Divergence](./04-f_Divergence.md)** | Fundamental theory & proofs | [Convexity & Jensen's Inequality](../01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md), [KL Divergence](./02-KL_Divergence.md), [Fenchel Conjugate & Duality](../01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md) | Direct implementation |
 
 ---
 
@@ -24,11 +24,11 @@
 
 For optimal conceptual continuity, learners should study these guides in the following sequential order:
 
-1. **[Entropy CrossEntropy CCE](./Entropy_CrossEntropy_CCE.md)**
-2. **[Jensen Shannon Divergence](./Jensen_Shannon_Divergence.md)**
-3. **[KL Divergence](./KL_Divergence.md)**
-4. **[Wasserstein Distance and EMD](./Wasserstein_Distance_and_EMD.md)**
-5. **[f Divergence](./f_Divergence.md)**
+1. **[Entropy CrossEntropy CCE](./01-Entropy_CrossEntropy_CCE.md)**
+2. **[Jensen Shannon Divergence](./03-Jensen_Shannon_Divergence.md)**
+3. **[KL Divergence](./02-KL_Divergence.md)**
+4. **[Wasserstein Distance and EMD](./05-Wasserstein_Distance_and_EMD.md)**
+5. **[f Divergence](./04-f_Divergence.md)**
 
 ---
 

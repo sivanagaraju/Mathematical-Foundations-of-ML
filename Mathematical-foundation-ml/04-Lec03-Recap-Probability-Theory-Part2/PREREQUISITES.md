@@ -144,3 +144,18 @@ Without $X$, the triplet and the dataset live in two different worlds.
 Ready → [NOTES.md](./NOTES.md) (start at **Executive Summary**).  
 Quiz: [quiz.html](./quiz.html) Part A = this file.  
 Prior package: [Lec 02 Part 1](../03-Lec02-Recap-Probability-Theory-Part1/NOTES.md).
+
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Formal definition of random variable $X: \Omega \to \mathbb{R}^d$, pre-images $X^{-1}(B)$, and CDF $P_X(x)$ |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Discrete vs continuous probability support and distribution profiles |
+
+---

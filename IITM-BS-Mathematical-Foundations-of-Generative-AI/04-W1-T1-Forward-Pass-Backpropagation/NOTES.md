@@ -793,6 +793,24 @@ opt_G = optim.Adam(generator.parameters(), lr=0.0001, betas=(0.0, 0.9))
 
 ---
 
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Chain Rule & Backpropagation** | [Chain Rule & Backpropagation](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md) | Multivariate chain rule, computational DAGs, and reverse-mode autodiff |
+| **Functions, Derivatives, & Calculus Rules** | [Functions, Derivatives, & Calculus Rules](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Scalar derivatives, limits, and product/quotient calculus rules |
+| **Gradients & Directional Derivatives** | [Gradients & Directional Derivatives](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Gradient vectors $\nabla_\theta L$ as directions of steepest ascent/descent |
+| **Jacobian Matrix** | [Jacobian Matrix](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/03-Jacobian_Matrix.md) | Vector-valued transformation sensitivities between layer representations |
+| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Gradient descent parameter updates $\theta \leftarrow \theta - \eta \nabla_\theta L$ |
+
+---
+
 ## External references
 
 The following peer-reviewed papers, university lecture notes, and authoritative guides expand on the mathematical principles established in this tutorial:

@@ -182,14 +182,14 @@ Matching $p_{\hat x}$ to $p_x$ does **not** by itself give you $E$. Pixel $W_2$ 
 
 | Symbol / Term | Theoretical Meaning | PyTorch / Software Implementation | Role in GAN Inversion & FID | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- | :--- |
-| **$x \in \mathbb{R}^D$** | Ambient Data Vector | `x = batch_images.view(B, -1)` | High-dimensional observable pixel vector ($D=784, 12288$) | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/Tensors_and_Shapes.md) |
-| **$z \in \mathbb{R}^K$** | Low-Dimensional Latent Code | `z = torch.randn(B, K)` | True underlying degrees of freedom on data manifold ($K \ll D$) | [Latent Variable Models](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/Latent_Variable_Models.md) |
-| **$G(z)$** | Push-Forward Generator (Decoder) | `x_fake = generator(z)` | Maps low-D latent Gaussian code to high-D synthetic pixels | [Autoregressive Models](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/Autoregressive_Models.md) |
-| **$E(x)$** | Inversion Encoder Network | `z_hat = encoder(x)` | Maps high-D real images to latent feature representations | [Autoencoders & Latent Spaces](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/Autoencoders_and_Latent_Spaces.md) |
-| **$q(x, z)$ vs $p(x, z)$** | Joint Empirical vs Model Measures | `(x, E(x))` vs `(G(z), z)` | BiGAN / ALI joint distribution matching pairs | [Joint, Marginal & Conditional Dist](../../MathsTerms/04-Probability-and-Statistical-Estimation/Joint_Marginal_Conditional_Dist.md) |
-| **$D(x, z)$** | Joint Discriminator Network | `score = discriminator(x, z)` | Classifies joint image-latent pairs $(x, z)$ as real or fake | [Jensen-Shannon Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/Jensen_Shannon_Divergence.md) |
-| **$\phi(x) \in \mathbb{R}^{2048}$** | Inception-v3 pool3 Embedding | `feats = inception_v3(x)` | Perceptual feature representation capturing semantic realism | [Convolution & Pooling](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/Convolution_and_Pooling.md) |
-| **$\text{FID}$** | Fréchet Inception Distance | `FrechetInceptionDistance()` | Evaluates generator sample quality & diversity via 2-Wasserstein | [Fréchet Inception Distance](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/Frechet_Inception_Distance.md) |
+| **$x \in \mathbb{R}^D$** | Ambient Data Vector | `x = batch_images.view(B, -1)` | High-dimensional observable pixel vector ($D=784, 12288$) | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| **$z \in \mathbb{R}^K$** | Low-Dimensional Latent Code | `z = torch.randn(B, K)` | True underlying degrees of freedom on data manifold ($K \ll D$) | [Latent Variable Models](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/05-Latent_Variable_Models.md) |
+| **$G(z)$** | Push-Forward Generator (Decoder) | `x_fake = generator(z)` | Maps low-D latent Gaussian code to high-D synthetic pixels | [Autoregressive Models](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/04-Autoregressive_Models.md) |
+| **$E(x)$** | Inversion Encoder Network | `z_hat = encoder(x)` | Maps high-D real images to latent feature representations | [Autoencoders & Latent Spaces](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/03-Autoencoders_and_Latent_Spaces.md) |
+| **$q(x, z)$ vs $p(x, z)$** | Joint Empirical vs Model Measures | `(x, E(x))` vs `(G(z), z)` | BiGAN / ALI joint distribution matching pairs | [Joint, Marginal & Conditional Dist](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
+| **$D(x, z)$** | Joint Discriminator Network | `score = discriminator(x, z)` | Classifies joint image-latent pairs $(x, z)$ as real or fake | [Jensen-Shannon Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md) |
+| **$\phi(x) \in \mathbb{R}^{2048}$** | Inception-v3 pool3 Embedding | `feats = inception_v3(x)` | Perceptual feature representation capturing semantic realism | [Convolution & Pooling](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/01-Convolution_and_Pooling.md) |
+| **$\text{FID}$** | Fréchet Inception Distance | `FrechetInceptionDistance()` | Evaluates generator sample quality & diversity via 2-Wasserstein | [Fréchet Inception Distance](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/10-Frechet_Inception_Distance.md) |
 
 ---
 

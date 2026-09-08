@@ -644,6 +644,24 @@ The leftover problem is engineering: sample averages, alternate steps on $\theta
 
 ---
 
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Minimax Game & Generative Adversarial Networks** | [Minimax Game & Generative Adversarial Networks](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/09-Minimax_Game_and_GANs.md) | Foundational GAN architecture, generator $G_\theta$, and discriminator $D_w$ |
+| **Jensen-Shannon Divergence** | [Jensen-Shannon Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md) | Symmetric divergence matching vanilla GAN's theoretical optimal objective |
+| **Fenchel Convex Conjugate & Dual Representations** | [Fenchel Convex Conjugate & Dual Representations](../../MathsTerms/01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md) | Conjugate domain restrictions $\text{dom}(f^*) = \mathbb{R}_-$ and activation output matching |
+| **Neural Activation Functions** | [Neural Activation Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md) | Sigmoid activation $D = \sigma(V) \in (0, 1)$ reparameterizing the critic |
+| **Loss Functions** | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Two-log adversarial loss $J_{\text{GAN}} = \mathbb{E}[\log D] + \mathbb{E}[\log(1-D)]$ |
+
+---
+
 ## External references
 
 Links live **here**, not under topics. University items include original notes/slides when public. Skill default is 3–8 total; this table is **2–3 per topic** as requested. No Dataset API pages.

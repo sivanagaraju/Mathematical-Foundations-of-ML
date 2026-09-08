@@ -400,6 +400,23 @@ Next lectures apply this $d$ inside training / models.
 
 ---
 
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Kullback-Leibler (KL) Divergence** | [Kullback-Leibler (KL) Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) | Mathematical definition $D_{\text{KL}}(p \parallel q)$, directional asymmetry, and Gibbs' inequality |
+| **Entropy, Cross-Entropy & CCE** | [Entropy, Cross-Entropy & CCE](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Decomposition identity: $D_{\text{KL}}(p \parallel q) = H(p, q) - H(p)$ |
+| **Convexity & Jensen's Inequality** | [Convexity & Jensen's Inequality](../../MathsTerms/01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md) | Information inequality proof $D_{\text{KL}}(p \parallel q) \ge 0$ via strict Jensen's inequality |
+| **f-Divergence** | [f-Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/04-f_Divergence.md) | Classification of KL divergence within the Csiszár $f$-divergence family |
+
+---
+
 ## External references
 
 | Resource | Matches lecture… | Why it helps |

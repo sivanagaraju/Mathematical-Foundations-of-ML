@@ -568,6 +568,21 @@ You own the probability stack that makes statistical FA precise. Next lectures a
 
 ---
 
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Probability Basics & Kolmogorov Axioms** | [Probability Basics & Kolmogorov Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) | Random experiments, sample space $\Omega$, event $\sigma$-algebra $\mathcal{F}$, and probability measure $P$ |
+| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Measurable spaces and foundations of probabilistic reasoning |
+
+---
+
 ## External references
 
 | Resource | Matches lecture… | Why it helps |

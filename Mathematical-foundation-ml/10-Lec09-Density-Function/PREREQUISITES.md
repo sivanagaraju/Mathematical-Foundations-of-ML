@@ -394,3 +394,19 @@ The distribution $P_X$ is still the **pushforward** of the original measure $P$ 
 Ready → [NOTES.md](./NOTES.md).  
 Quiz: [quiz.html](./quiz.html).  
 Prior: [Lec 08](../09-Lec08-Distribution-Estimation/NOTES.md).
+
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Random Variables & Continuous Distributions** | [Random Variables & Continuous Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Continuous densities $p(x)$, infinitesimal probability $p(x)dx$, and integration |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Density height properties (why $p(x)$ can exceed 1) and normalization $\int p(x)dx = 1$ |
+| **Functions, Derivatives & Calculus Rules** | [Functions, Derivatives & Calculus Rules](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Calculus of densities: relationship between CDF $F(x)$ and derivative PDF $f(x)$ |
+
+---

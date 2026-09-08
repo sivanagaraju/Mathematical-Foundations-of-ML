@@ -12,11 +12,11 @@
 
 | # | Guide Title | Core Mathematical Concept | Key Upstream Prerequisites | Modern Generative AI Application |
 | :-: | :--- | :--- | :--- | :--- |
-| **01** | **[Convexity and Jensens Inequality](./Convexity_and_Jensens_Inequality.md)** | Fundamental theory & proofs | [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/Functions_Derivatives_and_Rules.md), [Logarithms & Exponential Functions](./Logarithms_and_Exponential_Functions.md), [Probability Basics & Axioms](./Probability_Basics_and_Axioms.md) | Direct implementation |
-| **02** | **[Fenchel Conjugate and Dual Representations](./Fenchel_Conjugate_and_Dual_Representations.md)** | Fundamental theory & proofs | [Convexity & Jensen's Inequality](./Convexity_and_Jensens_Inequality.md), [Dot Product & Similarity](../02-Linear-Algebra-Geometry-and-Tensors/Dot_Product_and_Similarity.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/Functions_Derivatives_and_Rules.md) | Direct implementation |
-| **03** | **[Lipschitz Continuity](./Lipschitz_Continuity.md)** | Fundamental theory & proofs | [Vector Norms & Inner Products](../02-Linear-Algebra-Geometry-and-Tensors/Vector_Norms_and_Inner_Products.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/Functions_Derivatives_and_Rules.md), [Derivatives, Gradients & Jacobians](../03-Multivariate-Calculus-and-Optimization/Derivatives_Gradients_and_Jacobians.md) | Direct implementation |
-| **04** | **[Logarithms and Exponential Functions](./Logarithms_and_Exponential_Functions.md)** | Fundamental theory & proofs | [Probability Basics & Axioms](./Probability_Basics_and_Axioms.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/Functions_Derivatives_and_Rules.md) | Direct implementation |
-| **05** | **[Probability Basics and Axioms](./Probability_Basics_and_Axioms.md)** | Fundamental theory & proofs | [Logarithms & Exponential Functions](./Logarithms_and_Exponential_Functions.md) | Direct implementation |
+| **01** | **[Convexity and Jensens Inequality](./03-Convexity_and_Jensens_Inequality.md)** | Fundamental theory & proofs | [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md), [Logarithms & Exponential Functions](./02-Logarithms_and_Exponential_Functions.md), [Probability Basics & Axioms](./01-Probability_Basics_and_Axioms.md) | Direct implementation |
+| **02** | **[Fenchel Conjugate and Dual Representations](./05-Fenchel_Conjugate_and_Dual_Representations.md)** | Fundamental theory & proofs | [Convexity & Jensen's Inequality](./03-Convexity_and_Jensens_Inequality.md), [Dot Product & Similarity](../02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Direct implementation |
+| **03** | **[Lipschitz Continuity](./04-Lipschitz_Continuity.md)** | Fundamental theory & proofs | [Vector Norms & Inner Products](../02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md), [Derivatives, Gradients & Jacobians](../03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Direct implementation |
+| **04** | **[Logarithms and Exponential Functions](./02-Logarithms_and_Exponential_Functions.md)** | Fundamental theory & proofs | [Probability Basics & Axioms](./01-Probability_Basics_and_Axioms.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Direct implementation |
+| **05** | **[Probability Basics and Axioms](./01-Probability_Basics_and_Axioms.md)** | Fundamental theory & proofs | [Logarithms & Exponential Functions](./02-Logarithms_and_Exponential_Functions.md) | Direct implementation |
 
 ---
 
@@ -24,11 +24,11 @@
 
 For optimal conceptual continuity, learners should study these guides in the following sequential order:
 
-1. **[Convexity and Jensens Inequality](./Convexity_and_Jensens_Inequality.md)**
-2. **[Fenchel Conjugate and Dual Representations](./Fenchel_Conjugate_and_Dual_Representations.md)**
-3. **[Lipschitz Continuity](./Lipschitz_Continuity.md)**
-4. **[Logarithms and Exponential Functions](./Logarithms_and_Exponential_Functions.md)**
-5. **[Probability Basics and Axioms](./Probability_Basics_and_Axioms.md)**
+1. **[Convexity and Jensens Inequality](./03-Convexity_and_Jensens_Inequality.md)**
+2. **[Fenchel Conjugate and Dual Representations](./05-Fenchel_Conjugate_and_Dual_Representations.md)**
+3. **[Lipschitz Continuity](./04-Lipschitz_Continuity.md)**
+4. **[Logarithms and Exponential Functions](./02-Logarithms_and_Exponential_Functions.md)**
+5. **[Probability Basics and Axioms](./01-Probability_Basics_and_Axioms.md)**
 
 ---
 

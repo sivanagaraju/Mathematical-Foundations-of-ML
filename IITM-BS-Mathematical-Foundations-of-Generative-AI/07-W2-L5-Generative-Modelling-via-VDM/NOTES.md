@@ -1074,6 +1074,24 @@ def verify_and_update(param, param_grad, loss_fn_forward, alpha=0.01):
 
 ---
 
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **ELBO & Variational Inference** | [ELBO & Variational Inference](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/07-ELBO_and_Variational_Inference.md) | Variational bounds, tractable estimators, and optimization landscapes |
+| **Fenchel Convex Conjugate & Dual Representations** | [Fenchel Convex Conjugate & Dual Representations](../../MathsTerms/01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md) | Fenchel duality formulation for dual variational divergence estimation |
+| **f-Divergence** | [f-Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/04-f_Divergence.md) | Dual variational representation of $f$-divergence across arbitrary distributions |
+| **Minimax Game & GANs** | [Minimax Game & GANs](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/09-Minimax_Game_and_GANs.md) | Two-player zero-sum game formulation between generator and discriminator |
+| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Alternating gradient ascent-descent dynamics on saddle point surfaces |
+
+---
+
 ## External references
 
 A curated collection of authoritative university lectures, textbooks, and interactive visual guides expanding on the backpropagation and MLP mechanics derived in this tutorial:

@@ -12,12 +12,12 @@
 
 | # | Guide Title | Core Mathematical Concept | Key Upstream Prerequisites | Modern Generative AI Application |
 | :-: | :--- | :--- | :--- | :--- |
-| **01** | **[Common Probability Distributions](./Common_Probability_Distributions.md)** | Fundamental theory & proofs | [Random Variables & Distributions](./Random_Variables_and_Distributions.md), [Vectors & Matrices](../02-Linear-Algebra-Geometry-and-Tensors/Vectors_and_Matrices.md), [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/Logarithms_and_Exponential_Functions.md) | Direct implementation |
-| **02** | **[Joint Marginal Conditional Dist](./Joint_Marginal_Conditional_Dist.md)** | Fundamental theory & proofs | [Probability Basics & Axioms](../01-Primal-Analysis-and-Foundations/Probability_Basics_and_Axioms.md), [Random Variables & Distributions](./Random_Variables_and_Distributions.md) | Direct implementation |
-| **03** | **[Likelihood and Log Likelihood](./Likelihood_and_Log_Likelihood.md)** | Fundamental theory & proofs | [Joint, Marginal & Conditional Dist](./Joint_Marginal_Conditional_Dist.md), [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/Logarithms_and_Exponential_Functions.md) | Direct implementation |
-| **04** | **[MLE](./MLE.md)** | Fundamental theory & proofs | [Likelihood & Log-Likelihood](./Likelihood_and_Log_Likelihood.md), [Derivatives, Gradients & Jacobians](../03-Multivariate-Calculus-and-Optimization/Derivatives_Gradients_and_Jacobians.md) | Direct implementation |
-| **05** | **[NLL](./NLL.md)** | Fundamental theory & proofs | [Maximum Likelihood Estimation (MLE)](./MLE.md), [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/Logarithms_and_Exponential_Functions.md), [Loss Functions in Machine Learning](../03-Multivariate-Calculus-and-Optimization/Loss_Functions.md) | Direct implementation |
-| **06** | **[Random Variables and Distributions](./Random_Variables_and_Distributions.md)** | Fundamental theory & proofs | [Probability Basics & Axioms](../01-Primal-Analysis-and-Foundations/Probability_Basics_and_Axioms.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/Functions_Derivatives_and_Rules.md) | Direct implementation |
+| **01** | **[Common Probability Distributions](./02-Common_Probability_Distributions.md)** | Fundamental theory & proofs | [Random Variables & Distributions](./01-Random_Variables_and_Distributions.md), [Vectors & Matrices](../02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md), [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md) | Direct implementation |
+| **02** | **[Joint Marginal Conditional Dist](./03-Joint_Marginal_Conditional_Dist.md)** | Fundamental theory & proofs | [Probability Basics & Axioms](../01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md), [Random Variables & Distributions](./01-Random_Variables_and_Distributions.md) | Direct implementation |
+| **03** | **[Likelihood and Log Likelihood](./04-Likelihood_and_Log_Likelihood.md)** | Fundamental theory & proofs | [Joint, Marginal & Conditional Dist](./03-Joint_Marginal_Conditional_Dist.md), [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md) | Direct implementation |
+| **04** | **[MLE](./05-MLE.md)** | Fundamental theory & proofs | [Likelihood & Log-Likelihood](./04-Likelihood_and_Log_Likelihood.md), [Derivatives, Gradients & Jacobians](../03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Direct implementation |
+| **05** | **[NLL](./06-NLL.md)** | Fundamental theory & proofs | [Maximum Likelihood Estimation (MLE)](./05-MLE.md), [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md), [Loss Functions in Machine Learning](../03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Direct implementation |
+| **06** | **[Random Variables and Distributions](./01-Random_Variables_and_Distributions.md)** | Fundamental theory & proofs | [Probability Basics & Axioms](../01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Direct implementation |
 
 ---
 
@@ -25,12 +25,12 @@
 
 For optimal conceptual continuity, learners should study these guides in the following sequential order:
 
-1. **[Common Probability Distributions](./Common_Probability_Distributions.md)**
-2. **[Joint Marginal Conditional Dist](./Joint_Marginal_Conditional_Dist.md)**
-3. **[Likelihood and Log Likelihood](./Likelihood_and_Log_Likelihood.md)**
-4. **[MLE](./MLE.md)**
-5. **[NLL](./NLL.md)**
-6. **[Random Variables and Distributions](./Random_Variables_and_Distributions.md)**
+1. **[Common Probability Distributions](./02-Common_Probability_Distributions.md)**
+2. **[Joint Marginal Conditional Dist](./03-Joint_Marginal_Conditional_Dist.md)**
+3. **[Likelihood and Log Likelihood](./04-Likelihood_and_Log_Likelihood.md)**
+4. **[MLE](./05-MLE.md)**
+5. **[NLL](./06-NLL.md)**
+6. **[Random Variables and Distributions](./01-Random_Variables_and_Distributions.md)**
 
 ---
 

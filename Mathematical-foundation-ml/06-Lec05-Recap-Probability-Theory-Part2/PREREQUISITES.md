@@ -694,3 +694,19 @@ Without margins, you cannot drop a column and still have a valid single-column s
 Ready → [NOTES.md](./NOTES.md) (start at **Executive Summary**).  
 Quiz: [quiz.html](./quiz.html) (Part A = this file).  
 Prior: [Lec 04 Part 3](../05-Lec04-Recap-Probability-Theory-Part3/NOTES.md).
+
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Joint, Marginal, & Conditional Distributions** | [Joint, Marginal, & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Joint distributions $P_{XY}$, marginalization $\sum_y P_{XY}$, conditionals $P_{Y|X}$, and Bayes' rule |
+| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Vector random variables interpreted as joint collections of scalar variables |
+| **Entropy & Cross-Entropy** | [Entropy & Cross-Entropy](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Conditional entropy and information-theoretic measures on joint distributions |
+
+---

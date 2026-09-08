@@ -23,20 +23,19 @@
 
 Keep this translation table handy whenever a tensor operation looks confusing:
 
-| Math / PyTorch Symbol | Formal Technical Name | Plain-English Translation | Everyday Intuition |
-| :--- | :--- | :--- | :--- |
-| `torch.Tensor` | $N$-Dimensional Array | A structured, rectangular grid of numbers | A spreadsheet table (2D) or a stack of spreadsheets (3D cube) that GPUs can process instantly. |
-| `shape` (e.g., `(2, 3)`) | Tensor Dimensionality Tuple | "How many rows and how many columns?" | A $2 \times 3$ egg carton holding 2 rows of 3 eggs (6 eggs total). |
-| `dtype` (e.g., `float32`) | Numerical Data Type | "What kind of numbers are inside the grid?" | Decimals (`float32`) vs whole counting numbers (`int64`). |
-| `device` (e.g., `cpu` vs `cuda:0`) | Hardware Processing Unit | "Where does this memory grid physically live?" | Standard computer CPU memory (RAM) vs Lightning-fast Graphics Card memory (VRAM). |
-| `torch.from_numpy(arr)` | Zero-Copy Bridge | Wraps an existing NumPy array as a PyTorch tensor | Putting a PyTorch label on an existing box of numbers without moving the box. |
-| `ones_like(x)` / `rand_like(x)` | Shape Template Cloner | "Make a new grid with the same size as $x$, but filled with 1s or random numbers" | Using a cookie cutter of shape $x$ to cut out a brand-new cookie filled with sugar. |
-| `torch.cat([A, B], dim=0)` | Vertical Concatenation | "Stack tensor $B$ underneath tensor $A$" | Stacking two Lego bricks on top of each other to make a taller tower. |
-| `torch.cat([A, B], dim=1)` | Horizontal Concatenation | "Glue tensor $B$ to the right side of tensor $A$" | Gluing two tables side-by-side to make a wider table. |
-| `A @ B` or `torch.matmul(A, B)` | Matrix Multiplication (Linear Algebra) | Row-by-column dot product projection | Transforming a 3D coordinate into a 2D screen coordinate (powers all neural network layers). |
-| `A * B` or `torch.mul(A, B)` | Element-Wise Product (Hadamard) | Multiplying matching cells one-by-one | Multiplying your item quantities by their individual unit prices to get line-item totals. |
-| `A.T` | Matrix Transpose | Swapping rows and columns | Flipping a rectangular table diagonally so its length becomes its width. |
-
+| Math / PyTorch Symbol | Formal Technical Name | Plain-English Translation | Everyday Intuition | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| `torch.Tensor` | $N$-Dimensional Array | A structured, rectangular grid of numbers | A spreadsheet table (2D) or a stack of spreadsheets (3D cube) that GPUs can process instantly. | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| `shape` (e.g., `(2, 3)`) | Tensor Dimensionality Tuple | "How many rows and how many columns?" | A $2 \times 3$ egg carton holding 2 rows of 3 eggs (6 eggs total). | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| `dtype` (e.g., `float32`) | Numerical Data Type | "What kind of numbers are inside the grid?" | Decimals (`float32`) vs whole counting numbers (`int64`). | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| `device` (e.g., `cpu` vs `cuda:0`) | Hardware Processing Unit | "Where does this memory grid physically live?" | Standard computer CPU memory (RAM) vs Lightning-fast Graphics Card memory (VRAM). | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| `torch.from_numpy(arr)` | Zero-Copy Bridge | Wraps an existing NumPy array as a PyTorch tensor | Putting a PyTorch label on an existing box of numbers without moving the box. | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| `ones_like(x)` / `rand_like(x)` | Shape Template Cloner | "Make a new grid with the same size as $x$, but filled with 1s or random numbers" | Using a cookie cutter of shape $x$ to cut out a brand-new cookie filled with sugar. | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| `torch.cat([A, B], dim=0)` | Vertical Concatenation | "Stack tensor $B$ underneath tensor $A$" | Stacking two Lego bricks on top of each other to make a taller tower. | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| `torch.cat([A, B], dim=1)` | Horizontal Concatenation | "Glue tensor $B$ to the right side of tensor $A$" | Gluing two tables side-by-side to make a wider table. | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| `A @ B` or `torch.matmul(A, B)` | Matrix Multiplication (Linear Algebra) | Row-by-column dot product projection | Transforming a 3D coordinate into a 2D screen coordinate (powers all neural network layers). | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) |
+| `A * B` or `torch.mul(A, B)` | Element-Wise Product (Hadamard) | Multiplying matching cells one-by-one | Multiplying your item quantities by their individual unit prices to get line-item totals. | [Matrix Operations & Eigenvalues](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md) |
+| `A.T` | Matrix Transpose | Swapping rows and columns | Flipping a rectangular table diagonally so its length becomes its width. | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) |
 ```
 ══════════════════════════════════════════════════════════════════════════════════════════════════
                                THE 8 FOUNDATIONAL PILLARS OF W1_L3
@@ -507,3 +506,21 @@ Check off each item before starting [NOTES.md](./NOTES.md):
 ---
 
 **You have mastered the tensor foundations! Proceed to [NOTES.md](./NOTES.md).**
+
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Tensors, Strides, & Memory Layout** | [Tensors, Strides, & Memory Layout](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Contiguous memory allocations, shapes, strides, and dtypes in PyTorch |
+| **Tensor Broadcasting & Axis Semantics** | [Tensor Broadcasting & Axis Semantics](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/05-Tensor_Broadcasting.md) | Broadcasting rules for matching dimensions across arithmetic operations |
+| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Matrix multiplication `@` as linear projection in neural network layers |
+| **Matrix Operations & Transposition** | [Matrix Operations & Transposition](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md) | Hadamard element-wise product `*` and transposition (`.T`) |
+| **f-Divergence Theory** | [f-Divergence Theory](../../MathsTerms/05-Information-Theory-and-Divergences/04-f_Divergence.md) | Theoretical foundations connecting tensor networks to $f$-divergence objectives |
+
+---

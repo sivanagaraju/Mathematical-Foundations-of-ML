@@ -351,3 +351,22 @@ Someone asks: **must the press and the vault use the same gray scale?** Yes. Tha
 
 Ready → [NOTES.md](./NOTES.md) (start at **Executive Summary**).  
 Quiz later: [quiz.html](./quiz.html) Part A = this file.
+
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Minimax Game & GAN Implementations** | [Minimax Game & GAN Implementations](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/09-Minimax_Game_and_GANs.md) | Full training loop, alternating optimizer steps, and adversarial updates |
+| **Convolution & Pooling Operations** | [Convolution & Pooling Operations](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/01-Convolution_and_Pooling.md) | DCGAN convolutional strides, transposed convolutions, and spatial upsampling |
+| **Batch Normalization & Spectral Norm** | [Batch Normalization & Spectral Norm](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/11-Batch_Normalization_and_Spectral_Norm.md) | Stabilizing GAN generator and discriminator internal activations |
+| **Neural Activation Functions** | [Neural Activation Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md) | LeakyReLU in discriminator and Tanh generator output normalization |
+| **Loss Functions** | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | `BCEWithLogitsLoss` for numerical stability against sigmoid exponent overflows |
+| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Adam optimizer tuning (learning rate 0.0002, $\beta_1 = 0.5$) for GAN stability |
+
+---

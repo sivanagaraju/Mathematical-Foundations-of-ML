@@ -48,14 +48,14 @@ This hour is **theory**, not a training loop. Last lectures built a **sampler**:
 
 | Symbol / Term | Theoretical Concept | Plain-English Software Metaphor | Dedicated MathsTerm Guide |
 | :--- | :--- | :--- | :--- |
-| **$x \in \mathbb{R}^D$** | Ambient Image Vector | High-dimensional pixel array ($D=784$ or $12288$) | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/Tensors_and_Shapes.md) |
-| **$z \in \mathbb{R}^K$** | Latent Representation Vector | Low-dimensional continuous knobs ($K \ll D$) | [Latent Variable Models](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/Latent_Variable_Models.md) |
-| **$G(z)$** | Push-Forward Generator (Decoder) | Printing press generating photo $\hat{x}$ from code $z$ | [Autoregressive Models](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/Autoregressive_Models.md) |
-| **$E(x)$** | Inversion Encoder Network | Ingest camera mapping real photo $x$ to latent code $z$ | [Autoencoders & Latent Spaces](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/Autoencoders_and_Latent_Spaces.md) |
-| **$z^* = \arg\min_z \|x - G(z)\|^2$** | Direct Optimization Inversion | Gradient descent on latent code to reconstruct target photo | [Gradient Descent](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/Gradient_Descent.md) |
-| **$W_2^2(P_r, P_g)$** | 2-Wasserstein Distance | Quadratic optimal transport cost between feature Gaussians | [Wasserstein Distance & EMD](../../MathsTerms/05-Information-Theory-and-Divergences/Wasserstein_Distance_and_EMD.md) |
-| **$\text{FID}(r, g)$** | Fréchet Inception Distance | $\|\mu_r - \mu_g\|^2 + \text{Tr}(\Sigma_r + \Sigma_g - 2(\Sigma_r \Sigma_g)^{1/2})$ | [Fréchet Inception Distance](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/Frechet_Inception_Distance.md) |
-| **$\text{BiGAN} / \text{ALI}$** | Joint Adversarial Matching | Discriminator matching joint pairs $(x, E(x))$ vs $(G(z), z)$ | [Joint, Marginal & Conditional Dist](../../MathsTerms/04-Probability-and-Statistical-Estimation/Joint_Marginal_Conditional_Dist.md) |
+| **$x \in \mathbb{R}^D$** | Ambient Image Vector | High-dimensional pixel array ($D=784$ or $12288$) | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| **$z \in \mathbb{R}^K$** | Latent Representation Vector | Low-dimensional continuous knobs ($K \ll D$) | [Latent Variable Models](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/05-Latent_Variable_Models.md) |
+| **$G(z)$** | Push-Forward Generator (Decoder) | Printing press generating photo $\hat{x}$ from code $z$ | [Autoregressive Models](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/04-Autoregressive_Models.md) |
+| **$E(x)$** | Inversion Encoder Network | Ingest camera mapping real photo $x$ to latent code $z$ | [Autoencoders & Latent Spaces](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/03-Autoencoders_and_Latent_Spaces.md) |
+| **$z^* = \arg\min_z \|x - G(z)\|^2$** | Direct Optimization Inversion | Gradient descent on latent code to reconstruct target photo | [Gradient Descent](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) |
+| **$W_2^2(P_r, P_g)$** | 2-Wasserstein Distance | Quadratic optimal transport cost between feature Gaussians | [Wasserstein Distance & EMD](../../MathsTerms/05-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md) |
+| **$\text{FID}(r, g)$** | Fréchet Inception Distance | $\|\mu_r - \mu_g\|^2 + \text{Tr}(\Sigma_r + \Sigma_g - 2(\Sigma_r \Sigma_g)^{1/2})$ | [Fréchet Inception Distance](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/10-Frechet_Inception_Distance.md) |
+| **$\text{BiGAN} / \text{ALI}$** | Joint Adversarial Matching | Discriminator matching joint pairs $(x, E(x))$ vs $(G(z), z)$ | [Joint, Marginal & Conditional Dist](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
 
 ---
 

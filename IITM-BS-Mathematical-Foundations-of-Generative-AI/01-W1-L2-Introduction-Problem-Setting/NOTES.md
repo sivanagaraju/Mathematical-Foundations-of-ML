@@ -490,6 +490,27 @@ Concludes the lecture by formulating the four foundational open questions that e
 
 ---
 
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Random Variables & Distributions** | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Mathematical formulation of $X: \Omega \to \mathbb{R}^D$ and true data law $P_X$ |
+| **Common Probability Distributions & Gaussian Priors** | [Common Probability Distributions & Gaussian Priors](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Standard normal base noise $Z \sim \mathcal{N}(0, I_k)$ in generative models |
+| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | High-dimensional vector representations of images ($x \in \mathbb{R}^D$) |
+| **Tensors, Dimensions & Shapes** | [Tensors, Dimensions & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Image flattening and shape geometry in multi-dimensional space |
+| **Joint, Marginal, & Conditional Distributions** | [Joint, Marginal, & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | IID sample assumption vs strong inter-pixel spatial dependencies |
+| **f-Divergence & Discrepancy Measures** | [f-Divergence & Discrepancy Measures](../../MathsTerms/05-Information-Theory-and-Divergences/04-f_Divergence.md) | Statistical yardsticks $d(p_x \parallel p_\theta)$ for evaluating model divergence |
+| **Latent Variable Generative Models** | [Latent Variable Generative Models](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/05-Latent_Variable_Models.md) | Pushforward generator $G_\theta(z)$ transforming simple noise to complex images |
+| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Parameter estimation via $\arg\min_\theta d(p_x \parallel p_\theta)$ |
+
+---
+
 ## External References
 
 > Comprehensive multi-source learning materials curated for every subtopic in this lecture.

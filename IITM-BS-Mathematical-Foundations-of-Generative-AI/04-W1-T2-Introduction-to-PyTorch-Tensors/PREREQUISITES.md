@@ -23,21 +23,20 @@
 
 Keep this translation table handy whenever a class, method, or parameter looks confusing:
 
-| PyTorch / Math Term | Formal Definition | Plain-English Translation | Everyday Intuition |
-| :--- | :--- | :--- | :--- |
-| `torch.Tensor` | Multi-dimensional numerical array with autograd & GPU support | A structured grid of numbers (vectors, matrices, or 3D/4D cubes) | A spreadsheet grid or a 3D box of numbers that computers and GPUs can calculate instantly. |
-| `ToTensor()` | Transform converting PIL/NumPy image to float tensor in $[0.0, 1.0]$ | Takes an image file and turns it into a standardized number grid | Scanning a physical paper photo into a clean digital pixel matrix. |
-| `(C, H, W)` | Channel $\times$ Height $\times$ Width format | The standard 3D shape PyTorch expects for an image | A photo with 1 color layer (grayscale) or 3 layers (RGB), 28 pixels tall and 28 pixels wide. |
-| `Dataset` | Abstract base class in `torch.utils.data` representing a collection | The single-item warehouse worker: knows how to fetch **one** example $(x, y)$ | An indexed warehouse shelf where asking for item `#42` gives you shoe `#42` and its tag. |
-| `DataLoader` | Python iterable wrapping a `Dataset` with batching & multiprocessing | The automated conveyor belt / forklift: groups items into **mini-batches** | A forklift that loads 64 shoeboxes onto a shipping pallet and brings them to the loading dock. |
-| `batch_size = 64` | The number of samples processed together in one forward pass | How many examples are bundled together on one pallet | A box holding exactly 64 items so the neural network can process all 64 at the exact same moment. |
-| `shuffle = True` | Randomly permutes dataset indices at the start of each epoch | Shuffling the deck of cards before dealing | Thoroughly shuffling flashcards so you don't accidentally memorize the order of the questions. |
-| `__init__` | Python class constructor method | The setup step: runs once when you create the object | Unpacking and setting up your kitchen tools before you start cooking. |
-| `__len__` | Dunder method returning total number of items | Answers the question: *"How many total items exist?"* | Counting the total number of pages in a catalog so `len(catalog)` works. |
-| `__getitem__(idx)` | Dunder method retrieving the item at index `idx` | Answers the request: *"Give me item number `idx`"* | Opening drawer number `idx` and handing over the item inside (`dataset[idx]`). |
-| `pd.read_csv()` | Pandas function parsing comma-separated tabular files | Reads a spreadsheet table into computer memory | Opening an Excel spreadsheet containing filenames and category labels. |
-| `.iloc[idx, col]` | Pandas integer-location based indexing | Grabbing the cell at row `idx` and column `col` | Pointing your finger at Row 5, Column 1 on a spreadsheet page. |
-
+| PyTorch / Math Term | Formal Definition | Plain-English Translation | Everyday Intuition | Dedicated MathsTerm Guide |
+| :--- | :--- | :--- | :--- | :--- |
+| `torch.Tensor` | Multi-dimensional numerical array with autograd & GPU support | A structured grid of numbers (vectors, matrices, or 3D/4D cubes) | A spreadsheet grid or a 3D box of numbers that computers and GPUs can calculate instantly. | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| `ToTensor()` | Transform converting PIL/NumPy image to float tensor in $[0.0, 1.0]$ | Takes an image file and turns it into a standardized number grid | Scanning a physical paper photo into a clean digital pixel matrix. | [Encodings, Categorical & Embeddings](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md) |
+| `(C, H, W)` | Channel $\times$ Height $\times$ Width format | The standard 3D shape PyTorch expects for an image | A photo with 1 color layer (grayscale) or 3 layers (RGB), 28 pixels tall and 28 pixels wide. | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| `Dataset` | Abstract base class in `torch.utils.data` representing a collection | The single-item warehouse worker: knows how to fetch **one** example $(x, y)$ | An indexed warehouse shelf where asking for item `#42` gives you shoe `#42` and its tag. | [Encodings, Categorical & Embeddings](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md) |
+| `DataLoader` | Python iterable wrapping a `Dataset` with batching & multiprocessing | The automated conveyor belt / forklift: groups items into **mini-batches** | A forklift that loads 64 shoeboxes onto a shipping pallet and brings them to the loading dock. | [Encodings, Categorical & Embeddings](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md) |
+| `batch_size = 64` | The number of samples processed together in one forward pass | How many examples are bundled together on one pallet | A box holding exactly 64 items so the neural network can process all 64 at the exact same moment. | [MathsTerms Library](../../MathsTerms/README.md) |
+| `shuffle = True` | Randomly permutes dataset indices at the start of each epoch | Shuffling the deck of cards before dealing | Thoroughly shuffling flashcards so you don't accidentally memorize the order of the questions. | [MathsTerms Library](../../MathsTerms/README.md) |
+| `__init__` | Python class constructor method | The setup step: runs once when you create the object | Unpacking and setting up your kitchen tools before you start cooking. | [MathsTerms Library](../../MathsTerms/README.md) |
+| `__len__` | Dunder method returning total number of items | Answers the question: *"How many total items exist?"* | Counting the total number of pages in a catalog so `len(catalog)` works. | [MathsTerms Library](../../MathsTerms/README.md) |
+| `__getitem__(idx)` | Dunder method retrieving the item at index `idx` | Answers the request: *"Give me item number `idx`"* | Opening drawer number `idx` and handing over the item inside (`dataset[idx]`). | [MathsTerms Library](../../MathsTerms/README.md) |
+| `pd.read_csv()` | Pandas function parsing comma-separated tabular files | Reads a spreadsheet table into computer memory | Opening an Excel spreadsheet containing filenames and category labels. | [MathsTerms Library](../../MathsTerms/README.md) |
+| `.iloc[idx, col]` | Pandas integer-location based indexing | Grabbing the cell at row `idx` and column `col` | Pointing your finger at Row 5, Column 1 on a spreadsheet page. | [MathsTerms Library](../../MathsTerms/README.md) |
 ```
 ══════════════════════════════════════════════════════════════════════════════════════════════════
                                THE 8 FOUNDATIONAL PILLARS OF W1_T2
@@ -488,3 +487,20 @@ Check off each item before starting [NOTES.md](./NOTES.md):
 ---
 
 **You are fully prepared! Proceed to [NOTES.md](./NOTES.md).**
+
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Tensors, Dimensions & Shapes** | [Tensors, Dimensions & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Tensor buffers, dimension manipulation (`view`, `reshape`, `unsqueeze`) |
+| **Tensor Broadcasting Semantics** | [Tensor Broadcasting Semantics](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/05-Tensor_Broadcasting.md) | Broadcasting rules across singleton and mismatched axes |
+| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Vector dot products, matrix algebra, and affine projections |
+| **Matrix Operations & Eigenvalues** | [Matrix Operations & Eigenvalues](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md) | Linear algebraic operations on multi-dimensional tensors |
+
+---

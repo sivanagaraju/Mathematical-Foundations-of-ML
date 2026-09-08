@@ -156,19 +156,19 @@ Suggested first watch: **Lec 01** (FA, 48 min), then **Lec 02–05** (probabilit
 
 | Playlist # | Video | Folder |
 |------------|-------|--------|
-| 2 | Lec 01 Overview of Function Approximation | [`02-Lec01-Overview-Function-Approximation/`](./02-Lec01-Overview-Function-Approximation/) |
-| 3 | Lec 02 Recap of Probability Theory - 1, Part 1 | [`03-Lec02-Recap-Probability-Theory-Part1/`](./03-Lec02-Recap-Probability-Theory-Part1/) |
-| 4 | Lec 03 Recap of Probability Theory - 1, Part 2 | [`04-Lec03-Recap-Probability-Theory-Part2/`](./04-Lec03-Recap-Probability-Theory-Part2/) |
-| 5 | Lec 04 Recap of Probability Theory - 1, Part 3 | [`05-Lec04-Recap-Probability-Theory-Part3/`](./05-Lec04-Recap-Probability-Theory-Part3/) |
-| 6 | Lec 05 Recap of Probability Theory Part 2 | [`06-Lec05-Recap-Probability-Theory-Part2/`](./06-Lec05-Recap-Probability-Theory-Part2/) |
-| 7 | Lec 06 Understanding a Chest X-Ray as Sample from Distribution | [`07-Lec06-XRay-Sample-From-Distribution/`](./07-Lec06-XRay-Sample-From-Distribution/) |
-| 8 | Lec 07 IID Assumption | [`08-Lec07-IID-Assumption/`](./08-Lec07-IID-Assumption/) |
-| 9 | Lec 08 Distribution Estimation | [`09-Lec08-Distribution-Estimation/`](./09-Lec08-Distribution-Estimation/) |
-| 10 | Lec 09 Density Function | [`10-Lec09-Density-Function/`](./10-Lec09-Density-Function/) |
-| 11 | Lec 10 Challenge With ML | [`11-Lec10-Challenges-of-ML/`](./11-Lec10-Challenges-of-ML/) |
-| 14 | Lec 11 Entropy | [`12-Lec11-Entropy/`](./12-Lec11-Entropy/) |
-| 15 | Lec 12 Kullback-Leibler (KL) Divergence | [`13-Lec12-KL-Divergence/`](./13-Lec12-KL-Divergence/) |
-| 16 | Lec 13 Minimization of KL Divergence | [`14-Lec13-Minimization-of-KL/`](./14-Lec13-Minimization-of-KL/) |
+| 2 | Lec 01 Overview of Function Approximation | [`02-Lec01-Overview-Function-Approximation/`](./Mathematical-foundation-ml/02-Lec01-Overview-Function-Approximation/) |
+| 3 | Lec 02 Recap of Probability Theory - 1, Part 1 | [`03-Lec02-Recap-Probability-Theory-Part1/`](./Mathematical-foundation-ml/03-Lec02-Recap-Probability-Theory-Part1/) |
+| 4 | Lec 03 Recap of Probability Theory - 1, Part 2 | [`04-Lec03-Recap-Probability-Theory-Part2/`](./Mathematical-foundation-ml/04-Lec03-Recap-Probability-Theory-Part2/) |
+| 5 | Lec 04 Recap of Probability Theory - 1, Part 3 | [`05-Lec04-Recap-Probability-Theory-Part3/`](./Mathematical-foundation-ml/05-Lec04-Recap-Probability-Theory-Part3/) |
+| 6 | Lec 05 Recap of Probability Theory Part 2 | [`06-Lec05-Recap-Probability-Theory-Part2/`](./Mathematical-foundation-ml/06-Lec05-Recap-Probability-Theory-Part2/) |
+| 7 | Lec 06 Understanding a Chest X-Ray as Sample from Distribution | [`07-Lec06-XRay-Sample-From-Distribution/`](./Mathematical-foundation-ml/07-Lec06-XRay-Sample-From-Distribution/) |
+| 8 | Lec 07 IID Assumption | [`08-Lec07-IID-Assumption/`](./Mathematical-foundation-ml/08-Lec07-IID-Assumption/) |
+| 9 | Lec 08 Distribution Estimation | [`09-Lec08-Distribution-Estimation/`](./Mathematical-foundation-ml/09-Lec08-Distribution-Estimation/) |
+| 10 | Lec 09 Density Function | [`10-Lec09-Density-Function/`](./Mathematical-foundation-ml/10-Lec09-Density-Function/) |
+| 11 | Lec 10 Challenge With ML | [`11-Lec10-Challenges-of-ML/`](./Mathematical-foundation-ml/11-Lec10-Challenges-of-ML/) |
+| 14 | Lec 11 Entropy | [`12-Lec11-Entropy/`](./Mathematical-foundation-ml/12-Lec11-Entropy/) |
+| 15 | Lec 12 Kullback-Leibler (KL) Divergence | [`13-Lec12-KL-Divergence/`](./Mathematical-foundation-ml/13-Lec12-KL-Divergence/) |
+| 16 | Lec 13 Minimization of KL Divergence | [`14-Lec13-Minimization-of-KL/`](./Mathematical-foundation-ml/14-Lec13-Minimization-of-KL/) |
 
 Intro, tutorials, and Lec 14 onward do not yet have packages here.
 
@@ -189,26 +189,26 @@ Summaries are from official titles plus this repo’s lecture packages (Lec 01�
 | # | Video | Duration | Link | Summary | Package |
 |---|--------|----------|------|---------|---------|
 | 1 | Mathematical Foundations of Machine Learning (Intro) | 3:33 | [watch](https://www.youtube.com/watch?v=vbs9WGWjS9U&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=1) | Course trailer: ML from a probabilistic viewpoint; first of a two-course sequence (GenAI is next). | |
-| 2 | Lec 01 Overview of Function Approximation | 47:50 | [watch](https://www.youtube.com/watch?v=G2h7nD_Stxg&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=2) | FA is the core job: from a finite table, estimate unknown $f$ for new $x$. Model ≠ algorithm. Physics often fails; probability is the fork. | [02](./02-Lec01-Overview-Function-Approximation/) |
+| 2 | Lec 01 Overview of Function Approximation | 47:50 | [watch](https://www.youtube.com/watch?v=G2h7nD_Stxg&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=2) | FA is the core job: from a finite table, estimate unknown $f$ for new $x$. Model ≠ algorithm. Physics often fails; probability is the fork. | [02](./Mathematical-foundation-ml/02-Lec01-Overview-Function-Approximation/) |
 
 ### Probability recap
 
 | # | Video | Duration | Link | Summary | Package |
 |---|--------|----------|------|---------|---------|
-| 3 | Lec 02 Recap of Probability Theory - 1, Part 1 | 32:13 | [watch](https://www.youtube.com/watch?v=YLx3hBqt28k&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=3) | Random experiment → sample space Ω → events → probability $P$. Why ML needs a measure. | [03](./03-Lec02-Recap-Probability-Theory-Part1/) |
-| 4 | Lec 03 Recap of Probability Theory - 1, Part 2 | 14:30 | [watch](https://www.youtube.com/watch?v=DaBw9qBpt2s&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=4) | Random variable $X:\Omega\to\mathbb R^d$. Sensors turn hidden outcomes into number lists. | [04](./04-Lec03-Recap-Probability-Theory-Part2/) |
-| 5 | Lec 04 Recap of Probability Theory - 1, Part 3 | 29:06 | [watch](https://www.youtube.com/watch?v=0R6Agp4tqSU&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=5) | Pushforward / CDF. Density trap. Vector RV and a preview of several RVs. | [05](./05-Lec04-Recap-Probability-Theory-Part3/) |
-| 6 | Lec 05 Recap of Probability Theory Part 2 | 21:43 | [watch](https://www.youtube.com/watch?v=R69wew8RrPo&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=6) | Joints, conditionals, margins. A $d$-vector RV ≡ $d$ scalar RVs. | [06](./06-Lec05-Recap-Probability-Theory-Part2/) |
+| 3 | Lec 02 Recap of Probability Theory - 1, Part 1 | 32:13 | [watch](https://www.youtube.com/watch?v=YLx3hBqt28k&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=3) | Random experiment → sample space Ω → events → probability $P$. Why ML needs a measure. | [03](./Mathematical-foundation-ml/03-Lec02-Recap-Probability-Theory-Part1/) |
+| 4 | Lec 03 Recap of Probability Theory - 1, Part 2 | 14:30 | [watch](https://www.youtube.com/watch?v=DaBw9qBpt2s&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=4) | Random variable $X:\Omega\to\mathbb R^d$. Sensors turn hidden outcomes into number lists. | [04](./Mathematical-foundation-ml/04-Lec03-Recap-Probability-Theory-Part2/) |
+| 5 | Lec 04 Recap of Probability Theory - 1, Part 3 | 29:06 | [watch](https://www.youtube.com/watch?v=0R6Agp4tqSU&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=5) | Pushforward / CDF. Density trap. Vector RV and a preview of several RVs. | [05](./Mathematical-foundation-ml/05-Lec04-Recap-Probability-Theory-Part3/) |
+| 6 | Lec 05 Recap of Probability Theory Part 2 | 21:43 | [watch](https://www.youtube.com/watch?v=R69wew8RrPo&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=6) | Joints, conditionals, margins. A $d$-vector RV ≡ $d$ scalar RVs. | [06](./Mathematical-foundation-ml/06-Lec05-Recap-Probability-Theory-Part2/) |
 
 ### Data as samples; estimation; density
 
 | # | Video | Duration | Link | Summary | Package |
 |---|--------|----------|------|---------|---------|
-| 7 | Lec 06 Understanding a Chest X-Ray as Sample from Distribution | 26:51 | [watch](https://www.youtube.com/watch?v=bdcvsSNAHIk&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=7) | Image ∈ range$(X)$. Data is not $P$. Labels need a joint. A dataset is draws from $p_{X,Y}$. | [07](./07-Lec06-XRay-Sample-From-Distribution/) |
-| 8 | Lec 07 IID Assumption | 30:42 | [watch](https://www.youtube.com/watch?v=C83xmx80tMo&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=8) | Identical + independent **across** points. ML = estimate $P$ from IID files. | [08](./08-Lec07-IID-Assumption/) |
-| 9 | Lec 08 Distribution Estimation | 28:47 | [watch](https://www.youtube.com/watch?v=aYb8KG9JYsg&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=9) | Given $D$, estimate $P$. Targets $P(Y\|X)$, $P(Y)$, …. Discriminative vs generative. | [09](./09-Lec08-Distribution-Estimation/) |
-| 10 | Lec 09 Density Function | 8:06 | [watch](https://www.youtube.com/watch?v=_QrezNPmxDk&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=10) | Density $p$: height ≠ probability. Uniform-on-$[0,0.5]$ has height 2. Estimate $p$. | [10](./10-Lec09-Density-Function/) |
-| 11 | Lec 10 Challenge With ML | 35:31 | [watch](https://www.youtube.com/watch?v=767MLwniPKE&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=11) | True $p$ is unknown. Recipe: family $p_\theta$, divergence $d$, $\arg\min$. Model ≠ algorithm. | [11](./11-Lec10-Challenges-of-ML/) |
+| 7 | Lec 06 Understanding a Chest X-Ray as Sample from Distribution | 26:51 | [watch](https://www.youtube.com/watch?v=bdcvsSNAHIk&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=7) | Image ∈ range$(X)$. Data is not $P$. Labels need a joint. A dataset is draws from $p_{X,Y}$. | [07](./Mathematical-foundation-ml/07-Lec06-XRay-Sample-From-Distribution/) |
+| 8 | Lec 07 IID Assumption | 30:42 | [watch](https://www.youtube.com/watch?v=C83xmx80tMo&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=8) | Identical + independent **across** points. ML = estimate $P$ from IID files. | [08](./Mathematical-foundation-ml/08-Lec07-IID-Assumption/) |
+| 9 | Lec 08 Distribution Estimation | 28:47 | [watch](https://www.youtube.com/watch?v=aYb8KG9JYsg&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=9) | Given $D$, estimate $P$. Targets $P(Y\|X)$, $P(Y)$, …. Discriminative vs generative. | [09](./Mathematical-foundation-ml/09-Lec08-Distribution-Estimation/) |
+| 10 | Lec 09 Density Function | 8:06 | [watch](https://www.youtube.com/watch?v=_QrezNPmxDk&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=10) | Density $p$: height ≠ probability. Uniform-on-$[0,0.5]$ has height 2. Estimate $p$. | [10](./Mathematical-foundation-ml/10-Lec09-Density-Function/) |
+| 11 | Lec 10 Challenge With ML | 35:31 | [watch](https://www.youtube.com/watch?v=767MLwniPKE&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=11) | True $p$ is unknown. Recipe: family $p_\theta$, divergence $d$, $\arg\min$. Model ≠ algorithm. | [11](./Mathematical-foundation-ml/11-Lec10-Challenges-of-ML/) |
 
 ### Python / probability tutorials
 
@@ -221,9 +221,9 @@ Summaries are from official titles plus this repo’s lecture packages (Lec 01�
 
 | # | Video | Duration | Link | Summary | Package |
 |---|--------|----------|------|---------|---------|
-| 14 | Lec 11 Entropy | 17:56 | [watch](https://www.youtube.com/watch?v=P6wjLz4dRTs&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=14) | Surprisal $-\log P$. Entropy $H=-\sum p\log p$. Need a divergence $d$ to train. | [12](./12-Lec11-Entropy/) |
-| 15 | Lec 12 Kullback-Leibler (KL) Divergence | 16:49 | [watch](https://www.youtube.com/watch?v=ihkGbIdbbxc&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=15) | Cross-entropy; $\mathrm{KL}=\mathrm{CE}-H$. Asymmetric; not a metric. | [13](./13-Lec12-KL-Divergence/) |
-| 16 | Lec 13 Minimization of KL Divergence | 24:52 | [watch](https://www.youtube.com/watch?v=Ij4p5hLbfo4&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=16) | $\min\mathrm{KL}$ drops $H$; LLN; MLE ≡ min-KL estimator. | [14](./14-Lec13-Minimization-of-KL/) |
+| 14 | Lec 11 Entropy | 17:56 | [watch](https://www.youtube.com/watch?v=P6wjLz4dRTs&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=14) | Surprisal $-\log P$. Entropy $H=-\sum p\log p$. Need a divergence $d$ to train. | [12](./Mathematical-foundation-ml/12-Lec11-Entropy/) |
+| 15 | Lec 12 Kullback-Leibler (KL) Divergence | 16:49 | [watch](https://www.youtube.com/watch?v=ihkGbIdbbxc&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=15) | Cross-entropy; $\mathrm{KL}=\mathrm{CE}-H$. Asymmetric; not a metric. | [13](./Mathematical-foundation-ml/13-Lec12-KL-Divergence/) |
+| 16 | Lec 13 Minimization of KL Divergence | 24:52 | [watch](https://www.youtube.com/watch?v=Ij4p5hLbfo4&list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu&index=16) | $\min\mathrm{KL}$ drops $H$; LLN; MLE ≡ min-KL estimator. | [14](./Mathematical-foundation-ml/14-Lec13-Minimization-of-KL/) |
 
 ### Risk minimization and Bayes
 

@@ -371,3 +371,19 @@ He uses script $\mathcal{P}$ for distribution functions; ML practice often works
 Ready → [NOTES.md](./NOTES.md).  
 Quiz: [quiz.html](./quiz.html).  
 Prior: [Lec 07](../08-Lec07-IID-Assumption/NOTES.md).
+
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Likelihood & Log-Likelihood** | [Likelihood & Log-Likelihood](../../MathsTerms/04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Parametric likelihood functions $L(\theta; \mathcal{D})$ as measures of parameter goodness-of-fit |
+| **Maximum Likelihood Estimation (MLE)** | [Maximum Likelihood Estimation (MLE)](../../MathsTerms/04-Probability-and-Statistical-Estimation/05-MLE.md) | Foundational principles of fitting parametric distribution families $\arg\max_\theta \ell(\theta)$ |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Gaussian, Bernoulli, Poisson, and categorical parametric models |
+
+---

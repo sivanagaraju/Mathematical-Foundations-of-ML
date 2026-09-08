@@ -1053,6 +1053,24 @@ def safe_evaluate(test_loader, model, device):
 
 ---
 
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Neural Activation Functions** | [Neural Activation Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md) | Non-linearities: ReLU, LeakyReLU, Sigmoid, Tanh and saturation dynamics |
+| **Softmax Function** | [Softmax Function](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/06-Softmax.md) | Probability simplex mapping, temperature scaling, and Log-Sum-Exp trick |
+| **Loss Functions** | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Binary Cross-Entropy (BCE), Cross-Entropy, and Mean Squared Error (MSE) |
+| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Stochastic Gradient Descent (SGD), Momentum, RMSProp, and Adam |
+| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Fully connected affine layers $y = Wx + b$ |
+
+---
+
 ## External references
 
 A curated collection of authoritative documentation, university lecture notes, and engineering guides expanding on the PyTorch model-building principles established in this tutorial:

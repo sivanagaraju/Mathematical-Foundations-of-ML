@@ -591,6 +591,24 @@ z2 = tensor.mul(tensor)
 
 ---
 
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Tensors, Strides, & Memory Layout** | [Tensors, Strides, & Memory Layout](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Contiguous memory allocations, shapes, strides, and dtypes in PyTorch |
+| **Tensor Broadcasting & Axis Semantics** | [Tensor Broadcasting & Axis Semantics](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/05-Tensor_Broadcasting.md) | Broadcasting rules for matching dimensions across arithmetic operations |
+| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Matrix multiplication `@` as linear projection in neural network layers |
+| **Matrix Operations & Transposition** | [Matrix Operations & Transposition](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md) | Hadamard element-wise product `*` and transposition (`.T`) |
+| **f-Divergence Theory** | [f-Divergence Theory](../../MathsTerms/05-Information-Theory-and-Divergences/04-f_Divergence.md) | Theoretical foundations connecting tensor networks to $f$-divergence objectives |
+
+---
+
 ## External References
 
 > Comprehensive multi-source learning materials curated for every subtopic in this tutorial.

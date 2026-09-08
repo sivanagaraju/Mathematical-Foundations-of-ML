@@ -454,3 +454,19 @@ If those five are easy, go to NOTES.
 Ready → [NOTES.md](./NOTES.md) (start at **Executive Summary**).
 Quiz later: [quiz.html](./quiz.html) Part A = this file.
 Prior video package: [Lec 03 Part 2](../04-Lec03-Recap-Probability-Theory-Part2/NOTES.md).
+
+
+---
+
+## 🗝️ Mathematical Foundations & MathsTerms Bridge
+
+> [!TIP]
+> **Foundational Knowledge Base:** This module directly relies upon formal mathematical constructs systematically defined and verified in our central [`MathsTerms`](../../MathsTerms) repository. For visual dependency graphs and multi-track learning roadmaps, consult the [Grand Unified Concept Map](../../MathsTerms/CONCEPT_MAP.md).
+
+| Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
+| :--- | :--- | :--- |
+| **Random Variables & Distributions (Expectation & Moments)** | [Random Variables & Distributions (Expectation & Moments)](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Expected value $\mathbb{E}[X]$, variance $\text{Var}(X)$, standard deviation, and covariance |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Moments and expected values of canonical probability distributions |
+| **Convexity & Jensen's Inequality** | [Convexity & Jensen's Inequality](../../MathsTerms/01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md) | Jensen's inequality $f(\mathbb{E}[X]) \le \mathbb{E}[f(X)]$ for convex transformations |
+
+---
