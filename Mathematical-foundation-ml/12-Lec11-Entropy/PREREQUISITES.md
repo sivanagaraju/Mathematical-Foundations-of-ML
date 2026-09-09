@@ -31,6 +31,20 @@
 
 ---
 
+## Math Terminology Rosetta Stone
+
+Before diving into the foundational pillars, use this reference table to decode mathematical shorthand and notation into plain English, spoken phonetics, and software implementations.
+
+| Symbol / Notation | Spoken English (Phonetics) | Mathematical Concept | Plain-English Intuition | Dedicated MathsTerm Link |
+| :--- | :--- | :--- | :--- | :--- |
+| $I(A) = -\log_2 P(A)$ | **INFO OF AY EQUALS NEG-uh-tiv LOG-TWO OF PEE OF AY** | Self-Information (Surprisal) | Bits of uncertainty or shock received upon learning event $A$ occurred | [Entropy & Cross-Entropy](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) |
+| $H(P) = -\sum_{x} P(x) \log_2 P(x)$ | **AYCH OF PEE** | Shannon Entropy | Expected or average surprise across all outcomes; minimum bits needed to encode a draw | [Entropy & Cross-Entropy](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) |
+| $\text{bits vs nats}$ | **BITS VERSUS NATS** | Information Units | Log base 2 measures information in bits; natural log ($\ln$) measures in nats | [Logarithms & Exponential Functions](../../MathsTerms/01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md) |
+| $\lim_{p \to 0^+} p \log p = 0$ | **LIH-mit AZ PEE GOES TO ZERO FROM RIGHT** | Limiting Entropy Zero-Product | Impossible events carry zero total entropy contribution because they never happen | [Logarithms & Exponential Functions](../../MathsTerms/01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md) |
+| $H(P) \le \log_2 |\mathcal{X}|$ | **AYCH LESS THAN LOG CARDINALITY** | Maximum Entropy Bound | Uniform distribution over $|\mathcal{X}|$ states has maximal uncertainty and highest entropy | [Entropy & Cross-Entropy](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) |
+
+---
+
 ## 1. Why $-\log$ of a probability?
 
 <a id="p1-neglog"></a>
@@ -372,3 +386,13 @@ Prior: [Lec 10 Challenges](../11-Lec10-Challenges-of-ML/NOTES.md).
 | **Loss Functions** | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Cross-entropy loss as the negative log-likelihood of categorical targets |
 
 ---
+
+## 🌉 Curriculum & Sibling Course Prerequisite Bridges
+
+| Prerequisite Concept | Source Module / Resource | Target Application in Lecture 11 | Verification Check |
+| :--- | :--- | :--- | :--- |
+| **IID Assumption & Joint Probability** | [Lecture 07: IID Assumption](../../Mathematical-foundation-ml/08-Lec07-IID-Assumption/NOTES.md) | Logarithm turns probability products into sums: $\log \prod p_i = \sum \log p_i$ | Show why independence enforces additivity of information |
+| **Continuous Densities vs PMFs** | [Lecture 09: Density Function](../../Mathematical-foundation-ml/10-Lec09-Density-Function/NOTES.md) | Understanding why continuous differential entropy can be negative while discrete entropy $\ge 0$ | Evaluate $h(X) < 0$ when density height exceeds 1 |
+| **The Three-Step Recipe** | [Lecture 10: Challenges of ML](../../Mathematical-foundation-ml/11-Lec10-Challenges-of-ML/NOTES.md) | Formulating Step 2 (distance metric) using information-theoretic divergence | Identify the role of entropy in defining KL divergence |
+| **Kullback-Leibler Divergence** | [Lecture 12: KL-Divergence](../../Mathematical-foundation-ml/13-Lec12-KL-Divergence/NOTES.md) | Relative entropy $D_{KL}(P \parallel Q) = \sum P(x) \log(P(x)/Q(x)) = H(P, Q) - H(P)$ | Contrast self-entropy with relative divergence |
+| **Minimization of KL** | [Lecture 13: Minimization of KL](../../Mathematical-foundation-ml/14-Lec13-Minimization-of-KL/NOTES.md) | Showing that minimizing KL divergence to the empirical data distribution reduces to minimizing cross-entropy | Connect entropy to empirical log-likelihood maximization |

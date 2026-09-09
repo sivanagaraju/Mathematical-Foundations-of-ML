@@ -585,6 +585,8 @@ You own the probability stack that makes statistical FA precise. Next lectures a
 
 ## External references
 
+> 📚 **Dedicated Annotated References Hub:** For seminal research papers, textbook chapter cross-references, sibling course bridges, and interactive visualizers, see [references.md](./references.md).
+
 | Resource | Matches lecture… | Why it helps |
 |----------|------------------|--------------|
 | [3Blue1Brown — Bayes theorem / probability intuition](https://www.youtube.com/watch?v=HZGCoVF3YvM) | Topics 2,7–8 uncertainty and $P$ as sizes | Visual unit-whole intuition for measures on events |

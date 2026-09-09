@@ -249,6 +249,12 @@ Every data point is still a range element of a RV; $N$ of them share one distrib
 
 If you force pixel independence, you may destroy the image’s structure. Instead: keep within-image dependence; assume across-patient independence (as a model).
 
+### Contrastive Analysis: Why Sample Independence, Not Dimension Independence
+
+- **Chosen Assumption (X):** Independence across data samples ($X_i \perp X_j$ for $i \neq j$).
+- **Naive Alternative (Y):** Independence across coordinate dimensions within a single sample ($X_{i,a} \perp X_{i,b}$).
+- **Why We Choose X over Y:** In physical sensory signals like radiographs, adjacent pixels share anatomical tissue density, absorption coefficients, and structural boundaries. If coordinates were independent, images would degenerate into high-frequency white noise static, erasing all diagnostic signal. Real-world machine learning relies on the correlation structure across coordinates within a sample to extract features, while relying on sample independence to guarantee that empirical sums converge by the Law of Large Numbers.
+
 We now have the critical axis correct. Still missing: how the two dataset viewpoints interact with “identical,” and what sampling means.
 
 ### Analogy for this topic only
@@ -556,6 +562,8 @@ Probability tools are in place. Next lectures name ML problems rigorously and de
 ---
 
 ## External references
+
+> 📚 **Dedicated Annotated References Hub:** For seminal research papers, textbook chapter cross-references, sibling course bridges, and interactive visualizers, see [references.md](./references.md).
 
 | Resource | Matches lecture… | Why it helps |
 |----------|------------------|--------------|

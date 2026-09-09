@@ -521,6 +521,8 @@ Refresh the listed probability tools; next sessions cast learning as estimating 
 
 ## External references
 
+> 📚 **Dedicated Annotated References Hub:** For seminal research papers, textbook chapter cross-references, sibling course bridges, and interactive visualizers, see [references.md](./references.md).
+
 | Resource | Matches lecture… | Why it helps |
 |----------|------------------|--------------|
 | [StatQuest — The normal distribution, clearly explained](https://www.youtube.com/watch?v=rzFX5NWojp0) | Topics 5–6 continuous distributions | Intuition before density-vs-measure trap |

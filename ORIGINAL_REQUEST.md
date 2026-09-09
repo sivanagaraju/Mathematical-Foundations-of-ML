@@ -77,3 +77,64 @@ The application must be delivered as a single self-contained HTML file (derivati
 - [ ] The 2D contour explorer updates gradient vector arrows and contour orthogonal angles in real time.
 - [ ] The Jacobian transformation grid dynamically warps unit circles and squares based on matrix slider inputs.
 - [ ] The entire application works out-of-the-box as a single file opened locally via file:// protocol.
+
+## 2026-09-08T16:51:56Z
+
+# Teamwork Project Prompt
+
+> Requested team: Standard full team
+
+Upgrade the `youtube-lecture-tutor` skill definition, reference specifications, contract templates, and automated validation suite (`validate_package.py`) to mandate first-principles pedagogy, zero-leap mathematical derivations with English phonetic pronunciation guides, contrastive "Why X, Not Y" justifications, executable simulation code packages (`examples/`), `glossary.md`, and `formulae_sheet.md`.
+
+Working directory: c:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\youtube-lecture-tutor
+Integrity mode: development
+
+## Reference Materials
+- Existing Skill Specification: `c:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\youtube-lecture-tutor\SKILL.md`
+- Upgrade Specification: `c:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\UPGRADE_SPEC.md`
+- Generative AI Upgrade Plan: `c:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\generative_ai_markdown_upgrade_plan.md`
+- Core Pedagogical Task Prompt: `c:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\prompt.md`
+- Validation Engine: `c:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\youtube-lecture-tutor\scripts\validate_package.py`
+
+## Requirements
+
+### R1. Expanded Multi-File Study Package Contract
+Upgrade the `youtube-lecture-tutor` package architecture beyond `PREREQUISITES.md`, `NOTES.md`, and `quiz.html` to mandatorily require:
+- `examples/*.py`: Fully self-contained, heavily commented, runnable Python simulations and mathematical verifications, directly referenced with line/file links inside `PREREQUISITES.md` and `NOTES.md`.
+- `glossary.md`: Master terminology glossary featuring formal definitions, plain-English meanings, and explicit English phonetic pronunciation guides (how practitioners speak formulas and Greek symbols aloud).
+- `formulae_sheet.md`: High-density reference sheet compiling core equations, mathematical guarantees, input/output tensor shapes, and contrastive "Why X, Not Y" summaries.
+- Dynamic `MathsTerms/` Integration: Standardized discovery and bidirectional hyperlinking to standalone foundational math term files adhering to the 7-section visual gold standard.
+
+### R2. First-Principles Pedagogy & Anti-AI-Slop Governance
+Incorporate pedagogical and anti-slop standards across `SKILL.md` and `references/`:
+- Storytelling & Physical Analogy: Start concepts from ground-floor physical systems before presenting formulas.
+- Zero-Leap Algebraic Derivations: Show every intermediate step in proofs and derivations without hand-waving or magic formulas.
+- Contrastive Justification: Explicitly answer "Why this specific concept/loss/algorithm?" and explain why naive alternatives fail in AI/ML.
+- Advanced Structured ASCII Visualizations: Multi-stage geometric and architectural ASCII diagrams for conceptual intuition.
+- Active Comprehension Checks: "Check Your Understanding" sections covering Recall, Apply, Diagnose, and Vocabulary.
+
+### R3. Automated Evaluation & Quality Gate Upgrade (`validate_package.py`)
+Enhance the Python evaluation suite `scripts/validate_package.py` to enforce the new contracts programmatically:
+- File & Structure Verifiers: Validate presence and formatting of `examples/*.py`, `glossary.md`, `formulae_sheet.md`, and `MathsTerms/` relative links.
+- Code Execution Verifier: Programmatically execute all scripts in `examples/` and assert clean termination (exit code 0).
+- Content & Pedagogy Linters: Check for phonetic pronunciation tables, contrastive rationale sections, active comprehension blocks, forbidden AI-slop phrases, and derivation gap heuristics.
+- Automated Test Suite: Provide test cases or a test harness demonstrating that `validate_package.py` accurately catches non-compliant packages and validates compliant ones.
+
+### R4. Template Synchronization & Reference Architecture
+- Author new and updated reference documents under `youtube-lecture-tutor/references/` (including templates for `glossary.md`, `formulae_sheet.md`, and `examples/`).
+- Synchronize all changes between the local workspace (`youtube-lecture-tutor/`) and the global user skill directory (`C:\Users\sivan\.gemini\config\skills\youtube-lecture-tutor/`).
+
+## Acceptance Criteria
+
+### Automated Verification
+- [ ] `validate_package.py` includes programmatic checks for `examples/`, `glossary.md`, `formulae_sheet.md`, phonetic pronunciations, contrastive sections, and `MathsTerms/` links.
+- [ ] Running `python validate_package.py --help` and the validator test suite exits with code 0 without syntax errors.
+- [ ] Execution tests correctly verify that Python scripts in `examples/` execute successfully without errors.
+- [ ] The validator successfully differentiates between a fully compliant package and one missing the new components.
+
+### Specification & Contract Criteria
+- [ ] `SKILL.md` documents the complete upgraded package layout, commands, and quality gate checklists.
+- [ ] Reference templates for `glossary.md`, `formulae_sheet.md`, and `examples/` exist under `references/`.
+- [ ] Anti-slop, zero-leap derivation, and contrastive "Why X, Not Y" rules are formally codified in `references/tutor-voice.md` and `references/output-blog-contract.md`.
+- [ ] All changes are mirrored and synchronized between the project directory and the global configuration directory.
+

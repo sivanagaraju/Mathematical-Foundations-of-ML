@@ -33,6 +33,20 @@
 
 ---
 
+## Math Terminology Rosetta Stone
+
+Before diving into the foundational pillars, use this reference table to decode mathematical shorthand and notation into plain English, spoken phonetics, and software implementations.
+
+| Symbol / Notation | Spoken English (Phonetics) | Mathematical Concept | Plain-English Intuition | Dedicated MathsTerm Link |
+| :--- | :--- | :--- | :--- | :--- |
+| $\arg\min_\theta D_{\text{KL}}(P_{\text{data}} \parallel P_\theta)$ | **ARG-MIN OVER THAY-tuh OF KAY-EL** | Minimum-KL Divergence Estimation | Finding the model parameters whose distribution comes closest to the data-generating law | [KL Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) |
+| $\mathbb{E}_{x \sim P}[\log p_\theta(x)]$ | **EX-pek-TAY-shun OF LOG PEE-THAY-tuh** | Expected Log-Likelihood | Average log-probability density assigned to real data by our model | [Likelihood & Log-Likelihood](../../MathsTerms/04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) |
+| $\frac{1}{N} \sum_{i=1}^N \log p_\theta(x_i)$ | **ONE OVER EN SUM OVER EYE OF LOG PEE** | Empirical Log-Likelihood Surrogate | Monte Carlo approximation of expected log-likelihood evaluated over finite IID batch | [Likelihood & Log-Likelihood](../../MathsTerms/04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) |
+| $\theta_{\text{MLE}} = \arg\max_\theta \sum_{i=1}^N \log p_\theta(x_i)$ | **THAY-tuh EM-EL-EE** | Maximum Likelihood Estimator (MLE) | Parameter choice maximizing probability/density of observing the collected training data | [Maximum Likelihood Estimation (MLE)](../../MathsTerms/04-Probability-and-Statistical-Estimation/05-MLE.md) |
+| $\text{NLL}(\theta) = -\frac{1}{N}\sum_{i=1}^N \log p_\theta(x_i)$ | **EN-EL-EL OF THAY-tuh** | Negative Log-Likelihood Loss | Standard deep learning loss (`nn.CrossEntropyLoss` / `NLLLoss`) minimizing KL divergence | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) |
+
+---
+
 ## 1. Density vs probability (continuous)
 
 <a id="p1-density"></a>
@@ -495,3 +509,13 @@ Quiz later: [quiz.html](./quiz.html) Part A = this file · Part B = NOTES.
 | **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Gradient-based optimization of log-likelihood objectives |
 
 ---
+
+## 🌉 Curriculum & Sibling Course Prerequisite Bridges
+
+| Prerequisite Concept | Source Module / Resource | Target Application in Lecture 13 | Verification Check |
+| :--- | :--- | :--- | :--- |
+| **IID Assumption & Sample Factorization** | [Lecture 07: IID Assumption](../../Mathematical-foundation-ml/08-Lec07-IID-Assumption/NOTES.md) | Factorizing the joint likelihood $L(\mathcal{D}; \theta) = \prod_{i=1}^N p_\theta(x_i)$ | Express log-likelihood as an additive sum of log-densities |
+| **Distribution Estimation Setup** | [Lecture 08: Distribution Estimation](../../Mathematical-foundation-ml/09-Lec08-Distribution-Estimation/NOTES.md) | The core machine learning goal of fitting unknown population distribution from data | Differentiate parameter estimation from non-parametric lookup |
+| **Three-Step Recipe Architecture** | [Lecture 10: Challenges of ML](../../Mathematical-foundation-ml/11-Lec10-Challenges-of-ML/NOTES.md) | Formulating the exact mathematical bridge connecting Step 2 (KL distance) to Step 3 (MLE optimization) | Walk through the three recipe steps for a Gaussian model |
+| **Information Entropy Invariance** | [Lecture 11: Entropy](../../Mathematical-foundation-ml/12-Lec11-Entropy/NOTES.md) | Expanding $D_{KL}(p \parallel q) = -H(p) + \mathbb{E}_p[-\log q]$ and proving $\nabla_\theta H(p_{\text{data}}) \equiv \mathbf{0}$ | Verify why the data entropy term drops out of $\arg\min_\theta$ |
+| **KL Divergence Fundamentals** | [Lecture 12: KL-Divergence](../../Mathematical-foundation-ml/13-Lec12-KL-Divergence/NOTES.md) | Asymmetry of forward vs reverse KL and Gibbs' inequality guarantee $D_{KL} \ge 0$ | Contrast mode-covering forward KL with mode-seeking reverse KL |

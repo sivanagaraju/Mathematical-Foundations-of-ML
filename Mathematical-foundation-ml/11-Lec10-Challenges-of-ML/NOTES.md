@@ -663,6 +663,8 @@ Next: ERM equivalence, then linear models — still the same three-step system.
 
 ## External references
 
+> 📚 **Dedicated Annotated References Hub:** For seminal research papers, textbook chapter cross-references, sibling course bridges, and interactive visualizers, see [references.md](./references.md).
+
 | Resource | Matches lecture… | Why it helps |
 |----------|------------------|--------------|
 | [StatQuest — Maximum Likelihood, clearly explained](https://www.youtube.com/watch?v=XepXtl9YKwc) | Topics 1–5 | Estimation + scoring models from data |

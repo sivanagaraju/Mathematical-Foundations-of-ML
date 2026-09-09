@@ -87,6 +87,7 @@ Law: `~/.grok/skills/youtube-lecture-tutor/`
 | [`Mathematical-Foundation-for-GenerativeAI/30-Lec18-Wasserstein-GAN/`](./Mathematical-Foundation-for-GenerativeAI/30-Lec18-Wasserstein-GAN/) | [Lec 18 Wasserstein GAN (WGAN)](https://www.youtube.com/watch?v=1neDqqgaXhE) | math_technical | OT / earth-mover · manifold hyp · KR dual · \|W\|_2=1 · more stable than naive GAN |
 | [`Mathematical-Foundation-for-GenerativeAI/31-Lec19-Inversion-GANs-FID/`](./Mathematical-Foundation-for-GenerativeAI/31-Lec19-Inversion-GANs-FID/) | [Lec 19 Inversion with GANs and FID](https://www.youtube.com/watch?v=zw2DUzD0TLE) | math_technical | BiGAN/ALI tuple D · invert E then G · FID = W2 of Inception Gaussians |
 | [`Mathematical-Foundation-for-GenerativeAI/32-Lec20-Latent-Variable-Models-VAE/`](./Mathematical-Foundation-for-GenerativeAI/32-Lec20-Latent-Variable-Models-VAE/) | [Lec 20 LVM and VAE intro](https://www.youtube.com/watch?v=4djE9goJtKs) | math_technical | p(x)=∫p(x,z) · ELBO · EM vs AEVB · reparam next class |
+| [`Mathematical-Foundation-for-GenerativeAI/33-Lec09-VAEs-Part1/`](./Mathematical-Foundation-for-GenerativeAI/33-Lec09-VAEs-Part1/) | [Lec 09 VAEs Part 1](https://www.youtube.com/watch?v=KHiRfCIpJkI) | math_technical | boxed ELBO · encoder/decoder · reparam Gaussian + inverse-CDF · reparam-only scope |
 
 ## Study one package
 

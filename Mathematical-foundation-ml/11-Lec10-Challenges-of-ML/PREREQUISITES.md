@@ -32,6 +32,20 @@
 
 ---
 
+## Math Terminology Rosetta Stone
+
+Before diving into the foundational pillars, use this reference table to decode mathematical shorthand and notation into plain English, spoken phonetics, and software implementations.
+
+| Symbol / Notation | Spoken English (Phonetics) | Mathematical Concept | Plain-English Intuition | Dedicated MathsTerm Link |
+| :--- | :--- | :--- | :--- | :--- |
+| $\mathcal{P} = \{p_\theta : \theta \in \Theta\}$ | **CAL-ih-GRAF-ik PEE** | Parametric Hypothesis Class | The family of candidate probability density models indexed by parameter vector $\theta$ | [Functions & Derivatives](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
+| $D(p, q)$ | **DEE OF PEE COMMA KYOO** | Statistical Divergence / Distance | Measure of statistical dissimilarity between true density $p$ and candidate model $q$ | [KL Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) |
+| $\theta^* = \arg\min_\theta D(p, p_\theta)$ | **ARG-MIN OVER THAY-tuh OF DEE** | Optimal Parameter Vector | The specific weight configuration that minimizes the discrepancy between true and modeled densities | [Functions & Derivatives](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
+| $\nabla_\theta \mathcal{L}(\theta)$ | **NAB-luh THAY-tuh OF EL** | Loss Gradient Vector | Direction of steepest error increase in parameter space used by optimizers to update weights | [Derivatives, Gradients & Jacobians](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) |
+| $\theta^{(t+1)} = \theta^{(t)} - \eta \nabla \mathcal{L}$ | **THAY-tuh AT TEE PLUS ONE** | Gradient Descent Update Step | Moving weights downhill against the loss gradient scaled by learning rate $\eta$ | [Gradient Descent](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) |
+
+---
+
 ## 1. Density and “estimate $p$” (reload)
 
 <a id="p1-density-estimate"></a>
@@ -426,3 +440,13 @@ Prior: [Lec 09 Density](../10-Lec09-Density-Function/NOTES.md).
 | **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Ill-conditioned curvature and optimization challenges in high dimensions |
 
 ---
+
+## 🌉 Curriculum & Sibling Course Prerequisite Bridges
+
+| Prerequisite Concept | Source Module / Resource | Target Application in Lecture 10 | Verification Check |
+| :--- | :--- | :--- | :--- |
+| **Overview & Function Approximation** | [Lecture 01: Overview Function Approximation](../../Mathematical-foundation-ml/02-Lec01-Overview-Function-Approximation/NOTES.md) | Universal Function Approximation (UFA) and choosing flexible model families | Differentiate lookup tables from parametric models |
+| **IID Assumption & Sample Factorization** | [Lecture 07: IID Assumption](../../Mathematical-foundation-ml/08-Lec07-IID-Assumption/NOTES.md) | Formulating the empirical dataset $\mathcal{D} = \{x_i\}_{i=1}^N$ as i.i.d. draws from true $p$ | State why joint sample probability factors as a product |
+| **Continuous Densities & Normalization** | [Lecture 09: Density Function](../../Mathematical-foundation-ml/10-Lec09-Density-Function/NOTES.md) | Continuous density models $p_\theta(x)$ and probability integral definitions | Verify $\int p_\theta(x) dx = 1$ |
+| **Information Entropy** | [Lecture 11: Entropy](../../Mathematical-foundation-ml/12-Lec11-Entropy/NOTES.md) | Measuring average surprisal and information content in data-generating distribution | Compute $H(p) = -\sum p(x)\log p(x)$ |
+| **Kullback-Leibler Divergence** | [Lecture 12: KL-Divergence](../../Mathematical-foundation-ml/13-Lec12-KL-Divergence/NOTES.md) | Formulating statistical divergence $D_{KL}(p \parallel p_\theta)$ as the canonical distance in Step 2 | Check asymmetric properties of KL divergence |

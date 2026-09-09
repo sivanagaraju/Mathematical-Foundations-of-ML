@@ -269,7 +269,7 @@ In lecture words: evaluate density freely; only integrals give probabilities.
 
 ### Bridge
 
-Is there a density that is obviously bigger than 1 so nobody can call the height a probability?
+Is there a density that provably exceeds 1 so nobody can call the height a probability?
 
 ---
 
@@ -518,6 +518,8 @@ What makes estimating a free-form density from finite samples hard? Next lecture
 ---
 
 ## External references
+
+> 📚 **Dedicated Annotated References Hub:** For seminal research papers, textbook chapter cross-references, sibling course bridges, and interactive visualizers, see [references.md](./references.md).
 
 | Resource | Matches lecture… | Why it helps |
 |----------|------------------|--------------|

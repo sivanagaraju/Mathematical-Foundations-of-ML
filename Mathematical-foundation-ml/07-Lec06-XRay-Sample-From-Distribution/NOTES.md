@@ -562,6 +562,8 @@ Unpack i.i.d.; continue toward densities and algorithms that estimate the distri
 
 ## External references
 
+> 📚 **Dedicated Annotated References Hub:** For seminal research papers, textbook chapter cross-references, sibling course bridges, and interactive visualizers, see [references.md](./references.md).
+
 | Resource | Matches lecture… | Why it helps |
 |----------|------------------|--------------|
 | [3Blue1Brown — But what is a neural network? (pixels as inputs)](https://www.youtube.com/watch?v=aircAruvnKk) | Topic 2 | Images as big input vectors (stacking intuition) |

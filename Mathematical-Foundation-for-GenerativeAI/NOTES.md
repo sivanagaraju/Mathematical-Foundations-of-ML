@@ -122,7 +122,7 @@ One recipe, reused every week:
 | Review | Tut 7–10 | Triplet / RV / CDF / joints; MLE, EM — the MFML spine used as a warm-up. |
 | Divergence | Lec 03–04, Tut 11 | $f$-div examples; VDM min–max via $f^\star$. |
 | Implicit generators | Lec 05, Tut 12, Lec 18–19 | GAN → DCGAN/cGAN in code → WGAN → invert $G$ and score with FID. |
-| Latent / VAE | Lec 20 | Incomplete likelihood; VAE as amortized variational inference. **Current end.** |
+| Latent / VAE | Lec 20 + Lec 09 VAEs Part 1 | Incomplete likelihood; VAE as amortized variational inference; boxed ELBO + reparam. **Current end.** |
 
 Suggested first watch: **Lec 02** (problem formulation, 64 min), then **Lec 03–04** ($f$-div and VDM). That is the same spine as IITM W1_L2–L4.
 
@@ -151,6 +151,7 @@ Suggested first watch: **Lec 02** (problem formulation, 64 min), then **Lec 03�
 | 19 | Lec 18 Wasserstein GAN (WGAN) | [`30-Lec18-Wasserstein-GAN/`](./30-Lec18-Wasserstein-GAN/) |
 | 20 | Lec 19 Inversion with GANs and FID | [`31-Lec19-Inversion-GANs-FID/`](./31-Lec19-Inversion-GANs-FID/) |
 | 21 | Lec 20 Latent Variable Models and VAE intro | [`32-Lec20-Latent-Variable-Models-VAE/`](./32-Lec20-Latent-Variable-Models-VAE/) |
+| 22 | Lec 09 VAEs Part 1 | [`33-Lec09-VAEs-Part1/`](./33-Lec09-VAEs-Part1/) |
 
 No package yet: course Intro, Tutorial 1.
 
@@ -206,7 +207,8 @@ Links keep the playlist id. `index` is the **YouTube slot** (newest-first list),
 | 18 | 4 | Tutorial 12 : Implementations of Vanilla GAN, DCGAN and Conditional GAN | 1:18:34 | [watch](https://www.youtube.com/watch?v=dBcURX7GrwE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=4) | Three GAN families in PyTorch: vanilla, conv (DCGAN), class-conditional. | [29](./29-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/) |
 | 19 | 3 | Lec 18 Wasserstein GAN (WGAN) | 44:48 | [watch](https://www.youtube.com/watch?v=1neDqqgaXhE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=3) | Earth-mover / $W_2$; 1-Lipschitz critic; why $f$-div saturates and WGAN does not. | [30](./30-Lec18-Wasserstein-GAN/) |
 | 20 | 2 | Lec 19 Inversion with GANs and FID | 28:12 | [watch](https://www.youtube.com/watch?v=zw2DUzD0TLE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=2) | Find $z$ with $G(z)\approx x$ via BiGAN/ALI tuples. FID = $W_2$ of Inception Gaussians. | [31](./31-Lec19-Inversion-GANs-FID/) |
-| 21 | 1 | Lec 20 Latent Variable Models and Introduction to Variational Autoencoder (VAE) | 55:25 | [watch](https://www.youtube.com/watch?v=4djE9goJtKs&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=1) | Hidden $z$; incomplete likelihood; ELBO; EM vs VAE when posterior intractable. **Current last lecture.** | [32](./32-Lec20-Latent-Variable-Models-VAE/) |
+| 21 | 1 | Lec 20 Latent Variable Models and Introduction to Variational Autoencoder (VAE) | 55:25 | [watch](https://www.youtube.com/watch?v=4djE9goJtKs&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=1) | Hidden $z$; incomplete likelihood; ELBO; EM vs VAE when posterior intractable. | [32](./32-Lec20-Latent-Variable-Models-VAE/) |
+| 22 | 0 | Lec 09 VAEs Part 1 | 32:56 | [watch](https://www.youtube.com/watch?v=KHiRfCIpJkI&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK) | Boxed ELBO $E_Q[\log P(X\|Z)]-KL$; encoder/decoder; reparam trick (Gaussian affine + inverse-CDF); reparam-only scope. | [33](./33-Lec09-VAEs-Part1/) |
 
 ---
 
@@ -265,6 +267,7 @@ Learning order. Index = YouTube slot.
 19. Lec 18 Wasserstein GAN (WGAN) → https://www.youtube.com/watch?v=1neDqqgaXhE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=3
 20. Lec 19 Inversion with GANs and FID → https://www.youtube.com/watch?v=zw2DUzD0TLE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=2
 21. Lec 20 Latent Variable Models and Introduction to Variational Autoencoder (VAE) → https://www.youtube.com/watch?v=4djE9goJtKs&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=1
+22. Lec 09 VAEs Part 1 → https://www.youtube.com/watch?v=KHiRfCIpJkI&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK
 
 ---
 

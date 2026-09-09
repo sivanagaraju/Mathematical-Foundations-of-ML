@@ -419,6 +419,8 @@ Next lectures apply this $d$ inside training / models.
 
 ## External references
 
+> 📚 **Dedicated Annotated References Hub:** For seminal research papers, textbook chapter cross-references, sibling course bridges, and interactive visualizers, see [references.md](./references.md).
+
 | Resource | Matches lecture… | Why it helps |
 |----------|------------------|--------------|
 | [StatQuest — Cross Entropy](https://www.youtube.com/watch?v=6ArSys5qGfA) | Topics 2–3 | CE as average surprise under a model |

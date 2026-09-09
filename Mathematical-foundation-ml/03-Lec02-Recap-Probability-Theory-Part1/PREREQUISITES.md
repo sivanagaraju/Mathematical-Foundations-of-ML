@@ -18,6 +18,35 @@ If you finished Lec 01, skim [function approximation warm-ups](../02-Lec01-Overv
 
 ---
 
+## Math Terminology Rosetta Stone
+
+Before diving into the foundational pillars, use this reference table to decode mathematical shorthand and notation into plain English, spoken phonetics, and software implementations.
+
+| Symbol / Notation | Spoken English (Phonetics) | Mathematical Concept | Plain-English Intuition | Dedicated MathsTerm Link |
+| :--- | :--- | :--- | :--- | :--- |
+| $(\Omega, \mathcal{F}, \mathbb{P})$ | **OH-MAY-GUH, CAL-ih-GRAF-ik EFF, PEE** | Probability Space Triplet | Formal framework: sample space, valid event set, and probability measure | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
+| $\Omega$ | **oh-MAY-guh** | Sample Space | The set containing every possible mutually exclusive outcome of an experiment | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
+| $\mathcal{F}$ | **CAL-ih-GRAF-ik EFF** | $\sigma$-Algebra | Collection of observable subsets closed under complementation and countable union | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
+| $\mathbb{P}(A)$ | **PROB-uh-BIL-ih-tee OF AY** | Probability Measure | Function assigning a real value in $[0, 1]$ measuring the likelihood of event $A$ | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
+| $\emptyset$ | **EMP-tee SET** or **FY** | Null Event | Impossible outcome containing zero elements, with guaranteed $\mathbb{P}(\emptyset) = 0$ | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
+| $A \cup B$ | **AY YOON-yun BEE** | Event Union | Logical OR: outcome occurs in event $A$, event $B$, or both | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
+| $A \cap B$ | **AY IN-ter-SEK-shun BEE** | Event Intersection | Logical AND: outcome satisfies both condition $A$ and condition $B$ simultaneously | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
+| $A^c$ | **AY KOM-pluh-ment** | Complementary Event | Logical NOT: outcome occurs outside of $A$, with $\mathbb{P}(A^c) = 1 - \mathbb{P}(A)$ | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
+
+---
+
+## 🌉 Curriculum & Sibling Course Prerequisite Bridges
+
+Before diving into the foundational pillars, review these key concepts from sibling course series and standalone mathematical foundations:
+
+| Assumed Concept | Primary Series Foundation | MathsTerms Deep-Dive | 1-Sentence Intuition Refresher |
+| :--- | :--- | :--- | :--- |
+| **Function Approximation Shift** | [Lec 01: Function Approximation](../../Mathematical-foundation-ml/02-Lec01-Overview-Function-Approximation/NOTES.md) | [Functions & Derivatives](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Moving from deterministic functions to statistical models requires formal probability measures. |
+| **Probability Axioms** | [Lec 03: Probability Recap 2](../../Mathematical-foundation-ml/04-Lec03-Recap-Probability-Theory-Part2/NOTES.md) | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) | The Kolmogorov triplet $(\Omega, \mathcal{F}, P)$ provides the rigorous foundation for random variables. |
+| **Distribution Estimation** | [Lec 08: Distribution Estimation](../../Mathematical-foundation-ml/09-Lec08-Distribution-Estimation/NOTES.md) | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Estimating unknown probability distributions from observed empirical data points. |
+
+---
+
 ## 1. Sets: bags of things
 
 <a id="p1-sets"></a>

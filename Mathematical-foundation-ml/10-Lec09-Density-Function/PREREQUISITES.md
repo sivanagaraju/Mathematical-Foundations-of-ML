@@ -32,6 +32,21 @@
 
 ---
 
+## Math Terminology Rosetta Stone
+
+Before diving into the foundational pillars, use this reference table to decode mathematical shorthand and notation into plain English, spoken phonetics, and software implementations.
+
+| Symbol / Notation | Spoken English (Phonetics) | Mathematical Concept | Plain-English Intuition | Dedicated MathsTerm Link |
+| :--- | :--- | :--- | :--- | :--- |
+| $p(x)$ | **PEE OF EKS** | Probability Density Function (PDF) | Height of continuous probability curve at point $x$; can exceed 1 because it is density, not probability | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $P(a \le X \le b) = \int_a^b p(x)dx$ | **INTEGRAL FROM AY TO BEE OF PEE OF EKS DEE-EKS** | Interval Probability | Total probability mass computed as the definite integral (area under curve) | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $p(x) \ge 0$ | **PEE OF EKS GREATER THAN OR EQUAL TO ZERO** | Non-Negativity Axiom | Continuous densities can never be negative anywhere on their domain | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
+| $\int_{-\infty}^\infty p(x)dx = 1$ | **INTEGRAL OVER REALS OF PEE OF EKS EQUALS ONE** | Normalization Axiom | Total probability of the entire real line must sum/integrate to exactly 1 | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
+| $p(x, y)$ | **PEE OF EKS COMMA WYE** | Joint Continuous Density | 2D surface height measuring joint probability accumulation per unit area $dx\,dy$ | [Joint, Marginal & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
+| $p(y \mid x) = \frac{p(x, y)}{p(x)}$ | **PEE OF WYE GIV-un EKS** | Conditional Continuous Density | Cross-sectional slice through joint density surface, normalized by marginal height $p(x)$ | [Joint, Marginal & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
+
+---
+
 ## 1. Continuous random variables and the CDF (reload)
 
 <a id="p1-continuous-cdf"></a>
@@ -410,3 +425,12 @@ Prior: [Lec 08](../09-Lec08-Distribution-Estimation/NOTES.md).
 | **Functions, Derivatives & Calculus Rules** | [Functions, Derivatives & Calculus Rules](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Calculus of densities: relationship between CDF $F(x)$ and derivative PDF $f(x)$ |
 
 ---
+
+## 🌉 Curriculum & Sibling Course Prerequisite Bridges
+
+| Prerequisite Concept | Source Module / Resource | Target Application in Lecture 09 | Verification Check |
+| :--- | :--- | :--- | :--- |
+| **Pushforward Measures & CDFs** | [Lecture 04: Recap Probability Theory Part 3](../../Mathematical-foundation-ml/05-Lec04-Recap-Probability-Theory-Part3/NOTES.md) | Formulating continuous CDF $F_X(x)$ as an integral of density $f_X(t)$ | Verify right-continuity and limits $\lim_{x \to -\infty} F(x) = 0, \lim_{x \to \infty} F(x) = 1$ |
+| **Joint Distributions & Conditioning** | [Lecture 05: Recap Probability Theory Part 2](../../Mathematical-foundation-ml/06-Lec05-Recap-Probability-Theory-Part2/NOTES.md) | Transitioning discrete Bayes conditioning to joint continuous densities $p(y \mid x) = p(x,y)/p(x)$ | Confirm marginal density integral $p(x) = \int p(x,y)dy > 0$ |
+| **Distribution Estimation Framing** | [Lecture 08: Distribution Estimation](../../Mathematical-foundation-ml/09-Lec08-Distribution-Estimation/NOTES.md) | Understanding why machine learning models switch from estimating abstract distributions $P$ to concrete densities $p$ | State the core ML goal of parameterizing and fitting $p_\theta(x)$ |
+| **High-Dimensional Scaling Challenges** | [Lecture 10: Challenges of ML](../../Mathematical-foundation-ml/11-Lec10-Challenges-of-ML/NOTES.md) | Analyzing density estimation failure modes as input dimensionality $d \to \infty$ | Explain why continuous empirical density estimation encounters empty volume sparsity |

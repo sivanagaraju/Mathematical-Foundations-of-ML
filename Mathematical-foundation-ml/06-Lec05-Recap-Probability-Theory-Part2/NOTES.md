@@ -560,6 +560,8 @@ Ground the disease/X-ray problem in joints and conditionals; introduce densities
 
 ## External references
 
+> 📚 **Dedicated Annotated References Hub:** For seminal research papers, textbook chapter cross-references, sibling course bridges, and interactive visualizers, see [references.md](./references.md).
+
 | Resource | Matches lecture… | Why it helps |
 |----------|------------------|--------------|
 | [StatQuest — Conditional Probability, Clearly Explained](https://www.youtube.com/watch?v=H02B3aMNKzE) | Topic 6 | Event-first $P(A\mid B)$ intuition |

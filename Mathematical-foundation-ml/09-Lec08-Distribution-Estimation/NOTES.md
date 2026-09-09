@@ -359,6 +359,12 @@ $$
 
 If you always estimate the wrong object, the use case fails. Instead: pick the target matching the ask.
 
+### Contrastive Analysis: Why Full Distribution Estimation, Not Moment Matching Alone
+
+- **Chosen Objective (X):** Full distribution estimation $\hat{P}$ (e.g. parametric density $p_\theta(x)$ or full conditional $P(Y \mid X)$).
+- **Naive Alternative (Y):** Moment matching alone (estimating only mean $\mathbb{E}[X]$ and variance $\text{Var}(X)$).
+- **Why We Choose X over Y:** For unimodal Gaussians, the first two moments completely specify the distribution. However, real-world data (such as disease populations or multi-class image features) is inherently multimodal. In a bimodal mixture of healthy and sick patients, the population mean falls in the empty valley between modes where virtually zero patients exist. Moment matching places peak density at this unrealistic mean, whereas full distribution estimation captures mode separation, skewness, and tail probabilities necessary for safe classification and generation.
+
 We now have the target catalog starting. Still missing: concrete disease use cases and $P(Y)$ vs $P(X\mid Y)$.
 
 ### Analogy for this topic only
@@ -618,6 +624,8 @@ Introduce PDFs so continuous estimation has the right objects.
 ---
 
 ## External references
+
+> 📚 **Dedicated Annotated References Hub:** For seminal research papers, textbook chapter cross-references, sibling course bridges, and interactive visualizers, see [references.md](./references.md).
 
 | Resource | Matches lecture… | Why it helps |
 |----------|------------------|--------------|

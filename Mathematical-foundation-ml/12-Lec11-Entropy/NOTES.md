@@ -263,6 +263,15 @@ Next topic will apply this to singletons $\{X=x_i\}$ of a discrete RV.
 
 If you drop the minus, “information” goes negative for ordinary events — useless as a size of surprise. Instead: surprisal $=-\log P$.
 
+### Contrastive Analysis: Why Logarithmic Surprisal, Not Linear or Reciprocal Scorer
+
+| Candidate Surprisal Formulation | Mathematical Definition | Additivity Property: $I(A \cap B)$ for $A \perp B$ | Reason for Rejection / Adoption |
+| :--- | :--- | :--- | :--- |
+| **Linear Deviation** | $I_{\text{lin}}(p) = 1 - p$ | $(1 - p_A) + (1 - p_B) - (1 - p_A)(1 - p_B) \neq I(A) + I(B)$ | **Rejected:** Fails independence additivity; bounded in $[0, 1]$ unable to scale rare events. |
+| **Reciprocal / Odds** | $I_{\text{rec}}(p) = \frac{1}{p} - 1$ | Multiplicative scaling: $\frac{1}{p_A p_B} - 1 \neq I(A) + I(B)$ | **Rejected:** Converts product into product, failing Shannon's additive channel capacity requirement. |
+| **Logarithmic Surprisal** | $I_{\text{log}}(p) = -\log_2(p)$ | $-\log_2(p_A \cdot p_B) = -\log_2(p_A) + (-\log_2(p_B)) \equiv I(A) + I(B)$ | **Adopted:** The unique continuous monotonic function mapping probability multiplication to information addition. |
+
+
 You can now compute $I(A)$ and check the three rules. Still missing: lift from one event to a whole distribution.
 
 ### Analogy for this topic only
@@ -446,6 +455,8 @@ Next: use information-theoretic measures to define distances between pairs of di
 ---
 
 ## External references
+
+> 📚 **Dedicated Annotated References Hub:** For seminal research papers, textbook chapter cross-references, sibling course bridges, and interactive visualizers, see [references.md](./references.md).
 
 | Resource | Matches lecture… | Why it helps |
 |----------|------------------|--------------|

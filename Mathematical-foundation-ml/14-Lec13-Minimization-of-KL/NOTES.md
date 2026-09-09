@@ -647,6 +647,8 @@ The recipe now has a named, computable estimator. What remains for later lecture
 
 ## External references
 
+> 📚 **Dedicated Annotated References Hub:** For seminal research papers, textbook chapter cross-references, sibling course bridges, and interactive visualizers, see [references.md](./references.md).
+
 **How to use:** stay in NOTES for the chain first. When a box still feels thin, open **only that topic’s row group** below (video + blog/notes). Prior package [Lec 12 KL](../13-Lec12-KL-Divergence/NOTES.md) is the immediate prequel for the definition of $D_{\mathrm{KL}}$.
 
 Links are **companions mapped to map boxes** — not a second lecture dump. Prefer one video *or* one short notes page per sticky point rather than watching everything.

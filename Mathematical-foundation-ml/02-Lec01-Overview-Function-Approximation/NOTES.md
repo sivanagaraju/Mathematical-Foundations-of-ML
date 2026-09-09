@@ -634,6 +634,8 @@ You now own the architecture: FA → blind obstacle → model/algorithm → vect
 
 ## External references
 
+> 📚 **Dedicated Annotated References Hub:** For seminal research papers, textbook chapter cross-references, sibling course bridges, and interactive visualizers, see [references.md](./references.md).
+
 Companions for **this** video’s boxes (videos + notes/blogs; not a wiki dump).
 
 | Resource | Matches lecture… | Why it helps |

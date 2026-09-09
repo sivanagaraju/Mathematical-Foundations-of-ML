@@ -466,6 +466,8 @@ You own $X$ as the bridge from Lec 02’s triple to ML vectors. Next sessions an
 
 ## External references
 
+> 📚 **Dedicated Annotated References Hub:** For seminal research papers, textbook chapter cross-references, sibling course bridges, and interactive visualizers, see [references.md](./references.md).
+
 | Resource | Matches lecture… | Why it helps |
 |----------|------------------|--------------|
 | [StatQuest — Histograms, Probability & Density](https://www.youtube.com/watch?v=qBigTkBLU6g) | Topics 4–6 from map to numbers | Gentle path from outcomes toward distributions of RVs |

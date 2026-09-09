@@ -1,0 +1,28 @@
+{
+  "title": "Lec 09 Variational Autoencoders (VAEs) Part 1",
+  "video_id": "KHiRfCIpJkI",
+  "url": "https://www.youtube.com/watch?v=KHiRfCIpJkI",
+  "duration_seconds": 1976,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A. P. (NPTEL IISc)",
+  "description": "Evidence Lower Bound, Variational Inference, Reparameterization Trick\nhttps://drive.google.com/file/d/1Kebb00VehPBMyleuw2ubp2qbvrBqyvZZ/view",
+  "playlist_index": 10,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 8,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "topics": [
+    "Foundations of Latent Variable Models and Marginal Likelihood Intractability",
+    "The Three Mandates of Neural LVMs and the Unified Generative Horizon",
+    "Deterministic vs Probabilistic Neural Representations of Distributions",
+    "Architecture Anatomy: The Independent Encoder and Decoder Networks",
+    "Gradient Decomposition of the ELBO: Isolating the Backpropagation Bottleneck",
+    "Product Rule Anatomy and the Failure of Naive Expectation Gradients",
+    "The Reparameterization Trick via the Law of the Unconscious Statistician (LOTUS)",
+    "Instantiating Reparameterization: Gaussian Affine Transforms, Inverse CDFs, and Beyond"
+  ]
+}
