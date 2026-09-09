@@ -6,3 +6,4 @@ screenshots/manifest.json
 GenAI-IITM.pdf
 .agents
 youtube-lecture-tutor/
+.grok_profile/
