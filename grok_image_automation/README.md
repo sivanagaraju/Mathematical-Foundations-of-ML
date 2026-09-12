@@ -91,8 +91,9 @@ python grok_imagine_runner.py --range 14 33 --parallel 3
 | :--- | :--- | :--- |
 | `--run` | *(flag)* | Start batch generation process for a single tutorial |
 | `--range` | `START END` | Batch process all folders in number range (e.g. `--range 14 33`) |
-| `--skip-existing` | *(flag)* | Skip folders that already have all images complete (default: True) |
-| `--force` | *(flag)* | Force regenerate even if images already exist |
+| `--regenerate`, `--force` | *(flag)* | Force regenerate all topics even if images already exist |
+| `--skip-existing` | *(flag)* | Skip topics that already have 2 complete images |
+| `--max-retries` | `N` | Retries for topics that fail or have < 2 images (default: `2`) |
 | `--parallel` | `1-3` | Number of parallel generations in concurrent tabs (max: `3`, e.g. `--parallel 3`) |
 | `--login` | *(flag)* | Launch Chrome interactively to log in / refresh session |
 | `--transcripts-dir` | `<path>` | Direct path to `raw/transcript-by-topic` folder |

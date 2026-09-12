@@ -1,0 +1,27 @@
+{
+  "title": "Lec 10 VAEs Part 2",
+  "video_id": "plrfGKsZihg",
+  "url": "https://www.youtube.com/watch?v=plrfGKsZihg",
+  "duration_seconds": 2706,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A. P. (NPTEL IISc)",
+  "description": "Forward and Backward Pass in VAEs, Training and Inference in VAEs\nhttps://drive.google.com/file/d/1Kebb00VehPBMyleuw2ubp2qbvrBqyvZZ/view",
+  "playlist_index": 14,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 7,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "topics": [
+    "Practical Forward Computation and Reparameterized Batch Sampling",
+    "Decoder Likelihood Formulations: Gaussian Distribution and MSE Loss Equivalence",
+    "Bernoulli Decoder Likelihood and Binary Cross-Entropy Loss",
+    "Closed-Form Gaussian KL Divergence and Analytical Encoder Gradients",
+    "Coordinate Optimization Dynamics: The EM Algorithm and K-Means Analogy",
+    "Ancestral Sampling, Latent Space Traversal, and Generation Mechanics",
+    "Posterior Collapse, Average Image Blurriness, and Latent Hole Diagnostics"
+  ]
+}

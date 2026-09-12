@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tutorial 13 WGAN Weight Clipping</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Tutorial 13 WGAN Weight Clipping</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q01", "part": "prerequisites", "flavor": "definition", "prompt": "What is the primary theoretical advantage of the 1-Wasserstein distance over Jensen-Shannon divergence in generative modeling?", "options": ["Wasserstein distance provides smooth, continuous gradients everywhere, even when real and generated distributions reside on completely disjoint manifolds.", "Wasserstein distance is always zero for all distributions.", "Wasserstein distance eliminates the need for backpropagation.", "Wasserstein distance requires solving a discrete quadratic equation."], "answer": "A", "whyCorrect": "When two distributions have non-overlapping support, JS divergence is constant at log(2) with zero gradient, whereas Wasserstein distance grows linearly with spatial separation, providing informative gradients.", "whyOthers": "Option A is mathematically false. Option C is absurd since neural networks require backpropagation. Option D is irrelevant.", "diagram": "Disjoint Manifolds:  JS Divergence = log(2) (Zero Grad)  VS  Wasserstein = |theta| (Constant Grad)", "anchor": "p1-wasserstein-metric"}, {"id": "q02", "part": "prerequisites", "flavor": "tradeoff", "prompt": "Why did Kantorovich and Rubinstein reformulate the primal optimal transport problem into its dual form?", "options": ["To prove that all probability distributions are Gaussians.", "The primal problem requires searching over all joint probability distributions (transport plans), which is computationally intractable in continuous spaces; the dual reduces this to optimizing a single 1-Lipschitz function.", "To remove the generator network from the training loop.", "To force all gradients to be strictly negative."], "answer": "B", "whyCorrect": "The primal problem involves an infimum over joint couplings Gamma(P_r, P_g), which is intractable for continuous high-dimensional spaces. Duality transforms this into maximizing expectations over 1-Lipschitz functions.", "whyOthers": "Option A is untrue. Option C is false because generator is trained against the Critic. Option D is nonsense.", "diagram": "Primal: inf_{gamma in Gamma} E[||x - y||]  ===>  Dual: sup_{||f||_L <= 1} E[f(x)] - E[f(y)]", "anchor": "p2-kantorovich-duality"}, {"id": "q03", "part": "prerequisites", "flavor": "numerical", "prompt": "Let P_0 be a Dirac delta at x = 0 and P_theta be a Dirac delta at x = 3. What is the 1-Wasserstein distance W_1(P_0, P_theta)?", "options": ["0.0", "log(2) = 0.693", "3.0", "9.0"], "answer": "C", "whyCorrect": "The 1-Wasserstein distance between two point masses separated by distance d is exactly d. Here, |3 - 0| = 3.0.", "whyOthers": "Option A would mean identical distributions. Option C is the Jensen-Shannon divergence. Option D is squared distance.", "diagram": "W_1(delta_0, delta_3) = |3 - 0| = 3.0", "anchor": "p1-wasserstein-metric"}, {"id": "q04", "part": "notes", "flavor": "map", "prompt": "How does the Critic network in WGAN differ architecturally from the Discriminator in standard GANs?", "options": ["The Critic has no hidden layers.", "The Critic uses Softmax over 100 classes.", "The Critic is trained with cross-entropy loss.", "The Critic discards the final Sigmoid activation and outputs an unconstrained real-valued scalar score, interpreting outputs as potential values rather than probabilities."], "answer": "D", "whyCorrect": "In standard GANs, the discriminator outputs a probability in [0, 1] via Sigmoid. In WGAN, the Critic acts as the dual witness function f(x) and must output unbounded real values.", "whyOthers": "Option A is false. Option C applies to multi-class classification. Option D describes standard binary cross-entropy GANs.", "diagram": "Standard GAN: x -> Conv -> Sigmoid -> [0, 1]  VS  WGAN: x -> Conv -> Linear -> (-inf, +inf)", "anchor": "p3-lipschitz-continuity"}, {"id": "q05", "part": "notes", "flavor": "trap", "prompt": "Why is the Adam optimizer with standard momentum (beta_1 = 0.9) discouraged when training WGAN with hard weight clipping?", "options": ["When weights hit the clipping boundaries [-c, c], momentum pushes them into saturated boundaries, causing erratic oscillations and destabilizing Critic optimization.", "Because Adam cannot compute gradients for convolutional layers.", "Because Adam causes learning rates to decay to zero after 10 steps.", "Because Adam produces complex-valued loss values."], "answer": "A", "whyCorrect": "Hard weight clipping creates non-smooth parameter truncations. When combined with Adam's running momentum buffer, the optimizer continues pushing weights in historical directions despite boundary constraints.", "whyOthers": "Option A is false. Option C is untrue. Option D is imaginary.", "diagram": "Weight Clipping + High Momentum Buffer ===> Saturated Boundary Thrashing", "anchor": "p4-hard-weight-clipping"}, {"id": "q06", "part": "notes", "flavor": "definition", "prompt": "What does a function f being '1-Lipschitz continuous' mean mathematically?", "options": ["The function is constantly equal to 1 everywhere.", "For all x_1, x_2, the rate of change is bounded: |f(x_1) - f(x_2)| <= ||x_1 - x_2||, meaning gradients have norm <= 1 everywhere.", "The function has zero second derivative.", "The function can only accept unit vectors as input."], "answer": "B", "whyCorrect": "A function is 1-Lipschitz if the absolute difference between outputs never exceeds the Euclidean distance between inputs, ensuring gradients are bounded by 1.", "whyOthers": "Option A describes a constant function. Option C describes linear functions. Option D confuses domain with smoothness.", "diagram": "|f(x_1) - f(x_2)| <= 1.0 * ||x_1 - x_2||", "anchor": "p3-lipschitz-continuity"}, {"id": "q07", "part": "notes", "flavor": "tradeoff", "prompt": "Why is the Critic trained for multiple steps (e.g. n_critic = 5) for every single generator update step in WGAN?", "options": ["Because the generator is already pretrained.", "Because PyTorch requires multiple passes to allocate GPU memory.", "Because the Kantorovich-Rubinstein duality equality only holds when the Critic is close to the optimal supremum; training the Critic to optimality provides accurate Wasserstein distance estimates.", "Because n_critic = 5 reduces the batch size by 5x."], "answer": "C", "whyCorrect": "The loss is a valid approximation of the Wasserstein distance only when the Critic is near optimality. Unlike standard GANs where an optimal discriminator causes vanishing gradients, an optimal Critic provides clean gradients.", "whyOthers": "Option A is false. Option C is false. Option D is untrue.", "diagram": "Train Critic (5 steps) -> Optimal f*(x) -> Accurate W1 Estimate -> 1 Generator Step", "anchor": "p2-kantorovich-duality"}, {"id": "q08", "part": "notes", "flavor": "trap", "prompt": "What major empirical failure mode occurs when the weight clipping parameter c is chosen too small (e.g. c = 0.0001)?", "options": ["The GPU runs out of VRAM.", "The model produces inverted color images.", "Reconstruction loss becomes negative.", "Gradients vanish exponentially with network depth, preventing the early convolutional layers of the Critic from learning any features."], "answer": "D", "whyCorrect": "If c is too small, backpropagating through L layers multiplies gradients by small matrices, causing exponential gradient decay.", "whyOthers": "Option A is false. Option C is unrelated. Option D is irrelevant.", "diagram": "Small c -> ||W|| < 1 -> Gradients vanish exponentially through deep layers", "anchor": "p4-hard-weight-clipping"}, {"id": "q09", "part": "notes", "flavor": "numerical", "prompt": "If real sample score E[f(x_real)] = 4.5 and generated sample score E[f(x_fake)] = 1.2, what is the empirical Wasserstein distance estimate?", "options": ["3.3", "5.7", "0.26", "2.25"], "answer": "A", "whyCorrect": "The empirical Wasserstein estimate is E[f(x_real)] - E[f(x_fake)] = 4.5 - 1.2 = 3.3.", "whyOthers": "Option A adds the scores. Option C divides them. Option D averages them.", "diagram": "W_1 estimate = E[f(x_real)] - E[f(x_fake)] = 4.5 - 1.2 = 3.3", "anchor": "p1-wasserstein-metric"}, {"id": "q10", "part": "notes", "flavor": "map", "prompt": "Why does the WGAN Critic loss correlate directly with sample quality, unlike traditional GAN discriminator loss?", "options": ["Because WGAN loss is always zero when training ends.", "Because the Critic uses labels from ImageNet.", "Because the negative Critic loss directly approximates the 1-Wasserstein distance between real and generated distributions; as generated samples improve, W_1 monotonically decreases toward zero.", "Because the generator optimizes mean squared error."], "answer": "C", "whyCorrect": "In standard GANs, discriminator loss oscillates unpredictably. In WGAN, the loss measures the actual transport distance, meaning a decreasing loss directly signifies converging distributions.", "whyOthers": "Option A is false. Option C is false. Option D is untrue.", "diagram": "Lower WGAN Loss <===> Lower Transport Distance <===> Higher Sample Fidelity", "anchor": "p1-wasserstein-metric"}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

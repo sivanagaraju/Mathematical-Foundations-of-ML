@@ -1,0 +1,27 @@
+{
+  "title": "Tutorial 17 : Implementation overview of Diffusion Models",
+  "video_id": "Jw01N9Efubw",
+  "url": "https://www.youtube.com/watch?v=Jw01N9Efubw",
+  "duration_seconds": 2311,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "Diffusion Models\nhttps://colab.research.google.com/drive/15nVkKu1mySDHzEj4NaqDjDAUUvZsTxzR?usp=sharing",
+  "playlist_index": 1,
+  "chapter_count": 0,
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "instructor": "Prof. Chiranjib Bhattacharyya / Prof. Partha Pratim Talukdar (IISc)",
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topics": [
+    "Hierarchical VAE Formulation & Fixed Forward Process: Equal Dimensions and Parameter-Free Destruction",
+    "ELBO Deconstruction & The Consistency Term: Dual-Variable Expectation and Monte Carlo Variance",
+    "Bayes Conditioning on Clean Data: Transforming Consistency into the Single-Variable Denoising Term",
+    "Analytical Tractable Posterior: Deriving Closed-Form Mean and Variance in Equation 70",
+    "Calvin Luo's Quartet: Mathematical Equivalence of Mean, Sample, Noise, and Score Parameterizations",
+    "Unified U-Net Architecture: Deterministic Algebraic Mapping to Reverse Mean and Training Invariance"
+  ]
+}

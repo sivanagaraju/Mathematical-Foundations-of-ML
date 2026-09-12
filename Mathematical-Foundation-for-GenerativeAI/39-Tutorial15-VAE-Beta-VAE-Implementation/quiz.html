@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tutorial 15 VAE & Beta-VAE Implementation</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Tutorial 15 VAE & Beta-VAE Implementation</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q01", "part": "prerequisites", "flavor": "definition", "prompt": "What is the primary mathematical reason for outputting log-variance log(sigma^2) rather than standard deviation sigma from the encoder in PyTorch?", "options": ["Because standard deviation can only take negative values.", "Linear layers output values in (-inf, +inf); parameterizing in log-space guarantees that computed standard deviation sigma = exp(0.5 * logvar) is strictly positive without requiring artificial clipping.", "Because PyTorch cannot backpropagate through standard deviation.", "Because log-variance eliminates the need for an activation function."], "answer": "B", "whyCorrect": "Neural network outputs are unconstrained real numbers. Mapping to variance directly risks negative numbers which break standard deviations. Outputting log-variance ensures valid positive variances for all inputs.", "whyOthers": "Option A is mathematically false (standard deviations must be non-negative). Option C is false. Option D is irrelevant.", "diagram": "Linear Layer ---> log(sigma^2) in (-inf, +inf) ---> sigma = exp(0.5 * logvar) > 0", "anchor": "p1-logvar-parameterization"}, {"id": "q02", "part": "prerequisites", "flavor": "tradeoff", "prompt": "How does the reparameterization trick z = mu + sigma * eps enable gradient flow through the encoder network?", "options": ["It eliminates all stochasticity from the model forever.", "It isolates the non-differentiable stochastic sampling step into an external independent noise variable eps ~ N(0, I), transforming the latent code z into a deterministic, differentiable function of encoder parameters.", "It increases the learning rate of the convolutional layers by 10x.", "It replaces backpropagation with finite differences."], "answer": "B", "whyCorrect": "By expressing sampling as a deterministic transformation z = mu + sigma * eps, autograd computes exact partial derivatives dz/dmu = 1 and dz/dsigma = eps without stochastic node blockages.", "whyOthers": "Option A is false because sampling still occurs. Option C is untrue. Option D is absurd.", "diagram": "Stochastic Node z ~ N(mu, sigma^2) (Blocked)  ===>  Deterministic z = mu + sigma * eps (Differentiable!)", "anchor": "p2-reparameterization-trick"}, {"id": "q03", "part": "prerequisites", "flavor": "numerical", "prompt": "For a single 1D latent dimension, if the encoder outputs mu = 0.0 and logvar = 0.0, what is the analytical KL divergence D_KL(N(mu, sigma^2) || N(0, 1))?", "options": ["0.0 nats", "1.0 nats", "0.5 nats", "2.0 nats"], "answer": "A", "whyCorrect": "D_KL = -0.5 * (1 + logvar - mu^2 - exp(logvar)) = -0.5 * (1 + 0 - 0 - exp(0)) = -0.5 * (1 - 1) = 0.0 nats.", "whyOthers": "Option B ignores the -0.5 multiplier. Option C and D compute incorrect algebra.", "diagram": "D_KL = -0.5 * (1 + 0 - 0 - 1) = 0.0 nats (Identical distributions)", "anchor": "p3-analytical-gaussian-kl"}, {"id": "q04", "part": "notes", "flavor": "map", "prompt": "In the Beta-VAE loss formulation, how does setting beta > 1.0 alter the latent representation compared to standard VAE (beta = 1.0)?", "options": ["It causes the encoder to memorize pixels exactly like a lookup table.", "It imposes higher information capacity compression, forcing latent dimensions to align with independent ground-truth generative factors (disentanglement) at the cost of slightly higher reconstruction error.", "It eliminates all convolutional layers in favor of fully connected layers.", "It forces the latent dimensionality to increase by a factor of beta."], "answer": "B", "whyCorrect": "Higher beta increases the penalty on total correlation across latent coordinates, forcing the network to discover statistically independent axes of variation.", "whyOthers": "Option A describes beta = 0. Option C and D confuse hyperparameters with network architecture.", "diagram": "beta > 1.0 ===> Higher Compression Penalty ===> Independent Disentangled Latent Axes", "anchor": "p4-beta-disentanglement"}, {"id": "q05", "part": "notes", "flavor": "trap", "prompt": "What severe failure mode commonly occurs when training a Beta-VAE with constant beta = 5.0 starting from the very first epoch?", "options": ["The GPU explodes into a thermal shutdown.", "Instant catastrophic posterior collapse: the heavy KL penalty dominates early training before the decoder has learned visual features, forcing all posteriors to N(0, I) and producing blurry mean images.", "The loss function evaluates to a complex number.", "The learning rate increases to infinity."], "answer": "B", "whyCorrect": "At initialization, reconstruction loss is high and noisy. A heavy KL penalty causes the optimizer to take the easy path: setting mu=0, logvar=0 to zero out KL, collapsing the latent space.", "whyOthers": "Option A is humorous nonsense. Option C is mathematically impossible. Option D is untrue.", "diagram": "High beta at step 0 ===> Optimizer zeros out KL ===> Instant Posterior Collapse", "anchor": "p4-beta-disentanglement"}, {"id": "q06", "part": "notes", "flavor": "definition", "prompt": "What is a 'latent dimension traversal' and what does it reveal about a trained generative model?", "options": ["It is a technique for pruning neural network weights.", "It involves systematically varying a single latent coordinate z_k across a range (e.g. [-3, +3]) while holding all other coordinates fixed at zero, revealing whether that axis controls a single isolated factor of variation.", "It is a method for measuring the floating point operations of the decoder.", "It is a sorting algorithm for training batches."], "answer": "B", "whyCorrect": "Latent traversals visually verify disentanglement: if sweeping coordinate z_3 smoothly changes digit rotation without altering digit thickness or style, that factor is cleanly disentangled.", "whyOthers": "Option A relates to compression. Option C relates to FLOPs. Option D relates to data loading.", "diagram": "Sweep z_1: [-3.0 ---> 0.0 ---> +3.0]  ===>  Observe smooth physical variation in reconstructions", "anchor": "p2-reparameterization-trick"}, {"id": "q07", "part": "notes", "flavor": "tradeoff", "prompt": "When choosing between Binary Cross-Entropy (BCE) and Mean Squared Error (MSE) for the VAE reconstruction loss on normalized [0, 1] images, what is the key consideration?", "options": ["BCE corresponds to a Bernoulli observation model (sharper on high-contrast black-and-white datasets like MNIST), whereas MSE corresponds to a Gaussian observation model (natural for continuous color distributions).", "MSE can only be used on 3-channel RGB images.", "BCE requires that latent dimensions be integers.", "There is zero difference between BCE and MSE."], "answer": "A", "whyCorrect": "BCE maximizes Bernoulli likelihood, heavily penalizing intermediate gray values on black-and-white digits. MSE assumes Gaussian noise, which often produces softer, smoother images.", "whyOthers": "Option B is false. Option C is untrue. Option D ignores underlying probability likelihood formulations.", "diagram": "Bernoulli Assumption (BCE) -> Crisp High-Contrast  VS  Gaussian Assumption (MSE) -> Smooth Continuous", "anchor": "p3-analytical-gaussian-kl"}, {"id": "q08", "part": "notes", "flavor": "numerical", "prompt": "If an image batch has B = 16, C = 1, H = 28, W = 28, what is the total number of pixel elements evaluated in the reconstruction loss per batch?", "options": ["12,544", "784", "448", "3,136"], "answer": "A", "whyCorrect": "Total elements = B * C * H * W = 16 * 1 * 28 * 28 = 16 * 784 = 12,544 pixels.", "whyOthers": "Option B is for a single image. Option C is 16 * 28. Option D is 4 * 784.", "diagram": "Batch Elements = 16 * 1 * 28 * 28 = 12,544", "anchor": "p1-logvar-parameterization"}, {"id": "q09", "part": "notes", "flavor": "trap", "prompt": "Why should log-variance logvar be clamped (e.g. torch.clamp(logvar, -15.0, 10.0)) before computing exp(0.5 * logvar)?", "options": ["To prevent the GPU from running out of memory.", "To prevent numerical overflow into inf/NaN if encoder weights produce large activations, and to prevent underflow where variance collapses to machine zero.", "Because PyTorch cannot compute exponential of numbers greater than 1.0.", "To force all latent channels to have identical variance."], "answer": "B", "whyCorrect": "Floating-point exp(x) overflows to inf around x = 88. Clamping logvar prevents exploding standard deviations and numerical NaN crashes.", "whyOthers": "Option A is false. Option C is incorrect. Option D misunderstands clamping bounds.", "diagram": "clamp(logvar, -15.0, 10.0) ===> Prevents NaN overflow and zero-variance underflow", "anchor": "p1-logvar-parameterization"}, {"id": "q10", "part": "notes", "flavor": "master-map", "prompt": "Trace the complete execution pipeline of a single forward and backward pass in Beta-VAE:", "options": ["Input x -> ConvEncoder -> mu, logvar -> Reparameterize z = mu + exp(0.5*logvar)*eps -> ConvDecoder -> x_hat -> Compute Recon Loss (BCE/MSE) -> Compute Analytical KL -> Total Loss = Recon + beta * KL -> backward() -> Adam step.", "Input x -> ConvEncoder -> Discrete Codebook Argmin -> z_q -> ConvDecoder -> STE step.", "Input x -> Real/Fake classification -> Sigmoid -> Weight clipping step.", "Input x -> Forward Diffusion Process -> Noise Prediction -> Reverse Step."], "answer": "A", "whyCorrect": "This accurately summarizes the full forward pass, reparameterized latent sampling, reconstruction and KL computation, and backpropagation.", "whyOthers": "Option B describes VQ-VAE. Option C describes WGAN. Option D describes Diffusion models.", "diagram": "x -> Encoder -> (mu, logvar) -> z = mu + sig*eps -> Decoder -> x_hat -> Recon + beta*KL -> Adam", "anchor": "p2-reparameterization-trick"}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

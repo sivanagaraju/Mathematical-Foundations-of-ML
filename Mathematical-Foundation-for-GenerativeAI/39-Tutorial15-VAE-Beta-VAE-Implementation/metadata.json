@@ -1,0 +1,26 @@
+{
+  "title": "Tutorial 15 : VAE and Beta-VAE Implementation",
+  "video_id": "f_X2vwIXVz4",
+  "url": "https://www.youtube.com/watch?v=f_X2vwIXVz4",
+  "duration_seconds": 1820,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A. P. (NPTEL IISc)",
+  "description": "PyTorch implementation of VAE and Beta-VAE, convolutional encoder-decoder, reparameterization trick, BCE vs MSE reconstruction, beta KL scaling, latent space traversal",
+  "playlist_index": 17,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "topics": [
+    "Architectural Design: Convolutional Encoder and Convolutional Decoder for Vision",
+    "Reparameterization Module: Differentiable Sampling via Gaussian Auxiliary Noise",
+    "Loss Engineering: Balancing Reconstruction with Scaled Analytical Gaussian KL Divergence",
+    "Tuning the Disentanglement Multiplier beta: Reconstruction Crispness vs Latent Organization",
+    "Latent Space Traversals: Isolating Generative Factors along Orthogonal Axes",
+    "Complete Training Loop: Gradient Norm Monitoring, Epoch Scheduling, and Visualizations"
+  ]
+}

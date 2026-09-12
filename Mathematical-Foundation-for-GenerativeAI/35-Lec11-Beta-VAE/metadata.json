@@ -1,0 +1,26 @@
+{
+  "title": "Lec 11 Beta- VAE",
+  "video_id": "I89atful2qg",
+  "url": "https://www.youtube.com/watch?v=I89atful2qg",
+  "duration_seconds": 1427,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A. P. (NPTEL IISc)",
+  "description": "Posterior collapse, Beta-VAE, Disentangled Representations, Information Bottleneck\nhttps://drive.google.com/file/d/1Kebb00VehPBMyleuw2ubp2qbvrBqyvZZ/view",
+  "playlist_index": 13,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "topics": [
+    "Mechanics of Posterior Collapse and the Blurry Consensus Problem",
+    "The Bias-Variance Spectrum: Overfitting Dirac Deltas vs Over-Regularized Collapses",
+    "Bayesian Representation Regularization: Priors on Weights versus Activations",
+    "Constrained Optimization, Lagrange Multipliers, and the Beta-VAE Formulation",
+    "The Beta Trade-Off Frontier: Reconstruction Fidelity versus Generative Sampling",
+    "Beyond Isotropic Priors: VampPrior, Multimodality, and the Road to VQ-VAE"
+  ]
+}

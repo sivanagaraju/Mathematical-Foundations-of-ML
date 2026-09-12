@@ -1,0 +1,27 @@
+{
+  "title": "Lec 14 Diffusion Models - Part 1",
+  "video_id": "Q6EUgNEPwRk",
+  "url": "https://www.youtube.com/watch?v=Q6EUgNEPwRk",
+  "duration_seconds": 2108,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "DDPMs (Denoising Diffusion Probabilistic Models), Hierarchical variational autoencoders (HVAEs), Forward process, Reverse Process\nhttps://drive.google.com/file/d/1Kebb00VehPBMyleuw2ubp2qbvrBqyvZZ/view",
+  "playlist_index": 10,
+  "chapter_count": 0,
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "instructor": "Prof. Chiranjib Bhattacharyya / Prof. Partha Pratim Talukdar (IISc)",
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topics": [
+    "Hierarchical Variational Formulation: Defining Trajectories q(x_{1:T}|x_0) and p_theta(x_{0:T})",
+    "The Naive Variational Lower Bound (ELBO): High Monte Carlo Variance Across T Steps",
+    "Bayes Conditioning Trick: Reformulating Forward Transitions q(x_t|x_{t-1}, x_0)",
+    "The Telescoping Product Cancellation: Collapsing Joint Path Quotients into Per-Step Ratios",
+    "The Tripartite ELBO Decomposition: Prior Matching L_T, Denoising L_{t-1}, and Reconstruction L_0",
+    "Tractable Posterior q(x_{t-1}|x_t, x_0): Gaussian Expansion and Variance Parameters"
+  ]
+}

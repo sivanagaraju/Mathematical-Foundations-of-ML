@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lec 12 Vector Quantised VAE</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Lec 12 Vector Quantised VAE</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q01", "part": "prerequisites", "flavor": "definition", "prompt": "In the context of VQ-VAE, what is the mathematical role of the Straight-Through Estimator (STE)?", "options": ["It computes the exact analytical derivative of the nearest-neighbor argmin operator.", "It acts as an identity gradient proxy on backward pass, copying dL/dz_q directly to dL/dz_e across the non-differentiable quantization bottleneck.", "It forces the continuous encoder representations to follow a standard Gaussian distribution.", "It eliminates the need for an image reconstruction loss."], "answer": "B", "whyCorrect": "Because argmin is a piecewise constant step function with zero derivative almost everywhere, STE sets dL/dz_e = dL/dz_q during backpropagation, enabling gradient flow into the encoder.", "whyOthers": "Option A is false because argmin is non-differentiable. Option C describes continuous Gaussian VAEs. Option D would eliminate autoencoding.", "diagram": "Forward: z_q = e_k  ===>  Backward: dL/dz_e = dL/dz_q via STE identity", "anchor": "p2-straight-through-estimator"}, {"id": "q02", "part": "prerequisites", "flavor": "tradeoff", "prompt": "How does vector quantization fundamentally resolve the posterior collapse problem seen in continuous VAEs?", "options": ["It increases the learning rate of the decoder by 100x.", "It eliminates the continuous KL divergence penalty between posterior and prior during representation learning, removing the mathematical incentive to set latent codes to zero.", "It replaces neural network decoders with linear regressions.", "It forces all latent coordinates to take infinite variance."], "answer": "B", "whyCorrect": "In continuous VAEs, posterior collapse is driven by the KL divergence term penalizing deviations from N(0, I). VQ-VAE trains a deterministic discrete autoencoder first without this KL term, completely eliminating collapse.", "whyOthers": "Option A exacerbates collapse. Option C destroys capacity. Option D is mathematically nonsensical.", "diagram": "Continuous ELBO: -KL forces q(z|x) -> N(0, I)  VS  VQ-VAE: No KL during autoencoding", "anchor": "p1-vector-quantization"}, {"id": "q03", "part": "prerequisites", "flavor": "numerical", "prompt": "Given continuous vector z_e = [1.0, 2.0] and codebook vectors e_1 = [0.8, 1.9] and e_2 = [2.0, 3.0], what is the squared Euclidean distance to e_1 and which vector is selected?", "options": ["Distance to e_1 is 0.05; e_1 is selected because 0.05 < 2.0.", "Distance to e_1 is 1.41; e_2 is selected because its norm is larger.", "Distance to e_1 is 0.50; e_2 is selected because it is positive.", "Distance to e_1 is 2.00; neither is selected."], "answer": "A", "whyCorrect": "||z_e - e_1||^2 = (1.0 - 0.8)^2 + (2.0 - 1.9)^2 = 0.04 + 0.01 = 0.05. For e_2: (1.0 - 2.0)^2 + (2.0 - 3.0)^2 = 1.0 + 1.0 = 2.0. Since 0.05 < 2.0, e_1 is selected.", "whyOthers": "Option B computes square root incorrectly and makes wrong selection. Options C and D calculate wrong distance values.", "diagram": "||z_e - e_1||^2 = 0.04 + 0.01 = 0.05  <  ||z_e - e_2||^2 = 1.0 + 1.0 = 2.0  ==> Pick e_1", "anchor": "p1-vector-quantization"}, {"id": "q04", "part": "notes", "flavor": "map", "prompt": "In the tripartite loss function of VQ-VAE, what is the specific role of the commitment loss term beta * ||z_e(x) - sg[e]||^2?", "options": ["It optimizes the codebook vectors toward the encoder outputs.", "It prevents the continuous encoder outputs from drifting unboundedly away from the currently chosen codebook prototype vector.", "It minimizes the reconstruction error of the convolutional decoder.", "It computes the cross-entropy of discrete tokens."], "answer": "B", "whyCorrect": "Because the codebook is stopped from backpropagating in this term via sg[e], the commitment loss strictly updates the encoder parameters to commit to the selected prototype vector.", "whyOthers": "Option A describes the VQ loss term ||sg[z_e] - e||^2. Option C describes reconstruction loss. Option D refers to the second-stage prior.", "diagram": "beta * ||z_e - sg[e]||^2  ===>  Gradients flow ONLY to encoder z_e", "anchor": "p3-commitment-loss"}, {"id": "q05", "part": "notes", "flavor": "trap", "prompt": "What happens if an engineer removes the stop-gradient operator sg[e] from the commitment loss term?", "options": ["Training speed triples with zero mathematical change.", "The codebook vectors will be updated by both terms simultaneously, destroying the separation of roles and allowing encoder and codebook to shrink toward trivial zero representations.", "The model becomes a continuous Gaussian VAE.", "Reconstruction error automatically reaches zero."], "answer": "B", "whyCorrect": "The stop-gradient is essential to decouple codebook updates from encoder commitment. Without sg[e], both terms pull against each other without bounded anchoring.", "whyOthers": "Option A ignores gradient graph mechanics. Option C is false because quantization remains discrete. Option D is completely incorrect.", "diagram": "sg[e] locks codebook during commitment step, preventing mutual unanchored drift", "anchor": "p3-commitment-loss"}, {"id": "q06", "part": "notes", "flavor": "definition", "prompt": "What mathematical pathology is termed 'codebook collapse' in discrete representation learning?", "options": ["All model parameters diverge to infinity.", "A substantial fraction of dictionary embedding vectors are never chosen as nearest neighbors, receiving zero updates and becoming permanently inactive dead codes.", "The convolutional layers produce NaN outputs.", "The latent space dimension collapses to zero."], "answer": "B", "whyCorrect": "Codebook collapse occurs when the encoder clusters all its outputs around a small subset of dictionary vectors, leaving the remaining vectors starved of updates and wasted.", "whyOthers": "Option A describes gradient explosion. Option C describes numerical overflow. Option D describes architectural pruning.", "diagram": "Active Codes: {e_1, e_2}  VS  Dead Codes: {e_3, ..., e_K} (Zero Assignments)", "anchor": "p4-ema-updates"}, {"id": "q07", "part": "notes", "flavor": "tradeoff", "prompt": "Why are Exponential Moving Average (EMA) dictionary updates preferred over Adam SGD updates for the VQ codebook?", "options": ["EMA updates are completely invariant to codebook learning rates and eliminate gradient variance caused by fluctuating mini-batch cluster sizes.", "EMA eliminates the need for an encoder network.", "EMA allows backpropagation through argmin without STE.", "EMA forces the codebook size K to double every epoch."], "answer": "A", "whyCorrect": "EMA treats codebook vectors as running cluster centroids (like mini-batch k-means), removing the sensitive codebook learning rate hyperparameter and stabilizing dictionary tracking.", "whyOthers": "Option B is false because encoder is required. Option C is false because STE is still required for encoder gradients. Option D is nonsensical.", "diagram": "EMA: e_k(t) = m_k(t) / N_k(t)  ===>  Analytical centroid tracking without SGD", "anchor": "p4-ema-updates"}, {"id": "q08", "part": "notes", "flavor": "map", "prompt": "Why can a trained VQ-VAE autoencoder NOT generate novel images directly by sampling codebook indices uniformly at random?", "options": ["Because codebook vectors are encrypted.", "Because uniform index sampling ignores the complex spatial correlation and joint probability distribution of visual features, producing white noise images.", "Because the decoder can only run once per session.", "Because discrete tokens do not have floating point representations."], "answer": "B", "whyCorrect": "Codebook tokens in natural images exhibit intense statistical dependencies. Novel generation requires a learned autoregressive prior (PixelCNN or Transformer) that models p(z_1, ..., z_M).", "whyOthers": "Option A is fantasy. Option C is technically false. Option D ignores that codebook vectors are continuous vectors in R^D.", "diagram": "Uniform Random Indices ---> Decoder ---> Incoherent Salt-and-Pepper Noise", "anchor": "p1-vector-quantization"}, {"id": "q09", "part": "notes", "flavor": "numerical", "prompt": "In an EMA codebook update with decay factor gamma = 0.9, if previous count N_k^(t-1) = 10.0 and current batch assignment count is 2.0, what is updated count N_k^(t)?", "options": ["12.0", "9.2", "10.8", "1.8"], "answer": "B", "whyCorrect": "N_k^(t) = gamma * N_k^(t-1) + (1 - gamma) * count = 0.9 * 10.0 + 0.1 * 2.0 = 9.0 + 0.2 = 9.2.", "whyOthers": "Option A is a simple sum. Option C computes 10 + 0.8. Option D computes (1 - gamma) * (10 + 8).", "diagram": "N_k = 0.9 * 10.0 + 0.1 * 2.0 = 9.0 + 0.2 = 9.2", "anchor": "p4-ema-updates"}, {"id": "q10", "part": "notes", "flavor": "tradeoff", "prompt": "What is the primary benefit of decoupling representation learning (Stage 1) from generative density modeling (Stage 2) in VQ-VAE?", "options": ["It allows both models to be trained on different programming languages.", "It allows the autoencoder to focus purely on high-fidelity visual token compression while the prior focuses purely on learning symbolic discrete token sequences.", "It eliminates the need for graphics processing units (GPUs).", "It guarantees zero reconstruction loss on any dataset."], "answer": "B", "whyCorrect": "Decoupling isolates perceptual feature compression from sequence modeling. The autoencoder eliminates high-frequency pixel redundancy, allowing the autoregressive prior to model global structure efficiently.", "whyOthers": "Option A is irrelevant. Option C is false because both stages require GPUs. Option D is impossible in lossy compression.", "diagram": "Stage 1: Pixel Redundancy Compression  ===>  Stage 2: Symbolic Sequence Modeling", "anchor": "p1-vector-quantization"}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "title": "Lec 12 Vector Quantised VAE",
+  "video_id": "inowo4EMmkA",
+  "url": "https://www.youtube.com/watch?v=inowo4EMmkA",
+  "duration_seconds": 1092,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A. P. (NPTEL IISc)",
+  "description": "Vector Quantised VAE (VQ-VAE), Discrete Latent Spaces, Straight-Through Estimator, Codebook Collapse, EMA Updates",
+  "playlist_index": 14,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "topics": [
+    "Continuous Latent Bottleneck Pitfalls and the Motivation for Discrete Latents",
+    "Codebook Architecture and Discrete Nearest-Neighbor Quantization",
+    "The Non-Differentiability Dilemma and Straight-Through Estimator",
+    "Tripartite Objective Formulation: Reconstruction, VQ, and Commitment",
+    "Codebook Collapse and Exponential Moving Average (EMA) Updates",
+    "Two-Stage Generative Pipeline with Autoregressive Priors"
+  ]
+}

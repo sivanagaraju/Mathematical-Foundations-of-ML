@@ -1,0 +1,27 @@
+{
+  "title": "Lec 13 Introduction to Diffusion Models",
+  "video_id": "DrLmFcXxhKY",
+  "url": "https://www.youtube.com/watch?v=DrLmFcXxhKY",
+  "duration_seconds": 1836,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "Introdution to Diffusion models\nhttps://drive.google.com/file/d/1Kebb00VehPBMyleuw2ubp2qbvrBqyvZZ/view",
+  "playlist_index": 11,
+  "chapter_count": 0,
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "instructor": "Prof. Chiranjib Bhattacharyya / Prof. Partha Pratim Talukdar (IISc)",
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topics": [
+    "Generative Modeling Taxonomy: Failure Modes of GANs, VAEs, and Normalizing Flows",
+    "Thermodynamics Inspiration: Non-Equilibrium Diffusion and Structure Destruction",
+    "The Forward Markov Diffusion Process: Step-by-Step Perturbation Kernel q(x_t|x_{t-1})",
+    "Closed-Form Arbitrary Step Sampling: Jump Kernel via Cumulative Variance alpha_bar_t",
+    "The Reverse Generative Markov Process: Denoising Path p_theta(x_{t-1}|x_t)",
+    "Noise Schedules and Variance Dynamics: Linear vs Cosine Beta Schedules"
+  ]
+}

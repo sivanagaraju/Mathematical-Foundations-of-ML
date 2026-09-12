@@ -1,0 +1,27 @@
+{
+  "title": "Lec 16 Pedagogy in the Times of AI",
+  "video_id": "N2a1J0UPeL4",
+  "url": "https://www.youtube.com/watch?v=N2a1J0UPeL4",
+  "duration_seconds": 3386,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "Pedagogy in the Times of AI",
+  "playlist_index": 5,
+  "chapter_count": 0,
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "instructor": "Prof. Chiranjib Bhattacharyya / Prof. Partha Pratim Talukdar (IISc)",
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topics": [
+    "The Epistemological Shockwave: Commoditization of Cognitive Labor and the AI Economic Crisis",
+    "The Obsolescence of Passive Education: Why Slide Lecturing, Standard Exams, and Rote Coding Fail",
+    "Token Dependency vs Mathematical Sovereignty: The Hazard of Cognitive Outsourcing to AI Lords",
+    "The Inverted Classroom & Bloom's Taxonomy: Transitioning from Execution to First-Principles Verification",
+    "The University as an Intellectual Gym: Discipline, Socialization, and Embodied Socratic Dialectic",
+    "The Frontier Competency Model: The 45-Minute Dual Dialectic and Lifelong Self-Correcting Mastery"
+  ]
+}

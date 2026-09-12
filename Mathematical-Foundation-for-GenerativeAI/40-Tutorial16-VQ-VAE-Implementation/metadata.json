@@ -1,0 +1,26 @@
+{
+  "title": "Tutorial 16 : Implementation of VQ-VAE",
+  "video_id": "NZQzEYuok_c",
+  "url": "https://www.youtube.com/watch?v=NZQzEYuok_c",
+  "duration_seconds": 2100,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A. P. (NPTEL IISc)",
+  "description": "PyTorch implementation of VQ-VAE, discrete codebook embedding layer, vectorized pairwise distance computation, straight-through estimator detach trick, tripartite loss engineering, codebook perplexity tracking",
+  "playlist_index": 18,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "topics": [
+    "Modular Architecture of VQ-VAE: Convolutional Encoder, Codebook, and Transposed Conv Decoder",
+    "Discrete Codebook Embedding: nn.Embedding Initialization and Tensor Reshaping",
+    "Vectorized Distance Computation: Expanding Squared Euclidean Norms for GPU Acceleration",
+    "The Straight-Through Detach Trick: Implementing Autograd Identity Bridges",
+    "Tripartite Loss Computation: Reconstruction Loss, VQ Codebook Loss, and Commitment Loss",
+    "Practical Training Loop: Tracking Codebook Perplexity, Active Code Counts, and Visualizations"
+  ]
+}

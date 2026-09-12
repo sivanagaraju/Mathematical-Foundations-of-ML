@@ -1,0 +1,26 @@
+{
+  "title": "Tutorial 13 : Wasserstein GAN (WGAN) Implementation using Gradient Clip",
+  "video_id": "p0wXSsTnmw0",
+  "url": "https://www.youtube.com/watch?v=p0wXSsTnmw0",
+  "duration_seconds": 1560,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A. P. (NPTEL IISc)",
+  "description": "Wasserstein GAN (WGAN) implementation, Earth Mover's Distance, Kantorovich-Rubinstein duality, 1-Lipschitz continuity, hard weight clipping, Critic architecture, RMSprop optimization",
+  "playlist_index": 15,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "topics": [
+    "Pitfalls of Traditional GANs and Jensen-Shannon Divergence Pathologies",
+    "Optimal Transport and the 1-Wasserstein Metric (Earth Mover's Distance)",
+    "Kantorovich-Rubinstein Duality and the 1-Lipschitz Constraint",
+    "Critic Architecture: Eliminating Sigmoid and Outputting Linear Scores",
+    "Enforcing Lipschitz Continuity via Hard Weight Clipping [-c, c]",
+    "Training Dynamics: Critic Iterations (n_critic = 5) and Practical Clipping Failures"
+  ]
+}

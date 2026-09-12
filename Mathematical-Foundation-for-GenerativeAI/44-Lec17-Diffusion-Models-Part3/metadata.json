@@ -1,0 +1,27 @@
+{
+  "title": "Lec 17 Diffusion Models - Part 3",
+  "video_id": "hf5E8k_Pdh0",
+  "url": "https://www.youtube.com/watch?v=hf5E8k_Pdh0",
+  "duration_seconds": 1768,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "Sample Estimation in DDPMs, Noise Estimation in DDPMs\nhttps://drive.google.com/file/d/1Kebb00VehPBMyleuw2ubp2qbvrBqyvZZ/view",
+  "playlist_index": 4,
+  "chapter_count": 0,
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "instructor": "Prof. Chiranjib Bhattacharyya / Prof. Partha Pratim Talukdar (IISc)",
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topics": [
+    "Network Architecture Selection: U-Net and Vision Transformers for Isomorphic Spatial Regression",
+    "Multi-Scale Noise Conditioning: Shared Weights Across Noise Intensities via Time Embeddings",
+    "Deterministic ODE Drift vs Stochastic Langevin Diffusion: The Role of Noise Injection",
+    "The Full Sampling Trajectory: Walking the Reverse Chain from x_T to Clean Sample x_0",
+    "Transition to Controllable Generation: Introduction of Guided Diffusion and Conditional Priors",
+    "Taxonomy of Guidance Mechanisms: Classifier Guidance vs Classifier-Free Guidance (CFG)"
+  ]
+}

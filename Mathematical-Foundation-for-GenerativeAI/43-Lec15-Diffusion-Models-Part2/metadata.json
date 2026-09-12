@@ -1,0 +1,27 @@
+{
+  "title": "Lec 15 Diffusion Models - Part 2",
+  "video_id": "O-Jzyk_JjME",
+  "url": "https://www.youtube.com/watch?v=O-Jzyk_JjME",
+  "duration_seconds": 1532,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "Mean Estimation in DDPMs\nhttps://drive.google.com/file/d/1Kebb00VehPBMyleuw2ubp2qbvrBqyvZZ/view",
+  "playlist_index": 9,
+  "chapter_count": 0,
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "instructor": "Prof. Chiranjib Bhattacharyya / Prof. Partha Pratim Talukdar (IISc)",
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topics": [
+    "Analytical Gaussian Target: Transforming L_{t-1} into Explicit Mean Squared Error",
+    "Inverting the Jump Kernel: Expressing Clean Data x_0 in Terms of Injected Noise epsilon",
+    "Reparameterizing the Posterior Mean: From State Prediction to Noise-Prediction Network epsilon_theta",
+    "Loss Equivalence Derivation: Bridging Variational ELBO to Denoising Score Matching",
+    "The Simplified Loss L_simple: Dropping Analytical Weights to Emphasize Perceptual Quality",
+    "The Ancestral Reverse Sampling Algorithm: Iterative Denoising from Noise to Pristine Data"
+  ]
+}

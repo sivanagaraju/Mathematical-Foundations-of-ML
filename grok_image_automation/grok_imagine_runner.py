@@ -53,26 +53,17 @@ def get_topic_titles(target_dir: Path):
     return []
 
 def clean_transcript(text: str) -> str:
-    """Remove timestamp prefixes like [00:01] and clean excess whitespace."""
-    cleaned = re.sub(r'\[\d{2}:\d{2}\]', '', text)
-    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+    """Remove timestamp prefixes like [00:01] or **[00:01]** and clean excess whitespace."""
+    cleaned = re.sub(r'\*?\*?\[\d{2}:\d{2}\]\*?\*?', '', text)
+    cleaned = re.sub(r'[ \t]+', ' ', cleaned)
+    cleaned = re.sub(r'\n{3,}', '\n\n', cleaned).strip()
     return cleaned
 
 def format_prompt(topic_idx: int, topic_title: str, text: str, mode: str = "cleaned") -> str:
-    """Format the prompt for Grok Imagine."""
+    """Return strictly the topic file content with no prompt prefix, suffix, or extra text added."""
     if mode == "raw":
-        return text
-    
-    cleaned = clean_transcript(text)
-    if len(cleaned) > 1000:
-        cleaned = cleaned[:1000].rsplit(' ', 1)[0] + "..."
-    
-    prompt = (
-        f"Detailed educational technical infographic diagram of {topic_title}. "
-        f"Mathematical formulas, clear mathematical intuition, clean typography, aesthetic modern layout. "
-        f"Topic context: {cleaned}"
-    )
-    return prompt
+        return text.strip()
+    return clean_transcript(text)
 
 def launch_browser(p, profile_dir: Path, headless: bool = False):
     """Launch persistent Chrome browser context."""
@@ -124,7 +115,8 @@ def configure_imagine_settings(page, quality: str = "2.0", aspect_ratio: str = "
     """Ensure Grok Imagine settings (Quality 2.0, 2:3 ratio, x2 count) are selected."""
     page.bring_to_front()
     try:
-        page.wait_for_selector(".tiptap, .ProseMirror, [contenteditable='true']", timeout=15000)
+        page.wait_for_selector(".tiptap, .ProseMirror", timeout=15000)
+        page.wait_for_selector("button[aria-label='Aspect Ratio']", timeout=10000)
     except Exception:
         pass
 
@@ -358,15 +350,82 @@ def resolve_paths(dir_arg: str, transcripts_arg: str = "", output_arg: str = "")
 
     return transcripts_dir, output_dir, target_dir
 
-def process_topics(profile_dir: Path, transcripts_dir: Path, output_dir: Path, target_dir: Path, topic_filter: list = None, prompt_mode: str = "cleaned", delay: int = 6, parallel: int = 1):
-    """Iterate through topic files, generate images in Grok, and download them (supports up to 3 in parallel)."""
+def is_topic_complete(output_dir: Path, t_num: int, expected_count: int = 2) -> bool:
+    """Check if all expected images exist and are valid (>10KB) for a topic."""
+    for idx in range(1, expected_count + 1):
+        jpg_f = output_dir / f"topic-{t_num:02d}_img{idx}.jpg"
+        png_f = output_dir / f"topic-{t_num:02d}_img{idx}.png"
+        valid_jpg = jpg_f.exists() and jpg_f.stat().st_size > 10000
+        valid_png = png_f.exists() and png_f.stat().st_size > 10000
+        if not (valid_jpg or valid_png):
+            return False
+    return True
+
+def run_topic_batch(context, chunk, topic_titles, prompt_mode, output_dir):
+    """Submit prompts for a chunk of topics across tabs and download generated images."""
+    while len(context.pages) < len(chunk):
+        context.new_page()
+    tabs = context.pages[:len(chunk)]
+
+    batch_info = []
+    for tab_idx, (t_num, f) in enumerate(chunk):
+        tab = tabs[tab_idx]
+        t_title = topic_titles[t_num - 1] if 0 <= (t_num - 1) < len(topic_titles) else f"Topic {t_num}"
+        print(f"  [Tab {tab_idx+1}] Setting up Topic {t_num:02d} ('{t_title}')...", flush=True)
+
+        with open(f, "r", encoding="utf-8") as tf:
+            raw_content = tf.read()
+        prompt = format_prompt(t_num, t_title, raw_content, mode=prompt_mode)
+
+        tab.bring_to_front()
+        tab.goto(GROK_IMAGINE_URL, timeout=30000)
+        try:
+            tab.wait_for_selector(".tiptap, .ProseMirror", timeout=20000)
+        except Exception:
+            time.sleep(2)
+
+        configure_imagine_settings(tab, quality="2.0", aspect_ratio="2:3", num_images=2)
+        pre_ids = set(extract_post_ids(tab))
+        enter_prompt_and_generate(tab, prompt)
+        batch_info.append((tab, t_num, pre_ids))
+        time.sleep(1.5)
+
+    print(f"\nAll {len(chunk)} prompts in batch submitted! Waiting 40s for parallel generations...", flush=True)
+    time.sleep(38)
+
+    results = []
+    for tab_idx, (tab, t_num, pre_ids) in enumerate(batch_info):
+        tab.bring_to_front()
+        prefix = f"topic-{t_num:02d}"
+        print(f"  [Tab {tab_idx+1}] Downloading images for {prefix}...", flush=True)
+        downloaded = wait_and_download_images(context, tab, output_dir, prefix, pre_ids, expected_count=2, max_wait=30, initial_wait=2)
+        print(f"  [Tab {tab_idx+1}] Topic {t_num:02d} complete: {len(downloaded)} images.", flush=True)
+        results.append((t_num, downloaded))
+
+    return results
+
+def process_topics(
+    profile_dir: Path,
+    transcripts_dir: Path,
+    output_dir: Path,
+    target_dir: Path,
+    topic_filter: list = None,
+    prompt_mode: str = "cleaned",
+    delay: int = 6,
+    parallel: int = 1,
+    skip_existing: bool = False,
+    max_retries: int = 2
+):
+    """Iterate through topic files, generate images in Grok, and download them with automatic retries."""
     if not transcripts_dir or not transcripts_dir.exists():
         print(f"Error: Transcripts directory not found: {transcripts_dir}", flush=True)
         return
 
     topic_titles = get_topic_titles(target_dir) if target_dir else []
     all_files = sorted(list(transcripts_dir.glob("topic-*.txt")))
-    
+    if not all_files:
+        all_files = sorted(list(transcripts_dir.glob("topic-*.md")))
+
     # Filter files
     topic_files = []
     for f in all_files:
@@ -379,23 +438,20 @@ def process_topics(profile_dir: Path, transcripts_dir: Path, output_dir: Path, t
         topic_files.append((t_num, f))
 
     if not topic_files:
-        print(f"Error: No matching topic-*.txt files found in {transcripts_dir}", flush=True)
+        print(f"Error: No matching topic files found in {transcripts_dir}", flush=True)
         return
 
-    # Filter out topics that already have 2 generated images (>10KB)
-    valid_topic_files = []
-    for t_num, f in topic_files:
-        img1 = output_dir / f"topic-{t_num:02d}_img1.jpg"
-        img2 = output_dir / f"topic-{t_num:02d}_img2.jpg"
-        alt1 = output_dir / f"topic-{t_num:02d}_img1.png"
-        alt2 = output_dir / f"topic-{t_num:02d}_img2.png"
-        has_1 = (img1.exists() and img1.stat().st_size > 10000) or (alt1.exists() and alt1.stat().st_size > 10000)
-        has_2 = (img2.exists() and img2.stat().st_size > 10000) or (alt2.exists() and alt2.stat().st_size > 10000)
-        if has_1 and has_2:
-            print(f"  [SKIP] Topic {t_num:02d} already has 2 generated images in {output_dir.name}", flush=True)
-        else:
-            valid_topic_files.append((t_num, f))
-    topic_files = valid_topic_files
+    # Check whether to skip fully generated topics or regenerate all
+    if skip_existing:
+        valid_topic_files = []
+        for t_num, f in topic_files:
+            if is_topic_complete(output_dir, t_num, expected_count=2):
+                print(f"  [SKIP] Topic {t_num:02d} already fully generated in {output_dir.name}", flush=True)
+            else:
+                valid_topic_files.append((t_num, f))
+        topic_files = valid_topic_files
+    else:
+        print(f"  [REGENERATE] Processing all {len(topic_files)} topic(s) in {output_dir.name} (full regeneration)", flush=True)
 
     if not topic_files:
         print(f"All topics already completed for {output_dir.parent.name}!", flush=True)
@@ -421,80 +477,42 @@ def process_topics(profile_dir: Path, transcripts_dir: Path, output_dir: Path, t
                 print("⚠️ Session expired or not logged in. Please run `python grok_imagine_runner.py --login` first!", flush=True)
                 return
 
-            if parallel == 1:
-                # Sequential mode
-                for t_num, f in topic_files:
-                    t_title = topic_titles[t_num - 1] if 0 <= (t_num - 1) < len(topic_titles) else f"Topic {t_num}"
-                    print(f"\n[{t_num:02d}/10] Processing: {f.name} - '{t_title}'", flush=True)
+            # Process in batches of size `parallel`
+            for i in range(0, len(topic_files), parallel):
+                chunk = topic_files[i : i + parallel]
+                chunk_nums = [t_num for t_num, _ in chunk]
+                print(f"\n>>> Starting Parallel Batch: Topics {chunk_nums} ({len(chunk)} tabs)", flush=True)
 
-                    with open(f, "r", encoding="utf-8") as tf:
-                        raw_content = tf.read()
+                run_topic_batch(context, chunk, topic_titles, prompt_mode, output_dir)
 
-                    prompt = format_prompt(t_num, t_title, raw_content, mode=prompt_mode)
-                    print(f"Prompt snippet: {prompt[:120]}...", flush=True)
+                # Retry any topic in this chunk that is not fully generated (missing 2 valid images)
+                retry_queue = [item for item in chunk if not is_topic_complete(output_dir, item[0], expected_count=2)]
+                retry_count = 1
+                while retry_queue and retry_count <= max_retries:
+                    missing_nums = [t[0] for t in retry_queue]
+                    print(f"\n⚠️ Topic(s) {missing_nums} not fully generated (missing 2 valid images). Retrying attempt {retry_count}/{max_retries}...", flush=True)
+                    time.sleep(3)
+                    run_topic_batch(context, retry_queue, topic_titles, prompt_mode, output_dir)
+                    retry_queue = [item for item in chunk if not is_topic_complete(output_dir, item[0], expected_count=2)]
+                    retry_count += 1
 
-                    configure_imagine_settings(main_page, quality="2.0", aspect_ratio="2:3", num_images=2)
-                    pre_existing_ids = set(extract_post_ids(main_page))
-                    enter_prompt_and_generate(main_page, prompt)
+                # Cooldown before next batch
+                if i + parallel < len(topic_files) and delay > 0:
+                    print(f"\nWaiting {delay}s cooldown before next parallel batch...", flush=True)
+                    time.sleep(delay)
 
-                    prefix = f"topic-{t_num:02d}"
-                    downloaded = wait_and_download_images(context, main_page, output_dir, prefix, pre_existing_ids, expected_count=2, max_wait=65, initial_wait=38)
-                    print(f"Topic {t_num:02d} complete: downloaded {len(downloaded)} images.", flush=True)
-
-                    main_page.goto(GROK_IMAGINE_URL, timeout=30000)
-                    time.sleep(2)
-
-                    if delay > 0:
-                        print(f"Waiting {delay}s cooldown before next topic...", flush=True)
-                        time.sleep(delay)
-            else:
-                # Parallel mode (up to 3 tabs)
-                for i in range(0, len(topic_files), parallel):
-                    chunk = topic_files[i : i + parallel]
-                    chunk_nums = [t_num for t_num, _ in chunk]
-                    print(f"\n>>> Starting Parallel Batch: Topics {chunk_nums} ({len(chunk)} tabs)", flush=True)
-
-                    # Ensure we have enough tabs open
-                    while len(context.pages) < len(chunk):
-                        context.new_page()
-                    tabs = context.pages[:len(chunk)]
-
-                    # Prepare and submit each tab
-                    batch_info = []
-                    for tab_idx, (t_num, f) in enumerate(chunk):
-                        tab = tabs[tab_idx]
-                        t_title = topic_titles[t_num - 1] if 0 <= (t_num - 1) < len(topic_titles) else f"Topic {t_num}"
-                        print(f"  [Tab {tab_idx+1}] Setting up Topic {t_num:02d} ('{t_title}')...", flush=True)
-
-                        with open(f, "r", encoding="utf-8") as tf:
-                            raw_content = tf.read()
-                        prompt = format_prompt(t_num, t_title, raw_content, mode=prompt_mode)
-
-                        tab.bring_to_front()
-                        tab.goto(GROK_IMAGINE_URL, timeout=30000)
-                        time.sleep(2)
-
-                        configure_imagine_settings(tab, quality="2.0", aspect_ratio="2:3", num_images=2)
-                        pre_ids = set(extract_post_ids(tab))
-                        enter_prompt_and_generate(tab, prompt)
-                        batch_info.append((tab, t_num, pre_ids))
-                        time.sleep(1.5)
-
-                    print(f"\nAll {len(chunk)} prompts in batch submitted! Waiting 40s for parallel generations...", flush=True)
-                    time.sleep(38)
-
-                    # Download results from each tab
-                    for tab_idx, (tab, t_num, pre_ids) in enumerate(batch_info):
-                        tab.bring_to_front()
-                        prefix = f"topic-{t_num:02d}"
-                        print(f"  [Tab {tab_idx+1}] Downloading images for {prefix}...", flush=True)
-                        downloaded = wait_and_download_images(context, tab, output_dir, prefix, pre_ids, expected_count=2, max_wait=30, initial_wait=2)
-                        print(f"  [Tab {tab_idx+1}] Topic {t_num:02d} complete: {len(downloaded)} images.", flush=True)
-
-                    # Cooldown before next batch
-                    if i + parallel < len(topic_files) and delay > 0:
-                        print(f"\nWaiting {delay}s cooldown before next parallel batch...", flush=True)
-                        time.sleep(delay)
+            # Final verification pass across all topics in this run
+            incomplete_topics = [item for item in topic_files if not is_topic_complete(output_dir, item[0], expected_count=2)]
+            sweep_count = 1
+            while incomplete_topics and sweep_count <= max_retries:
+                inc_nums = [t[0] for t in incomplete_topics]
+                print(f"\n⚠️ Final Verification: Topic(s) {inc_nums} still not fully generated. Running sweep retry {sweep_count}/{max_retries}...", flush=True)
+                for j in range(0, len(incomplete_topics), parallel):
+                    sweep_chunk = incomplete_topics[j : j + parallel]
+                    run_topic_batch(context, sweep_chunk, topic_titles, prompt_mode, output_dir)
+                    time.sleep(3)
+                incomplete_topics = [item for item in topic_files if not is_topic_complete(output_dir, item[0], expected_count=2)]
+                sweep_count += 1
 
             # Close extra tabs to save resources
             while len(context.pages) > 1:
@@ -503,14 +521,28 @@ def process_topics(profile_dir: Path, transcripts_dir: Path, output_dir: Path, t
                 except Exception:
                     break
 
+            all_complete = all(is_topic_complete(output_dir, t[0], 2) for t in topic_files)
             print("\n" + "=" * 70, flush=True)
-            print("ALL REQUESTED TOPICS COMPLETED SUCCESSFULLY!", flush=True)
+            if all_complete:
+                print("ALL REQUESTED TOPICS COMPLETED AND FULLY GENERATED (2 IMAGES EACH)!", flush=True)
+            else:
+                missing = [t[0] for t in topic_files if not is_topic_complete(output_dir, t[0], 2)]
+                print(f"Completed with some topics still missing images: {missing}", flush=True)
             print(f"Images are saved in: {output_dir}", flush=True)
             print("=" * 70, flush=True)
         finally:
             context.close()
 
-def run_range(profile_path: Path, start_num: int, end_num: int, skip_existing: bool = True, parallel: int = 3, prompt_mode: str = "cleaned", delay: int = 6):
+def run_range(
+    profile_path: Path,
+    start_num: int,
+    end_num: int,
+    skip_existing: bool = True,
+    parallel: int = 3,
+    prompt_mode: str = "cleaned",
+    delay: int = 6,
+    max_retries: int = 2
+):
     """Process all tutorial/lecture folders within start_num and end_num range."""
     lectures_root = PROJECT_ROOT / "Mathematical-Foundation-for-GenerativeAI"
     if not lectures_root.exists():
@@ -541,14 +573,26 @@ def run_range(profile_path: Path, start_num: int, end_num: int, skip_existing: b
             continue
 
         topic_files = list(trans_dir.glob("topic-*.txt"))
+        if not topic_files:
+            topic_files = list(trans_dir.glob("topic-*.md"))
         expected_imgs = len(topic_files) * 2
 
         out_dir = folder / "grok_images"
         if skip_existing and out_dir.exists():
             existing_imgs = list(out_dir.glob("*.jpg")) + list(out_dir.glob("*.png"))
             if len(existing_imgs) >= expected_imgs and expected_imgs > 0:
-                print(f"\n[SKIP] {folder.name}: Already complete ({len(existing_imgs)}/{expected_imgs} images).", flush=True)
-                continue
+                # Verify each individual topic has 2 valid images
+                all_done = True
+                for tf in topic_files:
+                    m = re.search(r'topic-(\d+)', tf.stem)
+                    if m and not is_topic_complete(out_dir, int(m.group(1)), 2):
+                        all_done = False
+                        break
+                if all_done:
+                    print(f"\n[SKIP] {folder.name}: Already complete ({len(existing_imgs)}/{expected_imgs} images).", flush=True)
+                    continue
+                else:
+                    print(f"\n[PARTIAL] {folder.name}: Found topics not fully generated. Running completion...", flush=True)
 
         print(f"\n" + "#" * 70)
         print(f"PROCESSING FOLDER {num:02d}: {folder.name}")
@@ -563,7 +607,9 @@ def run_range(profile_path: Path, start_num: int, end_num: int, skip_existing: b
             topic_filter=None,
             prompt_mode=prompt_mode,
             delay=delay,
-            parallel=parallel
+            parallel=parallel,
+            skip_existing=skip_existing,
+            max_retries=max_retries
         )
 
 def main():
@@ -571,8 +617,9 @@ def main():
     parser.add_argument("--login", action="store_true", help="Launch browser to log in interactively and save session")
     parser.add_argument("--run", action="store_true", help="Run batch image generation for topics")
     parser.add_argument("--range", type=int, nargs=2, metavar=("START", "END"), help="Run across folder number range, e.g. --range 14 33")
-    parser.add_argument("--skip-existing", action="store_true", default=True, help="Skip folders that already have complete grok images (default: True)")
-    parser.add_argument("--force", action="store_true", help="Do not skip existing folders when running --range")
+    parser.add_argument("--regenerate", "--force", dest="regenerate", action="store_true", help="Force regenerate all topics even if images already exist")
+    parser.add_argument("--skip-existing", action="store_true", help="Skip topics that already have 2 complete images")
+    parser.add_argument("--max-retries", type=int, default=2, help="Number of retries for topics not fully generated (default: 2)")
     parser.add_argument("--transcripts-dir", type=str, default="", help="Direct path to transcript-by-topic directory")
     parser.add_argument("--dir", type=str, default="", help="Target lecture/tutorial directory (default: 26-Tutorial11-f-Divergence-Examples)")
     parser.add_argument("--output-dir", type=str, default="", help="Custom output directory to save images")
@@ -589,7 +636,7 @@ def main():
     if args.login:
         interactive_login(profile_path)
     elif args.range:
-        skip_existing = not args.force
+        skip_existing = not args.regenerate
         start_num, end_num = args.range
         parallel_val = args.parallel if args.parallel > 1 else 3
         run_range(
@@ -599,10 +646,14 @@ def main():
             skip_existing=skip_existing,
             parallel=parallel_val,
             prompt_mode=prompt_mode,
-            delay=args.delay
+            delay=args.delay,
+            max_retries=args.max_retries
         )
     elif args.run:
         transcripts_dir, output_dir, target_dir = resolve_paths(args.dir, args.transcripts_dir, args.output_dir)
+        # When targeting a specific folder, default to regenerate unless --skip-existing is explicitly passed
+        skip_existing = args.skip_existing and not args.regenerate
+        parallel_val = args.parallel if args.parallel > 1 else 3
         process_topics(
             profile_path,
             transcripts_dir,
@@ -611,7 +662,9 @@ def main():
             topic_filter=args.topic,
             prompt_mode=prompt_mode,
             delay=args.delay,
-            parallel=args.parallel
+            parallel=parallel_val,
+            skip_existing=skip_existing,
+            max_retries=args.max_retries
         )
     else:
         parser.print_help()

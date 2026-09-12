@@ -1,0 +1,27 @@
+{
+  "title": "Lec 18 Diffusion Models - Part 4",
+  "video_id": "1G3kzIE44aQ",
+  "url": "https://www.youtube.com/watch?v=1G3kzIE44aQ",
+  "duration_seconds": 1936,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "Score Estimation in DDPMs, Conditional Diffusion, Classifier-Guided Diffusion, Classifier-Free Guidance (CFG)\nhttps://drive.google.com/file/d/1Kebb00VehPBMyleuw2ubp2qbvrBqyvZZ/view",
+  "playlist_index": 3,
+  "chapter_count": 0,
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "instructor": "Prof. Chiranjib Bhattacharyya / Prof. Partha Pratim Talukdar (IISc)",
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topics": [
+    "Classical Statistics & Tweedie's Formula: The Empirical Bayes Bridge from Posterior Mean to Score",
+    "The Score-Matching Duality: Formulating DDPM as a Continuous Vector Field Estimator",
+    "Classifier-Guided Diffusion: Steering Reverse Trajectories with External Noise-Robust Classifiers",
+    "Classifier-Free Guidance (CFG): Derivation and Mechanics of Implicit Score Guidance",
+    "Latent Diffusion Models (LDM): High-Resolution Synthesis via Pretrained Latent Space Autoencoders",
+    "Continuous-Time Diffusion: Unifying VP and VE SDEs with the Reverse-Time Stochastic Differential Equation"
+  ]
+}

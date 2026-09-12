@@ -1,0 +1,26 @@
+{
+  "title": "Tutorial 14 : Wasserstein GAN (WGAN) Implementation using Gradient Penalty",
+  "video_id": "Mxad7Wz7ymg",
+  "url": "https://www.youtube.com/watch?v=Mxad7Wz7ymg",
+  "duration_seconds": 1280,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A. P. (NPTEL IISc)",
+  "description": "Wasserstein GAN with Gradient Penalty (WGAN-GP), Gulrajani et al., 1-Lipschitz gradient norm condition, straight-line interpolation, autograd.grad with create_graph=True, LayerNorm vs BatchNorm, Adam optimization",
+  "playlist_index": 16,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E2",
+  "topics": [
+    "Theoretical Limitations of Hard Weight Clipping and the Path to Gradient Penalty",
+    "The 1-Lipschitz Gradient Norm Condition: Equivalence of ||nabla f|| <= 1",
+    "Sampling Along Straight Lines: Convex Combinations of Real and Fake Samples",
+    "Formulating the Gradient Penalty Objective with Multiplier lambda = 10",
+    "PyTorch Implementation Mechanics: autograd.grad with create_graph=True and Adam Compatibility",
+    "Why Batch Normalization is Forbidden in Critic Networks (LayerNorm Alternatives)"
+  ]
+}
