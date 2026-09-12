@@ -66,7 +66,6 @@ def format_prompt(topic_idx: int, topic_title: str, text: str, mode: str = "clea
     prompt = (
         f"Comprehensive educational technical infographic clearly explaining the core mechanics{title_suffix}. Critical is for given context need to work and explain that."
         f"Step-by-step visual explanation with annotated mathematical formulas, labeled architecture block diagrams, directional data flow arrows, and structured explanation. "
-        f"Clear technical intuition, readable typography, professional university lecture poster layout. "
         f"Topic content:\n{content}"
     )
     return prompt
@@ -179,32 +178,31 @@ def configure_imagine_settings(page, quality: str = "2.0", aspect_ratio: str = "
         print(f"  Note on Image Count selector: {e}", flush=True)
 
 def is_generation_underway(page, initial_canvases: int, pre_ids: set) -> bool:
-    """Check if Grok Imagine has actively started generating images."""
+    """
+    Check if Grok Imagine has actively started generating images.
+    CRITICAL: Only true generation indicators (canvases, fresh post IDs, pulsing cards)
+    are checked. A disabled submit button alone does NOT mean generation is underway,
+    because Grok disables the submit button when prompt length exceeds limits!
+    """
     try:
-        # Check 1: Canvas placeholders for the dot matrix animation (seen in generating cards)
+        # Check 1: Canvas placeholders for the dot matrix animation (most reliable indicator)
         current_canvases = page.locator("canvas").count()
         if current_canvases > initial_canvases:
             return True
 
-        # Check 2: New post IDs appearing in DOM
+        # Check 2: New post IDs appearing in DOM links
         current_ids = set(extract_post_ids(page))
         if len(current_ids - pre_ids) > 0:
             return True
 
-        # Check 3: Submit button disabled while prompt is in editor
-        submit_btn = page.locator("button[aria-label='Submit']")
-        if submit_btn.count() > 0 and submit_btn.first.is_visible():
-            if submit_btn.first.is_disabled():
-                return True
-
-        # Check 4: Generating pulse or busy states
-        if page.locator("[class*='animate-pulse'], [aria-busy='true']").count() > 0:
+        # Check 3: Shimmering or active pulsing placeholder elements
+        if page.locator("a[href*='/imagine/post/'] [class*='animate-pulse'], [aria-busy='true']").count() > 0:
             return True
     except Exception:
         pass
     return False
 
-def trim_content_at_end(content: str, max_chars: int = 3800) -> str:
+def trim_content_at_end(content: str, max_chars: int = 3200) -> str:
     """Trim transcript content at the end for rare scenarios where context limit is hit."""
     if len(content) <= max_chars:
         return content

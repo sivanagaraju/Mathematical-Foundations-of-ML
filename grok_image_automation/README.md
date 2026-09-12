@@ -125,3 +125,38 @@ python grok_imagine_runner.py --run --dir "../Mathematical-Foundation-for-Genera
 ```
 
 Images will automatically download into that lecture's `grok_images/` folder!
+
+---
+
+## MathsTerms Automation (`grok_mathsterms_runner.py`)
+
+A dedicated runner that dynamically parses monolithic topic markdown files in `MathsTerms/` into numbered sections (`### 1.` through `### 11.`), automatically formats educational infographics prompts, and saves images in segregated subfolders per document.
+
+### Segregated Folder Structure:
+```
+MathsTerms/<Category>/grok_images/<MarkdownFileStem>/
+  ├── topic-01_<TopicSlug>_img1.jpg
+  ├── topic-01_<TopicSlug>_img2.jpg
+  ├── topic-02_<TopicSlug>_img1.jpg
+  └── ...
+```
+
+### Ready-to-Run Commands (Copy & Paste):
+
+```powershell
+# 1. Run all 11 topics for a specific file (parallel 2 tabs)
+python grok_image_automation/grok_mathsterms_runner.py --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --parallel 2
+
+# 2. Run specific topic(s) of a file (e.g. Topics 1, 2, 4)
+python grok_image_automation/grok_mathsterms_runner.py --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 1 2 4
+
+# 3. Force regenerate a topic (e.g. Topic 4)
+python grok_image_automation/grok_mathsterms_runner.py --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 4 --regenerate
+
+# 4. Run all files in an entire category folder
+python grok_image_automation/grok_mathsterms_runner.py --category "01-Primal-Analysis-and-Foundations" --parallel 3
+
+# 5. Batch run all 46 files in MathsTerms (skipping already complete topics)
+python grok_image_automation/grok_mathsterms_runner.py --all --parallel 3 --skip-existing
+```
+
