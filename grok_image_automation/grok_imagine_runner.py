@@ -60,10 +60,16 @@ def clean_transcript(text: str) -> str:
     return cleaned
 
 def format_prompt(topic_idx: int, topic_title: str, text: str, mode: str = "cleaned") -> str:
-    """Return strictly the topic file content with no prompt prefix, suffix, or extra text added."""
-    if mode == "raw":
-        return text.strip()
-    return clean_transcript(text)
+    """Format prompt with comprehensive explanatory infographic directive followed by full topic content."""
+    content = text.strip() if mode == "raw" else clean_transcript(text)
+    title_suffix = f" of '{topic_title}'" if topic_title else ""
+    prompt = (
+        f"Comprehensive educational technical infographic clearly explaining the core mechanics{title_suffix}. Critical is for given context need to work and explain that."
+        f"Step-by-step visual explanation with annotated mathematical formulas, labeled architecture block diagrams, directional data flow arrows, and structured explanation. "
+        f"Clear technical intuition, readable typography, professional university lecture poster layout. "
+        f"Topic content:\n{content}"
+    )
+    return prompt
 
 def launch_browser(p, profile_dir: Path, headless: bool = False):
     """Launch persistent Chrome browser context."""
@@ -172,9 +178,103 @@ def configure_imagine_settings(page, quality: str = "2.0", aspect_ratio: str = "
     except Exception as e:
         print(f"  Note on Image Count selector: {e}", flush=True)
 
-def enter_prompt_and_generate(page, prompt_text: str):
-    """Find prompt input, clear, type prompt, and click the blue circle button to generate."""
+def is_generation_underway(page, initial_canvases: int, pre_ids: set) -> bool:
+    """Check if Grok Imagine has actively started generating images."""
+    try:
+        # Check 1: Canvas placeholders for the dot matrix animation (seen in generating cards)
+        current_canvases = page.locator("canvas").count()
+        if current_canvases > initial_canvases:
+            return True
+
+        # Check 2: New post IDs appearing in DOM
+        current_ids = set(extract_post_ids(page))
+        if len(current_ids - pre_ids) > 0:
+            return True
+
+        # Check 3: Submit button disabled while prompt is in editor
+        submit_btn = page.locator("button[aria-label='Submit']")
+        if submit_btn.count() > 0 and submit_btn.first.is_visible():
+            if submit_btn.first.is_disabled():
+                return True
+
+        # Check 4: Generating pulse or busy states
+        if page.locator("[class*='animate-pulse'], [aria-busy='true']").count() > 0:
+            return True
+    except Exception:
+        pass
+    return False
+
+def trim_content_at_end(content: str, max_chars: int = 3800) -> str:
+    """Trim transcript content at the end for rare scenarios where context limit is hit."""
+    if len(content) <= max_chars:
+        return content
+    truncated = content[:max_chars]
+    # Try to cleanly break at paragraph or sentence boundary
+    last_para = truncated.rfind('\n\n')
+    if last_para > int(max_chars * 0.7):
+        truncated = truncated[:last_para]
+    else:
+        last_dot = truncated.rfind('. ')
+        if last_dot > int(max_chars * 0.7):
+            truncated = truncated[:last_dot + 1]
+    return truncated.strip() + "\n\n[...context trimmed at end due to length limit...]"
+
+def trigger_submit_safely(page, initial_canvases: int, pre_ids: set, max_attempts: int = 2) -> bool:
+    """
+    Attempt to trigger generation. If not generating after an attempt, safely re-click button.
+    CRITICAL: Only click if generation is NOT already underway.
+    """
+    for attempt in range(1, max_attempts + 1):
+        if is_generation_underway(page, initial_canvases, pre_ids):
+            print(f"  [OK] Generation already underway. Button will NOT be re-pressed.", flush=True)
+            return True
+
+        submit_btn = page.locator("button[aria-label='Submit']")
+        if submit_btn.count() > 0 and submit_btn.first.is_visible():
+            if not submit_btn.first.is_disabled():
+                print(f"  Submit attempt {attempt}/{max_attempts}: clicking submit button...", flush=True)
+                submit_btn.first.click()
+            else:
+                print(f"  Submit attempt {attempt}/{max_attempts}: button disabled, checking generation status...", flush=True)
+        else:
+            alt_btn = page.locator("button.rounded-full, button.bg-primary").filter(has=page.locator("svg"))
+            if alt_btn.count() > 0 and alt_btn.last.is_visible():
+                print(f"  Submit attempt {attempt}/{max_attempts}: clicking alternate submit button...", flush=True)
+                alt_btn.last.click()
+            else:
+                print(f"  Submit attempt {attempt}/{max_attempts}: pressing Enter...", flush=True)
+                page.keyboard.press("Enter")
+
+        # Poll for 3-4 seconds to confirm if generation started
+        for _ in range(7):
+            time.sleep(0.5)
+            if is_generation_underway(page, initial_canvases, pre_ids):
+                print("  [OK] Generation started successfully!", flush=True)
+                return True
+
+        print(f"  Notice: Generation not detected after attempt {attempt}.", flush=True)
+
+    return is_generation_underway(page, initial_canvases, pre_ids)
+
+def enter_prompt_and_generate(
+    page,
+    prompt_text: str,
+    raw_content: str = "",
+    topic_idx: int = 1,
+    topic_title: str = "",
+    prompt_mode: str = "cleaned",
+    pre_ids: set = None
+):
+    """
+    Find prompt input, clear, type prompt, and safely trigger submit.
+    1. Re-clicks submit only if image generation has NOT started (never clicks if already generating).
+    2. Rare fallback: if context limit is hit causing failure, trims context at the end and re-submits.
+    """
     page.bring_to_front()
+    if pre_ids is None:
+        pre_ids = set(extract_post_ids(page))
+    initial_canvases = page.locator("canvas").count()
+
     print(f"Entering prompt ({len(prompt_text)} chars)...", flush=True)
     
     # Locate TipTap / ProseMirror rich text editor
@@ -195,26 +295,37 @@ def enter_prompt_and_generate(page, prompt_text: str):
     page.keyboard.press("Backspace")
     time.sleep(0.2)
 
-    # Insert prompt text
+    # Insert full prompt text
     page.keyboard.insert_text(prompt_text)
     time.sleep(0.8)
 
-    # Click the Blue Circle Submit Button (button[aria-label='Submit'])
-    submit_btn = page.locator("button[aria-label='Submit']")
-    if submit_btn.count() > 0 and submit_btn.first.is_visible():
-        print("Clicking blue circle Submit button...", flush=True)
-        submit_btn.first.click()
+    # Step 1: Safely trigger submit (re-clicks only if image is NOT generating)
+    started = trigger_submit_safely(page, initial_canvases, pre_ids, max_attempts=2)
+
+    # Step 2: Context length hit - fallback only in rare failure scenario
+    if not started and (len(prompt_text) > 3500 or raw_content):
+        print("\n⚠️ Prompt generation did not start. Rare context limit likely hit.", flush=True)
+        print("  Applying rare fallback: Trimming context at the end...", flush=True)
+
+        base_content = raw_content if raw_content else prompt_text
+        trimmed_content = trim_content_at_end(base_content, max_chars=3800)
+        trimmed_prompt = format_prompt(topic_idx, topic_title, trimmed_content, mode=prompt_mode)
+        print(f"  Trimmed prompt from {len(prompt_text)} to {len(trimmed_prompt)} chars.", flush=True)
+
+        editor.click()
+        page.keyboard.press("Control+A")
+        page.keyboard.press("Backspace")
+        time.sleep(0.2)
+        page.keyboard.insert_text(trimmed_prompt)
+        time.sleep(0.8)
+
+        # Trigger submit safely with trimmed prompt
+        started = trigger_submit_safely(page, initial_canvases, pre_ids, max_attempts=2)
+
+    if started:
+        print("Generation triggered! Waiting for images to render...", flush=True)
     else:
-        # Fallback to any round SVG button or Enter
-        alt_btn = page.locator("button.rounded-full, button.bg-primary").filter(has=page.locator("svg"))
-        if alt_btn.count() > 0 and alt_btn.last.is_visible():
-            print("Clicking circular submit button...", flush=True)
-            alt_btn.last.click()
-        else:
-            print("Fallback: Pressing Enter to generate...", flush=True)
-            page.keyboard.press("Enter")
-    
-    print("Generation triggered! Waiting for images to render...", flush=True)
+        print("⚠️ Warning: Could not confirm generation start. Proceeding to image wait...", flush=True)
 
 def extract_post_ids(page) -> list:
     """Extract all unique post IDs currently found in links on the page."""
@@ -386,7 +497,15 @@ def run_topic_batch(context, chunk, topic_titles, prompt_mode, output_dir):
 
         configure_imagine_settings(tab, quality="2.0", aspect_ratio="2:3", num_images=2)
         pre_ids = set(extract_post_ids(tab))
-        enter_prompt_and_generate(tab, prompt)
+        enter_prompt_and_generate(
+            tab,
+            prompt,
+            raw_content=raw_content,
+            topic_idx=t_num,
+            topic_title=t_title,
+            prompt_mode=prompt_mode,
+            pre_ids=pre_ids
+        )
         batch_info.append((tab, t_num, pre_ids))
         time.sleep(1.5)
 
