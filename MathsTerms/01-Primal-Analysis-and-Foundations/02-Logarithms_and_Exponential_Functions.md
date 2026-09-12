@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Calculus` `Logarithms` `Exponential-Functions` `Log-Sum-Exp` `Softmax` `NLL` `Information-Theory` `Generative-AI`  
 > `📚 Prerequisites Needed:` [Probability Basics & Axioms](./01-Probability_Basics_and_Axioms.md) (Probabilities in $[0, 1]$ mapped to log-surprisal / log-likelihood in $(-\infty, 0]$) · [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) (Derivative of exponential $\frac{d}{dx} e^x = e^x$ and natural logarithm $\frac{d}{dx} \ln x = \frac{1}{x}$)
 > `🎯 Where Do We Use This?:` **Every single loss function and probability calculation in AI** — The Log-Sum-Exp numerical stabilization trick in Softmax (GPT-4, LLaMA-3), Negative Log-Likelihood (NLL) and Cross-Entropy loss, Evidence Lower Bound (ELBO in VAEs), and Score-matching gradients ($\nabla_x \ln p(x)$ in Diffusion Models).  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/22-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/09-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational & Intuitive · 20 min read)
 
 ---

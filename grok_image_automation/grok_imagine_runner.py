@@ -327,9 +327,9 @@ def resolve_paths(dir_arg: str, transcripts_arg: str = "", output_arg: str = "")
                 transcripts_dir = p / "transcript-by-topic"
                 target_dir = p
 
-    # Default fallback: 26-Tutorial11-f-Divergence-Examples
+    # Default fallback: 13-Tutorial11-f-Divergence-Examples
     if not transcripts_dir:
-        default_t26 = PROJECT_ROOT / "Mathematical-Foundation-for-GenerativeAI" / "26-Tutorial11-f-Divergence-Examples"
+        default_t26 = PROJECT_ROOT / "Mathematical-Foundation-for-GenerativeAI" / "13-Tutorial11-f-Divergence-Examples"
         if (default_t26 / "raw" / "transcript-by-topic").exists():
             transcripts_dir = default_t26 / "raw" / "transcript-by-topic"
             target_dir = default_t26
@@ -537,7 +537,7 @@ def run_range(
     profile_path: Path,
     start_num: int,
     end_num: int,
-    skip_existing: bool = True,
+    skip_existing: bool = False,
     parallel: int = 3,
     prompt_mode: str = "cleaned",
     delay: int = 6,
@@ -621,7 +621,7 @@ def main():
     parser.add_argument("--skip-existing", action="store_true", help="Skip topics that already have 2 complete images")
     parser.add_argument("--max-retries", type=int, default=2, help="Number of retries for topics not fully generated (default: 2)")
     parser.add_argument("--transcripts-dir", type=str, default="", help="Direct path to transcript-by-topic directory")
-    parser.add_argument("--dir", type=str, default="", help="Target lecture/tutorial directory (default: 26-Tutorial11-f-Divergence-Examples)")
+    parser.add_argument("--dir", type=str, default="", help="Target lecture/tutorial directory (default: 13-Tutorial11-f-Divergence-Examples)")
     parser.add_argument("--output-dir", type=str, default="", help="Custom output directory to save images")
     parser.add_argument("--topic", type=int, nargs="+", help="Specific topic number(s) to run (e.g. --topic 1 2)")
     parser.add_argument("--parallel", type=int, default=1, help="Number of parallel generation calls (max: 3, e.g. --parallel 3)")
@@ -636,7 +636,7 @@ def main():
     if args.login:
         interactive_login(profile_path)
     elif args.range:
-        skip_existing = not args.regenerate
+        skip_existing = args.skip_existing
         start_num, end_num = args.range
         parallel_val = args.parallel if args.parallel > 1 else 3
         run_range(

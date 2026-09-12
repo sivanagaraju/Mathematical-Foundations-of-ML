@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Statistics` `MLE` `Parameter-Estimation` `Log-Likelihood` `Gaussian-MLE` `Bernoulli-MLE` `Generative-AI`  
 > `📚 Prerequisites Needed:` [Likelihood & Log-Likelihood](./04-Likelihood_and_Log_Likelihood.md) (Log-likelihood objective $\ell(\theta) = \sum \ln p(x_i \mid \theta)$ given observable data) · [Derivatives, Gradients & Jacobians](../03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) (First-order score stationarity conditions $\nabla_\theta \ell(\theta) = 0$)
 > `🎯 Where Do We Use This?:` **The foundational optimization principle in Machine Learning & Generative AI** — Pre-training Large Language Models (LLaMA-3, GPT-4), Training Diffusion Models via Gaussian score matching, Fitting Gaussian Mixture Models (GMMs), and Deriving Mean Squared Error (MSE) and Cross-Entropy loss functions.  
-> `🎓 Course Module Mapping:` [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/22-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 20: VAEs](../../Mathematical-Foundation-for-GenerativeAI/32-Lec20-Latent-Variable-Models-VAE/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/09-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 20: VAEs](../../Mathematical-Foundation-for-GenerativeAI/19-Lec08-Latent-Variable-Models-VAE/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐⭐☆☆☆ (Foundational & Intuitive · 15 min read)
 
 ---

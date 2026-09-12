@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Optimization` `NLL` `Loss-Functions` `Cross-Entropy` `MLE` `Information-Theory` `LLMs` `PyTorch`  
 > `📚 Prerequisites Needed:` [Maximum Likelihood Estimation (MLE)](./05-MLE.md) (Equivalence between maximizing log-likelihood and minimizing NLL ($\mathcal{L}_{\text{NLL}} = -\ell(\theta)$)) · [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md) (Log-loss penalties and numerical stability) · [Loss Functions in Machine Learning](../03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) (Cross-entropy loss as empirical risk minimization)
 > `🎯 Where Do We Use This?:` **The core training loss for all probabilistic and language models** — Pre-training Large Language Models (`torch.nn.CrossEntropyLoss` in GPT-4, LLaMA-3), Variational Autoencoders reconstruction term, Multi-class classification (`torch.nn.NLLLoss`), and Perplexity evaluation in NLP.  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/22-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/09-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational & Intuitive · 15 min read)
 
 ---

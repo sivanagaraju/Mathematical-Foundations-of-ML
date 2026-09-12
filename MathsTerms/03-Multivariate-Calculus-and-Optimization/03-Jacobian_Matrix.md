@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Multivariate-Calculus` `Jacobian` `Vector-Valued-Functions` `Normalizing-Flows` `Change-of-Variables` `Autograd-VJP` `Deep-Learning`  
 > `📚 Prerequisites Needed:` [Derivatives, Gradients & Jacobians](./02-Derivatives_Gradients_and_Jacobians.md) (Partial derivatives $\frac{\partial f_i}{\partial x_j}$ and multivariate gradient vectors) · [Vectors & Matrices](../02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) (Matrix transformations, coordinate spaces, and local linear mappings $\Delta \vec{y} \approx J \Delta \vec{x}$)
 > `🎯 Where Do We Use This?:` **The exact mathematical engine of multi-dimensional transformations in Generative AI** — Change of variables probability density tracking in Normalizing Flows (RealNVP, Glow), PyTorch Reverse-Mode Autograd Vector-Jacobian Products (`v.T @ J`), Adversarial gradient penalties, and Latent space local curvature analysis.  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 06: Matrix Calculus](../../Mathematical-Foundation-for-GenerativeAI/20-Tutorial06-Transfer-Learning-PyTorch/NOTES.md) · [Lec 01: Introduction](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 06: Matrix Calculus](../../Mathematical-Foundation-for-GenerativeAI/07-Tutorial06-Transfer-Learning-PyTorch/NOTES.md) · [Lec 01: Introduction](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐⭐⭐☆☆ (Intermediate & Geometric · 20 min read)
 
 ---

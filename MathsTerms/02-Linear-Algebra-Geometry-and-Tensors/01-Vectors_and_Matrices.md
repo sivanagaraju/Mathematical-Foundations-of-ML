@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Linear-Algebra` `Vectors` `Matrices` `Linear-Transformations` `Matrix-Multiplication` `Determinants` `Matrix-Inverses` `Deep-Learning`  
 > `📚 Prerequisites Needed:` [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) (Linear functions, slopes, and systems of linear equations)
 > `🎯 Where Do We Use This?:` **The fundamental structural language of Deep Learning and Generative AI** — Linear projection layers ($y = Wx + b$) in Transformers (GPT-4, LLaMA-3), Attention projection matrices ($W_Q, W_K, W_V$), Latent space geometry in Diffusion models and VAEs, and GPU Tensor Core matrix engines (NVIDIA cuBLAS).  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Introduction](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 14: Linear Algebra Review](../../Mathematical-Foundation-for-GenerativeAI/20-Tutorial06-Transfer-Learning-PyTorch/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Introduction](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 14: Linear Algebra Review](../../Mathematical-Foundation-for-GenerativeAI/07-Tutorial06-Transfer-Learning-PyTorch/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational, Intuitive & Visual · 20 min read)
 
 ---

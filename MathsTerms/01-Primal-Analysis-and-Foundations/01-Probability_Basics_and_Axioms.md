@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Probability` `Kolmogorov-Axioms` `Bayes-Theorem` `Sample-Space` `Generative-AI` `Softmax` `Diffusion` `LLMs`
 > `📚 Prerequisites Needed:` [Logarithms & Exponential Functions](./02-Logarithms_and_Exponential_Functions.md) (Continuous monotonic mappings and exponential scaling)
 > `🎯 Where Do We Use This?:` **The foundational bedrock of all Probabilistic AI** — Softmax probability calibration in Large Language Models (GPT-4, LLaMA-3, DeepSeek), Gaussian Markov noise transitions in Diffusion Models (Stable Diffusion, Flux), Latent prior distributions $\mathcal{N}(0, I)$ in VAEs, and Push-forward probability measures in GANs.
-> `🎓 Course Module Mapping:` [Tut 07: Basic Probability 1](../../Mathematical-Foundation-for-GenerativeAI/21-Tutorial07-Review-Basic-Probability-1/NOTES.md) · [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/22-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Lec 01: Generative Models](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 20: VAEs](../../Mathematical-Foundation-for-GenerativeAI/32-Lec20-Latent-Variable-Models-VAE/NOTES.md)
+> `🎓 Course Module Mapping:` [Tut 07: Basic Probability 1](../../Mathematical-Foundation-for-GenerativeAI/08-Tutorial07-Review-Basic-Probability-1/NOTES.md) · [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/09-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Lec 01: Generative Models](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 20: VAEs](../../Mathematical-Foundation-for-GenerativeAI/19-Lec08-Latent-Variable-Models-VAE/NOTES.md)
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational & Intuitive · 20 min read)
 
 ---

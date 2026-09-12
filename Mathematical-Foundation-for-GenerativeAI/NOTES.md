@@ -52,9 +52,9 @@ NPTEL abstract: deep generative models — VAEs, GANs, autoregressive models, di
 > [!NOTE]
 > **YouTube Title Renaming Note:**
 > NPTEL previously uploaded three videos mislabeled as Lec 18, Lec 19, and Lec 20. YouTube has since updated them to their rightful sequential titles:
-> - `Lec 18 WGAN` $\rightarrow$ **`Lec 06 Wasserstein GAN (WGAN)`** (folder `30-Lec18-Wasserstein-GAN`)
-> - `Lec 19 Inversion with GANs and FID` $\rightarrow$ **`Lec 07 Inversion with GANs and FID`** (folder `31-Lec19-Inversion-GANs-FID`)
-> - `Lec 20 Latent Variable Models & VAE` $\rightarrow$ **`Lec 08 Latent Variable Models and Introduction to Variational Autoencoder (VAE)`** (folder `32-Lec20-Latent-Variable-Models-VAE`)
+> - `Lec 18 WGAN` $\rightarrow$ **`Lec 06 Wasserstein GAN (WGAN)`** (folder `17-Lec06-Wasserstein-GAN`)
+> - `Lec 19 Inversion with GANs and FID` $\rightarrow$ **`Lec 07 Inversion with GANs and FID`** (folder `18-Lec07-Inversion-GANs-FID`)
+> - `Lec 20 Latent Variable Models & VAE` $\rightarrow$ **`Lec 08 Latent Variable Models and Introduction to Variational Autoencoder (VAE)`** (folder `19-Lec08-Latent-Variable-Models-VAE`)
 >
 > All lectures from **Lec 01 to Lec 18** and tutorials from **Tutorial 01 to Tutorial 17** are now live in the playlist!
 
@@ -151,41 +151,41 @@ The repository packages follow the **7-Pillar Study Package standard** (`PREREQU
 | Learn # | Video Title | YouTube Slot | Study Package Folder | Status |
 |:-------:|:------------|:------------:|:---------------------|:------:|
 | 1 | Mathematical Foundations of Generative AI (Intro) | YT #36 | `[Planned: 01-Intro]` | Roadmap |
-| 2 | Lec 01 Introduction | YT #35 | [`14-Lec01-MFGAI-Introduction/`](./14-Lec01-MFGAI-Introduction/) | Completed |
+| 2 | Lec 01 Introduction | YT #35 | [`01-Lec01-MFGAI-Introduction/`](./01-Lec01-MFGAI-Introduction/) | Completed |
 | 3 | Tutorial 1 : Introduction to Python Basics | YT #34 | `[Planned: 13B-Tutorial01]` | Roadmap |
-| 4 | Tutorial 2 : Introduction to Numpy | YT #33 | [`16-Tutorial02-Introduction-to-NumPy/`](./16-Tutorial02-Introduction-to-NumPy/) | Completed |
-| 5 | Lec 02 Generative Models : Problem Formulation | YT #32 | [`15-Lec02-Generative-Models-Problem-Formulation/`](./15-Lec02-Generative-Models-Problem-Formulation/) | Completed |
-| 6 | Tutorial 3 : PyTorch Basics | YT #31 | [`17-Tutorial03-PyTorch-Basics/`](./17-Tutorial03-PyTorch-Basics/) | Completed |
-| 7 | Tutorial 4 : CNNs using PyTorch | YT #30 | [`18-Tutorial04-CNNs-PyTorch/`](./18-Tutorial04-CNNs-PyTorch/) | Completed |
-| 8 | Tutorial 5 : RNNs using PyTorch | YT #29 | [`19-Tutorial05-RNNs-PyTorch/`](./19-Tutorial05-RNNs-PyTorch/) | Completed |
-| 9 | Tutorial 6 : Transfer Learning with PyTorch | YT #28 | [`20-Tutorial06-Transfer-Learning-PyTorch/`](./20-Tutorial06-Transfer-Learning-PyTorch/) | Completed |
-| 10 | Tutorial 7 : Review of Basic Probability 1 | YT #27 | [`21-Tutorial07-Review-Basic-Probability-1/`](./21-Tutorial07-Review-Basic-Probability-1/) | Completed |
-| 11 | Tutorial 8 : Review of Basic Probability 2 | YT #26 | [`22-Tutorial08-Review-Basic-Probability-2/`](./22-Tutorial08-Review-Basic-Probability-2/) | Completed |
-| 12 | Tutorial 9 : Review of Basic Probability 3 | YT #25 | [`23-Tutorial09-Review-Basic-Probability-3/`](./23-Tutorial09-Review-Basic-Probability-3/) | Completed |
-| 13 | Tutorial 10 : Review of Machine Learning 1 | YT #24 | [`24-Tutorial10-Review-Machine-Learning-1/`](./24-Tutorial10-Review-Machine-Learning-1/) | Completed |
-| 14 | Lec 03 f-Divergence and Examples | YT #23 | [`25-Lec03-f-Divergence-Examples/`](./25-Lec03-f-Divergence-Examples/) | Completed |
-| 15 | Tutorial 11 – f-Divergence and Examples | YT #22 | [`26-Tutorial11-f-Divergence-Examples/`](./26-Tutorial11-f-Divergence-Examples/) | Completed |
-| 16 | Lec 04 Variational Divergence Minimization (VDM) | YT #21 | [`27-Lec04-Variational-Divergence-Minimization/`](./27-Lec04-Variational-Divergence-Minimization/) | Completed |
-| 17 | Lec 05 Generative Adversarial Networks (GANs) | YT #20 | [`28-Lec05-Generative-Adversarial-Networks/`](./28-Lec05-Generative-Adversarial-Networks/) | Completed |
-| 18 | Tutorial 12 : Implementations of Vanilla GAN, DCGAN and Conditional GAN | YT #19 | [`29-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/`](./29-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/) | Completed |
-| 19 | Lec 06 Wasserstein GAN (WGAN) | YT #18 | [`30-Lec18-Wasserstein-GAN/`](./30-Lec18-Wasserstein-GAN/) | Completed |
-| 20 | Lec 07 Inversion with GANs and FID | YT #17 | [`31-Lec19-Inversion-GANs-FID/`](./31-Lec19-Inversion-GANs-FID/) | Completed |
-| 21 | Lec 08 Latent Variable Models and Introduction to Variational Autoencoder (VAE) | YT #16 | [`32-Lec20-Latent-Variable-Models-VAE/`](./32-Lec20-Latent-Variable-Models-VAE/) | Completed |
-| 22 | Lec 09 VAEs Part 1 | YT #15 | [`33-Lec09-VAEs-Part1/`](./33-Lec09-VAEs-Part1/) | Completed |
-| 23 | Lec 10 VAEs Part 2 | YT #14 | [`34-Lec10-VAEs-Part2/`](./34-Lec10-VAEs-Part2/) | Completed |
-| 24 | Lec 11 Beta- VAE | YT #13 | [`35-Lec11-Beta-VAE/`](./35-Lec11-Beta-VAE/) | Completed |
-| 25 | Tutorial 15 : VAE and Beta-VAE Implementation | YT #6 | [`39-Tutorial15-VAE-Beta-VAE-Implementation/`](./39-Tutorial15-VAE-Beta-VAE-Implementation/) | Completed |
-| 26 | Lec 12 Vector Quantised VAE | YT #12 | [`36-Lec12-Vector-Quantised-VAE/`](./36-Lec12-Vector-Quantised-VAE/) | Completed |
-| 27 | Tutorial 16 : Implementation of VQ-VAE | YT #2 | [`40-Tutorial16-VQ-VAE-Implementation/`](./40-Tutorial16-VQ-VAE-Implementation/) | Completed |
-| 28 | Tutorial 13 : Wasserstein GAN (WGAN) Implementation using Gradient Clip | YT #8 | [`37-Tutorial13-WGAN-Weight-Clipping/`](./37-Tutorial13-WGAN-Weight-Clipping/) | Completed |
-| 29 | Tutorial 14 : Wasserstein GAN (WGAN) Implementation using Gradient Penalty | YT #7 | [`38-Tutorial14-WGAN-Gradient-Penalty/`](./38-Tutorial14-WGAN-Gradient-Penalty/) | Completed |
-| 30 | Lec 13 Introdution to Diffusion models | YT #11 | [`41-Lec13-Introduction-to-Diffusion-Models/`](./41-Lec13-Introduction-to-Diffusion-Models/) | Completed |
-| 31 | Lec 14 Diffussion Models - Part 1 | YT #10 | [`42-Lec14-Diffusion-Models-Part1/`](./42-Lec14-Diffusion-Models-Part1/) | Completed |
-| 32 | Lec 15 Diffussion Models - Part 2 | YT #9 | [`43-Lec15-Diffusion-Models-Part2/`](./43-Lec15-Diffusion-Models-Part2/) | Completed |
-| 33 | Lec 17 Diffussion Models - Part 3 | YT #4 | [`44-Lec17-Diffusion-Models-Part3/`](./44-Lec17-Diffusion-Models-Part3/) | Completed |
-| 34 | Lec 18 Diffussion Models - Part 4 | YT #3 | [`45-Lec18-Diffusion-Models-Part4/`](./45-Lec18-Diffusion-Models-Part4/) | Completed |
-| 35 | Tutorial 17 : Implementation overview of Diffusion Models | YT #1 | [`46-Tutorial17-Diffusion-Models-Implementation-Overview/`](./46-Tutorial17-Diffusion-Models-Implementation-Overview/) | Completed |
-| 36 | Lec 16 Pedagogy in the Times of AI | YT #5 | [`47-Lec16-Pedagogy-in-the-Times-of-AI/`](./47-Lec16-Pedagogy-in-the-Times-of-AI/) | Completed |
+| 4 | Tutorial 2 : Introduction to Numpy | YT #33 | [`03-Tutorial02-Introduction-to-NumPy/`](./03-Tutorial02-Introduction-to-NumPy/) | Completed |
+| 5 | Lec 02 Generative Models : Problem Formulation | YT #32 | [`02-Lec02-Generative-Models-Problem-Formulation/`](./02-Lec02-Generative-Models-Problem-Formulation/) | Completed |
+| 6 | Tutorial 3 : PyTorch Basics | YT #31 | [`04-Tutorial03-PyTorch-Basics/`](./04-Tutorial03-PyTorch-Basics/) | Completed |
+| 7 | Tutorial 4 : CNNs using PyTorch | YT #30 | [`05-Tutorial04-CNNs-PyTorch/`](./05-Tutorial04-CNNs-PyTorch/) | Completed |
+| 8 | Tutorial 5 : RNNs using PyTorch | YT #29 | [`06-Tutorial05-RNNs-PyTorch/`](./06-Tutorial05-RNNs-PyTorch/) | Completed |
+| 9 | Tutorial 6 : Transfer Learning with PyTorch | YT #28 | [`07-Tutorial06-Transfer-Learning-PyTorch/`](./07-Tutorial06-Transfer-Learning-PyTorch/) | Completed |
+| 10 | Tutorial 7 : Review of Basic Probability 1 | YT #27 | [`08-Tutorial07-Review-Basic-Probability-1/`](./08-Tutorial07-Review-Basic-Probability-1/) | Completed |
+| 11 | Tutorial 8 : Review of Basic Probability 2 | YT #26 | [`09-Tutorial08-Review-Basic-Probability-2/`](./09-Tutorial08-Review-Basic-Probability-2/) | Completed |
+| 12 | Tutorial 9 : Review of Basic Probability 3 | YT #25 | [`10-Tutorial09-Review-Basic-Probability-3/`](./10-Tutorial09-Review-Basic-Probability-3/) | Completed |
+| 13 | Tutorial 10 : Review of Machine Learning 1 | YT #24 | [`11-Tutorial10-Review-Machine-Learning-1/`](./11-Tutorial10-Review-Machine-Learning-1/) | Completed |
+| 14 | Lec 03 f-Divergence and Examples | YT #23 | [`12-Lec03-f-Divergence-Examples/`](./12-Lec03-f-Divergence-Examples/) | Completed |
+| 15 | Tutorial 11 – f-Divergence and Examples | YT #22 | [`13-Tutorial11-f-Divergence-Examples/`](./13-Tutorial11-f-Divergence-Examples/) | Completed |
+| 16 | Lec 04 Variational Divergence Minimization (VDM) | YT #21 | [`14-Lec04-Variational-Divergence-Minimization/`](./14-Lec04-Variational-Divergence-Minimization/) | Completed |
+| 17 | Lec 05 Generative Adversarial Networks (GANs) | YT #20 | [`15-Lec05-Generative-Adversarial-Networks/`](./15-Lec05-Generative-Adversarial-Networks/) | Completed |
+| 18 | Tutorial 12 : Implementations of Vanilla GAN, DCGAN and Conditional GAN | YT #19 | [`16-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/`](./16-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/) | Completed |
+| 19 | Lec 06 Wasserstein GAN (WGAN) | YT #18 | [`17-Lec06-Wasserstein-GAN/`](./17-Lec06-Wasserstein-GAN/) | Completed |
+| 20 | Lec 07 Inversion with GANs and FID | YT #17 | [`18-Lec07-Inversion-GANs-FID/`](./18-Lec07-Inversion-GANs-FID/) | Completed |
+| 21 | Lec 08 Latent Variable Models and Introduction to Variational Autoencoder (VAE) | YT #16 | [`19-Lec08-Latent-Variable-Models-VAE/`](./19-Lec08-Latent-Variable-Models-VAE/) | Completed |
+| 22 | Lec 09 VAEs Part 1 | YT #15 | [`20-Lec09-VAEs-Part1/`](./20-Lec09-VAEs-Part1/) | Completed |
+| 23 | Lec 10 VAEs Part 2 | YT #14 | [`21-Lec10-VAEs-Part2/`](./21-Lec10-VAEs-Part2/) | Completed |
+| 24 | Lec 11 Beta- VAE | YT #13 | [`22-Lec11-Beta-VAE/`](./22-Lec11-Beta-VAE/) | Completed |
+| 25 | Tutorial 15 : VAE and Beta-VAE Implementation | YT #6 | [`26-Tutorial15-VAE-Beta-VAE-Implementation/`](./26-Tutorial15-VAE-Beta-VAE-Implementation/) | Completed |
+| 26 | Lec 12 Vector Quantised VAE | YT #12 | [`23-Lec12-Vector-Quantised-VAE/`](./23-Lec12-Vector-Quantised-VAE/) | Completed |
+| 27 | Tutorial 16 : Implementation of VQ-VAE | YT #2 | [`27-Tutorial16-VQ-VAE-Implementation/`](./27-Tutorial16-VQ-VAE-Implementation/) | Completed |
+| 28 | Tutorial 13 : Wasserstein GAN (WGAN) Implementation using Gradient Clip | YT #8 | [`24-Tutorial13-WGAN-Weight-Clipping/`](./24-Tutorial13-WGAN-Weight-Clipping/) | Completed |
+| 29 | Tutorial 14 : Wasserstein GAN (WGAN) Implementation using Gradient Penalty | YT #7 | [`25-Tutorial14-WGAN-Gradient-Penalty/`](./25-Tutorial14-WGAN-Gradient-Penalty/) | Completed |
+| 30 | Lec 13 Introdution to Diffusion models | YT #11 | [`28-Lec13-Introduction-to-Diffusion-Models/`](./28-Lec13-Introduction-to-Diffusion-Models/) | Completed |
+| 31 | Lec 14 Diffussion Models - Part 1 | YT #10 | [`29-Lec14-Diffusion-Models-Part1/`](./29-Lec14-Diffusion-Models-Part1/) | Completed |
+| 32 | Lec 15 Diffussion Models - Part 2 | YT #9 | [`30-Lec15-Diffusion-Models-Part2/`](./30-Lec15-Diffusion-Models-Part2/) | Completed |
+| 33 | Lec 17 Diffussion Models - Part 3 | YT #4 | [`31-Lec17-Diffusion-Models-Part3/`](./31-Lec17-Diffusion-Models-Part3/) | Completed |
+| 34 | Lec 18 Diffussion Models - Part 4 | YT #3 | [`32-Lec18-Diffusion-Models-Part4/`](./32-Lec18-Diffusion-Models-Part4/) | Completed |
+| 35 | Tutorial 17 : Implementation overview of Diffusion Models | YT #1 | [`33-Tutorial17-Diffusion-Models-Implementation-Overview/`](./33-Tutorial17-Diffusion-Models-Implementation-Overview/) | Completed |
+| 36 | Lec 16 Pedagogy in the Times of AI | YT #5 | [`34-Lec16-Pedagogy-in-the-Times-of-AI/`](./34-Lec16-Pedagogy-in-the-Times-of-AI/) | Completed |
 
 ---
 
@@ -198,81 +198,81 @@ Links keep the playlist ID. `index` is the **YouTube slot** (newest-first list),
 | Learn | YT # | Video | Duration | Link | Summary | Package |
 |:-----:|:----:|:------|:--------:|:----:|:--------|:-------:|
 | 1 | 36 | Mathematical Foundations of Generative AI (Intro) | 3:29 | [watch](https://www.youtube.com/watch?v=tXduOwQ36X0&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=36) | Trailer: probabilistic GenAI — estimate a law and sample; sequel to MFML course. | Roadmap |
-| 2 | 35 | Lec 01 Introduction | 1:10:53 | [watch](https://www.youtube.com/watch?v=H05WDy9Mngk&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=35) | RE $\rightarrow$ $\Omega$ $\rightarrow$ $P$ $\rightarrow$ RV $\rightarrow$ estimate $P_X$. Course roadmap (GAN, VAE, diffusion, AR, LLM). | [14](./14-Lec01-MFGAI-Introduction/) |
+| 2 | 35 | Lec 01 Introduction | 1:10:53 | [watch](https://www.youtube.com/watch?v=H05WDy9Mngk&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=35) | RE $\rightarrow$ $\Omega$ $\rightarrow$ $P$ $\rightarrow$ RV $\rightarrow$ estimate $P_X$. Course roadmap (GAN, VAE, diffusion, AR, LLM). | [01](./01-Lec01-MFGAI-Introduction/) |
 | 3 | 34 | Tutorial 1 : Introduction to Python Basics | 34:25 | [watch](https://www.youtube.com/watch?v=HvLLR_PScio&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=34) | Python warm-up before NumPy / PyTorch. | Roadmap |
-| 4 | 33 | Tutorial 2 : Introduction to Numpy | 1:09:18 | [watch](https://www.youtube.com/watch?v=E79ld44pfGM&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=33) | Arrays $\rightarrow$ matmul $\rightarrow$ ReLU/softmax $\rightarrow$ conv/RNN sketches $\rightarrow$ logistic regression. | [16](./16-Tutorial02-Introduction-to-NumPy/) |
-| 5 | 32 | Lec 02 Generative Models : Problem Formulation | 1:03:59 | [watch](https://www.youtube.com/watch?v=GKfv4l6r7hQ&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=32) | Files $\in \mathbb R^d$; dataset $\sim p_x$; GenAI = estimate $p_x$ **and** sample. Recipe: $p_\theta$, $d$, train. | [15](./15-Lec02-Generative-Models-Problem-Formulation/) |
+| 4 | 33 | Tutorial 2 : Introduction to Numpy | 1:09:18 | [watch](https://www.youtube.com/watch?v=E79ld44pfGM&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=33) | Arrays $\rightarrow$ matmul $\rightarrow$ ReLU/softmax $\rightarrow$ conv/RNN sketches $\rightarrow$ logistic regression. | [03](./03-Tutorial02-Introduction-to-NumPy/) |
+| 5 | 32 | Lec 02 Generative Models : Problem Formulation | 1:03:59 | [watch](https://www.youtube.com/watch?v=GKfv4l6r7hQ&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=32) | Files $\in \mathbb R^d$; dataset $\sim p_x$; GenAI = estimate $p_x$ **and** sample. Recipe: $p_\theta$, $d$, train. | [02](./02-Lec02-Generative-Models-Problem-Formulation/) |
 
 ### PyTorch, CNN, RNN, transfer
 
 | Learn | YT # | Video | Duration | Link | Summary | Package |
 |:-----:|:----:|:------|:--------:|:----:|:--------|:-------:|
-| 6 | 31 | Tutorial 3 : PyTorch Basics | 1:02:09 | [watch](https://www.youtube.com/watch?v=SEtu7Eef5ps&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=31) | Tensors, device, autograd, `Module`, `DataLoader`, MLP train loop. | [17](./17-Tutorial03-PyTorch-Basics/) |
-| 7 | 30 | Tutorial 4 : CNNs using PyTorch | 39:30 | [watch](https://www.youtube.com/watch?v=BhnGtsMwUCU&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=30) | `Conv2d`, max-pool, SimpleCNN, MNIST train/eval. | [18](./18-Tutorial04-CNNs-PyTorch/) |
-| 8 | 29 | Tutorial 5 : RNNs using PyTorch | 38:16 | [watch](https://www.youtube.com/watch?v=k6zF2NsvVrk&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=29) | Sequence tensors, RNN/LSTM/GRU, save/load. | [19](./19-Tutorial05-RNNs-PyTorch/) |
-| 9 | 28 | Tutorial 6 : Transfer Learning with PyTorch | 29:29 | [watch](https://www.youtube.com/watch?v=ETJG9mmeL5k&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=28) | Pretrained AlexNet/VGG/ResNet; swap the head; fine-tune. | [20](./20-Tutorial06-Transfer-Learning-PyTorch/) |
+| 6 | 31 | Tutorial 3 : PyTorch Basics | 1:02:09 | [watch](https://www.youtube.com/watch?v=SEtu7Eef5ps&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=31) | Tensors, device, autograd, `Module`, `DataLoader`, MLP train loop. | [04](./04-Tutorial03-PyTorch-Basics/) |
+| 7 | 30 | Tutorial 4 : CNNs using PyTorch | 39:30 | [watch](https://www.youtube.com/watch?v=BhnGtsMwUCU&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=30) | `Conv2d`, max-pool, SimpleCNN, MNIST train/eval. | [05](./05-Tutorial04-CNNs-PyTorch/) |
+| 8 | 29 | Tutorial 5 : RNNs using PyTorch | 38:16 | [watch](https://www.youtube.com/watch?v=k6zF2NsvVrk&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=29) | Sequence tensors, RNN/LSTM/GRU, save/load. | [06](./06-Tutorial05-RNNs-PyTorch/) |
+| 9 | 28 | Tutorial 6 : Transfer Learning with PyTorch | 29:29 | [watch](https://www.youtube.com/watch?v=ETJG9mmeL5k&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=28) | Pretrained AlexNet/VGG/ResNet; swap the head; fine-tune. | [07](./07-Tutorial06-Transfer-Learning-PyTorch/) |
 
 ### Probability and ML review tutorials
 
 | Learn | YT # | Video | Duration | Link | Summary | Package |
 |:-----:|:----:|:------|:--------:|:----:|:--------|:-------:|
-| 10 | 27 | Tutorial 7 : Review of Basic Probability 1 | 50:07 | [watch](https://www.youtube.com/watch?v=owlWCCgYx50&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=27) | Triplet, conditional/Bayes, independence, RV/CDF, discrete PMF families. | [21](./21-Tutorial07-Review-Basic-Probability-1/) |
-| 11 | 26 | Tutorial 8 : Review of Basic Probability 2 | 57:13 | [watch](https://www.youtube.com/watch?v=pQIbfyjSnFk&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=26) | Continuous RV/PDF, expectation/LOTUS/var, Markov/Chebyshev/Jensen, numpy samples. | [22](./22-Tutorial08-Review-Basic-Probability-2/) |
-| 12 | 25 | Tutorial 9 : Review of Basic Probability 3 | 1:13:24 | [watch](https://www.youtube.com/watch?v=eDSb3yObtB8&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=25) | Joints, marginals, conditionals, mixed/GMM, IID, Jacobian. | [23](./23-Tutorial09-Review-Basic-Probability-3/) |
-| 13 | 24 | Tutorial 10 : Review of Machine Learning 1 | 47:34 | [watch](https://www.youtube.com/watch?v=wjSKM1xFoSU&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=24) | Sign-censored Normal MLE; two-exponential EM; $Q$ and a closed M-step. | [24](./24-Tutorial10-Review-Machine-Learning-1/) |
+| 10 | 27 | Tutorial 7 : Review of Basic Probability 1 | 50:07 | [watch](https://www.youtube.com/watch?v=owlWCCgYx50&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=27) | Triplet, conditional/Bayes, independence, RV/CDF, discrete PMF families. | [08](./08-Tutorial07-Review-Basic-Probability-1/) |
+| 11 | 26 | Tutorial 8 : Review of Basic Probability 2 | 57:13 | [watch](https://www.youtube.com/watch?v=pQIbfyjSnFk&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=26) | Continuous RV/PDF, expectation/LOTUS/var, Markov/Chebyshev/Jensen, numpy samples. | [09](./09-Tutorial08-Review-Basic-Probability-2/) |
+| 12 | 25 | Tutorial 9 : Review of Basic Probability 3 | 1:13:24 | [watch](https://www.youtube.com/watch?v=eDSb3yObtB8&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=25) | Joints, marginals, conditionals, mixed/GMM, IID, Jacobian. | [10](./10-Tutorial09-Review-Basic-Probability-3/) |
+| 13 | 24 | Tutorial 10 : Review of Machine Learning 1 | 47:34 | [watch](https://www.youtube.com/watch?v=wjSKM1xFoSU&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=24) | Sign-censored Normal MLE; two-exponential EM; $Q$ and a closed M-step. | [11](./11-Tutorial10-Review-Machine-Learning-1/) |
 
 ### f-divergence and VDM
 
 | Learn | YT # | Video | Duration | Link | Summary | Package |
 |:-----:|:----:|:------|:--------:|:----:|:--------|:-------:|
-| 14 | 23 | Lec 03 f-Divergence and Examples | 43:00 | [watch](https://www.youtube.com/watch?v=LR9UQXY_IU8&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=23) | Estimate + sample via $G_\theta$. $f$-div (not a metric). KL / reverse-KL / JSD; modes vs junk. | [25](./25-Lec03-f-Divergence-Examples/) |
-| 15 | 22 | Tutorial 11 – f-Divergence and Examples | 48:09 | [watch](https://www.youtube.com/watch?v=GjxuVZeMSfE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=22) | $P\ll Q$; Jensen proofs; KL / $-\log$ / TV / JSD. KL fails symmetry and triangle. | [26](./26-Tutorial11-f-Divergence-Examples/) |
-| 16 | 21 | Lec 04 Variational Divergence Minimization (VDM) | 58:54 | [watch](https://www.youtube.com/watch?v=4vtL3NhCkgg&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=21) | Two clouds; conjugate $f^\star$; critic $T(x)$ lower bound; $\min_\theta\max_w$ saddle. | [27](./27-Lec04-Variational-Divergence-Minimization/) |
+| 14 | 23 | Lec 03 f-Divergence and Examples | 43:00 | [watch](https://www.youtube.com/watch?v=LR9UQXY_IU8&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=23) | Estimate + sample via $G_\theta$. $f$-div (not a metric). KL / reverse-KL / JSD; modes vs junk. | [12](./12-Lec03-f-Divergence-Examples/) |
+| 15 | 22 | Tutorial 11 – f-Divergence and Examples | 48:09 | [watch](https://www.youtube.com/watch?v=GjxuVZeMSfE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=22) | $P\ll Q$; Jensen proofs; KL / $-\log$ / TV / JSD. KL fails symmetry and triangle. | [13](./13-Tutorial11-f-Divergence-Examples/) |
+| 16 | 21 | Lec 04 Variational Divergence Minimization (VDM) | 58:54 | [watch](https://www.youtube.com/watch?v=4vtL3NhCkgg&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=21) | Two clouds; conjugate $f^\star$; critic $T(x)$ lower bound; $\min_\theta\max_w$ saddle. | [14](./14-Lec04-Variational-Divergence-Minimization/) |
 
 ### GANs, WGAN, inversion
 
 | Learn | YT # | Video | Duration | Link | Summary | Package |
 |:-----:|:----:|:------|:--------:|:----:|:--------|:-------:|
-| 17 | 20 | Lec 05 Generative Adversarial Networks (GANs) | 58:04 | [watch](https://www.youtube.com/watch?v=5uqga82bDNA&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=20) | GAN as VDM with a JS-style $f$. Generator $G(z)$, discriminator as density-ratio. | [28](./28-Lec05-Generative-Adversarial-Networks/) |
-| 18 | 19 | Tutorial 12 : Implementations of Vanilla GAN, DCGAN and Conditional GAN | 1:18:34 | [watch](https://www.youtube.com/watch?v=dBcURX7GrwE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=19) | Three GAN families in PyTorch: vanilla, conv (DCGAN), class-conditional. | [29](./29-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/) |
-| 19 | 18 | Lec 06 Wasserstein GAN (WGAN) | 44:48 | [watch](https://www.youtube.com/watch?v=1neDqqgaXhE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=18) | Earth-mover / $W_1$; 1-Lipschitz critic; why $f$-div saturates and WGAN does not. *(Formerly Lec 18)* | [30](./30-Lec18-Wasserstein-GAN/) |
-| 20 | 17 | Lec 07 Inversion with GANs and FID | 28:12 | [watch](https://www.youtube.com/watch?v=zw2DUzD0TLE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=17) | Find $z$ with $G(z)\approx x$ via BiGAN/ALI tuples. FID = $W_2$ of Inception Gaussians. *(Formerly Lec 19)* | [31](./31-Lec19-Inversion-GANs-FID/) |
+| 17 | 20 | Lec 05 Generative Adversarial Networks (GANs) | 58:04 | [watch](https://www.youtube.com/watch?v=5uqga82bDNA&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=20) | GAN as VDM with a JS-style $f$. Generator $G(z)$, discriminator as density-ratio. | [15](./15-Lec05-Generative-Adversarial-Networks/) |
+| 18 | 19 | Tutorial 12 : Implementations of Vanilla GAN, DCGAN and Conditional GAN | 1:18:34 | [watch](https://www.youtube.com/watch?v=dBcURX7GrwE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=19) | Three GAN families in PyTorch: vanilla, conv (DCGAN), class-conditional. | [16](./16-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/) |
+| 19 | 18 | Lec 06 Wasserstein GAN (WGAN) | 44:48 | [watch](https://www.youtube.com/watch?v=1neDqqgaXhE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=18) | Earth-mover / $W_1$; 1-Lipschitz critic; why $f$-div saturates and WGAN does not. *(Formerly Lec 18)* | [17](./17-Lec06-Wasserstein-GAN/) |
+| 20 | 17 | Lec 07 Inversion with GANs and FID | 28:12 | [watch](https://www.youtube.com/watch?v=zw2DUzD0TLE&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=17) | Find $z$ with $G(z)\approx x$ via BiGAN/ALI tuples. FID = $W_2$ of Inception Gaussians. *(Formerly Lec 19)* | [18](./18-Lec07-Inversion-GANs-FID/) |
 
 ### WGAN PyTorch implementations
 
 | Learn | YT # | Video | Duration | Link | Summary | Package |
 |:-----:|:----:|:------|:--------:|:----:|:--------|:-------:|
-| 21 | 8 | Tutorial 13 : Wasserstein GAN (WGAN) Implementation using Gradient Clip | 32:54 | [watch](https://www.youtube.com/watch?v=p0wXSsTnmw0&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=8) | WGAN in PyTorch: clamping weights in $[-c, c]$ to satisfy 1-Lipschitz condition; critic loss. | [37](./37-Tutorial13-WGAN-Weight-Clipping/) |
-| 22 | 7 | Tutorial 14 : Wasserstein GAN (WGAN) Implementation using Gradient Penalty | 20:43 | [watch](https://www.youtube.com/watch?v=Mxad7Wz7ymg&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=7) | WGAN-GP in PyTorch: interpolating samples $\hat{x}$, penalizing $(\|\nabla_{\hat{x}} D\|_2 - 1)^2$, eliminating clipping pathology. | [38](./38-Tutorial14-WGAN-Gradient-Penalty/) |
+| 21 | 8 | Tutorial 13 : Wasserstein GAN (WGAN) Implementation using Gradient Clip | 32:54 | [watch](https://www.youtube.com/watch?v=p0wXSsTnmw0&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=8) | WGAN in PyTorch: clamping weights in $[-c, c]$ to satisfy 1-Lipschitz condition; critic loss. | [24](./24-Tutorial13-WGAN-Weight-Clipping/) |
+| 22 | 7 | Tutorial 14 : Wasserstein GAN (WGAN) Implementation using Gradient Penalty | 20:43 | [watch](https://www.youtube.com/watch?v=Mxad7Wz7ymg&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=7) | WGAN-GP in PyTorch: interpolating samples $\hat{x}$, penalizing $(\|\nabla_{\hat{x}} D\|_2 - 1)^2$, eliminating clipping pathology. | [25](./25-Tutorial14-WGAN-Gradient-Penalty/) |
 
 ### Latent-variable models, VAE, beta-VAE, VQ-VAE
 
 | Learn | YT # | Video | Duration | Link | Summary | Package |
 |:-----:|:----:|:------|:--------:|:----:|:--------|:-------:|
-| 23 | 16 | Lec 08 Latent Variable Models and Introduction to Variational Autoencoder (VAE) | 55:25 | [watch](https://www.youtube.com/watch?v=4djE9goJtKs&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=16) | Hidden $z$; incomplete likelihood; ELBO derivation; EM vs VAE when posterior is intractable. *(Formerly Lec 20)* | [32](./32-Lec20-Latent-Variable-Models-VAE/) |
-| 24 | 15 | Lec 09 VAEs Part 1 | 32:56 | [watch](https://www.youtube.com/watch?v=KHiRfCIpJkI&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=15) | Boxed ELBO $\mathbb{E}_Q[\log P(X\|Z)]-KL$; encoder/decoder; reparam trick via LOTUS. | [33](./33-Lec09-VAEs-Part1/) |
-| 25 | 14 | Lec 10 VAEs Part 2 | 45:07 | [watch](https://www.youtube.com/watch?v=plrfGKsZihg&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=14) | Gaussian likelihood, analytic Gaussian KL term $\frac{1}{2}\sum(\sigma_j^2+\mu_j^2-1-\log\sigma_j^2)$, full training algorithm. | [34](./34-Lec10-VAEs-Part2/) |
-| 26 | 13 | Lec 11 Beta- VAE | 23:47 | [watch](https://www.youtube.com/watch?v=I89atful2qg&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=13) | Adding weight $\beta$ to KL term; constrained optimization Lagrangian; learning disentangled features vs reconstruction tradeoff. | [35](./35-Lec11-Beta-VAE/) |
-| 27 | 6 | Tutorial 15 : VAE and Beta-VAE Implementation | 41:27 | [watch](https://www.youtube.com/watch?v=f_X2vwIXVz4&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=6) | PyTorch implementation of VAE and $\beta$-VAE on MNIST/CIFAR: encoder $(\mu,\sigma)$, sampling node, reconstruction loss, latent traversals. | [39](./39-Tutorial15-VAE-Beta-VAE-Implementation/) |
-| 28 | 12 | Lec 12 Vector Quantised VAE | 18:06 | [watch](https://www.youtube.com/watch?v=inowo4EMmkA&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=12) | VQ-VAE: discrete latent space, codebook vector quantization, dictionary learning, Straight-Through Estimator (STE). | [36](./36-Lec12-Vector-Quantised-VAE/) |
-| 29 | 2 | Tutorial 16 : Implementation of VQ-VAE | 58:35 | [watch](https://www.youtube.com/watch?v=NZQzEYuok_c&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=2) | PyTorch code for VQ-VAE: discrete codebook `nn.Embedding`, nearest neighbor assignment, straight-through gradient copy, commitment loss. | [40](./40-Tutorial16-VQ-VAE-Implementation/) |
+| 23 | 16 | Lec 08 Latent Variable Models and Introduction to Variational Autoencoder (VAE) | 55:25 | [watch](https://www.youtube.com/watch?v=4djE9goJtKs&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=16) | Hidden $z$; incomplete likelihood; ELBO derivation; EM vs VAE when posterior is intractable. *(Formerly Lec 20)* | [19](./19-Lec08-Latent-Variable-Models-VAE/) |
+| 24 | 15 | Lec 09 VAEs Part 1 | 32:56 | [watch](https://www.youtube.com/watch?v=KHiRfCIpJkI&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=15) | Boxed ELBO $\mathbb{E}_Q[\log P(X\|Z)]-KL$; encoder/decoder; reparam trick via LOTUS. | [20](./20-Lec09-VAEs-Part1/) |
+| 25 | 14 | Lec 10 VAEs Part 2 | 45:07 | [watch](https://www.youtube.com/watch?v=plrfGKsZihg&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=14) | Gaussian likelihood, analytic Gaussian KL term $\frac{1}{2}\sum(\sigma_j^2+\mu_j^2-1-\log\sigma_j^2)$, full training algorithm. | [21](./21-Lec10-VAEs-Part2/) |
+| 26 | 13 | Lec 11 Beta- VAE | 23:47 | [watch](https://www.youtube.com/watch?v=I89atful2qg&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=13) | Adding weight $\beta$ to KL term; constrained optimization Lagrangian; learning disentangled features vs reconstruction tradeoff. | [22](./22-Lec11-Beta-VAE/) |
+| 27 | 6 | Tutorial 15 : VAE and Beta-VAE Implementation | 41:27 | [watch](https://www.youtube.com/watch?v=f_X2vwIXVz4&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=6) | PyTorch implementation of VAE and $\beta$-VAE on MNIST/CIFAR: encoder $(\mu,\sigma)$, sampling node, reconstruction loss, latent traversals. | [26](./26-Tutorial15-VAE-Beta-VAE-Implementation/) |
+| 28 | 12 | Lec 12 Vector Quantised VAE | 18:06 | [watch](https://www.youtube.com/watch?v=inowo4EMmkA&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=12) | VQ-VAE: discrete latent space, codebook vector quantization, dictionary learning, Straight-Through Estimator (STE). | [23](./23-Lec12-Vector-Quantised-VAE/) |
+| 29 | 2 | Tutorial 16 : Implementation of VQ-VAE | 58:35 | [watch](https://www.youtube.com/watch?v=NZQzEYuok_c&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=2) | PyTorch code for VQ-VAE: discrete codebook `nn.Embedding`, nearest neighbor assignment, straight-through gradient copy, commitment loss. | [27](./27-Tutorial16-VQ-VAE-Implementation/) |
 
 ### Diffusion Models (DDPM Engine)
 
 | Learn | YT # | Video | Duration | Link | Summary | Package |
 |:-----:|:----:|:------|:--------:|:----:|:--------|:-------:|
-| 30 | 11 | Lec 13 Introdution to Diffusion models | 30:37 | [watch](https://www.youtube.com/watch?v=DrLmFcXxhKY&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=11) | Physical motivation from non-equilibrium thermodynamics; forward noising process vs reverse generative denoising process. | [41](./41-Lec13-Introduction-to-Diffusion-Models/) |
-| 31 | 10 | Lec 14 Diffussion Models - Part 1 | 35:09 | [watch](https://www.youtube.com/watch?v=Q6EUgNEPwRk&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=10) | DDPM formulation: Gaussian transition kernel $q(x_t\|x_{t-1})$; closed-form forward marginal $q(x_t\|x_0)=\mathcal{N}(x_t; \sqrt{\bar{\alpha}_t}x_0, (1-\bar{\alpha}_t)I)$. | [42](./42-Lec14-Diffusion-Models-Part1/) |
-| 32 | 9 | Lec 15 Diffussion Models - Part 2 | 25:32 | [watch](https://www.youtube.com/watch?v=O-Jzyk_JjME&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=9) | Variational Lower Bound (VLB) expansion: splitting into prior matching $L_T$, denoising matching $L_{t-1}$, and reconstruction $L_0$. Bayes posterior $q(x_{t-1}\|x_t,x_0)$. | [43](./43-Lec15-Diffusion-Models-Part2/) |
-| 33 | 4 | Lec 17 Diffussion Models - Part 3 | 29:28 | [watch](https://www.youtube.com/watch?v=hf5E8k_Pdh0&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=4) | Connection to score matching; reparameterizing $\mu_\theta(x_t, t)$ into noise prediction $\epsilon_\theta(x_t, t)$; Ho et al. simplified loss $L_{\text{simple}}$. | [44](./44-Lec17-Diffusion-Models-Part3/) |
-| 34 | 3 | Lec 18 Diffussion Models - Part 4 | 32:17 | [watch](https://www.youtube.com/watch?v=1G3kzIE44aQ&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=3) | DDPM Ancestral Sampling algorithm; noise schedules (linear $\beta_t$, cosine); conditionings and classifier-free guidance foundations. | [45](./45-Lec18-Diffusion-Models-Part4/) |
-| 35 | 1 | Tutorial 17 : Implementation overview of Diffusion Models | 38:32 | [watch](https://www.youtube.com/watch?v=Jw01N9Efubw&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=1) | Full PyTorch DDPM implementation overview: UNet backbone, sinusoidal timestep embedding, forward noise schedule, training loop, ancestral sampling loop. | [46](./46-Tutorial17-Diffusion-Models-Implementation-Overview/) |
+| 30 | 11 | Lec 13 Introdution to Diffusion models | 30:37 | [watch](https://www.youtube.com/watch?v=DrLmFcXxhKY&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=11) | Physical motivation from non-equilibrium thermodynamics; forward noising process vs reverse generative denoising process. | [28](./28-Lec13-Introduction-to-Diffusion-Models/) |
+| 31 | 10 | Lec 14 Diffussion Models - Part 1 | 35:09 | [watch](https://www.youtube.com/watch?v=Q6EUgNEPwRk&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=10) | DDPM formulation: Gaussian transition kernel $q(x_t\|x_{t-1})$; closed-form forward marginal $q(x_t\|x_0)=\mathcal{N}(x_t; \sqrt{\bar{\alpha}_t}x_0, (1-\bar{\alpha}_t)I)$. | [29](./29-Lec14-Diffusion-Models-Part1/) |
+| 32 | 9 | Lec 15 Diffussion Models - Part 2 | 25:32 | [watch](https://www.youtube.com/watch?v=O-Jzyk_JjME&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=9) | Variational Lower Bound (VLB) expansion: splitting into prior matching $L_T$, denoising matching $L_{t-1}$, and reconstruction $L_0$. Bayes posterior $q(x_{t-1}\|x_t,x_0)$. | [30](./30-Lec15-Diffusion-Models-Part2/) |
+| 33 | 4 | Lec 17 Diffussion Models - Part 3 | 29:28 | [watch](https://www.youtube.com/watch?v=hf5E8k_Pdh0&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=4) | Connection to score matching; reparameterizing $\mu_\theta(x_t, t)$ into noise prediction $\epsilon_\theta(x_t, t)$; Ho et al. simplified loss $L_{\text{simple}}$. | [31](./31-Lec17-Diffusion-Models-Part3/) |
+| 34 | 3 | Lec 18 Diffussion Models - Part 4 | 32:17 | [watch](https://www.youtube.com/watch?v=1G3kzIE44aQ&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=3) | DDPM Ancestral Sampling algorithm; noise schedules (linear $\beta_t$, cosine); conditionings and classifier-free guidance foundations. | [32](./32-Lec18-Diffusion-Models-Part4/) |
+| 35 | 1 | Tutorial 17 : Implementation overview of Diffusion Models | 38:32 | [watch](https://www.youtube.com/watch?v=Jw01N9Efubw&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=1) | Full PyTorch DDPM implementation overview: UNet backbone, sinusoidal timestep embedding, forward noise schedule, training loop, ancestral sampling loop. | [33](./33-Tutorial17-Diffusion-Models-Implementation-Overview/) |
 
 ### Pedagogy in the Times of AI
 
 | Learn | YT # | Video | Duration | Link | Summary | Package |
 |:-----:|:----:|:------|:--------:|:----:|:--------|:-------:|
-| 36 | 5 | Lec 16 Pedagogy in the Times of AI | 56:27 | [watch](https://www.youtube.com/watch?v=N2a1J0UPeL4&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=5) | Special lecture by Prof. Prathosh: pedagogy, learning versus generation, cognition, curriculum evolution in the generative AI era. | [47](./47-Lec16-Pedagogy-in-the-Times-of-AI/) |
+| 36 | 5 | Lec 16 Pedagogy in the Times of AI | 56:27 | [watch](https://www.youtube.com/watch?v=N2a1J0UPeL4&list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK&index=5) | Special lecture by Prof. Prathosh: pedagogy, learning versus generation, cognition, curriculum evolution in the generative AI era. | [34](./34-Lec16-Pedagogy-in-the-Times-of-AI/) |
 
 ---
 

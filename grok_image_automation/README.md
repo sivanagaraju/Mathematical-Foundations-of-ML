@@ -61,12 +61,12 @@ python grok_imagine_runner.py --login
 
 #### Option A: Direct Transcripts Path
 ```powershell
-python grok_imagine_runner.py --run --transcripts-dir "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\Mathematical-Foundation-for-GenerativeAI\26-Tutorial11-f-Divergence-Examples\raw\transcript-by-topic"
+python grok_imagine_runner.py --run --transcripts-dir "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\Mathematical-Foundation-for-GenerativeAI\13-Tutorial11-f-Divergence-Examples\raw\transcript-by-topic"
 ```
 
 #### Option B: Test with Topic 1 Only (Recommended first check)
 ```powershell
-python grok_imagine_runner.py --run --transcripts-dir "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\Mathematical-Foundation-for-GenerativeAI\26-Tutorial11-f-Divergence-Examples\raw\transcript-by-topic" --topic 1
+python grok_imagine_runner.py --run --transcripts-dir "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\Mathematical-Foundation-for-GenerativeAI\13-Tutorial11-f-Divergence-Examples\raw\transcript-by-topic" --topic 1
 #### Run all topics in a tutorial with 3 parallel tabs:
 ```powershell
 python grok_imagine_runner.py --run --parallel 3
@@ -74,7 +74,7 @@ python grok_imagine_runner.py --run --parallel 3
 
 #### Run a specific tutorial directory:
 ```powershell
-python grok_imagine_runner.py --run --dir "../Mathematical-Foundation-for-GenerativeAI/28-Lec05-Generative-Adversarial-Networks" --parallel 3
+python grok_imagine_runner.py --run --dir "../Mathematical-Foundation-for-GenerativeAI/15-Lec05-Generative-Adversarial-Networks" --parallel 3
 ```
 
 #### Run a range of folders automatically (e.g. 14 to 33):
@@ -112,7 +112,7 @@ You can point the runner to any other tutorial in the repository without re-auth
 
 ```powershell
 # Example: Run for Lecture 03
-python grok_imagine_runner.py --run --dir "../Mathematical-Foundation-for-GenerativeAI/25-Lec03-f-Divergence-Examples"
+python grok_imagine_runner.py --run --dir "../Mathematical-Foundation-for-GenerativeAI/12-Lec03-f-Divergence-Examples"
 ```
 
 Images will automatically download into that lecture's `grok_images/` folder!

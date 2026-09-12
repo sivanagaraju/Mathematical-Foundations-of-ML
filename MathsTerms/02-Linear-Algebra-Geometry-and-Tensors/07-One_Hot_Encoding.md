@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Linear-Algebra` `One-Hot-Encoding` `Embeddings` `Categorical-Data` `Transformers` `LLMs` `Classification`  
 > `📚 Prerequisites Needed:` [Vectors & Matrices](./01-Vectors_and_Matrices.md) (Standard orthonormal basis vectors $\vec{e}_k$ in $\mathbb{R}^V$)
 > `🎯 Where Do We Use This?:` **Every discrete data processing system in AI** — Token vocabulary matrix lookups in Large Language Models (LLMs), Ground-truth target representations in Cross-Entropy loss, Class conditioning in Conditional GANs (cGANs) and Diffusion (ControlNet/Class-guided DiT), and Categorical feature preprocessing.  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 04: CNNs](../../Mathematical-Foundation-for-GenerativeAI/18-Tutorial04-CNNs-PyTorch/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md) · [Tut 12: GAN Implementations](../../Mathematical-Foundation-for-GenerativeAI/29-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 04: CNNs](../../Mathematical-Foundation-for-GenerativeAI/05-Tutorial04-CNNs-PyTorch/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md) · [Tut 12: GAN Implementations](../../Mathematical-Foundation-for-GenerativeAI/16-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational & Intuitive · 15 min read)
 
 ---

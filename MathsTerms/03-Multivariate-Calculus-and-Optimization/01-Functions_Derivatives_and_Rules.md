@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Calculus` `Functions` `Derivatives` `Power-Rule` `Product-Rule` `Quotient-Rule` `Limits` `Optimization` `Deep-Learning`  
 > `📚 Prerequisites Needed:` [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md) (Continuous curves, natural exponential $e^x$, and logarithmic rates of change)
 > `🎯 Where Do We Use This?:` **The core engine of all machine learning parameter updates** — Computing instantaneous rates of change, loss function minimization, activation function slope analysis (ReLU, GELU, Sigmoid), learning rate step sizes, and the building blocks of the Chain Rule in Neural Networks.  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Introduction to MFGAI](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Introduction to MFGAI](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational & Crystal-Clear · 20 min read)
 
 ---

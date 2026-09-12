@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Transformers` `Positional-Encoding` `RoPE` `Sinusoidal` `ALiBi` `LLMs` `LLaMA-3` `Attention` `Deep-Learning`  
 > `📚 Prerequisites Needed:` [Dot Product & Similarity](./03-Dot_Product_and_Similarity.md) (Attention dot products $\langle q, k \rangle$ and angular rotation invariance in RoPE) · [Encodings & Embeddings](./08-Encodings_Categorical_and_Embeddings.md) (Token embedding vectors in Transformer architectures) · [Vectors & Matrices](./01-Vectors_and_Matrices.md) (2D Givens rotation matrices and block-diagonal linear transformations)
 > `🎯 Where Do We Use This?:` **The structural backbone of modern Large Language Models** — Rotary Position Embedding (RoPE) in state-of-the-art LLMs (LLaMA-3, Mistral, Gemma, DeepSeek, Qwen), Sinusoidal encodings in original Transformers (Vaswani 2017) and Diffusion Models (Timestep embeddings in Stable Diffusion/Flux), ALiBi in long-context models, and Vision Transformer patch spatial encodings.  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Introduction](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Introduction](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐⭐⭐☆☆ (Intermediate, Geometric & Elegant · 25 min read)
 
 ---

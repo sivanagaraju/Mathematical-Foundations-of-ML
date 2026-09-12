@@ -671,17 +671,17 @@ Links live **here**, not under topics. University items include original notes/s
 | Resource | Matches lecture… | Why it helps |
 |----------|------------------|--------------|
 | [W1_T3 notes (this playlist)](../05-W1-T3-PyTorch-Datasets-DataLoaders/NOTES.md) | Topic 1 | Immediate previous: $T_w$, saddle, critic/D names. |
-| [NPTEL Lec 04 VDM (video)](https://www.youtube.com/watch?v=4vtL3NhCkgg) | Topic 1 | Twin bound this sitting starts from. Notes: [`27-Lec04`](../../Mathematical-Foundation-for-GenerativeAI/27-Lec04-Variational-Divergence-Minimization/NOTES.md). |
+| [NPTEL Lec 04 VDM (video)](https://www.youtube.com/watch?v=4vtL3NhCkgg) | Topic 1 | Twin bound this sitting starts from. Notes: [`27-Lec04`](../../Mathematical-Foundation-for-GenerativeAI/14-Lec04-Variational-Divergence-Minimization/NOTES.md). |
 | [Nowozin et al. · $f$-GAN (arXiv:1606.00709)](https://arxiv.org/abs/1606.00709) | Topic 1 | Paper: $T$ must land in $\mathrm{dom}(f^*)$. PDF: [arxiv.org/pdf/1606.00709](https://arxiv.org/pdf/1606.00709). |
 | [CS236 notes · GANs](https://deepgenerativemodels.github.io/notes/gan/) | Topic 2 | Original Stanford notes: $f$-GAN split, then vanilla GAN. |
 | [CS236 Lec 10 slides](https://deepgenerativemodels.github.io/assets/slides/cs236_lecture10.pdf) | Topic 2 | Slides: $g_f$ activation on a shared net. |
 | [3Blue1Brown · What is a neural network?](https://www.youtube.com/watch?v=aircAruvnKk) | Topic 2 | Video: a net as $X\to\mathbb{R}$ (his $V_w$). |
 | [Nowozin $f$-GAN PDF](https://arxiv.org/pdf/1606.00709) (Table 1) | Topic 3 | Same $J$ after substituting $T=g_f(V)$. |
 | [Colin Raffel · GANs and divergence minimization](https://colinraffel.com/blog/gans-and-divergence-minimization.html) | Topic 3 | Blog: the two-E score before the GAN letters. |
-| [NPTEL Lec 04 notes](../../Mathematical-Foundation-for-GenerativeAI/27-Lec04-Variational-Divergence-Minimization/NOTES.md) | Topic 3 | Bound $J=\mathbb{E}T-\mathbb{E}f^*(T)$ this rewrite starts from. |
+| [NPTEL Lec 04 notes](../../Mathematical-Foundation-for-GenerativeAI/14-Lec04-Variational-Divergence-Minimization/NOTES.md) | Topic 3 | Bound $J=\mathbb{E}T-\mathbb{E}f^*(T)$ this rewrite starts from. |
 | [Nowozin · From GANs to VDM (MSR talk)](https://www.microsoft.com/en-us/research/video/gans-variational-divergence-minimization/) | Topic 4 | Author lecture: GAN as one $f$. |
 | [Raffel blog](https://colinraffel.com/blog/gans-and-divergence-minimization.html) | Topic 4 | Which GAN loss is which $f$. |
-| [NPTEL Lec 05 GANs (same instructor)](https://www.youtube.com/watch?v=5uqga82bDNA) | Topic 4 | Twin recording. [`28-Lec05`](../../Mathematical-Foundation-for-GenerativeAI/28-Lec05-Generative-Adversarial-Networks/NOTES.md). |
+| [NPTEL Lec 05 GANs (same instructor)](https://www.youtube.com/watch?v=5uqga82bDNA) | Topic 4 | Twin recording. [`28-Lec05`](../../Mathematical-Foundation-for-GenerativeAI/15-Lec05-Generative-Adversarial-Networks/NOTES.md). |
 | [Boyd & Vandenberghe · Convex Optimization (free book)](https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf) | Topic 5 | Original notes: conjugate $f^*$ (Ch. 3.3). Slides: [bv_cvxslides.pdf](https://web.stanford.edu/~boyd/cvxbook/bv_cvxslides.pdf). |
 | [CS236 Lec 10 slides](https://deepgenerativemodels.github.io/assets/slides/cs236_lecture10.pdf) (GAN row) | Topic 5 | $f^*$, domain, output activation. |
 | [Nowozin Table 1](https://arxiv.org/pdf/1606.00709) | Topic 5 | $g_f(v)=-\log(1+e^{-v})$ matches speech. |

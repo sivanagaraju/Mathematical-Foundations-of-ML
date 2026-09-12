@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Embeddings` `One-Hot-Encoding` `Tokenization` `BPE` `Categorical-Data` `LLMs` `Transformers` `Deep-Learning`  
 > `📚 Prerequisites Needed:` [One-Hot Encoding](./07-One_Hot_Encoding.md) (Sparse canonical basis vectors $\vec{e}_i \in \{0, 1\}^V$) · [Vectors & Matrices](./01-Vectors_and_Matrices.md) (Matrix-vector lookup operations $E = W_{\text{emb}} \vec{e}_i$ and continuous vector coordinates)
 > `🎯 Where Do We Use This?:` **The entry gateway of all Natural Language Processing & Generative AI** — Converting discrete text tokens into continuous vectors in LLMs (GPT-4, LLaMA-3, Claude), Entity embeddings in recommendation systems, Categorical feature pipelines, and CLIP text token encoders.  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational, Intuitive & Core · 20 min read)
 
 ---

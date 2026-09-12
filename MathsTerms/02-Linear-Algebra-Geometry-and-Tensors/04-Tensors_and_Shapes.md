@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Linear-Algebra` `Tensors` `Shapes` `Broadcasting` `Strides` `Memory-Contiguity` `PyTorch` `Transformers` `Diffusion`  
 > `📚 Prerequisites Needed:` [Vectors & Matrices](./01-Vectors_and_Matrices.md) (1D vectors, 2D matrices, column-major vs row-major coordinate systems, and matrix dimensions)
 > `🎯 Where Do We Use This?:` **Every single line of neural network code** — Multi-head attention tensor operations in Large Language Models `(Batch, Heads, Sequence, Dim)`, 4D Image batch processing in Diffusion and GANs `(Batch, Channels, Height, Width)`, and GPU memory layout optimization via contiguous strides.  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 04: CNNs](../../Mathematical-Foundation-for-GenerativeAI/18-Tutorial04-CNNs-PyTorch/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 04: CNNs](../../Mathematical-Foundation-for-GenerativeAI/05-Tutorial04-CNNs-PyTorch/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational & Intuitive · 15 min read)
 
 ---

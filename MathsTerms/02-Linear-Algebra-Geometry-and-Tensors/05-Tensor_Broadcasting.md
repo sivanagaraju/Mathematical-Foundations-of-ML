@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Tensors` `Broadcasting` `Memory-Strides` `PyTorch` `NumPy` `CUDA-Optimization` `Transformers` `Deep-Learning`  
 > `📚 Prerequisites Needed:` [Tensors & Shapes](./04-Tensors_and_Shapes.md) (Tensor ranks, shapes, dimensions, and contiguous memory stride layouts) · [Vectors & Matrices](./01-Vectors_and_Matrices.md) (Matrix-vector shape compatibility in affine linear layers ($y = Wx + b$))
 > `🎯 Where Do We Use This?:` **Every single forward pass in Deep Learning and Generative AI** — Adding layer bias vectors ($Y = XW + b$) across large batches, Attention masking in Transformers ($[1, 1, S, S]$ broadcast over $[B, H, S, S]$), Normalization layer statistics (LayerNorm, RMSNorm, BatchNorm), and Loss reduction without allocating redundant GPU VRAM.  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 04: CNNs](../../Mathematical-Foundation-for-GenerativeAI/18-Tutorial04-CNNs-PyTorch/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 04: CNNs](../../Mathematical-Foundation-for-GenerativeAI/05-Tutorial04-CNNs-PyTorch/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational, Practical & High-Performance · 20 min read)
 
 ---

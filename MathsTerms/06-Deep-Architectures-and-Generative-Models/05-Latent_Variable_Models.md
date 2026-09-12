@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Generative-AI` `Latent-Variables` `Probabilistic-Inference` `VAEs` `GMM` `ELBO` `Bayesian-Modeling`  
 > `📚 Prerequisites Needed:` [Joint, Marginal & Conditional Dist](../04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) (Joint factorization $p(x, z) = p(x \mid z)p(z)$ and continuous marginalization $\int p(x, z) dz$) · [Likelihood & Log-Likelihood](../04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) (Marginal likelihood (evidence) optimization and the curse of latent integration)
 > `🎯 Where Do We Use This?:` **The core conceptual framework of generative modeling** — Variational Autoencoders (VAEs), Latent Diffusion Models (Stable Diffusion, FLUX), Gaussian Mixture Models (GMMs), Topic Modeling (LDA), and Hidden Markov Models (HMMs).  
-> `🎓 Course Module Mapping:` [Lec 20: Latent Variable Models & VAEs](../../Mathematical-Foundation-for-GenerativeAI/32-Lec20-Latent-Variable-Models-VAE/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md) · [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/22-Tutorial08-Review-Basic-Probability-2/NOTES.md)  
+> `🎓 Course Module Mapping:` [Lec 20: Latent Variable Models & VAEs](../../Mathematical-Foundation-for-GenerativeAI/19-Lec08-Latent-Variable-Models-VAE/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md) · [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/09-Tutorial08-Review-Basic-Probability-2/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐⭐⭐☆☆ (Intermediate & Intuitive · 15 min read)
 
 ---

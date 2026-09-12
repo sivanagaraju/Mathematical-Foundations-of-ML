@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Linear-Algebra` `SVD` `Matrix-Factorization` `LoRA` `PCA` `Low-Rank-Approximation` `Dimensionality-Reduction` `Deep-Learning`  
 > `📚 Prerequisites Needed:` [Vectors & Matrices](./01-Vectors_and_Matrices.md) (Matrix multiplication, transpose $A^T$, matrix rank, and symmetric matrices $A^T A$) · [Vector Norms & Inner Products](./02-Vector_Norms_and_Inner_Products.md) (Spectral norm, Frobenius norm, and geometric length preservation under orthogonal transforms)
 > `🎯 Where Do We Use This?:` **The core mathematical engine of AI compression and parameter-efficient fine-tuning** — Low-Rank Adaptation (LoRA) in Large Language Models (LLaMA-3, Mistral) and Diffusion Models (Stable Diffusion, Flux), Principal Component Analysis (PCA), Moore-Penrose Matrix Pseudoinverse, Latent Semantic Analysis (LSA), and Attention matrix rank analysis.  
-> `🎓 Course Module Mapping:` [Tut 06: Matrix Calculus](../../Mathematical-Foundation-for-GenerativeAI/20-Tutorial06-Transfer-Learning-PyTorch/NOTES.md) · [Lec 01: Introduction](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 14: Linear Algebra Review](../../Mathematical-Foundation-for-GenerativeAI/20-Tutorial06-Transfer-Learning-PyTorch/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 06: Matrix Calculus](../../Mathematical-Foundation-for-GenerativeAI/07-Tutorial06-Transfer-Learning-PyTorch/NOTES.md) · [Lec 01: Introduction](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 14: Linear Algebra Review](../../Mathematical-Foundation-for-GenerativeAI/07-Tutorial06-Transfer-Learning-PyTorch/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐⭐⭐☆☆ (Intermediate, Geometric & Elegant · 25 min read)
 
 ---

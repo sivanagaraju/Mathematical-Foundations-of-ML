@@ -1,9 +1,12 @@
 raw/
 screenshots/raw/
-screenshots/composites/
+screenshots/composites/*.png
 composites/*.png
 screenshots/manifest.json
 GenAI-IITM.pdf
 .agents
 youtube-lecture-tutor/
 .grok_profile/
+__pycache__/*
+.pytest_cache
+htmldesigns/*

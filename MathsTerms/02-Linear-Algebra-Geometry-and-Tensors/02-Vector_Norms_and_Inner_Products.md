@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Linear-Algebra` `Vector-Norms` `Inner-Products` `Cosine-Similarity` `Attention` `RAG` `Embedding` `Optimization`  
 > `📚 Prerequisites Needed:` [Vectors & Matrices](./01-Vectors_and_Matrices.md) (Vector spaces $\mathbb{R}^n$, linear combinations, and geometric coordinate vectors)
 > `🎯 Where Do We Use This?:` **Every modern AI attention and search engine** — Scaled Dot-Product Attention in Transformers ($\text{Softmax}(QK^\top / \sqrt{d_k})$ in GPT-4, LLaMA-3), Cosine similarity in Retrieval-Augmented Generation (RAG vector databases like Pinecone/Chroma), $L_2$ Weight decay in AdamW optimizer, and Gradient norm regularization in WGAN-GP.  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 04: CNNs](../../Mathematical-Foundation-for-GenerativeAI/18-Tutorial04-CNNs-PyTorch/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 18: WGAN](../../Mathematical-Foundation-for-GenerativeAI/30-Lec18-Wasserstein-GAN/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Tut 04: CNNs](../../Mathematical-Foundation-for-GenerativeAI/05-Tutorial04-CNNs-PyTorch/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 18: WGAN](../../Mathematical-Foundation-for-GenerativeAI/17-Lec06-Wasserstein-GAN/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational & Intuitive · 15 min read)
 
 ---

@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Statistics` `Likelihood` `Log-Likelihood` `Score-Function` `Fisher-Information` `MLE` `NLL` `Diffusion` `LLMs`  
 > `📚 Prerequisites Needed:` [Joint, Marginal & Conditional Dist](./03-Joint_Marginal_Conditional_Dist.md) (I.I.D. joint product factorization $p(X \mid \theta) = \prod_{i=1}^N p(x_i \mid \theta)$) · [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md) (Converting likelihood products into numerically tractable additive log-sums $\ln \prod = \sum \ln$)
 > `🎯 Where Do We Use This?:` **The core objective function of all generative modeling** — Maximizing data log-likelihood in Large Language Models ($\sum \ln p(w_t \mid w_{<t})$ in GPT-4, LLaMA-3), The Stein Score Function ($\nabla_x \ln p_t(x)$) in Diffusion Models (Flux, SD3), Marginal log-evidence in VAEs ($\ln p(x)$), and Fisher Information in Natural Gradient optimization.  
-> `🎓 Course Module Mapping:` [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/22-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 20: VAEs](../../Mathematical-Foundation-for-GenerativeAI/32-Lec20-Latent-Variable-Models-VAE/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/09-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 20: VAEs](../../Mathematical-Foundation-for-GenerativeAI/19-Lec08-Latent-Variable-Models-VAE/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐⭐☆☆☆ (Foundational & Intuitive · 15 min read)
 
 ---

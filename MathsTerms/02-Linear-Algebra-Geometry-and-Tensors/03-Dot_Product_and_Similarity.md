@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Linear-Algebra` `Dot-Product` `Cosine-Similarity` `Attention-Mechanism` `Transformers` `CLIP` `RAG` `Vector-Search` `Deep-Learning`  
 > `📚 Prerequisites Needed:` [Vectors & Matrices](./01-Vectors_and_Matrices.md) (Vector definitions, components, and coordinate representations in $\mathbb{R}^d$) · [Vector Norms & Inner Products](./02-Vector_Norms_and_Inner_Products.md) (Euclidean $L_2$ norm $\|\vec{a}\|_2$ and cosine similarity projection $\cos\theta$)
 > `🎯 Where Do We Use This?:` **The exact mathematical engine of Self-Attention and Vector Retrieval in AI** — Scaled Dot-Product Attention ($\text{softmax}(QK^T / \sqrt{d_k})V$) in Transformers (GPT-4, LLaMA-3, Claude), Semantic similarity in Retrieval-Augmented Generation (RAG) and Vector Databases (Pinecone, Chroma), and Contrastive multimodal alignment in CLIP (connecting images and text in Stable Diffusion and DALL-E 3).  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Introduction](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 14: Linear Algebra Review](../../Mathematical-Foundation-for-GenerativeAI/20-Tutorial06-Transfer-Learning-PyTorch/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Introduction](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 14: Linear Algebra Review](../../Mathematical-Foundation-for-GenerativeAI/07-Tutorial06-Transfer-Learning-PyTorch/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational, Geometric & Core · 20 min read)
 
 ---

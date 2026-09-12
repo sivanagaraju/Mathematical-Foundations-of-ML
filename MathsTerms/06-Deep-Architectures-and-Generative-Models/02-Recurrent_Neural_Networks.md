@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Deep-Learning` `RNN` `LSTM` `GRU` `Sequential-Modeling` `Autoregressive` `State-Space-Models` `Mamba`  
 > `📚 Prerequisites Needed:` [The Chain Rule & Backpropagation](../03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md) (Backpropagation Through Time (BPTT) and vanishing/exploding repeated Jacobian chains $\prod W^T$) · [Vectors & Matrices](../02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) (Hidden state recurrent transition equations $h_t = \tanh(W x_t + U h_{t-1} + b)$) · [Activation Functions](../03-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md) (Hyperbolic tangent $\tanh$ and sigmoid gating non-linearities in LSTM/GRU)
 > `🎯 Where Do We Use This?:` **Foundations of sequential intelligence & modern linear State-Space Models** — Autoregressive sequence generation foundations, Modern State Space Models (Mamba, S4, RWKV), Real-time audio streaming (WaveNet, Voice AI), and Sequential time-series forecasting.  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md) · [Tut 04: CNNs](../../Mathematical-Foundation-for-GenerativeAI/18-Tutorial04-CNNs-PyTorch/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md) · [Tut 04: CNNs](../../Mathematical-Foundation-for-GenerativeAI/05-Tutorial04-CNNs-PyTorch/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational & Intuitive · 15 min read)
 
 ---

@@ -123,71 +123,71 @@ Do **not** restrict math terms to a fixed list. During the processing of **each 
 ├────┬─────────────────────────────────────────────────┬──────────────────────────────────────────┤
 │ Step │ Target Module Folder                          │ Expected Initial / Baseline MathsTerms   │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 01 │ 14-Lec01-MFGAI-Introduction                     │ • Probability_Basics_and_Axioms.md       │
+│ 01 │ 01-Lec01-MFGAI-Introduction                     │ • Probability_Basics_and_Axioms.md       │
 │    │                                                 │ • Random_Variables_and_Distributions.md  │
 │    │                                                 │ • Common_Probability_Distributions.md    │
 │    │                                                 │ • Likelihood_and_Log_Likelihood.md       │
 │    │                                                 │ • MLE.md (Audit & Standardize)           │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 02 │ 15-Lec02-Generative-Models-Problem-Formulation  │ • Tensors_and_Shapes.md                  │
+│ 02 │ 02-Lec02-Generative-Models-Problem-Formulation  │ • Tensors_and_Shapes.md                  │
 │    │                                                 │ • Vector_Norms_and_Inner_Products.md     │
 │    │                                                 │ • KL_Divergence.md                       │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 03 │ 16-Tutorial02-Introduction-to-NumPy (Tier 1)    │ • Activation_Functions.md (ReLU, Sigmoid)│
+│ 03 │ 03-Tutorial02-Introduction-to-NumPy (Tier 1)    │ • Activation_Functions.md (ReLU, Sigmoid)│
 │    │                                                 │ • Loss_Functions.md (MSE, BCE, CCE, NLL) │
 │    │                                                 │ • Convolution_and_Pooling.md             │
 │    │                                                 │ • Recurrent_Neural_Networks.md           │
 │    │                                                 │ • Softmax.md · Argmax.md · OneHot.md     │
 │    │                                                 │ • Gradient_Descent.md (Audit)            │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 04 │ 17-Tutorial03-PyTorch-Basics                    │ • Derivatives_Gradients_and_Jacobians.md │
+│ 04 │ 04-Tutorial03-PyTorch-Basics                    │ • Derivatives_Gradients_and_Jacobians.md │
 │    │                                                 │ • Tensors_and_Shapes.md                  │
 │    │                                                 │ • Activation_Functions.md                │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 05 │ 18-Tutorial04-CNNs-PyTorch                      │ • Convolution_and_Pooling.md             │
+│ 05 │ 05-Tutorial04-CNNs-PyTorch                      │ • Convolution_and_Pooling.md             │
 │    │                                                 │ • Batch_Normalization_and_Spectral_Norm.md│
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 06 │ 19-Tutorial05-RNNs-PyTorch                      │ • Recurrent_Neural_Networks.md (LSTM/GRU)│
+│ 06 │ 06-Tutorial05-RNNs-PyTorch                      │ • Recurrent_Neural_Networks.md (LSTM/GRU)│
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 07 │ 20-Tutorial06-Transfer-Learning-PyTorch         │ • Convolution_and_Pooling.md             │
+│ 07 │ 07-Tutorial06-Transfer-Learning-PyTorch         │ • Convolution_and_Pooling.md             │
 │    │                                                 │ • Loss_Functions.md                      │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 08 │ 21-Tutorial07-Review-Basic-Probability-1        │ • Probability_Basics_and_Axioms.md       │
+│ 08 │ 08-Tutorial07-Review-Basic-Probability-1        │ • Probability_Basics_and_Axioms.md       │
 │    │                                                 │ • Logarithms_and_Exponential_Functions.md│
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 09 │ 22-Tutorial08-Review-Basic-Probability-2        │ • Convexity_and_Jensens_Inequality.md    │
+│ 09 │ 09-Tutorial08-Review-Basic-Probability-2        │ • Convexity_and_Jensens_Inequality.md    │
 │    │                                                 │ • Random_Variables_and_Distributions.md  │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 10 │ 23-Tutorial09-Review-Basic-Probability-3        │ • Joint_Marginal_Conditional_Dist.md     │
+│ 10 │ 10-Tutorial09-Review-Basic-Probability-3        │ • Joint_Marginal_Conditional_Dist.md     │
 │    │                                                 │ • Derivatives_Gradients_and_Jacobians.md │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 11 │ 24-Tutorial10-Review-Machine-Learning-1         │ • Likelihood_and_Log_Likelihood.md       │
+│ 11 │ 11-Tutorial10-Review-Machine-Learning-1         │ • Likelihood_and_Log_Likelihood.md       │
 │    │                                                 │ • Expectation_Maximization_Algorithm.md  │
 │    │                                                 │ • NLL.md (Audit)                         │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 12 │ 25-Lec03-f-Divergence-Examples                  │ • f_Divergence.md                        │
+│ 12 │ 12-Lec03-f-Divergence-Examples                  │ • f_Divergence.md                        │
 │    │                                                 │ • KL_Divergence.md                       │
 │    │                                                 │ • Jensen_Shannon_Divergence.md           │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 13 │ 26-Tutorial11-f-Divergence-Examples             │ • f_Divergence.md                        │
+│ 13 │ 13-Tutorial11-f-Divergence-Examples             │ • f_Divergence.md                        │
 │    │                                                 │ • Convexity_and_Jensens_Inequality.md    │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 14 │ 27-Lec04-Variational-Divergence-Minimization    │ • Fenchel_Conjugate_Dual_Functions.md    │
+│ 14 │ 14-Lec04-Variational-Divergence-Minimization    │ • Fenchel_Conjugate_Dual_Functions.md    │
 │    │                                                 │ • Minimax_Game_and_GANs.md               │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 15 │ 28-Lec05-Generative-Adversarial-Networks        │ • Minimax_Game_and_GANs.md               │
+│ 15 │ 15-Lec05-Generative-Adversarial-Networks        │ • Minimax_Game_and_GANs.md               │
 │    │                                                 │ • Jensen_Shannon_Divergence.md           │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
 │ 16 │ 29-Tutorial12-Implementations-Vanilla-DCGAN-cGAN│ • Minimax_Game_and_GANs.md               │
 │    │                                                 │ • FID_Frechet_Inception_Distance.md      │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 17 │ 30-Lec18-Wasserstein-GAN (Tier 1)               │ • Wasserstein_Distance.md                │
+│ 17 │ 17-Lec06-Wasserstein-GAN (Tier 1)               │ • Wasserstein_Distance.md                │
 │    │                                                 │ • Lipschitz_Continuity.md                │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 18 │ 31-Lec19-Inversion-GANs-FID (Tier 1)            │ • FID_Frechet_Inception_Distance.md      │
+│ 18 │ 18-Lec07-Inversion-GANs-FID (Tier 1)            │ • FID_Frechet_Inception_Distance.md      │
 │    │                                                 │ • Latent_Variable_Models.md              │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤
-│ 19 │ 32-Lec20-Latent-Variable-Models-VAE (Tier 1)    │ • Latent_Variable_Models.md              │
+│ 19 │ 19-Lec08-Latent-Variable-Models-VAE (Tier 1)    │ • Latent_Variable_Models.md              │
 │    │                                                 │ • ELBO_Evidence_Lower_Bound.md           │
 │    │                                                 │ • Reparameterization_Trick.md            │
 ├────┼─────────────────────────────────────────────────┼──────────────────────────────────────────┤

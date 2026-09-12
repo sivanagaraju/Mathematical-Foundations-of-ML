@@ -3,7 +3,7 @@
 > `🏷️ Tags:` `Optimization` `EMA` `Moving-Average` `Diffusion-Models` `Adam-Optimizer` `Stable-Diffusion` `Target-Networks` `Deep-Learning`  
 > `📚 Prerequisites Needed:` [Gradient Descent & Optimizers](./09-Gradient_Descent.md) (SGD noisy parameter trajectories, weight oscillations, and Adam momentum) · [Vectors & Matrices](../02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) (Convex combinations of parameter weight vectors $\theta_{\text{EMA}} = \beta \theta_{\text{EMA}} + (1-\beta)\theta$)
 > `🎯 Where Do We Use This?:` **The secret weapon for photorealistic image generation and stable optimization** — Shadow Model Weights in Diffusion Models (Stable Diffusion, Flux, Midjourney) for smooth denoising, 1st & 2nd moment tracking in the Adam/AdamW optimizer ($\beta_1, \beta_2$), Target networks in Reinforcement Learning (SAC, DDPG), and Batch Normalization running statistics.  
-> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/17-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/14-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 18: WGAN](../../Mathematical-Foundation-for-GenerativeAI/30-Lec18-Wasserstein-GAN/NOTES.md)  
+> `🎓 Course Module Mapping:` [Tut 03: PyTorch Basics](../../Mathematical-Foundation-for-GenerativeAI/04-Tutorial03-PyTorch-Basics/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 18: WGAN](../../Mathematical-Foundation-for-GenerativeAI/17-Lec06-Wasserstein-GAN/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational, Intuitive & Practical · 20 min read)
 
 ---

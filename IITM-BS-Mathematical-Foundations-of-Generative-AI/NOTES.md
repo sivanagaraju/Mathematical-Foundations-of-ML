@@ -138,7 +138,7 @@ Every family in the playlist is a different answer to the **same recipe**:
 | AR / Transformer | next-token$p_\theta(x_i\|x_{<i})$                | ancestral decode                           | teacher-forcing train ≠ free-run inference |
 | RLHF / DPO       | reward$r$ or preference $\pi_\theta$             | still decode the LM                        | treating alignment as “just more NLL”     |
 
-The NPTEL Lec 02 package in this repo ([problem formulation](../Mathematical-Foundation-for-GenerativeAI/15-Lec02-Generative-Models-Problem-Formulation/NOTES.md)) is the same *recipe* in a different recording. This IITM playlist is the full 12-week expansion of that recipe.
+The NPTEL Lec 02 package in this repo ([problem formulation](../Mathematical-Foundation-for-GenerativeAI/02-Lec02-Generative-Models-Problem-Formulation/NOTES.md)) is the same *recipe* in a different recording. This IITM playlist is the full 12-week expansion of that recipe.
 
 ---
 
