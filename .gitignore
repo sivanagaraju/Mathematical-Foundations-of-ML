@@ -11,3 +11,4 @@ __pycache__/*
 .pytest_cache
 htmldesigns/*
 __pycache__
+.chatgpt_profile

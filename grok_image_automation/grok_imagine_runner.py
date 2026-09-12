@@ -38,6 +38,24 @@ GROK_URL = "https://grok.com"
 GROK_IMAGINE_URL = "https://grok.com/imagine"
 GROK_LIBRARY_URL = "https://grok.com/library"
 
+# Import ChatGPT Engine
+try:
+    from chatgpt_engine import (
+        CHATGPT_PROFILE_DIR,
+        CHATGPT_IMAGES_URL,
+        DEFAULT_EMAIL,
+        DEFAULT_PASSWORD,
+        launch_chatgpt_browser,
+        chatgpt_login,
+        is_chatgpt_logged_in,
+        ensure_chatgpt_images_page,
+        submit_chatgpt_prompt,
+        wait_and_download_chatgpt_images,
+        extract_image_elements
+    )
+except ImportError:
+    pass
+
 def get_topic_titles(target_dir: Path):
     """Load topic titles from metadata.json if available."""
     if not target_dir:
@@ -448,14 +466,15 @@ def resolve_paths(dir_arg: str, transcripts_arg: str = "", output_arg: str = "")
                 transcripts_dir = cwd / "raw" / "transcript-by-topic"
                 target_dir = cwd
 
+    folder_name = "chatgpt_images" if engine == "chatgpt" else "grok_images"
     if output_arg:
         output_dir = Path(output_arg).resolve()
     elif target_dir:
-        output_dir = target_dir / "grok_images"
+        output_dir = target_dir / folder_name
     elif transcripts_dir:
-        output_dir = transcripts_dir.parent / "grok_images"
+        output_dir = transcripts_dir.parent / folder_name
     else:
-        output_dir = SCRIPT_DIR / "grok_images"
+        output_dir = SCRIPT_DIR / folder_name
 
     return transcripts_dir, output_dir, target_dir
 
@@ -470,8 +489,62 @@ def is_topic_complete(output_dir: Path, t_num: int, expected_count: int = 2) -> 
             return False
     return True
 
-def run_topic_batch(context, chunk, topic_titles, prompt_mode, output_dir):
+def run_topic_batch(context, chunk, topic_titles, prompt_mode, output_dir, engine: str = "grok"):
     """Submit prompts for a chunk of topics across tabs and download generated images."""
+    if engine == "chatgpt":
+        while len(context.pages) < len(chunk):
+            context.new_page()
+        tabs = context.pages[:len(chunk)]
+
+        batch_info = []
+        for tab_idx, (t_num, f) in enumerate(chunk):
+            tab = tabs[tab_idx]
+            t_title = topic_titles[t_num - 1] if 0 <= (t_num - 1) < len(topic_titles) else f"Topic {t_num}"
+            prefix = f"topic-{t_num:02d}"
+            print(f"  [Tab {tab_idx+1}] Setting up ChatGPT Images for Topic {t_num:02d} ('{t_title}')...", flush=True)
+
+            with open(f, "r", encoding="utf-8") as tf:
+                raw_content = tf.read()
+            prompt = format_prompt(t_num, t_title, raw_content, mode=prompt_mode)
+
+            tab.bring_to_front()
+            ensure_chatgpt_images_page(tab, reset=(tab_idx == 0))
+
+            pre_urls = set(extract_image_elements(tab))
+            submit_chatgpt_prompt(tab, prompt)
+            batch_info.append((tab, t_num, prefix, pre_urls))
+            time.sleep(2)
+
+        if len(chunk) > 1:
+            print(f"\nAll {len(chunk)} ChatGPT prompts in batch submitted! Waiting 25s for parallel generations...", flush=True)
+            time.sleep(25)
+
+        results = []
+        for tab_idx, (tab, t_num, prefix, pre_urls) in enumerate(batch_info):
+            tab.bring_to_front()
+            print(f"  [Tab {tab_idx+1}] Downloading ChatGPT image for {prefix}...", flush=True)
+            downloaded = wait_and_download_chatgpt_images(
+                context,
+                tab,
+                output_dir,
+                prefix,
+                pre_urls,
+                expected_count=1,
+                max_wait=180,
+                initial_wait=5 if len(chunk) > 1 else 20
+            )
+            print(f"  [Tab {tab_idx+1}] Topic {t_num:02d} complete: {len(downloaded)} image(s).", flush=True)
+            results.append((t_num, downloaded))
+
+        # Close extra tabs beyond tab 0
+        while len(context.pages) > 1:
+            try:
+                context.pages[-1].close()
+            except Exception:
+                break
+
+        return results
+
     while len(context.pages) < len(chunk):
         context.new_page()
     tabs = context.pages[:len(chunk)]
@@ -531,9 +604,12 @@ def process_topics(
     delay: int = 6,
     parallel: int = 1,
     skip_existing: bool = False,
-    max_retries: int = 2
+    max_retries: int = 2,
+    engine: str = "grok",
+    chatgpt_email: str = DEFAULT_EMAIL,
+    chatgpt_password: str = DEFAULT_PASSWORD
 ):
-    """Iterate through topic files, generate images in Grok, and download them with automatic retries."""
+    """Iterate through topic files, generate images, and download them with automatic retries."""
     if not transcripts_dir or not transcripts_dir.exists():
         print(f"Error: Transcripts directory not found: {transcripts_dir}", flush=True)
         return
@@ -558,11 +634,13 @@ def process_topics(
         print(f"Error: No matching topic files found in {transcripts_dir}", flush=True)
         return
 
+    expected_imgs = 1 if engine == "chatgpt" else 2
+
     # Check whether to skip fully generated topics or regenerate all
     if skip_existing:
         valid_topic_files = []
         for t_num, f in topic_files:
-            if is_topic_complete(output_dir, t_num, expected_count=2):
+            if is_topic_complete(output_dir, t_num, expected_count=expected_imgs):
                 print(f"  [SKIP] Topic {t_num:02d} already fully generated in {output_dir.name}", flush=True)
             else:
                 valid_topic_files.append((t_num, f))
@@ -575,60 +653,69 @@ def process_topics(
         return
 
     parallel = max(1, min(parallel, 3))
+
     print("=" * 70, flush=True)
-    print(f"PROCESSING {len(topic_files)} TOPIC(S) IN GROK IMAGINE (Parallel Concurrency: {parallel})", flush=True)
+    print(f"PROCESSING {len(topic_files)} TOPIC(S) IN {engine.upper()} (Parallel Concurrency: {parallel})", flush=True)
     print(f"Transcripts: {transcripts_dir}", flush=True)
     print(f"Profile:     {profile_dir}", flush=True)
     print(f"Output:      {output_dir}", flush=True)
     print("=" * 70, flush=True)
 
     with sync_playwright() as p:
-        context = launch_browser(p, profile_dir, headless=False)
+        context = launch_chatgpt_browser(p, profile_dir, headless=False) if engine == "chatgpt" else launch_browser(p, profile_dir, headless=False)
         try:
             main_page = context.pages[0] if context.pages else context.new_page()
-            print(f"Navigating to Grok Imagine: {GROK_IMAGINE_URL}...", flush=True)
-            main_page.goto(GROK_IMAGINE_URL, timeout=60000)
-            time.sleep(3)
+            if engine == "chatgpt":
+                print(f"Navigating to ChatGPT Images: {CHATGPT_IMAGES_URL}...", flush=True)
+                main_page.goto(CHATGPT_IMAGES_URL, timeout=60000)
+                time.sleep(3)
+                if not is_chatgpt_logged_in(main_page):
+                    print("Session not active. Running ChatGPT manual login...", flush=True)
+                    chatgpt_login(context, login_timeout_seconds=60)
+            else:
+                print(f"Navigating to Grok Imagine: {GROK_IMAGINE_URL}...", flush=True)
+                main_page.goto(GROK_IMAGINE_URL, timeout=60000)
+                time.sleep(3)
 
-            if "login" in main_page.url.lower() or "signin" in main_page.url.lower():
-                print("⚠️ Session expired or not logged in. Please run `python grok_imagine_runner.py --login` first!", flush=True)
-                return
+                if "login" in main_page.url.lower() or "signin" in main_page.url.lower():
+                    print("⚠️ Session expired or not logged in. Please run `python grok_imagine_runner.py --engine grok --login` first!", flush=True)
+                    return
 
             # Process in batches of size `parallel`
             for i in range(0, len(topic_files), parallel):
                 chunk = topic_files[i : i + parallel]
                 chunk_nums = [t_num for t_num, _ in chunk]
-                print(f"\n>>> Starting Parallel Batch: Topics {chunk_nums} ({len(chunk)} tabs)", flush=True)
+                print(f"\n>>> Starting Batch: Topics {chunk_nums} ({len(chunk)} tab(s))", flush=True)
 
-                run_topic_batch(context, chunk, topic_titles, prompt_mode, output_dir)
+                run_topic_batch(context, chunk, topic_titles, prompt_mode, output_dir, engine=engine)
 
-                # Retry any topic in this chunk that is not fully generated (missing 2 valid images)
-                retry_queue = [item for item in chunk if not is_topic_complete(output_dir, item[0], expected_count=2)]
+                # Retry any topic in this chunk that is not fully generated
+                retry_queue = [item for item in chunk if not is_topic_complete(output_dir, item[0], expected_count=expected_imgs)]
                 retry_count = 1
                 while retry_queue and retry_count <= max_retries:
                     missing_nums = [t[0] for t in retry_queue]
-                    print(f"\n⚠️ Topic(s) {missing_nums} not fully generated (missing 2 valid images). Retrying attempt {retry_count}/{max_retries}...", flush=True)
+                    print(f"\n⚠️ Topic(s) {missing_nums} not fully generated (missing {expected_imgs} valid images). Retrying attempt {retry_count}/{max_retries}...", flush=True)
                     time.sleep(3)
-                    run_topic_batch(context, retry_queue, topic_titles, prompt_mode, output_dir)
-                    retry_queue = [item for item in chunk if not is_topic_complete(output_dir, item[0], expected_count=2)]
+                    run_topic_batch(context, retry_queue, topic_titles, prompt_mode, output_dir, engine=engine)
+                    retry_queue = [item for item in chunk if not is_topic_complete(output_dir, item[0], expected_count=expected_imgs)]
                     retry_count += 1
 
                 # Cooldown before next batch
                 if i + parallel < len(topic_files) and delay > 0:
-                    print(f"\nWaiting {delay}s cooldown before next parallel batch...", flush=True)
+                    print(f"\nWaiting {delay}s cooldown before next batch...", flush=True)
                     time.sleep(delay)
 
             # Final verification pass across all topics in this run
-            incomplete_topics = [item for item in topic_files if not is_topic_complete(output_dir, item[0], expected_count=2)]
+            incomplete_topics = [item for item in topic_files if not is_topic_complete(output_dir, item[0], expected_count=expected_imgs)]
             sweep_count = 1
             while incomplete_topics and sweep_count <= max_retries:
                 inc_nums = [t[0] for t in incomplete_topics]
                 print(f"\n⚠️ Final Verification: Topic(s) {inc_nums} still not fully generated. Running sweep retry {sweep_count}/{max_retries}...", flush=True)
                 for j in range(0, len(incomplete_topics), parallel):
                     sweep_chunk = incomplete_topics[j : j + parallel]
-                    run_topic_batch(context, sweep_chunk, topic_titles, prompt_mode, output_dir)
+                    run_topic_batch(context, sweep_chunk, topic_titles, prompt_mode, output_dir, engine=engine)
                     time.sleep(3)
-                incomplete_topics = [item for item in topic_files if not is_topic_complete(output_dir, item[0], expected_count=2)]
+                incomplete_topics = [item for item in topic_files if not is_topic_complete(output_dir, item[0], expected_count=expected_imgs)]
                 sweep_count += 1
 
             # Close extra tabs to save resources
@@ -638,13 +725,13 @@ def process_topics(
                 except Exception:
                     break
 
-            all_complete = all(is_topic_complete(output_dir, t[0], 2) for t in topic_files)
+            all_complete = all(is_topic_complete(output_dir, t[0], expected_imgs) for t in topic_files)
             print("\n" + "=" * 70, flush=True)
             if all_complete:
-                print("ALL REQUESTED TOPICS COMPLETED AND FULLY GENERATED (2 IMAGES EACH)!", flush=True)
+                print(f"ALL REQUESTED TOPICS COMPLETED AND FULLY GENERATED ({expected_imgs} IMAGE(S) EACH)!", flush=True)
             else:
-                missing = [t[0] for t in topic_files if not is_topic_complete(output_dir, t[0], 2)]
-                print(f"Completed with some topics still missing images: {missing}", flush=True)
+                missing = [t[0] for t in topic_files if not is_topic_complete(output_dir, t[0], expected_imgs)]
+                print(f"PARTIALLY COMPLETED. Incomplete topic(s): {missing}", flush=True)
             print(f"Images are saved in: {output_dir}", flush=True)
             print("=" * 70, flush=True)
         finally:
@@ -658,7 +745,10 @@ def run_range(
     parallel: int = 3,
     prompt_mode: str = "cleaned",
     delay: int = 6,
-    max_retries: int = 2
+    max_retries: int = 2,
+    engine: str = "grok",
+    chatgpt_email: str = DEFAULT_EMAIL,
+    chatgpt_password: str = DEFAULT_PASSWORD
 ):
     """Process all tutorial/lecture folders within start_num and end_num range."""
     lectures_root = PROJECT_ROOT / "Mathematical-Foundation-for-GenerativeAI"
@@ -677,8 +767,10 @@ def run_range(
                 matching_dirs.append((num, d))
 
     print("=" * 70, flush=True)
-    print(f"BATCH RANGE RUN: Folders {start_num} to {end_num} ({len(matching_dirs)} folders found)", flush=True)
+    print(f"BATCH RANGE RUN: Folders {start_num} to {end_num} ({len(matching_dirs)} folders found, Engine: {engine.upper()})")
     print("=" * 70, flush=True)
+
+    folder_name = "chatgpt_images" if engine == "chatgpt" else "grok_images"
 
     for num, folder in matching_dirs:
         trans_dir = folder / "raw" / "transcript-by-topic"
@@ -692,17 +784,17 @@ def run_range(
         topic_files = list(trans_dir.glob("topic-*.txt"))
         if not topic_files:
             topic_files = list(trans_dir.glob("topic-*.md"))
-        expected_imgs = len(topic_files) * 2
+        imgs_per_topic = 1 if engine == "chatgpt" else 2
+        expected_imgs = len(topic_files) * imgs_per_topic
 
-        out_dir = folder / "grok_images"
+        out_dir = folder / folder_name
         if skip_existing and out_dir.exists():
             existing_imgs = list(out_dir.glob("*.jpg")) + list(out_dir.glob("*.png"))
             if len(existing_imgs) >= expected_imgs and expected_imgs > 0:
-                # Verify each individual topic has 2 valid images
                 all_done = True
                 for tf in topic_files:
                     m = re.search(r'topic-(\d+)', tf.stem)
-                    if m and not is_topic_complete(out_dir, int(m.group(1)), 2):
+                    if m and not is_topic_complete(out_dir, int(m.group(1)), imgs_per_topic):
                         all_done = False
                         break
                 if all_done:
@@ -726,12 +818,19 @@ def run_range(
             delay=delay,
             parallel=parallel,
             skip_existing=skip_existing,
-            max_retries=max_retries
+            max_retries=max_retries,
+            engine=engine,
+            chatgpt_email=chatgpt_email,
+            chatgpt_password=chatgpt_password
         )
 
 def main():
-    parser = argparse.ArgumentParser(description="Grok Imagine Batch Automation")
-    parser.add_argument("--login", action="store_true", help="Launch browser to log in interactively and save session")
+    parser = argparse.ArgumentParser(description="Image Automation (Grok Imagine & ChatGPT Images 2.5)")
+    parser.add_argument("--engine", choices=["grok", "chatgpt"], default="grok", help="Image generation engine (grok or chatgpt, default: grok)")
+    parser.add_argument("--login", action="store_true", help="Launch browser to log in and save session")
+    parser.add_argument("--wait", type=int, default=60, help="Seconds to wait for manual login (default: 60)")
+    parser.add_argument("--email", type=str, default=DEFAULT_EMAIL, help="Email for ChatGPT login (default: sivanagarajupachipulusu@gmail.com)")
+    parser.add_argument("--password", type=str, default=DEFAULT_PASSWORD, help="Password for ChatGPT login")
     parser.add_argument("--run", action="store_true", help="Run batch image generation for topics")
     parser.add_argument("--range", type=int, nargs=2, metavar=("START", "END"), help="Run across folder number range, e.g. --range 14 33")
     parser.add_argument("--regenerate", "--force", dest="regenerate", action="store_true", help="Force regenerate all topics even if images already exist")
@@ -741,21 +840,37 @@ def main():
     parser.add_argument("--dir", type=str, default="", help="Target lecture/tutorial directory (default: 13-Tutorial11-f-Divergence-Examples)")
     parser.add_argument("--output-dir", type=str, default="", help="Custom output directory to save images")
     parser.add_argument("--topic", type=int, nargs="+", help="Specific topic number(s) to run (e.g. --topic 1 2)")
-    parser.add_argument("--parallel", type=int, default=1, help="Number of parallel generation calls (max: 3, e.g. --parallel 3)")
+    parser.add_argument("--parallel", type=int, default=2, help="Number of parallel generation tabs (1-3, default: 2)")
     parser.add_argument("--raw", action="store_true", help="Paste raw transcript text without cleaning timestamps")
     parser.add_argument("--delay", type=int, default=6, help="Delay (in seconds) between generations/batches")
-    parser.add_argument("--profile-dir", type=str, default=str(PROFILE_DIR), help="Path to browser profile directory")
+    parser.add_argument("--profile-dir", type=str, default="", help="Path to browser profile directory")
 
     args = parser.parse_args()
-    profile_path = Path(args.profile_dir)
+
+    # Determine profile directory based on engine
+    if args.profile_dir:
+        profile_path = Path(args.profile_dir)
+    elif args.engine == "chatgpt":
+        profile_path = CHATGPT_PROFILE_DIR
+    else:
+        profile_path = PROFILE_DIR
+
     prompt_mode = "raw" if args.raw else "cleaned"
 
     if args.login:
-        interactive_login(profile_path)
+        if args.engine == "chatgpt":
+            with sync_playwright() as p:
+                context = launch_chatgpt_browser(p, profile_path, headless=False)
+                try:
+                    chatgpt_login(context, login_timeout_seconds=args.wait)
+                finally:
+                    context.close()
+        else:
+            interactive_login(profile_path)
     elif args.range:
         skip_existing = args.skip_existing
         start_num, end_num = args.range
-        parallel_val = args.parallel if args.parallel > 1 else 3
+        parallel_val = max(1, min(args.parallel, 3))
         run_range(
             profile_path=profile_path,
             start_num=start_num,
@@ -764,13 +879,15 @@ def main():
             parallel=parallel_val,
             prompt_mode=prompt_mode,
             delay=args.delay,
-            max_retries=args.max_retries
+            max_retries=args.max_retries,
+            engine=args.engine,
+            chatgpt_email=args.email,
+            chatgpt_password=args.password
         )
     elif args.run:
-        transcripts_dir, output_dir, target_dir = resolve_paths(args.dir, args.transcripts_dir, args.output_dir)
-        # When targeting a specific folder, default to regenerate unless --skip-existing is explicitly passed
+        transcripts_dir, output_dir, target_dir = resolve_paths(args.dir, args.transcripts_dir, args.output_dir, engine=args.engine)
         skip_existing = args.skip_existing and not args.regenerate
-        parallel_val = args.parallel if args.parallel > 1 else 3
+        parallel_val = max(1, min(args.parallel, 3))
         process_topics(
             profile_path,
             transcripts_dir,
@@ -781,7 +898,10 @@ def main():
             delay=args.delay,
             parallel=parallel_val,
             skip_existing=skip_existing,
-            max_retries=args.max_retries
+            max_retries=args.max_retries,
+            engine=args.engine,
+            chatgpt_email=args.email,
+            chatgpt_password=args.password
         )
     else:
         parser.print_help()

@@ -1,162 +1,150 @@
-# Grok Imagine Automation (`grok_image_automation`)
+# Multi-Engine Image Automation (`grok_image_automation`)
 
-Automate AI image generation in Grok Imagine using Playwright with persistent session storage.
+Automate educational technical infographic generation using **Grok Imagine** and **ChatGPT Images 2.5** (`https://chatgpt.com/images`) with persistent session storage.
 
 ---
 
-## Directory Structure
+## Directory & Profile Architecture
 
 ```
 Mathematical-Foundations-of-ML/
 │
 └── grok_image_automation/
-    ├── grok_imagine_runner.py    # Main automation script
-    ├── README.md                 # Documentation & usage guide
-    └── .grok_profile/            # Persistent Chrome profile (stores your login session)
+    ├── chatgpt_engine.py         # ChatGPT Images 2.5 automation engine
+    ├── grok_imagine_runner.py    # Lecture notes runner (supports --engine grok | chatgpt)
+    ├── grok_mathsterms_runner.py # MathsTerms markdown runner (supports --engine grok | chatgpt)
+    ├── README.md                 # Complete documentation & copy-paste commands
+    ├── .grok_profile/            # Persistent Chrome profile for Grok
+    └── .chatgpt_profile/         # Persistent Chrome profile for ChatGPT
 ```
 
 ---
 
-## How It Works
+## Supported Engines
 
-1. **Persistent Session (`.grok_profile`)**:
 
-   - Uses real Google Chrome with a persistent user data directory (`.grok_profile/`).
-   - All cookies, auth tokens, and session context are saved directly to disk.
-   - You only need to log into Grok once. Future runs reuse this session automatically.
-2. **Automated Settings**:
-
-   - **Aspect Ratio**: Automatically selects **`2:3`** (portrait).
-   - **Quality**: Selects **`Quality 2.0`**.
-   - **Image Count**: Selects **`2 images`** per generation.
-3. **Batch Processing**:
-
-   - Reads every topic file (`topic-01.txt` through `topic-10.txt`) from the transcript folder.
-   - Cleans timestamp markers `[00:01]` and crafts an educational infographic diagram prompt.
-   - Submits prompt to Grok Imagine by clicking the blue circle Submit button.
-   - Waits 40 seconds for generation and tracks the exact new post IDs generated on the Imagine screen (ensuring old/cached images are never downloaded).
-   - Automatically downloads the full-resolution (1152x1728) images to `grok_images/` as `topic-01_img1.jpg`, `topic-01_img2.jpg`, etc.
+| Engine                                      | URL                          | Storage Profile     | Default Output Directory |
+| :-------------------------------------------- | :----------------------------- | :-------------------- | :------------------------- |
+| **Grok Imagine** (`--engine grok`)          | `https://grok.com/imagine`   | `.grok_profile/`    | `.../grok_images/`       |
+| **ChatGPT Images 2.5** (`--engine chatgpt`) | `https://chatgpt.com/images` | `.chatgpt_profile/` | `.../chatgpt_images/`    |
 
 ---
 
-## Quick Start Guide
+## 1. Authentication & Persistent Profiles (Run Once)
 
-Open a PowerShell terminal in `grok_image_automation`:
-
-```powershell
-cd c:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\grok_image_automation
-```
-
-### 1. First Time: Log in and Save Session (Only needed once)
+### Grok Login:
 
 ```powershell
-python grok_imagine_runner.py --login
+python grok_image_automation/grok_imagine_runner.py --engine grok --login
 ```
 
-- A visible Chrome window opens to `https://grok.com`.
-- Log in with your Google, X, or email credentials.
-- Once you see your dashboard, return to the terminal and press **`[Enter]`**.
-- Your login is now permanently saved in `.grok_profile/`.
+- Opens Chrome to `https://grok.com`. Log in and press `[Enter]` in the terminal.
+
+### ChatGPT Images Login (Manual 60-Second Window):
+
+```powershell
+python grok_image_automation/chatgpt_engine.py --login
+```
+
+*(Or via either runner: `python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --login`)*
+
+- Chrome opens directly with the persistent `.chatgpt_profile/` directory.
+- You have **60 seconds** to log in manually (enter email, password, passcode/2FA, verify).
+- Once completed, the browser cleanly saves all session cookies, tokens, and storage state into `.chatgpt_profile/`.
+- That profile is then **permanently reused** by both `grok_mathsterms_runner.py` and `grok_imagine_runner.py`!
+- Optional: Use `--wait <seconds>` (e.g. `--wait 90`) if you need more time.
 
 ---
 
-### 2. Run for Tutorial 11 Transcripts
+## 2. MathsTerms Runner (`grok_mathsterms_runner.py`)
 
-#### Option A: Direct Transcripts Path
+Dynamically parses topic sections (`### 1.`, `### 2.`, etc.) from monolithic markdown files in `MathsTerms/` and downloads generated images into segregated topic folders.
+
+### Using ChatGPT Images 2.5 (`--engine chatgpt`):
 
 ```powershell
-python grok_imagine_runner.py --run --transcripts-dir "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\Mathematical-Foundation-for-GenerativeAI\13-Tutorial11-f-Divergence-Examples\raw\transcript-by-topic"
+# 1. Run all files in Category 01 in parallel (2 tabs):
+python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --category "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\MathsTerms\01-Primal-Analysis-and-Foundations" --parallel 2 --skip-existing
+
+# 2. Or using category folder name shorthand (3 parallel tabs):
+python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --category "01-Primal-Analysis-and-Foundations" --parallel 3 --skip-existing
+
+# 3. Generate images for Topic 1 of a specific file:
+python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 1
+
+# 4. Generate multiple topics (e.g. Topics 1, 2, 4) in parallel:
+python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 1 2 4 --parallel 3
+
+# 5. Process all topics in a single file (parallel 2 tabs):
+python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --parallel 2 --skip-existing
 ```
 
-#### Option B: Test with Topic 1 Only (Recommended first check)
+### Using Grok Imagine (`--engine grok`):
 
 ```powershell
-python grok_imagine_runner.py --run --transcripts-dir "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\Mathematical-Foundation-for-GenerativeAI\13-Tutorial11-f-Divergence-Examples\raw\transcript-by-topic" --topic 1
-#### Run all topics in a tutorial with 3 parallel tabs:
-```powershell
-python grok_imagine_runner.py --run --parallel 3
+# 1. Run Category 01 with Grok (parallel 2 tabs):
+python grok_image_automation/grok_mathsterms_runner.py --engine grok --category "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\MathsTerms\01-Primal-Analysis-and-Foundations" --parallel 2 --skip-existing
+
+# 2. Run all topics for a file in parallel (2 tabs):
+python grok_image_automation/grok_mathsterms_runner.py --engine grok --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --parallel 2
+
+# 3. Force regenerate a specific topic:
+python grok_image_automation/grok_mathsterms_runner.py --engine grok --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 4 --regenerate
 ```
 
-#### Run a specific tutorial directory:
+### Output Folder Structure:
 
-```powershell
-python grok_imagine_runner.py --run --dir "../Mathematical-Foundation-for-GenerativeAI/15-Lec05-Generative-Adversarial-Networks" --parallel 3
+```
+MathsTerms/<Category>/chatgpt_images/<MarkdownFileStem>/
+  ├── topic-01_<TopicSlug>_img1.jpg
+  ├── topic-01_<TopicSlug>_img2.jpg
+  └── ...
 ```
 
-#### Run a range of folders automatically (e.g. 14 to 33):
+---
+
+## 3. Lecture Transcripts Runner (`grok_imagine_runner.py`)
+
+Processes topic transcript files (`topic-*.txt` or `topic-*.md`) across lecture notes (`01-*` through `34-*`).
+
+### Using ChatGPT Images 2.5:
 
 ```powershell
-python grok_imagine_runner.py --range 14 33 --parallel 3
+# Run Topic 1 for Lecture 13:
+python grok_image_automation/grok_imagine_runner.py --engine chatgpt --run --dir "Mathematical-Foundation-for-GenerativeAI/13-Tutorial11-f-Divergence-Examples" --topic 1
+
+# Run across all topics in a lecture folder in parallel (2 tabs):
+python grok_image_automation/grok_imagine_runner.py --engine chatgpt --run --dir "Mathematical-Foundation-for-GenerativeAI/13-Tutorial11-f-Divergence-Examples" --parallel 2 --skip-existing
 ```
 
-*Note: Automatically skips folders that already have complete images.*
+### Using Grok Imagine:
+
+```powershell
+# Run 3 parallel tabs:
+python grok_image_automation/grok_imagine_runner.py --engine grok --run --parallel 3
+
+# Run across a range of lecture folders (e.g. 14 to 33):
+python grok_image_automation/grok_imagine_runner.py --engine grok --range 14 33 --parallel 3
+```
 
 ---
 
 ## CLI Options & Flags
 
 
-| Flag                      | Argument    | Description                                                                      |
-| :-------------------------- | :------------ | :--------------------------------------------------------------------------------- |
-| `--run`                   | *(flag)*    | Start batch generation process for a single tutorial                             |
-| `--range`                 | `START END` | Batch process all folders in number range (e.g.`--range 14 33`)                  |
-| `--regenerate`, `--force` | *(flag)*    | Force regenerate all topics even if images already exist                         |
-| `--skip-existing`         | *(flag)*    | Skip topics that already have 2 complete images                                  |
-| `--max-retries`           | `N`         | Retries for topics that fail or have < 2 images (default:`2`)                    |
-| `--parallel`              | `1-3`       | Number of parallel generations in concurrent tabs (max:`3`, e.g. `--parallel 3`) |
-| `--login`                 | *(flag)*    | Launch Chrome interactively to log in / refresh session                          |
-| `--transcripts-dir`       | `<path>`    | Direct path to`raw/transcript-by-topic` folder                                   |
-| `--dir`                   | `<path>`    | Path to a lecture/tutorial root folder                                           |
-| `--topic`                 | `1 2 3...`  | Run specific topic numbers (e.g.`--topic 1` or `--topic 6 7 8`)                  |
-| `--raw`                   | *(flag)*    | Send verbatim raw transcript text without cleaning timestamps                    |
-| `--delay`                 | `N`         | Cooldown pause in seconds between batches (default:`6` seconds)                  |
-| `--output-dir`            | `<path>`    | Custom directory to save downloaded images                                       |
-| `--profile-dir`           | `<path>`    | Custom path to Chrome profile (default:`.grok_profile`)                          |
-
----
-
-## Reusing for Other Tutorials / Lectures
-
-You can point the runner to any other tutorial in the repository without re-authenticating:
-
-```powershell
-# Example: Run for Lecture 03
-python grok_imagine_runner.py --run --dir "../Mathematical-Foundation-for-GenerativeAI/12-Lec03-f-Divergence-Examples"
-```
-
-Images will automatically download into that lecture's `grok_images/` folder!
-
----
-
-## MathsTerms Automation (`grok_mathsterms_runner.py`)
-
-A dedicated runner that dynamically parses monolithic topic markdown files in `MathsTerms/` into numbered sections (`### 1.` through `### 11.`), automatically formats educational infographics prompts, and saves images in segregated subfolders per document.
-
-### Segregated Folder Structure:
-```
-MathsTerms/<Category>/grok_images/<MarkdownFileStem>/
-  ├── topic-01_<TopicSlug>_img1.jpg
-  ├── topic-01_<TopicSlug>_img2.jpg
-  ├── topic-02_<TopicSlug>_img1.jpg
-  └── ...
-```
-
-### Ready-to-Run Commands (Copy & Paste):
-
-```powershell
-# 1. Run all 11 topics for a specific file (parallel 2 tabs)
-python grok_image_automation/grok_mathsterms_runner.py --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --parallel 2
-
-# 2. Run specific topic(s) of a file (e.g. Topics 1, 2, 4)
-python grok_image_automation/grok_mathsterms_runner.py --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 1 2 4
-
-# 3. Force regenerate a topic (e.g. Topic 4)
-python grok_image_automation/grok_mathsterms_runner.py --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 4 --regenerate
-
-# 4. Run all files in an entire category folder
-python grok_image_automation/grok_mathsterms_runner.py --category "01-Primal-Analysis-and-Foundations" --parallel 3
-
-# 5. Batch run all 46 files in MathsTerms (skipping already complete topics)
-python grok_image_automation/grok_mathsterms_runner.py --all --parallel 3 --skip-existing
-```
-
+| Flag                      | Argument            | Description                                                             |
+| :-------------------------- | :-------------------- | :------------------------------------------------------------------------ |
+| `--engine`                | `grok` \| `chatgpt` | Engine to use for image generation (default:`grok`)                     |
+| `--login`                 | *(flag)*            | Launch browser to log in and save session to engine's profile           |
+| `--email`                 | `<email>`           | Account email for ChatGPT (default:`sivanagarajupachipulusu@gmail.com`) |
+| `--password`              | `<password>`        | Password for ChatGPT (default:`Pulk@_ta!nt_01!`)                        |
+| `--file`                  | `<path>`            | Path to a MathsTerms markdown file                                      |
+| `--category`              | `<name>`            | Category name or absolute path in MathsTerms                            |
+| `--all`                   | *(flag)*            | Process all files across all categories in MathsTerms                   |
+| `--topic`                 | `1 2 3...`          | Specific topic numbers to run                                           |
+| `--parallel`              | `1-3`               | Number of parallel generation tabs (default: 2)                         |
+| `--skip-existing`         | *(flag)*            | Skip topics that already have valid downloaded images                   |
+| `--regenerate`, `--force` | *(flag)*            | Force regenerate topics even if images already exist                    |
+| `--max-retries`           | `N`                 | Number of retries for incomplete topics (default:`2`)                   |
+| `--delay`                 | `N`                 | Cooldown seconds between batches (default:`6`)                          |
+| `--profile-dir`           | `<path>`            | Custom Chrome profile directory                                         |
