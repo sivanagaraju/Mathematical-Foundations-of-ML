@@ -217,7 +217,7 @@ verify_sampling_step()
 | :--- | :--- | :--- |
 | Mean Squared Error | [08-Loss_Functions.md](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Formulating $L_{\text{simple}}(\theta) = \|\epsilon - \epsilon_\theta(x_t, t)\|^2$ |
 | Gaussian Distributions | [02-Common_Probability_Distributions.md](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Reverse transition kernel $p_\theta(x_{t-1} \mid x_t)$ |
-| Score Matching | [04-Lipschitz_Continuity.md](../../MathsTerms/01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md) | Connection between $\epsilon_\theta(x_t, t)$ and score function $\nabla_{x_t} \log p(x_t)$ |
+| Score Matching | [06-Lipschitz_Continuity.md](../../MathsTerms/01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md) | Connection between $\epsilon_\theta(x_t, t)$ and score function $\nabla_{x_t} \log p(x_t)$ |
 
 ---
 

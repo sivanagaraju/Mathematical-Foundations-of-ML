@@ -1,7 +1,7 @@
 # Probability Basics, Sample Spaces & The Kolmogorov Axioms: The Mathematical Foundations of Uncertainty
 
 > `🏷️ Tags:` `Probability` `Kolmogorov-Axioms` `Bayes-Theorem` `Sample-Space` `Generative-AI` `Softmax` `Diffusion` `LLMs`
-> `📚 Prerequisites Needed:` [Logarithms & Exponential Functions](./02-Logarithms_and_Exponential_Functions.md) (Continuous monotonic mappings and exponential scaling)
+> `📚 Prerequisites Needed:` Basic arithmetic with fractions, elementary set language, and comfort reading a simple table. Logarithms are useful later for AI applications, but are **not** required to learn probability itself.
 > `🎯 Where Do We Use This?:` **The foundational bedrock of all Probabilistic AI** — Softmax probability calibration in Large Language Models (GPT-4, LLaMA-3, DeepSeek), Gaussian Markov noise transitions in Diffusion Models (Stable Diffusion, Flux), Latent prior distributions $\mathcal{N}(0, I)$ in VAEs, and Push-forward probability measures in GANs.
 > `🎓 Course Module Mapping:` [Tut 07: Basic Probability 1](../../Mathematical-Foundation-for-GenerativeAI/08-Tutorial07-Review-Basic-Probability-1/NOTES.md) · [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/09-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Lec 01: Generative Models](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 20: VAEs](../../Mathematical-Foundation-for-GenerativeAI/19-Lec08-Latent-Variable-Models-VAE/NOTES.md)
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational & Intuitive · 20 min read)
@@ -27,10 +27,16 @@
 ### 1. 🧭 Executive Summary & Metadata Header
 
 
+> **This chapter is about:** assigning and updating sensible numerical beliefs when an outcome is uncertain.
+>
+> **Start with this idea:** a probability is a number from $0$ to $1$ attached to an event, such as “a die shows an even number.” The formal objects $\Omega$, $\mathcal{F}$, and $P$ make this everyday idea reliable for finite games, continuous measurements, and eventually machine-learning models.
+>
+> **By the end, you should be able to:** list outcomes and events, use union/intersection/complement, calculate conditional probability, and explain Bayes' rule using a small example. The $\sigma$-algebra language is the rigorous extension; learn the concrete examples first.
+
 > [!NOTE]
 > ### 🎓 Mathematical Prerequisite Bridge & Foundational Lineage
 > To master this topic with complete mathematical depth and intuition, verify comfort with:
-> - **[Logarithms & Exponential Functions](./02-Logarithms_and_Exponential_Functions.md)** — Continuous monotonic mappings and exponential scaling
+> - **Basic arithmetic and set notation** — Fractions, percentages, $\in$, $\subseteq$, union, and intersection. Use the notation decoder below whenever a symbol is unfamiliar.
 >
 Probability theory is the rigorous mathematical framework for measuring and reasoning under **uncertainty**. In Machine Learning and Generative AI, computers do not output absolute truths; they manipulate probability distributions over words, pixels, and continuous latent vectors.
 

@@ -41,6 +41,11 @@
 
 ### 1. 🧭 Executive Summary & The Linchpin of Modern AI
 
+> **This chapter is about:** curves whose shape makes averaging and optimization predictable. A convex curve bends like a bowl: the line segment joining any two points on the curve stays above the curve.
+>
+> **Why this exists:** many difficult questions become manageable when a problem has this shape. A local low point is then globally low, and Jensen's inequality tells us how a curve interacts with an average.
+>
+> **By the end, you should be able to:** identify convex and concave functions geometrically, state Jensen's inequality in words and symbols, and explain why it produces bounds such as the ELBO.
 
 > [!NOTE]
 > ### 🎓 Mathematical Prerequisite Bridge & Foundational Lineage
@@ -49,7 +54,7 @@
 > - **[Logarithms & Exponential Functions](./02-Logarithms_and_Exponential_Functions.md)** — Concavity of the natural logarithm ($-\ln x$) underpinning ELBO and information bounds
 > - **[Probability Basics & Axioms](./01-Probability_Basics_and_Axioms.md)** — Probability measures and expectation as a convex combination ($\mathbb{E}[X] = \int x dP$)
 >
-In mathematics and Machine Learning, **Convexity** is the foundational bedrock of optimization: it guarantees that **every local minimum is the unique global minimum**. You cannot get trapped in false valleys or potholes.
+In mathematics and Machine Learning, **convexity** is a foundational optimization guarantee: every local minimum of a convex function is a global minimum, so there are no false valleys. The global minimum is **unique only when the function is strictly convex**.
 
 **Jensen's Inequality** (discovered by Danish mathematician Johan Jensen in 1906) is the geometric law that dictates what happens when a non-linear curved function acts on an average of inputs. It states:
 - For any **convex (bowl-shaped) function $f$**: The average of the curved outputs is **greater than or equal to** the function evaluated at the average input: $\mathbb{E}[f(X)] \ge f(\mathbb{E}[X])$.
@@ -473,7 +478,7 @@ $$\begin{aligned}
 ---
 
 #### 3. Why is optimizing non-convex neural networks hard compared to convex models?
-- **The Convex Guarantee:** For convex loss functions (like Logistic Regression or Linear SVMs), every stationary point ($\nabla f(\theta) = 0$) is guaranteed to be the unique global optimum.
+- **The Convex Guarantee:** For a differentiable convex loss, every stationary point ($\nabla f(\theta) = 0$) is a global optimum. It is unique only if the loss is strictly convex (or has another source of uniqueness, such as suitable regularization).
 - **The Non-Convex Reality:** Deep neural networks have millions of non-convex saddle points, ridges, and local minima.
 - **The Engineering Bridge:** Understanding convexity allows researchers to isolate convex sub-components (like the inner maximization of $f$-GANs or the Wasserstein-1 dual Kantorovich-Rubinstein problem) to stabilize overall non-convex deep training!
 
@@ -606,7 +611,7 @@ $$D_{\text{KL}}(q_\phi \parallel p_\theta) = 0.80 \times (0.064539) + 0.20 \time
 $$\text{ELBO} + D_{\text{KL}}(q_\phi \parallel p_\theta) = -2.532731 + 0.007002 = \mathbf{-2.525729\text{ nats}} \equiv \ln p_\theta(x) \quad \text{✅}$$
 
 > 💡 **The Geometric Takeaway:**  
-> The solvable floor ($\text{ELBO} = -2.532731$) is strictly below the true evidence ($\ln p(x) = -2.525729$). The gap is precisely the non-negative KL divergence ($0.007002 \ge 0$). Raising the ELBO guarantees pushing the true evidence upwards!
+> The solvable floor ($\text{ELBO} = -2.532731$) is strictly below the true evidence ($\ln p(x) = -2.525729$). The gap is precisely the non-negative KL divergence ($0.007002 \ge 0$). Raising the ELBO raises a certified lower bound on the evidence; it is the standard training surrogate, although an ELBO increase alone does not prove the evidence increased unless the variational gap is controlled.
 
 ---
 
@@ -652,7 +657,7 @@ flowchart TD
 | :--- | :--- | :--- |
 | **Variational Autoencoders (VAEs)** | **ELBO Derivation**: $\ln p_\theta(x) \ge \mathbb{E}_q[\ln p_\theta(x \mid z)] - D_{\text{KL}}(q_\phi(z \mid x) \parallel p(z))$ | Bypasses intractable $512$-dimensional integration, enabling end-to-end backpropagation. |
 | **Latent Diffusion Models (Stable Diffusion / Flux)** | **Latent Space Compression**: Uses VAE encoder-decoder trained via Jensen ELBO | Compresses high-resolution $1024 \times 1024 \times 3$ images into $128 \times 128 \times 4$ latent manifolds for fast diffusion training. |
-| **$f$-GANs & Variational Discriminators** | **Fenchel Duality**: $D_f(P \parallel Q) = \sup_{T} \left\{ \mathbb{E}_P[T(x)] - \mathbb{E}_Q[f^*(T(x))] \right\}$ | Allows adversarial training on ANY statistical divergence (KL, JSD, $\chi^2$) from raw data samples without density ratios. |
+| **$f$-GANs & Variational Discriminators** | **Fenchel dual lower bound**: $D_f(P \parallel Q) \ge \sup_T \left\{ \mathbb{E}_P[T(x)] - \mathbb{E}_Q[f^*(T(x))] \right\}$ | Turns an $f$-divergence into an adversarial lower-bound objective. Equality needs the usual convexity conditions and a sufficiently rich witness class. |
 | **Expectation-Maximization (EM)** | **Monotonic Likelihood Ascent**: $\ln p(X \mid \theta^{(t+1)}) \ge Q(\theta^{(t+1)} \mid \theta^{(t)}) \ge \ln p(X \mid \theta^{(t)})$ | Guarantees that iterative GMM / HMM parameter updates never decrease true data likelihood. |
 | **LLM Reinforcement Learning (RLHF / DPO)** | **Gibbs KL Constraint**: $\max_\pi \mathbb{E}[R] - \beta D_{\text{KL}}(\pi \parallel \pi_{\text{ref}})$ | Prevents language models from collapsing into reward hacking by maintaining a bounded Jensen divergence from reference policy. |
 

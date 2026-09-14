@@ -31,7 +31,7 @@ Last hour’s GAN / VDM **saddle** can **saturate**: a perfect inspector leaves 
 | **$D_f$** | $f$-divergence (KL, JSD, …) | Classical divergence yardstick; saturates to $\ln 2$ on disjoint supports | [f-Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/04-f_Divergence.md) |
 | **$W_1(P, Q)$** | Wasserstein / Earth-Mover's Distance | Minimal shovel work $\inf_\gamma \mathbb{E}[\|x - y\|]$ between piles | [Wasserstein Distance & EMD](../../MathsTerms/05-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md) |
 | **$\pi / \gamma$** | Transport plan = joint coupling table | Conservation-of-mass joint distribution coupling $P$ and $Q$ | [Joint, Marginal & Conditional Dist](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
-| **$T_w / D_w$** | 1-Lipschitz Critic Net | Scalar regression potential landscape; slope bounded by 1.0 | [Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md) |
+| **$T_w / D_w$** | 1-Lipschitz Critic Net | Scalar regression potential landscape; slope bounded by 1.0 | [Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md) |
 | **$\text{Saddle}$** | $\min_\theta \max_w J(\theta, w)$ | Minimax optimization seeking Nash equilibrium on zero-sum landscape | [Minimax Games & GANs](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/09-Minimax_Game_and_GANs.md) |
 
 ```

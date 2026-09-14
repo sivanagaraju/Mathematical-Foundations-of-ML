@@ -331,7 +331,7 @@ The wrong move is allowing the Critic to output arbitrarily steep gradients to s
   assert slope.item() <= 1.0, "1-Lipschitz violated!"
   print(f"Topic 3 Clean: Verified 1-Lipschitz slope = {slope.item():.2f}")
   ```
-- `🔗 MathsTerm Link`: [Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md).
+- `🔗 MathsTerm Link`: [Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why enforce 1-Lipschitz continuity (X) rather than unconstrained score maximization (Y)? Without the Lipschitz constraint, the supremum diverges to $+\infty$ and the objective ceases to be a valid metric.

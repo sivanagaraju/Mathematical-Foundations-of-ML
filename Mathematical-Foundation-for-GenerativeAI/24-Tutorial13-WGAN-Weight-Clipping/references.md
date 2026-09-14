@@ -10,7 +10,7 @@ The mathematical concepts in this lecture build directly upon optimal transport,
 
 - [MathsTerms: Wasserstein Distance & EMD](../../MathsTerms/05-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md)
   - **Relevance & Why Read This:** Details primal optimal transport, Kantorovich relaxation, and Monge problem geometry.
-- [MathsTerms: Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md)
+- [MathsTerms: Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md)
   - **Relevance & Why Read This:** Provides rigorous mathematical proofs for Lipschitz constants and gradient norm bounds.
 - [MathsTerms: Minimax Game and GANs](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/09-Minimax_Game_and_GANs.md)
   - **Relevance & Why Read This:** Establishes the standard zero-sum minimax objective and Jensen-Shannon divergence derivations.

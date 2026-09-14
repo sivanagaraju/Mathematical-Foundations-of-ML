@@ -202,7 +202,7 @@ The wrong move is attempting to fine-tune the clipping constant $c$ across hundr
   assert decay < 1e-7
   print(f"Topic 1 Clean: Gradient decay across {depth} layers = {decay:.2e}")
   ```
-- `🔗 MathsTerm Link`: [Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md).
+- `🔗 MathsTerm Link`: [Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why penalize function gradients (X) rather than clipping weights (Y)? Weight clipping constrains parameters indirectly and exponentially with depth, whereas gradient penalty constrains the function's rate of change directly and uniformly across all layers.

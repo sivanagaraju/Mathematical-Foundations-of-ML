@@ -10,7 +10,7 @@ The mathematical concepts in this lecture build directly upon optimal transport,
 
 - [Tutorial 13: WGAN Weight Clipping](../24-Tutorial13-WGAN-Weight-Clipping/NOTES.md)
   - **Relevance & Why Read This:** Directly preceding tutorial establishing Kantorovich-Rubinstein duality, the linear Critic architecture, and the failure modes of hard weight clipping that WGAN-GP cures.
-- [MathsTerms: Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md)
+- [MathsTerms: Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md)
   - **Relevance & Why Read This:** Details the equivalence between the Lipschitz constant and the supremum of the gradient norm.
 - [MathsTerms: Batch Normalization & Spectral Norm](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/11-Batch_Normalization_and_Spectral_Norm.md)
   - **Relevance & Why Read This:** Analyzes why Batch Normalization violates point-wise Lipschitz evaluation and details Spectral Normalization alternatives.

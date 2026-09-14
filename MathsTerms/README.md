@@ -27,14 +27,16 @@ Every guide in this directory follows a strict **10-Section Gold Standard** brid
 
 ### 1. ⚡ [01-Primal-Analysis-and-Foundations](./01-Primal-Analysis-and-Foundations/README.md)
 
+> 🌱 **Starting from zero?** Use the [First-Principles Route](./01-Primal-Analysis-and-Foundations/START_HERE.md) before treating the catalogue numbers as a study sequence.
+
 | Mathematical Guide | Core Focus & Key Formula | Primary Modules |
 | :--- | :--- | :--- |
 | **[Probability Basics & Axioms](./01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md)** | Sample spaces, $\sigma$-algebras, measure non-negativity, countable additivity | Tut 07 |
 | **[Logarithms & Exponential Functions](./01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md)** | Numerical stability, log-space arithmetic, preventing underflow ($\ln(ab) = \ln a + \ln b$) | Tut 02, Lec 01, Tut 10 |
 | **[Convexity & Jensen\'s Inequality](./01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md)** | Convex functions, secant lines, and lower bounds ((\mathbb{E}[X]) \le \mathbb{E}[f(X)]$) | Lec 03, Lec 20 |
-| **[Lipschitz Continuity](./01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md)** | Bounded gradient slope $\|f(x) - f(y)\| \le K \|x - y\|$, Kantorovich-Rubinstein dual | Lec 18, Tut 12 |
+| **[Lipschitz Continuity](./01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md)** | Bounded gradient slope $\|f(x) - f(y)\| \le K \|x - y\|$, Kantorovich-Rubinstein dual | Lec 18, Tut 12 |
 | **[Fenchel Conjugate & Dual Variational Representations](./01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md)** | Legendre-Fenchel transformation ($f^*(t) = \sup_u \{tu - f(u)\}$), slope scanning & unzipping | Lec 04, Lec 05, Lec 18 |
-| **[Bounds, Supremum, Infimum & Linear Families](./01-Primal-Analysis-and-Foundations/06-Bounds_Supremum_Infimum_and_Linear_Families.md)** | Lower bounds, $\sup$ vs $\max$, open sets, family of lines, highest linear supporting bound | Lec 04, Lec 05 |
+| **[Bounds, Supremum, Infimum & Linear Families](./01-Primal-Analysis-and-Foundations/04-Bounds_Supremum_Infimum_and_Linear_Families.md)** | Lower bounds, $\sup$ vs $\max$, open sets, family of lines, highest linear supporting bound | Lec 04, Lec 05 |
 
 ---
 

@@ -1,7 +1,7 @@
 # Wasserstein Distance & Earth Mover's Distance (EMD): Optimal Transport & Stable Generative Modeling
 
 > `🏷️ Tags:` `Optimal-Transport` `Wasserstein-Distance` `Earth-Movers-Distance` `WGAN` `WGAN-GP` `Lipschitz-Continuity` `FID` `Generative-AI`  
-> `📚 Prerequisites Needed:` [Lipschitz Continuity](../01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md) (1-Lipschitz witness functions $\|f\|_L \le 1$ in the Kantorovich-Rubinstein duality theorem) · [Common Probability Distributions](../04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) (Probability measures, joint couplings $\gamma \in \Pi(P, Q)$, and marginal constraints) · [Vector Norms & Inner Products](../02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md) (Ground metric transport cost $\|x - y\|$ on low-dimensional manifolds)
+> `📚 Prerequisites Needed:` [Lipschitz Continuity](../01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md) (1-Lipschitz witness functions $\|f\|_L \le 1$ in the Kantorovich-Rubinstein duality theorem) · [Common Probability Distributions](../04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) (Probability measures, joint couplings $\gamma \in \Pi(P, Q)$, and marginal constraints) · [Vector Norms & Inner Products](../02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md) (Ground metric transport cost $\|x - y\|$ on low-dimensional manifolds)
 > `🎯 Where Do We Use This?:` **The gold standard for stable adversarial generation and image evaluation** — Wasserstein GAN with Gradient Penalty (WGAN-GP in StyleGAN, BigGAN), Fréchet Inception Distance (FID / 2-Wasserstein metric for image benchmarking), and Optimal transport matching in Flow Matching (Flux, SD3).  
 > `🎓 Course Module Mapping:` [Lec 18: WGAN](../../Mathematical-Foundation-for-GenerativeAI/17-Lec06-Wasserstein-GAN/NOTES.md) · [Lec 19: Inversion & FID](../../Mathematical-Foundation-for-GenerativeAI/18-Lec07-Inversion-GANs-FID/NOTES.md) · [Tut 12: GAN Implementations](../../Mathematical-Foundation-for-GenerativeAI/16-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐☆☆☆☆ (Foundational & Intuitive · 20 min read)
@@ -29,7 +29,7 @@
 > [!NOTE]
 > ### 🎓 Mathematical Prerequisite Bridge & Foundational Lineage
 > To master this topic with complete mathematical depth and intuition, verify comfort with:
-> - **[Lipschitz Continuity](../01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md)** — 1-Lipschitz witness functions $\|f\|_L \le 1$ in the Kantorovich-Rubinstein duality theorem
+> - **[Lipschitz Continuity](../01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md)** — 1-Lipschitz witness functions $\|f\|_L \le 1$ in the Kantorovich-Rubinstein duality theorem
 > - **[Common Probability Distributions](../04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md)** — Probability measures, joint couplings $\gamma \in \Pi(P, Q)$, and marginal constraints
 > - **[Vector Norms & Inner Products](../02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md)** — Ground metric transport cost $\|x - y\|$ on low-dimensional manifolds
 >

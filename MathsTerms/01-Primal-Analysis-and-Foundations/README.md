@@ -8,29 +8,35 @@
 
 ---
 
-## 🧭 Curated Mathematical Guides in this Cluster
-
-| # | Guide Title | Core Mathematical Concept | Key Upstream Prerequisites | Modern Generative AI Application |
-| :-: | :--- | :--- | :--- | :--- |
-| **01** | **[Convexity and Jensens Inequality](./03-Convexity_and_Jensens_Inequality.md)** | Fundamental theory & proofs | [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md), [Logarithms & Exponential Functions](./02-Logarithms_and_Exponential_Functions.md), [Probability Basics & Axioms](./01-Probability_Basics_and_Axioms.md) | Direct implementation |
-| **02** | **[Fenchel Conjugate and Dual Representations](./05-Fenchel_Conjugate_and_Dual_Representations.md)** | Fundamental theory & proofs | [Convexity & Jensen's Inequality](./03-Convexity_and_Jensens_Inequality.md), [Dot Product & Similarity](../02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Direct implementation |
-| **03** | **[Lipschitz Continuity](./04-Lipschitz_Continuity.md)** | Fundamental theory & proofs | [Vector Norms & Inner Products](../02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md), [Derivatives, Gradients & Jacobians](../03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Direct implementation |
-| **04** | **[Logarithms and Exponential Functions](./02-Logarithms_and_Exponential_Functions.md)** | Fundamental theory & proofs | [Probability Basics & Axioms](./01-Probability_Basics_and_Axioms.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Direct implementation |
-| **05** | **[Probability Basics and Axioms](./01-Probability_Basics_and_Axioms.md)** | Fundamental theory & proofs | [Logarithms & Exponential Functions](./02-Logarithms_and_Exponential_Functions.md) | Direct implementation |
-| **06** | **[Bounds, Supremum, Infimum & Linear Families](./06-Bounds_Supremum_Infimum_and_Linear_Families.md)** | Lower/upper bounds, $\sup$ vs $\max$, supporting lines | [Convexity & Jensen's Inequality](./03-Convexity_and_Jensens_Inequality.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Variational bounds & $f$-GAN duality |
+> 🌱 **New to mathematics for AI?** Begin with [Start Here: A First-Principles Route](./START_HERE.md). The filenames are catalogue identifiers; the cross-cluster route gives the actual zero-background learning order.
 
 ---
 
-## 🗺️ Recommended Pedagogical Reading Order
+## 🧭 Curated Mathematical Guides in this Cluster
 
-For optimal conceptual continuity, learners should study these guides in the following sequential order:
+> 💡 **How to read this cluster:** These guides form one part of a larger curriculum. Read [Start Here](./START_HERE.md) for the prerequisite route across algebra, calculus, and linear algebra; then use this table as a map of the concepts in this cluster.
 
-1. **[Probability Basics and Axioms](./01-Probability_Basics_and_Axioms.md)**
-2. **[Logarithms and Exponential Functions](./02-Logarithms_and_Exponential_Functions.md)**
+| # | Guide Title | Core Mathematical Concept | Key Upstream Prerequisites | Modern Generative AI Application |
+| :-: | :--- | :--- | :--- | :--- |
+| **01** | **[Probability Basics and Axioms](./01-Probability_Basics_and_Axioms.md)** | Events, conditional probability, and the formal probability triplet | Basic arithmetic and set language; logarithms are only needed for later AI applications | Softmax calibration in LLMs, diffusion noise chains, latent priors |
+| **02** | **[Logarithms and Exponential Functions](./02-Logarithms_and_Exponential_Functions.md)** | Exponents, inverse logarithms, log-space arithmetic, and numerical stability | Basic arithmetic and algebra; probability and derivatives are later applications | Cross-entropy loss, perplexity, score functions |
+| **03** | **[Convexity and Jensens Inequality](./03-Convexity_and_Jensens_Inequality.md)** | Convex functions, epigraphs, Jensen's inequality | [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md), [Logarithms & Exponential Functions](./02-Logarithms_and_Exponential_Functions.md), [Probability Basics & Axioms](./01-Probability_Basics_and_Axioms.md) | ELBO in VAEs, Gibbs' inequality, f-divergence non-negativity |
+| **04** | **[Bounds, Supremum, Infimum & Linear Families](./04-Bounds_Supremum_Infimum_and_Linear_Families.md)** | Lower/upper bounds, $\sup$ vs $\max$, envelope of supporting lines | Basic algebra and functions for bounds; convexity and derivatives for supporting-line envelopes | Variational lower bounds & $f$-GAN duality |
+| **05** | **[Fenchel Conjugate and Dual Representations](./05-Fenchel_Conjugate_and_Dual_Representations.md)** | Legendre-Fenchel dual $f^*(t) = \sup_u \{tu - f(u)\}$ | [Bounds, Supremum & Linear Families](./04-Bounds_Supremum_Infimum_and_Linear_Families.md), [Convexity & Jensen's Inequality](./03-Convexity_and_Jensens_Inequality.md), [Dot Product & Similarity](../02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | $f$-GAN-style variational objectives; related divergence estimators |
+| **06** | **[Lipschitz Continuity](./06-Lipschitz_Continuity.md)** | Bounded slopes $\|f(x) - f(y)\| \le K \|x - y\|$, spectral norm | [Vector Norms & Inner Products](../02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md), [Derivatives, Gradients & Jacobians](../03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | WGAN critic constraint, spectral normalization, flow matching |
+
+---
+
+## 🗺️ Reading Order Within This Cluster
+
+After the external prerequisites in [Start Here](./START_HERE.md), study the cluster in this conceptual order:
+
+1. **[Logarithms and Exponential Functions](./02-Logarithms_and_Exponential_Functions.md)**
+2. **[Probability Basics and Axioms](./01-Probability_Basics_and_Axioms.md)**
 3. **[Convexity and Jensens Inequality](./03-Convexity_and_Jensens_Inequality.md)**
-4. **[Bounds, Supremum, Infimum & Linear Families](./06-Bounds_Supremum_Infimum_and_Linear_Families.md)**
+4. **[Bounds, Supremum, Infimum & Linear Families](./04-Bounds_Supremum_Infimum_and_Linear_Families.md)**
 5. **[Fenchel Conjugate and Dual Representations](./05-Fenchel_Conjugate_and_Dual_Representations.md)**
-6. **[Lipschitz Continuity](./04-Lipschitz_Continuity.md)**
+6. **[Lipschitz Continuity](./06-Lipschitz_Continuity.md)** — after the separate vectors, norms, and gradient guides.
 
 ---
 
