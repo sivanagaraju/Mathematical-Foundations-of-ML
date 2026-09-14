@@ -86,6 +86,38 @@ Convex mathematicians discovered that **any convex bowl can be described complet
 - $T(x)$ (**Discriminator / Witness Function**): A neural network predicting the optimal tangent slope $t$ for sample $x$.
 - $D_f(P \parallel Q)$ (**Variational Divergence**): The divergence estimated purely from sample batches without knowing probability formulas.
 
+#### Deep Geometric Intuition: Small Slope, Medium Slope, Large Slope
+To visualize how the Fenchel conjugate scans a convex curve $f(u) = u^2$:
+```
+===================================================================================================
+         GEOMETRIC SCANNING: SMALL SLOPE vs MEDIUM SLOPE vs LARGE SLOPE ON f(u) = u²
+===================================================================================================
+
+   f(u) ▲
+        │                                  /  LARGE SLOPE (t = 6)
+        │                                 /   Tangent at u* = 3
+        │                                /    f*(6) = 9 (Intercept = -9)
+        │                      /        /
+        │            .---.    / MEDIUM / (t = 2)
+        │        .--'     '--/--------/ Tangent at u* = 1
+        │    .--'           /        /  f*(2) = 1 (Intercept = -1)
+        │   ●──────────────/────────/── SMALL SLOPE (t = 0)
+        │  /              /        /   Tangent at u* = 0, f*(0) = 0
+   0.0 ─┴─●──────────────●────────●───────────────────────────────────► u
+         u=0            u=1      u=3
+===================================================================================================
+```
+1. **Small Slope ($t = 0$):**  
+   The stationarity condition $f'(u^*) = 2u^* = 0 \implies u^* = 0$. The tangent line $y = 0 \cdot u - 0 = 0$ grazes the very bottom of the bowl at $(0, 0)$. Vertical intercept is $-f^*(0) = 0$.
+2. **Medium Slope ($t = 2$):**  
+   Stationarity: $f'(u^*) = 2u^* = 2 \implies u^* = 1$. The vertical gap $2u - u^2$ peaks at $u^* = 1$, giving $f^*(2) = 2(1) - 1^2 = 1$. The supporting line is $y = 2u - 1$, with vertical intercept $-1$.
+3. **Large Slope ($t = 6$):**  
+   Stationarity: $f'(u^*) = 2u^* = 6 \implies u^* = 3$. The vertical gap $6u - u^2$ peaks at $u^* = 3$, giving $f^*(6) = 6(3) - 3^2 = 9$. The supporting line is $y = 6u - 9$, with vertical intercept $-9$.
+4. **The "Unzipping" Superpower:**  
+   Because $f(u) = \sup_t \{ t \cdot u - f^*(t) \}$, substituting the intractable density ratio $u = \frac{p_{\text{data}}(x)}{p_\theta(x)}$ **unzips** the ratio out of the non-linear function $f(\cdot)$:
+   $$f\left(\frac{p_{\text{data}}(x)}{p_\theta(x)}\right) = \sup_t \left\{ t \cdot \frac{p_{\text{data}}(x)}{p_\theta(x)} - f^*(t) \right\}$$
+   When multiplied by $p_\theta(x)$ and integrated, $p_\theta(x)$ cancels out cleanly: $p_\theta(x) \cdot \left[ t \frac{p_{\text{data}}(x)}{p_\theta(x)} \right] = t \cdot p_{\text{data}}(x)$, giving computable expectations!
+
 ---
 
 ### 3. 💡 The Core "Aha!" Pivot Point & Memory Hooks

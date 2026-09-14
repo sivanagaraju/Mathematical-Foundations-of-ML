@@ -17,6 +17,7 @@
 | **03** | **[Lipschitz Continuity](./04-Lipschitz_Continuity.md)** | Fundamental theory & proofs | [Vector Norms & Inner Products](../02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md), [Derivatives, Gradients & Jacobians](../03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Direct implementation |
 | **04** | **[Logarithms and Exponential Functions](./02-Logarithms_and_Exponential_Functions.md)** | Fundamental theory & proofs | [Probability Basics & Axioms](./01-Probability_Basics_and_Axioms.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Direct implementation |
 | **05** | **[Probability Basics and Axioms](./01-Probability_Basics_and_Axioms.md)** | Fundamental theory & proofs | [Logarithms & Exponential Functions](./02-Logarithms_and_Exponential_Functions.md) | Direct implementation |
+| **06** | **[Bounds, Supremum, Infimum & Linear Families](./06-Bounds_Supremum_Infimum_and_Linear_Families.md)** | Lower/upper bounds, $\sup$ vs $\max$, supporting lines | [Convexity & Jensen's Inequality](./03-Convexity_and_Jensens_Inequality.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Variational bounds & $f$-GAN duality |
 
 ---
 
@@ -24,11 +25,12 @@
 
 For optimal conceptual continuity, learners should study these guides in the following sequential order:
 
-1. **[Convexity and Jensens Inequality](./03-Convexity_and_Jensens_Inequality.md)**
-2. **[Fenchel Conjugate and Dual Representations](./05-Fenchel_Conjugate_and_Dual_Representations.md)**
-3. **[Lipschitz Continuity](./04-Lipschitz_Continuity.md)**
-4. **[Logarithms and Exponential Functions](./02-Logarithms_and_Exponential_Functions.md)**
-5. **[Probability Basics and Axioms](./01-Probability_Basics_and_Axioms.md)**
+1. **[Probability Basics and Axioms](./01-Probability_Basics_and_Axioms.md)**
+2. **[Logarithms and Exponential Functions](./02-Logarithms_and_Exponential_Functions.md)**
+3. **[Convexity and Jensens Inequality](./03-Convexity_and_Jensens_Inequality.md)**
+4. **[Bounds, Supremum, Infimum & Linear Families](./06-Bounds_Supremum_Infimum_and_Linear_Families.md)**
+5. **[Fenchel Conjugate and Dual Representations](./05-Fenchel_Conjugate_and_Dual_Representations.md)**
+6. **[Lipschitz Continuity](./04-Lipschitz_Continuity.md)**
 
 ---
 

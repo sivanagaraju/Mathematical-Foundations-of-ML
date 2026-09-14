@@ -19,11 +19,11 @@ Every guide in this directory follows a strict **10-Section Gold Standard** brid
 ## 🗺️ Master Dependency Graph & Concept Roadmap
 
 > 🚀 **Looking to connect all the dots?**  
-> Explore the comprehensive **[Grand Unified Concept Map & Mathematical Dependency Graph](./CONCEPT_MAP.md)** connecting all 46 guides from first-principles axioms to Generative AI architectures (VAEs, GANs, Diffusion Models, Autoregressive LLMs, Flow Matching), featuring interactive Mermaid diagrams, ASCII pipelines, sub-term lineage, and 4 specialized learning tracks.
+> Explore the comprehensive **[Grand Unified Concept Map & Mathematical Dependency Graph](./CONCEPT_MAP.md)** connecting all 49 guides from first-principles axioms to Generative AI architectures (VAEs, GANs, Diffusion Models, Autoregressive LLMs, Flow Matching), featuring interactive Mermaid diagrams, ASCII pipelines, sub-term lineage, and 4 specialized learning tracks.
 
 ---
 
-## 🧭 Master Directory Index (46 Curated Guides in 6 Sequenced Categories)
+## 🧭 Master Directory Index (49 Curated Guides in 6 Sequenced Categories)
 
 ### 1. ⚡ [01-Primal-Analysis-and-Foundations](./01-Primal-Analysis-and-Foundations/README.md)
 
@@ -33,7 +33,8 @@ Every guide in this directory follows a strict **10-Section Gold Standard** brid
 | **[Logarithms & Exponential Functions](./01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md)** | Numerical stability, log-space arithmetic, preventing underflow ($\ln(ab) = \ln a + \ln b$) | Tut 02, Lec 01, Tut 10 |
 | **[Convexity & Jensen\'s Inequality](./01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md)** | Convex functions, secant lines, and lower bounds ((\mathbb{E}[X]) \le \mathbb{E}[f(X)]$) | Lec 03, Lec 20 |
 | **[Lipschitz Continuity](./01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md)** | Bounded gradient slope $\|f(x) - f(y)\| \le K \|x - y\|$, Kantorovich-Rubinstein dual | Lec 18, Tut 12 |
-| **[Fenchel Conjugate & Dual Variational Representations](./01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md)** | Legendre-Fenchel transformation (^*(t) = \sup_u \{tu - f(u)\}$), $-GAN variational dual | Lec 04, Lec 05, Lec 18 |
+| **[Fenchel Conjugate & Dual Variational Representations](./01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md)** | Legendre-Fenchel transformation ($f^*(t) = \sup_u \{tu - f(u)\}$), slope scanning & unzipping | Lec 04, Lec 05, Lec 18 |
+| **[Bounds, Supremum, Infimum & Linear Families](./01-Primal-Analysis-and-Foundations/06-Bounds_Supremum_Infimum_and_Linear_Families.md)** | Lower bounds, $\sup$ vs $\max$, open sets, family of lines, highest linear supporting bound | Lec 04, Lec 05 |
 
 ---
 
@@ -81,6 +82,7 @@ Every guide in this directory follows a strict **10-Section Gold Standard** brid
 | **[Likelihood & Log-Likelihood](./04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md)** | Parameter scoring given fixed data ((\theta; X) = \prod p(x_i \mid \theta)$) | Tut 08, Tut 10, Lec 20 |
 | **[Maximum Likelihood Estimation (MLE)](./04-Probability-and-Statistical-Estimation/05-MLE.md)** | Optimal parameter estimation, score equations ($\hat{\theta}_{\text{MLE}} = \arg\max \sum \ln p(x_i)$) | Tut 10, Lec 02, Lec 20 |
 | **[Negative Log-Likelihood (NLL)](./04-Probability-and-Statistical-Estimation/06-NLL.md)** | Supervised & generative training loss ($\mathcal{L}_{\text{NLL}} = -\sum_{i=1}^N \ln p_\theta(y_i \mid x_i)$) | Lec 01, Tut 10 |
+| **[LOTUS & Empirical Expectations](./04-Probability-and-Statistical-Estimation/07-LOTUS_and_Empirical_Expectation_Estimation.md)** | $\mathbb{E}[g(X)] = \int g(x)p(x)dx$, push-forward measures, sampling latents $z \sim \mathcal{N}(0, I)$ | Lec 04, Lec 20 |
 
 ---
 
@@ -93,6 +95,7 @@ Every guide in this directory follows a strict **10-Section Gold Standard** brid
 | **[Jensen-Shannon Divergence](./05-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md)** | Symmetric divergence, strict $[0, \ln 2]$ bounds, GAN minimax connection | Lec 03, Lec 05, Tut 12 |
 | **[$-Divergence & Csiszár Generators](./05-Information-Theory-and-Divergences/04-f_Divergence.md)** | Unified divergence family, non-negativity, convexity ((P \parallel Q) = \int q f(p/q) dx$) | Lec 03, Tut 11, Lec 04 |
 | **[Wasserstein Distance & Earth Mover\'s Distance (EMD)](./05-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md)** | Optimal transport, Kantorovich-Rubinstein dual ($\sup_{\|f\|_L \le 1} \mathbb{E}_P[f] - \mathbb{E}_Q[f]$), WGAN-GP | Lec 18, Tut 12 |
+| **[Variational Divergence Minimization (VDM)](./05-Information-Theory-and-Divergences/06-Variational_Divergence_Minimization_VDM.md)** | Intractable integrals $\to$ dual function probe $T(x) \to$ Minimax saddle $\min_\theta \max_w$ | Lec 04, Lec 05 |
 
 ---
 

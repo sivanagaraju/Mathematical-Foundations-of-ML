@@ -1,7 +1,7 @@
 # Lec 04 — Variational Divergence Minimization & Fenchel Duality
 
 **Video:** [Lec 04 Variational Divergence Minimization (VDM)](https://www.youtube.com/watch?v=4vtL3NhCkgg) · **~59 min** (00:02–58:53)  
-**Warm-up First:** [PREREQUISITES.md](./PREREQUISITES.md) · **Interactive Quiz:** [quiz.html](./quiz.html)  
+**Warm-up First:** [PREREQUISITES.md](./PREREQUISITES.md) · **MathsTerms Deep Dive:** [MathsTerms Catalog](../../MathsTerms/README.md) · **Interactive Quiz:** [quiz.html](./quiz.html)  
 **Complements:** [Lecture 3 — $f$-Divergence and Examples](../12-Lec03-f-Divergence-Examples/NOTES.md) and [Tutorial 11 — $f$-Divergence Proofs](../13-Tutorial11-f-Divergence-Examples/NOTES.md)  
 **Course:** Mathematical Foundations of Generative AI (IISc Bengaluru / NPTEL)  
 **Speaker:** Prof. Prathosh A. P. (IISc Bengaluru)  

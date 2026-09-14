@@ -3,7 +3,7 @@
 ## From Axiomatic Primitives to Modern Generative AI Architectures
 
 > `🏷️ Document Type:` Master Concept Roadmap & Dependency Matrix
-> `🎯 Purpose:` Connect all 46 mathematical foundation guides in `MathsTerms/` into an unbroken logical lineage from foundational math to state-of-the-art Generative AI (Diffusion Models, Autoregressive LLMs, VAEs, GANs, Flow Matching).
+> `🎯 Purpose:` Connect all 49 mathematical foundation guides in `MathsTerms/` into an unbroken logical lineage from foundational math to state-of-the-art Generative AI (Diffusion Models, Autoregressive LLMs, VAEs, GANs, Flow Matching).
 > `📐 Pedagogical Standard:` 5-Point Pedagogical Bridge (ELI5 $\iff$ Plain English $\iff$ Micro-Numbers $\iff$ Formal Proofs $\iff$ PyTorch Code)
 
 ---
@@ -25,7 +25,7 @@
    - [Track 2: The Path to LLMs, Transformers & Autoregressive AI](#track-2-the-path-to-llms-transformers--autoregressive-ai)
    - [Track 3: The Path to Variational Autoencoders (VAEs) & Latent Diffusion](#track-3-the-path-to-variational-autoencoders-vaes--latent-diffusion)
    - [Track 4: The Path to GANs, Optimal Transport & WGAN-GP](#track-4-the-path-to-gans-optimal-transport--wgan-gp)
-6. [📚 Complete 46-Guide Master Rosetta Cross-Reference Table](#6--complete-46-guide-master-rosetta-cross-reference-table)
+6. [📚 Complete 49-Guide Master Rosetta Cross-Reference Table](#6--complete-49-guide-master-rosetta-cross-reference-table)
 
 ---
 
@@ -105,6 +105,7 @@ flowchart TD
         P_Axioms["Probability Basics & Kolmogorov Axioms"]:::t1
         LogExp["Logarithms & Exponential Functions"]:::t1
         Convexity["Convexity & Jensen's Inequality"]:::t1
+        Bounds["Bounds, Supremum & Linear Families"]:::t1
         Lipschitz["Lipschitz Continuity & Metric Slopes"]:::t1
         Fenchel["Fenchel Conjugate & Duality"]:::t1
     end
@@ -142,6 +143,7 @@ flowchart TD
         Likelihood["Likelihood & Log-Likelihood"]:::t4
         MLE["Maximum Likelihood Estimation (MLE)"]:::t4
         NLL["Negative Log-Likelihood (NLL) Loss"]:::t4
+        LOTUS["LOTUS & Empirical Expectations"]:::t4
     end
 
     subgraph TIER5 ["📡 Tier 5: Information Theory, Divergences & Optimal Transport"]
@@ -150,6 +152,7 @@ flowchart TD
         JSDivergence["Jensen-Shannon Divergence (JSD)"]:::t5
         FDivergence["f-Divergence Family & Csiszár Generators"]:::t5
         Wasserstein["Wasserstein Distance & Earth Mover's (EMD)"]:::t5
+        VDM["Variational Divergence Minimization (VDM)"]:::t5
     end
 
     subgraph TIER6 ["🧠 Tier 6: Deep Architectures, Variational & Adversarial Generative AI"]
@@ -171,11 +174,12 @@ flowchart TD
     LogExp --> SoftmaxFn
     Convexity --> KLDivergence
     Convexity --> ELBO
-    Convexity --> Fenchel
+    Convexity --> Bounds
+    Bounds --> Fenchel
     Lipschitz --> Wasserstein
     Lipschitz --> Norms
     Fenchel --> FDivergence
-    Fenchel --> Minimax
+    Fenchel --> VDM
 
     VecMat --> VecNorms
     VecNorms --> DotProd
@@ -198,6 +202,7 @@ flowchart TD
     Norms --> GradDesc
 
     RandVars --> Distributions
+    RandVars --> LOTUS
     Distributions --> JointMargCond
     JointMargCond --> Likelihood
     Likelihood --> MLE
@@ -209,7 +214,9 @@ flowchart TD
     KLDivergence --> JSDivergence
     KLDivergence --> FDivergence
     JSDivergence --> FDivergence
-    FDivergence --> Minimax
+    FDivergence --> VDM
+    LOTUS --> VDM
+    VDM --> Minimax
     Wasserstein --> Minimax
     Wasserstein --> FID
 
@@ -245,8 +252,9 @@ The foundational rules governing measure spaces, numerical computation, curvatur
 flowchart LR
     P_Axiom["1. Probability Basics & Axioms<br/>(Ω, ℱ, P)"] --> Convex["2. Convexity & Jensen's<br/>f(E[X]) ≤ E[f(X)]"]
     LogExp["3. Logarithms & Exponential<br/>ln(ab) = ln a + ln b"] --> Convex
-    Convex --> Fenchel["4. Fenchel Conjugate<br/>f*(t) = sup_u {tu - f(u)}"]
-    Lipschitz["5. Lipschitz Continuity<br/>||f(x)-f(y)|| ≤ K||x-y||"] --> Dual["Variational Dual Spaces<br/>& Bounded Gradients"]
+    Convex --> Bounds["4. Bounds & Linear Families<br/>y = tu - c, sup/inf"]
+    Bounds --> Fenchel["5. Fenchel Conjugate<br/>f*(t) = sup_u {tu - f(u)}"]
+    Lipschitz["6. Lipschitz Continuity<br/>||f(x)-f(y)|| ≤ K||x-y||"] --> Dual["Variational Dual Spaces<br/>& Bounded Gradients"]
     Fenchel --> Dual
 ```
 
@@ -258,8 +266,8 @@ flowchart LR
    \mathbb{E}[f(X)] \ge f(\mathbb{E}[X])
 
    $$
-2. **From Convexity to Fenchel-Legendre Duality:**
-   Every strictly convex function $f(u)$ is fully represented by the upper envelope of its supporting affine tangent lines with slopes $t$:
+2. **From Bounds and Linear Families to Fenchel-Legendre Duality:**
+   Every strictly convex function $f(u)$ is bounded from below by affine lines $y = tu - c$. Taking the least upper bound (supremum) over all supporting hyperplanes reconstructs $f(u)$ exactly via its dual intercepts:
    $$
    f^*(t) = \sup_{u \in \text{dom}(f)} \left\{ t \cdot u - f(u) \right\} \iff f(u) = \sup_{t \in \text{dom}(f^*)} \left\{ t \cdot u - f^*(t) \right\}
 
@@ -271,6 +279,8 @@ flowchart LR
 
 - **Sample Space ($\Omega$):** Universe of all outcomes.
 - **$\sigma$-Algebra ($\mathcal{F}$):** Collection of legal measurable events closed under complement and countable unions.
+- **Supremum ($\sup$) vs Maximum ($\max$):** Least upper bound; always exists for bounded sets even when open boundaries prevent attainment.
+- **Supporting Hyperplane:** A linear function $y = tu - c$ that bounds $f(u)$ from below and touches it tangentially at $t \in \partial f(u)$.
 - **Epigraph ($\text{epi}(f)$):** Region of space lying on or above the graph of $f$; convex iff $f$ is convex.
 - **Fenchel-Young Inequality:** $t u \le f(u) + f^*(t)$, with equality holding iff $t \in \partial f(u)$.
 - **Lipschitz Constant ($K$):** Maximum rate of change $\|f(x) - f(y)\| / \|x - y\| \le K$.
@@ -383,6 +393,7 @@ flowchart TD
     JointMargCond --> Likelihood["4. Likelihood & Log-Likelihood<br/>L(θ; X) = ∏ p(x_i | θ)"]
     Likelihood --> MLE["5. Maximum Likelihood Estimation<br/>θ̂_MLE = argmax ∑ ln p(x_i | θ)"]
     MLE --> NLL["6. Negative Log-Likelihood Loss<br/>ℒ_NLL = -∑ ln p_θ(x_i)"]
+    RandVars --> LOTUS["7. LOTUS & Sample Averages<br/>E[g(X)] ≈ 1/N ∑ g(x_i)"]
 ```
 
 #### 📐 Mathematical Transition Equations
@@ -405,6 +416,12 @@ flowchart TD
    \hat{\theta}_{\text{MLE}} = \arg\max_\theta \frac{1}{N} \sum_{i=1}^N \ln p_\theta(x_i) = \arg\min_\theta \mathbb{E}_{x \sim P_{\text{data}}}[-\ln p_\theta(x)]
 
    $$
+4. **From LOTUS to Monte Carlo Sample Averages:**
+   Evaluating transformed expectations $\mathbb{E}_{x \sim P}[g(x)] = \int g(x)p(x)dx$ without determining the push-forward density $p_Y(y)$, converted directly into computable sample averages via the Law of Large Numbers:
+   $$
+   \mathbb{E}_{x \sim P}[g(x)] \approx \frac{1}{N} \sum_{i=1}^N g(x_i), \quad x_i \stackrel{\text{i.i.d.}}{\sim} P
+
+   $$
 
 #### 📚 Key Sub-Terms Lineage
 
@@ -425,6 +442,7 @@ flowchart TD
     KLDivergence --> JSDivergence["3. Jensen-Shannon Divergence<br/>JSD(P || Q) = 0.5 D_KL(P||M) + 0.5 D_KL(Q||M)"]
     KLDivergence --> FDivergence["4. f-Divergence & Csiszár Generators<br/>D_f(P || Q) = ∫ q f(p/q) dx"]
     JSDivergence --> FDivergence
+    FDivergence --> VDM["6. Variational Divergence Minimization<br/>min_θ max_w E_P[T_w] - E_Q[f*(T_w)]"]
   
     Lipschitz["Lipschitz Continuity"] --> Wasserstein["5. Wasserstein Distance & EMD<br/>W₁(P, Q) = sup_{||f||_L ≤ 1} E_P[f] - E_Q[f]"]
     Wasserstein --> SmoothGrad["Smooth Non-Vanishing Gradients<br/>on Disjoint Low-Dim Manifolds"]
@@ -458,7 +476,14 @@ flowchart TD
    | **Jensen-Shannon**   | $u \ln u - (u+1)\ln\left(\frac{u+1}{2}\right)$ | $-\ln(2 - e^t)$         |
    | **Pearson $\chi^2$** | $(u - 1)^2$                                    | $\frac{1}{4} t^2 + t$   |
    | **Total Variation**  | $\frac{1}{2} |u - 1|$                          | $t$ (for $|t| \le 1/2$) |
-4. **The Kantorovich-Rubinstein Duality for Optimal Transport:**
+
+4. **From Csiszár Divergences to Variational Divergence Minimization (VDM):**
+   By applying the Fenchel conjugate representation $f(u) = \sup_t \{tu - f^*(t)\}$ to the density ratio $u = p(x)/q(x)$, the integral unzips into two independent expectations:
+   $$
+   D_f(P \parallel Q) = \sup_{T: \mathcal{X} \to \text{dom}(f^*)} \left\{ \mathbb{E}_{x \sim P}[T(x)] - \mathbb{E}_{x \sim Q}[f^*(T(x))] \right\}
+   $$
+   Parameterizing $T$ as a neural probe $T_w(x)$ turns divergence minimization into a sample-based minimax game $\min_\theta \max_w V(\theta, w)$ with zero density evaluations needed.
+5. **The Kantorovich-Rubinstein Duality for Optimal Transport:**
    Transforming the intractable infimum over all coupling distributions $\Pi(P, Q)$ into a supremum over 1-Lipschitz witness functions:
 
    $$
@@ -661,14 +686,14 @@ flowchart LR
 1. **[Derivatives, Gradients & Jacobians](./03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md)** $\to$ Multivariable calculus on parameter loss surfaces.
 2. **[Minimax Games & GANs](./06-Deep-Architectures-and-Generative-Models/09-Minimax_Game_and_GANs.md)** $\to$ Two-player zero-sum games, discriminator optimality, and Nash equilibrium.
 3. **[Jensen-Shannon Divergence](./05-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md)** & **[$f$-Divergence](./05-Information-Theory-and-Divergences/04-f_Divergence.md)** $\to$ Vanishing gradients on disjoint manifolds.
-4. **[Fenchel Conjugate & Duality](./01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md)** $\to$ Variational $f$-GAN formulation with discriminator witness functions.
+4. **[Bounds, Supremum & Linear Families](./01-Primal-Analysis-and-Foundations/06-Bounds_Supremum_Infimum_and_Linear_Families.md)**, **[Fenchel Conjugate & Duality](./01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md)**, **[LOTUS](./04-Probability-and-Statistical-Estimation/07-LOTUS_and_Empirical_Expectation_Estimation.md)**, & **[Variational Divergence Minimization (VDM)](./05-Information-Theory-and-Divergences/06-Variational_Divergence_Minimization_VDM.md)** $\to$ Unzipping intractable density ratios into expectations via supporting linear bounds, turning divergence minimization into $f$-GAN sample-based minimax games.
 5. **[Lipschitz Continuity](./01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md)** & **[Batch Normalization & Spectral Norm](./03-Multivariate-Calculus-and-Optimization/11-Batch_Normalization_and_Spectral_Norm.md)** $\to$ Enforcing $\|\nabla D(x)\| \le 1$.
 6. **[Wasserstein Distance & EMD](./05-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md)** $\to$ Kantorovich-Rubinstein dual and WGAN with Gradient Penalty (WGAN-GP).
 7. **[Fréchet Inception Distance (FID)](./06-Deep-Architectures-and-Generative-Models/10-Frechet_Inception_Distance.md)** $\to$ Benchmark synthetic image quality via Gaussian 2-Wasserstein metrics.
 
 ---
 
-## 6. 📚 Complete 46-Guide Master Rosetta Cross-Reference Table
+## 6. 📚 Complete 49-Guide Master Rosetta Cross-Reference Table
 
 
 |   #   | Guide Title & Link                                                                  | Core Formula / Concept                                                                                                           | Upstream Prerequisites       | Downstream AI Paradigms             | Primary Course Modules |
@@ -678,47 +703,50 @@ flowchart LR
 | **03** | **[Autoencoders & Latent Spaces](./06-Deep-Architectures-and-Generative-Models/03-Autoencoders_and_Latent_Spaces.md)**             | $\mathcal{L}_{\text{AE}} = \|x - D(E(x))\|_2^2$                                                                                  | VecMat, LossFns              | Latent Diffusion, VAEs, VQ-GAN      | Tut 06, Lec 19         |
 | **04** | **[Autoregressive Models](./06-Deep-Architectures-and-Generative-Models/04-Autoregressive_Models.md)**                             | $p(x) = \prod_{t=1}^T p(x_t \mid x_{<t})$                                                                                        | JointMargCond, ChainRule     | LLMs (GPT-4, LLaMA-3), PixelCNN     | Lec 02, Tut 05         |
 | **05** | **[Batch Norm & Spectral Norm](./03-Multivariate-Calculus-and-Optimization/11-Batch_Normalization_and_Spectral_Norm.md)**        | $W_{\text{SN}} = \frac{W}{\sigma_1(W)}, \sigma_1(W) = \max \frac{\|Wh\|}{\|h\|}$                                                 | VecNorms, Lipschitz          | WGAN-GP, SNGAN, ResNets             | Tut 04, Lec 18         |
-| **06** | **[Chain Rule & Backpropagation](./03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md)**             | $\frac{\partial \mathcal{L}}{\partial x_i} = \sum_j \frac{\partial \mathcal{L}}{\partial y_j} \frac{\partial y_j}{\partial x_i}$ | CalcRules, Gradients         | All Deep Learning Autograd          | Tut 03, Tut 04         |
-| **07** | **[Common Probability Distributions](./04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md)**       | $\mathcal{N}(x; \mu, \Sigma) = \frac{\exp(-\frac{1}{2}(x-\mu)^T \Sigma^{-1}(x-\mu))}{(2\pi)^{d/2}|\Sigma|^{1/2}}$                | RandVars, VecMat             | Diffusion, VAE Priors, GMMs         | Tut 07, Tut 08         |
-| **08** | **[Convexity & Jensen's Inequality](./01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md)**        | $f(\mathbb{E}[X]) \le \mathbb{E}[f(X)] \text{ for convex } f$                                                                    | CalcRules, RandVars          | ELBO, Gibbs Inequality, EM          | Lec 03, Lec 20         |
-| **09** | **[Convolution & Pooling](./06-Deep-Architectures-and-Generative-Models/01-Convolution_and_Pooling.md)**                           | $(I * K)_{ij} = \sum_m \sum_n I_{i-m, j-n} K_{mn}$                                                                               | Tensors, VecMat              | DCGAN, U-Net Denoiser               | Tut 04, Tut 12         |
-| **10** | **[Derivatives, Gradients & Jacobians](./03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md)**  | $\nabla f(\vec{x}) = \left[\frac{\partial f}{\partial x_1}, \dots, \frac{\partial f}{\partial x_n}\right]^T$                     | CalcRules                    | Backpropagation, Optimizers         | Tut 03, Lec 04         |
-| **11** | **[Dot Product & Similarity](./02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md)**                     | $\vec{a} \cdot \vec{b} = \|\vec{a}\|_2 \|\vec{b}\|_2 \cos\theta$                                                                 | VecMat, VecNorms             | Scaled Dot-Product Attention        | Tut 02, Tut 03         |
-| **12** | **[ELBO & Variational Inference](./06-Deep-Architectures-and-Generative-Models/07-ELBO_and_Variational_Inference.md)**             | $\ln p(x) \ge \mathbb{E}_q[\ln p(x\mid z)] - D_{\text{KL}}(q \parallel p)$                                                       | Convexity, KLDivergence      | VAEs, Latent Diffusion,$\beta$-VAE  | Lec 20                 |
-| **13** | **[Encodings & Embeddings](./02-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md)**             | $\vec{e} = W_{\text{emb}} \cdot \vec{e}_i \in \mathbb{R}^D$                                                                      | OneHot, VecMat               | LLM Embeddings, Vector DBs          | Tut 03, Lec 01         |
-| **14** | **[Entropy, Cross-Entropy & CCE](./05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md)**                   | $H(P, Q) = -\sum p(x) \ln q(x) = H(P) + D_{\text{KL}}(P \parallel Q)$                                                            | LogExp, Likelihood           | Classification, LLM Training        | Lec 01, Tut 10         |
-| **15** | **[Expectation-Maximization (EM)](./06-Deep-Architectures-and-Generative-Models/06-Expectation_Maximization_Algorithm.md)**        | $Q(\theta \mid \theta^{(t)}) = \mathbb{E}_{Z \mid X, \theta^{(t)}}[\ln p(X, Z \mid \theta)]$                                     | LVM, Convexity               | Gaussian Mixture Models, HMMs       | Tut 10, Lec 20         |
-| **16** | **[Exponential Moving Average (EMA)](./03-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md)**         | $\theta_{\text{EMA}}^{(t)} = \beta \theta_{\text{EMA}}^{(t-1)} + (1-\beta)\theta^{(t)}$                                          | GradDesc                     | Diffusion Shadow Weights, Adam      | Tut 03, Lec 01         |
-| **17** | **[Fenchel Conjugate & Duality](./01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md)**  | $f^*(t) = \sup_{u} \{t u - f(u)\}$                                                                                               | Convexity                    | $f$-GAN, MINE, Energy Models        | Lec 04, Lec 05         |
-| **18** | **[Fréchet Inception Distance (FID)](./06-Deep-Architectures-and-Generative-Models/10-Frechet_Inception_Distance.md)**            | $\|\mu_r - \mu_g\|_2^2 + \text{Tr}(\Sigma_r + \Sigma_g - 2(\Sigma_r\Sigma_g)^{1/2})$                                             | Wasserstein, Distributions   | Generative Image Benchmarking       | Tut 12, Lec 19         |
-| **19** | **[Functions, Derivatives & Rules](./03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md)**          | $f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$                                                                                 | Pure Math                    | Gradient Foundations                | Tut 03, Lec 01         |
-| **20** | **[Gradient Descent & Optimizers](./03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md)**                          | $\theta_{t+1} = \theta_t - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}$                                                   | Gradients, LossFns           | SGD, Momentum, AdamW                | Tut 03, Lec 05         |
-| **21** | **[The Jacobian Matrix](./03-Multivariate-Calculus-and-Optimization/03-Jacobian_Matrix.md)**                                     | $J_{ij} = \frac{\partial f_i}{\partial x_j}, \text{VJP}: \vec{v}^T J$                                                            | Gradients, VecMat            | Normalizing Flows, Autograd         | Tut 03, Tut 06         |
-| **22** | **[Jensen-Shannon Divergence](./05-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md)**                     | $\text{JSD}(P \parallel Q) = \frac{1}{2} D_{\text{KL}}(P \parallel M) + \frac{1}{2} D_{\text{KL}}(Q \parallel M)$                | KLDivergence                 | Vanilla GAN Nash Equilibrium        | Lec 03, Lec 05         |
-| **23** | **[Joint, Marginal & Conditional Dist](./04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md)**      | $p(x, z) = p(x \mid z) p(z), p(x) = \int p(x, z) dz$                                                                             | RandVars, P_Axioms           | Latent Variable Models, Bayes       | Tut 09, Lec 19         |
-| **24** | **[KL Divergence](./05-Information-Theory-and-Divergences/02-KL_Divergence.md)**                                             | $D_{\text{KL}}(P \parallel Q) = \int p(x) \ln \frac{p(x)}{q(x)} dx$                                                              | Entropy, Convexity           | VAE Regularization, Policy Grad     | Lec 02, Lec 03         |
-| **25** | **[Latent Variable Models](./06-Deep-Architectures-and-Generative-Models/05-Latent_Variable_Models.md)**                           | $p(x) = \int p(x \mid z) p(z) dz$                                                                                                | JointMargCond, Distributions | VAEs, GMMs, Diffusion Models        | Lec 19, Lec 20         |
-| **26** | **[Likelihood & Log-Likelihood](./04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md)**               | $\ell(\theta; X) = \sum_{i=1}^N \ln p(x_i \mid \theta)$                                                                          | JointMargCond, LogExp        | MLE, NLL, Model Fitting             | Tut 08, Tut 10         |
-| **27** | **[Lipschitz Continuity](./01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md)**                               | $\|f(x) - f(y)\| \le K \|x - y\|$                                                                                                | CalcRules, VecNorms          | WGAN Critic, Spectral Norm          | Lec 18, Tut 12         |
-| **28** | **[Logarithms & Exponential Functions](./01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md)** | $\text{LogSumExp}(z) = c + \ln \sum e^{z_i - c}$                                                                                 | Pure Math                    | Numerical Stability in Softmax/Loss | Tut 02, Lec 01         |
-| **29** | **[Loss Functions in Machine Learning](./03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md)**                       | $\mathcal{L}_{\text{MSE}} = \frac{1}{N} \|y - \hat{y}\|_2^2, \mathcal{L}_{\text{BCE}} = -y \ln \hat{y} - (1-y)\ln(1-\hat{y})$    | Gradients, Softmax           | Objective Optimization              | Tut 03, Tut 10         |
-| **30** | **[Maximum Likelihood Estimation (MLE)](./04-Probability-and-Statistical-Estimation/05-MLE.md)**                                 | $\hat{\theta}_{\text{MLE}} = \arg\max_\theta \sum \ln p_\theta(x_i)$                                                             | Likelihood, Gradients        | Foundation of Model Training        | Tut 10, Lec 02         |
-| **31** | **[Minimax Games & GANs](./06-Deep-Architectures-and-Generative-Models/09-Minimax_Game_and_GANs.md)**                              | $\min_G \max_D \mathbb{E}_{x \sim P}[\ln D(x)] + \mathbb{E}_{z \sim p_z}[\ln(1 - D(G(z)))]$                                      | JSDivergence, Gradients      | GANs, BigGAN, StyleGAN              | Lec 04, Lec 05         |
-| **32** | **[Negative Log-Likelihood (NLL)](./04-Probability-and-Statistical-Estimation/06-NLL.md)**                                       | $\mathcal{L}_{\text{NLL}}(\theta) = -\sum \ln p_\theta(y_i \mid x_i)$                                                            | MLE, LogExp                  | Supervised Learning, LLM Loss       | Lec 01, Tut 10         |
-| **33** | **[One-Hot Encoding](./02-Linear-Algebra-Geometry-and-Tensors/07-One_Hot_Encoding.md)**                                       | $\vec{e}_k = [0, \dots, 0, 1, 0, \dots, 0]^T$                                                                                    | VecMat                       | Categorical Targets, Embeddings     | Lec 01, Tut 10         |
-| **34** | **[Positional Encodings & RoPE](./02-Linear-Algebra-Geometry-and-Tensors/09-Positional_Encodings.md)**                        | $\langle R_{\Theta, m} \vec{q}, R_{\Theta, n} \vec{k} \rangle = g(\vec{q}, \vec{k}, m-n)$                                        | DotProd, Embeddings          | Transformers, LLaMA-3, SD3          | Tut 03, Lec 01         |
-| **35** | **[Probability Basics & Axioms](./01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md)**               | $P(\Omega) = 1, P(A) \ge 0, P(A \cup B) = P(A) + P(B)$                                                                           | Set Theory                   | Bedrock of Uncertainty in AI        | Tut 07                 |
-| **36** | **[Random Variables & Distributions](./04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md)**     | $F(x) = P(X \le x), p(x) = F'(x), \mathbb{E}[X] = \int x p(x) dx$                                                                | P_Axioms, CalcRules          | Data Models, Sampling               | Tut 07, Tut 08         |
-| **37** | **[Recurrent Neural Networks (RNNs)](./06-Deep-Architectures-and-Generative-Models/02-Recurrent_Neural_Networks.md)**              | $h_t = \tanh(W x_t + U h_{t-1} + b)$                                                                                             | ChainRule, VecMat            | Sequential Autoregressive Models    | Tut 05                 |
-| **38** | **[Reparameterization Trick](./06-Deep-Architectures-and-Generative-Models/08-Reparameterization_Trick.md)**                       | $z = \mu_\phi(x) + \sigma_\phi(x) \odot \epsilon, \quad \epsilon \sim \mathcal{N}(0, I)$                                         | Distributions, ChainRule     | VAEs, Diffusion Samplers            | Lec 20                 |
-| **39** | **[Singular Value Decomposition (SVD)](./02-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md)**         | $A = U \Sigma V^T = \sum \sigma_i \vec{u}_i \vec{v}_i^T$                                                                         | VecMat, VecNorms             | LoRA Fine-Tuning, PCA               | Tut 06, Lec 01         |
-| **40** | **[Softmax Function](./03-Multivariate-Calculus-and-Optimization/06-Softmax.md)**                                                | $\sigma(z)_i = \frac{e^{z_i / \tau}}{\sum_{j=1}^C e^{z_j / \tau}}$                                                               | LogExp, VecMat               | Categorical Logits, Attention       | Lec 01, Tut 03         |
-| **41** | **[Tensor Broadcasting](./02-Linear-Algebra-Geometry-and-Tensors/05-Tensor_Broadcasting.md)**                                 | Matching trailing dimensions with dimension size$1$                                                                              | Tensors                      | Zero-Copy GPU Arithmetic            | Tut 02, Tut 03         |
-| **42** | **[Tensors, Shapes & Dimensions](./02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md)**                         | Contiguous Strides:$\text{Offset} = \sum i_k \times \text{stride}_k$                                                             | VecMat                       | PyTorch Tensor Execution            | Tut 02, Tut 03         |
-| **43** | **[Vector Norms & Inner Products](./02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md)**           | $\|x\|_p = \left(\sum |x_i|^p\right)^{1/p}, \langle x, y \rangle = x^T y$                                                        | VecMat                       | Weight Decay, Distance Metrics      | Tut 02, Lec 18         |
-| **44** | **[Vectors & Matrices](./02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md)**                                 | $y = Wx + b, \quad \text{rank}(A) \le \min(m, n)$                                                                                | Linear Algebra               | Dense Neural Network Layers         | Tut 02, Tut 03         |
-| **45** | **[Wasserstein Distance & EMD](./05-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md)**                 | $W_1(P, Q) = \sup_{\|f\|_L \le 1} \mathbb{E}_P[f] - \mathbb{E}_Q[f]$                                                             | Lipschitz, Distributions     | WGAN-GP, Flow Matching, FID         | Lec 18, Tut 12         |
-| **46** | **[$f$-Divergence & Csiszár Generators](./05-Information-Theory-and-Divergences/04-f_Divergence.md)**                       | $D_f(P \parallel Q) = \int q(x) f\left(\frac{p(x)}{q(x)}\right) dx$                                                              | Convexity, KLDivergence      | $f$-GAN, Variational Bounds         | Lec 03, Tut 11         |
+| **06** | **[Bounds, Supremum, Infimum & Linear Families](./01-Primal-Analysis-and-Foundations/06-Bounds_Supremum_Infimum_and_Linear_Families.md)** | $f(u) = \sup_t \{tu - f^*(t)\}$                                                                                                   | Convexity, CalcRules         | Fenchel Conjugate, $f$-GAN, VDM     | Lec 04, Lec 05         |
+| **07** | **[Chain Rule & Backpropagation](./03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md)**             | $\frac{\partial \mathcal{L}}{\partial x_i} = \sum_j \frac{\partial \mathcal{L}}{\partial y_j} \frac{\partial y_j}{\partial x_i}$ | CalcRules, Gradients         | All Deep Learning Autograd          | Tut 03, Tut 04         |
+| **08** | **[Common Probability Distributions](./04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md)**       | $\mathcal{N}(x; \mu, \Sigma) = \frac{\exp(-\frac{1}{2}(x-\mu)^T \Sigma^{-1}(x-\mu))}{(2\pi)^{d/2}|\Sigma|^{1/2}}$                | RandVars, VecMat             | Diffusion, VAE Priors, GMMs         | Tut 07, Tut 08         |
+| **09** | **[Convexity & Jensen's Inequality](./01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md)**        | $f(\mathbb{E}[X]) \le \mathbb{E}[f(X)] \text{ for convex } f$                                                                    | CalcRules, RandVars          | ELBO, Gibbs Inequality, EM          | Lec 03, Lec 20         |
+| **10** | **[Convolution & Pooling](./06-Deep-Architectures-and-Generative-Models/01-Convolution_and_Pooling.md)**                           | $(I * K)_{ij} = \sum_m \sum_n I_{i-m, j-n} K_{mn}$                                                                               | Tensors, VecMat              | DCGAN, U-Net Denoiser               | Tut 04, Tut 12         |
+| **11** | **[Derivatives, Gradients & Jacobians](./03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md)**  | $\nabla f(\vec{x}) = \left[\frac{\partial f}{\partial x_1}, \dots, \frac{\partial f}{\partial x_n}\right]^T$                     | CalcRules                    | Backpropagation, Optimizers         | Tut 03, Lec 04         |
+| **12** | **[Dot Product & Similarity](./02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md)**                     | $\vec{a} \cdot \vec{b} = \|\vec{a}\|_2 \|\vec{b}\|_2 \cos\theta$                                                                 | VecMat, VecNorms             | Scaled Dot-Product Attention        | Tut 02, Tut 03         |
+| **13** | **[ELBO & Variational Inference](./06-Deep-Architectures-and-Generative-Models/07-ELBO_and_Variational_Inference.md)**             | $\ln p(x) \ge \mathbb{E}_q[\ln p(x\mid z)] - D_{\text{KL}}(q \parallel p)$                                                       | Convexity, KLDivergence      | VAEs, Latent Diffusion,$\beta$-VAE  | Lec 20                 |
+| **14** | **[Encodings & Embeddings](./02-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md)**             | $\vec{e} = W_{\text{emb}} \cdot \vec{e}_i \in \mathbb{R}^D$                                                                      | OneHot, VecMat               | LLM Embeddings, Vector DBs          | Tut 03, Lec 01         |
+| **15** | **[Entropy, Cross-Entropy & CCE](./05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md)**                   | $H(P, Q) = -\sum p(x) \ln q(x) = H(P) + D_{\text{KL}}(P \parallel Q)$                                                            | LogExp, Likelihood           | Classification, LLM Training        | Lec 01, Tut 10         |
+| **16** | **[Expectation-Maximization (EM)](./06-Deep-Architectures-and-Generative-Models/06-Expectation_Maximization_Algorithm.md)**        | $Q(\theta \mid \theta^{(t)}) = \mathbb{E}_{Z \mid X, \theta^{(t)}}[\ln p(X, Z \mid \theta)]$                                     | LVM, Convexity               | Gaussian Mixture Models, HMMs       | Tut 10, Lec 20         |
+| **17** | **[Exponential Moving Average (EMA)](./03-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md)**         | $\theta_{\text{EMA}}^{(t)} = \beta \theta_{\text{EMA}}^{(t-1)} + (1-\beta)\theta^{(t)}$                                          | GradDesc                     | Diffusion Shadow Weights, Adam      | Tut 03, Lec 01         |
+| **18** | **[Fenchel Conjugate & Duality](./01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md)**  | $f^*(t) = \sup_{u} \{t u - f(u)\}$                                                                                               | Convexity                    | $f$-GAN, MINE, Energy Models        | Lec 04, Lec 05         |
+| **19** | **[Fréchet Inception Distance (FID)](./06-Deep-Architectures-and-Generative-Models/10-Frechet_Inception_Distance.md)**            | $\|\mu_r - \mu_g\|_2^2 + \text{Tr}(\Sigma_r + \Sigma_g - 2(\Sigma_r\Sigma_g)^{1/2})$                                             | Wasserstein, Distributions   | Generative Image Benchmarking       | Tut 12, Lec 19         |
+| **20** | **[Functions, Derivatives & Rules](./03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md)**          | $f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$                                                                                 | Pure Math                    | Gradient Foundations                | Tut 03, Lec 01         |
+| **21** | **[Gradient Descent & Optimizers](./03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md)**                          | $\theta_{t+1} = \theta_t - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}$                                                   | Gradients, LossFns           | SGD, Momentum, AdamW                | Tut 03, Lec 05         |
+| **22** | **[The Jacobian Matrix](./03-Multivariate-Calculus-and-Optimization/03-Jacobian_Matrix.md)**                                     | $J_{ij} = \frac{\partial f_i}{\partial x_j}, \text{VJP}: \vec{v}^T J$                                                            | Gradients, VecMat            | Normalizing Flows, Autograd         | Tut 03, Tut 06         |
+| **23** | **[Jensen-Shannon Divergence](./05-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md)**                     | $\text{JSD}(P \parallel Q) = \frac{1}{2} D_{\text{KL}}(P \parallel M) + \frac{1}{2} D_{\text{KL}}(Q \parallel M)$                | KLDivergence                 | Vanilla GAN Nash Equilibrium        | Lec 03, Lec 05         |
+| **24** | **[Joint, Marginal & Conditional Dist](./04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md)**      | $p(x, z) = p(x \mid z) p(z), p(x) = \int p(x, z) dz$                                                                             | RandVars, P_Axioms           | Latent Variable Models, Bayes       | Tut 09, Lec 19         |
+| **25** | **[KL Divergence](./05-Information-Theory-and-Divergences/02-KL_Divergence.md)**                                             | $D_{\text{KL}}(P \parallel Q) = \int p(x) \ln \frac{p(x)}{q(x)} dx$                                                              | Entropy, Convexity           | VAE Regularization, Policy Grad     | Lec 02, Lec 03         |
+| **26** | **[Latent Variable Models](./06-Deep-Architectures-and-Generative-Models/05-Latent_Variable_Models.md)**                           | $p(x) = \int p(x \mid z) p(z) dz$                                                                                                | JointMargCond, Distributions | VAEs, GMMs, Diffusion Models        | Lec 19, Lec 20         |
+| **27** | **[Likelihood & Log-Likelihood](./04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md)**               | $\ell(\theta; X) = \sum_{i=1}^N \ln p(x_i \mid \theta)$                                                                          | JointMargCond, LogExp        | MLE, NLL, Model Fitting             | Tut 08, Tut 10         |
+| **28** | **[Lipschitz Continuity](./01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md)**                               | $\|f(x) - f(y)\| \le K \|x - y\|$                                                                                                | CalcRules, VecNorms          | WGAN Critic, Spectral Norm          | Lec 18, Tut 12         |
+| **29** | **[Logarithms & Exponential Functions](./01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md)** | $\text{LogSumExp}(z) = c + \ln \sum e^{z_i - c}$                                                                                 | Pure Math                    | Numerical Stability in Softmax/Loss | Tut 02, Lec 01         |
+| **30** | **[Loss Functions in Machine Learning](./03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md)**                       | $\mathcal{L}_{\text{MSE}} = \frac{1}{N} \|y - \hat{y}\|_2^2, \mathcal{L}_{\text{BCE}} = -y \ln \hat{y} - (1-y)\ln(1-\hat{y})$    | Gradients, Softmax           | Objective Optimization              | Tut 03, Tut 10         |
+| **31** | **[LOTUS & Empirical Expectations](./04-Probability-and-Statistical-Estimation/07-LOTUS_and_Empirical_Expectation_Estimation.md)** | $\mathbb{E}[g(X)] = \int g(x)p(x)dx$                                                                                              | RandVars, ChainRule          | GANs, VAEs, Diffusion, Monte Carlo  | Lec 04, Lec 20         |
+| **32** | **[Maximum Likelihood Estimation (MLE)](./04-Probability-and-Statistical-Estimation/05-MLE.md)**                                 | $\hat{\theta}_{\text{MLE}} = \arg\max_\theta \sum \ln p_\theta(x_i)$                                                             | Likelihood, Gradients        | Foundation of Model Training        | Tut 10, Lec 02         |
+| **33** | **[Minimax Games & GANs](./06-Deep-Architectures-and-Generative-Models/09-Minimax_Game_and_GANs.md)**                              | $\min_G \max_D \mathbb{E}_{x \sim P}[\ln D(x)] + \mathbb{E}_{z \sim p_z}[\ln(1 - D(G(z)))]$                                      | JSDivergence, Gradients      | GANs, BigGAN, StyleGAN              | Lec 04, Lec 05         |
+| **34** | **[Negative Log-Likelihood (NLL)](./04-Probability-and-Statistical-Estimation/06-NLL.md)**                                       | $\mathcal{L}_{\text{NLL}}(\theta) = -\sum \ln p_\theta(y_i \mid x_i)$                                                            | MLE, LogExp                  | Supervised Learning, LLM Loss       | Lec 01, Tut 10         |
+| **35** | **[One-Hot Encoding](./02-Linear-Algebra-Geometry-and-Tensors/07-One_Hot_Encoding.md)**                                       | $\vec{e}_k = [0, \dots, 0, 1, 0, \dots, 0]^T$                                                                                    | VecMat                       | Categorical Targets, Embeddings     | Lec 01, Tut 10         |
+| **36** | **[Positional Encodings & RoPE](./02-Linear-Algebra-Geometry-and-Tensors/09-Positional_Encodings.md)**                        | $\langle R_{\Theta, m} \vec{q}, R_{\Theta, n} \vec{k} \rangle = g(\vec{q}, \vec{k}, m-n)$                                        | DotProd, Embeddings          | Transformers, LLaMA-3, SD3          | Tut 03, Lec 01         |
+| **37** | **[Probability Basics & Axioms](./01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md)**               | $P(\Omega) = 1, P(A) \ge 0, P(A \cup B) = P(A) + P(B)$                                                                           | Set Theory                   | Bedrock of Uncertainty in AI        | Tut 07                 |
+| **38** | **[Random Variables & Distributions](./04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md)**     | $F(x) = P(X \le x), p(x) = F'(x), \mathbb{E}[X] = \int x p(x) dx$                                                                | P_Axioms, CalcRules          | Data Models, Sampling               | Tut 07, Tut 08         |
+| **39** | **[Recurrent Neural Networks (RNNs)](./06-Deep-Architectures-and-Generative-Models/02-Recurrent_Neural_Networks.md)**              | $h_t = \tanh(W x_t + U h_{t-1} + b)$                                                                                             | ChainRule, VecMat            | Sequential Autoregressive Models    | Tut 05                 |
+| **40** | **[Reparameterization Trick](./06-Deep-Architectures-and-Generative-Models/08-Reparameterization_Trick.md)**                       | $z = \mu_\phi(x) + \sigma_\phi(x) \odot \epsilon, \quad \epsilon \sim \mathcal{N}(0, I)$                                         | Distributions, ChainRule     | VAEs, Diffusion Samplers            | Lec 20                 |
+| **41** | **[Singular Value Decomposition (SVD)](./02-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md)**         | $A = U \Sigma V^T = \sum \sigma_i \vec{u}_i \vec{v}_i^T$                                                                         | VecMat, VecNorms             | LoRA Fine-Tuning, PCA               | Tut 06, Lec 01         |
+| **42** | **[Softmax Function](./03-Multivariate-Calculus-and-Optimization/06-Softmax.md)**                                                | $\sigma(z)_i = \frac{e^{z_i / \tau}}{\sum_{j=1}^C e^{z_j / \tau}}$                                                               | LogExp, VecMat               | Categorical Logits, Attention       | Lec 01, Tut 03         |
+| **43** | **[Tensor Broadcasting](./02-Linear-Algebra-Geometry-and-Tensors/05-Tensor_Broadcasting.md)**                                 | Matching trailing dimensions with dimension size$1$                                                                              | Tensors                      | Zero-Copy GPU Arithmetic            | Tut 02, Tut 03         |
+| **44** | **[Tensors, Shapes & Dimensions](./02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md)**                         | Contiguous Strides:$\text{Offset} = \sum i_k \times \text{stride}_k$                                                             | VecMat                       | PyTorch Tensor Execution            | Tut 02, Tut 03         |
+| **45** | **[Variational Divergence Minimization (VDM)](./05-Information-Theory-and-Divergences/06-Variational_Divergence_Minimization_VDM.md)** | $\min_\theta \max_w \mathbb{E}_P[T_w] - \mathbb{E}_Q[f^*(T_w)]$                                                                   | $f$-Divergence, Fenchel, LOTUS | $f$-GAN, LSGAN, WGAN, Bi-Level Opt | Lec 04, Lec 05         |
+| **46** | **[Vector Norms & Inner Products](./02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md)**           | $\|x\|_p = \left(\sum |x_i|^p\right)^{1/p}, \langle x, y \rangle = x^T y$                                                        | VecMat                       | Weight Decay, Distance Metrics      | Tut 02, Lec 18         |
+| **47** | **[Vectors & Matrices](./02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md)**                                 | $y = Wx + b, \quad \text{rank}(A) \le \min(m, n)$                                                                                | Linear Algebra               | Dense Neural Network Layers         | Tut 02, Tut 03         |
+| **48** | **[Wasserstein Distance & EMD](./05-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md)**                 | $W_1(P, Q) = \sup_{\|f\|_L \le 1} \mathbb{E}_P[f] - \mathbb{E}_Q[f]$                                                             | Lipschitz, Distributions     | WGAN-GP, Flow Matching, FID         | Lec 18, Tut 12         |
+| **49** | **[$f$-Divergence & Csiszár Generators](./05-Information-Theory-and-Divergences/04-f_Divergence.md)**                       | $D_f(P \parallel Q) = \int q(x) f\left(\frac{p(x)}{q(x)}\right) dx$                                                              | Convexity, KLDivergence      | $f$-GAN, Variational Bounds         | Lec 03, Tut 11         |
 
 ---
 

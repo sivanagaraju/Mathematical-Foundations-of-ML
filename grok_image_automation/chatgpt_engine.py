@@ -36,6 +36,22 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 CHATGPT_PROFILE_DIR = SCRIPT_DIR / ".chatgpt_profile"
 
+def get_chatgpt_profile_dir(account: str = "1", custom_dir: str = "") -> Path:
+    """
+    Resolve profile directory for a given ChatGPT account / session.
+    - account="1" or "default" or "main" -> SCRIPT_DIR / ".chatgpt_profile"
+    - account="2" -> SCRIPT_DIR / ".chatgpt_profile_2"
+    - account="<name>" -> SCRIPT_DIR / f".chatgpt_profile_{name}"
+    - If custom_dir is provided, it takes precedence.
+    """
+    if custom_dir:
+        return Path(custom_dir).resolve()
+    acc = str(account).strip()
+    if acc in ["1", "default", "", "main"]:
+        return CHATGPT_PROFILE_DIR
+    safe_name = re.sub(r'[^a-zA-Z0-9_\-]', '_', acc)
+    return SCRIPT_DIR / f".chatgpt_profile_{safe_name}"
+
 CHATGPT_BASE_URL = "https://chatgpt.com"
 CHATGPT_IMAGES_URL = "https://chatgpt.com/images"
 CHATGPT_LOGIN_URL = "https://chatgpt.com/auth/login"
@@ -87,19 +103,20 @@ def is_chatgpt_logged_in(page) -> bool:
 
 def chatgpt_login(
     context,
+    profile_dir: Path = CHATGPT_PROFILE_DIR,
     login_timeout_seconds: int = 60,
     **kwargs
 ) -> bool:
     """
     Open Chrome with the persistent profile so the USER can log in manually.
     Waits 60 seconds for the user to complete login in the open Chrome window.
-    Saves and preserves all session cookies, tokens, and storage state in .chatgpt_profile.
+    Saves and preserves all session cookies, tokens, and storage state in profile_dir.
     """
     page = context.pages[0] if context.pages else context.new_page()
     print("=" * 70, flush=True)
     print("MANUAL CHATGPT LOGIN FLOW", flush=True)
     print(f"Target URL:  {CHATGPT_IMAGES_URL}", flush=True)
-    print(f"Profile Dir: {CHATGPT_PROFILE_DIR}", flush=True)
+    print(f"Profile Dir: {profile_dir}", flush=True)
     print(f"Window Time: {login_timeout_seconds} seconds", flush=True)
     print("=" * 70, flush=True)
 
@@ -167,6 +184,10 @@ def chatgpt_login(
 
         if remaining % 10 == 0 or remaining <= 5:
             print(f"  Waiting for manual login in Chrome... ({remaining}s remaining)", flush=True)
+            try:
+                dismiss_chatgpt_modals(page, cooldown_if_rate_limited=False)
+            except Exception:
+                pass
         time.sleep(2)
 
     # Let Chrome persist all cookies and tokens to disk
@@ -176,7 +197,7 @@ def chatgpt_login(
     if logged_in or is_chatgpt_logged_in(page):
         print("=" * 70, flush=True)
         print("[SUCCESS] ChatGPT profile saved successfully to:", flush=True)
-        print(f"  {CHATGPT_PROFILE_DIR}", flush=True)
+        print(f"  {profile_dir}", flush=True)
         print("This profile will now be automatically reused by:")
         print("  - grok_mathsterms_runner.py --engine chatgpt")
         print("  - grok_imagine_runner.py --engine chatgpt")
@@ -186,21 +207,125 @@ def chatgpt_login(
         print("\n⚠️ Notice: Login not fully confirmed yet. You can re-run with `--login` anytime.", flush=True)
         return False
 
+def dismiss_chatgpt_modals(page, cooldown_if_rate_limited: bool = False, cooldown_seconds: int = 45) -> bool:
+    """
+    Detect and dismiss ChatGPT popups/modals, specifically:
+    - 'Too many requests' dialog with 'Got it' button
+    - Any modal/dialog with 'Got it', 'Got It', 'Dismiss', 'Close', or 'OK' button
+    If 'Too many requests' is detected and cooldown_if_rate_limited=True,
+    waits cooldown_seconds with countdown logs so ChatGPT rate limit can recover.
+    Returns True if a modal was dismissed, False otherwise.
+    """
+    dismissed = False
+    rate_limited = False
+
+    try:
+        # Check for Rate Limit markers in text or headings
+        rate_limit_indicators = [
+            "text='Too many requests'",
+            "text='making requests too quickly'",
+            "text='temporarily limited access'",
+            "text='wait a few minutes'"
+        ]
+        for ind in rate_limit_indicators:
+            if page.locator(ind).count() > 0:
+                rate_limited = True
+                break
+    except Exception:
+        pass
+
+    # Selectors for 'Got it' and other dismiss buttons
+    button_selectors = [
+        "button:has-text('Got it')",
+        "button:has-text('Got It')",
+        "button:has-text('got it')",
+        "div[role='dialog'] button:has-text('Got it')",
+        "div[role='dialog'] button:has-text('Got It')",
+        "div[role='alertdialog'] button:has-text('Got it')",
+        "div[role='alertdialog'] button:has-text('Got It')",
+        "div[role='dialog'] button",
+        "div[role='alertdialog'] button",
+        "button:has-text('Dismiss')",
+        "button:has-text('Close')",
+        "button:has-text('OK')"
+    ]
+
+    for sel in button_selectors:
+        try:
+            btns = page.locator(sel).all()
+            for btn in btns:
+                if btn.is_visible():
+                    btn_text = btn.inner_text().strip().lower()
+                    if any(w in btn_text for w in ["got it", "dismiss", "close", "ok"]):
+                        print(f"  [MODAL DETECTED] Clicking '{btn.inner_text().strip()}' button...", flush=True)
+                        btn.click(timeout=3000, force=True)
+                        dismissed = True
+                        time.sleep(1)
+                        break
+            if dismissed:
+                break
+        except Exception:
+            continue
+
+    # Fallback via JavaScript evaluation in case of layout overlays
+    if not dismissed:
+        try:
+            js_res = page.evaluate("""() => {
+                const buttons = Array.from(document.querySelectorAll('button'));
+                for (const b of buttons) {
+                    const txt = (b.innerText || '').trim().toLowerCase();
+                    if (txt === 'got it' || txt === 'got it.' || txt === 'dismiss' || txt === 'close' || txt === 'ok') {
+                        b.click();
+                        return b.innerText.trim();
+                    }
+                }
+                return null;
+            }""")
+            if js_res:
+                print(f"  [MODAL DETECTED] Clicked '{js_res}' button via JavaScript evaluation.", flush=True)
+                dismissed = True
+                time.sleep(1)
+        except Exception:
+            pass
+
+    # Extra fallback: press Escape if dialog still active
+    if not dismissed and rate_limited:
+        try:
+            page.keyboard.press("Escape")
+            time.sleep(0.5)
+        except Exception:
+            pass
+
+    if rate_limited:
+        print("  ⚠️ [RATE LIMIT] ChatGPT 'Too many requests' dialog was encountered (clicked 'Got it').", flush=True)
+        if cooldown_if_rate_limited:
+            print(f"  Cooling down for {cooldown_seconds}s before retrying...", flush=True)
+            for rem in range(cooldown_seconds, 0, -10):
+                print(f"    Rate limit cooldown: {rem}s remaining...", flush=True)
+                time.sleep(10)
+            print("  Rate limit cooldown completed! Resuming...", flush=True)
+
+    return dismissed or rate_limited
+
 def ensure_chatgpt_images_page(page, reset: bool = False):
     """Ensure page is on https://chatgpt.com/images and the input box is ready."""
     page.bring_to_front()
+    dismiss_chatgpt_modals(page, cooldown_if_rate_limited=False)
     if reset or "/images" not in page.url:
         print(f"Navigating to {CHATGPT_IMAGES_URL}...", flush=True)
         page.goto(CHATGPT_IMAGES_URL, timeout=45000)
         time.sleep(2)
+        dismiss_chatgpt_modals(page, cooldown_if_rate_limited=False)
 
     try:
         page.wait_for_selector("div#prompt-textarea, div.ProseMirror, [contenteditable='true']:visible", timeout=20000)
     except Exception:
+        dismiss_chatgpt_modals(page, cooldown_if_rate_limited=False)
         img_nav = page.locator("a[href*='/images'], button:has-text('Images')").first
         if img_nav.count() > 0:
             img_nav.click()
             time.sleep(2)
+        dismiss_chatgpt_modals(page, cooldown_if_rate_limited=False)
 
 def is_chatgpt_generating(page) -> bool:
     """Check if ChatGPT is actively generating an image."""
@@ -210,59 +335,86 @@ def is_chatgpt_generating(page) -> bool:
             return True
         if page.locator("text='Creating image', text='Thinking', [aria-busy='true']").count() > 0:
             return True
+        # Check for progress percentage pill (e.g. 54%, 82%)
+        pills = page.locator("div:has-text('%'), span:has-text('%')")
+        for i in range(min(5, pills.count())):
+            txt = pills.nth(i).inner_text().strip()
+            if re.search(r'\b\d{1,3}%\b', txt):
+                return True
     except Exception:
         pass
     return False
 
-def submit_chatgpt_prompt(page, prompt_text: str, max_retries: int = 2) -> bool:
+def submit_chatgpt_prompt(page, prompt_text: str, max_retries: int = 3) -> bool:
     """
-    Enter prompt into ChatGPT Images prompt textarea and click the circular submit arrow button.
+    Enter prompt into ChatGPT Images prompt textarea and click the circular submit arrow button or press Enter.
     """
-    ensure_chatgpt_images_page(page)
+    try:
+        ensure_chatgpt_images_page(page)
+        dismiss_chatgpt_modals(page, cooldown_if_rate_limited=True, cooldown_seconds=45)
 
-    editor = page.locator("div#prompt-textarea, div.ProseMirror, [contenteditable='true']:visible").first
-    editor.wait_for(state="visible", timeout=15000)
-    editor.click()
-    time.sleep(0.3)
+        editor = page.locator("div#prompt-textarea, div.ProseMirror, [contenteditable='true']:visible").first
+        editor.wait_for(state="visible", timeout=15000)
+        editor.click()
+        time.sleep(0.3)
 
-    # Clear previous text
-    page.keyboard.press("Control+A")
-    page.keyboard.press("Backspace")
-    time.sleep(0.2)
+        # Clear previous text
+        page.keyboard.press("Control+A")
+        page.keyboard.press("Backspace")
+        time.sleep(0.2)
 
-    # Insert prompt text
-    print(f"Entering prompt into ChatGPT Images ({len(prompt_text)} chars)...", flush=True)
-    page.keyboard.insert_text(prompt_text)
-    time.sleep(0.8)
+        # Insert prompt text
+        print(f"Entering prompt into ChatGPT Images ({len(prompt_text)} chars)...", flush=True)
+        page.keyboard.insert_text(prompt_text)
+        time.sleep(1.0)
 
-    # Click the circular Submit / Send button
-    for attempt in range(1, max_retries + 1):
-        if is_chatgpt_generating(page):
-            print("  [OK] Generation already underway!", flush=True)
-            return True
-
-        send_btn = page.locator("button[data-testid='send-button'], button[aria-label*='Send' i]").first
-        if send_btn.count() > 0 and send_btn.is_visible() and not send_btn.is_disabled():
-            print(f"  Attempt {attempt}: Clicking circular Send button...", flush=True)
-            send_btn.click()
-        else:
-            alt_send = page.locator("button.rounded-full").filter(has=page.locator("svg"))
-            if alt_send.count() > 0 and alt_send.last.is_visible() and not alt_send.last.is_disabled():
-                print(f"  Attempt {attempt}: Clicking alternate Send button...", flush=True)
-                alt_send.last.click()
-            else:
-                print(f"  Attempt {attempt}: Pressing Enter to send...", flush=True)
-                page.keyboard.press("Enter")
-
-        for _ in range(8):
-            time.sleep(0.5)
+        # Click the circular Submit / Send button or press Enter
+        for attempt in range(1, max_retries + 1):
+            dismiss_chatgpt_modals(page, cooldown_if_rate_limited=False)
             if is_chatgpt_generating(page):
-                print("  [OK] ChatGPT generation started successfully!", flush=True)
+                print("  [OK] Generation already underway!", flush=True)
                 return True
 
-        print(f"  Notice: Generation not detected after attempt {attempt}.", flush=True)
+            # Attempt clicking the explicit Send button with short timeout and force=True to bypass disclaimer overlay
+            clicked = False
+            send_btn = page.locator("button[data-testid='send-button'], button[aria-label*='Send' i], button[aria-label*='Send prompt' i]").first
+            if send_btn.count() > 0 and send_btn.is_visible() and not send_btn.is_disabled():
+                try:
+                    print(f"  Attempt {attempt}: Clicking circular Send button...", flush=True)
+                    send_btn.click(timeout=4000, force=True)
+                    clicked = True
+                except Exception as e:
+                    print(f"  Send button click failed ({e}), checking modals & falling back to Enter...", flush=True)
+                    dismiss_chatgpt_modals(page, cooldown_if_rate_limited=True, cooldown_seconds=45)
 
-    return is_chatgpt_generating(page)
+            if not clicked:
+                print(f"  Attempt {attempt}: Pressing Enter to send prompt...", flush=True)
+                try:
+                    editor.click(timeout=3000, force=True)
+                except Exception:
+                    pass
+                time.sleep(0.2)
+                page.keyboard.press("Enter")
+
+            # Wait up to 12s for generation to register
+            for check_step in range(24):
+                time.sleep(0.5)
+                if is_chatgpt_generating(page):
+                    print("  [OK] ChatGPT generation started successfully!", flush=True)
+                    return True
+                if check_step % 6 == 0:
+                    was_modal = dismiss_chatgpt_modals(page, cooldown_if_rate_limited=True, cooldown_seconds=45)
+                    if was_modal:
+                        print("  Modal dismissed during generation wait. Retrying prompt submission...", flush=True)
+                        break
+
+            print(f"  Notice: Generation not detected after attempt {attempt}.", flush=True)
+
+        return is_chatgpt_generating(page)
+    except Exception as e:
+        print(f"⚠️ Error submitting prompt to ChatGPT: {e}", flush=True)
+        dismiss_chatgpt_modals(page, cooldown_if_rate_limited=False)
+        return False
 
 def extract_image_elements(page) -> list:
     """Extract rendered generated image URLs or elements from ChatGPT conversation."""
@@ -296,7 +448,7 @@ def wait_and_download_chatgpt_images(
 ) -> list:
     """
     Wait for ChatGPT image generation to finish and download the newly created image(s).
-    Includes generous max_wait (up to 180s) and periodic progress heartbeat.
+    Includes generous max_wait (up to 180s), periodic modal dismissal, and progress heartbeat.
     """
     start_time = time.time()
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -304,11 +456,19 @@ def wait_and_download_chatgpt_images(
 
     if initial_wait > 0:
         print(f"Waiting initial {initial_wait}s for ChatGPT to generate...", flush=True)
-        time.sleep(initial_wait)
+        for _ in range(initial_wait // 5):
+            time.sleep(5)
+            dismiss_chatgpt_modals(page, cooldown_if_rate_limited=False)
+        rem_init = initial_wait % 5
+        if rem_init > 0:
+            time.sleep(rem_init)
 
     new_urls = []
     last_heartbeat = time.time()
     while time.time() - start_time < max_wait:
+        # Check and dismiss any 'Got it' or 'Too many requests' modal that popped up
+        dismiss_chatgpt_modals(page, cooldown_if_rate_limited=False)
+
         generating = is_chatgpt_generating(page)
         current_urls = extract_image_elements(page)
         fresh_urls = [u for u in current_urls if u not in pre_existing_urls]
@@ -367,28 +527,31 @@ def wait_and_download_chatgpt_images(
 
 def main():
     parser = argparse.ArgumentParser(description="ChatGPT Images 2.5 Automation Engine")
-    parser.add_argument("--login", action="store_true", help="Log into ChatGPT and save session into .chatgpt_profile")
+    parser.add_argument("--account", type=str, default="1", help="ChatGPT account / session identifier (e.g. 1, 2, 'alt', default: '1')")
+    parser.add_argument("--login", action="store_true", help="Log into ChatGPT and save session into profile")
     parser.add_argument("--test", action="store_true", help="Test ChatGPT Images session and prompt generation")
     parser.add_argument("--wait", type=int, default=60, help="Seconds to wait for manual login (default: 60)")
     parser.add_argument("--email", type=str, default=DEFAULT_EMAIL, help="ChatGPT account email")
     parser.add_argument("--password", type=str, default=DEFAULT_PASSWORD, help="ChatGPT account password")
-    parser.add_argument("--profile-dir", type=str, default=str(CHATGPT_PROFILE_DIR), help="Path to profile directory")
+    parser.add_argument("--profile-dir", type=str, default="", help="Path to profile directory (overrides --account)")
 
     args = parser.parse_args()
-    profile_path = Path(args.profile_dir)
+    profile_path = get_chatgpt_profile_dir(args.account, custom_dir=args.profile_dir)
+
+    print(f"ChatGPT Profile: {profile_path} (Account: {args.account})", flush=True)
 
     with sync_playwright() as p:
         context = launch_chatgpt_browser(p, profile_path, headless=False)
         try:
             if args.login:
-                chatgpt_login(context, login_timeout_seconds=args.wait)
+                chatgpt_login(context, profile_dir=profile_path, login_timeout_seconds=args.wait)
             elif args.test:
                 page = context.pages[0] if context.pages else context.new_page()
                 page.goto(CHATGPT_IMAGES_URL, timeout=45000)
                 time.sleep(3)
                 if not is_chatgpt_logged_in(page):
                     print("Not logged in. Running login first...", flush=True)
-                    chatgpt_login(context, login_timeout_seconds=args.wait)
+                    chatgpt_login(context, profile_dir=profile_path, login_timeout_seconds=args.wait)
                 
                 print("Testing prompt generation on ChatGPT Images...", flush=True)
                 test_prompt = "A high-contrast mathematical diagram of Jensen's inequality with secant lines and convex curve."

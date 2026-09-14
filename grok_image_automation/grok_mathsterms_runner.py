@@ -24,8 +24,8 @@ RUN COMMANDS (Copy & Paste):
   # 4. Run specific topic(s) of a file (e.g. Topics 1, 2, 4):
   python grok_image_automation/grok_mathsterms_runner.py --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 1 2 4
 
-  # 5. Run across all 46 files in MathsTerms (skipping completed topics):
-  python grok_image_automation/grok_mathsterms_runner.py --all --parallel 3 --skip-existing
+  # 5. Run across all 46 files in MathsTerms with ChatGPT (skipping completed topics):
+  python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --all --parallel 2 --skip-existing
 """
 
 import os
@@ -51,6 +51,9 @@ PROJECT_ROOT = SCRIPT_DIR.parent
 MATHS_TERMS_DIR = PROJECT_ROOT / "MathsTerms"
 PROFILE_DIR = SCRIPT_DIR / ".grok_profile"
 
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
 GROK_URL = "https://grok.com"
 GROK_IMAGINE_URL = "https://grok.com/imagine"
 
@@ -67,10 +70,44 @@ try:
         ensure_chatgpt_images_page,
         submit_chatgpt_prompt,
         wait_and_download_chatgpt_images,
-        extract_image_elements
+        extract_image_elements,
+        dismiss_chatgpt_modals,
+        get_chatgpt_profile_dir
     )
 except ImportError:
-    pass
+    try:
+        from grok_image_automation.chatgpt_engine import (
+            CHATGPT_PROFILE_DIR,
+            CHATGPT_IMAGES_URL,
+            DEFAULT_EMAIL,
+            DEFAULT_PASSWORD,
+            launch_chatgpt_browser,
+            chatgpt_login,
+            is_chatgpt_logged_in,
+            ensure_chatgpt_images_page,
+            submit_chatgpt_prompt,
+            wait_and_download_chatgpt_images,
+            extract_image_elements,
+            dismiss_chatgpt_modals,
+            get_chatgpt_profile_dir
+        )
+    except ImportError:
+        CHATGPT_PROFILE_DIR = SCRIPT_DIR / ".chatgpt_profile"
+        CHATGPT_IMAGES_URL = "https://chatgpt.com/images"
+        DEFAULT_EMAIL = "sivanagarajupachipulusu@gmail.com"
+        DEFAULT_PASSWORD = "Pulk@_ta!nt_01!"
+        def get_chatgpt_profile_dir(account="1", custom_dir=""):
+            return Path(custom_dir).resolve() if custom_dir else SCRIPT_DIR / ".chatgpt_profile"
+
+def get_grok_profile_dir(account: str = "1", custom_dir: str = "") -> Path:
+    """Resolve profile directory for Grok account / session."""
+    if custom_dir:
+        return Path(custom_dir).resolve()
+    acc = str(account).strip()
+    if acc in ["1", "default", "", "main"]:
+        return PROFILE_DIR
+    safe_name = re.sub(r'[^a-zA-Z0-9_\-]', '_', acc)
+    return SCRIPT_DIR / f".grok_profile_{safe_name}"
 
 def clean_title(raw_title: str) -> str:
     """Remove emoji and special characters from heading title."""
@@ -428,16 +465,66 @@ def wait_and_download_images(
 
     return downloaded_files
 
-def is_topic_complete(output_dir: Path, file_prefix: str, expected_count: int = 2) -> bool:
-    """Check if all expected images exist and are valid (>10KB) for a topic prefix."""
+def is_topic_complete(output_dir: Path, topic_identifier, expected_count: int = 1) -> bool:
+    """
+    Check if all expected images exist and are valid (>10KB) for a topic.
+    topic_identifier can be:
+      - dict: e.g. {"num": 1, "slug": "...", ...}
+      - int: topic number, e.g. 1
+      - str: file_prefix like "topic-01_slug" or "topic-01"
+    """
+    if not output_dir.exists():
+        return False
+
+    t_num = None
+    prefix = ""
+    if isinstance(topic_identifier, dict):
+        t_num = topic_identifier.get("num")
+        slug = topic_identifier.get("slug", "")
+        prefix = f"topic-{t_num:02d}_{slug}" if slug else f"topic-{t_num:02d}"
+    elif isinstance(topic_identifier, int):
+        t_num = topic_identifier
+        prefix = f"topic-{t_num:02d}"
+    elif isinstance(topic_identifier, str):
+        prefix = topic_identifier
+        m = re.match(r"topic-(\d+)", prefix)
+        if m:
+            t_num = int(m.group(1))
+
+    # 1. Exact prefix check for expected_count images ({prefix}_img1.jpg, etc.)
+    exact_count = 0
     for idx in range(1, expected_count + 1):
-        jpg_f = output_dir / f"{file_prefix}_img{idx}.jpg"
-        png_f = output_dir / f"{file_prefix}_img{idx}.png"
-        valid_jpg = jpg_f.exists() and jpg_f.stat().st_size > 10000
-        valid_png = png_f.exists() and png_f.stat().st_size > 10000
-        if not (valid_jpg or valid_png):
-            return False
-    return True
+        found = False
+        for ext in [".jpg", ".jpeg", ".png", ".webp"]:
+            candidate = output_dir / f"{prefix}_img{idx}{ext}"
+            if candidate.exists() and candidate.stat().st_size > 10000:
+                found = True
+                break
+        if found:
+            exact_count += 1
+
+    if exact_count >= expected_count:
+        return True
+
+    # If expected_count == 1, also check {prefix}.jpg (without _img1 suffix)
+    if expected_count == 1:
+        for ext in [".jpg", ".jpeg", ".png", ".webp"]:
+            candidate = output_dir / f"{prefix}{ext}"
+            if candidate.exists() and candidate.stat().st_size > 10000:
+                return True
+
+    # 2. Topic number glob check: any valid images starting with topic-{t_num:02d}
+    if t_num is not None:
+        valid_matching = []
+        for ext in [".jpg", ".jpeg", ".png", ".webp"]:
+            for pattern in [f"topic-{t_num:02d}{ext}", f"topic-{t_num:02d}_*{ext}"]:
+                for f in output_dir.glob(pattern):
+                    if f.is_file() and f.stat().st_size > 10000 and f not in valid_matching:
+                        valid_matching.append(f)
+        if len(valid_matching) >= expected_count:
+            return True
+
+    return False
 
 def run_topic_batch(context, chunk, doc_title: str, output_dir: Path, engine: str = "grok"):
     """Submit prompts for a chunk of topics across tabs and download generated images."""
@@ -456,12 +543,25 @@ def run_topic_batch(context, chunk, doc_title: str, output_dir: Path, engine: st
             print(f"  [Tab {tab_idx+1}] Setting up ChatGPT Images for Topic {t_num:02d} ('{t_title}')...", flush=True)
 
             tab.bring_to_front()
+            try:
+                dismiss_chatgpt_modals(tab, cooldown_if_rate_limited=True, cooldown_seconds=45)
+            except Exception:
+                pass
             ensure_chatgpt_images_page(tab, reset=(tab_idx == 0))
 
             prompt = format_mathsterms_prompt(t_num, t_title, doc_title, t["content"])
             pre_urls = set(extract_image_elements(tab))
 
-            submit_chatgpt_prompt(tab, prompt)
+            ok = submit_chatgpt_prompt(tab, prompt)
+            if not ok:
+                print(f"  [Tab {tab_idx+1}] Notice: Initial submit attempt not confirmed, checking modals & retrying...", flush=True)
+                try:
+                    dismiss_chatgpt_modals(tab, cooldown_if_rate_limited=True, cooldown_seconds=45)
+                except Exception:
+                    pass
+                time.sleep(2)
+                submit_chatgpt_prompt(tab, prompt)
+
             batch_info.append((tab, t, file_prefix, pre_urls))
             time.sleep(2)
 
@@ -472,6 +572,10 @@ def run_topic_batch(context, chunk, doc_title: str, output_dir: Path, engine: st
         results = []
         for tab_idx, (tab, t, file_prefix, pre_urls) in enumerate(batch_info):
             tab.bring_to_front()
+            try:
+                dismiss_chatgpt_modals(tab, cooldown_if_rate_limited=False)
+            except Exception:
+                pass
             print(f"  [Tab {tab_idx+1}] Downloading ChatGPT image for {file_prefix}...", flush=True)
             downloaded = wait_and_download_chatgpt_images(
                 context,
@@ -583,14 +687,14 @@ def process_single_mathsterms_file(
     for t in all_topics:
         if topic_filter and t["num"] not in topic_filter:
             continue
-        file_prefix = f"topic-{t['num']:02d}_{t['slug']}"
-        if skip_existing and is_topic_complete(output_dir, file_prefix, expected_count=expected_imgs):
+        if skip_existing and is_topic_complete(output_dir, t, expected_count=expected_imgs):
             print(f"  [SKIP] Topic {t['num']:02d} ({t['title'][:30]}) already complete in {output_dir.name}", flush=True)
         else:
             topics_to_process.append(t)
 
     if not topics_to_process:
-        print(f"All topics already completed for {md_file.name}!", flush=True)
+        filter_str = f" for requested topic(s) {topic_filter}" if topic_filter else ""
+        print(f"All topics already completed{filter_str} for {md_file.name}!", flush=True)
         return
 
     print("=" * 75, flush=True)
@@ -611,14 +715,14 @@ def process_single_mathsterms_file(
         run_topic_batch(context, chunk, doc_title, output_dir, engine=engine)
 
         # Retry loop for any topic in this chunk that is incomplete
-        retry_queue = [t for t in chunk if not is_topic_complete(output_dir, f"topic-{t['num']:02d}_{t['slug']}", expected_count=expected_imgs)]
+        retry_queue = [t for t in chunk if not is_topic_complete(output_dir, t, expected_count=expected_imgs)]
         retry_count = 1
         while retry_queue and retry_count <= max_retries:
             missing_nums = [t["num"] for t in retry_queue]
             print(f"\n⚠️ Topic(s) {missing_nums} not fully generated (missing {expected_imgs} valid images). Retrying attempt {retry_count}/{max_retries}...", flush=True)
             time.sleep(3)
             run_topic_batch(context, retry_queue, doc_title, output_dir, engine=engine)
-            retry_queue = [t for t in chunk if not is_topic_complete(output_dir, f"topic-{t['num']:02d}_{t['slug']}", expected_count=expected_imgs)]
+            retry_queue = [t for t in chunk if not is_topic_complete(output_dir, t, expected_count=expected_imgs)]
             retry_count += 1
 
         if i + parallel < len(topics_to_process) and delay > 0:
@@ -626,7 +730,7 @@ def process_single_mathsterms_file(
             time.sleep(delay)
 
     # Final sweep verification pass
-    incomplete = [t for t in topics_to_process if not is_topic_complete(output_dir, f"topic-{t['num']:02d}_{t['slug']}", expected_count=expected_imgs)]
+    incomplete = [t for t in topics_to_process if not is_topic_complete(output_dir, t, expected_count=expected_imgs)]
     sweep_count = 1
     while incomplete and sweep_count <= max_retries:
         inc_nums = [t["num"] for t in incomplete]
@@ -635,14 +739,14 @@ def process_single_mathsterms_file(
             sweep_chunk = incomplete[j : j + parallel]
             run_topic_batch(context, sweep_chunk, doc_title, output_dir, engine=engine)
             time.sleep(3)
-        incomplete = [t for t in topics_to_process if not is_topic_complete(output_dir, f"topic-{t['num']:02d}_{t['slug']}", expected_count=expected_imgs)]
+        incomplete = [t for t in topics_to_process if not is_topic_complete(output_dir, t, expected_count=expected_imgs)]
         sweep_count += 1
 
-    all_done = all(is_topic_complete(output_dir, f"topic-{t['num']:02d}_{t['slug']}", expected_count=expected_imgs) for t in topics_to_process)
+    all_done = all(is_topic_complete(output_dir, t, expected_count=expected_imgs) for t in topics_to_process)
     if all_done:
         print(f"\n[DONE] All {len(topics_to_process)} topics completed in: {output_dir}\n", flush=True)
     else:
-        missing = [t["num"] for t in topics_to_process if not is_topic_complete(output_dir, f"topic-{t['num']:02d}_{t['slug']}", expected_count=expected_imgs)]
+        missing = [t["num"] for t in topics_to_process if not is_topic_complete(output_dir, t, expected_count=expected_imgs)]
         print(f"\n[PARTIAL] Topics still missing images: {missing}\n", flush=True)
 
 def find_target_files(file_arg: str = "", category_arg: str = "", all_flag: bool = False) -> list:
@@ -690,9 +794,24 @@ def find_target_files(file_arg: str = "", category_arg: str = "", all_flag: bool
 
     return target_files
 
+def parse_topic_arg(topic_args) -> list:
+    """Parse topic argument which may be ints, list of ints, or comma-separated strings."""
+    if not topic_args:
+        return []
+    result = set()
+    for item in topic_args:
+        if isinstance(item, int):
+            result.add(item)
+        elif isinstance(item, str):
+            for part in item.replace(",", " ").split():
+                if part.strip().isdigit():
+                    result.add(int(part.strip()))
+    return sorted(list(result))
+
 def main():
     parser = argparse.ArgumentParser(description="Image Automation for MathsTerms (Grok Imagine & ChatGPT Images 2.5)")
     parser.add_argument("--engine", choices=["grok", "chatgpt"], default="grok", help="Image generation engine (grok or chatgpt, default: grok)")
+    parser.add_argument("--account", type=str, default="1", help="Account / session number or name (e.g. 1, 2, 'alt', default: '1')")
     parser.add_argument("--login", action="store_true", help="Launch browser to log in and save session into profile")
     parser.add_argument("--wait", type=int, default=60, help="Seconds to wait for manual login (default: 60)")
     parser.add_argument("--email", type=str, default=DEFAULT_EMAIL, help="Email for ChatGPT login (default: sivanagarajupachipulusu@gmail.com)")
@@ -700,23 +819,24 @@ def main():
     parser.add_argument("--file", type=str, default="", help="Path to specific MathsTerms markdown file")
     parser.add_argument("--category", type=str, default="", help="Category folder name or number (e.g. 01-Primal-Analysis-and-Foundations)")
     parser.add_argument("--all", action="store_true", help="Process all markdown files across all categories in MathsTerms")
-    parser.add_argument("--topic", type=int, nargs="+", help="Specific topic number(s) to run (e.g. --topic 1 2 4)")
+    parser.add_argument("--topic", nargs="+", help="Specific topic number(s) to run (e.g. --topic 1 2 or --topic 1,2)")
     parser.add_argument("--parallel", type=int, default=2, help="Number of parallel generation tabs (1-3, default: 2)")
-    parser.add_argument("--skip-existing", action="store_true", help="Skip topics that already have complete images")
+    parser.add_argument("--skip-existing", action="store_true", default=True, help="Skip topics that already have complete images (default: True)")
+    parser.add_argument("--no-skip-existing", dest="skip_existing", action="store_false", help="Do not skip existing images")
     parser.add_argument("--regenerate", "--force", dest="regenerate", action="store_true", help="Force regenerate all topics even if images exist")
     parser.add_argument("--max-retries", type=int, default=2, help="Max retries for incomplete topics (default: 2)")
     parser.add_argument("--delay", type=int, default=6, help="Cooldown delay (seconds) between batches (default: 6)")
-    parser.add_argument("--profile-dir", type=str, default="", help="Custom Chrome profile directory")
+    parser.add_argument("--profile-dir", type=str, default="", help="Custom Chrome profile directory (overrides --account)")
 
     args = parser.parse_args()
 
-    # Determine profile directory based on engine
+    # Determine profile directory based on engine and account
     if args.profile_dir:
         profile_path = Path(args.profile_dir)
     elif args.engine == "chatgpt":
-        profile_path = CHATGPT_PROFILE_DIR
+        profile_path = get_chatgpt_profile_dir(args.account)
     else:
-        profile_path = PROFILE_DIR
+        profile_path = get_grok_profile_dir(args.account)
 
     # Handle interactive / automated login
     if args.login:
@@ -724,7 +844,7 @@ def main():
             if args.engine == "chatgpt":
                 context = launch_chatgpt_browser(p, profile_path, headless=False)
                 try:
-                    chatgpt_login(context, login_timeout_seconds=args.wait)
+                    chatgpt_login(context, profile_dir=profile_path, login_timeout_seconds=args.wait)
                 finally:
                     context.close()
             else:
@@ -737,13 +857,54 @@ def main():
         print("No target files found to process. Use --file, --category, or --all.", flush=True)
         return
 
+    topic_filter = parse_topic_arg(args.topic)
     skip_existing = args.skip_existing and not args.regenerate
     parallel_val = max(1, min(args.parallel, 3))
 
+    expected_imgs = 1 if args.engine == "chatgpt" else 2
+    img_folder = "chatgpt_images" if args.engine == "chatgpt" else "grok_images"
+
+    # Pre-scan target files to check if all requested topics already exist
+    files_with_pending_topics = []
+    total_skipped_topics = 0
+    total_needed_topics = 0
+
+    for md_file in target_files:
+        doc_title, all_topics = parse_markdown_topics(md_file)
+        if not all_topics:
+            continue
+        out_dir = md_file.parent / img_folder / md_file.stem
+        needed = []
+        for t in all_topics:
+            if topic_filter and t["num"] not in topic_filter:
+                continue
+            if skip_existing and is_topic_complete(out_dir, t, expected_count=expected_imgs):
+                total_skipped_topics += 1
+            else:
+                needed.append(t)
+                total_needed_topics += 1
+        if needed or not skip_existing:
+            files_with_pending_topics.append(md_file)
+
+    if skip_existing and total_needed_topics == 0:
+        filter_desc = f" for requested topic(s) {topic_filter}" if topic_filter else ""
+        print("=" * 75, flush=True)
+        print(f"MATHSTERMS IMAGE AUTOMATION RUNNER")
+        print(f"Engine:           {args.engine.upper()} (Account: {args.account})")
+        print(f"Target files:     {len(target_files)}")
+        print(f"Skip existing:    {skip_existing}")
+        print("=" * 75, flush=True)
+        print(f"✅ [ALL COMPLETE] All topic images{filter_desc} across {len(target_files)} file(s) already exist!", flush=True)
+        print(f"   Skipped {total_skipped_topics} already completed topic(s). Nothing to generate.")
+        print("   (Pass --regenerate or --force if you want to overwrite existing images.)\n", flush=True)
+        return
+
+    target_run_files = files_with_pending_topics if skip_existing else target_files
+
     print("=" * 75, flush=True)
     print(f"MATHSTERMS IMAGE AUTOMATION RUNNER")
-    print(f"Engine:           {args.engine.upper()}")
-    print(f"Target files:     {len(target_files)}")
+    print(f"Engine:           {args.engine.upper()} (Account: {args.account})")
+    print(f"Target files:     {len(target_run_files)} (Pending topics: {total_needed_topics}, Skipped: {total_skipped_topics})")
     print(f"Parallel tabs:    {parallel_val}")
     print(f"Skip existing:    {skip_existing}")
     print(f"Max retries:      {args.max_retries}")
@@ -760,7 +921,7 @@ def main():
                 time.sleep(3)
                 if not is_chatgpt_logged_in(main_page):
                     print("Session not active. Running ChatGPT login...", flush=True)
-                    chatgpt_login(context, login_timeout_seconds=args.wait)
+                    chatgpt_login(context, profile_dir=profile_path, login_timeout_seconds=args.wait)
             else:
                 print(f"Navigating to Grok Imagine: {GROK_IMAGINE_URL}...", flush=True)
                 main_page.goto(GROK_IMAGINE_URL, timeout=60000)
@@ -770,12 +931,12 @@ def main():
                     print("⚠️ Session expired or not logged in. Please log in via python grok_mathsterms_runner.py --engine grok --login first!", flush=True)
                     return
 
-            for idx, md_file in enumerate(target_files, start=1):
-                print(f"\n[{idx}/{len(target_files)}] Processing file: {md_file.name}...")
+            for idx, md_file in enumerate(target_run_files, start=1):
+                print(f"\n[{idx}/{len(target_run_files)}] Processing file: {md_file.name}...")
                 process_single_mathsterms_file(
                     context=context,
                     md_file=md_file,
-                    topic_filter=args.topic,
+                    topic_filter=topic_filter,
                     delay=args.delay,
                     parallel=parallel_val,
                     skip_existing=skip_existing,

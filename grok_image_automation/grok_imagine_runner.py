@@ -34,6 +34,9 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 PROFILE_DIR = SCRIPT_DIR / ".grok_profile"
 
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
 GROK_URL = "https://grok.com"
 GROK_IMAGINE_URL = "https://grok.com/imagine"
 GROK_LIBRARY_URL = "https://grok.com/library"
@@ -51,10 +54,44 @@ try:
         ensure_chatgpt_images_page,
         submit_chatgpt_prompt,
         wait_and_download_chatgpt_images,
-        extract_image_elements
+        extract_image_elements,
+        dismiss_chatgpt_modals,
+        get_chatgpt_profile_dir
     )
 except ImportError:
-    pass
+    try:
+        from grok_image_automation.chatgpt_engine import (
+            CHATGPT_PROFILE_DIR,
+            CHATGPT_IMAGES_URL,
+            DEFAULT_EMAIL,
+            DEFAULT_PASSWORD,
+            launch_chatgpt_browser,
+            chatgpt_login,
+            is_chatgpt_logged_in,
+            ensure_chatgpt_images_page,
+            submit_chatgpt_prompt,
+            wait_and_download_chatgpt_images,
+            extract_image_elements,
+            dismiss_chatgpt_modals,
+            get_chatgpt_profile_dir
+        )
+    except ImportError:
+        CHATGPT_PROFILE_DIR = SCRIPT_DIR / ".chatgpt_profile"
+        CHATGPT_IMAGES_URL = "https://chatgpt.com/images"
+        DEFAULT_EMAIL = "sivanagarajupachipulusu@gmail.com"
+        DEFAULT_PASSWORD = "Pulk@_ta!nt_01!"
+        def get_chatgpt_profile_dir(account="1", custom_dir=""):
+            return Path(custom_dir).resolve() if custom_dir else SCRIPT_DIR / ".chatgpt_profile"
+
+def get_grok_profile_dir(account: str = "1", custom_dir: str = "") -> Path:
+    """Resolve profile directory for Grok account / session."""
+    if custom_dir:
+        return Path(custom_dir).resolve()
+    acc = str(account).strip()
+    if acc in ["1", "default", "", "main"]:
+        return PROFILE_DIR
+    safe_name = re.sub(r'[^a-zA-Z0-9_\-]', '_', acc)
+    return SCRIPT_DIR / f".grok_profile_{safe_name}"
 
 def get_topic_titles(target_dir: Path):
     """Load topic titles from metadata.json if available."""
@@ -424,7 +461,7 @@ def wait_and_download_images(ctx, page, output_dir: Path, topic_prefix: str, pre
 
     return downloaded_files
 
-def resolve_paths(dir_arg: str, transcripts_arg: str = "", output_arg: str = ""):
+def resolve_paths(dir_arg: str, transcripts_arg: str = "", output_arg: str = "", engine: str = "grok"):
     """Resolve transcripts_dir, output_dir, and target_dir robustly."""
     transcripts_dir = None
     target_dir = None
@@ -478,16 +515,54 @@ def resolve_paths(dir_arg: str, transcripts_arg: str = "", output_arg: str = "")
 
     return transcripts_dir, output_dir, target_dir
 
-def is_topic_complete(output_dir: Path, t_num: int, expected_count: int = 2) -> bool:
+def is_topic_complete(output_dir: Path, topic_identifier, expected_count: int = 2) -> bool:
     """Check if all expected images exist and are valid (>10KB) for a topic."""
+    if not output_dir.exists():
+        return False
+
+    t_num = None
+    if isinstance(topic_identifier, int):
+        t_num = topic_identifier
+    elif isinstance(topic_identifier, dict):
+        t_num = topic_identifier.get("num")
+    elif isinstance(topic_identifier, str):
+        m = re.match(r"topic-(\d+)", topic_identifier)
+        if m:
+            t_num = int(m.group(1))
+
+    if t_num is None:
+        return False
+
+    # 1. Exact match check
+    exact_count = 0
     for idx in range(1, expected_count + 1):
-        jpg_f = output_dir / f"topic-{t_num:02d}_img{idx}.jpg"
-        png_f = output_dir / f"topic-{t_num:02d}_img{idx}.png"
-        valid_jpg = jpg_f.exists() and jpg_f.stat().st_size > 10000
-        valid_png = png_f.exists() and png_f.stat().st_size > 10000
-        if not (valid_jpg or valid_png):
-            return False
-    return True
+        found = False
+        for ext in [".jpg", ".jpeg", ".png", ".webp"]:
+            candidate = output_dir / f"topic-{t_num:02d}_img{idx}{ext}"
+            if candidate.exists() and candidate.stat().st_size > 10000:
+                found = True
+                break
+        if found:
+            exact_count += 1
+
+    if exact_count >= expected_count:
+        return True
+
+    # Check without _img suffix if expected_count == 1
+    if expected_count == 1:
+        for ext in [".jpg", ".jpeg", ".png", ".webp"]:
+            candidate = output_dir / f"topic-{t_num:02d}{ext}"
+            if candidate.exists() and candidate.stat().st_size > 10000:
+                return True
+
+    # 2. Glob match check for topic-{t_num:02d}*
+    valid_matching = []
+    for ext in [".jpg", ".jpeg", ".png", ".webp"]:
+        for pattern in [f"topic-{t_num:02d}{ext}", f"topic-{t_num:02d}_*{ext}"]:
+            for f in output_dir.glob(pattern):
+                if f.is_file() and f.stat().st_size > 10000 and f not in valid_matching:
+                    valid_matching.append(f)
+    return len(valid_matching) >= expected_count
 
 def run_topic_batch(context, chunk, topic_titles, prompt_mode, output_dir, engine: str = "grok"):
     """Submit prompts for a chunk of topics across tabs and download generated images."""
@@ -508,10 +583,23 @@ def run_topic_batch(context, chunk, topic_titles, prompt_mode, output_dir, engin
             prompt = format_prompt(t_num, t_title, raw_content, mode=prompt_mode)
 
             tab.bring_to_front()
+            try:
+                dismiss_chatgpt_modals(tab, cooldown_if_rate_limited=True, cooldown_seconds=45)
+            except Exception:
+                pass
             ensure_chatgpt_images_page(tab, reset=(tab_idx == 0))
 
             pre_urls = set(extract_image_elements(tab))
-            submit_chatgpt_prompt(tab, prompt)
+            ok = submit_chatgpt_prompt(tab, prompt)
+            if not ok:
+                print(f"  [Tab {tab_idx+1}] Notice: Initial submit attempt not confirmed, checking modals & retrying once...", flush=True)
+                try:
+                    dismiss_chatgpt_modals(tab, cooldown_if_rate_limited=True, cooldown_seconds=45)
+                except Exception:
+                    pass
+                time.sleep(2)
+                submit_chatgpt_prompt(tab, prompt)
+
             batch_info.append((tab, t_num, prefix, pre_urls))
             time.sleep(2)
 
@@ -522,6 +610,10 @@ def run_topic_batch(context, chunk, topic_titles, prompt_mode, output_dir, engin
         results = []
         for tab_idx, (tab, t_num, prefix, pre_urls) in enumerate(batch_info):
             tab.bring_to_front()
+            try:
+                dismiss_chatgpt_modals(tab, cooldown_if_rate_limited=False)
+            except Exception:
+                pass
             print(f"  [Tab {tab_idx+1}] Downloading ChatGPT image for {prefix}...", flush=True)
             downloaded = wait_and_download_chatgpt_images(
                 context,
@@ -671,7 +763,7 @@ def process_topics(
                 time.sleep(3)
                 if not is_chatgpt_logged_in(main_page):
                     print("Session not active. Running ChatGPT manual login...", flush=True)
-                    chatgpt_login(context, login_timeout_seconds=60)
+                    chatgpt_login(context, profile_dir=profile_dir, login_timeout_seconds=60)
             else:
                 print(f"Navigating to Grok Imagine: {GROK_IMAGINE_URL}...", flush=True)
                 main_page.goto(GROK_IMAGINE_URL, timeout=60000)
@@ -824,9 +916,24 @@ def run_range(
             chatgpt_password=chatgpt_password
         )
 
+def parse_topic_arg(topic_args) -> list:
+    """Parse topic argument which may be ints, list of ints, or comma-separated strings."""
+    if not topic_args:
+        return []
+    result = set()
+    for item in topic_args:
+        if isinstance(item, int):
+            result.add(item)
+        elif isinstance(item, str):
+            for part in item.replace(",", " ").split():
+                if part.strip().isdigit():
+                    result.add(int(part.strip()))
+    return sorted(list(result))
+
 def main():
     parser = argparse.ArgumentParser(description="Image Automation (Grok Imagine & ChatGPT Images 2.5)")
     parser.add_argument("--engine", choices=["grok", "chatgpt"], default="grok", help="Image generation engine (grok or chatgpt, default: grok)")
+    parser.add_argument("--account", type=str, default="1", help="Account / session number or name (e.g. 1, 2, 'alt', default: '1')")
     parser.add_argument("--login", action="store_true", help="Launch browser to log in and save session")
     parser.add_argument("--wait", type=int, default=60, help="Seconds to wait for manual login (default: 60)")
     parser.add_argument("--email", type=str, default=DEFAULT_EMAIL, help="Email for ChatGPT login (default: sivanagarajupachipulusu@gmail.com)")
@@ -834,26 +941,27 @@ def main():
     parser.add_argument("--run", action="store_true", help="Run batch image generation for topics")
     parser.add_argument("--range", type=int, nargs=2, metavar=("START", "END"), help="Run across folder number range, e.g. --range 14 33")
     parser.add_argument("--regenerate", "--force", dest="regenerate", action="store_true", help="Force regenerate all topics even if images already exist")
-    parser.add_argument("--skip-existing", action="store_true", help="Skip topics that already have 2 complete images")
+    parser.add_argument("--skip-existing", action="store_true", default=True, help="Skip topics that already have complete images (default: True)")
+    parser.add_argument("--no-skip-existing", dest="skip_existing", action="store_false", help="Do not skip existing images")
     parser.add_argument("--max-retries", type=int, default=2, help="Number of retries for topics not fully generated (default: 2)")
     parser.add_argument("--transcripts-dir", type=str, default="", help="Direct path to transcript-by-topic directory")
     parser.add_argument("--dir", type=str, default="", help="Target lecture/tutorial directory (default: 13-Tutorial11-f-Divergence-Examples)")
     parser.add_argument("--output-dir", type=str, default="", help="Custom output directory to save images")
-    parser.add_argument("--topic", type=int, nargs="+", help="Specific topic number(s) to run (e.g. --topic 1 2)")
+    parser.add_argument("--topic", nargs="+", help="Specific topic number(s) to run (e.g. --topic 1 2 or --topic 1,2)")
     parser.add_argument("--parallel", type=int, default=2, help="Number of parallel generation tabs (1-3, default: 2)")
     parser.add_argument("--raw", action="store_true", help="Paste raw transcript text without cleaning timestamps")
     parser.add_argument("--delay", type=int, default=6, help="Delay (in seconds) between generations/batches")
-    parser.add_argument("--profile-dir", type=str, default="", help="Path to browser profile directory")
+    parser.add_argument("--profile-dir", type=str, default="", help="Path to browser profile directory (overrides --account)")
 
     args = parser.parse_args()
 
-    # Determine profile directory based on engine
+    # Determine profile directory based on engine and account
     if args.profile_dir:
         profile_path = Path(args.profile_dir)
     elif args.engine == "chatgpt":
-        profile_path = CHATGPT_PROFILE_DIR
+        profile_path = get_chatgpt_profile_dir(args.account)
     else:
-        profile_path = PROFILE_DIR
+        profile_path = get_grok_profile_dir(args.account)
 
     prompt_mode = "raw" if args.raw else "cleaned"
 
@@ -862,13 +970,13 @@ def main():
             with sync_playwright() as p:
                 context = launch_chatgpt_browser(p, profile_path, headless=False)
                 try:
-                    chatgpt_login(context, login_timeout_seconds=args.wait)
+                    chatgpt_login(context, profile_dir=profile_path, login_timeout_seconds=args.wait)
                 finally:
                     context.close()
         else:
             interactive_login(profile_path)
     elif args.range:
-        skip_existing = args.skip_existing
+        skip_existing = args.skip_existing and not args.regenerate
         start_num, end_num = args.range
         parallel_val = max(1, min(args.parallel, 3))
         run_range(
@@ -886,6 +994,7 @@ def main():
         )
     elif args.run:
         transcripts_dir, output_dir, target_dir = resolve_paths(args.dir, args.transcripts_dir, args.output_dir, engine=args.engine)
+        topic_filter = parse_topic_arg(args.topic)
         skip_existing = args.skip_existing and not args.regenerate
         parallel_val = max(1, min(args.parallel, 3))
         process_topics(
@@ -893,7 +1002,7 @@ def main():
             transcripts_dir,
             output_dir,
             target_dir,
-            topic_filter=args.topic,
+            topic_filter=topic_filter,
             prompt_mode=prompt_mode,
             delay=args.delay,
             parallel=parallel_val,

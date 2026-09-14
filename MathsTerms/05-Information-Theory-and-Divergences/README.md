@@ -17,6 +17,7 @@
 | **03** | **[KL Divergence](./02-KL_Divergence.md)** | Fundamental theory & proofs | [Entropy, Cross-Entropy & CCE](./01-Entropy_CrossEntropy_CCE.md), [Convexity & Jensen's Inequality](../01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md), [Likelihood & Log-Likelihood](../04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Direct implementation |
 | **04** | **[Wasserstein Distance and EMD](./05-Wasserstein_Distance_and_EMD.md)** | Fundamental theory & proofs | [Lipschitz Continuity](../01-Primal-Analysis-and-Foundations/04-Lipschitz_Continuity.md), [Common Probability Distributions](../04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md), [Vector Norms & Inner Products](../02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md) | Direct implementation |
 | **05** | **[f Divergence](./04-f_Divergence.md)** | Fundamental theory & proofs | [Convexity & Jensen's Inequality](../01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md), [KL Divergence](./02-KL_Divergence.md), [Fenchel Conjugate & Duality](../01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md) | Direct implementation |
+| **06** | **[Variational Divergence Minimization (VDM)](./06-Variational_Divergence_Minimization_VDM.md)** | Intractable integrals to minimax neural optimization | [f-Divergence](./04-f_Divergence.md), [Fenchel Conjugate & Duality](../01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md), [LOTUS & Empirical Expectations](../04-Probability-and-Statistical-Estimation/07-LOTUS_and_Empirical_Expectation_Estimation.md) | $f$-GAN & adversarial training |
 
 ---
 
@@ -25,10 +26,11 @@
 For optimal conceptual continuity, learners should study these guides in the following sequential order:
 
 1. **[Entropy CrossEntropy CCE](./01-Entropy_CrossEntropy_CCE.md)**
-2. **[Jensen Shannon Divergence](./03-Jensen_Shannon_Divergence.md)**
-3. **[KL Divergence](./02-KL_Divergence.md)**
-4. **[Wasserstein Distance and EMD](./05-Wasserstein_Distance_and_EMD.md)**
-5. **[f Divergence](./04-f_Divergence.md)**
+2. **[KL Divergence](./02-KL_Divergence.md)**
+3. **[Jensen Shannon Divergence](./03-Jensen_Shannon_Divergence.md)**
+4. **[f Divergence](./04-f_Divergence.md)**
+5. **[Variational Divergence Minimization (VDM)](./06-Variational_Divergence_Minimization_VDM.md)**
+6. **[Wasserstein Distance and EMD](./05-Wasserstein_Distance_and_EMD.md)**
 
 ---
 

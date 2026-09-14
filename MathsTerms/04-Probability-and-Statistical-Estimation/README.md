@@ -18,6 +18,7 @@
 | **04** | **[MLE](./05-MLE.md)** | Fundamental theory & proofs | [Likelihood & Log-Likelihood](./04-Likelihood_and_Log_Likelihood.md), [Derivatives, Gradients & Jacobians](../03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Direct implementation |
 | **05** | **[NLL](./06-NLL.md)** | Fundamental theory & proofs | [Maximum Likelihood Estimation (MLE)](./05-MLE.md), [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md), [Loss Functions in Machine Learning](../03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Direct implementation |
 | **06** | **[Random Variables and Distributions](./01-Random_Variables_and_Distributions.md)** | Fundamental theory & proofs | [Probability Basics & Axioms](../01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Direct implementation |
+| **07** | **[LOTUS & Empirical Expectations](./07-LOTUS_and_Empirical_Expectation_Estimation.md)** | $\mathbb{E}[g(X)] = \int g(x)p(x)dx$, push-forwards, LLN | [Random Variables & Distributions](./01-Random_Variables_and_Distributions.md), [The Chain Rule & Backpropagation](../03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md) | Pushforward sampling in GANs, VAEs, Diffusion |
 
 ---
 
@@ -25,12 +26,13 @@
 
 For optimal conceptual continuity, learners should study these guides in the following sequential order:
 
-1. **[Common Probability Distributions](./02-Common_Probability_Distributions.md)**
-2. **[Joint Marginal Conditional Dist](./03-Joint_Marginal_Conditional_Dist.md)**
-3. **[Likelihood and Log Likelihood](./04-Likelihood_and_Log_Likelihood.md)**
-4. **[MLE](./05-MLE.md)**
-5. **[NLL](./06-NLL.md)**
-6. **[Random Variables and Distributions](./01-Random_Variables_and_Distributions.md)**
+1. **[Random Variables and Distributions](./01-Random_Variables_and_Distributions.md)**
+2. **[Common Probability Distributions](./02-Common_Probability_Distributions.md)**
+3. **[Joint Marginal Conditional Dist](./03-Joint_Marginal_Conditional_Dist.md)**
+4. **[Likelihood and Log Likelihood](./04-Likelihood_and_Log_Likelihood.md)**
+5. **[MLE](./05-MLE.md)**
+6. **[NLL](./06-NLL.md)**
+7. **[LOTUS & Empirical Expectations](./07-LOTUS_and_Empirical_Expectation_Estimation.md)**
 
 ---
 

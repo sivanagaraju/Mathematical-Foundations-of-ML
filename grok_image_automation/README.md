@@ -30,29 +30,34 @@ Mathematical-Foundations-of-ML/
 
 ---
 
-## 1. Authentication & Persistent Profiles (Run Once)
+## 1. Authentication & Multi-Account Persistent Sessions (Run Once)
+
+You can maintain multiple independent ChatGPT accounts and sessions side-by-side using `--account 1`, `--account 2`, etc.
+
+### ChatGPT Account 1 Login (Default):
+```powershell
+python grok_image_automation/chatgpt_engine.py --login --account 1
+```
+*(Or: `python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --login --account 1`)*
+- Chrome opens with `.chatgpt_profile/`.
+- Log in manually (enter email, password, passcode/2FA, verify).
+- Saved permanently into `.chatgpt_profile/`.
+
+### ChatGPT Account 2 Login (New / Second Gmail Account):
+```powershell
+python grok_image_automation/chatgpt_engine.py --login --account 2
+```
+*(Or: `python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --login --account 2`)*
+- Chrome opens with an isolated, clean directory: `.chatgpt_profile_2/`.
+- Log in with your **second Gmail account**.
+- Saved permanently into `.chatgpt_profile_2/`. Both accounts exist side-by-side without interference!
+- Optional: Use `--wait 90` if you need more time.
 
 ### Grok Login:
-
 ```powershell
 python grok_image_automation/grok_imagine_runner.py --engine grok --login
 ```
-
 - Opens Chrome to `https://grok.com`. Log in and press `[Enter]` in the terminal.
-
-### ChatGPT Images Login (Manual 60-Second Window):
-
-```powershell
-python grok_image_automation/chatgpt_engine.py --login
-```
-
-*(Or via either runner: `python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --login`)*
-
-- Chrome opens directly with the persistent `.chatgpt_profile/` directory.
-- You have **60 seconds** to log in manually (enter email, password, passcode/2FA, verify).
-- Once completed, the browser cleanly saves all session cookies, tokens, and storage state into `.chatgpt_profile/`.
-- That profile is then **permanently reused** by both `grok_mathsterms_runner.py` and `grok_imagine_runner.py`!
-- Optional: Use `--wait <seconds>` (e.g. `--wait 90`) if you need more time.
 
 ---
 
@@ -63,21 +68,31 @@ Dynamically parses topic sections (`### 1.`, `### 2.`, etc.) from monolithic mar
 ### Using ChatGPT Images 2.5 (`--engine chatgpt`):
 
 ```powershell
-# 1. Run all files in Category 01 in parallel (2 tabs):
+# 1. Run across ALL 6 categories/folders in MathsTerms with ChatGPT:
+python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --all --parallel 2 --skip-existing
+
+# 2. Run all files in Category 01 in parallel (2 tabs):
 python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --category "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\MathsTerms\01-Primal-Analysis-and-Foundations" --parallel 2 --skip-existing
 
-# 2. Or using category folder name shorthand (3 parallel tabs):
+# 3. Or using category folder name shorthand (3 parallel tabs):
 python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --category "01-Primal-Analysis-and-Foundations" --parallel 3 --skip-existing
 
-# 3. Generate images for Topic 1 of a specific file:
+# 4. Generate images for Topic 1 of a specific file:
 python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 1
 
-# 4. Generate multiple topics (e.g. Topics 1, 2, 4) in parallel:
+# 5. Generate multiple topics (e.g. Topics 1, 2, 4) in parallel:
 python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 1 2 4 --parallel 3
 
-# 5. Process all topics in a single file (parallel 2 tabs):
+# 6. Process all topics in a single file (parallel 2 tabs):
 python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --parallel 2 --skip-existing
+
+# 7. Run using your SECOND ChatGPT account (--account 2):
+python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --account 2 --all --parallel 2 --skip-existing
 ```
+
+> [!NOTE]
+> **Automatic "Too many requests" / "Got it" Modal Handling**:
+> If ChatGPT shows the "Too many requests" popup dialog at any point (during tab navigation, prompt submission, or generation polling), the engine automatically detects it, clicks the **"Got it"** button, runs a safe cooldown countdown, and retries prompt generation smoothly without crashing or stalling.
 
 ### Using Grok Imagine (`--engine grok`):
 
@@ -135,16 +150,18 @@ python grok_image_automation/grok_imagine_runner.py --engine grok --range 14 33 
 | Flag                      | Argument            | Description                                                             |
 | :-------------------------- | :-------------------- | :------------------------------------------------------------------------ |
 | `--engine`                | `grok` \| `chatgpt` | Engine to use for image generation (default:`grok`)                     |
+| `--account`               | `<id>`              | Account / session identifier (`1`, `2`, `'alt'`, etc., default: `1`)    |
 | `--login`                 | *(flag)*            | Launch browser to log in and save session to engine's profile           |
 | `--email`                 | `<email>`           | Account email for ChatGPT (default:`sivanagarajupachipulusu@gmail.com`) |
 | `--password`              | `<password>`        | Password for ChatGPT (default:`Pulk@_ta!nt_01!`)                        |
 | `--file`                  | `<path>`            | Path to a MathsTerms markdown file                                      |
 | `--category`              | `<name>`            | Category name or absolute path in MathsTerms                            |
 | `--all`                   | *(flag)*            | Process all files across all categories in MathsTerms                   |
-| `--topic`                 | `1 2 3...`          | Specific topic numbers to run                                           |
+| `--topic`                 | `1 2 3...` or `1,2` | Specific topic numbers to run (accepts space or comma-separated)         |
 | `--parallel`              | `1-3`               | Number of parallel generation tabs (default: 2)                         |
-| `--skip-existing`         | *(flag)*            | Skip topics that already have valid downloaded images                   |
-| `--regenerate`, `--force` | *(flag)*            | Force regenerate topics even if images already exist                    |
+| `--skip-existing`         | *(flag)*            | Automatically skip topics that already have valid images (**Default: TRUE**) |
+| `--regenerate`, `--force` | *(flag)*            | Force re-generate topics even if images already exist on disk           |
+| `--no-skip-existing`      | *(flag)*            | Disable skipping existing images                                        |
 | `--max-retries`           | `N`                 | Number of retries for incomplete topics (default:`2`)                   |
 | `--delay`                 | `N`                 | Cooldown seconds between batches (default:`6`)                          |
 | `--profile-dir`           | `<path>`            | Custom Chrome profile directory                                         |
