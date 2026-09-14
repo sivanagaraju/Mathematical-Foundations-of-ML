@@ -8,31 +8,55 @@
 
 ---
 
+## 🏛️ Module Architectural Dependency Graph
+
+```text
+  [01-Random Variables & Distributions]
+           │
+           ▼
+  [02-Common Probability Distributions]
+           │
+           ▼
+  [03-Joint, Marginal & Conditional Distributions]
+           │
+           ▼
+  [04-Likelihood & Log-Likelihood]
+           │
+           ▼
+  [05-Maximum Likelihood Estimation (MLE)]
+           │
+           ├───────────────────────────────┐
+           ▼                               ▼
+  [06-Negative Log-Likelihood (NLL)]  [07-LOTUS & Empirical Expectations]
+```
+
+---
+
 ## 🧭 Curated Mathematical Guides in this Cluster
 
 | # | Guide Title | Core Mathematical Concept | Key Upstream Prerequisites | Modern Generative AI Application |
 | :-: | :--- | :--- | :--- | :--- |
-| **01** | **[Common Probability Distributions](./02-Common_Probability_Distributions.md)** | Fundamental theory & proofs | [Random Variables & Distributions](./01-Random_Variables_and_Distributions.md), [Vectors & Matrices](../02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md), [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md) | Direct implementation |
-| **02** | **[Joint Marginal Conditional Dist](./03-Joint_Marginal_Conditional_Dist.md)** | Fundamental theory & proofs | [Probability Basics & Axioms](../01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md), [Random Variables & Distributions](./01-Random_Variables_and_Distributions.md) | Direct implementation |
-| **03** | **[Likelihood and Log Likelihood](./04-Likelihood_and_Log_Likelihood.md)** | Fundamental theory & proofs | [Joint, Marginal & Conditional Dist](./03-Joint_Marginal_Conditional_Dist.md), [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md) | Direct implementation |
-| **04** | **[MLE](./05-MLE.md)** | Fundamental theory & proofs | [Likelihood & Log-Likelihood](./04-Likelihood_and_Log_Likelihood.md), [Derivatives, Gradients & Jacobians](../03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Direct implementation |
-| **05** | **[NLL](./06-NLL.md)** | Fundamental theory & proofs | [Maximum Likelihood Estimation (MLE)](./05-MLE.md), [Logarithms & Exponential Functions](../01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md), [Loss Functions in Machine Learning](../03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Direct implementation |
-| **06** | **[Random Variables and Distributions](./01-Random_Variables_and_Distributions.md)** | Fundamental theory & proofs | [Probability Basics & Axioms](../01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md), [Functions, Derivatives & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Direct implementation |
-| **07** | **[LOTUS & Empirical Expectations](./07-LOTUS_and_Empirical_Expectation_Estimation.md)** | $\mathbb{E}[g(X)] = \int g(x)p(x)dx$, push-forwards, LLN | [Random Variables & Distributions](./01-Random_Variables_and_Distributions.md), [The Chain Rule & Backpropagation](../03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md) | Pushforward sampling in GANs, VAEs, Diffusion |
+| **01** | **[Random Variables & Distributions](./01-Random_Variables_and_Distributions.md)** | Discrete PMF vs Continuous PDF, CDF, Expectation $\mathbb{E}[X]$, Variance $\text{Var}(X)$, Pushforward transforms | [Probability Basics & Axioms](../01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md), [Functions & Rules](../03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | VAE latent variables $z \sim p(z)$, Normalizing Flows pushforward densities |
+| **02** | **[Common Probability Distributions](./02-Common_Probability_Distributions.md)** | Bernoulli, Categorical, Gaussian $\mathcal{N}(\mu, \sigma^2)$, Multivariate Gaussian $\mathcal{N}(\mu, \Sigma)$, Poisson | [Vectors & Matrices](../02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md), [Logarithms & Exponentials](../01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md) | Diffusion Gaussian noise schedules, LLM next-token categorical distributions |
+| **03** | **[Joint, Marginal & Conditional Distributions](./03-Joint_Marginal_Conditional_Dist.md)** | Joint density $p(x, y)$, Marginalization $\int p(x, y)dy$, Conditional density $p(y \mid x)$, Bayes' rule | [Probability Basics & Axioms](../01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md), [Random Variables & Distributions](./01-Random_Variables_and_Distributions.md) | Autoregressive factorization $p(x_{1:T})$, Classifier-Free Guidance (CFG) |
+| **04** | **[Likelihood & Log-Likelihood](./04-Likelihood_and_Log_Likelihood.md)** | Likelihood $L(\theta \mid x)$ vs probability $p(x \mid \theta)$, Log-Likelihood $\ell(\theta)$, Fisher Score $S(\theta) = \nabla_\theta \ell(\theta)$ | [Joint & Conditional Distributions](./03-Joint_Marginal_Conditional_Dist.md), [Derivatives & Gradients](../03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Evaluating LLM perplexity $\exp(-\frac{1}{T}\ell)$, Diffusion score matching |
+| **05** | **[Maximum Likelihood Estimation (MLE)](./05-MLE.md)** | Parameter estimation principle $\arg\max_\theta \ell(\theta)$, Analytical closed-form MLE, Gradient ascent updates | [Likelihood & Log-Likelihood](./04-Likelihood_and_Log_Likelihood.md), [Gradient Descent](../03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Supervised fine-tuning (SFT) of LLMs, GMM parameter estimation |
+| **06** | **[Negative Log-Likelihood (NLL)](./06-NLL.md)** | Universal generative loss $\mathcal{L} = -\sum \ln p_\theta(x)$, Cross-Entropy equivalence, Error gradient $\hat{p} - y$ | [MLE](./05-MLE.md), [Loss Functions](../03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md), [The Softmax Function](../03-Multivariate-Calculus-and-Optimization/06-Softmax.md) | Autoregressive token cross-entropy training loss, VAE reconstruction loss |
+| **07** | **[LOTUS & Empirical Expectations](./07-LOTUS_and_Empirical_Expectation_Estimation.md)** | $\mathbb{E}[g(X)] = \int g(x)p(x)dx$, Monte Carlo sample average $\frac{1}{N}\sum g(x_i)$, LLN, Reparameterization | [Random Variables & Distributions](./01-Random_Variables_and_Distributions.md), [Chain Rule & Backprop](../03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md) | VAE ELBO Monte Carlo expectations, Policy gradients in RLHF (PPO) |
 
 ---
 
 ## 🗺️ Recommended Pedagogical Reading Order
 
-For optimal conceptual continuity, learners should study these guides in the following sequential order:
+For optimal conceptual continuity without circular prerequisites, study these guides in the sequential order:
 
-1. **[Random Variables and Distributions](./01-Random_Variables_and_Distributions.md)**
-2. **[Common Probability Distributions](./02-Common_Probability_Distributions.md)**
-3. **[Joint Marginal Conditional Dist](./03-Joint_Marginal_Conditional_Dist.md)**
-4. **[Likelihood and Log Likelihood](./04-Likelihood_and_Log_Likelihood.md)**
-5. **[MLE](./05-MLE.md)**
-6. **[NLL](./06-NLL.md)**
-7. **[LOTUS & Empirical Expectations](./07-LOTUS_and_Empirical_Expectation_Estimation.md)**
+1. **[Random Variables & Distributions](./01-Random_Variables_and_Distributions.md)** — Master how random variables map uncertainty to the real number line, and contrast discrete PMFs with continuous PDFs.
+2. **[Common Probability Distributions](./02-Common_Probability_Distributions.md)** — Build intuition for the parametric distribution zoo (Bernoulli, Categorical, Gaussian, Multivariate Gaussian) that governs AI models.
+3. **[Joint, Marginal & Conditional Distributions](./03-Joint_Marginal_Conditional_Dist.md)** — Generalize to multi-variable dependencies, Bayes' rule, and the causal factorization that powers autoregressive LLMs.
+4. **[Likelihood & Log-Likelihood](./04-Likelihood_and_Log_Likelihood.md)** — Invert the probability perspective: treat the observed data as fixed and evaluate the plausibility of candidate model parameters.
+5. **[Maximum Likelihood Estimation (MLE)](./05-MLE.md)** — Derive closed-form parameter estimators and trace gradient ascent on high-dimensional likelihood surfaces.
+6. **[Negative Log-Likelihood (NLL)](./06-NLL.md)** — Flip likelihood maximization into loss minimization, establishing the mathematical engine behind cross-entropy training and perplexity evaluation.
+7. **[LOTUS & Empirical Expectations](./07-LOTUS_and_Empirical_Expectation_Estimation.md)** — Evaluate expectations of non-linear neural networks over complex distributions without intractable integration using Monte Carlo sampling and the reparameterization trick.
 
 ---
 
