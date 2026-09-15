@@ -163,5 +163,17 @@ python grok_image_automation/grok_imagine_runner.py --engine grok --range 14 33 
 | `--regenerate`, `--force` | *(flag)*            | Force re-generate topics even if images already exist on disk           |
 | `--no-skip-existing`      | *(flag)*            | Disable skipping existing images                                        |
 | `--max-retries`           | `N`                 | Number of retries for incomplete topics (default:`2`)                   |
+| `--include-all-sections`  | *(flag)*            | Include non-image sections (References & Beginner Comprehension, skipped by default) |
+| `--clean-ignored`         | *(flag)*            | Clean/delete obsolete generated image files for ignored sections (e.g. topic-13, topic-14) |
 | `--delay`                 | `N`                 | Cooldown seconds between batches (default:`6`)                          |
 | `--profile-dir`           | `<path>`            | Custom Chrome profile directory                                         |
+
+> [!TIP]
+> **Automatic Non-Image Section Skipping**:
+> By default, `grok_mathsterms_runner.py` automatically skips generating images for non-visual sections:
+> - **Section 13:** Beginner Comprehension Confidence Audit (rubrics / checklists)
+> - **Section 14:** Curated External Learning References & Further Study (link portfolios / tables)
+>
+> Pass `--include-all-sections` if you wish to generate images for these sections as well.
+> Pass `--clean-ignored` to automatically delete any existing image files for these sections from output folders.
+

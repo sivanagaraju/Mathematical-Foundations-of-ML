@@ -123,9 +123,44 @@ def slugify_title(title: str, max_len: int = 35) -> str:
         slug = slug[:max_len].rstrip('_')
     return slug if slug else "topic"
 
+# Patterns matching non-visual / metadata sections that should NOT generate images:
+# 1. Curated External Learning / References / Further Study (e.g. Section 14)
+# 2. Beginner Comprehension Confidence Audit (e.g. Section 13)
+IGNORED_SECTION_PATTERNS = [
+    re.compile(r'curated\s+external', re.IGNORECASE),
+    re.compile(r'external\s+(?:learning|references?|resources?)', re.IGNORECASE),
+    re.compile(r'\breferences?\b(?:\s*,\s*textbooks|\s*&\s*further|\s*$)', re.IGNORECASE),
+    re.compile(r'\b(?:further\s+study|further\s+reading)\b', re.IGNORECASE),
+    re.compile(r'beginner\s+comprehension', re.IGNORECASE),
+    re.compile(r'comprehension\s+confidence(?:\s+audit)?', re.IGNORECASE),
+    re.compile(r'\bconfidence\s+audit\b', re.IGNORECASE),
+]
+
+def is_ignorable_topic(topic: dict) -> bool:
+    """
+    Check if a topic section should be skipped for image generation.
+    Skips:
+      - Curated External Learning References / Further Study sections (e.g., Section 14)
+      - Beginner Comprehension Confidence Audit sections (e.g., Section 13)
+    """
+    num = topic.get("num")
+    raw_title = topic.get("raw_title", "")
+    title = topic.get("title", "")
+    combined = f"{raw_title} {title}".strip()
+
+    # Explicit section number checks for standard MathsTerms curriculum
+    if num == 13 and any(k in combined.lower() for k in ["beginner", "comprehension", "audit", "rubric"]):
+        return True
+    if num == 14 and any(k in combined.lower() for k in ["reference", "external", "study", "source", "textbook"]):
+        return True
+
+    # Pattern-based check matching title phrases regardless of section numbering
+    return any(p.search(combined) for p in IGNORED_SECTION_PATTERNS)
+
 def parse_markdown_topics(file_path: Path) -> tuple:
     """
     Parse a MathsTerms markdown file into its document title and numbered section topics.
+    Prioritizes top-level ## section headers, falling back to ### if needed.
     Returns: (doc_title, list_of_topics)
     """
     text = file_path.read_text(encoding="utf-8")
@@ -135,11 +170,11 @@ def parse_markdown_topics(file_path: Path) -> tuple:
     doc_title = doc_title_match.group(1).strip() if doc_title_match else file_path.stem
     doc_title = clean_title(doc_title)
     
-    # Match numbered sections: ### 1. ... or ## 1. ...
-    pattern = r'(?m)^###\s+(\d+)\.\s*(.+)$'
+    # Match numbered sections: prioritize top-level ## 1. ... then fallback to ### 1. ...
+    pattern = r'(?m)^##\s+(\d+)\.\s*(.+)$'
     matches = list(re.finditer(pattern, text))
     if not matches:
-        pattern = r'(?m)^##\s+(\d+)\.\s*(.+)$'
+        pattern = r'(?m)^###\s+(\d+)\.\s*(.+)$'
         matches = list(re.finditer(pattern, text))
         
     topics = []
@@ -155,14 +190,16 @@ def parse_markdown_topics(file_path: Path) -> tuple:
         # Clean trailing horizontal rule --- if present
         content = re.sub(r'\n---\s*$', '', content).strip()
         
-        topics.append({
+        topic_data = {
             "num": sec_num,
             "raw_title": raw_title,
             "title": title,
             "slug": slug,
             "content": content,
             "char_count": len(content)
-        })
+        }
+        topic_data["is_ignored"] = is_ignorable_topic(topic_data)
+        topics.append(topic_data)
         
     return doc_title, topics
 
@@ -526,6 +563,31 @@ def is_topic_complete(output_dir: Path, topic_identifier, expected_count: int = 
 
     return False
 
+def clean_ignored_section_images(output_dir: Path, topics: list) -> int:
+    """Optionally remove previously generated images for ignorable sections (e.g. topic-13, topic-14)."""
+    removed = 0
+    if not output_dir.exists():
+        return 0
+    ignored_topics = [t for t in topics if is_ignorable_topic(t)]
+    for t in ignored_topics:
+        t_num = t["num"]
+        slug = t["slug"]
+        patterns = [
+            f"topic-{t_num:02d}_*",
+            f"topic-{t_num:02d}.*",
+            f"topic-{t_num}_*"
+        ]
+        for pat in patterns:
+            for f in output_dir.glob(pat):
+                if f.is_file() and f.suffix.lower() in [".jpg", ".jpeg", ".png", ".webp"]:
+                    try:
+                        f.unlink()
+                        removed += 1
+                        print(f"  [CLEANED] Removed obsolete non-image section file: {f.name}", flush=True)
+                    except Exception as e:
+                        print(f"  [ERROR] Failed to delete {f.name}: {e}", flush=True)
+    return removed
+
 def run_topic_batch(context, chunk, doc_title: str, output_dir: Path, engine: str = "grok"):
     """Submit prompts for a chunk of topics across tabs and download generated images."""
     if engine == "chatgpt":
@@ -665,7 +727,8 @@ def process_single_mathsterms_file(
     parallel: int = 2,
     skip_existing: bool = False,
     max_retries: int = 2,
-    engine: str = "grok"
+    engine: str = "grok",
+    include_all_sections: bool = False
 ):
     """Process a single MathsTerms markdown file, creating its segregated images directory."""
     doc_title, all_topics = parse_markdown_topics(md_file)
@@ -684,24 +747,29 @@ def process_single_mathsterms_file(
 
     # Filter topics if requested
     topics_to_process = []
+    ignored_count = 0
     for t in all_topics:
         if topic_filter and t["num"] not in topic_filter:
             continue
+        if not include_all_sections and is_ignorable_topic(t):
+            ignored_count += 1
+            print(f"  [SKIP - NON-IMAGE SECTION] Topic {t['num']:02d} ('{t['title'][:32]}') skipped (References / Beginner Comprehension)", flush=True)
+            continue
         if skip_existing and is_topic_complete(output_dir, t, expected_count=expected_imgs):
-            print(f"  [SKIP] Topic {t['num']:02d} ({t['title'][:30]}) already complete in {output_dir.name}", flush=True)
+            print(f"  [SKIP - COMPLETE] Topic {t['num']:02d} ({t['title'][:30]}) already complete in {output_dir.name}", flush=True)
         else:
             topics_to_process.append(t)
 
     if not topics_to_process:
         filter_str = f" for requested topic(s) {topic_filter}" if topic_filter else ""
-        print(f"All topics already completed{filter_str} for {md_file.name}!", flush=True)
+        print(f"All topics already completed{filter_str} for {md_file.name}! (Ignored non-image sections: {ignored_count})", flush=True)
         return
 
     print("=" * 75, flush=True)
     print(f"ENGINE:  {engine.upper()}")
     print(f"FILE:    {md_file.name}")
     print(f"TITLE:   {doc_title}")
-    print(f"TOPICS:  {len(topics_to_process)} / {len(all_topics)} topic(s) to generate (Expected: {len(topics_to_process) * expected_imgs} images)")
+    print(f"TOPICS:  {len(topics_to_process)} / {len(all_topics)} topic(s) to generate (Ignored non-image sections: {ignored_count}, Expected: {len(topics_to_process) * expected_imgs} images)")
     print(f"OUTPUT:  {output_dir}")
     print("=" * 75, flush=True)
 
@@ -827,6 +895,8 @@ def main():
     parser.add_argument("--max-retries", type=int, default=2, help="Max retries for incomplete topics (default: 2)")
     parser.add_argument("--delay", type=int, default=6, help="Cooldown delay (seconds) between batches (default: 6)")
     parser.add_argument("--profile-dir", type=str, default="", help="Custom Chrome profile directory (overrides --account)")
+    parser.add_argument("--include-all-sections", action="store_true", default=False, help="Include non-image sections like Curated References and Beginner Comprehension (default: False, these sections are skipped)")
+    parser.add_argument("--clean-ignored", action="store_true", default=False, help="Delete existing generated image files for ignored sections (e.g. topic-13, topic-14) from output directories")
 
     args = parser.parse_args()
 
@@ -864,9 +934,25 @@ def main():
     expected_imgs = 1 if args.engine == "chatgpt" else 2
     img_folder = "chatgpt_images" if args.engine == "chatgpt" else "grok_images"
 
+    # Optional: clean existing image files for ignored sections
+    if args.clean_ignored:
+        total_cleaned = 0
+        print("=" * 75, flush=True)
+        print("CLEANING OBSOLETE NON-IMAGE SECTION FILES (--clean-ignored)")
+        print("=" * 75, flush=True)
+        for md_file in target_files:
+            doc_title, all_topics = parse_markdown_topics(md_file)
+            out_dir = md_file.parent / img_folder / md_file.stem
+            cleaned = clean_ignored_section_images(out_dir, all_topics)
+            if cleaned > 0:
+                print(f"  Cleaned {cleaned} file(s) in {out_dir.name}", flush=True)
+                total_cleaned += cleaned
+        print(f"\nTotal obsolete non-image files cleaned: {total_cleaned}\n", flush=True)
+
     # Pre-scan target files to check if all requested topics already exist
     files_with_pending_topics = []
     total_skipped_topics = 0
+    total_ignored_topics = 0
     total_needed_topics = 0
 
     for md_file in target_files:
@@ -877,6 +963,9 @@ def main():
         needed = []
         for t in all_topics:
             if topic_filter and t["num"] not in topic_filter:
+                continue
+            if not args.include_all_sections and is_ignorable_topic(t):
+                total_ignored_topics += 1
                 continue
             if skip_existing and is_topic_complete(out_dir, t, expected_count=expected_imgs):
                 total_skipped_topics += 1
@@ -895,7 +984,10 @@ def main():
         print(f"Skip existing:    {skip_existing}")
         print("=" * 75, flush=True)
         print(f"✅ [ALL COMPLETE] All topic images{filter_desc} across {len(target_files)} file(s) already exist!", flush=True)
-        print(f"   Skipped {total_skipped_topics} already completed topic(s). Nothing to generate.")
+        print(f"   Skipped {total_skipped_topics} already completed topic(s).")
+        if total_ignored_topics > 0:
+            print(f"   Ignored {total_ignored_topics} non-image section(s) (Curated References & Beginner Comprehension).")
+        print("   Nothing to generate.")
         print("   (Pass --regenerate or --force if you want to overwrite existing images.)\n", flush=True)
         return
 
@@ -904,7 +996,7 @@ def main():
     print("=" * 75, flush=True)
     print(f"MATHSTERMS IMAGE AUTOMATION RUNNER")
     print(f"Engine:           {args.engine.upper()} (Account: {args.account})")
-    print(f"Target files:     {len(target_run_files)} (Pending topics: {total_needed_topics}, Skipped: {total_skipped_topics})")
+    print(f"Target files:     {len(target_run_files)} (Pending topics: {total_needed_topics}, Skipped complete: {total_skipped_topics}, Ignored non-image: {total_ignored_topics})")
     print(f"Parallel tabs:    {parallel_val}")
     print(f"Skip existing:    {skip_existing}")
     print(f"Max retries:      {args.max_retries}")
@@ -941,7 +1033,8 @@ def main():
                     parallel=parallel_val,
                     skip_existing=skip_existing,
                     max_retries=args.max_retries,
-                    engine=args.engine
+                    engine=args.engine,
+                    include_all_sections=args.include_all_sections
                 )
 
             while len(context.pages) > 1:
