@@ -8,29 +8,31 @@
 
 ---
 
-### 📌 Table of Contents
+## 📌 Table of Contents
+
 > 🧭 **Recommended First-Reading Route:**
 > - **Beginner / Non-Math Background:** Read Section 1 (Executive Summary), Section 2 (Visual Coordinate Primitive), Section 6 (Physical Metaphors & Improv Storyteller), and Section 14 (Curated External References).
-> - **Practitioner / ML Engineer:** Read Section 1 (Metadata), Section 4 (Aha! Why Causal Factorization Eliminates Divergence Collapse), Section 10 (AI Bridge Table), and Section 11 (Runnable Python Simulation).
-> - **Deep Rigor / Researcher:** Read all sections sequentially including Section 8 (Theoretical Formulations), Section 9 (Proofs of Causal Equivalence & Information Retention), and Section 12 (Diagnostic Checks).
+> - **Practitioner / ML Engineer:** Read Section 1 (Metadata), Section 4 (Aha! Why Causal Factorization Eliminates Divergence Collapse), Section 8 (Hardware Realities & Memory Bandwidth Constraints), Section 10 (AI Bridge Table), and Section 11 (Dual-Stage Runnable Scripts).
+> - **Deep Rigor / Researcher:** Read all sections sequentially including Section 4 (Step-by-step Proof of Probability Chain Rule), Section 8 (Theoretical Formulations), Section 9 (Full Forward, Backward Logit Gradients & KV-Cache FLOPs), and Section 12 (Transfer Challenge).
 
-- [1. 🧭 Executive Summary & Metadata Header](#1--executive-summary--metadata-header)
-- [2. 🌟 The Missing Foundation (Domain-Specific Visual ASCII Art & Physical Primitive)](#2--the-missing-foundation-domain-specific-visual-ascii-art--physical-primitive)
-- [3. 🗣️ How to Read Every Mathematical Symbol (Pronunciation Guide)](#3--how-to-read-every-mathematical-symbol-pronunciation-guide)
-- [4. 💡 The Core "Aha!" Pivot Point & Memory Hooks](#4--the-core-aha-pivot-point--memory-hooks)
-- [5. 🥊 Contrastive Analysis: Why This Math & Why Naive Alternatives Fail (Why X, Not Y)](#5--contrastive-analysis-why-this-math--why-naive-alternatives-fail-why-x-not-y)
-- [6. 👶 ELI5 Intuition: The End-to-End AI Lifecycle](#6--eli5-intuition-the-end-to-end-ai-lifecycle)
-- [7. 📚 Deep Terminology Master Glossary (15 Core Concepts Dissected)](#7--deep-terminology-master-glossary-15-core-concepts-dissected)
-- [8. 📐 Mathematical Formulations, Rules & Hardware Realities](#8--mathematical-formulations-rules--hardware-realities)
-- [9. 🔢 Concrete Micro-Numerical Worked Examples (Pencil-and-Paper)](#9--concrete-micro-numerical-worked-examples-pencil-and-paper)
-- [10. 🔗 Connecting the Dots: Generative AI Architecture Blocks](#10--connecting-the-dots-generative-ai-architecture-blocks)
-- [11. 💻 Standalone Executable Python/PyTorch Verification Script](#11--standalone-executable-pythonpytorch-verification-script)
-- [12. 🩺 Diagnostic Mini-Checks & Common Traps](#12--diagnostic-mini-checks--common-traps)
-- [13. 🏆 Beginner Comprehension Confidence Audit](#13--beginner-comprehension-confidence-audit)
+- [1. 🧭 Executive Summary & Metadata Header](#1-executive-summary-metadata-header)
+- [2. 🌟 The Missing Foundation (Domain-Specific Visual ASCII Art & Physical Primitive)](#2-the-missing-foundation-domain-specific-visual-ascii-art-physical-primitive)
+- [3. 🗣️ How to Read Every Mathematical Symbol (Pronunciation Guide)](#3-how-to-read-every-mathematical-symbol-pronunciation-guide)
+- [4. 💡 The Core "Aha!" Pivot Point & Memory Hooks](#4-the-core-aha-pivot-point-memory-hooks)
+- [5. 🥊 Contrastive Analysis: Why This Math & Why Naive Alternatives Fail (Why X, Not Y)](#5-contrastive-analysis-why-this-math-why-naive-alternatives-fail-why-x-not-y)
+- [6. 👶 ELI5 Intuition: The End-to-End AI Lifecycle](#6-eli5-intuition-the-end-to-end-ai-lifecycle)
+- [7. 📚 Deep Terminology Master Glossary (15 Core Concepts Dissected)](#7-deep-terminology-master-glossary-15-core-concepts-dissected)
+- [8. 📐 Mathematical Formulations, Rules & Hardware Realities](#8-mathematical-formulations-rules-hardware-realities)
+- [9. 🔢 Concrete Micro-Numerical Worked Examples (Pencil-and-Paper)](#9-concrete-micro-numerical-worked-examples-pencil-and-paper)
+- [10. 🔗 Connecting the Dots: Generative AI Architecture Blocks](#10-connecting-the-dots-generative-ai-architecture-blocks)
+- [11. 💻 Standalone Executable Python/PyTorch Verification Script](#11-standalone-executable-pythonpytorch-verification-script)
+- [12. 🩺 Diagnostic Mini-Checks & Common Traps](#12-diagnostic-mini-checks-common-traps)
+- [13. 🏆 Beginner Comprehension Confidence Audit](#13-beginner-comprehension-confidence-audit)
+- [14. 🌐 Curated External Learning References & Further Study](#14-curated-external-learning-references-further-study)
 
 ---
 
-### 1. 🧭 Executive Summary & Metadata Header
+## 1. 🧭 Executive Summary & Metadata Header
 
 > [!NOTE]
 > ### 1. What is this chapter about?
@@ -41,15 +43,16 @@
 >
 > ### 3. What will I be able to do after this?
 > - Apply the probability chain rule to calculate exact joint sequence likelihoods and negative log-likelihood (NLL) losses.
+> - Compute forward next-token probabilities, analytical backward logit gradients ($\nabla_z \mathcal{L} = \hat{p} - y$), and parameter updates by hand.
 > - Construct and verify causal attention mask matrices ($M_{ij} \in \{0, -\infty\}$) to enforce strict temporal causality in Transformers.
 > - Calculate KV-cache memory footprints and arithmetic intensity limits during autoregressive generation.
 > - Implement temperature scaling, top-$k$, and nucleus (top-$p$) sampling strategies mathematically.
-> - Build and run a complete autoregressive token generation loop in PyTorch.
+> - Build, verify, and run complete autoregressive token generation loops in pure Python and PyTorch.
 >
 > ### 4. What do I need first?
 > Joint and conditional distributions ([Module 04, Chapter 03](../04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md)), the Softmax function ([Module 03, Chapter 06](../03-Multivariate-Calculus-and-Optimization/06-Softmax.md)), and Negative Log-Likelihood ([Module 04, Chapter 06](../04-Probability-and-Statistical-Estimation/06-NLL.md)).
 
-```
+```text
  ===================================================================================================
                  THE PROBABILITY CHAIN RULE & CAUSAL GENERATIVE FACTORIZATION
  ===================================================================================================
@@ -74,29 +77,29 @@
 
 ---
 
-### 2. 🌟 The Missing Foundation (Domain-Specific Visual ASCII Art & Physical Primitive)
+## 2. 🌟 The Missing Foundation (Domain-Specific Visual ASCII Art & Physical Primitive)
 
-#### What Real-World Physical Problem Forced Humans to Invent This Math?
+### What Real-World Physical Problem Forced Humans to Invent This Math?
 Suppose you want an AI to write a 500-word essay. If the vocabulary has $50,000$ possible words, how many possible 500-word essays exist? 
 $$\text{Total Combinations} = 50,000^{500} \approx 10^{2350}$$
 This number is unimaginably larger than the total number of atoms in the entire observable universe ($10^{80}$). You could never build a giant probability table to score every full essay all at once.
 
 Humans solved this combinatorial explosion with **Autoregressive Factorization**: instead of predicting all 500 words simultaneously in one impossible guess, the model only predicts **one single word at a time**, conditioned on the words already written!
 
-```
-   IMPOSSIBLE ALL-AT-ONCE GUESS                       FACTORIZED AUTOREGRESSIVE LADDER
-   (Combinatorial Explosion: 50,000⁵⁰⁰)               (500 Simple 50,000-Way Next-Word Choices)
+```text
+   IMPOSSIBLE ALL-AT-ONCE GUESS            FACTORIZED AUTOREGRESSIVE LADDER
+   (Combinatorial Explosion: 50,000^500)   (500 Sequential 50,000-Way Choices)
 
-         p(Word 1, Word 2, ..., Word 500)                    Step 1: p(Word 1) ──► "The"
-                     ▲                                                    │
-                     │                                       Step 2: p(Word 2 | "The") ──► "cat"
-        [ IMPOSSIBLE GIANT TABLE ]                                        │
-                     │                                       Step 3: p(Word 3 | "The cat") ──► "sat"
-                     ▼                                                    │
-             (10²³⁵⁰ States!)                                Step 4: p(Word 4 | "The cat sat") ──► "down"
+         p(Word 1, ..., Word 500)                 Step 1: p(Word 1) ──► "The"
+                    ▲                                          │
+                    │                             Step 2: p(Word 2 | "The") ──► "cat"
+       [ IMPOSSIBLE GIANT TABLE ]                              │
+                    │                             Step 3: p(Word 3 | "The cat") ──► "sat"
+                    ▼                                          │
+            (10^2350 States!)                     Step 4: p(Word 4 | "The cat sat") ──► "down"
 ```
 
-#### Plain-English Breakdown of Basic Notation
+### Plain-English Breakdown of Basic Notation
 - $p(x_1, \dots, x_T)$ (**Joint Probability**): The probability of the entire complete sentence or sequence occurring together.
 - $\prod_{t=1}^T$ (**Product Symbol**): Multiply all the terms together from step $t=1$ to step $t=T$.
 - $x_t$ (**Current Token**): The word, character, or pixel at time step $t$.
@@ -107,12 +110,12 @@ Humans solved this combinatorial explosion with **Autoregressive Factorization**
 
 ---
 
-### 3. 🗣️ How to Read Every Mathematical Symbol (Pronunciation Guide)
+## 3. 🗣️ How to Read Every Mathematical Symbol (Pronunciation Guide)
 
 | Mathematical Expression / Symbol | Read It Aloud As... (Pronunciation) | Plain-English Meaning & Intuition | Context in Machine Learning |
 | :--- | :--- | :--- | :--- |
 | $p(x_1, \dots, x_T) = \prod_{t=1}^T p(x_t \mid x_{<t})$ | *"p of x-one through x-T equals product from t equals one to T of p of x-sub-t given x-less-than-t"* | The total sequence likelihood is computed by multiplying the probability of each token given all previous tokens. | Fundamental autoregressive factorization identity driving LLMs. |
-| $\mathcal{L}_{\mathrm{NLL}} = -\sum_{t=1}^T \ln p_\theta(x_t \mid x_{<t})$ | *"NLL loss equals negative sum over t of natural log of p-sub-theta of x-sub-t given x-less-than-t"* | Total cross-entropy penalty summing negative log probabilities across all sequence positions. | Universal pre-training training objective of GPT, Claude, LLaMA. |
+| $\mathcal{L}_{\mathrm{NLL}} = -\sum_{t=1}^T \ln p_\theta(x_t \mid x_{<t})$ | *"NLL loss equals negative sum over t of natural log of p-sub-theta of x-sub-t given x-less-than-t"* | Total cross-entropy penalty summing negative log probabilities across all sequence positions. | Universal pre-training objective of GPT, Claude, LLaMA. |
 | $\text{Softmax}\left(\frac{QK^\top}{\sqrt{d_k}} + M\right)$ | *"Softmax of Q K-transpose over square root of d-k plus M"* | Scaled dot-product attention scores modified by causal mask matrix $M$. | Causal self-attention mechanism in decoder-only Transformers. |
 | $M_{ij} = -\infty \quad (j > i)$ | *"M-sub-i-j equals negative infinity for j greater than i"* | Set attention logits to negative infinity so that $\exp(-\infty) = 0$ after Softmax. | Blindfolds token $i$ from attending to future tokens $j > i$. |
 | $p_i = \frac{\exp(z_i / \tau)}{\sum_j \exp(z_j / \tau)}$ | *"p-sub-i equals exponential of z-sub-i over tau divided by sum of exponentials"* | Temperature-scaled Softmax distributing probability mass across vocabulary tokens. | Sampling temperature controlling diversity and randomness. |
@@ -120,12 +123,12 @@ Humans solved this combinatorial explosion with **Autoregressive Factorization**
 
 ---
 
-### 4. 💡 The Core "Aha!" Pivot Point & Memory Hooks
+## 4. 💡 The Core "Aha!" Pivot Point & Memory Hooks
 
 > 💡 **The Core "Aha!" Discovery:**  
 > **You don't need to know how to write an entire encyclopedia all at once. If you can accurately predict just the *single next word* given what came before, you can recursively write the entire encyclopedia!**
 
-#### Step-by-Step Mathematical Proof: The Exact Probability Chain Rule
+### Step-by-Step Mathematical Proof: The Exact Probability Chain Rule
 Why does multiplying conditional probabilities give the exact joint probability without any approximations? Let us prove this directly from the definition of conditional probability:
 
 1. By Kolmogorov's definition of conditional probability:
@@ -142,14 +145,14 @@ Why does multiplying conditional probabilities give the exact joint probability 
    $$\boxed{-\ln p(X) = \sum_{t=1}^T -\ln p(x_t \mid x_{<t})}$$
    This is the exact negative log-likelihood (NLL) / cross-entropy loss used in all modern LLMs!
 
-#### 5-Second Mental Memory Hooks
+### 5-Second Mental Memory Hooks
 - **"Auto" means Self, "Regressive" means Looking Back:** The model feeds its own past outputs back into itself as future inputs.
-- **Teacher Forcing in Training:** All tokens trained in parallel ($O(1)$) using causal mask blindfolds.
+- **Teacher Forcing in Training:** All tokens trained in parallel ($O(1)$ GPU steps) using causal mask blindfolds.
 - **Sequential in Inference:** Tokens generated one-by-one ($O(T)$) like dominos falling in a row.
 
 ---
 
-### 5. 🥊 Contrastive Analysis: Why This Math & Why Naive Alternatives Fail (Why X, Not Y)
+## 5. 🥊 Contrastive Analysis: Why This Math & Why Naive Alternatives Fail (Why X, Not Y)
 
 | Dimension | Autoregressive Model (GPT / LLM) | Variational Autoencoder (VAE) | Generative Adversarial Net (GAN) | Diffusion / Flow Matching |
 | :--- | :--- | :--- | :--- | :--- |
@@ -159,7 +162,7 @@ Why does multiplying conditional probabilities give the exact joint probability 
 | **Discrete Data Handling** | **Native & Flawless** (Categorical cross-entropy over tokens) | **Difficult** (Requires Gumbel-Softmax or discrete VQ) | **Fails** (Cannot backpropagate through discrete tokens) | **Developing** (Continuous diffusion over discrete embeddings) |
 | **Dominant AI Domain** | **Language & Code** (GPT-4, Claude, LLaMA-3) | **Latent Compression** (SDXL VAE, FLUX) | **Real-Time Image Synthesis** (StyleGAN) | **High-Fidelity Photorealism** (Midjourney, Sora) |
 
-#### Concrete Mathematical Failure Counterexample: Future Token Leakage from Causal Mask Omission
+### Concrete Mathematical Failure Counterexample: Future Token Leakage from Causal Mask Omission
 Suppose we train a decoder-only Transformer on a 4-token sequence $X = [x_1, x_2, x_3, x_4]$ without applying a causal attention mask (setting $M_{ij} = 0$ everywhere).
 
 1. The attention matrix $A = \operatorname{Softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)$ allows token $t$ to place attention weight on token $t+1$.
@@ -171,54 +174,52 @@ Suppose we train a decoder-only Transformer on a 4-token sequence $X = [x_1, x_2
 
 ---
 
-### 6. 👶 ELI5 Intuition: The End-to-End AI Lifecycle
+## 6. 👶 ELI5 Intuition: The End-to-End AI Lifecycle
 
-```
+```text
  ===================================================================================================
            END-TO-END AI LIFECYCLE: AUTOREGRESSIVE GENERATION IN CHATGPT
  ===================================================================================================
 
-  USER PROMPT: "Once upon a "
-       │
-       ▼ [1. Tokenizer maps text to discrete IDs]: [1203, 3401, 257]
-  CONTEXT WINDOW: 3 Tokens
-       │
-       ▼ [2. Transformer Forward Pass with Causal Masking]:
-  Computes vocabulary logits over 50,000 candidate words
-       │
-       ▼ [3. Softmax & Temperature Scaling (tau = 0.7)]:
-  p("time") = 0.92,  p("midnight") = 0.05,  p("ship") = 0.02
-       │
-       ▼ [4. Sample Next Token]: Emits "time" (ID 842)
-  CONTEXT WINDOW EXPANDS: "Once upon a time" (4 Tokens)
-       │
-       ▼ [5. Store past Keys and Values in KV-Cache & Repeat Loop until <EOS>!]
+   USER PROMPT: "Once upon a "
+        │
+        ▼ [1. Tokenizer maps text to discrete IDs]: [1203, 3401, 257]
+   CONTEXT WINDOW: 3 Tokens
+        │
+        ▼ [2. Transformer Forward Pass with Causal Masking]:
+   Computes vocabulary logits over 50,000 candidate words
+        │
+        ▼ [3. Softmax & Temperature Scaling (tau = 0.7)]:
+   p("time") = 0.92,  p("midnight") = 0.05,  p("ship") = 0.02
+        │
+        ▼ [4. Sample Next Token]: Emits "time" (ID 842)
+   CONTEXT WINDOW EXPANDS: "Once upon a time" (4 Tokens)
+        │
+        ▼ [5. Store past Keys and Values in KV-Cache & Repeat Loop until <EOS>!]
  ===================================================================================================
 ```
 
-#### Everyday Real-World Metaphors
+### Everyday Real-World Metaphors
 
-##### Metaphor 1: The Domino Chain Reaction
+#### Metaphor 1: The Domino Chain Reaction
 - You set up a line of 1,000 dominos.
 - You don't push all 1,000 dominos simultaneously.
 - You tip over Domino 1. Domino 1 knocks down Domino 2. Domino 2 knocks down Domino 3.
 - Each domino falling is an autoregressive step, triggered entirely by the domino immediately preceding it.
 
-##### Metaphor 2: The Sentence Completion Improviser
+#### Metaphor 2: The Sentence Completion Improviser
 - In an improv comedy game, an actor can only say one word, then their partner says one word.
 - You never know what the final sentence will be in advance.
 - You listen to what has been said so far, pick the single most natural next word, and pass the microphone.
 
----
-
-#### ⚠️ Where the Metaphor Breaks Down (Limits of the Analogy)
+### ⚠️ Where the Metaphor Breaks Down (Limits of the Analogy)
 The typing typist / improv storyteller metaphor suggests fluid, seamless continuity where each word spontaneously triggers the next. However:
 - **Inference Latency Bottleneck (Memory-Bandwidth Bound):** While training processes billions of tokens simultaneously via parallel triangular causal masks, generation requires an inherently sequential loop: generating $N$ tokens requires $N$ sequential forward passes. Even with KV caching, generation speeds are limited by GPU memory bandwidth transferring weights for every single token.
 - **Compounding Exposure Bias:** Training uses teacher forcing (conditioning on ground-truth human prefix tokens). During inference, the model conditions on its own generated outputs. A single slight hallucination drifts the conditioning sequence out of the training distribution, causing compounding nonsensical generations.
 
 ---
 
-### 7. 📚 Deep Terminology Master Glossary (15 Core Concepts Dissected)
+## 7. 📚 Deep Terminology Master Glossary (15 Core Concepts Dissected)
 
 | Term / Notation | Formal Mathematical Meaning | Plain-English Meaning (No Jargon) | How to Remember / Real-World Analogy |
 | :--- | :--- | :--- | :--- |
@@ -240,9 +241,9 @@ The typing typist / improv storyteller metaphor suggests fluid, seamless continu
 
 ---
 
-### 8. 📐 Mathematical Formulations, Rules & Hardware Realities
+## 8. 📐 Mathematical Formulations, Rules & Hardware Realities
 
-```
+```text
  ===================================================================================================
                  CAUSAL ATTENTION MASKING MATRIX (T = 4)
  ===================================================================================================
@@ -250,20 +251,20 @@ The typing typist / improv storyteller metaphor suggests fluid, seamless continu
    Attention Logit Matrix: (QKᵀ / √d_k) + M
    
    Positions:     Token 1 (The)   Token 2 (cat)   Token 3 (sat)   Token 4 (down)
-   Token 1 (The)  [    0.0     ,      -inf     ,      -inf     ,      -inf    ] ──► Can only see "The"
-   Token 2 (cat)  [    1.2     ,       0.0     ,      -inf     ,      -inf    ] ──► Can see "The", "cat"
-   Token 3 (sat)  [    0.8     ,       2.4     ,       0.0     ,      -inf    ] ──► Can see "The", "cat", "sat"
-   Token 4 (down) [    0.1     ,       1.5     ,       3.1     ,       0.0    ] ──► Can see all 4 tokens!
+   Token 1 (The)  [ 0.0 , -inf, -inf, -inf] ──► Can only see "The"
+   Token 2 (cat)  [ 1.2 ,  0.0, -inf, -inf] ──► Can see "The", "cat"
+   Token 3 (sat)  [ 0.8 ,  2.4,  0.0, -inf] ──► Can see "The", "cat", "sat"
+   Token 4 (down) [ 0.1 ,  1.5,  3.1,  0.0] ──► Can see all 4 tokens!
  ===================================================================================================
 ```
 
-#### Core Mathematical Equations
+### Core Mathematical Equations
 
 1. **The Exact Probability Chain Rule:**
    $$p(x_1, x_2, \dots, x_T) = p(x_1) \prod_{t=2}^T p(x_t \mid x_1, \dots, x_{t-1}) = \prod_{t=1}^T p(x_t \mid x_{<t})$$
 
 2. **Exact Log-Likelihood Evaluation:**
-   $$\ln p(x) = \sum_{t=1}^T \ln p_\theta(x_t \mid x_{<t})$$
+   $$\ln p(X) = \sum_{t=1}^T \ln p_\theta(x_t \mid x_{<t})$$
 
 3. **Causal Masked Attention (Vaswani et al., 2017):**
    $$\text{Attention}(Q, K, V) = \text{Softmax}\left( \frac{QK^\top}{\sqrt{d_k}} + M \right) V$$
@@ -273,61 +274,121 @@ The typing typist / improv storyteller metaphor suggests fluid, seamless continu
    $$\text{Memory}_{\text{KV}} = 2 \times B \times L \times H \times t \times d_k \times \text{sizeof}(\text{float16})$$
    where $B$ is batch size, $L$ is layer count, $H$ is number of attention heads, $t$ is current sequence length, and $d_k$ is head dimension.
 
-#### Hardware & Computer Memory Realities
+### Hardware & Computer Memory Realities
 - **Memory-Bandwidth Bound Inference:** Unlike training (which multiplies giant matrices and is compute-bound on Tensor Cores), autoregressive inference loads billions of weights from GPU High Bandwidth Memory (HBM) to compute just **one single token** per step. The Arithmetic Intensity is $< 1\text{ FLOP/byte}$, meaning token generation speed is limited entirely by memory bandwidth (e.g., $3.35\text{ TB/s}$ on an H100 GPU).
 - **KV-Cache Memory Growth & Fragmentation:** Generating a 32,000-token sequence with LLaMA-70B requires tens of gigabytes of VRAM purely to store past Key and Value tensors. **PagedAttention (vLLM)** manages this memory using virtual memory paging to eliminate memory fragmentation.
 
 ---
 
-### 9. 🔢 Concrete Micro-Numerical Worked Examples (Pencil-and-Paper)
+## 9. 🔢 Concrete Micro-Numerical Worked Examples (Pencil-and-Paper)
 
-#### Example 1: 3-Token Sequence Joint Likelihood by Hand
+### Example 1: 3-Token Sequence Joint Likelihood & Analytical Cross-Entropy Logit Gradients by Hand
 Let sentence be: $X = [\text{"The"}, \quad \text{"dog"}, \quad \text{"barks"}]$.
-Given the conditional probabilities:
-- $p(x_1 = \text{"The"}) = \mathbf{0.10}$
-- $p(x_2 = \text{"dog"} \mid x_1 = \text{"The"}) = \mathbf{0.40}$
-- $p(x_3 = \text{"barks"} \mid x_{<3} = \text{"The dog"}) = \mathbf{0.70}$
+Given the conditional probabilities from an autoregressive language model:
+- $p(x_1 = \text{"The"}) = \mathbf{0.1000}$
+- $p(x_2 = \text{"dog"} \mid x_1 = \text{"The"}) = \mathbf{0.4000}$
+- $p(x_3 = \text{"barks"} \mid x_{<3} = \text{"The dog"}) = \mathbf{0.7000}$
 
-##### 1. Calculate Joint Probability via Chain Rule Multiplication:
-$$p(\text{"The dog barks"}) = 0.10 \times 0.40 \times 0.70$$
-- Step 1: $0.10 \times 0.40 = 0.040$
-- Step 2: $0.040 \times 0.70 = \mathbf{0.0280}$
+#### Step 1: Forward Joint Probability, Sequence NLL, and Perplexity
+1. **Joint Probability via Chain Rule:**
+   $$p(\text{"The dog barks"}) = 0.1000 \times 0.4000 \times 0.7000$$
+   - Intermediate: $0.1000 \times 0.4000 = 0.0400$
+   - Final: $0.0400 \times 0.7000 = \mathbf{0.0280} \quad (2.80\%)$
+2. **Exact Sequence Negative Log-Likelihood (NLL):**
+   $$\text{NLL} = -\ln(0.1000) - \ln(0.4000) - \ln(0.7000)$$
+   - $-\ln(0.1000) \approx +2.302585\text{ nats}$
+   - $-\ln(0.4000) \approx +0.916291\text{ nats}$
+   - $-\ln(0.7000) \approx +0.356675\text{ nats}$
+   - Total $\text{NLL} = 2.302585 + 0.916291 + 0.356675 = \mathbf{3.575551\text{ nats}}$
+   - *Cross-Check:* $-\ln(0.0280) = \mathbf{3.575551\text{ nats}}$
+3. **Sequence Perplexity (PPL):**
+   $$\text{Average NLL per token} = \frac{3.575551}{3} \approx 1.191850\text{ nats}$$
+   $$\text{PPL} = \exp(1.191850) \approx \mathbf{3.2932}$$
+   *Interpretation:* Across this 3-token sequence, the model was on average as uncertain as choosing uniformly among $3.29$ equally likely words per position.
 
-##### 2. Calculate Exact Sequence Negative Log-Likelihood (NLL):
-$$\text{NLL} = -\ln(0.10) - \ln(0.40) - \ln(0.70)$$
-- $-\ln(0.10) \approx +2.302585$
-- $-\ln(0.40) \approx +0.916291$
-- $-\ln(0.70) \approx +0.356675$
-- Total $\text{NLL} = 2.302585 + 0.916291 + 0.356675 = \mathbf{3.575551\text{ nats}}$
-- **Cross-Check:** $-\ln(0.0280) = \mathbf{3.575551\text{ nats}}$
+#### Step 2: Backward Cross-Entropy Gradient Derivation on Logits
+Suppose at step 3, candidate vocabulary logits for candidate words `["barks", "runs", "sleeps"]` are:
+$$z = \begin{bmatrix} z_1 \\ z_2 \\ z_3 \end{bmatrix} = \begin{bmatrix} 2.0000 \\ 1.0000 \\ 0.0000 \end{bmatrix}$$
+The ground-truth next token is $x_3 = \text{"barks"}$ (index 1), so the one-hot target vector is $y = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}$.
+
+1. **Evaluate Predicted Softmax Probabilities ($\tau = 1.0$):**
+   $$e^{z_1} = e^{2.0} \approx 7.389056, \quad e^{z_2} = e^{1.0} \approx 2.718282, \quad e^{z_3} = e^{0.0} = 1.000000$$
+   $$\text{Denominator } Z = 7.389056 + 2.718282 + 1.000000 = 11.107338$$
+   $$\hat{p}_1 = \frac{7.389056}{11.107338} \approx \mathbf{0.665241}, \quad \hat{p}_2 = \frac{2.718282}{11.107338} \approx \mathbf{0.244728}, \quad \hat{p}_3 = \frac{1.000000}{11.107338} \approx \mathbf{0.090031}$$
+2. **Evaluate Cross-Entropy Loss:**
+   $$\mathcal{L}_3 = -\sum_{i=1}^3 y_i \ln(\hat{p}_i) = -\ln(\hat{p}_1) = -\ln(0.665241) \approx \mathbf{0.407606\text{ nats}}$$
+3. **Compute Exact Analytical Gradient Vector ($\nabla_z \mathcal{L}_3 = \hat{p} - y$):**
+   By the multivariate chain rule for Softmax + Cross-Entropy:
+   $$\frac{\partial \mathcal{L}_3}{\partial z_i} = \hat{p}_i - y_i$$
+   Evaluating each coordinate:
+   $$\frac{\partial \mathcal{L}_3}{\partial z_1} = \hat{p}_1 - y_1 = 0.665241 - 1.000000 = \mathbf{-0.334759}$$
+   $$\frac{\partial \mathcal{L}_3}{\partial z_2} = \hat{p}_2 - y_2 = 0.244728 - 0.000000 = \mathbf{+0.244728}$$
+   $$\frac{\partial \mathcal{L}_3}{\partial z_3} = \hat{p}_3 - y_3 = 0.090031 - 0.000000 = \mathbf{+0.090031}$$
+   $$\nabla_z \mathcal{L}_3 = \begin{bmatrix} -0.334759 \\ +0.244728 \\ +0.090031 \end{bmatrix}$$
+4. **Verification of Zero Sum:**
+   $$\sum_{i=1}^3 \frac{\partial \mathcal{L}_3}{\partial z_i} = -0.334759 + 0.244728 + 0.090031 = \mathbf{0.000000}$$
+   *Property:* The sum of cross-entropy logit gradients is always identically zero because shifting all logits by a constant does not change softmax probabilities.
+
+#### Step 3: Gradient Descent Update & Physical Sign Interpretation
+Let learning rate $\eta = 0.50$.
+1. **Update Logit Coordinates ($z \leftarrow z - \eta \nabla_z \mathcal{L}_3$):**
+   $$z_1^{(1)} = 2.0000 - (0.50)(-0.334759) = 2.0000 + 0.167380 = \mathbf{2.167380}$$
+   $$z_2^{(1)} = 1.0000 - (0.50)(+0.244728) = 1.0000 - 0.122364 = \mathbf{0.877636}$$
+   $$z_3^{(1)} = 0.0000 - (0.50)(+0.090031) = 0.0000 - 0.045016 = \mathbf{-0.045016}$$
+2. **Physical Coordinate Sign Interpretation:**
+   - **Why did $z_1$ increase ($2.0 \to 2.1674$)?**  
+     Token 1 is the correct target ($y_1 = 1$), but the model only predicted $\hat{p}_1 = 66.52\% < 100\%$. The residual error is negative ($-0.3348$). Subtracting a negative gradient *boosts* logit $z_1$, actively raising the probability of the correct word.
+   - **Why did $z_2$ and $z_3$ decrease?**  
+     Tokens 2 and 3 are incorrect ($y_2 = 0, y_3 = 0$). Their gradients are positive ($+0.2447$ and $+0.0900$). Subtracting positive gradients *suppresses* their logits, penalizing incorrect competitor tokens.
 
 ---
 
-#### Example 2: Temperature Scaling Logit Arithmetic
-Let vocabulary logits at step $t$ be $z = [2.0, \quad 1.0, \quad 0.0]$ for candidate words `["cat", "dog", "fish"]`.
+### Example 2: Temperature Scaling, Top-$k$ & Nucleus (Top-$p$) Sampling Worked by Hand
+Let vocabulary logits at step $t$ be $z = [2.0000, \quad 1.0000, \quad 0.0000]$ for `["cat", "dog", "fish"]`.
 
-##### 1. Evaluate at Temperature $\tau = 1.0$ (Default):
-- Exponentiate: $e^{2.0} \approx 7.389056$, \quad $e^{1.0} \approx 2.718282$, \quad $e^{0.0} = 1.000000$
-- Sum denominator: $Z = 7.389056 + 2.718282 + 1.000000 = 11.107338$
-- Probabilities:
-  $$p(\text{"cat"}) = \frac{7.389056}{11.107338} = \mathbf{0.6653}$$
-  $$p(\text{"dog"}) = \frac{2.718282}{11.107338} = \mathbf{0.2447}$$
-  $$p(\text{"fish"}) = \frac{1.000000}{11.107338} = \mathbf{0.0900}$$
+#### 1. Temperature Scaling Comparison
+- **At Default Temperature $\tau = 1.0$:**
+  $$p = [0.6653, \quad 0.2447, \quad 0.0900]$$
+- **At Focused Temperature $\tau = 0.50$:**
+  Scaled logits: $z / 0.5 = [4.0, \quad 2.0, \quad 0.0]$
+  $$e^{4.0} \approx 54.5982, \quad e^{2.0} \approx 7.3891, \quad e^{0.0} = 1.0000 \implies Z = 62.9873$$
+  $$p_{\tau=0.5} = [0.8668, \quad 0.1173, \quad 0.0159] \quad \text{(Target probability boosted by +20.1%!)}$$
+- **At Creative Temperature $\tau = 2.00$:**
+  Scaled logits: $z / 2.0 = [1.0, \quad 0.5, \quad 0.0]$
+  $$e^{1.0} \approx 2.7183, \quad e^{0.5} \approx 1.6487, \quad e^{0.0} = 1.0000 \implies Z = 5.3670$$
+  $$p_{\tau=2.0} = [0.5065, \quad 0.3072, \quad 0.1863] \quad \text{(Distribution flattens towards uniform randomness)}$$
 
-##### 2. Evaluate at Temperature $\tau = 0.5$ (Sharper / More Focused):
-- Scaled logits: $z / 0.5 = [4.0, \quad 2.0, \quad 0.0]$
-- Exponentiate: $e^{4.0} \approx 54.598150$, \quad $e^{2.0} \approx 7.389056$, \quad $e^{0.0} = 1.000000$
-- Sum denominator: $Z = 54.598150 + 7.389056 + 1.000000 = 62.987206$
-- Probabilities:
-  $$p(\text{"cat"}) = \frac{54.598150}{62.987206} = \mathbf{0.8668} \quad \text{(Confidence boosted from 66.5% to 86.7%!)}$$
-  $$p(\text{"dog"}) = \frac{7.389056}{62.987206} = \mathbf{0.1173}$$
-  $$p(\text{"fish"}) = \frac{1.000000}{62.987206} = \mathbf{0.0159}$$
+#### 2. Top-$k$ Truncation ($k = 2$)
+1. Sort candidate probabilities: $\text{"cat"} (0.6653) \ge \text{"dog"} (0.2447) > \text{"fish"} (0.0900)$.
+2. Retain top $k=2$ candidates: `["cat", "dog"]`. Set $p(\text{"fish"}) = 0$.
+3. Renormalize over surviving mass $Z_{\text{top2}} = 0.6653 + 0.2447 = 0.9100$:
+   $$p_{\text{renorm}}(\text{"cat"}) = \frac{0.6653}{0.9100} \approx \mathbf{0.7311}, \quad p_{\text{renorm}}(\text{"dog"}) = \frac{0.2447}{0.9100} \approx \mathbf{0.2689}$$
+
+#### 3. Nucleus / Top-$p$ Truncation ($p = 0.90$)
+1. Compute cumulative sum of sorted probabilities:
+   - "cat": $0.6653 < 0.90$
+   - "cat" + "dog": $0.6653 + 0.2447 = \mathbf{0.9100} \ge 0.90 \implies \text{Cutoff reached!}$
+2. Candidate pool consists of `["cat", "dog"]` (identical to top-2 here, but dynamically shrinks to 1 token when model confidence $\ge 90\%$).
 
 ---
 
-### 10. 🔗 Connecting the Dots: Generative AI Architecture Blocks
+### Example 3: KV-Cache Attention Arithmetic & FLOP Savings by Hand
+Consider generating token $t = 4$ in an autoregressive Transformer where head dimension $d_k = 64$.
+- **Without KV-Cache (Recomputing from scratch):**
+  - Must recompute Keys and Values for tokens $1, 2, 3, 4$: $4$ Key projections and $4$ Value projections.
+  - Must compute all 4 attention query-key dot products: $Q_1 K_1^\top, Q_2 K_{1..2}^\top, Q_3 K_{1..3}^\top, Q_4 K_{1..4}^\top$ ($1 + 2 + 3 + 4 = 10$ vector dot products).
+  - Total dot products across $T$ tokens scales quadratically as $\sum_{t=1}^T t = \frac{T(T+1)}{2} = \mathcal{O}(T^2)$.
+- **With KV-Cache (Reusing cached keys and values):**
+  - Keys and Values for tokens $1, 2, 3$ are already stored in GPU VRAM.
+  - Only compute Key and Value for the single new token $t = 4$ ($1$ projection each).
+  - Only compute the query vector for token $t=4$ against the 4 cached keys: $Q_4 K_{1..4}^\top$ ($1 \times 4$ dot product).
+  - Total dot products at step $t$: exactly $t$ multiplications. Total across $T$ tokens: $\sum_{t=1}^T 1 = \mathcal{O}(T)$ operations per step, eliminating redundant past computations!
 
-```
+---
+
+## 10. 🔗 Connecting the Dots: Generative AI Architecture Blocks
+
+```text
  ===================================================================================================
                  AUTOREGRESSIVE GENERATIVE ARCHITECTURES
  ===================================================================================================
@@ -348,91 +409,166 @@ Let vocabulary logits at step $t$ be $z = [2.0, \quad 1.0, \quad 0.0]$ for candi
 | **Audio Synthesis (WaveNet, AudioCraft)** | **Autoregressive Waveform Prediction** | Predicts raw audio amplitude samples at 24,000 samples per second | Sample-by-sample generation is too slow for real-time streaming without chunked or diffusion hybrid models. |
 | **Autoregressive Vision (PixelCNN, Chameleon)** | **Raster-Scan Causal Pixel Generation** | Generates discrete image patches row-by-row, conditioning on upper-left context | Raster-scan ordering arbitrarily breaks 2D bidirectional spatial symmetry. |
 | **Robotics (RT-2 / OpenVLA)** | **Autoregressive Action Tokenization** | Predicts 7-DoF robotic arm motor commands as discrete token sequences | Continuous physical actuator trajectories are discretized into coarse bins, causing control chatter. |
+
 ---
 
-### 11. 💻 Standalone Executable Python/PyTorch Verification Script
+## 11. 💻 Standalone Executable Python/PyTorch Verification Script
 
 ```python
 """
-Autoregressive Modeling & Causal Attention Simulation
-=====================================================
-Demonstrates:
-1. Exact probability chain rule joint likelihood calculation
-2. Causal attention masking matrix generation in PyTorch
-3. Autoregressive token-by-token generation loop with temperature sampling
+Autoregressive Modeling & Causal Decoding Verification Suite
+============================================================
+Part A: Pure Python standard library (built-in math only, zero dependencies).
+Part B: PyTorch industrial verification suite with autograd logit checks,
+        causal masking verification, and KV-cache bit-exact equivalence.
 """
+
+import math
+
+print("=" * 80)
+print("PART A: PURE PYTHON STDLIB AUTOREGRESSIVE & TEMPERATURE DECODING")
+print("=" * 80)
+
+# ─── 1. Pure Python Softmax with Temperature ───
+def pure_python_softmax(logits, temperature=1.0):
+    """Numerically stable softmax with temperature scaling."""
+    scaled = [l / temperature for l in logits]
+    max_val = max(scaled)
+    exp_vals = [math.exp(v - max_val) for v in scaled]
+    total = sum(exp_vals)
+    return [v / total for v in exp_vals]
+
+# Section 9 Example 1 Verification
+logits = [2.0, 1.0, 0.0]
+probs_tau1 = pure_python_softmax(logits, temperature=1.0)
+probs_tau05 = pure_python_softmax(logits, temperature=0.50)
+probs_tau20 = pure_python_softmax(logits, temperature=2.00)
+
+print(f"1. Pure Python Temperature Scaling (Logits: {logits}):")
+print(f"   * tau = 1.0: {[round(p, 4) for p in probs_tau1]} (Expected: [0.6652, 0.2447, 0.0900])")
+print(f"   * tau = 0.5: {[round(p, 4) for p in probs_tau05]} (Expected: [0.8668, 0.1173, 0.0159])")
+print(f"   * tau = 2.0: {[round(p, 4) for p in probs_tau20]} (Expected: [0.5065, 0.3072, 0.1863])")
+
+assert math.isclose(probs_tau1[0], 0.6652, rel_tol=1e-3)
+assert math.isclose(probs_tau05[0], 0.8668, rel_tol=1e-3)
+assert math.isclose(probs_tau20[0], 0.5065, rel_tol=1e-3)
+
+# ─── 2. Cross-Entropy Loss & Analytical Logit Gradient ───
+target_idx = 0 # Target: "barks"
+loss_ce = -math.log(probs_tau1[target_idx])
+grad_logits = [probs_tau1[i] - (1.0 if i == target_idx else 0.0) for i in range(len(logits))]
+
+print(f"\n2. Pure Python Loss & Analytical Logit Gradients (Target: Index {target_idx}):")
+print(f"   * Cross-Entropy Loss:    {loss_ce:.6f} nats (Expected: 0.407606)")
+print(f"   * Analytical Logit Grad: {[round(g, 6) for g in grad_logits]}")
+print(f"   * Sum of Gradients:      {sum(grad_logits):.8f} (Expected: 0.0000)")
+
+assert math.isclose(loss_ce, 0.407606, rel_tol=1e-4)
+assert math.isclose(grad_logits[0], -0.334759, rel_tol=1e-4)
+assert math.isclose(grad_logits[1], +0.244728, rel_tol=1e-4)
+assert math.isclose(grad_logits[2], +0.090031, rel_tol=1e-4)
+assert math.isclose(sum(grad_logits), 0.0, abs_tol=1e-7)
+
+# ─── 3. Top-k & Nucleus (Top-p) Filtering ───
+def top_k_filter(probs, k=2):
+    indexed = sorted(enumerate(probs), key=lambda x: x[1], reverse=True)
+    surviving_indices = {idx for idx, _ in indexed[:k]}
+    filtered = [p if i in surviving_indices else 0.0 for i, p in enumerate(probs)]
+    total = sum(filtered)
+    return [p / total for p in filtered]
+
+def top_p_filter(probs, p_thresh=0.90):
+    indexed = sorted(enumerate(probs), key=lambda x: x[1], reverse=True)
+    cum = 0.0
+    surviving_indices = set()
+    for idx, p in indexed:
+        surviving_indices.add(idx)
+        cum += p
+        if cum >= p_thresh:
+            break
+    filtered = [p if i in surviving_indices else 0.0 for i, p in enumerate(probs)]
+    total = sum(filtered)
+    return [p / total for p in filtered]
+
+top_k_probs = top_k_filter(probs_tau1, k=2)
+top_p_probs = top_p_filter(probs_tau1, p_thresh=0.90)
+
+print(f"\n3. Pure Python Sampling Filters:")
+print(f"   * Top-k (k=2) Renormalized: {[round(p, 4) for p in top_k_probs]} (Expected: [0.7311, 0.2689, 0.0])")
+print(f"   * Top-p (p=0.90) Renormalized: {[round(p, 4) for p in top_p_probs]}")
+
+assert math.isclose(top_k_probs[0], 0.7311, rel_tol=1e-3)
+assert top_k_probs[2] == 0.0
+assert math.isclose(top_p_probs[0], 0.7311, rel_tol=1e-3)
+print("Part A Pure Python Suite: ALL CHECKS PASSED [OK]")
+
+print("\n" + "=" * 80)
+print("PART B: PYTORCH INDUSTRIAL VERIFICATION & KV-CACHE EQUIVALENCE SUITE")
+print("=" * 80)
+
 import torch
 import torch.nn.functional as F
 import numpy as np
 
-print("=" * 75)
-print("AUTOREGRESSIVE MODELING & CAUSAL ATTENTION SIMULATION")
-print("=" * 75)
+# ─── 1. PyTorch Autograd vs Analytical Logit Gradient ───
+z_torch = torch.tensor([2.0, 1.0, 0.0], dtype=torch.float64, requires_grad=True)
+target_torch = torch.tensor(0, dtype=torch.long)
+loss_torch = F.cross_entropy(z_torch.unsqueeze(0), target_torch.unsqueeze(0))
+loss_torch.backward()
 
-# ─── 1. Exact Probability Chain Rule Verification ───
-print("\n1. EXACT PROBABILITY CHAIN RULE (Sequence: 'The dog barks'):")
-p_the = 0.10
-p_dog_given_the = 0.40
-p_barks_given_thedog = 0.70
+expected_grad = torch.tensor([-0.3347590442, +0.2447284711, +0.0900305732], dtype=torch.float64)
+print("1. PyTorch Autograd vs Analytical Gradients:")
+print(f"   * PyTorch Loss:       {loss_torch.item():.6f}")
+print(f"   * PyTorch z.grad:     {z_torch.grad.tolist()}")
+print(f"   * Analytical Grad:    {expected_grad.tolist()}")
 
-joint_prob = p_the * p_dog_given_the * p_barks_given_thedog
-joint_nll = -(np.log(p_the) + np.log(p_dog_given_the) + np.log(p_barks_given_thedog))
+assert torch.allclose(z_torch.grad, expected_grad, atol=1e-6)
 
-print(f"   * Multiplied Joint Probability: {joint_prob:.4f} (Expected: 0.0280) [OK]")
-print(f"   * Exact Joint NLL Loss:         {joint_nll:.4f} nats (Expected: 3.5756) [OK]")
-
-assert np.isclose(joint_prob, 0.0280), "Joint probability mismatch!"
-assert np.isclose(joint_nll, 3.57555, atol=1e-4), "Joint NLL mismatch!"
-
-# ─── 2. Temperature Softmax Verification ───
-print("\n2. TEMPERATURE SOFTMAX COMPARISON (Logits: [2.0, 1.0, 0.0]):")
-z = torch.tensor([2.0, 1.0, 0.0])
-p_tau1 = F.softmax(z / 1.0, dim=-1)
-p_tau05 = F.softmax(z / 0.5, dim=-1)
-
-print(f"   * Probabilities at tau=1.0: {p_tau1.numpy().round(4).tolist()}")
-print(f"   * Probabilities at tau=0.5: {p_tau05.numpy().round(4).tolist()}")
-assert torch.allclose(p_tau05, torch.tensor([0.8668, 0.1173, 0.0159]), atol=1e-3)
-
-# ─── 3. PyTorch Causal Attention Mask Generation ───
-print("\n3. CAUSAL ATTENTION MASK GENERATION (Sequence Length T = 4):")
+# ─── 2. Causal Attention Mask Verification ───
 seq_len = 4
-causal_mask = torch.triu(torch.full((seq_len, seq_len), float('-inf')), diagonal=1)
-
-print(f"   * Causal Mask Matrix M:\n{causal_mask.numpy()}")
-print("   * Upper triangle filled with -inf (future strictly masked! [OK])")
-
-# ─── 4. Autoregressive Generation Loop Simulation ───
-print("\n4. AUTOREGRESSIVE GENERATION LOOP SIMULATION (T = 5 Tokens):")
-vocab = ["The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog"]
-vocab_size = len(vocab)
-
-# Simulated context token IDs
-context = [0] # Starts with "The"
-print(f"   Starting Prompt: {[vocab[idx] for idx in context]}")
-
+d_k = 8
 torch.manual_seed(42)
-for step in range(4):
-    simulated_logits = torch.randn(vocab_size)
-    simulated_logits[(context[-1] + 1) % vocab_size] += 3.0
-    
-    probs = F.softmax(simulated_logits / 0.8, dim=-1)
-    next_token = torch.multinomial(probs, num_samples=1).item()
-    context.append(next_token)
+Q = torch.randn(1, seq_len, d_k)
+K = torch.randn(1, seq_len, d_k)
+V = torch.randn(1, seq_len, d_k)
 
-generated_text = " ".join([vocab[idx] for idx in context])
-print(f"   * Generated Sequence: '{generated_text}' [OK]")
+scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(d_k)
+causal_mask = torch.triu(torch.full((seq_len, seq_len), float('-inf')), diagonal=1)
+masked_scores = scores + causal_mask
+attn_weights = F.softmax(masked_scores, dim=-1)
+out_parallel = torch.matmul(attn_weights, V)
 
-print("\n" + "=" * 75)
+print(f"\n2. Causal Attention Mask Verification (Seq Len T = {seq_len}):")
+print(f"   * Masked Upper Triangle Sum: {torch.triu(attn_weights, diagonal=1).sum().item():.8f} (Expected: 0.0)")
+assert torch.allclose(torch.triu(attn_weights, diagonal=1), torch.zeros(seq_len, seq_len))
+
+# ─── 3. KV-Cache Step Equivalence Check ───
+# In step 3 (0-indexed, 4th token), we only pass Q for token 3 and reuse cached K[:4], V[:4]
+q_step = Q[:, 3:4, :] # (1, 1, d_k)
+k_cache = K[:, :4, :] # (1, 4, d_k)
+v_cache = V[:, :4, :] # (1, 4, d_k)
+
+step_scores = torch.matmul(q_step, k_cache.transpose(-2, -1)) / math.sqrt(d_k)
+step_attn = F.softmax(step_scores, dim=-1)
+out_cached_step = torch.matmul(step_attn, v_cache) # (1, 1, d_k)
+
+cached_diff = torch.norm(out_parallel[:, 3:4, :] - out_cached_step).item()
+print(f"\n3. KV-Cache Numerical Equivalence at Step 4:")
+print(f"   * Difference between Parallel & Cached Step: {cached_diff:.8f}")
+print(f"   * Exact Equivalence (< 1e-6): {cached_diff < 1e-6} [OK]")
+
+assert cached_diff < 1e-6, "KV-Cache representation diverged from parallel attention!"
+
+print("\n" + "=" * 80)
 print("ALL AUTOREGRESSIVE MODELING TESTS PASSED SUCCESSFULLY! [OK]")
-print("=" * 75)
+print("=" * 80)
 ```
 
 ---
 
-### 12. 🩺 Diagnostic Mini-Checks & Common Traps
+## 12. 🩺 Diagnostic Mini-Checks & Common Traps
 
-#### ✅ Self-Test Questions & Answers
+### Self-Test Questions & Answers
 
 1. **Q:** Why can Autoregressive models train in parallel across all tokens but generate sequentially during inference?  
    **A:** During training, we use **Teacher Forcing** with a **Causal Mask**, feeding all ground-truth tokens simultaneously in a single forward pass ($O(1)$ GPU steps). During inference, token $t$ does not exist yet; the model must generate and sample token $t$ before computing token $t+1$, creating a sequential $O(T)$ dependency.
@@ -443,39 +579,47 @@ print("=" * 75)
 3. **Q:** What is the difference between Top-$k$ and Top-$p$ (Nucleus) sampling?  
    **A:** **Top-$k$** keeps a fixed number $k$ of candidates regardless of how confident the model is. **Top-$p$** dynamically expands or shrinks the candidate pool so their cumulative probability sums to $p$, adapting to whether the model is highly certain (1 token) or uncertain (50 tokens).
 
-#### 🎯 Transfer Challenge: Apply Beyond the Worked Example
+---
 
-**Scenario:** A 3-token sequence $oldsymbol{w} = (w_1, w_2, w_3)$ is evaluated by an autoregressive Transformer model. The model computes conditional probabilities:
+### 🎯 Transfer Challenge: Apply Beyond the Worked Example
+
+**Scenario:** A 3-token sequence $\boldsymbol{w} = (w_1, w_2, w_3)$ is evaluated by an autoregressive Transformer model. The model computes conditional probabilities:
 - $P(w_1) = 0.50$
 - $P(w_2 \mid w_1) = 0.40$
 - $P(w_3 \mid w_1, w_2) = 0.80$
 
 1. **Calculate Joint Probability:** Using the probability chain rule $P(w_1, w_2, w_3) = P(w_1) \cdot P(w_2 \mid w_1) \cdot P(w_3 \mid w_1, w_2)$, calculate the total sequence probability.
-2. **Compute Negative Log-Likelihood (NLL):** Using natural logarithms ($\ln 0.50 pprox -0.6931, \ln 0.40 pprox -0.9163, \ln 0.80 pprox -0.2231$), compute the sequence NLL:
-   $$	ext{NLL}(oldsymbol{w}) = -\sum_{t=1}^3 \ln P(w_t \mid w_{<t})$$
-3. **Calculate Sequence Perplexity (PPL):** Compute $	ext{PPL} = \exp\left(rac{	ext{NLL}}{3}ight)$ and explain what this score means for language model evaluation.
+2. **Compute Negative Log-Likelihood (NLL):** Using natural logarithms ($\ln 0.50 \approx -0.6931, \ln 0.40 \approx -0.9163, \ln 0.80 \approx -0.2231$), compute the sequence NLL:
+   $$\text{NLL}(\boldsymbol{w}) = -\sum_{t=1}^3 \ln P(w_t \mid w_{<t})$$
+3. **Calculate Sequence Perplexity (PPL):** Compute $\text{PPL} = \exp\left(\frac{\text{NLL}}{3}\right)$ and explain what this score means for language model evaluation.
 
 *Transfer Solution:*
-1. Joint Probability:
-   $$P(w_1, w_2, w_3) = 0.50 	imes 0.40 	imes 0.80 = \mathbf{0.1600} \quad (16\%)$$
-2. Negative Log-Likelihood:
-   $$	ext{NLL}(oldsymbol{w}) = -[\ln(0.50) + \ln(0.40) + \ln(0.80)] = -[-0.6931 - 0.9163 - 0.2231] = -[-1.8325] = \mathbf{1.8325} 	ext{ nats}$$
-3. Sequence Perplexity:
-   $$	ext{Average NLL per token} = rac{1.8325}{3} pprox 0.6108 	ext{ nats}$$
-   $$	ext{PPL} = \exp(0.6108) pprox \mathbf{1.8420}$$
+1. **Joint Probability:**
+   $$P(w_1, w_2, w_3) = 0.50 \times 0.40 \times 0.80 = \mathbf{0.1600} \quad (16\%)$$
+2. **Negative Log-Likelihood:**
+   $$\text{NLL}(\boldsymbol{w}) = -[\ln(0.50) + \ln(0.40) + \ln(0.80)] = -[-0.6931 - 0.9163 - 0.2231] = -[-1.8325] = \mathbf{1.8325}\text{ nats}$$
+3. **Sequence Perplexity:**
+   $$\text{Average NLL per token} = \frac{1.8325}{3} \approx 0.6108\text{ nats}$$
+   $$\text{PPL} = \exp(0.6108) \approx \mathbf{1.8420}$$
    *Interpretation:* A perplexity of $1.84$ means that at each generation step, the model is on average as uncertain as if choosing uniformly among $1.84$ equally likely candidate tokens. Lower perplexity indicates superior predictive confidence.
 
 ---
 
-#### ⚠️ Production Engineering Traps
+### ⚠️ Production Engineering Traps
 
 | Trap | Why It Fails | Production Fix |
 | :--- | :--- | :--- |
 | **Omitting the Causal Mask during Transformer training** | Future tokens leak into current attention scores; model achieves 0 training loss but generates garbage | Always add `torch.triu(..., diagonal=1)` mask before Softmax |
 | **Forgetting KV-Cache during long-context generation** | Recomputing entire context on every token slows inference by $10\times$ to $50\times$ | Maintain persistent `past_key_values` across decoding steps |
 | **Allowing KV-Cache memory to exceed GPU VRAM** | Long sequence decoding triggers sudden out-of-memory crashes | Use **PagedAttention (vLLM)** or flash-decoding kernels |
+| **Overly high temperature ($\tau > 1.5$) during factual question answering** | Probability distribution flattens, causing random hallucination of low-probability tokens | Use $\tau \le 0.2$ for code/math and $\tau \approx 0.7$ for creative prose |
 
-#### 📋 Summary Checklist
+### Spaced Return Plan
+- **Tomorrow:** Write out the probability chain rule for a 4-token sequence. Compute by hand the analytical cross-entropy logit gradient vector $\hat{p} - y$ for 3 vocabulary items.
+- **In One Week:** Explain to a colleague why Transformer pretraining is compute-bound ($O(1)$ parallel steps) while inference is memory-bandwidth bound ($O(T)$ sequential steps).
+- **In One Month:** Connect this chapter to [Module 06, Chapter 02 (Recurrent Neural Networks)](./02-Recurrent_Neural_Networks.md) and compare RNN $O(1)$ hidden state inference with Transformer KV-cache memory scaling.
+
+### Summary Checklist
 - [x] Autoregressive Models decompose joint probability distributions via the exact probability chain rule: $p(x) = \prod p(x_t \mid x_{<t})$.
 - [x] Causal Masking ($M_{ij} = -\infty$) allows parallel training while preventing future token leakage.
 - [x] Teacher Forcing trains on ground-truth tokens in a single fast parallel step.
@@ -484,25 +628,26 @@ print("=" * 75)
 
 ---
 
-### 13. 🏆 Beginner Comprehension Confidence Audit
-- [x] **Gate 1: Zero-Jargon Gate** — Every mathematical symbol ($p, \prod, \mid, x_{<t}, \tau, M_{ij}$) is defined in plain English before use.
+## 13. 🏆 Beginner Comprehension Confidence Audit
+
+- [x] **Gate 1: Zero-Jargon Gate** — Every mathematical symbol ($p, \prod, \mid, x_{<t}, \tau, M_{ij}, y_t$) is defined in plain English before use.
 - [x] **Gate 2: Visual Geometry Gate** — Clear visual ASCII diagrams depict joint distribution combinatorial explosion vs factorized chain rule ladders and causal masking grids.
-- [x] **Gate 3: No-Magic-Formulas Gate** — The exact probability chain rule and log-likelihood summation are derived algebraically step-by-step.
+- [x] **Gate 3: No-Magic-Formulas Gate** — The exact probability chain rule, log-likelihood summation, and analytical logit gradients $\hat{p} - y$ are derived algebraically step-by-step.
 - [x] **Gate 4: Zero-Skipped-Arithmetic Gate** — Micro-numerical examples show every multiplication, logarithm, temperature scaling, and probability calculation explicitly.
-- [x] **Gate 5: AI & PyTorch Connection Gate** — ChatGPT decoding loop, KV-caching, and an executable PyTorch script verify full functionality.
+- [x] **Gate 5: AI & PyTorch Connection Gate** — ChatGPT decoding loop, KV-caching, and runnable dual-stage Python/PyTorch verification scripts verify complete functionality.
 
 ---
 
-### 14. 🌐 Curated External Learning References & Further Study
+## 14. 🌐 Curated External Learning References & Further Study
 
 To deepen your mathematical grasp of autoregressive sequence modeling, causal attention, and decoding mechanics:
 
-| Resource / Link | Type | Key Topic / Concept Covered | When to Use & Prerequisites | Verified Status |
+| Resource & Link | Type & Authority | Specific Section / Scope | Why It Is Included & What It Clarifies | Verification & Status |
 | :--- | :--- | :--- | :--- | :--- |
-| [Andrej Karpathy: Neural Networks: Zero to Hero (Building GPT from scratch)](https://www.youtube.com/watch?v=kCc8FmEb1nY) | Video Lesson & Code Walkthrough | Implements a full autoregressive GPT model with multi-head causal attention from scratch. | Must-watch tutorial for hands-on deep understanding of autoregression. | ✅ Active YouTube Classic |
-| [Ashish Vaswani et al.: Attention Is All You Need (2017)](https://arxiv.org/abs/1706.03762) | Seminal Foundation Paper | The original paper introducing the Transformer architecture, scaled dot-product attention, and causal masking. | Essential reading for all modern AI engineering and research. | ✅ Published NeurIPS Classic |
-| [Aaron van den Oord et al.: WaveNet: A Generative Model for Raw Audio (2016)](https://arxiv.org/abs/1609.03499) | Seminal Deep Learning Paper | Autoregressive raw waveform synthesis with dilated causal convolutions. | Canonical paper demonstrating high-resolution autoregressive modeling. | ✅ Published DeepMind Classic |
-| [Alec Radford et al.: Language Models are Unsupervised Multitask Learners (GPT-2)](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf) | Groundbreaking OpenAI Paper | Demonstrates zero-shot task transfer from pure large-scale autoregressive next-token prediction. | Foundational reading on generative pretraining principles. | ✅ Active OpenAI Technical Report |
-| [Stanford CS224N: Transformers and Autoregressive Pretraining](https://web.stanford.edu/class/cs224n/) | University Course Notes | Formal mathematical treatment of causal masking, positional encodings, and KV-cache computational complexity. | Definitive academic reference for language modeling mathematics. | ✅ Active Stanford Course |
-| [Hugging Face Transformers Documentation: Generation Strategies](https://huggingface.co/docs/transformers/generation_strategies) | Official Engineering Reference | Practical mechanics of beam search, temperature scaling, top-k, nucleus (top-p), and speculative decoding. | Essential guide for configuring production LLM inference pipelines. | ✅ Active Official Hugging Face Documentation |
-
+| [Ashish Vaswani et al.: Attention Is All You Need (2017)](https://arxiv.org/abs/1706.03762) | Seminal Foundation Paper (NeurIPS) | §3.1–§3.2: Scaled dot-product attention and causal decoder masking | The original paper that invented the Transformer architecture and modern causal attention. | ✅ Published NeurIPS Classic |
+| [Andrej Karpathy: Neural Networks: Zero to Hero (Building GPT from scratch)](https://www.youtube.com/watch?v=kCc8FmEb1nY) | Visual / Code Walkthrough | Complete implementation of multi-head causal attention and autoregressive generation | Masterful pedagogical walkthrough explaining causal attention masks and token generation line-by-line. | ✅ Active YouTube Classic |
+| [Jay Alammar: The Illustrated Transformer (2018)](https://jalammar.github.io/illustrated-transformer/) | Visual Interactive Blog | Visual step-by-step breakdown of self-attention, causal masking, and decoder blocks | The definitive visual reference for intuitive geometric understanding of attention. | ✅ Active Open Web Classic |
+| [Stanford CS224N: Transformers and Autoregressive Pretraining](https://web.stanford.edu/class/cs224n/) | University Lecture Notes & Slides | Mathematical treatment of causal masking, positional encodings, and pretraining objectives | Authoritative academic reference for sequence modeling mathematics and perplexity evaluation. | ✅ Active Stanford Course |
+| [Dan Jurafsky & James H. Martin: Speech and Language Processing (Chapter 9: Language Models)](https://web.stanford.edu/~jurafsky/slp3/9.pdf) | Authoritative Standard Textbook | §9.1–§9.4: Probability chain rule, NLL loss, perplexity, and sampling strategies | Definitive university textbook covering statistical and neural autoregressive language models. | ✅ Active Stanford Textbook |
+| [Woosuk Kwon et al.: Efficient Memory Management for Large Language Model Serving with PagedAttention (vLLM 2023)](https://arxiv.org/abs/2309.06180) | Modern Systems Architecture Paper | §2–§4: KV-Cache memory fragmentation, virtual paging, and throughput bottlenecks | Crucial engineering paper explaining why KV-cache memory limits LLM inference serving. | ✅ Published SOSP Paper |
+| [Hugging Face Transformers Documentation: Generation Strategies](https://huggingface.co/docs/transformers/generation_strategies) | Official Engineering Documentation | Temperature scaling, greedy decoding, top-k, nucleus (top-p), and speculative decoding | Production implementation reference for tuning autoregressive inference in PyTorch. | ✅ Active Hugging Face Docs |

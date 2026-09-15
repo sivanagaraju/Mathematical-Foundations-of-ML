@@ -2,7 +2,7 @@
 
 > **Who this is for:** A developer, ML engineer, or researcher who wants to master modern deep learning architectures and the mathematical engines of Generative AI — from spatial convolutions and sequential recurrence to autoencoders, autoregressive transformers, latent variable models, expectation-maximization, variational inference (ELBO + reparameterization trick), generative adversarial networks (GANs), and generative benchmarking (FID) — without skipping algebraic derivations or getting lost in hand-waving abstractions.
 >
-> **What this page does:** It outlines the exact, acyclic pedagogical reading route for Deep Architectures and Generative Models. The 10 chapters in this module build sequentially from deterministic representation learning (CNNs, RNNs, Autoencoders) to probabilistic generative modeling (Autoregressive models, Latent Variable Models, EM, ELBO, Reparameterization Trick, GANs, and FID evaluation).
+> **What this page does:** It outlines the exact, acyclic pedagogical reading route for Deep Architectures and Generative Models. The 10 chapters in this module build sequentially from deterministic representation learning (CNNs, RNNs, Autoencoders) to probabilistic generative modeling (Autoregressive models, Latent Variable Models, EM, ELBO, Reparameterization Trick, GANs, and FID evaluation). Track continuous review and implementation progress in the [Audit & Execution Progress Tracker](./PROGRESS_TRACKER.md).
 
 ---
 

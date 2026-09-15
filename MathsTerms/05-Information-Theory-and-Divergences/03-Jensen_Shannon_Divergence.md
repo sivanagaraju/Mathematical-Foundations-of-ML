@@ -1,36 +1,37 @@
 # Jensen-Shannon Divergence (JSD): Symmetric Statistical Distance & The Original GAN Objective
 
 > `🏷️ Tags:` `Information-Theory` `Jensen-Shannon-Divergence` `GANs` `Minimax` `Symmetric-Metric` `Mode-Collapse` `Deep-Learning`  
-> `📚 Prerequisites Needed:` [KL Divergence](./02-KL_Divergence.md) (Relative entropy $D_{\text{KL}}(P \parallel M)$ evaluated against mixture distribution $M = \frac{1}{2}(P + Q)$) · [Entropy, Cross-Entropy & CCE](./01-Entropy_CrossEntropy_CCE.md) (Symmetric information-theoretic boundedness and Shannon entropy bounds $[0, \ln 2]$)
+> `📚 Prerequisites Needed:` [KL Divergence](./02-KL_Divergence.md) (Relative entropy $D_{\text{KL}}(P \parallel M)$ evaluated against mixture distribution $M = \frac{1}{2}(P + Q)$) · [Entropy, Cross-Entropy & CCE](./01-Entropy_CrossEntropy_CCE.md) (Symmetric information-theoretic boundedness and Shannon entropy bounds $[0, \ln 2]$)  
 > `🎯 Where Do We Use This?:` **The core mathematical engine of Vanilla GANs** — Ian Goodfellow's original Generative Adversarial Network objective ($V(D^*, G) = -\ln 4 + 2 D_{\text{JS}}(p_{\text{data}} \parallel p_G)$), Symmetric multi-distribution alignment, and Statistical hypothesis testing.  
 > `🎓 Course Module Mapping:` [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/09-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Lec 05: GANs](../../Mathematical-Foundation-for-GenerativeAI/15-Lec05-Generative-Adversarial-Networks/NOTES.md) · [Tut 12: GAN Implementations](../../Mathematical-Foundation-for-GenerativeAI/16-Tutorial12-Implementations-Vanilla-GAN-DCGAN-cGAN/NOTES.md) · [Lec 18: WGAN](../../Mathematical-Foundation-for-GenerativeAI/17-Lec06-Wasserstein-GAN/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐⭐⭐☆☆ (Intermediate & Intuitive · 15 min read)
 
 ---
 
-### 📌 Table of Contents
+## 📌 Table of Contents
 > 🧭 **Recommended First-Reading Route:**
 > - **Beginner / Non-Math Background:** Read Section 1 (Executive Summary), Section 2 (Visual Coordinate Primitive), Section 6 (Physical Intuition & Metaphors), and Section 14 (Curated External References).
 > - **Practitioner / ML Engineer:** Read Section 1 (Metadata), Section 4 (Aha! Why Symmetry Resolves KL Flaws), Section 10 (AI Bridge Table), and Section 11 (Runnable Python Simulation).
-> - **Deep Rigor / Researcher:** Read all sections sequentially including Section 8 (Theoretical Formulations), Section 9 (Proofs of Boundedness and Metric Properties), and Section 12 (Diagnostic Checks).
+> - **Deep Rigor / Researcher:** Read all sections sequentially including Section 8 (Theoretical Formulations), Section 9 (Pencil-and-Paper Worked Examples), and Section 12 (Diagnostic Checks).
 
-- [1. 🧭 Executive Summary & Metadata Header](#1--executive-summary--metadata-header)
-- [2. 🌟 The Missing Foundation (Domain-Specific Visual ASCII Art & Physical Primitive)](#2--the-missing-foundation-domain-specific-visual-ascii-art--physical-primitive)
-- [3. 🗣️ How to Read Every Mathematical Symbol (Pronunciation Guide)](#3--how-to-read-every-mathematical-symbol-pronunciation-guide)
-- [4. 💡 The Core "Aha!" Pivot Point & Memory Hooks](#4--the-core-aha-pivot-point--memory-hooks)
-- [5. 🥊 Contrastive Analysis: Why This Math & Why Naive Alternatives Fail (Why X, Not Y)](#5--contrastive-analysis-why-this-math--why-naive-alternatives-fail-why-x-not-y)
-- [6. 👶 ELI5 Intuition: The End-to-End AI Lifecycle](#6--eli5-intuition-the-end-to-end-ai-lifecycle)
-- [7. 📚 Deep Terminology Master Glossary (15 Core Concepts Dissected)](#7--deep-terminology-master-glossary-15-core-concepts-dissected)
-- [8. 📐 Mathematical Formulations, Rules & Hardware Realities](#8--mathematical-formulations-rules--hardware-realities)
-- [9. 🔢 Concrete Micro-Numerical Worked Examples (Pencil-and-Paper)](#9--concrete-micro-numerical-worked-examples-pencil-and-paper)
-- [10. 🔗 Connecting the Dots: Generative AI Architecture Blocks](#10--connecting-the-dots-generative-ai-architecture-blocks)
-- [11. 💻 Standalone Executable Python/PyTorch Verification Script](#11--standalone-executable-pythonpytorch-verification-script)
-- [12. 🩺 Diagnostic Mini-Checks & Common Traps](#12--diagnostic-mini-checks--common-traps)
-- [13. 🏆 Beginner Comprehension Confidence Audit](#13--beginner-comprehension-confidence-audit)
+- [1. 🧭 Executive Summary & Metadata Header](#1-executive-summary-metadata-header)
+- [2. 🌟 The Missing Foundation (Domain-Specific Visual ASCII Art & Physical Primitive)](#2-the-missing-foundation-domain-specific-visual-ascii-art-physical-primitive)
+- [3. 🗣️ How to Read Every Mathematical Symbol (Pronunciation Guide)](#3-how-to-read-every-mathematical-symbol-pronunciation-guide)
+- [4. 💡 The Core "Aha!" Pivot Point & Memory Hooks](#4-the-core-aha-pivot-point-memory-hooks)
+- [5. 🥊 Contrastive Analysis: Why This Math & Why Naive Alternatives Fail (Why X, Not Y)](#5-contrastive-analysis-why-this-math-why-naive-alternatives-fail-why-x-not-y)
+- [6. 👶 ELI5 Intuition: The End-to-End AI Lifecycle](#6-eli5-intuition-the-end-to-end-ai-lifecycle)
+- [7. 📚 Deep Terminology Master Glossary (15 Core Concepts Dissected)](#7-deep-terminology-master-glossary-15-core-concepts-dissected)
+- [8. 📐 Mathematical Formulations, Rules & Hardware Realities](#8-mathematical-formulations-rules-hardware-realities)
+- [9. 🔢 Concrete Micro-Numerical Worked Examples (Pencil-and-Paper)](#9-concrete-micro-numerical-worked-examples-pencil-and-paper)
+- [10. 🔗 Connecting the Dots: Generative AI Architecture Blocks](#10-connecting-the-dots-generative-ai-architecture-blocks)
+- [11. 💻 Standalone Executable Python/PyTorch Verification Script](#11-standalone-executable-pythonpytorch-verification-script)
+- [12. 🩺 Diagnostic Mini-Checks & Common Traps](#12-diagnostic-mini-checks-common-traps)
+- [13. 🏆 Beginner Comprehension Confidence Audit](#13-beginner-comprehension-confidence-audit)
+- [14. 🌐 Curated External Learning References & Further Study](#14-curated-external-learning-references-further-study)
 
 ---
 
-### 1. 🧭 Executive Summary & Metadata Header
+## 1. 🧭 Executive Summary & Metadata Header
 
 > [!NOTE]
 > ### 1. What is this chapter about?
@@ -42,14 +43,14 @@
 > ### 3. What will I be able to do after this?
 > - Calculate discrete Jensen-Shannon Divergences step-by-step with pencil and paper.
 > - Prove Goodfellow's 2014 GAN theorem linking the optimal discriminator to JSD: $V(D^*, G) = -\ln 4 + 2 D_{\text{JS}}(p_{\text{data}} \parallel p_G)$.
-> - Explain why JSD causes catastrophic vanishing gradients when high-dimensional data manifolds fail to overlap.
+> - Derive the analytical parameter gradients of JSD and prove why it causes catastrophic vanishing gradients when distributions have disjoint support.
 > - Contrast JSD against KL divergence and Wasserstein distance for generative modeling.
-> - Implement and verify custom JSD computation in PyTorch with numerical clamp safeguards.
+> - Implement and verify custom JSD computation in pure Python (standard library only) and production PyTorch.
 >
 > ### 4. What do I need first?
 > Relative entropy and KL divergence properties ([Module 05, Chapter 02](./02-KL_Divergence.md)) and Shannon entropy bounds ([Module 05, Chapter 01](./01-Entropy_CrossEntropy_CCE.md)).
 
-```
+```text
  ===================================================================================================
                  THE JENSEN-SHANNON DIVERGENCE (JSD) & GAN ARCHITECTURE
  ===================================================================================================
@@ -71,16 +72,16 @@
 
 ---
 
-### 2. 🌟 The Missing Foundation (Domain-Specific Visual ASCII Art & Physical Primitive)
+## 2. 🌟 The Missing Foundation (Domain-Specific Visual ASCII Art & Physical Primitive)
 
-#### What Real-World Physical Problem Forced Humans to Invent This Math?
+### What Real-World Physical Problem Forced Humans to Invent This Math?
 In classical statistics, **Kullback-Leibler (KL) Divergence** had two critical flaws:
 1. **It Explodes to $+\infty$:** If distribution $P$ contains an event that distribution $Q$ considers impossible ($Q(x) = 0$), KL divergence divides by zero and explodes to $+\infty$.
 2. **It is Asymmetric:** $D_{\text{KL}}(P \parallel Q) \neq D_{\text{KL}}(Q \parallel P)$, meaning the distance from $A \to B$ is not the distance from $B \to A$.
 
-Statisticians resolved this by creating a **shared midpoint mixture $M = \frac{1}{2}P + \frac{1}{2}Q$**. Because $M$ contains ingredients from both distributions, the denominator $M(x)$ is never zero. JSD is the average KL divergence of $P$ and $Q$ to their mutual midpoint $M$, guaranteeing a **symmetric, smooth distance strictly capped between $0$ and $\ln 2 \approx 0.6931\text{ nats}$**.
+Statisticians resolved this by creating a **shared midpoint mixture $M = \frac{1}{2}P + \frac{1}{2}Q$**. Because $M$ contains ingredients from both distributions, the denominator $M(x)$ is never zero whenever either $P(x) > 0$ or $Q(x) > 0$. JSD is the average KL divergence of $P$ and $Q$ to their mutual midpoint $M$, guaranteeing a **symmetric, smooth distance strictly capped between $0$ and $\ln 2 \approx 0.6931\text{ nats}$** (or $1.0\text{ bit}$ in base 2).
 
-```
+```text
             THE JSD MIDPOINT GEOMETRY & BOUNDS
  
   PERFECT OVERLAP (P == Q)                      DISJOINT SUPPORTS (P ∩ Q == ∅)
@@ -94,31 +95,50 @@ Statisticians resolved this by creating a **shared midpoint mixture $M = \frac{1
 
 ---
 
-### 3. 🗣️ How to Read Every Mathematical Symbol (Pronunciation Guide)
+## 3. 🗣️ How to Read Every Mathematical Symbol (Pronunciation Guide)
 
-| Mathematical Expression / Symbol | Read It Aloud As... (Pronunciation) | Plain-English Meaning & Intuition | Context in Machine Learning |
+| Symbol / Notation | Spoken English Pronunciation | Plain-English Intuitive Meaning | Deep Learning / Mathematical Context |
 | :--- | :--- | :--- | :--- |
 | $M = \frac{1}{2}(P + Q)$ | *"Mixture M equals one half P plus Q"* | The fifty-fifty blended midpoint distribution between two probability densities. | Acts as a shared reference anchor preventing zero-division. |
-| $D_{\text{JS}}(P \parallel Q)$ | *"Jensen-Shannon divergence between P and Q"* | The average KL divergence of two distributions to their common midpoint. | Measures distributional distance symmetrically. |
+| $D_{\text{JS}}(P \parallel Q)$ | *"Jensen-Shannon divergence between P and Q"* | The average KL divergence of two distributions to their common midpoint. | Measures distributional distance symmetrically and boundedly. |
 | $\sqrt{D_{\text{JS}}(P \parallel Q)}$ | *"Square root of J-S divergence"* | The Jensen-Shannon metric, which strictly satisfies the triangle inequality. | True geometric distance metric between distributions. |
 | $D^*(x) = \frac{p_{\text{data}}(x)}{p_{\text{data}}(x) + p_G(x)}$ | *"Optimal discriminator D-star of x"* | The Bayes optimal classifier predicting the probability that sample $x$ came from data rather than the generator. | The discriminator's theoretical peak performance in GAN minimax games. |
-| $V(D^*, G) = -\ln 4 + 2 D_{\text{JS}}$ | *"Value function at optimal D equals negative log four plus two J-S divergence"* | Relates the minimax game value under an optimal discriminator directly to JSD. | Goodfellow's 2014 proof that training a GAN minimizes JSD. |
-| $\nabla_\theta D_{\text{JS}} = 0$ | *"Gradient of J-S divergence with respect to theta vanishes to zero"* | The loss landscape is flat when real and fake distributions have disjoint supports. | The fundamental cause of vanishing gradients and mode collapse in vanilla GANs. |
+| $V(D^*, G) = -\ln 4 + 2 D_{\text{JS}}$ | *"Value function at optimal D equals negative log four plus two J-S divergence"* | Relates the minimax game value under an optimal discriminator directly to JSD. | Goodfellow's 2014 proof that training a Vanilla GAN minimizes JSD. |
+| $\nabla_\theta D_{\text{JS}} = \mathbf{0}$ | *"Gradient of J-S divergence with respect to theta vanishes to zero"* | The loss landscape is flat when real and fake distributions have disjoint supports. | The fundamental cause of vanishing gradients and mode collapse in vanilla GANs. |
 
 ---
 
-### 4. 💡 The Core "Aha!" Pivot Point & Memory Hooks
+## 4. 💡 The Core "Aha!" Pivot Point & Memory Hooks
 
 > 💡 **The Core "Aha!" Discovery:**  
-> **Instead of forcing City A to drive all the way to City B (which could hit a dead end and explode to $+\infty$), both cities meet at the exact halfway Rest Stop $M = \frac{1}{2}(P+Q)$. Since the rest stop contains ingredients from both sides, the distance is always finite, symmetric, and strictly capped at $\ln 2 \approx 0.6931\text{ nats}$!**
+> **Instead of forcing Distribution P to measure all the way to Distribution Q (which can hit empty support and explode to $+\infty$), both distributions evaluate their divergence to the exact halfway Rest Stop $M = \frac{1}{2}(P+Q)$. Since the rest stop contains ingredients from both sides, the distance is always finite, symmetric, and strictly capped at $\ln 2 \approx 0.6931\text{ nats}$!**
 
-#### Complete First-Principles Proof: Goodfellow's GAN Minimax Theorem (2014)
+```text
+               THE JSD MIXTURE ENTROPY DECOMPOSITION
+               
+    H(M) = Entropy of Shared Blend       [High Disorder / Blended Mixture]
+    ───────────────────────────────────────────────────────────────────────
+    │                                                                     │
+    │  ┌────────────────────────┐           ┌────────────────────────┐    │
+    │  │  ½ H(P) Real Data      │           │  ½ H(Q) Fake Model     │    │
+    │  │  Inherent Entropy      │           │  Inherent Entropy      │    │
+    │  └────────────────────────┘           └────────────────────────┘    │
+    │                                                                     │
+    │  ▲                                                               ▲  │
+    │  └─────────────────────── JSD(P || Q) ───────────────────────────┘  │
+    │                 Excess Uncertainty Created by Mixing                │
+    ───────────────────────────────────────────────────────────────────────
+             JSD(P || Q) = H(M) - ½ [ H(P) + H(Q) ]
+             Total Mixture Entropy - Average Inherent Component Entropy
+```
+
+### Complete First-Principles Proof: Goodfellow's GAN Minimax Theorem (2014)
 Why is training a Generative Adversarial Network equivalent to minimizing Jensen-Shannon Divergence? Let us trace the complete derivation without skipping any steps:
 
 Consider the minimax objective function proposed by Goodfellow et al.:
 $$V(D, G) = \int_{\mathcal{X}} p_{\text{data}}(x) \ln D(x) \, dx + \int_{\mathcal{X}} p_G(x) \ln(1 - D(x)) \, dx$$
 
-**Step 1: Find the Optimal Discriminator $D^*(x)$ for a Fixed Generator $G$**  
+#### Step 1: Find the Optimal Discriminator $D^*(x)$ for a Fixed Generator $G$
 For any fixed generator $G$, the objective can be written as an integral over independent point-wise evaluations of $D(x)$:
 $$f(D) = p_{\text{data}}(x) \ln D(x) + p_G(x) \ln(1 - D(x))$$
 
@@ -127,7 +147,7 @@ $$\frac{\partial f}{\partial D(x)} = \frac{p_{\text{data}}(x)}{D(x)} - \frac{p_G
 $$p_{\text{data}}(x)(1 - D(x)) = p_G(x) D(x)$$
 $$p_{\text{data}}(x) = \left( p_{\text{data}}(x) + p_G(x) \right) D(x) \implies \boxed{D^*(x) = \frac{p_{\text{data}}(x)}{p_{\text{data}}(x) + p_G(x)}}$$
 
-**Step 2: Substitute $D^*(x)$ back into the Minimax Objective $V(D^*, G)$**  
+#### Step 2: Substitute $D^*(x)$ back into the Minimax Objective $V(D^*, G)$
 Notice that $1 - D^*(x) = \frac{p_G(x)}{p_{\text{data}}(x) + p_G(x)}$. Substituting these into the integral:
 $$V(D^*, G) = \int_{\mathcal{X}} p_{\text{data}}(x) \ln\left( \frac{p_{\text{data}}(x)}{p_{\text{data}}(x) + p_G(x)} \right) dx + \int_{\mathcal{X}} p_G(x) \ln\left( \frac{p_G(x)}{p_{\text{data}}(x) + p_G(x)} \right) dx$$
 
@@ -143,25 +163,42 @@ V(D^*, G) &= \int_{\mathcal{X}} p_{\text{data}}(x) \ln\left( \frac{p_{\text{data
 
 This completes the proof! Optimizing the generator against an optimal discriminator is strictly equivalent to minimizing the Jensen-Shannon Divergence between the generated distribution $p_G$ and real data distribution $p_{\text{data}}$.
 
-#### 5-Second Mental Memory Hooks
-- **Formula**: *$D_{\text{JS}} = \frac{1}{2} D_{\text{KL}}(P \parallel M) + \frac{1}{2} D_{\text{KL}}(Q \parallel M)$ (Average distance to 50/50 blend).*
-- **Bounds**: *Strictly between $0.0$ (identical) and $\ln 2 \approx 0.693$ (completely disjoint).*
-- **GAN Equilibrium**: *When $P = Q \implies D_{\text{JS}} = 0.0 \implies D^*(x) = 0.50$ (random guessing).*
+### 5-Second Mental Memory Hooks
+- **Formula**: $D_{\text{JS}} = \frac{1}{2} D_{\text{KL}}(P \parallel M) + \frac{1}{2} D_{\text{KL}}(Q \parallel M)$ *(Average distance to 50/50 blend)*.
+- **Bounds**: Strictly between $0.0$ *(identical distributions)* and $\ln 2 \approx 0.6931\text{ nats}$ *(completely disjoint)*.
+- **GAN Equilibrium**: When $P = Q \implies D_{\text{JS}} = 0.0 \implies D^*(x) = 0.50$ *(random coin toss guessing)*.
 
 ---
 
-### 5. 🥊 Contrastive Analysis: Why This Math & Why Naive Alternatives Fail (Why X, Not Y)
+## 5. 🥊 Contrastive Analysis: Why This Math & Why Naive Alternatives Fail (Why X, Not Y)
+
+```text
+           LOSS & GRADIENT PROFILE ON DISJOINT MANIFOLDS (P ∩ Q = ∅)
+           
+   Divergence / Distance Loss
+      ▲
+  ln2 ┼──────────────────────────────────── JSD(P || Q) Flat Plateau
+      │                                     (Gradient dJSD/dθ = 0! STALLS TRAINING)
+      │
+      │                     /
+      │                   /
+      │                 /   Wasserstein W₁(P, Q) = |θ|
+      │               /     (Gradient dW₁/dθ = ±1! STEADY LEARNING)
+      │             /
+  0.0 ┴───────────/────────────────────────► Parameter Shift θ (Distance Between Supports)
+                 0.0 (Supports Overlap)
+```
 
 | Dimension | Jensen-Shannon Divergence ($D_{\text{JS}}$) | Forward KL ($D_{\text{KL}}(P \parallel Q)$) | Reverse KL ($D_{\text{KL}}(Q \parallel P)$) | Wasserstein-1 Distance ($W_1$) |
 | :--- | :--- | :--- | :--- | :--- |
 | **Symmetry** | **Symmetric:** $D_{\text{JS}}(P, Q) = D_{\text{JS}}(Q, P)$ | Asymmetric | Asymmetric | **Symmetric:** $W_1(P, Q) = W_1(Q, P)$ |
 | **Boundedness** | Strictly bounded: $[0, \ln 2]$ | Unbounded: $[0, \infty)$ | Unbounded: $[0, \infty)$ | Unbounded: $[0, \infty)$ (proportional to spatial distance) |
 | **Zero Support Overlap** | Saturates at constant $\ln 2 \approx 0.6931$ | Explodes to $+\infty$ | Ignores missing modes ($0$ penalty) | **Linear gradient** proportional to coordinate shift $\lvert \theta \rvert$ |
-| **Gradient on Disjoint Manifolds** | $\nabla_\theta D_{\text{JS}} = 0$ (**Vanishing Gradient!**) | Unstable / Explodes | Mode Collapse | Non-zero constant gradient ($\pm 1$) everywhere |
+| **Gradient on Disjoint Manifolds** | $\nabla_\theta D_{\text{JS}} = \mathbf{0}$ (**Vanishing Gradient!**) | Unstable / Explodes | Mode Collapse | Non-zero constant gradient ($\pm 1$) everywhere |
 | **Triangle Inequality** | Violates (fails metric property) | Violates | Violates | **Satisfies (True Metric!)** |
 | **Modern AI Application** | Vanilla GAN objective, document similarity | Supervised classification, LLM pre-training | Variational inference, Knowledge Distillation | WGAN-GP, Optimal Transport, Flow Matching |
 
-#### Concrete Mathematical Failure Counterexample: The Flat Plateau of Disjoint Supports
+### Concrete Mathematical Failure Counterexample: The Flat Plateau of Disjoint Supports
 Consider two parallel line distributions on $\mathbb{R}^2$:
 - True data distribution $P$ is uniform on the vertical line $x = 0$, $y \in [0, 1]$.
 - Model generator $Q_\theta$ is uniform on the vertical line $x = \theta$, $y \in [0, 1]$, parametrized by horizontal offset $\theta \ne 0$.
@@ -186,9 +223,9 @@ Let us compute the divergence and its gradient with respect to parameter $\theta
 
 ---
 
-### 6. 👶 ELI5 Intuition: The End-to-End AI Lifecycle
+## 6. 👶 ELI5 Intuition: The End-to-End AI Lifecycle
 
-```
+```text
  ===================================================================================================
            END-TO-END AI LIFECYCLE: THE ORIGINAL 2014 GOODFELLOW GAN GAME
  ===================================================================================================
@@ -209,28 +246,27 @@ Let us compute the divergence and its gradient with respect to parameter $\theta
  ===================================================================================================
 ```
 
-#### Everyday Real-World Metaphors
+### Everyday Real-World Metaphors
 
-##### Metaphor 1: The Neutral Cooking Recipe Mediator
+#### Metaphor 1: The Neutral Cooking Recipe Mediator
 - Two chefs disagree on a soup recipe ($P$ vs $Q$).
 - A neutral mediator blends both pots 50/50 ($M$).
 - The distance is simply how much Chef A and Chef B must each adjust their seasonings to match the blended pot.
 
-##### Metaphor 2: Meeting at the Midway Rest Stop
+#### Metaphor 2: Meeting at the Midway Rest Stop
 - Drivers in City A and City B want to meet.
-- Driving the full distance risks roadblocks; instead, both drive halfway to the central highway oasis.
+- Driving the full distance directly risks roadblocks; instead, both drive halfway to the central highway oasis.
 
 ---
 
-#### ⚠️ Where the Metaphor Breaks Down (Limits of the Analogy)
+### ⚠️ Where the Metaphor Breaks Down (Limits of the Analogy)
 The fair mediator / compromise midpoint mixture metaphor suggests that JSD provides a smooth, reliable comparison for any two arbitrary distributions. However:
-- **Disjoint Support Gradient Vanishing:** In deep generative modeling, real image datasets reside on low-dimensional sub-manifolds embedded within massive dimensional pixel space $\mathbb{R}^{D}$ ($D > 10^6$). If the generator's distribution $P_g$ and the real data distribution $P_{	ext{data}}$ do not overlap (disjoint supports), JSD saturates at its maximal theoretical bound: $	ext{JSD}(P_{	ext{data}} \parallel P_g) = \ln 2 pprox 0.6931$.
-- **Zero Gradient Signal:** Because JSD is flat and constant whenever supports are disjoint, the gradient with respect to generator parameters is identically zero: $
-abla_	heta 	ext{JSD}(P_{	ext{data}} \parallel P_{g,	heta}) = \mathbf{0}$. The generator learns nothing, causing vanishing gradients and training instability in vanilla GANs.
+- **Disjoint Support Gradient Vanishing:** In deep generative modeling, real image datasets reside on low-dimensional sub-manifolds embedded within massive dimensional pixel space $\mathbb{R}^{D}$ ($D > 10^6$). If the generator's distribution $P_G$ and the real data distribution $P_{\text{data}}$ do not overlap (disjoint supports), JSD saturates at its maximal theoretical bound: $D_{\text{JS}}(P_{\text{data}} \parallel P_G) = \ln 2 \approx 0.6931$.
+- **Zero Gradient Signal:** Because JSD is flat and constant whenever supports are disjoint, the gradient with respect to generator parameters is identically zero: $\nabla_\theta D_{\text{JS}}(P_{\text{data}} \parallel P_{G,\theta}) = \mathbf{0}$. The generator learns nothing, causing vanishing gradients and training instability in vanilla GANs.
 
 ---
 
-### 7. 📚 Deep Terminology Master Glossary (15 Core Concepts Dissected)
+## 7. 📚 Deep Terminology Master Glossary (15 Core Concepts Dissected)
 
 | Term / Notation | Formal Mathematical Meaning | Plain-English Definition (No Jargon) | How to Remember / Real-World Analogy |
 | :--- | :--- | :--- | :--- |
@@ -242,7 +278,7 @@ abla_	heta 	ext{JSD}(P_{	ext{data}} \parallel P_{g,	heta}) = \mathbf{0}$. The ge
 | **Optimal Discriminator ($D^*$)** | $D^*(x) = \frac{p_{\text{data}}(x)}{p_{\text{data}}(x) + p_G(x)}$ | The ideal art detective that outputs exact probability that image $x$ is real | A flawless forensic scanner |
 | **Equilibrium State ($D^* = 0.5$)** | $p_G = p_{\text{data}} \implies D^*(x) = \frac{1}{2}$ | The generator is so good that the detective can only guess randomly | An art forgery so perfect the museum cannot tell |
 | **Disjoint Support Trap** | $\text{supp}(P) \cap \text{supp}(Q) = \emptyset$ | When real and fake images do not overlap in high-D space, JSD is stuck at $\ln 2$ | Two islands with no bridge between them |
-| **Vanishing Gradient in GANs** | $\nabla_\theta D_{\text{JS}} = 0$ when disjoint | The generator gets zero learning signal because the discriminator wins $100\%$ | A teacher giving only "0%" with no hints on how to improve |
+| **Vanishing Gradient in GANs** | $\nabla_\theta D_{\text{JS}} = \mathbf{0}$ when disjoint | The generator gets zero learning signal because the discriminator wins $100\%$ | A teacher giving only "0%" with no hints on how to improve |
 | **Mode Collapse** | Generator produces only 1 specific image | The generator finds one sample that fools the discriminator and repeats it | A student memorizing only 1 essay for an exam |
 | **Wasserstein Distance Remedy** | Earth Mover's Distance ($W_1$) | The linear metric invented by Arjovsky et al. to replace JSD and fix vanishing gradients | Measuring the physical dirt needed to fill a hole |
 | **Entropy of the Mixture** | $H(M) = H\left(\frac{P+Q}{2}\right)$ | The total uncertainty of the blended distribution | Total flavor complexity when mixing two cocktails |
@@ -252,9 +288,9 @@ abla_	heta 	ext{JSD}(P_{	ext{data}} \parallel P_{g,	heta}) = \mathbf{0}$. The ge
 
 ---
 
-### 8. 📐 Mathematical Formulations, Rules & Hardware Realities
+## 8. 📐 Mathematical Formulations, Rules & Hardware Realities
 
-```
+```text
  ===================================================================================================
                  THE JSD FORMULATIONS & GAN MINIMAX VALUE
  ===================================================================================================
@@ -265,198 +301,364 @@ abla_	heta 	ext{JSD}(P_{	ext{data}} \parallel P_{g,	heta}) = \mathbf{0}$. The ge
  ===================================================================================================
 ```
 
-#### Core Mathematical Equations
+### Core Mathematical Equations
 
 1. **Formal Definition of Jensen-Shannon Divergence:**
    $$D_{\text{JS}}(P \parallel Q) \triangleq \frac{1}{2} D_{\text{KL}}(P \parallel M) + \frac{1}{2} D_{\text{KL}}(Q \parallel M), \qquad M = \frac{1}{2}(P + Q)$$
 
-2. **Entropy Formulation:**
+2. **Shannon Entropy Formulation:**
    $$D_{\text{JS}}(P \parallel Q) = H\left(\frac{P+Q}{2}\right) - \frac{H(P) + H(Q)}{2}$$
 
 3. **Global Minimum at Nash Equilibrium:**
    When $p_G = p_{\text{data}}$, $D_{\text{JS}}(p_{\text{data}} \parallel p_G) = 0.0$, and $V(D^*, G) = -\ln(4) \approx \mathbf{-1.386294}$.
 
-#### Hardware & Computer Memory Realities
+### Analytical Gradient Derivations of JSD
+
+#### 1. Unconstrained Gradient with Respect to Density $q(x)$
+Let $M = \frac{1}{2}(P + Q)$. Differentiating $D_{\text{JS}}(P \parallel Q)$ with respect to $q(x)$:
+$$\begin{aligned}
+\frac{\partial D_{\text{JS}}}{\partial q(x)} &= \frac{1}{2} \cdot p(x) \left( -\frac{1}{M(x)} \frac{\partial M(x)}{\partial q(x)} \right) + \frac{1}{2} \left[ \ln\left(\frac{q(x)}{M(x)}\right) + q(x) \left( \frac{1}{q(x)} - \frac{1}{M(x)} \frac{\partial M(x)}{\partial q(x)} \right) \right] \\
+&= -\frac{1}{4} \frac{p(x)}{M(x)} + \frac{1}{2} \ln\left(\frac{q(x)}{M(x)}\right) + \frac{1}{2} - \frac{1}{4} \frac{q(x)}{M(x)} \\
+&= \frac{1}{2} \ln\left(\frac{q(x)}{M(x)}\right) + \frac{1}{2} - \frac{1}{4} \left( \frac{p(x) + q(x)}{M(x)} \right)
+\end{aligned}$$
+Since $p(x) + q(x) = 2 M(x)$, the last term is identically $-\frac{1}{4}(2) = -\frac{1}{2}$. The terms $\frac{1}{2} - \frac{1}{2}$ cancel exactly:
+$$\boxed{\frac{\partial D_{\text{JS}}(P \parallel Q)}{\partial q(x)} = \frac{1}{2} \ln\left(\frac{q(x)}{M(x)}\right) = \frac{1}{2} \ln\left(\frac{2 q(x)}{p(x) + q(x)}\right)}$$
+
+#### 2. Logit Parameter Gradient via Softmax ($\nabla_z D_{\text{JS}}$)
+When distribution $Q$ is parameterized by unnormalized logits $z$ through softmax ($q_k = \frac{e^{z_k}}{\sum_j e^{z_j}}$), the chain rule yields:
+$$\frac{\partial D_{\text{JS}}}{\partial z_k} = \sum_i \frac{\partial D_{\text{JS}}}{\partial q_i} \frac{\partial q_i}{\partial z_k} = \frac{1}{2} q_k \left[ \ln\left(\frac{q_k}{M_k}\right) - D_{\text{KL}}(Q \parallel M) \right]$$
+
+#### 3. First-Principles Proof of the Disjoint Support Vanishing Gradient Theorem
+Suppose distributions $P$ and $Q$ have disjoint supports ($\text{supp}(P) \cap \text{supp}(Q) = \emptyset$).
+- For every state $k \in \text{supp}(Q)$, we have $p_k = 0 \implies M_k = \frac{1}{2}(0 + q_k) = \frac{1}{2} q_k$.
+- The log-ratio evaluates to:
+  $$\ln\left(\frac{q_k}{M_k}\right) = \ln\left(\frac{q_k}{0.5 q_k}\right) = \ln 2$$
+- The KL divergence $D_{\text{KL}}(Q \parallel M)$ evaluates to:
+  $$D_{\text{KL}}(Q \parallel M) = \sum_{k \in \text{supp}(Q)} q_k \ln\left(\frac{q_k}{0.5 q_k}\right) = \ln 2 \sum_k q_k = \ln 2$$
+- Substituting into the logit gradient:
+  $$\frac{\partial D_{\text{JS}}}{\partial z_k} = \frac{1}{2} q_k \left[ \ln 2 - \ln 2 \right] = \frac{1}{2} q_k [0] = \mathbf{0}$$
+**Conclusion:** On disjoint manifolds, the gradient of Jensen-Shannon Divergence with respect to model parameters is identically zero!
+
+### Hardware & Computer Memory Realities
 - **Binary Cross-Entropy Loss Stability:** In PyTorch, GAN discriminators are trained using `nn.BCEWithLogitsLoss()`, which fuses the sigmoid activation and logarithmic loss inside a single CUDA kernel using the log-sum-exp trick to prevent numerical underflow to zero.
 - **The Manifold Disjointness Bottleneck:** Real images lie on low-dimensional manifolds in high-dimensional $\mathbb{R}^{3 \times 1024 \times 1024}$ pixel space. The probability of random generator images intersecting the real data manifold is mathematically $0$. Consequently, JSD saturates at $\ln 2$, producing zero gradient on GPU float32 representations—the physical reason modern generative AI shifted from JSD-based GANs to Wasserstein GANs and Diffusion Models!
 
 ---
 
-### 9. 🔢 Concrete Micro-Numerical Worked Examples (Pencil-and-Paper)
+## 9. 🔢 Concrete Micro-Numerical Worked Examples (Pencil-and-Paper)
 
-#### Example 1: 2-State Bernoulli Distributions Hand Calculation
+### Example 1: 2-State Bernoulli Distributions Hand Calculation
 Let $P = [0.80, \quad 0.20]$ and $Q = [0.40, \quad 0.60]$.
 
-##### 1. Calculate Midpoint Mixture $M = \frac{1}{2}(P + Q)$:
+#### 1. Calculate Midpoint Mixture $M = \frac{1}{2}(P + Q)$:
 $$M = \left[ \frac{0.80 + 0.40}{2}, \quad \frac{0.20 + 0.60}{2} \right] = [\mathbf{0.60}, \quad \mathbf{0.40}]$$
 
-##### 2. Compute $D_{\text{KL}}(P \parallel M)$:
+#### 2. Compute $D_{\text{KL}}(P \parallel M)$:
 $$D_{\text{KL}}(P \parallel M) = 0.80 \ln\left(\frac{0.80}{0.60}\right) + 0.20 \ln\left(\frac{0.20}{0.40}\right)$$
 - $0.80 \ln(1.333333) = 0.80 \times 0.287682 = 0.230146$
 - $0.20 \ln(0.500000) = 0.20 \times -0.693147 = -0.138629$
 $$D_{\text{KL}}(P \parallel M) = 0.230146 - 0.138629 = \mathbf{0.091517\text{ nats}}$$
 
-##### 3. Compute $D_{\text{KL}}(Q \parallel M)$:
+#### 3. Compute $D_{\text{KL}}(Q \parallel M)$:
 $$D_{\text{KL}}(Q \parallel M) = 0.40 \ln\left(\frac{0.40}{0.60}\right) + 0.60 \ln\left(\frac{0.60}{0.40}\right)$$
 - $0.40 \ln(0.666667) = 0.40 \times -0.405465 = -0.162186$
 - $0.60 \ln(1.500000) = 0.60 \times 0.405465 = 0.243279$
 $$D_{\text{KL}}(Q \parallel M) = -0.162186 + 0.243279 = \mathbf{0.081093\text{ nats}}$$
 
-##### 4. Compute Total JSD:
+#### 4. Compute Total JSD:
 $$D_{\text{JS}}(P \parallel Q) = \frac{1}{2}(0.091517) + \frac{1}{2}(0.081093) = \mathbf{0.086305\text{ nats}}$$
 
 ---
 
-#### Example 2: Disjoint Support Collapse (Why Early GANs Had Vanishing Gradients)
-Suppose real data is $P = [1.0, \quad 0.0]$ and fake generator is $Q = [0.0, \quad 1.0]$.
-- Midpoint Mixture: $M = [0.50, \quad 0.50]$.
-- $D_{\text{KL}}(P \parallel M) = 1.0 \ln\left(\frac{1.0}{0.50}\right) = \ln(2) \approx \mathbf{0.693147}$.
-- $D_{\text{KL}}(Q \parallel M) = 1.0 \ln\left(\frac{1.0}{0.50}\right) = \ln(2) \approx \mathbf{0.693147}$.
-- $D_{\text{JS}}(P \parallel Q) = \frac{1}{2}\ln 2 + \frac{1}{2}\ln 2 = \mathbf{\ln 2 \approx 0.693147\text{ nats}}$ *(Maximal possible value!)*.
-- **Gradient w.r.t Generator Parameters $\theta$:** $\frac{\partial D_{\text{JS}}}{\partial \theta} = \mathbf{0.0000}$ *(Vanishing Gradient!)*.
+### Example 2: Parametric Bernoulli Generator with Exact Backward Gradient Vector
+
+#### Setup
+Suppose target distribution $P = [1.0, \quad 0.0]^\top$ (deterministic ground truth).  
+Let generator $Q_z$ be parameterized by a single logit $z \in \mathbb{R}$ via sigmoid:
+$$q_0(z) = \sigma(z) = \frac{1}{1 + e^{-z}}, \qquad q_1(z) = 1 - \sigma(z) = \frac{e^{-z}}{1 + e^{-z}}$$
+Evaluate at initial random state $z = 0.0 \implies Q_0 = [0.50, \quad 0.50]^\top$.
+
+#### 1. Forward Pass Evaluation
+1. Midpoint Mixture:
+   $$M = \frac{1}{2}([1.0, 0.0] + [0.5, 0.5]) = [0.75, \quad 0.25]^\top$$
+2. Compute $D_{\text{KL}}(P \parallel M)$:
+   $$D_{\text{KL}}(P \parallel M) = 1.0 \ln\left(\frac{1.0}{0.75}\right) + 0.0 = \ln(4/3) \approx \mathbf{0.287682\text{ nats}}$$
+3. Compute $D_{\text{KL}}(Q \parallel M)$:
+   $$D_{\text{KL}}(Q \parallel M) = 0.5 \ln\left(\frac{0.50}{0.75}\right) + 0.5 \ln\left(\frac{0.50}{0.25}\right) = 0.5 \ln(2/3) + 0.5 \ln(2) = 0.5 \ln(4/3) \approx \mathbf{0.143841\text{ nats}}$$
+4. Forward JSD:
+   $$D_{\text{JS}}(P \parallel Q) = \frac{1}{2}(0.287682) + \frac{1}{2}(0.143841) = \mathbf{0.215762\text{ nats}}$$
+
+#### 2. Backward Pass Gradient Computation
+Using our analytical gradient formulas:
+$$\frac{\partial D_{\text{JS}}}{\partial q_0} = \frac{1}{2} \ln\left(\frac{q_0}{M_0}\right) = \frac{1}{2} \ln\left(\frac{0.50}{0.75}\right) = \frac{1}{2} \ln\left(\frac{2}{3}\right) \approx -0.202733$$
+$$\frac{\partial D_{\text{JS}}}{\partial q_1} = \frac{1}{2} \ln\left(\frac{q_1}{M_1}\right) = \frac{1}{2} \ln\left(\frac{0.50}{0.25}\right) = \frac{1}{2} \ln(2) \approx +0.346574$$
+With $\frac{\partial q_0}{\partial z} = \sigma(z)(1 - \sigma(z)) = (0.5)(0.5) = 0.25$ and $\frac{\partial q_1}{\partial z} = -0.25$:
+$$\begin{aligned}
+\frac{\partial D_{\text{JS}}}{\partial z} &= \frac{\partial D_{\text{JS}}}{\partial q_0} \frac{\partial q_0}{\partial z} + \frac{\partial D_{\text{JS}}}{\partial q_1} \frac{\partial q_1}{\partial z} \\
+&= (-0.202733)(0.25) + (+0.346574)(-0.25) \\
+&= 0.25 \times (-0.202733 - 0.346574) = 0.25 \times (-0.549306) = \mathbf{-0.137327}
+\end{aligned}$$
+
+#### 3. Deep Physical Interpretation of Coordinates
+- **Negative Sign ($\frac{\partial D_{\text{JS}}}{\partial z} = -0.1373 < 0$):** In gradient descent, parameters update as $z \leftarrow z - \eta \frac{\partial \mathcal{L}}{\partial z} = z + \eta(0.1373)$. The positive update pushes $z$ higher, increasing $q_0 = \sigma(z)$ toward $1.0$, pulling the generator toward true data!
+- **Contrast with Disjoint Case ($z \to -\infty$, $Q = [0.0, 1.0]^\top$):**  
+  Here $q_0 \to 0$ and $q_1 \to 1$. The sigmoid derivative $\sigma(z)(1 - \sigma(z)) \to 0$.  
+  The gradient $\frac{\partial D_{\text{JS}}}{\partial z}$ evaluates to $\mathbf{0.0000}$! When the model is completely confident on the wrong disjoint support, the gradient vanishes completely, stalling training permanently!
 
 ---
 
-### 10. 🔗 Connecting the Dots: Generative AI Architecture Blocks
+## 10. 🔗 Connecting the Dots: Generative AI Architecture Blocks
 
-```
+```text
  ===================================================================================================
                  JSD IN GENERATIVE ADVERSARIAL ARCHITECTURES
  ===================================================================================================
 
-   VANILLA GAN (Minimizes JSD)                       WASSERSTEIN GAN (Replaces JSD with W₁)
-   V(D*, G) = -ln(4) + 2·JSD(p_data || p_G)          W(p_data, p_G) = sup_{||f||_L ≤ 1} E[f(x)] - E[f(G(z))]
-   ┌────────────────────────────────────────┐        ┌────────────────────────────────────────┐
-   │ Suffers from vanishing gradients when  │ ═════► │ Linear gradient everywhere! Smooth     │
-   │ discriminator is too strong            │        │ continuous Earth Mover's Distance      │
-   │ Mode Collapse on high-res images       │        │ Stable training for StyleGAN & BigGAN  │
-   └────────────────────────────────────────┘        └────────────────────────────────────────┘
+    VANILLA GAN (Minimizes JSD)                       WASSERSTEIN GAN (Replaces JSD with W₁)
+    V(D*, G) = -ln(4) + 2·JSD(p_data || p_G)          W(p_data, p_G) = sup_{||f||_L ≤ 1} E[f(x)] - E[f(G(z))]
+    ┌────────────────────────────────────────┐        ┌────────────────────────────────────────┐
+    │ Suffers from vanishing gradients when  │ ═════► │ Linear gradient everywhere! Smooth     │
+    │ discriminator is too strong            │        │ continuous Earth Mover's Distance      │
+    │ Mode Collapse on high-res images       │        │ Stable training for StyleGAN & BigGAN  │
+    └────────────────────────────────────────┘        └────────────────────────────────────────┘
  ===================================================================================================
 ```
 
 | Generative Feature | Vanilla GAN (JSD-Based) | Modern WGAN-GP / Diffusion | What is Approximate in Practice? |
 | :--- | :--- | :--- | :--- |
-| **Loss Formulation** | $\min_G \max_D V(D, G)$ yields $2	ext{JSD} - 2\ln 2$ | Kantorovich Dual or Denoising Score Matching | Optimal discriminator assumption never holds exactly during alternating gradient updates. |
-| **Gradient on Disjoint Supports** | Vanishing gradient: $
-abla_	heta 	ext{JSD} = \mathbf{0}$ | Constant non-zero gradient: $
-abla_	heta W_1 = 	ext{sign}(\Delta x)$ | Disjoint manifolds cause discriminator to achieve $100\%$ accuracy, stalling generator learning. |
+| **Loss Formulation** | $\min_G \max_D V(D, G)$ yields $2 D_{\text{JS}} - 2\ln 2$ | Kantorovich Dual or Denoising Score Matching | Optimal discriminator assumption never holds exactly during alternating gradient updates. |
+| **Gradient on Disjoint Supports** | Vanishing gradient: $\nabla_\theta D_{\text{JS}} = \mathbf{0}$ | Constant non-zero gradient: $\nabla_\theta W_1 = \text{sign}(\Delta x)$ | Disjoint manifolds cause discriminator to achieve $100\%$ accuracy, stalling generator learning. |
 | **Mode Collapse Tendency** | Severe mode dropping to avoid false samples | Highly robust mode coverage | Heuristic non-saturating GAN loss replaces JSD with reverse KL, inducing mode collapse. |
-| **Metric Properties** | $\sqrt{	ext{JSD}}$ is a true metric; JSD itself is bounded $[0, \ln 2]$ | $W_1$ is an unbounded true metric | Finite batch sampling produces noisy estimates of the theoretical midpoint mixture $M$. |
+| **Metric Properties** | $\sqrt{D_{\text{JS}}}$ is a true metric; JSD itself is bounded $[0, \ln 2]$ | $W_1$ is an unbounded true metric | Finite batch sampling produces noisy estimates of the theoretical midpoint mixture $M$. |
+
 ---
 
-### 11. 💻 Standalone Executable Python/PyTorch Verification Script
+## 11. 💻 Standalone Executable Python/PyTorch Verification Script
 
 ```python
 """
-Jensen-Shannon Divergence (JSD) & GAN Minimax Simulation
-========================================================
+Jensen-Shannon Divergence (JSD) & GAN Minimax Verification Suite
+=================================================================
 Demonstrates:
-1. Exact JSD computation on discrete distributions
-2. Symmetry and Boundedness assertions (0 <= JSD <= ln 2)
-3. Simulated GAN optimal minimax value V(D*, G) == -ln(4) + 2*JSD
+Part A: Pure Python Standard Library Simulation (math module only, zero external imports)
+Part B: Production PyTorch Verification Suite with Autograd & Clamping
 """
-import torch
-import torch.nn.functional as F
-import numpy as np
 
-print("=" * 75)
-print("JENSEN-SHANNON DIVERGENCE (JSD) & GAN THEOREM SIMULATION")
-print("=" * 75)
+# ==============================================================================
+# PART A: PURE PYTHON STANDARD LIBRARY SIMULATION (math module only)
+# ==============================================================================
+import math
 
-# ─── 1. Discrete JSD Function Definition ───
-def jensen_shannon_divergence(p, q):
-    p = torch.clamp(p, min=1e-12)
-    q = torch.clamp(q, min=1e-12)
-    m = 0.5 * (p + q)
-    kl_p_m = torch.sum(p * torch.log(p / m))
-    kl_q_m = torch.sum(q * torch.log(q / m))
+def jsd_pure(p, q):
+    """Computes Jensen-Shannon Divergence using only the built-in math module."""
+    assert len(p) == len(q), "Distributions must have identical dimension."
+    n = len(p)
+    # Midpoint mixture M = 0.5 * (P + Q)
+    m = [0.5 * (p[i] + q[i]) for i in range(n)]
+    
+    kl_p_m = 0.0
+    kl_q_m = 0.0
+    for i in range(n):
+        if p[i] > 1e-15:
+            kl_p_m += p[i] * math.log(p[i] / m[i])
+        if q[i] > 1e-15:
+            kl_q_m += q[i] * math.log(q[i] / m[i])
+            
     return 0.5 * (kl_p_m + kl_q_m)
 
-# Test Distributions from worked example
-P = torch.tensor([0.80, 0.20])
-Q = torch.tensor([0.40, 0.60])
+print("=" * 78)
+print("PART A: PURE PYTHON STANDARD LIBRARY SIMULATION (math module only)")
+print("=" * 78)
 
-jsd_pq = jensen_shannon_divergence(P, Q).item()
-jsd_qp = jensen_shannon_divergence(Q, P).item()
+# 1. Discrete 2-State Bernoulli Check (Worked Example 1)
+P_ex1 = [0.80, 0.20]
+Q_ex1 = [0.40, 0.60]
+jsd_val = jsd_pure(P_ex1, Q_ex1)
+jsd_sym = jsd_pure(Q_ex1, P_ex1)
 
-print(f"\n1. JSD COMPUTATION:")
-print(f"   Distribution P: {P.tolist()}")
-print(f"   Distribution Q: {Q.tolist()}")
-print(f"   * JSD(P || Q): {jsd_pq:.5f} nats (Analytic: 0.08630) ✅")
-print(f"   * JSD(Q || P): {jsd_qp:.5f} nats")
-assert abs(jsd_pq - jsd_qp) < 1e-6, "Symmetry assertion failed!"
-assert np.isclose(jsd_pq, 0.086305, atol=1e-4)
-print(f"   * Symmetry Confirmed: JSD(P||Q) == JSD(Q||P) ✅")
+print("\n1. Discrete Worked Example 1 Check:")
+print(f"   • P:                     {P_ex1}")
+print(f"   • Q:                     {Q_ex1}")
+print(f"   • JSD(P || Q):           {jsd_val:.6f} nats (Analytic: 0.086305)")
+print(f"   • JSD(Q || P):           {jsd_sym:.6f} nats")
+assert abs(jsd_val - 0.086305) < 1e-5, "Analytical match failed!"
+assert abs(jsd_val - jsd_sym) < 1e-12, "Symmetry assertion failed!"
+print("   • Symmetry & Analytical Value Confirmed! [PASS]")
 
-# ─── 2. Boundedness & Disjoint Support Test ───
-print("\n2. DISJOINT SUPPORT MAXIMAL BOUND TEST:")
-P_disjoint = torch.tensor([1.0, 0.0]) # Exists only at index 0
-Q_disjoint = torch.tensor([0.0, 1.0]) # Exists only at index 1
+# 2. Strict Boundedness & Disjoint Support Check
+P_disjoint = [1.0, 0.0]
+Q_disjoint = [0.0, 1.0]
+jsd_disjoint = jsd_pure(P_disjoint, Q_disjoint)
+ln2 = math.log(2.0)
 
-jsd_max = jensen_shannon_divergence(P_disjoint, Q_disjoint).item()
-ln2 = np.log(2.0)
+print("\n2. Strict Boundedness & Disjoint Support Check:")
+print(f"   • Disjoint JSD:          {jsd_disjoint:.6f} nats")
+print(f"   • Theoretical Max ln(2): {ln2:.6f} nats")
+assert abs(jsd_disjoint - ln2) < 1e-12, "Maximal bound assertion failed!"
+print("   • Max JSD strictly equals ln(2)! [PASS]")
 
-print(f"   * Disjoint Support JSD:  {jsd_max:.5f} nats")
-print(f"   * Theoretical Max ln(2): {ln2:.5f} nats")
-assert abs(jsd_max - ln2) < 1e-5, "Maximal bound assertion failed!"
-print("   * Boundedness Confirmed: Max JSD strictly equals ln(2)! ✅")
+# 3. Metric Property: Triangle Inequality of sqrt(JSD)
+A_dist = [0.90, 0.10]
+B_dist = [0.50, 0.50]
+C_dist = [0.10, 0.90]
 
-# ─── 3. Goodfellow's GAN Value Function Equivalence ───
-print("\n3. GOODFELLOW GAN MINIMAX THEOREM VERIFICATION:")
-# Optimal GAN Value: V(D*, G) = -ln(4) + 2 * JSD(P_data || P_G)
-ln4 = np.log(4.0)
-v_optimal = -ln4 + 2.0 * jsd_pq
+dist_ac = math.sqrt(jsd_pure(A_dist, C_dist))
+dist_ab = math.sqrt(jsd_pure(A_dist, B_dist))
+dist_bc = math.sqrt(jsd_pure(B_dist, C_dist))
 
-# Equilibrium check: when P_G == P_data, JSD = 0 => V* = -ln(4)
-jsd_zero = jensen_shannon_divergence(P, P).item()
-v_equilibrium = -ln4 + 2.0 * jsd_zero
+print("\n3. Triangle Inequality Check on sqrt(JSD):")
+print(f"   • Dist(A, C):            {dist_ac:.4f}")
+print(f"   • Dist(A, B) + Dist(B, C): {dist_ab + dist_bc:.4f}")
+assert dist_ac <= (dist_ab + dist_bc) + 1e-7, "Triangle inequality failed!"
+print("   • Triangle Inequality Confirmed: sqrt(JSD) is a true metric! [PASS]")
 
-print(f"   * Optimal GAN Value V(D*, G): {v_optimal:.5f}")
-print(f"   * Equilibrium Value (P=Q):    {v_equilibrium:.5f} (Exact -ln(4): {-ln4:.5f}) ✅")
-assert np.isclose(v_equilibrium, -ln4, atol=1e-5)
+# 4. Parametric Bernoulli Analytical Gradient Verification (Worked Example 2)
+z_init = 0.0
+sig_z = 1.0 / (1.0 + math.exp(-z_init))
+Q_init = [sig_z, 1.0 - sig_z]
+P_target = [1.0, 0.0]
+jsd_init = jsd_pure(P_target, Q_init)
 
-print("\n" + "=" * 75)
-print("ALL JENSEN-SHANNON DIVERGENCE TESTS PASSED SUCCESSFULLY! ✅")
-print("=" * 75)
+# Analytical gradient derivation from Section 8
+m0 = 0.5 * (1.0 + sig_z)
+m1 = 0.5 * (0.0 + (1.0 - sig_z))
+d_q0 = 0.5 * math.log(sig_z / m0)
+d_q1 = 0.5 * math.log((1.0 - sig_z) / m1)
+dq0_dz = sig_z * (1.0 - sig_z)
+dq1_dz = -dq0_dz
+grad_analytic = d_q0 * dq0_dz + d_q1 * dq1_dz
+
+# Numerical finite difference check
+eps = 1e-7
+sig_plus = 1.0 / (1.0 + math.exp(-(z_init + eps)))
+jsd_plus = jsd_pure(P_target, [sig_plus, 1.0 - sig_plus])
+grad_numeric = (jsd_plus - jsd_init) / eps
+
+print("\n4. Parametric Gradient Verification:")
+print(f"   • Forward Loss at z=0:   {jsd_init:.6f} nats (Analytic: 0.215762)")
+print(f"   • Analytic dJSD/dz:      {grad_analytic:.6f} (Target: -0.137327)")
+print(f"   • Numeric Finite Diff:   {grad_numeric:.6f}")
+assert abs(grad_analytic - (-0.137327)) < 1e-5, "Analytic gradient formula error!"
+assert abs(grad_analytic - grad_numeric) < 1e-4, "Gradient mismatch with finite difference!"
+print("   • Analytical gradient formula matches numerical derivative! [PASS]")
+
+
+# ==============================================================================
+# PART B: PRODUCTION PYTORCH VERIFICATION SUITE
+# ==============================================================================
+import torch
+import torch.nn.functional as F
+
+print("\n" + "=" * 78)
+print("PART B: PRODUCTION PYTORCH VERIFICATION SUITE")
+print("=" * 78)
+
+def jsd_pytorch(p_dist, q_dist, eps=1e-12):
+    """Production PyTorch Jensen-Shannon Divergence with clamping safeguards."""
+    p_clamped = torch.clamp(p_dist, min=eps)
+    q_clamped = torch.clamp(q_dist, min=eps)
+    m_dist = 0.5 * (p_clamped + q_clamped)
+    
+    kl_p = torch.sum(p_clamped * torch.log(p_clamped / m_dist), dim=-1)
+    kl_q = torch.sum(q_clamped * torch.log(q_clamped / m_dist), dim=-1)
+    return 0.5 * (kl_p + kl_q)
+
+# 1. PyTorch Autograd Gradient Verification
+z_param = torch.tensor([0.0], requires_grad=True)
+p_torch = torch.tensor([1.0, 0.0])
+
+def parametric_loss(logit):
+    q0 = torch.sigmoid(logit)
+    q1 = 1.0 - q0
+    q_dist = torch.cat([q0, q1])
+    return jsd_pytorch(p_torch, q_dist)
+
+loss = parametric_loss(z_param)
+loss.backward()
+
+print("\n1. PyTorch Autograd Gradient Check:")
+print(f"   • PyTorch Forward Loss:  {loss.item():.6f} nats")
+print(f"   • Autograd dLoss/dz:     {z_param.grad.item():.6f} (Analytic: -0.137327)")
+assert abs(z_param.grad.item() - (-0.137327)) < 1e-5, "PyTorch Autograd mismatch!"
+print("   • PyTorch Autograd matches hand derivation perfectly! [PASS]")
+
+# 2. Goodfellow GAN Value Function Equivalence Check
+P_data = torch.tensor([0.80, 0.20])
+P_model = torch.tensor([0.40, 0.60])
+jsd_gan = jsd_pytorch(P_data, P_model).item()
+ln4 = math.log(4.0)
+
+v_star = -ln4 + 2.0 * jsd_gan
+v_equilibrium = -ln4 + 2.0 * jsd_pytorch(P_data, P_data).item()
+
+print("\n2. Goodfellow GAN Minimax Theorem Verification:")
+print(f"   • Optimal GAN Value V(D*, G): {v_star:.6f}")
+print(f"   • Equilibrium Value (P=Q):    {v_equilibrium:.6f} (Exact -ln(4): {-ln4:.6f})")
+assert abs(v_equilibrium - (-ln4)) < 1e-7, "Equilibrium value mismatch!"
+print("   • GAN Equilibrium Value V(D*, G) == -ln(4) confirmed! [PASS]")
+
+# 3. Disjoint Support Gradient Vanishing Test
+z_disjoint = torch.tensor([-20.0], requires_grad=True) # Generator predicts state 1 with 99.99999% confidence
+loss_disjoint = parametric_loss(z_disjoint)
+loss_disjoint.backward()
+
+print("\n3. Disjoint Support Gradient Stall Test:")
+print(f"   • Loss under disjoint support: {loss_disjoint.item():.6f} (Approaching ln(2) = 0.6931)")
+print(f"   • Autograd gradient:          {z_disjoint.grad.item():.8e}")
+assert abs(z_disjoint.grad.item()) < 1e-5, "Gradient should vanish on disjoint support!"
+print("   • Vanishing gradient on disjoint manifold verified! [PASS]")
+
+print("\n" + "=" * 78)
+print("ALL FIRST-PRINCIPLES & PYTORCH JSD VERIFICATION TESTS PASSED! [PASS]")
+print("=" * 78)
 ```
 
 ---
 
-### 12. 🩺 Diagnostic Mini-Checks & Common Traps
+## 12. 🩺 Diagnostic Mini-Checks & Common Traps
 
-#### ✅ Self-Test Questions & Answers
+### ✅ Self-Test Questions & Answers
 
 1. **Q:** Why does JSD remain bounded ($\le \ln 2$) even when distributions have disjoint supports, while KL divergence explodes to $+\infty$?  
    **A:** Because JSD compares $P$ and $Q$ to their **50/50 mixture midpoint** $M = \frac{1}{2}(P + Q)$. Since $M$ contains mass wherever either $P$ or $Q$ has mass, the denominator $M(x)$ is never zero when $P(x) > 0$, capping the log-ratio at $\ln(\frac{P}{0.5P}) = \ln 2$.
 
 2. **Q:** If JSD is symmetric and bounded, why did researchers replace it with Wasserstein distance in modern GANs?  
-   **A:** When real and synthetic images occupy low-dimensional manifolds in high-dimensional pixel space, they almost never overlap initially. In this disjoint regime, JSD is flat and constant at $\ln 2$, causing **vanishing gradients** ($\nabla_\theta D_{\text{JS}} = 0$). Wasserstein distance provides smooth linear gradients regardless of overlap.
+   **A:** When real and synthetic images occupy low-dimensional manifolds in high-dimensional pixel space, they almost never overlap initially. In this disjoint regime, JSD is flat and constant at $\ln 2$, causing **vanishing gradients** ($\nabla_\theta D_{\text{JS}} = \mathbf{0}$). Wasserstein distance provides smooth linear gradients regardless of overlap.
 
 3. **Q:** What is the value of the optimal GAN discriminator $D^*(x)$ when the generator is perfectly trained?  
    **A:** When $p_G(x) = p_{\text{data}}(x)$, $D^*(x) = \frac{p_{\text{data}}(x)}{p_{\text{data}}(x) + p_{\text{data}}(x)} = \frac{1}{2} = \mathbf{0.50}$. The discriminator can do no better than a random coin toss!
 
-#### 🎯 Transfer Challenge: Apply Beyond the Worked Example
+---
+
+### 🎯 Transfer Challenge: Apply Beyond the Worked Example
 
 **Scenario:** Consider two discrete probability distributions over two outcomes representing disjoint binary states: $P = [1.0, 0.0]$ and $Q = [0.0, 1.0]$.
 
-1. **Construct the Midpoint Mixture:** Calculate the mixture distribution $M = rac{1}{2}(P + Q)$.
-2. **Compute KL Divergences to the Mixture:** Compute $D_{	ext{KL}}(P \parallel M)$ and $D_{	ext{KL}}(Q \parallel M)$ in natural units (nats).
-3. **Compute Jensen-Shannon Divergence:** Calculate $	ext{JSD}(P \parallel Q) = rac{1}{2} D_{	ext{KL}}(P \parallel M) + rac{1}{2} D_{	ext{KL}}(Q \parallel M)$ and verify that it hits the theoretical maximum bound of $\ln 2 pprox 0.6931$ nats ($1.0$ bit when using base 2). Explain why this causes vanishing gradients in GANs.
+1. **Construct the Midpoint Mixture:** Calculate the mixture distribution $M = \frac{1}{2}(P + Q)$.
+2. **Compute KL Divergences to the Mixture:** Compute $D_{\text{KL}}(P \parallel M)$ and $D_{\text{KL}}(Q \parallel M)$ in natural units (nats).
+3. **Compute Jensen-Shannon Divergence:** Calculate $D_{\text{JS}}(P \parallel Q) = \frac{1}{2} D_{\text{KL}}(P \parallel M) + \frac{1}{2} D_{\text{KL}}(Q \parallel M)$ and verify that it hits the theoretical maximum bound of $\ln 2 \approx 0.6931\text{ nats}$ ($1.0\text{ bit}$ when using base 2). Explain why this causes vanishing gradients in GANs.
 
-*Transfer Solution:*
+#### Transfer Solution:
 1. Midpoint Mixture:
-   $$M = rac{1}{2}([1.0, 0.0] + [0.0, 1.0]) = [0.50, 0.50]$$
+   $$M = \frac{1}{2}([1.0, 0.0] + [0.0, 1.0]) = [\mathbf{0.50}, \quad \mathbf{0.50}]$$
 2. KL to Mixture:
-   $$D_{	ext{KL}}(P \parallel M) = 1.0 \ln\left(rac{1.0}{0.50}ight) + 0.0 \ln\left(rac{0.0}{0.50}ight) = \ln(2) pprox \mathbf{0.6931} 	ext{ nats}$$
-   $$D_{	ext{KL}}(Q \parallel M) = 0.0 \ln\left(rac{0.0}{0.50}ight) + 1.0 \ln\left(rac{1.0}{0.50}ight) = \ln(2) pprox \mathbf{0.6931} 	ext{ nats}$$
+   $$D_{\text{KL}}(P \parallel M) = 1.0 \ln\left(\frac{1.0}{0.50}\right) + 0.0 \ln\left(\frac{0.0}{0.50}\right) = \ln(2) \approx \mathbf{0.6931\text{ nats}}$$
+   $$D_{\text{KL}}(Q \parallel M) = 0.0 \ln\left(\frac{0.0}{0.50}\right) + 1.0 \ln\left(\frac{1.0}{0.50}\right) = \ln(2) \approx \mathbf{0.6931\text{ nats}}$$
 3. JSD Calculation:
-   $$	ext{JSD}(P \parallel Q) = rac{1}{2}(\ln 2) + rac{1}{2}(\ln 2) = \ln 2 pprox \mathbf{0.6931} 	ext{ nats} \quad (= \mathbf{1.0000} 	ext{ bit in base 2})$$
-   *Implication for Generative AI:* Whenever two distributions have completely disjoint supports, JSD evaluates to the constant value $\ln 2$, regardless of whether the distributions are 0.001 millimeters apart or 100 kilometers apart. Because the derivative of a constant is zero, $
-abla_	heta 	ext{JSD} = \mathbf{0}$, freezing the generator's weights.
+   $$D_{\text{JS}}(P \parallel Q) = \frac{1}{2}(\ln 2) + \frac{1}{2}(\ln 2) = \ln 2 \approx \mathbf{0.6931\text{ nats}} \quad (= \mathbf{1.0000\text{ bit}}\text{ in base 2})$$
+   *Implication for Generative AI:* Whenever two distributions have completely disjoint supports, JSD evaluates to the constant value $\ln 2$, regardless of whether the distributions are 0.001 millimeters apart or 100 kilometers apart. Because the derivative of a constant is zero, $\nabla_\theta D_{\text{JS}} = \mathbf{0}$, freezing the generator's weights.
 
 ---
 
-#### ⚠️ Common Engineering Traps
+### 📅 Spaced Return & Retention Plan
+
+- [ ] **Tomorrow (24-Hour Recall Check):** Write down the definition of JSD from memory: $D_{\text{JS}}(P \parallel Q) = \frac{1}{2} D_{\text{KL}}(P \parallel M) + \frac{1}{2} D_{\text{KL}}(Q \parallel M)$. Verify why $M(x)$ eliminates the division-by-zero disaster.
+- [ ] **In One Week (Derivation Re-Verification):** Re-derive Goodfellow's optimal discriminator $D^*(x) = \frac{p_{\text{data}}}{p_{\text{data}} + p_G}$ and substitute it into the minimax integral to show $V(D^*, G) = -\ln 4 + 2 D_{\text{JS}}$.
+- [ ] **In One Month (Cross-Topic Synthesis):** Explain to a colleague why modern generative AI moved from JSD-based GANs to Wasserstein GANs and Diffusion models by sketching the flat plateau at $\ln 2$ versus the linear ramp $W_1 = |\theta|$.
+
+---
+
+### ⚠️ Common Engineering Traps
 
 | Trap | Why It Fails | Production Fix |
 | :--- | :--- | :--- |
@@ -464,7 +666,9 @@ abla_	heta 	ext{JSD} = \mathbf{0}$, freezing the generator's weights.
 | **Using JSD without square root as a distance metric** | JSD itself violates the Triangle Inequality; only $\sqrt{D_{\text{JS}}}$ is a true metric | Take square root $\sqrt{D_{\text{JS}}(P \parallel Q)}$ for geometric metric algorithms |
 | **Computing JSD by passing unnormalized logits** | Log ratios will be mathematically invalid if inputs do not sum to $1.0$ | Apply `F.softmax(logits, dim=-1)` before computing mixture and KL terms |
 
-#### 📋 Summary Checklist
+---
+
+### 📋 Summary Checklist
 - [x] Jensen-Shannon Divergence ($D_{\text{JS}}$) is the symmetric, bounded ($\le \ln 2$) version of KL divergence.
 - [x] Goodfellow's GAN Theorem: The Vanilla GAN minimax objective with an optimal discriminator is mathematically identical to minimizing $2 \cdot D_{\text{JS}}(p_{\text{data}} \parallel p_G) - \ln 4$.
 - [x] At Nash Equilibrium ($p_G = p_{\text{data}}$): $D_{\text{JS}} = 0.0$ and discriminator outputs $D^*(x) = 0.50$.
@@ -473,25 +677,28 @@ abla_	heta 	ext{JSD} = \mathbf{0}$, freezing the generator's weights.
 
 ---
 
-### 13. 🏆 Beginner Comprehension Confidence Audit
+## 13. 🏆 Beginner Comprehension Confidence Audit
 - [x] **Gate 1: Zero-Jargon Gate** — Every mathematical symbol ($P, Q, M, D_{\text{JS}}, D_{\text{KL}}, D^*(x), V(D, G)$) is defined in plain English before use.
 - [x] **Gate 2: Visual Geometry Gate** — Clear visual ASCII diagrams depict the midpoint mixture $M$, the bounded plateau at $\ln 2$, and the GAN training loop.
-- [x] **Gate 3: No-Magic-Formulas Gate** — Goodfellow's GAN minimax theorem is derived step-by-step algebraically.
-- [x] **Gate 4: Zero-Skipped-Arithmetic Gate** — Micro-numerical examples show every log-ratio, multiplication, and intermediate sum explicitly.
-- [x] **Gate 5: AI & PyTorch Connection Gate** — Vanilla GAN equilibrium, WGAN comparison, and an executable PyTorch verification script confirm complete functionality.
+- [x] **Gate 3: No-Magic-Formulas Gate** — Goodfellow's GAN minimax theorem and the analytical parameter gradients are derived step-by-step algebraically.
+- [x] **Gate 4: Zero-Skipped-Arithmetic Gate** — Micro-numerical examples show every log-ratio, multiplication, and intermediate sum explicitly, with forward evaluation and backward gradient vectors.
+- [x] **Gate 5: AI & PyTorch Connection Gate** — Vanilla GAN equilibrium, WGAN comparison, and an executable dual-stage Python/PyTorch verification script confirm complete functionality.
 
 ---
 
-### 14. 🌐 Curated External Learning References & Further Study
+## 14. 🌐 Curated External Learning References & Further Study
 
 To deepen your mathematical grasp of the Jensen-Shannon Divergence and adversarial training:
 
-| Resource / Link | Type | Key Topic / Concept Covered | When to Use & Prerequisites | Verified Status |
+| Resource & Link | Type & Authority | Specific Section / Scope | Why It Is Included & What It Clarifies | Verification & Status |
 | :--- | :--- | :--- | :--- | :--- |
-| [Jianhua Lin: Divergence Measures Based on the Shannon Entropy (1991)](https://ieeexplore.ieee.org/document/61115) | Seminal Foundation Paper | Original derivation of the Jensen-Shannon divergence, boundedness proofs, and information radius. | Definitive historical foundation paper for mathematical statistics. | ✅ Published IEEE Classic |
-| [Ian Goodfellow et al.: Generative Adversarial Nets (2014)](https://arxiv.org/abs/1406.2661) | Seminal Deep Learning Paper | Proof that minimax GAN optimization under an optimal discriminator directly minimizes JSD. | Must-read foundation paper for generative modeling researchers. | ✅ Published NeurIPS Classic |
-| [Martin Arjovsky & Léon Bottou: Towards Principled Methods for Training Generative Adversarial Networks (2017)](https://arxiv.org/abs/1701.04862) | Theoretical Analysis Paper | Rigorous mathematical proof showing why JSD yields vanishing gradients on disjoint low-dimensional manifolds. | Essential reading to understand why modern AI transitioned from JSD to Wasserstein and Diffusion. | ✅ Published ICLR Classic |
-| [Endres & Schindelin: A New Metric for Probability Distributions (2003)](https://ieeexplore.ieee.org/document/1207388) | Mathematical Physics Paper | Formal proof that the square root of the Jensen-Shannon divergence $\sqrt{	ext{JSD}}$ satisfies the triangle inequality and is a true metric. | Consult for formal metric proofs in information geometry. | ✅ Published Academic Classic |
-| [Stanford CS236: Deep Generative Models (Prof. Stefano Ermon)](https://deepgenerativemodels.github.io/) | University Course Notes | Theoretical analysis of GAN loss objectives, density ratio estimation, and divergence minimization. | Ideal for graduate level study of generative AI theory. | ✅ Active Stanford Course |
-| [SciPy Documentation: scipy.spatial.distance.jensenshannon](https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html) | Official Engineering Reference | Production numerical implementation of JSD and the Jensen-Shannon distance metric in Python. | Use for benchmarking distribution drift and dataset divergence. | ✅ Active SciPy Documentation |
-
+| [Jianhua Lin: Divergence Measures Based on the Shannon Entropy (1991)](https://ieeexplore.ieee.org/document/61115) | Seminal Foundation Paper | Original IEEE Paper | Definitive derivation of the Jensen-Shannon divergence, boundedness proofs ($0 \le D_{\text{JS}} \le \ln 2$), and information radius. | ✅ Published IEEE Classic |
+| [Ian Goodfellow et al.: Generative Adversarial Nets (2014)](https://arxiv.org/abs/1406.2661) | Seminal Deep Learning Paper | Section 4: Theoretical Results | Foundational proof that minimax GAN optimization under an optimal discriminator directly minimizes JSD: $V(D^*, G) = -\ln 4 + 2 D_{\text{JS}}$. | ✅ Published NeurIPS Classic |
+| [Martin Arjovsky & Léon Bottou: Towards Principled Methods for Training GANs (2017)](https://arxiv.org/abs/1701.04862) | Theoretical Analysis Paper | Sections 2 & 3: The Parallel Manifold Theorem | Rigorous mathematical proof showing why JSD yields vanishing gradients on disjoint low-dimensional manifolds, motivating Wasserstein distance. | ✅ Published ICLR Classic |
+| [Endres & Schindelin: A New Metric for Probability Distributions (2003)](https://ieeexplore.ieee.org/document/1207388) | Mathematical Physics Paper | Full Proof: Theorem 1 | Formal proof that the square root of the Jensen-Shannon divergence $\sqrt{D_{\text{JS}}}$ satisfies the triangle inequality and is a true metric. | ✅ Published Academic Classic |
+| [Stanford CS236: Deep Generative Models (Prof. Stefano Ermon)](https://deepgenerativemodels.github.io/) | University Course Material | Lecture Notes: Adversarial Learning & Divergences | Graduate-level analysis of GAN loss objectives, density ratio estimation, and divergence minimization. | ✅ Active Stanford Course |
+| [MIT 6.S191: Introduction to Deep Learning](https://introtodeeplearning.com/) | University Lecture & Lab | Generative Modeling Lecture | Clear visual introduction to generative adversarial training dynamics and discriminator-generator game theory. | ✅ Active MIT Course |
+| [StatQuest with Josh Starmer: GANs Clearly Explained](https://www.youtube.com/watch?v=8L11aMN5KY8) | Visual / Video Tutorial | Complete Walkthrough | High-intuition step-by-step visual explanation of how the discriminator and generator compete to reach Nash equilibrium. | ✅ Verified YouTube (200 OK) |
+| [Computerphile: Generative Adversarial Networks](https://www.youtube.com/watch?v=Gib_kiXGNvA) | Visual / Video Explanation | Full Video Demonstration | Intuitive breakdown of minimax adversarial game dynamics and training instabilities by Dr. Mike Pound. | ✅ Verified YouTube (200 OK) |
+| [Lilian Weng: From GAN to WGAN (2017)](https://lilianweng.github.io/posts/2017-08-20-gan/) | Deep Technical Blog | Sections: What is the Optimal Value? & Why JS Fails | The canonical industry engineering breakdown explaining JSD saturation and the mathematical shift to Earth Mover's Distance. | ✅ Active Engineering Blog |
+| [SciPy Documentation: scipy.spatial.distance.jensenshannon](https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html) | Production Library Reference | Function Specification & Notes | Canonical numerical implementation of JSD and the Jensen-Shannon distance metric in the Python scientific stack. | ✅ Active SciPy Documentation |

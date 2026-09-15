@@ -1,40 +1,41 @@
 # Expectation-Maximization (EM) Algorithm: Latent Variable Estimation & Monotonic Convergence
 
 > `🏷️ Tags:` `Statistics` `EM-Algorithm` `Latent-Variables` `GMM` `HMM` `Variational-Inference` `MLE`  
-> `📚 Prerequisites Needed:` [Latent Variable Models](./05-Latent_Variable_Models.md) (Complete vs incomplete data log-likelihood with latent mixture assignments) · [Convexity & Jensen's Inequality](../01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md) (Constructing the surrogate lower bound $Q(\theta \mid \theta^{(t)})$ via Jensen's inequality) · [Maximum Likelihood Estimation (MLE)](../04-Probability-and-Statistical-Estimation/05-MLE.md) (Closed-form parameter updates in the analytical M-step)
+> `📚 Prerequisites Needed:` [Latent Variable Models](./05-Latent_Variable_Models.md) (Complete vs incomplete data log-likelihood with latent mixture assignments) · [Convexity & Jensen's Inequality](../01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md) (Constructing the surrogate lower bound $Q(\theta \mid \theta^{(t)})$ via Jensen's inequality) · [Maximum Likelihood Estimation (MLE)](../04-Probability-and-Statistical-Estimation/05-MLE.md) (Closed-form parameter updates in the analytical M-step)  
 > `🎯 Where Do We Use This?:` **The foundational optimization algorithm for latent variable models** — Gaussian Mixture Models (GMMs) for density estimation and clustering, Baum-Welch algorithm for Hidden Markov Models (HMMs) in speech and bioinformatics, and the discrete precursor to Variational Autoencoders (VAEs).  
 > `🎓 Course Module Mapping:` [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/09-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Lec 20: Latent Variable Models & VAEs](../../Mathematical-Foundation-for-GenerativeAI/19-Lec08-Latent-Variable-Models-VAE/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md)  
 > `⏱️ Difficulty Level:` ⭐⭐⭐☆☆ (Intermediate & Intuitive · 15 min read)
 
 ---
 
-### 📌 Table of Contents
+## Table of Contents
 > 🧭 **Recommended First-Reading Route:**
 > - **Beginner / Non-Math Background:** Read Section 1 (Executive Summary), Section 2 (Visual Coordinate Primitive), Section 6 (Physical Metaphors & Alternating Detective), and Section 14 (Curated External References).
-> - **Practitioner / ML Engineer:** Read Section 1 (Metadata), Section 4 (Aha! Why Coordinate Ascent Guarantees Monotonic Improvement), Section 10 (AI Bridge Table), and Section 11 (Runnable Python Simulation).
+> - **Practitioner / ML Engineer:** Read Section 1 (Metadata), Section 4 (Why Coordinate Ascent Guarantees Monotonic Improvement), Section 10 (AI Bridge Table), and Section 11 (Runnable Python Simulation).
 > - **Deep Rigor / Researcher:** Read all sections sequentially including Section 8 (Theoretical Formulations), Section 9 (Proofs of Monotonic Likelihood Ascent via Jensen's Inequality), and Section 12 (Diagnostic Checks).
 
-- [1. 🧭 Executive Summary & Metadata Header](#1--executive-summary--metadata-header)
-- [2. 🌟 The Missing Foundation (Domain-Specific Visual ASCII Art & Physical Primitive)](#2--the-missing-foundation-domain-specific-visual-ascii-art--physical-primitive)
-- [3. 🗣️ How to Read Every Mathematical Symbol (Pronunciation Guide)](#3--how-to-read-every-mathematical-symbol-pronunciation-guide)
-- [4. 💡 The Core "Aha!" Pivot Point & Memory Hooks](#4--the-core-aha-pivot-point--memory-hooks)
-- [5. 🥊 Contrastive Analysis: Why This Math & Why Naive Alternatives Fail (Why X, Not Y)](#5--contrastive-analysis-why-this-math--why-naive-alternatives-fail-why-x-not-y)
-- [6. 👶 ELI5 Intuition: The End-to-End AI Lifecycle](#6--eli5-intuition-the-end-to-end-ai-lifecycle)
-- [7. 📚 Deep Terminology Master Glossary (15 Core Concepts Dissected)](#7--deep-terminology-master-glossary-15-core-concepts-dissected)
-- [8. 📐 Mathematical Formulations, Rules & Hardware Realities](#8--mathematical-formulations-rules--hardware-realities)
-- [9. 🔢 Concrete Micro-Numerical Worked Examples (Pencil-and-Paper)](#9--concrete-micro-numerical-worked-examples-pencil-and-paper)
-- [10. 🔗 Connecting the Dots: Generative AI Architecture Blocks](#10--connecting-the-dots-generative-ai-architecture-blocks)
-- [11. 💻 Standalone Executable Python/PyTorch Verification Script](#11--standalone-executable-pythonpytorch-verification-script)
-- [12. 🩺 Diagnostic Mini-Checks & Common Traps](#12--diagnostic-mini-checks--common-traps)
-- [13. 🏆 Beginner Comprehension Confidence Audit](#13--beginner-comprehension-confidence-audit)
+- [1. 🧭 Executive Summary & Metadata Header](#1-executive-summary-metadata-header)
+- [2. 🌟 The Missing Foundation (Domain-Specific Visual ASCII Art & Physical Primitive)](#2-the-missing-foundation-domain-specific-visual-ascii-art-physical-primitive)
+- [3. 🗣️ How to Read Every Mathematical Symbol (Pronunciation Guide)](#3-how-to-read-every-mathematical-symbol-pronunciation-guide)
+- [4. 💡 The Core "Aha!" Pivot Point & Memory Hooks](#4-the-core-aha-pivot-point-memory-hooks)
+- [5. 🥊 Contrastive Analysis: Why This Math & Why Naive Alternatives Fail (Why X, Not Y)](#5-contrastive-analysis-why-this-math-why-naive-alternatives-fail-why-x-not-y)
+- [6. 👶 ELI5 Intuition: The End-to-End AI Lifecycle](#6-eli5-intuition-the-end-to-end-ai-lifecycle)
+- [7. 📚 Deep Terminology Master Glossary (15 Core Concepts Dissected)](#7-deep-terminology-master-glossary-15-core-concepts-dissected)
+- [8. 📐 Mathematical Formulations, Rules & Hardware Realities](#8-mathematical-formulations-rules-hardware-realities)
+- [9. 🔢 Concrete Micro-Numerical Worked Examples (Pencil-and-Paper)](#9-concrete-micro-numerical-worked-examples-pencil-and-paper)
+- [10. 🔗 Connecting the Dots: Generative AI Architecture Blocks](#10-connecting-the-dots-generative-ai-architecture-blocks)
+- [11. 💻 Standalone Executable Python/PyTorch Verification Script](#11-standalone-executable-pythonpytorch-verification-script)
+- [12. 🩺 Diagnostic Mini-Checks & Common Traps](#12-diagnostic-mini-checks-common-traps)
+- [13. 🏆 Beginner Comprehension Confidence Audit](#13-beginner-comprehension-confidence-audit)
+- [14. 🌐 Curated External Learning References & Further Study](#14-curated-external-learning-references-further-study)
 
 ---
 
-### 1. 🧭 Executive Summary & Metadata Header
+## 1. 🧭 Executive Summary & Metadata Header
 
 > [!NOTE]
 > ### 1. What is this chapter about?
-> The mathematical theory and algorithmic steps of the **Expectation-Maximization (EM) Algorithm**: finding Maximum Likelihood Estimates (MLE) in probabilistic models with hidden latent variables $Z$ (such as Gaussian Mixture Models) by alternating between computing posterior responsibilities (E-step) and maximizing surrogate lower bounds (M-step).
+> The mathematical theory, geometric mechanics, and algorithmic steps of the **Expectation-Maximization (EM) Algorithm**: finding Maximum Likelihood Estimates (MLE) in probabilistic models with hidden latent variables $Z$ (such as Gaussian Mixture Models) by alternating between computing posterior responsibilities (E-step) and maximizing surrogate lower bounds (M-step).
 >
 > ### 2. Why does this idea exist?
 > In incomplete-data problems where latent variables are unobserved, the marginal log-likelihood has a sum inside the logarithm: $\ln p(X \mid \theta) = \sum_i \ln \sum_k \pi_k \mathcal{N}(x_i \mid \theta_k)$. This couples all parameters, eliminating closed-form solutions and creating severe gradient singularities. EM builds a concave surrogate lower bound $Q(\theta \mid \theta^{(t)})$ via Jensen's inequality that decouples parameters and guarantees monotonic likelihood ascent.
@@ -44,13 +45,13 @@
 > - Execute the Expectation (E) step by computing analytical posterior responsibilities $\gamma_{ik} = p(z_i = k \mid x_i, \theta^{(t)})$.
 > - Execute the Maximization (M) step by solving closed-form stationarity conditions ($\nabla_\theta Q = 0$) for cluster weights, means, and covariances.
 > - Prove the Dempster-Laird-Rubin Monotonic Convergence Theorem demonstrating that likelihood never decreases across iterations.
-> - Implement, debug, and verify a 2-component Gaussian Mixture Model EM engine in Python/NumPy.
+> - Implement, debug, and verify a 2-component Gaussian Mixture Model EM engine in pure Python standard library and PyTorch.
 >
 > ### 4. What do I need first?
 > Latent variable models and marginal evidence ([Module 06, Chapter 05](./05-Latent_Variable_Models.md)), Jensen's inequality on concave logarithms ([Module 01, Chapter 03](../01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md)), and MLE optimization principles ([Module 04, Chapter 05](../04-Probability-and-Statistical-Estimation/05-MLE.md)).
 
-```
- ===================================================================================================
+```text
+ =========================================================================================
                  THE 2-STAGE EXPECTATION-MAXIMIZATION (EM) ENGINE
  ===================================================================================================
   
@@ -65,14 +66,14 @@
                  │                 M-STEP: UPDATE PARAMETERS     │
                  │                 θᵗ⁺¹ = argmax_θ Q(θ | θᵗ)     ▼
                  └───────────────────────────────────────────────┘
- ===================================================================================================
+ =========================================================================================
 ```
 
 ---
 
-### 2. 🌟 The Missing Foundation (Domain-Specific Visual ASCII Art & Physical Primitive)
+## 2. 🌟 The Missing Foundation (Domain-Specific Visual ASCII Art & Physical Primitive)
 
-#### What Real-World Physical Problem Forced Humans to Invent This Math?
+### What Real-World Physical Problem Forced Humans to Invent This Math?
 Suppose 100 students take a math exam:
 - 50 students were taught by **Teacher A**, and 50 were taught by **Teacher B**.
 - You only see the students' final test scores ($X$), but the teacher identities ($Z$) were lost!
@@ -83,7 +84,7 @@ Suppose 100 students take a math exam:
 
 In 1977, Arthur Dempster, Nan Laird, and Donald Rubin formalized the **Expectation-Maximization (EM) algorithm** to resolve this circular deadlock by iteratively guessing the missing identities (E-step) and updating the model parameters (M-step), mathematically guaranteeing that data likelihood never decreases.
 
-```
+```text
        SURROGATE FUNCTION Q(θ | θᵗ) TANGENT TO TRUE LOG-LIKELIHOOD ln p(X|θ)
  
    Log-Likelihood ▲                  True Marginal Log-Likelihood ln p(X|θ)
@@ -102,9 +103,9 @@ In 1977, Arthur Dempster, Nan Laird, and Donald Rubin formalized the **Expectati
                              θᵗ                      θᵗ⁺¹
 ```
 
-#### Plain-English Breakdown of Basic Notation
-- $X$ (**Observed Data**): The data points we can see (e.g. test scores, audio waveforms).
-- $Z$ (**Latent Variables / Hidden Causes**): The missing information (e.g. which teacher taught which student).
+### Plain-English Breakdown of Basic Notation
+- $X$ (**Observed Data**): The data points we can see (e.g. test scores, audio waveforms, image pixels).
+- $Z$ (**Latent Variables / Hidden Causes**): The missing information (e.g. which teacher taught which student, which speaker spoke).
 - $\theta$ (**Model Parameters**): The cluster centers ($\mu$), spreads ($\Sigma$), and population proportions ($\pi$).
 - $\gamma_{ik}$ (**Responsibility / Soft Weight**): The probability ($0\%$ to $100\%$) that data point $i$ was generated by cluster $k$.
 - $Q(\theta \mid \theta^{(t)})$ (**Surrogate Function**): A solvable mathematical lower bound curve constructed during the E-step.
@@ -112,7 +113,7 @@ In 1977, Arthur Dempster, Nan Laird, and Donald Rubin formalized the **Expectati
 
 ---
 
-### 3. 🗣️ How to Read Every Mathematical Symbol (Pronunciation Guide)
+## 3. 🗣️ How to Read Every Mathematical Symbol (Pronunciation Guide)
 
 | Mathematical Expression / Symbol | Read It Aloud As... (Pronunciation) | Plain-English Meaning & Intuition | Context in Machine Learning |
 | :--- | :--- | :--- | :--- |
@@ -125,12 +126,12 @@ In 1977, Arthur Dempster, Nan Laird, and Donald Rubin formalized the **Expectati
 
 ---
 
-### 4. 💡 The Core "Aha!" Pivot Point & Memory Hooks
+## 4. 💡 The Core "Aha!" Pivot Point & Memory Hooks
 
-> 💡 **The Core "Aha!" Discovery:**  
+> **The Core Insight:**  
 > **Instead of trying to solve for both the hidden labels and the model parameters at the same time (impossible), alternate! Hold parameters fixed to estimate soft probabilities for the hidden labels (E-step); then hold the probabilities fixed to recalculate the parameters with weighted averages (M-step). Each alternation guarantees an uphill step on the true likelihood surface!**
 
-#### Step-by-Step Mathematical Proof: Monotonic Convergence Theorem (Dempster et al., 1977)
+### Step-by-Step Mathematical Proof: Monotonic Convergence Theorem (Dempster et al., 1977)
 Why is the EM algorithm mathematically guaranteed to never decrease data log-likelihood? Let us prove this from first principles:
 
 1. Let $\theta$ be any candidate parameter vector and $\theta^{(t)}$ be the current parameter estimates. The marginal log-likelihood satisfies:
@@ -154,14 +155,14 @@ Why is the EM algorithm mathematically guaranteed to never decrease data log-lik
    $$\boxed{\ln p(X \mid \theta^{(t+1)}) \ge \ln p(X \mid \theta^{(t)})}$$
    Every single iteration of the EM algorithm is guaranteed to climb or maintain the true data log-likelihood!
 
-#### 5-Second Mental Memory Hooks
+### Quick Memory Hooks
 - **E-Step (Expectation)**: *"Calculate the soft probabilities of who belongs to which group."*
 - **M-Step (Maximization)**: *"Update the group centers and spreads using weighted averages."*
 - **Hard EM vs Soft EM**: *K-Means is Hard EM (100% or 0%); GMM is Soft EM (smooth decimal probabilities).*
 
 ---
 
-### 5. 🥊 Contrastive Analysis: Why This Math & Why Naive Alternatives Fail (Why X, Not Y)
+## 5. 🥊 Contrastive Analysis: Why This Math & Why Naive Alternatives Fail (Why X, Not Y)
 
 | Dimension | Expectation-Maximization (EM) | K-Means Clustering (Hard EM) | Direct Gradient Ascent on Incomplete Likelihood | Variational Inference (VAE) |
 | :--- | :--- | :--- | :--- | :--- |
@@ -171,7 +172,7 @@ Why is the EM algorithm mathematically guaranteed to never decrease data log-lik
 | **Covariance Modeling** | Full anisotropic covariance ellipsoids ($\Sigma_k$) | Isotropic spherical assumption ($I \cdot \sigma^2$) | Full covariance (parametrically constrained) | Diagonal covariance heads ($\operatorname{diag}(\sigma^2)$) |
 | **Scalability Limit** | Moderate datasets; exact posterior over all $N$ points | High speed, scalable to large $N$ | Highly sensitive to local optima and step sizes | Massive scale (amortized over mini-batches) |
 
-#### Concrete Mathematical Failure Counterexample: Singularities in Direct Gradient Ascent for GMMs
+### Concrete Mathematical Failure Counterexample: Singularities in Direct Gradient Ascent for GMMs
 Suppose we attempt to train a 2-component Gaussian Mixture Model by performing unconstrained gradient ascent directly on the incomplete data log-likelihood:
 $$\ln p(X \mid \theta) = \sum_{i=1}^N \ln \left( \pi_1 \mathcal{N}(x_i \mid \mu_1, \sigma_1^2) + \pi_2 \mathcal{N}(x_i \mid \mu_2, \sigma_2^2) \right)$$
 
@@ -189,10 +190,10 @@ $$\ln p(X \mid \theta) = \sum_{i=1}^N \ln \left( \pi_1 \mathcal{N}(x_i \mid \mu_
 
 ---
 
-### 6. 👶 ELI5 Intuition: The End-to-End AI Lifecycle
+## 6. 👶 ELI5 Intuition: The End-to-End AI Lifecycle
 
-```
- ===================================================================================================
+```text
+ =========================================================================================
            END-TO-END AI LIFECYCLE: THE EM CLUSTERING LIFECYCLE
  ===================================================================================================
 
@@ -212,33 +213,31 @@ $$\ln p(X \mid \theta) = \sum_{i=1}^N \ln \left( \pi_1 \mathcal{N}(x_i \mid \mu_
   │         │
   │         ▼
   └─── [4. Check Log-Likelihood]: If Δln p(X) < 10⁻⁵ ──► CONVERGED!
- ===================================================================================================
+ =========================================================================================
 ```
 
-#### Everyday Real-World Metaphors
+### Everyday Real-World Metaphors
 
-##### Metaphor 1: The Potluck Dinner Mystery
+#### Metaphor 1: The Potluck Dinner Mystery
 - 50 guests brought unlabeled dishes to a potluck. You know some dishes are Spicy Thai and others are Mild Italian.
 - You take a bite of each dish (Observation $X$).
 - **E-Step:** You taste dish #7. It has lemongrass and chili. You estimate: *"95% chance this is Thai, 5% Italian"* (Responsibility $\gamma$).
 - **M-Step:** You gather all dishes with high Thai scores and determine the average spice and garlic level of Thai cooking (Updated Parameters $\mu, \Sigma$).
 - You repeat until your recipes match the dishes perfectly.
 
-##### Metaphor 2: Calibrating a Guitar Tuner
+#### Metaphor 2: Calibrating a Guitar Tuner
 - A microphone picks up sound from two guitar strings vibrating simultaneously.
 - You guess which harmonic peak belongs to String A vs String B (E-step).
 - You adjust the tuning pegs to match the predicted fundamental pitch (M-step).
 
----
-
-#### ⚠️ Where the Metaphor Breaks Down (Limits of the Analogy)
-The alternating detective / chicken-and-egg riddle metaphor suggests that alternately guessing clues and reconstructing the crime always converges to the single objective truth. However:
-- **Local Optima and Saddle Traps:** The EM algorithm guarantees only monotonic ascent on the marginal likelihood $\ell(	heta)$; it does not guarantee convergence to the global optimum. In high dimensions, EM frequently gets trapped in poor local maxima or along saddle plateaus depending on initial parameter seeding.
-- **Singularity Explosion:** For Gaussian Mixture Models, if a cluster shrinks until its covariance $\sigma_k^2 	o 0$ around a single training point, the likelihood blows up to positive infinity ($\ell 	o +\infty$). This is not a meaningful global solution; it is a degenerate delta singularity that breaks numerical stability without explicit variance flooring.
+### ⚠️ Where the Metaphor Breaks Down (Limits of the Analogy)
+The alternating detective riddle suggests that alternately guessing clues and reconstructing the crime always converges to the single objective truth. However:
+- **Local Optima and Saddle Traps:** The EM algorithm guarantees only monotonic ascent on the marginal likelihood $\ell(\theta)$; it does not guarantee convergence to the global optimum. In high dimensions, EM frequently gets trapped in poor local maxima or along saddle plateaus depending on initial parameter seeding.
+- **Singularity Explosion:** For Gaussian Mixture Models, if a cluster shrinks until its covariance $\sigma_k^2 \to 0$ around a single training point, the likelihood blows up to positive infinity ($\ell \to +\infty$). This is not a meaningful global solution; it is a degenerate delta singularity that breaks numerical stability without explicit variance flooring.
 
 ---
 
-### 7. 📚 Deep Terminology Master Glossary (15 Core Concepts Dissected)
+## 7. 📚 Deep Terminology Master Glossary (15 Core Concepts Dissected)
 
 | Term / Notation | Formal Mathematical Meaning | Plain-English Meaning (No Jargon) | How to Remember / Real-World Analogy |
 | :--- | :--- | :--- | :--- |
@@ -260,10 +259,10 @@ The alternating detective / chicken-and-egg riddle metaphor suggests that altern
 
 ---
 
-### 8. 📐 Mathematical Formulations, Rules & Hardware Realities
+## 8. 📐 Mathematical Formulations, Rules & Hardware Realities
 
-```
- ===================================================================================================
+```text
+ =========================================================================================
                  THE GMM EM ALGORITHM UPDATE EQUATIONS
  ===================================================================================================
 
@@ -277,64 +276,94 @@ The alternating detective / chicken-and-egg riddle metaphor suggests that altern
       • Mixing Weight:  π_k^{(t+1)} = N_k / N
       • Cluster Mean:   μ_k^{(t+1)} = (1 / N_k) ∑_{i=1}^N γ_{ik} · x_i
       • Covariance:     Σ_k^{(t+1)} = (1 / N_k) ∑_{i=1}^N γ_{ik} · (x_i - μ_k)(x_i - μ_k)ᵀ
- ===================================================================================================
+ =========================================================================================
 ```
 
-#### Analytical Derivation of the M-Step Mean Update
+### Analytical Derivation of the M-Step Mean Update
 To see why the M-step mean update is an exact responsibility-weighted average, take the partial derivative of $Q(\theta \mid \theta^{(t)})$ with respect to $\mu_k$:
 $$\frac{\partial Q}{\partial \mu_k} = \frac{\partial}{\partial \mu_k} \left( -\frac{1}{2} \sum_{i=1}^N \gamma_{ik} (x_i - \mu_k)^\top \Sigma_k^{-1} (x_i - \mu_k) \right) = \sum_{i=1}^N \gamma_{ik} \Sigma_k^{-1} (x_i - \mu_k)$$
-Setting this derivative to zero:
+Setting this derivative to zero for stationarity:
 $$\sum_{i=1}^N \gamma_{ik} \Sigma_k^{-1} x_i = \sum_{i=1}^N \gamma_{ik} \Sigma_k^{-1} \mu_k \implies \Sigma_k^{-1} \sum_{i=1}^N \gamma_{ik} x_i = \Sigma_k^{-1} \mu_k \left( \sum_{i=1}^N \gamma_{ik} \right)$$
 Multiplying by $\Sigma_k$ on the left and dividing by $N_k = \sum_{i=1}^N \gamma_{ik}$ yields:
 $$\boxed{\mu_k^{(t+1)} = \frac{\sum_{i=1}^N \gamma_{ik} x_i}{\sum_{i=1}^N \gamma_{ik}}}$$
 
-#### Hardware & Computer Memory Realities
-- **Covariance Inversion & Cholesky Decomposition:** In $D$-dimensional feature spaces, evaluating multivariate Gaussian densities requires computing $(\det \Sigma_k)^{-1/2}$ and $(x - \mu_k)^\top \Sigma_k^{-1} (x - \mu_k)$. Direct matrix inversion is $O(D^3)$ and numerically unstable. GPU frameworks use **Cholesky Factorization ($\Sigma_k = L L^\top$)** and solve triangular systems via CUDA cuBLAS.
+### Analytical Derivation of the M-Step Covariance Update
+For variance in 1D, expanding the quadratic and differentiating with respect to $\sigma_k^2$:
+$$\frac{\partial Q}{\partial \sigma_k^2} = \frac{\partial}{\partial \sigma_k^2} \sum_{i=1}^N \gamma_{ik} \left( -\frac{1}{2}\ln(2\pi \sigma_k^2) - \frac{(x_i - \mu_k)^2}{2\sigma_k^2} \right) = -\frac{N_k}{2\sigma_k^2} + \frac{1}{2(\sigma_k^2)^2} \sum_{i=1}^N \gamma_{ik}(x_i - \mu_k)^2 = 0$$
+Solving for $\sigma_k^2$:
+$$\boxed{\sigma_k^{2(t+1)} = \frac{1}{N_k} \sum_{i=1}^N \gamma_{ik}(x_i - \mu_k)^2}$$
+
+### Hardware & Computer Memory Realities
+- **Covariance Inversion & Cholesky Decomposition:** In $D$-dimensional feature spaces, evaluating multivariate Gaussian densities requires computing $(\det \Sigma_k)^{-1/2}$ and $(x - \mu_k)^\top \Sigma_k^{-1} (x - \mu_k)$. Direct matrix inversion is $\mathcal{O}(D^3)$ and numerically unstable. GPU frameworks use **Cholesky Factorization ($\Sigma_k = L L^\top$)** and solve triangular systems via CUDA cuBLAS.
 - **Memory Footprint of Responsibility Tensor:** The soft responsibility matrix has shape $(N, K)$. For 1 million data points and 1,000 components, $\gamma$ requires $1{,}000{,}000 \times 1{,}000 \times 4\text{ bytes} = 4\text{ GB}$ of RAM. High-throughput pipelines use **Mini-Batch EM** to process streaming batches.
 
 ---
 
-### 9. 🔢 Concrete Micro-Numerical Worked Examples (Pencil-and-Paper)
+## 9. 🔢 Concrete Micro-Numerical Worked Examples (Pencil-and-Paper)
 
-#### Example 1: 2-Component 1D GMM Single Iteration by Hand
+### Example 1: 2-Component 1D GMM Single Iteration by Hand
 Let dataset $X = [1.0, \quad 9.0]$ with $K=2$ components:
 - Initial parameters $\theta^{(0)}$: $\pi_1 = 0.5, \mu_1 = 2.0, \sigma_1 = 1.0$; $\pi_2 = 0.5, \mu_2 = 8.0, \sigma_2 = 1.0$.
 
-##### 1. E-Step (Compute Responsibilities):
-- **For $x_1 = 1.0$:**
-  - $\mathcal{N}(1.0 \mid 2.0, 1.0) = \frac{1}{\sqrt{2\pi}} e^{-(1.0-2.0)^2 / 2} = \frac{1}{\sqrt{2\pi}} e^{-0.5} \approx \mathbf{0.241971}$
-  - $\mathcal{N}(1.0 \mid 8.0, 1.0) = \frac{1}{\sqrt{2\pi}} e^{-(1.0-8.0)^2 / 2} = \frac{1}{\sqrt{2\pi}} e^{-24.5} \approx \mathbf{0.000000}$
-  - $\gamma_{1, 1} = \frac{0.5 \times 0.241971}{(0.5 \times 0.241971) + 0} = \mathbf{1.0000}, \qquad \gamma_{1, 2} = \mathbf{0.0000}$
-- **For $x_2 = 9.0$:**
-  - $\mathcal{N}(9.0 \mid 2.0, 1.0) = \frac{1}{\sqrt{2\pi}} e^{-(9.0-2.0)^2 / 2} \approx \mathbf{0.000000}$
-  - $\mathcal{N}(9.0 \mid 8.0, 1.0) = \frac{1}{\sqrt{2\pi}} e^{-(9.0-8.0)^2 / 2} \approx \mathbf{0.241971}$
-  - $\gamma_{2, 1} = \mathbf{0.0000}, \qquad \gamma_{2, 2} = \mathbf{1.0000}$
+#### 1. Initial Log-Likelihood Evaluation $\ln p(X \mid \theta^{(0)})$
+- For $x_1 = 1.0$:
+  $$\mathcal{N}(1.0 \mid 2.0, 1.0) = \frac{1}{\sqrt{2\pi}} e^{-(1.0-2.0)^2 / 2} = \frac{1}{\sqrt{2\pi}} e^{-0.5} \approx 0.398942 \times 0.606531 = \mathbf{0.241971}$$
+  $$\mathcal{N}(1.0 \mid 8.0, 1.0) = \frac{1}{\sqrt{2\pi}} e^{-(1.0-8.0)^2 / 2} = \frac{1}{\sqrt{2\pi}} e^{-24.5} \approx 0.398942 \times 2.2898 \times 10^{-11} \approx \mathbf{0.000000}$$
+  $$p(x_1 \mid \theta^{(0)}) = 0.5(0.241971) + 0.5(0.0) = 0.120986 \implies \ln p(x_1) = \mathbf{-2.1121}$$
 
-##### 2. M-Step (Update Cluster Means):
-$$\mu_1^{(1)} = \frac{\gamma_{1, 1}(1.0) + \gamma_{2, 1}(9.0)}{\gamma_{1, 1} + \gamma_{2, 1}} = \frac{(1.0000 \times 1.0) + (0.0000 \times 9.0)}{1.0000 + 0.0000} = \frac{1.0}{1.0} = \mathbf{1.0000}$$
-$$\mu_2^{(1)} = \frac{\gamma_{1, 2}(1.0) + \gamma_{2, 2}(9.0)}{\gamma_{1, 2} + \gamma_{2, 2}} = \frac{(0.0000 \times 1.0) + (1.0000 \times 9.0)}{0.0000 + 1.0000} = \frac{9.0}{1.0} = \mathbf{9.0000}$$
-*(The cluster means jumped from initial guesses $[2.0, 8.0]$ to the exact true cluster centers $[1.0, 9.0]$!)*
+- For $x_2 = 9.0$:
+  $$\mathcal{N}(9.0 \mid 2.0, 1.0) = \frac{1}{\sqrt{2\pi}} e^{-(9.0-2.0)^2 / 2} = \frac{1}{\sqrt{2\pi}} e^{-24.5} \approx \mathbf{0.000000}$$
+  $$\mathcal{N}(9.0 \mid 8.0, 1.0) = \frac{1}{\sqrt{2\pi}} e^{-(9.0-8.0)^2 / 2} = \frac{1}{\sqrt{2\pi}} e^{-0.5} \approx \mathbf{0.241971}$$
+  $$p(x_2 \mid \theta^{(0)}) = 0.5(0.0) + 0.5(0.241971) = 0.120986 \implies \ln p(x_2) = \mathbf{-2.1121}$$
+
+$$\ln p(X \mid \theta^{(0)}) = -2.1121 + (-2.1121) = \mathbf{-4.2242\text{ nats}}$$
+
+#### 2. E-Step (Compute Exact Posterior Responsibilities)
+- For $x_1 = 1.0$:
+  $$\gamma_{11} = \frac{0.5 \times 0.241971}{(0.5 \times 0.241971) + (0.5 \times 0.0)} = \frac{0.120986}{0.120986} = \mathbf{1.0000}, \qquad \gamma_{12} = \mathbf{0.0000}$$
+- For $x_2 = 9.0$:
+  $$\gamma_{21} = \frac{0.5 \times 0.0}{(0.5 \times 0.0) + (0.5 \times 0.241971)} = \mathbf{0.0000}, \qquad \gamma_{22} = \frac{0.120986}{0.120986} = \mathbf{1.0000}$$
+
+Effective cluster weights:
+$$N_1 = \gamma_{11} + \gamma_{21} = 1.0000 + 0.0000 = 1.0000$$
+$$N_2 = \gamma_{12} + \gamma_{22} = 0.0000 + 1.0000 = 1.0000$$
+
+#### 3. M-Step (Analytical Parameter Updates)
+- Mixing weights:
+  $$\pi_1^{(1)} = \frac{N_1}{N} = \frac{1.0}{2.0} = \mathbf{0.5000}, \qquad \pi_2^{(1)} = \frac{N_2}{N} = \frac{1.0}{2.0} = \mathbf{0.5000}$$
+
+- Cluster means:
+  $$\mu_1^{(1)} = \frac{\gamma_{11} x_1 + \gamma_{21} x_2}{N_1} = \frac{(1.0000 \times 1.0) + (0.0000 \times 9.0)}{1.0000} = \frac{1.0}{1.0} = \mathbf{1.0000}$$
+  $$\mu_2^{(1)} = \frac{\gamma_{12} x_1 + \gamma_{22} x_2}{N_2} = \frac{(0.0000 \times 1.0) + (1.0000 \times 9.0)}{1.0000} = \frac{9.0}{1.0} = \mathbf{9.0000}$$
+
+- Cluster variances (with safety variance floor $\epsilon = 10^{-4}$):
+  $$\sigma_1^{2(1)} = \frac{\gamma_{11}(x_1 - \mu_1^{(1)})^2 + \gamma_{21}(x_2 - \mu_1^{(1)})^2}{N_1} = \frac{1.0(1.0 - 1.0)^2 + 0.0}{1.0} = 0.0 \implies \max(0.0, 10^{-4}) = \mathbf{10^{-4}}$$
+  $$\sigma_2^{2(1)} = \frac{\gamma_{12}(x_1 - \mu_2^{(1)})^2 + \gamma_{22}(x_2 - \mu_2^{(1)})^2}{N_2} = \frac{0.0 + 1.0(9.0 - 9.0)^2}{1.0} = 0.0 \implies \max(0.0, 10^{-4}) = \mathbf{10^{-4}}$$
+
+*(Notice why the variance floor is essential: with 1 sample per cluster, unconstrained variance collapses to zero!)*
+
+#### 4. Stationarity Verification ($\nabla_\mu Q = 0$)
+Let us verify that at $\mu_1^{(1)} = 1.0$ and $\mu_2^{(1)} = 9.0$, the gradient of the surrogate function $Q(\theta \mid \theta^{(0)})$ is exactly zero:
+$$\frac{\partial Q}{\partial \mu_1} = \frac{1}{\sigma_1^2} \sum_{i=1}^2 \gamma_{i1}(x_i - \mu_1) = \frac{1}{\sigma_1^2} [ 1.0000(1.0 - 1.0) + 0.0000(9.0 - 1.0) ] = \frac{0.0}{\sigma_1^2} = \mathbf{0.0000}$$
+$$\frac{\partial Q}{\partial \mu_2} = \frac{1}{\sigma_2^2} \sum_{i=1}^2 \gamma_{i2}(x_i - \mu_2) = \frac{1}{\sigma_2^2} [ 0.0000(1.0 - 9.0) + 1.0000(9.0 - 9.0) ] = \frac{0.0}{\sigma_2^2} = \mathbf{0.0000}$$
+The analytical M-step finds the exact stationary critical point of the surrogate lower bound in a single step!
+
+#### 5. Log-Likelihood Evaluation & Monotonic Ascent Verification
+If we evaluate likelihood using fixed variance $\sigma^2 = 1.0$ to compare means fairly:
+- At $\mu_1^{(1)} = 1.0, \mu_2^{(1)} = 9.0, \sigma^2 = 1.0$:
+  - $p(x_1 = 1.0) = 0.5 \mathcal{N}(1.0 \mid 1.0, 1.0) = 0.5 \left( \frac{1}{\sqrt{2\pi}} \right) \approx 0.5(0.398942) = 0.199471$
+  - $p(x_2 = 9.0) = 0.5 \mathcal{N}(9.0 \mid 9.0, 1.0) = 0.5 \left( \frac{1}{\sqrt{2\pi}} \right) \approx 0.5(0.398942) = 0.199471$
+  - $\ln p(X \mid \theta^{(1)}) = \ln(0.199471) + \ln(0.199471) = -1.6121 + (-1.6121) = \mathbf{-3.2242\text{ nats}}$
+- Likelihood gain:
+  $$\Delta \ln p(X) = \ln p(X \mid \theta^{(1)}) - \ln p(X \mid \theta^{(0)}) = -3.2242 - (-4.2242) = \mathbf{+1.0000\text{ nat}}$$
+The data log-likelihood increased strictly by $+1.0000$ nat, confirming the Monotonic Convergence Theorem.
 
 ---
 
-#### Example 2: Log-Likelihood Evaluation & Monotonic Ascent
-- **Initial Log-Likelihood $\ln p(X \mid \theta^{(0)})$:**
-  - $p(x_1 = 1.0) = 0.5(0.241971) + 0 = 0.120986 \implies \ln(0.120986) = -2.1121$
-  - $p(x_2 = 9.0) = 0 + 0.5(0.241971) = 0.120986 \implies \ln(0.120986) = -2.1121$
-  - Total $\ln p(X \mid \theta^{(0)}) = -2.1121 + (-2.1121) = \mathbf{-4.2242\text{ nats}}$
-- **Updated Log-Likelihood $\ln p(X \mid \theta^{(1)})$:**
-  - At $\mu_1 = 1.0, \mu_2 = 9.0$, both points sit at the peak of their respective Gaussians: $\mathcal{N}(0) = \frac{1}{\sqrt{2\pi}} \approx 0.398942$.
-  - $p(x_1 = 1.0) = 0.5(0.398942) = 0.199471 \implies \ln(0.199471) = -1.6121$
-  - $p(x_2 = 9.0) = 0.5(0.398942) = 0.199471 \implies \ln(0.199471) = -1.6121$
-  - Total $\ln p(X \mid \theta^{(1)}) = -1.6121 + (-1.6121) = \mathbf{-3.2242\text{ nats}}$
-- **Monotonic Verification:** $-3.2242 > -4.2242$ (Likelihood increased by $+1.0000$ nat!).
+## 10. 🔗 Connecting the Dots: Generative AI Architecture Blocks
 
----
-
-### 10. 🔗 Connecting the Dots: Generative AI Architecture Blocks
-
-```
- ===================================================================================================
+```text
+ =========================================================================================
                  THE EVOLUTION FROM EM TO MODERN VARIATIONAL GENERATIVE AI
  ===================================================================================================
 
@@ -345,7 +374,7 @@ $$\mu_2^{(1)} = \frac{\gamma_{1, 2}(1.0) + \gamma_{2, 2}(9.0)}{\gamma_{1, 2} + \
    │ M-Step: Closed-form parameter updates  │        │ Amortized M-Step: Neural Decoder p_θ   │
    │ Monotonic convergence guaranteed       │        │ Gradient descent on continuous ELBO    │
    └────────────────────────────────────────┘        └────────────────────────────────────────┘
- ===================================================================================================
+ =========================================================================================
 ```
 
 | Generative System | How EM is Applied | Architectural Role | What is Approximate in Practice? |
@@ -354,85 +383,177 @@ $$\mu_2^{(1)} = \frac{\gamma_{1, 2}(1.0) + \gamma_{2, 2}(9.0)}{\gamma_{1, 2} + \
 | **Hidden Markov Models (Baum-Welch)** | **Forward-Backward updates posterior state transitions** | Unsupervised acoustic sequence modeling for speech and genomics | Quadratic time complexity $\mathcal{O}(T \cdot K^2)$ limits scaling to large state spaces. |
 | **Variational Autoencoders (Amortized EM)** | **Variational inference replaces intractable exact E-step** | Neural encoder computes approximate posterior $q_\phi(z \mid x)$ | Amortization gap: neural parameters $\phi$ cannot match the optimal individual posterior for every point. |
 | **Missing Data Imputation** | **Iteratively estimates missing values via expected posteriors** | Imputes corrupted tabular and sensory observations | Assumes data is Missing at Random (MAR); fails if missingness depends on unobserved values. |
+
 ---
 
-### 11. 💻 Standalone Executable Python/PyTorch Verification Script
+## 11. 💻 Standalone Executable Python/PyTorch Verification Script
+
+The following standalone script contains two complete runnable components:
+- **Part A:** A pure Python standard library implementation using only built-in `math` (zero external dependencies).
+- **Part B:** A PyTorch verification suite with autograd checking that the analytical M-step update achieves exact zero gradient on the surrogate lower bound, testing monotonic ascent and variance floor stability.
 
 ```python
 """
-Expectation-Maximization (EM) Algorithm Simulation
-==================================================
-Demonstrates:
-1. Exact manual E-Step and M-Step updates for a Gaussian Mixture Model
-2. Monotonic non-decreasing log-likelihood convergence test
-3. Comparison between initial parameters and converged MLE centers
+Standalone Verification Script: Expectation-Maximization (EM) Algorithm
+Part A: Pure Python standard library implementation (zero external libraries).
+Part B: PyTorch autograd stationarity verification and numerical assertions.
 """
-import numpy as np
 
+import math
+
+# =====================================================================
+# PART A: Pure Python Standard Library GMM EM Engine
+# =====================================================================
 print("=" * 75)
-print("EXPECTATION-MAXIMIZATION (EM) ALGORITHM MATHEMATICAL SIMULATION")
+print("PART A: Pure Python Standard Library GMM EM Engine")
 print("=" * 75)
 
-# ─── 1. Setup 1D Dataset & Initial Parameters ───
-X = np.array([1.0, 9.0]) # 2 distinct points
-pi = np.array([0.5, 0.5])
-mu = np.array([2.0, 8.0])
-sigma = np.array([1.0, 1.0])
+# Dataset: 2 distinct observation clusters
+X_data = [1.0, 9.0]
+pi_weights = [0.5, 0.5]
+mu_centers = [2.0, 8.0]
+sigma2_vars = [1.0, 1.0]
 
-def gaussian_pdf(x_val, mu_val, sigma_val):
-    return (1.0 / (sigma_val * np.sqrt(2.0 * np.pi))) * np.exp(-0.5 * ((x_val - mu_val) / sigma_val)**2)
+def stdlib_gaussian_pdf(x_val: float, mean_val: float, var_val: float) -> float:
+    coeff = 1.0 / math.sqrt(2.0 * math.pi * var_val)
+    exponent = -0.5 * ((x_val - mean_val) ** 2) / var_val
+    return coeff * math.exp(exponent)
 
-def compute_log_likelihood(X_data, pi_weights, mu_centers, sigma_spreads):
+def stdlib_log_likelihood(data, p_weights, m_centers, v_vars) -> float:
     total_ll = 0.0
-    for x in X_data:
-        p_x = np.sum([pi_weights[k] * gaussian_pdf(x, mu_centers[k], sigma_spreads[k]) for k in range(len(pi_weights))])
-        total_ll += np.log(p_x)
+    for x in data:
+        px = sum(p_weights[k] * stdlib_gaussian_pdf(x, m_centers[k], v_vars[k]) for k in range(len(p_weights)))
+        total_ll += math.log(px)
     return total_ll
 
-print("\n1. INITIAL STATE:")
-init_ll = compute_log_likelihood(X, pi, mu, sigma)
-print(f"   * Initial Means:          mu = {mu.tolist()}")
-print(f"   * Initial Log-Likelihood: {init_ll:.4f} nats")
+# Step 0: Initial Likelihood
+ll_0 = stdlib_log_likelihood(X_data, pi_weights, mu_centers, sigma2_vars)
+print(f"Initial Parameters: mu = {mu_centers}, pi = {pi_weights}")
+print(f"Initial Log-Likelihood: {ll_0:.4f} nats")
 
-# ─── 2. Run 1 Iteration of EM ───
-print("\n2. EXECUTING EM ITERATION 1:")
-N = len(X)
-K = len(pi)
-gamma = np.zeros((N, K))
+# Step 1: E-Step (Responsibilities)
+N = len(X_data)
+K = len(pi_weights)
+gamma_responsibilities = []
 
-# E-Step
-for i in range(N):
-    densities = np.array([pi[k] * gaussian_pdf(X[i], mu[k], sigma[k]) for k in range(K)])
-    gamma[i] = densities / np.sum(densities)
+for x in X_data:
+    densities = [pi_weights[k] * stdlib_gaussian_pdf(x, mu_centers[k], sigma2_vars[k]) for k in range(K)]
+    total_density = sum(densities)
+    gamma_responsibilities.append([d / total_density for d in densities])
 
-print(f"   * E-Step Responsibilities (gamma_ik):\n{gamma.round(4)}")
+print(f"E-Step Responsibilities (gamma_ik): {gamma_responsibilities}")
 
-# M-Step
+# Step 2: M-Step (Parameter Updates)
+pi_updated = []
+mu_updated = []
+sigma2_updated = []
+
 for k in range(K):
-    N_k = np.sum(gamma[:, k])
-    mu[k] = np.sum(gamma[:, k] * X) / N_k
-    pi[k] = N_k / N
+    Nk = sum(gamma_responsibilities[i][k] for i in range(N))
+    pi_updated.append(Nk / N)
+    new_mu = sum(gamma_responsibilities[i][k] * X_data[i] for i in range(N)) / Nk
+    mu_updated.append(new_mu)
+    new_var = sum(gamma_responsibilities[i][k] * ((X_data[i] - new_mu) ** 2) for i in range(N)) / Nk
+    # Enforce variance floor
+    new_var = max(new_var, 1e-4)
+    sigma2_updated.append(new_var)
 
-step1_ll = compute_log_likelihood(X, pi, mu, sigma)
-print(f"   * M-Step Updated Means:   mu = {mu.tolist()} (Analytic: [1.0, 9.0]) [OK]")
-print(f"   * Step 1 Log-Likelihood:  {step1_ll:.4f} nats")
-assert np.allclose(mu, [1.0, 9.0]), "M-step means did not converge to cluster centers!"
+print(f"M-Step Updated Means:    mu = {mu_updated}")
+print(f"M-Step Updated Weights:  pi = {pi_updated}")
+print(f"M-Step Updated Vars:     sigma^2 = {sigma2_updated}")
 
-# ─── 3. Monotonicity Assertion ───
-print("\n3. MONOTONIC CONVERGENCE THEOREM VERIFICATION:")
-print(f"   * Likelihood Delta: {step1_ll - init_ll:+.4f} nats (Strictly positive increase! [OK])")
-assert step1_ll >= init_ll, "EM Monotonic convergence theorem violated!"
+# Step 3: Check Monotonicity on Fixed Variance baseline
+ll_1_fixed = stdlib_log_likelihood(X_data, pi_updated, mu_updated, sigma2_vars)
+print(f"Updated Log-Likelihood (fixed var): {ll_1_fixed:.4f} nats")
+delta_ll = ll_1_fixed - ll_0
+print(f"Log-Likelihood Delta: {delta_ll:+.4f} nats")
+
+assert abs(mu_updated[0] - 1.0) < 1e-5, f"Expected mu[0]=1.0, got {mu_updated[0]}"
+assert abs(mu_updated[1] - 9.0) < 1e-5, f"Expected mu[1]=9.0, got {mu_updated[1]}"
+assert delta_ll >= 0.0, f"Monotonicity violated: delta_ll = {delta_ll}"
+print("Part A assertions passed successfully!")
+
+
+# =====================================================================
+# PART B: PyTorch Autograd Stationarity Verification Suite
+# =====================================================================
+print("\n" + "=" * 75)
+print("PART B: PyTorch Autograd Stationarity Verification Suite")
+print("=" * 75)
+
+import torch
+
+# Multi-point dataset: 4 points clustered around 1.0 and 9.0
+X_t = torch.tensor([1.0, 1.2, 8.8, 9.0], dtype=torch.float64)
+N_pts = X_t.shape[0]
+K_comps = 2
+
+pi_t = torch.tensor([0.5, 0.5], dtype=torch.float64)
+mu_t = torch.tensor([3.0, 7.0], dtype=torch.float64)
+var_t = torch.tensor([2.0, 2.0], dtype=torch.float64)
+
+def pt_gaussian_pdf(x, m, v):
+    return (1.0 / torch.sqrt(2.0 * torch.pi * v)) * torch.exp(-0.5 * ((x - m) ** 2) / v)
+
+def pt_log_likelihood(data, p, m, v):
+    ll = torch.tensor(0.0, dtype=torch.float64)
+    for x in data:
+        px = torch.sum(p * pt_gaussian_pdf(x, m, v))
+        ll = ll + torch.log(px)
+    return ll
+
+ll_initial_pt = pt_log_likelihood(X_t, pi_t, mu_t, var_t)
+
+# E-step: responsibilities
+densities_pt = torch.stack([pi_t[k] * pt_gaussian_pdf(X_t, mu_t[k], var_t[k]) for k in range(K_comps)], dim=1)
+gamma_pt = densities_pt / densities_pt.sum(dim=1, keepdim=True)
+
+# M-step analytical formulas
+Nk_pt = gamma_pt.sum(dim=0)
+mu_next_pt = (gamma_pt * X_t.unsqueeze(1)).sum(dim=0) / Nk_pt
+var_next_pt = (gamma_pt * ((X_t.unsqueeze(1) - mu_next_pt) ** 2)).sum(dim=0) / Nk_pt
+# Variance floor clamping
+var_next_pt = torch.clamp(var_next_pt, min=1e-4)
+pi_next_pt = Nk_pt / N_pts
+
+print(f"Initial Parameters: mu = {mu_t.tolist()}")
+print(f"Analytical M-Step Means: mu_next = {mu_next_pt.tolist()}")
+
+# Stationarity Proof Verification:
+# Surrogate Q(theta | theta_t) = sum_i sum_k gamma_ik * ln(pi_k * N(x_i | mu_k, var_k))
+# If analytical M-step maximizes Q, grad_{mu} Q evaluated at mu_next MUST BE EXACT ZERO!
+mu_cand = mu_next_pt.clone().detach().requires_grad_(True)
+Q_val = torch.tensor(0.0, dtype=torch.float64)
+for i in range(N_pts):
+    for k in range(K_comps):
+        log_density = -0.5 * torch.log(2.0 * torch.pi * var_next_pt[k]) - 0.5 * ((X_t[i] - mu_cand[k]) ** 2) / var_next_pt[k]
+        Q_val = Q_val + gamma_pt[i, k] * (torch.log(pi_next_pt[k]) + log_density)
+
+Q_val.backward()
+
+grad_at_m_step = mu_cand.grad
+print(f"Surrogate gradient at analytical M-step means: {grad_at_m_step.tolist()}")
+assert torch.allclose(grad_at_m_step, torch.zeros_like(grad_at_m_step), atol=1e-8), \
+    f"Stationarity test failed! Gradient was {grad_at_m_step}"
+print("Stationarity Verified: Analytical M-Step matches exact surrogate stationary peak (grad = 0)!")
+
+# Monotonicity check
+ll_updated_pt = pt_log_likelihood(X_t, pi_next_pt, mu_next_pt, var_next_pt)
+print(f"Initial Likelihood: {ll_initial_pt:.4f} nats, Updated: {ll_updated_pt:.4f} nats")
+delta_ll_pt = ll_updated_pt - ll_initial_pt
+print(f"Monotonic Ascent Delta: {delta_ll_pt:+.4f} nats")
+assert ll_updated_pt >= ll_initial_pt, "PyTorch EM Monotonic convergence failed!"
 
 print("\n" + "=" * 75)
-print("ALL EXPECTATION-MAXIMIZATION TESTS PASSED SUCCESSFULLY! [OK]")
+print("ALL TESTS IN BOTH PART A AND PART B PASSED SUCCESSFULLY!")
 print("=" * 75)
 ```
 
 ---
 
-### 12. 🩺 Diagnostic Mini-Checks & Common Traps
+## 12. 🩺 Diagnostic Mini-Checks & Common Traps
 
-#### ✅ Self-Test Questions & Answers
+### Self-Test Questions & Answers
 
 1. **Q:** Why does the EM algorithm guarantee that log-likelihood never decreases?  
    **A:** By Jensen's Inequality, the surrogate function $Q(\theta \mid \theta^{(t)})$ forms a lower bound that touches the true log-likelihood surface at $\theta^{(t)}$. Maximizing $Q$ in the M-step guarantees $\ln p(X \mid \theta^{(t+1)}) \ge \ln p(X \mid \theta^{(t)})$.
@@ -443,7 +564,7 @@ print("=" * 75)
 3. **Q:** What causes the "Singularity Problem" in GMM training and how is it fixed?  
    **A:** If a Gaussian component centers directly on a single data point and shrinks its variance to zero ($\sigma_k^2 \to 0$), its likelihood formula $\frac{1}{\sigma\sqrt{2\pi}} \to +\infty$, crashing the algorithm with `NaN`s. The fix is adding a small variance floor: $\sigma_k^2 = \max(\sigma_k^2, \epsilon_{\text{floor}})$.
 
-#### 🎯 Transfer Challenge: Apply Beyond the Worked Example
+### Transfer Challenge: Apply Beyond the Worked Example
 
 **Scenario:** A 1-dimensional Gaussian Mixture Model with $K = 2$ components has equal mixing weights ($\pi_1 = \pi_2 = 0.50$). Component parameters are:
 - Component 1: $\mu_1 = 0.0, \sigma_1^2 = 1.0$
@@ -453,24 +574,22 @@ We collect a single observation: $x = 2.0$ (equidistant between the two cluster 
 
 1. **Calculate Component Densities:** Compute $p(x = 2 \mid z=1) = \mathcal{N}(2; 0, 1)$ and $p(x = 2 \mid z=2) = \mathcal{N}(2; 4, 1)$. Show that both components yield identical values.
 2. **E-Step Responsibility:** Compute the posterior responsibility $\gamma_1 = P(z=1 \mid x=2)$ and $\gamma_2 = P(z=2 \mid x=2)$.
-3. **M-Step Parameter Update:** Suppose we add a second observation $x_2 = 1.0$ where responsibilities evaluate to $\gamma_{1, x_2} = 0.95$ and $\gamma_{2, x_2} = 0.05$. Using the M-step formula $\mu_1^{	ext{new}} = rac{\sum_{i=1}^2 \gamma_{1, i} x_i}{\sum_{i=1}^2 \gamma_{1, i}}$, compute the updated mean $\mu_1^{	ext{new}}$.
+3. **M-Step Parameter Update:** Suppose we add a second observation $x_2 = 1.0$ where responsibilities evaluate to $\gamma_{1, x_2} = 0.95$ and $\gamma_{2, x_2} = 0.05$. Using the M-step formula $\mu_1^{\text{new}} = \frac{\sum_{i=1}^2 \gamma_{1, i} x_i}{\sum_{i=1}^2 \gamma_{1, i}}$, compute the updated mean $\mu_1^{\text{new}}$.
 
 *Transfer Solution:*
 1. Component Densities at $x = 2.0$:
-   - For Component 1: $\mathcal{N}(2; 0, 1) = rac{1}{\sqrt{2\pi}} e^{-(2-0)^2 / 2} = rac{1}{\sqrt{2\pi}} e^{-2} pprox 0.3989 	imes 0.1353 pprox \mathbf{0.0540}$
-   - For Component 2: $\mathcal{N}(2; 4, 1) = rac{1}{\sqrt{2\pi}} e^{-(2-4)^2 / 2} = rac{1}{\sqrt{2\pi}} e^{-(-2)^2 / 2} = rac{1}{\sqrt{2\pi}} e^{-2} pprox \mathbf{0.0540}$
+   - For Component 1: $\mathcal{N}(2; 0, 1) = \frac{1}{\sqrt{2\pi}} e^{-(2-0)^2 / 2} = \frac{1}{\sqrt{2\pi}} e^{-2} \approx 0.3989 \times 0.1353 \approx \mathbf{0.0540}$
+   - For Component 2: $\mathcal{N}(2; 4, 1) = \frac{1}{\sqrt{2\pi}} e^{-(2-4)^2 / 2} = \frac{1}{\sqrt{2\pi}} e^{-(-2)^2 / 2} = \frac{1}{\sqrt{2\pi}} e^{-2} \approx \mathbf{0.0540}$
    Both components assign identical probability density because $x = 2.0$ is symmetric between $\mu_1 = 0$ and $\mu_2 = 4$.
 2. E-Step Responsibilities:
-   $$\gamma_1 = rac{\pi_1 p(x \mid z=1)}{\pi_1 p(x \mid z=1) + \pi_2 p(x \mid z=2)} = rac{0.50 	imes 0.0540}{0.50 	imes 0.0540 + 0.50 	imes 0.0540} = rac{0.0270}{0.0540} = \mathbf{0.5000}$$
+   $$\gamma_1 = \frac{\pi_1 p(x \mid z=1)}{\pi_1 p(x \mid z=1) + \pi_2 p(x \mid z=2)} = \frac{0.50 \times 0.0540}{0.50 \times 0.0540 + 0.50 \times 0.0540} = \frac{0.0270}{0.0540} = \mathbf{0.5000}$$
    $$\gamma_2 = 1.0 - \gamma_1 = \mathbf{0.5000}$$
    *(The model is $50/50$ undecided between the two clusters).*
 3. M-Step Updated Mean with $x_1 = 2.0$ ($\gamma_{1,1}=0.50$) and $x_2 = 1.0$ ($\gamma_{1,2}=0.95$):
-   $$\mu_1^{	ext{new}} = rac{(0.50)(2.0) + (0.95)(1.0)}{0.50 + 0.95} = rac{1.00 + 0.95}{1.45} = rac{1.95}{1.45} pprox \mathbf{1.3448}$$
+   $$\mu_1^{\text{new}} = \frac{(0.50)(2.0) + (0.95)(1.0)}{0.50 + 0.95} = \frac{1.00 + 0.95}{1.45} = \frac{1.95}{1.45} \approx \mathbf{1.3448}$$
    *Interpretation:* The second point $x_2 = 1.0$ is much closer to cluster 1, carrying $95\%$ responsibility. The updated mean shifts from $0.0$ toward $1.3448$, properly weighted by soft posterior assignments.
 
----
-
-#### ⚠️ Common Engineering Traps
+### Common Engineering Traps
 
 | Trap | Why It Fails | Production Fix |
 | :--- | :--- | :--- |
@@ -478,7 +597,7 @@ We collect a single observation: $x = 2.0$ (equidistant between the two cluster 
 | **Assuming EM always finds the global optimum** | EM is a local hill-climbing algorithm and can get stuck in poor local maxima | Use multiple random restarts or initialize means via **K-Means++** |
 | **Dividing by zero when a cluster receives zero responsibility** | $N_k = \sum \gamma_{ik} = 0$, causing division-by-zero during M-step mean update | Re-initialize empty clusters to a randomly selected data point |
 
-#### 📋 Summary Checklist
+### Summary Checklist
 - [x] The EM Algorithm optimizes parameters in models with hidden latent variables $Z$.
 - [x] E-Step computes soft posterior responsibilities $\gamma_{ik} = P(z_i = k \mid x_i, \theta)$.
 - [x] M-Step updates cluster parameters $(\pi, \mu, \Sigma)$ in closed form.
@@ -487,25 +606,22 @@ We collect a single observation: $x = 2.0$ (equidistant between the two cluster 
 
 ---
 
-### 13. 🏆 Beginner Comprehension Confidence Audit
+## 13. 🏆 Beginner Comprehension Confidence Audit
 - [x] **Gate 1: Zero-Jargon Gate** — Every mathematical symbol ($X, Z, \theta, \gamma_{ik}, Q, \mu_k, \Sigma_k, \pi_k$) is defined in plain English before use.
 - [x] **Gate 2: Visual Geometry Gate** — Clear visual ASCII diagrams depict the iterative 2-step loop, surrogate $Q$-function tangent curve, and multi-modal density fitting.
-- [x] **Gate 3: No-Magic-Formulas Gate** — The Monotonic Convergence proof and the M-step mean update derivative are derived step-by-step.
-- [x] **Gate 4: Zero-Skipped-Arithmetic Gate** — Micro-numerical examples show every Gaussian PDF evaluation, responsibility fraction, weighted average, and log-likelihood sum.
+- [x] **Gate 3: No-Magic-Formulas Gate** — The Monotonic Convergence proof, surrogate stationarity condition ($\nabla_\mu Q = 0$), and M-step variance updates are derived step-by-step.
+- [x] **Gate 4: Zero-Skipped-Arithmetic Gate** — Micro-numerical examples show every Gaussian PDF evaluation, responsibility fraction, weighted average, variance floor clamping, and log-likelihood sum.
 - [x] **Gate 5: AI & PyTorch Connection Gate** — Multi-modal GMMs, Speech HMMs, connection to VAEs, and an executable verification script confirm complete functionality.
 
 ---
 
-### 14. 🌐 Curated External Learning References & Further Study
+## 14. 🌐 Curated External Learning References & Further Study
 
-To deepen your mathematical grasp of the Expectation-Maximization algorithm, coordinate ascent, and latent estimation:
-
-| Resource / Link | Type | Key Topic / Concept Covered | When to Use & Prerequisites | Verified Status |
+| Resource & Link | Type & Authority | Specific Section / Scope | Why It Is Included & What It Clarifies | Verification & Status |
 | :--- | :--- | :--- | :--- | :--- |
-| [StatQuest with Josh Starmer: Expectation Maximization Step-by-Step](https://www.youtube.com/watch?v=REypj2sy_5U) | Video Lesson & Visual Walkthrough | Clear, accessible demonstration of soft clustering, responsibilities, and iterative mean updates. | Ideal introductory visual explanation for engineers. | ✅ Active YouTube Classic |
-| [Arthur Dempster, Nan Laird, Donald Rubin: Maximum Likelihood from Incomplete Data via EM (1977)](https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1977.tb01600.x) | Seminal Foundation Paper | Original derivation of the general EM theorem proving monotonic convergence of the expected log-likelihood. | Foundational landmark paper in modern mathematical statistics. | ✅ Published Royal Statistical Society Classic |
-| [Stanford CS229: The EM Algorithm and Gaussian Mixture Models (Andrew Ng)](https://cs229.stanford.edu/notes2022fall/cs229-notes8.pdf) | University Lecture Notes | Rigorous proof of Jensen's inequality bound, coordinate ascent on the free energy, and GMM derivations. | Definitive academic reference for implementing EM. | ✅ Active Stanford Reference |
-| [Christopher M. Bishop: Pattern Recognition and Machine Learning (Chapter 9)](https://www.microsoft.com/en-us/research/people/cmbishop/prml-book/) | Canonical University Textbook | In-depth exploration of EM for Gaussian mixtures, Bernoulli mixtures, and Bayesian EM extensions. | Essential reading for mastering latent variable estimation. | ✅ Published Academic Classic |
-| [Radford Neal & Geoffrey Hinton: A View of the EM Algorithm that Explains Why It Works (1998)](https://link.springer.com/chapter/10.1007/978-94-011-5014-9_12) | Influential Research Paper | Reformulates EM as coordinate ascent on a single energy function, directly laying the foundation for modern VAEs. | Essential bridge paper connecting classical EM to variational deep learning. | ✅ Published Academic Classic |
-| [Scikit-Learn Documentation: sklearn.mixture.GaussianMixture](https://scikit-learn.org/stable/modules/generated/sklearn.mixture.GaussianMixture.html) | Official Engineering Reference | Production implementation parameters for covariance types (full, tied, diag, spherical), convergence criteria, and regularization floors. | Essential reference for practical clustering pipelines. | ✅ Active Official Scikit-Learn Documentation |
-
+| [Arthur Dempster, Nan Laird, Donald Rubin: Maximum Likelihood from Incomplete Data via EM (1977)](https://rss.onlinelibrary.wiley.com/doi/10.1111/j.2517-6161.1977.tb01600.x) | Seminal Foundation Paper · Royal Statistical Society | Complete 1977 landmark paper introducing the generalized EM algorithm | Original mathematical proof that likelihood monotonically increases via Jensen's inequality and the Kullback-Leibler lower-bound gap. | ✅ Active Royal Statistical Society Classic |
+| [StatQuest with Josh Starmer: Expectation Maximization Step-by-Step](https://www.youtube.com/watch?v=REypj2sy_5U) | Visual / Interactive Intuition Video | 15-minute complete step-by-step visual animation | Provides the clearest visual explanation of responsibilities, shifting Gaussian bells, and why hard K-Means is a special case of soft EM. | ✅ Active YouTube Classic |
+| [Christopher M. Bishop: PRML Chapter 9 (Mixture Models and EM)](https://www.microsoft.com/en-us/research/people/cmbishop/prml-book/) | Canonical University Textbook · Springer | Chapter 9: Sections 9.2 (GMMs) and 9.4 (General EM) | The standard graduate textbook treatment detailing Gaussian mixtures, singularities, latent representations, and the complete-data log-evidence bound. | ✅ Active Official Textbook Free PDF |
+| [Stanford CS229: The EM Algorithm and Gaussian Mixture Models (Andrew Ng)](https://cs229.stanford.edu/notes2022fall/cs229-notes8.pdf) | University Lecture Notes · Stanford CS229 | Autumn 2022 Course Notes 8 (Full 12-page PDF) | Andrew Ng's rigorous university derivation connecting Jensen's inequality, coordinate ascent on the variational free energy, and closed-form GMM parameters. | ✅ Active Stanford University PDF |
+| [Radford Neal & Geoffrey Hinton: A View of the EM Algorithm that Explains Why It Works (1998)](https://link.springer.com/chapter/10.1007/978-94-011-5014-9_12) | Landmark Bridge Paper · Springer NATO ASI Series | Full 1998 conference paper | The foundational bridge connecting classical discrete EM to modern continuous Variational Autoencoders (VAEs) via coordinate ascent on a single free energy functional. | ✅ Published Academic Classic |
+| [Scikit-Learn Documentation: sklearn.mixture.GaussianMixture](https://scikit-learn.org/stable/modules/generated/sklearn.mixture.GaussianMixture.html) | Official Engineering Library Documentation | Full API Guide, Covariance Options & User Guide 2.1 | Industry standard implementation details covering covariance matrix types (`full`, `tied`, `diag`, `spherical`), `reg_covar` variance floors, and convergence tolerances. | ✅ Active Official Scikit-Learn Docs |
