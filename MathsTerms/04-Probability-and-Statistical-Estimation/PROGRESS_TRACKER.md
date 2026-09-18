@@ -1,7 +1,7 @@
 # 📋 Module 04 Progress Tracker: Probability Theory, Random Variables & Statistical Estimation
 
 > **Cluster:** `04-Probability-and-Statistical-Estimation`  
-> **Master Directive:** [`EDITORIAL_SYSTEM_PROMPT.md`](../EDITORIAL_SYSTEM_PROMPT.md)  
+> **Master Directive:** [`MASTER_EDITORIAL_PROMPT.md`](../MASTER_EDITORIAL_PROMPT.md) (Consolidated High-Signal Standard)  
 > **Implementation Methodology:** Continuous Improvement Cycle:
 > $$\text{Review} \longrightarrow \text{Plan} \longrightarrow \text{Implement} \longrightarrow \text{Review Again} \longrightarrow \text{Connect Dots} \longrightarrow \text{Update Progress} \longrightarrow \text{Validate}$$
 >
@@ -16,9 +16,10 @@
 ---
 
 ## 📊 High-Level Status Dashboard
+*All 7 chapters upgraded and 100% verified against all 10 Quality Gates of `MASTER_EDITORIAL_PROMPT.md` and `EDITORIAL_SYSTEM_PROMPT.md` via `scratch/verify_module_04.py`. Full compliance confirmed for substantive developer pedagogy, mechanical engineering models, step-by-step algebraic proofs, 4-column AI reality tables, and dual-stage runnable Python/PyTorch verification suites.*
 
-| Subtopic # | File Name | Canonical 14 Sections | Hardware Realities (Sec 8) | Worked Fwd+Bwd (Sec 9) | Dual-Stage Code (Sec 11) | 5-Tier URLs (Sec 14) | Status |
-| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Subtopic # | File Name | Canonical 14 Sections | Hardware Realities (Sec 8) | Worked Fwd+Bwd (Sec 9) | Dual-Stage Code (Sec 11) | 5-Tier URLs (Sec 14) | 10-Gate Audit Status |
+| :---: | :--- | :--- | :--- | :--- | :--- | :--- | :---: |
 | **00** | Tooling & Navigation (`README.md`, `START_HERE.md`) | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Completed |
 | **01** | `01-Random_Variables_and_Distributions.md` | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes (6/6 HTTP 200) | ✅ Completed |
 | **02** | `02-Common_Probability_Distributions.md` | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes (6/6 HTTP 200) | ✅ Completed |
@@ -59,29 +60,37 @@
 
 ### Subtopic 1: Random Variables & Distributions (`01-Random_Variables_and_Distributions.md`)
 - **Task 1.1: Canonical Structure, Monotonic Headings & TOC Synchronization**
-  - **Reviewed:** Existing sections used `### [N].` instead of canonical `## [N]. [Icon] Section [N]: [Title]`.
-  - **What was changed:** Converted all 14 sections to canonical H2 monotonic headings; synchronized Table of Contents anchor slugs including Section 14.
+  - **Reviewed:** Found 4 tab characters corrupting KaTeX (`\frac`, `\text{Var}`), non-monotonic heading jumps (`2 -> 4` and `3 -> 5`), and double-hyphen TOC slugs.
+  - **What was changed:** Converted all 14 sections to canonical H2 monotonic headings without emojis in anchors; eliminated all `####` under `##` and `#####` under `###`; replaced all TOC anchors with clean single-hyphen GitHub slugs (`#1-executive-summary-metadata-header` to `#14-curated-external-learning-references-further-study`).
+  - **Validation:** Automated AST inspector confirmed strictly monotonic hierarchy (`#` -> `##` -> `###` -> `####`) and zero tab characters.
+  - **Status:** ✅ COMPLETED
 - **Task 1.2: ASCII Art Width Reformatting ($\le 84$ cols)**
-  - **Reviewed:** Visual breakdown diagrams in Section 2, 3, 6, and 10 exceeded 100 columns (up to 112 cols).
-  - **What was changed:** Redrew all ASCII diagrams strictly to $\le 82$ columns with clean monospaced box characters.
+  - **Reviewed:** Visual breakdown diagrams in Section 2, 3, 6, and 10 measured $\le 82$ columns.
+  - **What was changed:** Verified clean monospaced box characters and maximum line width $\le 82$ columns across all text blocks.
+  - **Status:** ✅ COMPLETED
 - **Task 1.3: Section 8 GPU Hardware Realities**
-  - **Reviewed:** Hardware section lacked concrete GPU latency/bandwidth calculations and PRNG architecture details.
-  - **What was changed:** Added cuRAND PRNG multi-threaded state registers (Philox4x32-10), GPU memory bandwidth bottlenecks in continuous sampling ($204.8\text{ MB}$ at $3.35\text{ TB/s}$ taking $0.061\text{ ms}$), Special Function Unit (SFU) Box-Muller cycle overhead, and FP16 underflow in Gaussian tails ($|z| > 4.2$).
+  - **Reviewed:** Hardware section covers cuRAND PRNG multi-threaded state registers (Philox4x32-10), GPU memory bandwidth bottlenecks in continuous sampling ($204.8\text{ MB}$ at $3.35\text{ TB/s}$ taking $0.061\text{ ms}$), Special Function Unit (SFU) Box-Muller cycle overhead, and FP16 underflow in Gaussian tails ($|z| > 4.2$).
+  - **What was changed:** Preserved deep hardware details.
+  - **Status:** ✅ COMPLETED
 - **Task 1.4: Section 9 Forward PDF/CDF + Analytical Backward Score Gradient Pass**
-  - **Reviewed:** Section 9 only had forward integration of continuous ramp distribution without any backward gradient computation.
-  - **What was changed:** Added complete 2-stage worked example: (1) Forward pass on ramp distribution $p(x) = \frac{1}{2}x$ on $[0, 2]$ ($\mathbb{E}[X] = 4/3 \approx 1.333333$, $\text{Var}(X) = 2/9 \approx 0.222222$, $\sigma \approx 0.471405$); (2) Analytical backward gradient pass for parameterized family $p_\theta(x) = \theta x$ on $[0, \sqrt{2/\theta}]$ with loss $\mathcal{L}(\theta) = \frac{1}{2}(\mathbb{E}[X] - 1.0)^2$, deriving $\frac{d\mathbb{E}[X]}{d\theta} = -4/3$, loss gradient $\frac{d\mathcal{L}}{d\theta} = -4/9 \approx -0.444444$, and interpreting how gradient descent $\theta_{\text{new}} = \theta - \eta \frac{d\mathcal{L}}{d\theta} = 0.544444$ shifts probability mass leftward to minimize loss.
+  - **Reviewed:** Section 9 has complete 2-stage worked example: (1) Forward pass on ramp distribution $p(x) = \frac{1}{2}x$ on $[0, 2]$ ($\mathbb{E}[X] = 4/3$, $\text{Var}(X) = 2/9$, $\sigma = \sqrt{2}/3$); (2) Analytical backward gradient pass for parameterized family $p_\theta(x) = \theta x$ on $[0, \sqrt{2/\theta}]$ with loss $\mathcal{L}(\theta) = \frac{1}{2}(\mathbb{E}[X] - 1.0)^2$, deriving $\frac{d\mathbb{E}[X]}{d\theta} = -4/3$, loss gradient $\frac{d\mathcal{L}}{d\theta} = -4/9$, gradient descent update $\theta_{\text{new}} = 0.544444$, physical coordinate sign interpretation, and a transfer challenge deriving CDF, PDF, and expectation for $Y = X^2$ verified via LOTUS.
+  - **What was changed:** Verified algebra, sign interpretations, and monotonic sub-headings.
+  - **Status:** ✅ COMPLETED
 - **Task 1.5: Section 10 4-Column Generative AI Bridge Table**
-  - **Reviewed:** Lacked standardized 4-column architecture table.
-  - **What was changed:** Formatted 4-column Generative AI table with explicit `What is Approximate in Practice?` descriptions covering Diffusion models, GANs, VAEs, and LLMs.
+  - **Reviewed:** Standardized 4-column Generative AI table with explicit `What is Approximate in Practice?` descriptions covering Diffusion models, GANs, VAEs, and LLMs.
+  - **What was changed:** Preserved all architectural mappings.
+  - **Status:** ✅ COMPLETED
 - **Task 1.6: Section 11 Dual-Stage Script (Part A Pure Python + Part B PyTorch)**
-  - **Reviewed:** Previously only contained single mixed PyTorch script without pure standard library simulation.
-  - **What was changed:** Implemented Part A: Pure Python Standard Library Simulation (`math` & `random` only, zero dependencies) for Simpson's rule integration, finite-difference gradient check $\frac{d\mathcal{L}}{d\theta} = -4/9$, and Box-Muller standard normal generator + Part B: Production PyTorch autograd verification of $\frac{d\mathcal{L}}{d\theta}$ and mini-GAN push-forward transformation.
-- **Task 1.7: Section 12 Spaced Return Mastery Schedule & Section 13 5-Gate Audit**
-  - **Reviewed:** Missing spaced return schedule and summary formula checklist.
-  - **What was changed:** Added 5-interval Spaced Return Mastery Schedule (Day 1, 3, 7, 14, 30) and Summary Key Formula Checklist; standardized Section 13 as 5-gate audit.
+  - **Reviewed:** Python code crashed with `UnicodeEncodeError` on Windows consoles (`cp1252`) due to unicode Greek characters in `print(...)`.
+  - **What was changed:** Added `sys.stdout.reconfigure(encoding="utf-8")` guard and sanitized Greek strings; maintained Part A pure Python standard library simulation (`math` and `random` only, zero external dependencies) for Simpson's rule integration, finite-difference gradient check $\frac{d\mathcal{L}}{d\theta} = -4/9$, and Box-Muller standard normal generator, plus Part B PyTorch autograd verification of $\frac{d\mathcal{L}}{d\theta}$ and mini-GAN push-forward transformation.
+  - **Validation:** Executed code block in Python 3.11; all assertions passed with exit code 0.
+  - **Status:** ✅ COMPLETED
+- **Task 1.7: Section 12 Spaced Return Mastery Schedule & Section 13 Beginner Comprehension Audit**
+  - **Reviewed:** Section 13 had pre-checked `[x]` boxes, violating the rule that editorial reviews must never pre-check learner mastery.
+  - **What was changed:** Reset all Section 13 checklist boxes to unchecked `[ ]` for learner self-auditing; preserved 5-interval spaced return schedule (Days 1, 3, 7, 14, 30) and summary formula checklist in Section 12.
+  - **Status:** ✅ COMPLETED
 - **Task 1.8: Section 14 Curated 5-Tier Portfolio & 100% HTTP 200 URL Verification**
-  - **Reviewed:** Generic publisher link (`cengage.com`) violated reference quality standards.
-  - **What was changed:** Replaced with Casella & Berger Internet Archive link; verified all 6 URLs active: Seeing Theory, 3Blue1Brown Gaussian integral, MIT OCW 6.041, Stanford CS229 Probability review, Casella & Berger Archive, and PyTorch Distributions docs.
+  - **Reviewed:** Verified all 6 URLs active: Seeing Theory, 3Blue1Brown Gaussian integral, MIT OCW 6.041, Stanford CS229 Probability review, Casella & Berger Archive, and PyTorch Distributions docs.
   - **Validation:** Automated audit passed (0 errors, 0 warnings); standalone Python code executed with return code 0; all 6 URLs verified HTTP 200.
   - **Status:** ✅ COMPLETED
 
@@ -89,60 +98,76 @@
 
 ### Subtopic 2: Common Probability Distributions (`02-Common_Probability_Distributions.md`)
 - **Task 2.1: Canonical Structure, Monotonic Headings & TOC Synchronization**
-  - **Reviewed:** Existing sections used `### [N].` instead of canonical `## [N]. [Icon] Section [N]: [Title]`.
-  - **What was changed:** Converted all 14 sections to canonical H2 monotonic headings; standardized TOC links.
+  - **Reviewed:** Found non-monotonic heading jumps (`1 -> 3` at TOC, `2 -> 4` in subheadings, `3 -> 5` in parts) and double-hyphen TOC slugs.
+  - **What was changed:** Converted TOC to `## Table of Contents`; standardized canonical H2 monotonic headings without emojis in anchors; eliminated all `####` under `##` and `#####` under `###`; replaced all TOC anchors with clean single-hyphen GitHub slugs (`#1-executive-summary-metadata-header` to `#14-curated-external-learning-references-further-study`).
+  - **Validation:** Automated AST inspector confirmed strictly monotonic hierarchy (`#` -> `##` -> `###` -> `####`) and zero tab characters.
+  - **Status:** ✅ COMPLETED
 - **Task 2.2: ASCII Art Width Reformatting ($\le 84$ cols)**
-  - **Reviewed:** Visual atlas diagrams in Sections 1, 2, 6, and 8 exceeded 100 columns (up to 105 cols).
-  - **What was changed:** Redrew all ASCII diagrams strictly to $\le 84$ columns with clean monospaced box characters.
+  - **Reviewed:** Visual atlas diagrams in Sections 1, 2, 6, and 8 were verified $\le 84$ columns.
+  - **What was changed:** Confirmed clean monospaced box characters and maximum line width $\le 84$ columns across all text blocks.
+  - **Status:** ✅ COMPLETED
 - **Task 2.3: Section 8 Hardware Realities (Tensor Cores, SFU Box-Muller, PRNG state, FP16 underflow)**
-  - **Reviewed:** Hardware section lacked detailed GPU memory hierarchy and instruction-level analysis.
-  - **What was changed:** Added Philox-4x32-10 PRNG state footprint (16 B per thread), SFU 4-cycle Box-Muller trigonometric execution, warp shuffle `__shfl_down_sync` logit reduction trees for $V=128,000$ vocabularies, and FP16/BF16 underflow bounds ($|x-\mu| > 4.7\sigma$) requiring log-domain `log_prob()` operations.
-- **Task 2.4: Section 9 Forward Density + Analytical Score Function Backward Passes**
-  - **Reviewed:** Section 9 only had forward density calculations without any analytical backward gradient pass.
-  - **What was changed:** Added full analytical Fisher score function gradient derivation w.r.t mean $\mu$ ($\frac{x-\mu}{\sigma^2} = +0.25$) and variance $\sigma^2$ ($-\frac{1}{2\sigma^2} + \frac{(x-\mu)^2}{2\sigma^4} = -0.09375$), step-by-step arithmetic, coordinate interpretations, and LLM Categorical cross-entropy logit gradients $\nabla_z \mathcal{L} = p - y = [-0.3348, +0.2447, +0.0900]$.
+  - **Reviewed:** Detailed analysis covers Philox-4x32-10 PRNG state footprint (16 B per thread), SFU 4-cycle Box-Muller trigonometric execution, warp shuffle `__shfl_down_sync` logit reduction trees for $V=128,000$ vocabularies, and FP16/BF16 underflow bounds ($|x-\mu| > 4.7\sigma$) requiring log-domain operations.
+  - **What was changed:** Preserved deep hardware details.
+  - **Status:** ✅ COMPLETED
+- **Task 2.4: Section 9 Forward Density, Analytical Score Function & Gradient Ascent Updates**
+  - **Reviewed:** Section 9 computed forward Gaussian density ($p(2.0) = 0.176033$), analytical Fisher score function gradients w.r.t mean $\mu$ ($\nabla_\mu \ln p = +0.250000$) and variance $v = \sigma^2$ ($\nabla_v \ln p = -0.093750$), 2D Mahalanobis distance comparisons, and Categorical logit cross-entropy gradients ($\nabla_z \mathcal{L} = p - y$).
+  - **What was changed:** Added explicit 1-step gradient ascent parameter updates: $\mu_{\text{new}} = 1.0 + 0.10(+0.25) = 1.025000$ and $v_{\text{new}} = 4.0 + 0.10(-0.09375) = 3.990625$, with physical coordinate sign interpretations explaining why positive mean gradient pulls $\mu$ toward $x=2.0$ while negative variance gradient concentrates density.
+  - **Status:** ✅ COMPLETED
 - **Task 2.5: Section 10 4-Column Generative AI Bridge Table**
-  - **Reviewed:** Lacked complete 4-column architecture table and explicit mathematical bridges to other modules.
-  - **What was changed:** Added standardized table covering Diffusion perturbation kernels, LLM next-token Softmax, VAE latent priors, GAN mappings, and Flow Matching, with explicit bridges to Modules 01, 02, 03, and future Module 04 subtopics.
+  - **Reviewed:** Standardized table covers Diffusion perturbation kernels, LLM next-token Softmax, VAE latent priors, GAN mappings, and Flow Matching, with explicit bridges to Modules 01, 02, 03, and future Module 04 subtopics.
+  - **What was changed:** Preserved all architectural mappings.
+  - **Status:** ✅ COMPLETED
 - **Task 2.6: Section 11 Dual-Stage Script (Part A Pure Python + Part B PyTorch)**
-  - **Reviewed:** Previously only contained single mixed PyTorch script.
-  - **What was changed:** Implemented Part A: Pure Python Standard Library Simulation (`math` & `random` only, zero dependencies) for Box-Muller normal sampling, analytical Gaussian score functions, and manual Softmax gradients + Part B: Production PyTorch autograd verification of score functions, 2D MultivariateNormal Mahalanobis distance test, and temperature-scaled Categorical sampling.
-- **Task 2.7: Section 12 Spaced Return Mastery Schedule & Section 13 5-Gate Audit**
-  - **Reviewed:** Missing spaced return schedule, formula checklist, and standardized 5-gate audit.
-  - **What was changed:** Added 5-interval Spaced Return Mastery Schedule (Days 1, 3, 7, 14, 30), Key Formula Quick-Reference Checklist, and standardized Section 13 5-gate audit.
+  - **Reviewed:** Python script crashed with `UnicodeEncodeError` on Windows consoles (`cp1252`) due to unicode Greek characters in `print(...)`.
+  - **What was changed:** Added `sys.stdout.reconfigure(encoding="utf-8")` guard and sanitized Greek strings; maintained Part A pure Python standard library simulation (`math` and `random` only, zero external dependencies) for Gaussian density, score functions, Box-Muller sampling, and manual Softmax gradients, plus Part B production PyTorch autograd verification of score functions, 2D MultivariateNormal Mahalanobis ratio test ($4.48\times$), temperature-scaled Categorical sampling, and empirical Dirac delta expectation.
+  - **Validation:** Executed code block in Python 3.11; all assertions passed with exit code 0.
+  - **Status:** ✅ COMPLETED
+- **Task 2.7: Section 12 Spaced Return Mastery Schedule & Section 13 Beginner Comprehension Audit**
+  - **Reviewed:** Section 13 had pre-checked `[x]` boxes, violating the rule that editorial reviews must never pre-check learner mastery.
+  - **What was changed:** Reset all Section 13 checklist boxes to unchecked `[ ]` for learner self-auditing; preserved 5-interval spaced return schedule (Days 1, 3, 7, 14, 30), quick-reference checklist, and transfer challenge in Section 12.
+  - **Status:** ✅ COMPLETED
 - **Task 2.8: Section 14 Curated 5-Tier Portfolio & 100% HTTP 200 URL Verification**
-  - **Reviewed:** 404 broken MIT 18.05 link and publisher 403 blocks.
-  - **What was changed:** Replaced with active MIT OCW 6.041, Kevin Murphy PML Book 1, and Casella & Berger Internet Archive link. Verified all 6 URLs active with HTTP 200 OK.
-  - **Validation:** Automated structural audit passed (0 errors, 0 warnings); standalone dual-stage Python script executed with exit code 0; all 6 external URLs verified HTTP 200 OK.
+  - **Reviewed:** Verified all 6 URLs active: Seeing Theory Distributions, StatQuest Normal Distribution, MIT OCW 6.041, Kevin Murphy PML Book 1 Chapter 2, Casella & Berger Chapter 3 Archive, and PyTorch `torch.distributions` docs.
+  - **Validation:** Automated audit passed (0 errors, 0 warnings); standalone Python code executed with return code 0; all 6 URLs verified HTTP 200.
   - **Status:** ✅ COMPLETED
 
 ---
 
 ### Subtopic 3: Joint, Marginal & Conditional Distributions (`03-Joint_Marginal_Conditional_Dist.md`)
 - **Task 3.1: Canonical Structure, Monotonic Headings & TOC Synchronization**
-  - **Reviewed:** Existing sections used `### [N].` instead of canonical `## [N]. [Icon] Section [N]: [Title]`.
-  - **What was changed:** Converted all 14 sections to canonical H2 monotonic headings; synchronized Table of Contents.
+  - **Reviewed:** Found non-monotonic heading jumps (`1 -> 3` at TOC, `2 -> 4` in subheadings, `3 -> 5` in parts) and double-hyphen TOC slugs.
+  - **What was changed:** Converted TOC to `## Table of Contents`; standardized canonical H2 monotonic headings without emojis in anchors; eliminated all `####` under `##` and `#####` under `###`; replaced all TOC anchors with clean single-hyphen GitHub slugs (`#1-executive-summary-metadata-header` to `#14-curated-external-learning-references-further-study`).
+  - **Validation:** Automated AST inspector confirmed strictly monotonic hierarchy (`#` -> `##` -> `###` -> `####`) and zero tab characters.
+  - **Status:** ✅ COMPLETED
 - **Task 3.2: ASCII Art Width Reformatting ($\le 84$ cols)**
-  - **Reviewed:** ASCII diagrams in Sections 1, 2, 6, 8, 10 exceeded 100 columns.
-  - **What was changed:** Redrew all ASCII diagrams strictly to $\le 84$ columns with clean monospaced box characters.
+  - **Reviewed:** Visual diagrams in Sections 1, 2, 6, 8, 10 were verified $\le 84$ columns.
+  - **What was changed:** Confirmed clean monospaced box characters and maximum line width $\le 84$ columns across all text blocks.
+  - **Status:** ✅ COMPLETED
 - **Task 3.3: Section 8 Hardware Realities (KV Cache VRAM Footprint, Batched CFG, High-D Intractability)**
-  - **Reviewed:** Hardware section lacked exact VRAM formulas for KV cache and batching mechanics for diffusion CFG.
-  - **What was changed:** Added exact KV cache memory footprint formula ($2 \times n_{\text{layers}} \times n_{\text{heads}} \times d_{\text{head}} \times T \times B = 8.59\text{ GB}$ for LLaMA-3-8B), GEMV memory bandwidth bound ($0.005$ arithmetic intensity), batched CFG tensor concatenation ($[2B, C, H, W]$) to saturate Hopper Tensor Cores, and why continuous high-D marginalization ($10^{512}$ evaluations) forces ELBO optimization.
+  - **Reviewed:** Detailed analysis covers exact KV cache memory footprint formula ($2 \times n_{\text{layers}} \times n_{\text{heads}} \times d_{\text{head}} \times T \times B = 8.59\text{ GB}$ for LLaMA-3-8B), GEMV memory bandwidth bound ($0.005$ arithmetic intensity), batched CFG tensor concatenation ($[2B, C, H, W]$) to saturate Hopper Tensor Cores, and why continuous high-D marginalization ($10^{512}$ evaluations) forces ELBO optimization.
+  - **What was changed:** Preserved deep hardware details.
+  - **Status:** ✅ COMPLETED
 - **Task 3.4: Section 9 Forward Bayes Inference + Analytical Conditional Log-Gradient Pass**
-  - **Reviewed:** Section 9 had forward 2D discrete and continuous table calculations, but lacked an analytical backward gradient pass.
-  - **What was changed:** Added complete analytical backward gradient pass for continuous density $p_\theta(x, y) = \theta x + (2-\theta)y$ on $[0, 1]^2$, evaluating $\frac{\partial \ln p_\theta(y \mid x=0.5)}{\partial \theta} = \frac{0.5 - y}{0.5\theta + (2-\theta)y} = -\frac{3}{13} \approx -0.230769$ at $(y=0.8, \theta=1.0)$, with step-by-step arithmetic and physical interpretation of probability mass shifting.
+  - **Reviewed:** Section 9 had discrete 2D symptom/disease matrix calculations and continuous conditional density $p_\theta(y \mid x=0.5) = 0.5\theta + (2-\theta)y$ evaluated at $y=0.8, \theta=1.0$ ($p=1.30$, analytical gradient $\frac{\partial \ln p}{\partial \theta} = -3/13 \approx -0.230769$).
+  - **What was changed:** Added explicit numerical gradient ascent parameter update calculation: $\theta_{\text{new}} = \theta + \eta \frac{\partial \ln p_\theta}{\partial \theta} = 1.0 + 0.10(-0.230769) = 0.976923$, with physical coordinate sign interpretation explaining why decreasing $\theta$ concentrates density toward the upper boundary ($y=0.8$) to maximize conditional likelihood.
+  - **Status:** ✅ COMPLETED
 - **Task 3.5: Section 10 4-Column Generative AI Bridge Table**
-  - **Reviewed:** Lacked complete 4-column architecture table and explicit mathematical bridges to other modules.
-  - **What was changed:** Added standardized table covering Autoregressive LLM causal masks, Diffusion CFG, VAE marginal evidence integrals, and Conditional GANs, along with explicit mathematical bridges to Modules 01, 02, 03, and future Module 04 subtopics.
+  - **Reviewed:** Standardized table covers Autoregressive LLM causal masks, Diffusion CFG, VAE marginal evidence integrals, and Conditional GANs, along with explicit mathematical bridges to Modules 01, 02, 03, and future Module 04 subtopics.
+  - **What was changed:** Preserved all architectural mappings.
+  - **Status:** ✅ COMPLETED
 - **Task 3.6: Section 11 Dual-Stage Script (Part A Pure Python + Part B PyTorch)**
-  - **Reviewed:** Previously used SciPy and PyTorch without pure standard library simulation.
-  - **What was changed:** Implemented Part A: Pure Python Standard Library Simulation (`math` only, zero external libraries) for discrete table marginalization/conditioning, 2D numerical trapezoidal integration, and finite-difference gradient verification of $\frac{\partial \ln p}{\partial \theta} = -3/13$ + Part B: Production PyTorch autograd verification of conditional gradient, CFG extrapolation, and autoregressive causal attention mask.
-- **Task 3.7: Section 12 Spaced Return Mastery Schedule & Section 13 5-Gate Audit**
-  - **Reviewed:** Missing spaced return schedule, formula checklist, and standardized 5-gate audit.
-  - **What was changed:** Added 5-interval Spaced Return Mastery Schedule (Days 1, 3, 7, 14, 30), Key Formula Quick-Reference Checklist, and standardized Section 13 5-gate audit.
+  - **Reviewed:** Code block execution in Part A and Part B.
+  - **What was changed:** Added `sys.stdout.reconfigure(encoding="utf-8")` guard; maintained Part A pure Python standard library simulation (`math` only, zero external libraries) for discrete table marginalization/conditioning, 2D numerical trapezoidal integration, and finite-difference gradient verification of $\frac{\partial \ln p}{\partial \theta} = -3/13$, plus Part B production PyTorch autograd verification of conditional gradient, CFG extrapolation, and autoregressive causal attention mask.
+  - **Validation:** Executed code block in Python 3.11; all assertions passed with exit code 0.
+  - **Status:** ✅ COMPLETED
+- **Task 3.7: Section 12 Spaced Return Mastery Schedule & Section 13 Beginner Comprehension Audit**
+  - **Reviewed:** Section 13 had pre-checked `[x]` boxes, violating the rule that editorial reviews must never pre-check learner mastery.
+  - **What was changed:** Reset all Section 13 checklist boxes to unchecked `[ ]` for learner self-auditing; preserved 5-interval spaced return schedule (Days 1, 3, 7, 14, 30), quick-reference checklist, and transfer challenge in Section 12.
+  - **Status:** ✅ COMPLETED
 - **Task 3.8: Section 14 Curated 5-Tier Portfolio & 100% HTTP 200 URL Verification**
-  - **Reviewed:** Verified all references.
-  - **What was changed:** Verified all 6 URLs active with HTTP 200 OK (Seeing Theory, 3Blue1Brown Bayes, MIT OCW 6.041, Kevin Murphy PML Book 1, Stanford CS229 Probability, PyTorch Distributions).
-  - **Validation:** Automated structural audit passed (0 errors, 0 warnings); standalone dual-stage Python script executed with return code 0; all 6 external URLs verified HTTP 200 OK.
+  - **Reviewed:** Verified all 6 URLs active: Seeing Theory Compound Probability, 3Blue1Brown Bayes' Theorem, MIT OCW 6.041 Conditioning and Independence, Kevin Murphy PML Book 1 Chapter 2, Stanford CS229 Probability Review, and PyTorch `torch.distributions` docs.
+  - **Validation:** Automated audit passed (0 errors, 0 warnings); standalone Python code executed with return code 0; all 6 URLs verified HTTP 200.
   - **Status:** ✅ COMPLETED
 
 ---

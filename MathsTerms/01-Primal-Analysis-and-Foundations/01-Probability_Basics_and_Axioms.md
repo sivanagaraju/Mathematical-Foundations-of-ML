@@ -51,20 +51,23 @@
 > Basic arithmetic with fractions and percentages, and elementary set notation ($\in, \subseteq, \cup, \cap, \emptyset, A^c$). No calculus, linear algebra, or advanced measure theory is required to understand the axioms.
 
 ```text
-==================================================================================================
-              THE 3-TIER HIERARCHY OF MATHEMATICAL PROBABILITY (THE KOLMOGOROV TRIPLET)
-==================================================================================================
+=============================================================================
+   THE 3-TIER HIERARCHY OF MATHEMATICAL PROBABILITY (THE KOLMOGOROV TRIPLET)
+=============================================================================
 
-   TIER 1: SAMPLE SPACE (Ω)           TIER 2: EVENT SPACE (ℱ)              TIER 3: MEASURE (P)
-   Universe of All Outcomes           Family of Legal Subsets              Axiomatic Scale in [0, 1]
-   ┌────────────────────────────┐     ┌────────────────────────────┐       ┌─────────────────────┐
-   │ Physical Experiment        │───► │ Measurable Subsets A ⊆ Ω   │ ────► │ P: ℱ → [0.0, 1.0]   │
-   │ Ω = {ω₁, ω₂, ω₃, ..., ωₙ}  │     │ • Closed under Complement  │       │ • Axiom 1: P(A) ≥ 0 │
-   │ "The Master Menu"          │     │ • Closed under Union       │       │ • Axiom 2: P(Ω) = 1 │
-   │ e.g. 6-sided die: {1..6}   │     │ • e.g. "Even": {2, 4, 6}   │       │ • Axiom 3: Additive │
-   └────────────────────────────┘     └────────────────────────────┘       └─────────────────────┘
-==================================================================================================
+   TIER 1: SAMPLE SPACE (Ω)     TIER 2: EVENT SPACE (ℱ)       TIER 3: MEASURE (P)
+   Universe of All Outcomes     Family of Legal Subsets       Scale in [0.0, 1.0]
+   ┌──────────────────────┐     ┌──────────────────────┐      ┌─────────────────┐
+   │ Physical Experiment  │───► │ Measurable Sets A⊆Ω  │ ───► │ P: ℱ → [0.0, 1] │
+   │ Ω = {ω₁, ω₂, ..., ωₙ}│     │ • Closed under Compl │      │ • Axiom 1: P ≥ 0│
+   │ "The Master Menu"    │     │ • Closed under Union │      │ • Axiom 2: P=1  │
+   │ e.g. Die: {1,2,3..6} │     │ • e.g. Even: {2,4,6} │      │ • Axiom 3: Add. │
+   └──────────────────────┘     └──────────────────────┘      └─────────────────┘
+=============================================================================
 ```
+
+*What to observe and infer:* Notice that probability is not assigned directly to raw outcomes without structure; it flows from elementary outcomes in the sample space $\Omega$, into a mathematically valid family of subsets $\mathcal{F}$ (the event space), and finally through the measure function $P$ which maps each event to a real number between $0.0$ and $1.0$.
+
 
 ---
 
@@ -80,26 +83,28 @@ Imagine standing on a sidewalk flipping a physical brass coin:
 To make rational decisions under incomplete information, humans needed a mathematical language that assigns consistent numerical weights to what *might* happen:
 
 ```text
-==================================================================================================
-                  FROM PHYSICAL EXPERIMENT TO THE KOLMOGOROV TRIPLET (Ω, ℱ, P)
-==================================================================================================
+=============================================================================
+         FROM PHYSICAL EXPERIMENT TO THE KOLMOGOROV TRIPLET (Ω, ℱ, P)
+=============================================================================
 
-   [PHYSICAL EXPERIMENT]             [SAMPLE SPACE Ω]                [EVENT SPACE ℱ]
-    Flipping a Physical Coin          Menu of Outcomes                All Measurable Questions
-       ┌──────────┐                      ┌─────────────┐                 ┌───────────────────────┐
-       │   (🪙)   │ ──────────────────►  │ Ω = {H, T}  │ ─────────────►  │ ℱ = { ∅,              │
-       │  In Air  │                      └─────────────┘                 │       {H},            │
-       └──────────┘                                                      │       {T},            │
-                                                                         │       {H, T} }        │
-                                                                         └───────────┬───────────┘
-                                                                                     │
-   [PROBABILITY MEASURE P: SCALE ON [0.0, 1.0]] <────────────────────────────────────┘
-    • P(∅) = 0.00 (0% chance of nothing happening)
+   [PHYSICAL EXPERIMENT]     [SAMPLE SPACE Ω]         [EVENT SPACE ℱ]
+    Flipping a Brass Coin     Menu of Outcomes         All Legal Questions
+       ┌──────────┐              ┌─────────────┐          ┌─────────────────┐
+       │   (🪙)   │ ──────────►  │ Ω = {H, T}  │ ───────► │ ℱ = { ∅,        │
+       │  In Air  │              └─────────────┘          │       {H},      │
+       └──────────┘                                       │       {T},      │
+                                                          │       {H, T} }  │
+                                                          └────────┬────────┘
+                                                                   │
+   [PROBABILITY MEASURE P: SCALE ON [0.0, 1.0]] <──────────────────┘
+    • P(∅) = 0.00 (0% chance of nothing occurring)
     • P({H}) = 0.50 (50% fair chance of Heads)
     • P({T}) = 0.50 (50% fair chance of Tails)
-    • P({H, T}) = 1.00 (100% absolute certainty that coin lands on Heads or Tails)
-==================================================================================================
+    • P({H, T}) = 1.00 (100% certainty that coin lands on Heads or Tails)
+=============================================================================
 ```
+
+*What to observe and infer:* For a binary coin flip, the event space $\mathcal{F}$ contains $2^2 = 4$ possible measurable subsets (the power set). The probability measure $P$ assigns a non-negative real weight to each event such that the entire universe $\{H, T\}$ receives total probability $1.0$.
 
 ### The Geometric Venn Diagram & Probability Mass Distribution
 
@@ -120,6 +125,9 @@ Imagine the entire sample space $\Omega$ as a flat table of total surface area $
 │   Neither A nor B: (A ∪ B)ᶜ = {1, 3}  (Area = 2/6)                     │
 └────────────────────────────────────────────────────────────────────────┘
 ```
+
+*What to observe and infer:* The total area of the table is fixed at $1.00$. Notice how the union $A \cup B$ contains outcomes $\{2, 4, 5, 6\}$ with total area $4/6$. If we naively summed $P(A) = 3/6$ and $P(B) = 3/6$, we would get $6/6 = 1.00$, double-counting the overlap $\{4, 6\}$ whose area is $2/6$. Subtracting the overlap $P(A \cap B) = 2/6$ yields the exact true union area $4/6$.
+
 
 ---
 
@@ -152,14 +160,17 @@ Imagine the entire sample space $\Omega$ as a flat table of total surface area $
 In 1933, Soviet mathematician **Andrey Kolmogorov** unified centuries of fragmented gambling heuristics into three self-evident, irreducible postulates:
 
 ```text
-==================================================================================================
-                      THE THREE FOUNDATIONAL KOLMOGOROV AXIOMS (1933)
-==================================================================================================
-   [AXIOM 1: NON-NEGATIVITY]      [AXIOM 2: UNIT CERTAINTY]      [AXIOM 3: ADDITIVITY]
-   For every event A ∈ ℱ:         For the universe Ω:            For disjoint events (A ∩ B = ∅):
-   P(A) ≥ 0.0                     P(Ω) = 1.00                    P(A ∪ B) = P(A) + P(B)
-==================================================================================================
+=============================================================================
+               THE THREE FOUNDATIONAL KOLMOGOROV AXIOMS (1933)
+=============================================================================
+   [AXIOM 1: NON-NEGATIVITY]   [AXIOM 2: UNIT CERTAINTY]   [AXIOM 3: ADDITIVITY]
+   For every event A ∈ ℱ:      For the universe Ω:         If A ∩ B = ∅:
+   P(A) ≥ 0.0                  P(Ω) = 1.00                 P(A ∪ B) = P(A) + P(B)
+=============================================================================
 ```
+
+*What to observe and infer:* These three axioms are minimalist. They do not assume calculus or Gaussian distributions; they simply require that probabilities never go negative, the entire space has weight 1.0, and non-overlapping event chances add together linearly.
+
 
 From these three building blocks, all laws of probability unfold without magic.
 
@@ -279,6 +290,26 @@ $$\begin{aligned}
 \mathbf{\text{Conclusion:}} & \quad \mathbf{A \perp B \implies A \perp B^c} \quad \blacksquare
 \end{aligned}$$
 
+---
+
+### 📜 Proof 9: Continuity of Probability Measures (Limits of Monotone Sequences of Events)
+
+**Claim:** Probability measures are continuous set functions:
+1. If $A_1 \subseteq A_2 \subseteq A_3 \subseteq \cdots$ is an increasing sequence of events whose limit is $A = \bigcup_{n=1}^\infty A_n$ (denoted $A_n \uparrow A$), then $\lim_{n \to \infty} P(A_n) = P(A)$.
+2. If $B_1 \supseteq B_2 \supseteq B_3 \supseteq \cdots$ is a decreasing sequence of events whose limit is $B = \bigcap_{n=1}^\infty B_n$ (denoted $B_n \downarrow B$), then $\lim_{n \to \infty} P(B_n) = P(B)$.
+
+$$\begin{aligned}
+\text{Step 1 (Disjoint Decomposition):} & \quad \text{Construct disjoint events } C_1 = A_1 \text{ and } C_k = A_k \setminus A_{k-1} = A_k \cap A_{k-1}^c \text{ for } k \ge 2 \\
+\text{Step 2 (Pairwise Disjoint Check):} & \quad \text{For } j < k, C_j \subseteq A_j \subseteq A_{k-1} \text{ while } C_k \cap A_{k-1} = \emptyset \implies C_j \cap C_k = \emptyset \\
+\text{Step 3 (Reconstruct Unions):} & \quad \bigcup_{k=1}^n C_k = A_n \quad \text{and} \quad \bigcup_{k=1}^\infty C_k = \bigcup_{n=1}^\infty A_n = A \\
+\text{Step 4 (Countable Additivity - Axiom 3):} & \quad P(A) = P\left( \bigcup_{k=1}^\infty C_k \right) = \sum_{k=1}^\infty P(C_k) = \lim_{n \to \infty} \sum_{k=1}^n P(C_k) \\
+\text{Step 5 (Finite Additivity on Partial Sum):} & \quad \sum_{k=1}^n P(C_k) = P\left( \bigcup_{k=1}^n C_k \right) = P(A_n) \\
+\text{Step 6 (Substitute Partial Sum):} & \quad P(A) = \lim_{n \to \infty} P(A_n) \quad (\text{Continuity from below}) \\
+\text{Step 7 (Decreasing Sequences via Complements):} & \quad B_n \downarrow B \implies B_n^c \uparrow B^c \implies \lim_{n\to\infty} P(B_n^c) = P(B^c) \\
+\text{Step 8 (Apply Complement Rule):} & \quad \lim_{n\to\infty} [1.0 - P(B_n)] = 1.0 - P(B) \implies \lim_{n \to \infty} P(B_n) = P(B) \\
+\mathbf{\text{Conclusion:}} & \quad \mathbf{\lim_{n \to \infty} P(A_n) = P\left( \lim_{n \to \infty} A_n \right)} \quad \blacksquare
+\end{aligned}$$
+
 ### 5-Second Mental Memory Hooks
 - **Axioms in 3 words:** Non-negative, Total-one, Add-disjoint.
 - **Inclusion-Exclusion:** *Add the circles, subtract the football.*
@@ -297,20 +328,22 @@ $$\begin{aligned}
 | **Disjoint vs Independent** | Disjoint ($A \cap B = \emptyset$); Independent ($P(A \cap B) = P(A)P(B)$) | Conflating "disjoint" with "independent" | Disjoint events are *maximally dependent*: if $A$ occurs, $B$ is impossible ($P(B \mid A) = 0$). Independent events *must overlap*. | In multi-task learning and mixture of experts (MoE), expert routing requires understanding correlated vs independent representations. |
 
 ```text
-==================================================================================================
-                     DISJOINT (MUTUALLY EXCLUSIVE) vs STATISTICALLY INDEPENDENT
-==================================================================================================
+=============================================================================
+             DISJOINT (MUTUALLY EXCLUSIVE) vs STATISTICALLY INDEPENDENT
+=============================================================================
 
-   CASE 1: DISJOINT EVENTS (A ∩ B = ∅)              CASE 2: INDEPENDENT EVENTS (A ⊥ B)
-   Maximally Dependent! Knowing A forbids B!        Zero Information Transfer! A must overlap B!
-   ┌───────────────────────────────────────┐        ┌────────────────────────────────────────┐
-   │ Event A          │ Event B            │        │ Event A                Event B         │
-   │ {1, 2}           │ {5, 6}             │        │ ┌───────────────┬────────────────┐     │
-   │                  │                    │        │ │ Only A        │ Overlap        │     │
-   │ P(A ∩ B) = 0.00  │ P(A | B) = 0.00    │        │ │               │ P(A) · P(B)    │     │
-   └───────────────────────────────────────┘        └─┴───────────────┴────────────────┴─────┘
-==================================================================================================
+   CASE 1: DISJOINT EVENTS (A ∩ B = ∅)       CASE 2: INDEPENDENT (A ⊥ B)
+   Maximally Dependent! Knowing A bans B!    Zero Info Transfer! Overlap exists!
+   ┌────────────────────────────────┐        ┌──────────────────────────────┐
+   │ Event A       │ Event B        │        │ Event A          Event B     │
+   │ {1, 2}        │ {5, 6}         │        │ ┌───────────┬──────────┐     │
+   │               │                │        │ │ Only A    │ Overlap  │     │
+   │ P(A ∩ B) = 0  │ P(A | B) = 0   │        │ │           │ P(A)P(B) │     │
+   └────────────────────────────────┘        └─┴───────────┴──────────┴─────┘
+=============================================================================
 ```
+
+*What to observe and infer:* Disjoint events share zero outcomes, meaning that if one occurs, the other is impossible (maximum dependence). In contrast, independent events must overlap proportionally, so that conditioning on $B$ does not change the ratio of $A$'s probability ($P(A \mid B) = P(A)$).
 
 ---
 
@@ -324,18 +357,20 @@ Imagine baking a 1-kilogram chocolate cake for a birthday party:
 - **Axiom 3 (Additivity):** If Alice takes a $300\text{g}$ slice and Bob takes a $200\text{g}$ slice, their combined plate weighs $300\text{g} + 200\text{g} = 500\text{g}$ ($0.5\text{ kg}$), because their slices do not overlap.
 
 ```text
-==================================================================================================
-                        THE 1-KILOGRAM CAKE METAPHOR OF PROBABILITY AXIOMS
-==================================================================================================
+=============================================================================
+                 THE 1-KILOGRAM CAKE METAPHOR OF PROBABILITY AXIOMS
+=============================================================================
   
    THE ENTIRE CAKE: Ω (Total Weight = 1.0 kg = 100%)
-   ┌─────────────────────────────────┬───────────────────────────────┬───────────────────────────┐
-   │ Alice's Slice: A (300g = 0.30)  │ Bob's Slice: B (200g = 0.20)  │ Leftover: (A∪B)ᶜ (0.50kg) │
-   │ • P(A) ≥ 0                      │ • P(B) ≥ 0                    │ • P(Leftover) ≥ 0         │
-   └─────────────────────────────────┴───────────────────────────────┴───────────────────────────┘
+   ┌────────────────────────┬────────────────────────┬──────────────────────┐
+   │ Alice: A (300g = 0.30) │ Bob: B (200g = 0.20)   │ Remainder: (0.50 kg) │
+   │ • P(A) ≥ 0             │ • P(B) ≥ 0             │ • P(Remainder) ≥ 0   │
+   └────────────────────────┴────────────────────────┴──────────────────────┘
    Total Scale Reading: 0.30 + 0.20 + 0.50 = 1.000 kg (Axiom 2 Verified!)
-==================================================================================================
+=============================================================================
 ```
+
+*What to observe and infer:* Non-overlapping slices conserve total mass. Slicing the cake into pieces never creates extra chocolate or negative crumbs, physically mirroring Kolmogorov's axioms.
 
 ### ⚠️ Where the Metaphor Breaks Down (Limits of the Analogy)
 The cake metaphor treats probability mass as static, conserved physical matter in 3D Euclidean space. In generative AI and continuous probability:
@@ -347,24 +382,27 @@ The cake metaphor treats probability mass as static, conserved physical matter i
 In deep neural networks (like Large Language Models), the final linear projection produces unbounded real numbers called **logits** ($z \in \mathbb{R}^V$). The network uses Softmax to enforce Kolmogorov Axioms 1 and 2 before autoregressive token sampling:
 
 ```text
-==================================================================================================
-                    END-TO-END AI LIFECYCLE: LOGITS TO PROBABILITY SIMPLEX IN LLMs
-==================================================================================================
+=============================================================================
+             END-TO-END AI LIFECYCLE: LOGITS TO SIMPLEX IN LLMs
+=============================================================================
 
-   STEP 1: TRANSFORMER OUTPUT        STEP 2: SOFTMAX NORMALIZER           STEP 3: SAMPLING
-   Raw Unbounded Real Logits         Enforces Axioms 1 & 2                Sample Next Token
-   ┌───────────────────────────┐     ┌──────────────────────────────┐     ┌──────────────────────┐
-   │ Token: "Paris"  z₁ = +6.2 │     │ e^{6.2} / Z = 492.7 / 598.1  │     │ P("Paris")  = 0.8238 │
-   │ Token: "London" z₂ = +4.5 │═══► │ e^{4.5} / Z =  90.0 / 598.1  │═══► │ P("London") = 0.1505 │
-   │ Token: "Tokyo"  z₃ = +2.7 │     │ e^{2.7} / Z =  14.9 / 598.1  │     │ P("Tokyo")  = 0.0249 │
-   │ Token: "Apple"  z₄ = -3.1 │     │ e^{-3.1}/ Z =  0.05 / 598.1  │     │ P("Apple")  = 0.0001 │
-   └───────────────────────────┘     ├──────────────────────────────┤     └──────────┬───────────┘
-                                     │ Partition Sum Z = 598.14     │                │
-                                     │ • All P(v) ≥ 0.0 (Axiom 1 ✅)│                ▼
-                                     │ • ∑ P(v) = 1.000 (Axiom 2 ✅)│     Generated: "Paris"
-                                     └──────────────────────────────┘
-==================================================================================================
+   STEP 1: TRANSFORMER OUTPUT      STEP 2: SOFTMAX NORMALIZER     STEP 3: SAMPLING
+   Raw Unbounded Real Logits       Enforces Axioms 1 & 2          Sample Next
+   ┌─────────────────────────┐     ┌────────────────────────┐     ┌───────────────┐
+   │ Token: "Paris"  z₁=+6.2 │     │ e^{6.2}/Z = 492.7/598  │     │ P(Paris)=0.82 │
+   │ Token: "London" z₂=+4.5 │══►  │ e^{4.5}/Z =  90.0/598  │══►  │ P(London)=0.15│
+   │ Token: "Tokyo"  z₃=+2.7 │     │ e^{2.7}/Z =  14.9/598  │     │ P(Tokyo)=0.02 │
+   │ Token: "Apple"  z₄=-3.1 │     │ e^{-3.1}/Z=  0.05/598  │     │ P(Apple)=0.00 │
+   └─────────────────────────┘     ├────────────────────────┤     └───────┬───────┘
+                                   │ Partition Z = 598.14   │             │
+                                   │ • All P(v) ≥ 0 (Ax 1)  │             ▼
+                                   │ • ∑ P(v) = 1.0 (Ax 2)  │  Generated: "Paris"
+                                   └────────────────────────┘
+=============================================================================
 ```
+
+*What to observe and infer:* Softmax takes arbitrary negative or positive numbers from the model's final linear layer, exponentiates them to enforce Axiom 1 ($e^z > 0$), and divides by the partition sum $Z$ to enforce Axiom 2 ($\sum p_i = 1.0$).
+
 
 ---
 
@@ -522,25 +560,28 @@ $$\begin{aligned}
 ## 10. 🔗 Section 10: Connecting the Dots: Generative AI Architecture Blocks
 
 ```text
-==================================================================================================
-                 HOW PROBABILITY BASICS POWER MODERN GENERATIVE ARCHITECTURES
-==================================================================================================
+=============================================================================
+         HOW PROBABILITY BASICS POWER MODERN GENERATIVE ARCHITECTURES
+=============================================================================
 
-                     KOLMOGOROV PROBABILITY TRIPLET (Ω, ℱ, P)
-                     • Non-negativity, unit certainty, additivity
-                                       │
-            ┌──────────────────────────┴──────────────────────────┐
-            ▼                                                     ▼
-     CONDITIONAL PROBABILITY                               PROBABILITY CHAIN RULE
-     P(A | B) = P(A ∩ B) / P(B)                            P(x₁...x_T) = ∏ P(x_t | x_{<t})
-            │                                                     │
-    ┌───────┴────────┐                                            ▼
-    ▼                ▼                                [1. AUTOREGRESSIVE LLMs]
- [2. DIFFUSION]   [3. VAEs & GANs]                     • GPT-4, LLaMA-3 next-token
- • Markov noise   • Latent priors p(z)                 • Factorized causal attention
-   transitions      and push-forward measures          • Softmax simplex calibration
-==================================================================================================
+                 KOLMOGOROV PROBABILITY TRIPLET (Ω, ℱ, P)
+                 • Non-negativity, unit certainty, additivity
+                                   │
+             ┌─────────────────────┴─────────────────────┐
+             ▼                                           ▼
+      CONDITIONAL PROBABILITY                     PROBABILITY CHAIN RULE
+      P(A | B) = P(A ∩ B) / P(B)                  P(x₁..x_T) = ∏ P(x_t|x_{<t})
+             │                                           │
+     ┌───────┴────────┐                                  ▼
+     ▼                ▼                       [1. AUTOREGRESSIVE LLMs]
+  [2. DIFFUSION]   [3. VAEs & GANs]           • GPT-4, LLaMA next-token
+  • Markov noise   • Latent priors p(z)       • Causal attention
+    transitions      and push-forward         • Softmax simplex
+=============================================================================
 ```
+
+*What to observe and infer:* All major generative AI paradigms branch directly from Kolmogorov's foundation. Autoregressive models factorize joint distributions using the probability chain rule, while diffusion models and VAEs rely on conditional transition kernels and prior measures.
+
 
 ### Systematic 4-Column Generative AI Mapping Table
 
@@ -556,7 +597,7 @@ $$\begin{aligned}
 
 ## 11. 💻 Section 11: Standalone Executable Python/PyTorch Verification Script
 
-### Part A: Pure Python Standard Library Simulation (Zero Third-Party Dependencies)
+### Stage 1: Pure Mathematical Reference Implementation (Python Standard Library)
 
 ```python
 """
@@ -637,7 +678,7 @@ print("    --> Bayes Theorem Posterior Verified [OK]")
 print("\nALL PART A TESTS PASSED SUCCESSFULLY!")
 ```
 
-### Part B: Complete PyTorch Verification Suite
+### Stage 2: Production Framework Implementation (PyTorch with Autograd & Stability Checks)
 
 ```python
 """
@@ -763,36 +804,84 @@ print("\nALL PART B TESTS PASSED SUCCESSFULLY (100% GREEN)!")
 
 ### Summary Checklist of Key Takeaways
 
-- [x] **Kolmogorov Triplet $(\Omega, \mathcal{F}, P)$:** Sample Space (Menu), Event Space (Questions), and Probability Measure (Scale).
-- [x] **Axiom 1:** Non-negativity ($P(A) \ge 0.0$ for all legal events).
-- [x] **Axiom 2:** Unit measure certainty ($P(\Omega) = 1.00$).
-- [x] **Axiom 3:** Countable additivity ($P(A \cup B) = P(A) + P(B)$ if and only if $A \cap B = \emptyset$).
-- [x] **Inclusion-Exclusion:** $P(A \cup B) = P(A) + P(B) - P(A \cap B)$ prevents double-counting overlapping mass.
-- [x] **Conditional Probability:** $P(A \mid B) \triangleq \frac{P(A \cap B)}{P(B)}$ rescales the universe strictly to condition $B$.
-- [x] **Bayes' Theorem:** Inverts conditional probability to update prior beliefs with observed evidence.
-- [x] **Softmax Jacobian:** $\frac{\partial p_i}{\partial z_j} = p_i(\delta_{ij} - p_j)$ connects logit changes to probability mass shifts.
-- [x] **Deep Learning & GenAI:** Softmax acts as the neural enforcer of Kolmogorov Axioms 1 and 2, enabling language generation, image diffusion, and variational latent modeling.
+- [ ] **Kolmogorov Triplet $(\Omega, \mathcal{F}, P)$:** Sample Space (Menu), Event Space (Questions), and Probability Measure (Scale).
+- [ ] **Axiom 1:** Non-negativity ($P(A) \ge 0.0$ for all legal events).
+- [ ] **Axiom 2:** Unit measure certainty ($P(\Omega) = 1.00$).
+- [ ] **Axiom 3:** Countable additivity ($P(A \cup B) = P(A) + P(B)$ if and only if $A \cap B = \emptyset$).
+- [ ] **Inclusion-Exclusion:** $P(A \cup B) = P(A) + P(B) - P(A \cap B)$ prevents double-counting overlapping mass.
+- [ ] **Conditional Probability:** $P(A \mid B) \triangleq \frac{P(A \cap B)}{P(B)}$ rescales the universe strictly to condition $B$.
+- [ ] **Bayes' Theorem:** Inverts conditional probability to update prior beliefs with observed evidence.
+- [ ] **Continuity of Probability:** $\lim_{n \to \infty} P(A_n) = P(\lim_{n \to \infty} A_n)$ for monotonic event limits.
+- [ ] **Softmax Jacobian:** $\frac{\partial p_i}{\partial z_j} = p_i(\delta_{ij} - p_j)$ connects logit changes to probability mass shifts.
+- [ ] **Deep Learning & GenAI:** Softmax acts as the neural enforcer of Kolmogorov Axioms 1 and 2, enabling language generation, image diffusion, and variational latent modeling.
 
 ---
 
 ## 13. 🏆 Section 13: Beginner Comprehension Confidence Audit
 
-- [x] **Gate 1: Zero-Jargon & First Principles Gate** — Begins with a physical coin toss and cake slicing before introducing any neural network formulas.
-- [x] **Gate 2: Notation Decoder Gate** — Every mathematical symbol ($\Omega, \omega, \mathcal{F}, P, \in, \subseteq, \cup, \cap, \emptyset, A^c, \mid, \perp, \sum, \forall, \implies, \triangleq$) is decoded with pronunciation, meaning, and AI usage.
-- [x] **Gate 3: No-Magic-Formulas Gate** — 8 exhaustive, line-by-line algebraic proofs derive all core theorems from the 3 axioms without skipped steps.
-- [x] **Gate 4: Zero-Skipped-Arithmetic Gate** — Micro-numerical worked examples show every addition, multiplication, fraction calculation, and the backward gradient vector explicitly.
-- [x] **Gate 5: AI & PyTorch Connection Gate** — Dual-stage code (Part A stdlib + Part B PyTorch) verifies analytical Jacobian, autograd gradients, and extreme logit numerical stability with passing assertions.
+Before moving to the next module, test your active recall and rate your mastery against these five structural gates:
+
+### Foundational Gate Active Recall Checklists
+
+#### Gate 1: Zero-Jargon Decoding & Intuitive Foundations
+- [ ] Can define the Kolmogorov probability triplet $(\Omega, \mathcal{F}, P)$ using the restaurant menu metaphor without technical jargon.
+- [ ] Can explain why discrete point probabilities $P(\{x\}) > 0$ contrast with continuous probability spaces where single real outcomes have $P(\{x\}) = 0$.
+- [ ] Can articulate the intuitive difference between marginal probability $P(A)$, joint probability $P(A \cap B)$, and conditional probability $P(A \mid B)$.
+
+#### Gate 2: Geometric Visualization & Physical Primitives
+- [ ] Can sketch and label the Venn diagram for two overlapping sets and show why the intersection must be subtracted in $P(A \cup B) = P(A) + P(B) - P(A \cap B)$.
+- [ ] Can visualize conditional probability $P(A \mid B)$ as slicing and rescaling the sample space universe down to region $B$.
+- [ ] Can trace how Softmax temperature $\tau$ geometrically morphs logits from a uniform distribution ($\tau \to \infty$) into an argmax indicator simplex ($\tau \to 0^+$).
+
+#### Gate 3: Mathematical Derivations & No-Magic-Formulas
+- [ ] Can derive the complement rule $P(A^c) = 1 - P(A)$ directly from Kolmogorov Axioms 2 and 3.
+- [ ] Can derive Bayes' Theorem from the definition of conditional probability and the Law of Total Probability without skipping steps.
+- [ ] Can prove the continuity of probability $\lim_{n \to \infty} P(A_n) = P(\lim_{n \to \infty} A_n)$ for nested monotone sequences of events.
+
+#### Gate 4: Zero-Skipped-Arithmetic & Micro-Numerical Precision
+- [ ] Can calculate by hand the posterior probability of disease in the rare-disease screening test, demonstrating the Base Rate Fallacy.
+- [ ] Can compute by hand the Softmax probabilities for a 3-class logit vector and verify that all probabilities sum to exactly $1.0000$.
+- [ ] Can derive the cross-entropy gradient $\nabla_z \mathcal{L} = \hat{p} - y$ using the Softmax Jacobian $\frac{\partial p_i}{\partial z_j} = p_i(\delta_{ij} - p_j)$.
+
+#### Gate 5: AI System Realities & Production Hardware Execution
+- [ ] Can explain why passing raw unconstrained logits directly to $\ln(x)$ causes numerical NaN underflow and why LogSumExp is required.
+- [ ] Can explain how the probability chain rule underlies autoregressive next-token prediction in Large Language Models ($P(x_1, \dots, x_T) = \prod P(x_t \mid x_{<t})$).
+- [ ] Can execute both pure Python (math only) and PyTorch verification scripts, confirming that all Kolmogorov axioms and autograd derivatives hold.
+
+### Structural Gate Confidence Audit Matrix
+
+| Audit Gate | Assessment Focus | Target Capability | Self-Check Passing Criteria |
+| :--- | :--- | :--- | :--- |
+| **Gate 1: Zero-Jargon Decoding** | Pronunciation & Definitions | Able to read $(\Omega, \mathcal{F}, P)$ and axioms aloud without hesitation | Can explain why $P(\Omega) = 1.0$ and $P(\emptyset) = 0.0$ intuitively |
+| **Gate 2: Geometric Visualization** | Venn Diagrams & Slicing | Able to sketch probability mass overlaps and conditional sub-universes | Can draw why double-counting occurs without subtracting intersection |
+| **Gate 3: Mathematical Derivation** | Axiomatic Proofs | Able to derive complement, inclusion-exclusion, Bayes' theorem, and continuity | Complete line-by-line derivation with no missing axiomatic steps |
+| **Gate 4: Micro-Numerical Precision** | Pencil-and-Paper Calculations | Able to compute Bayes updates, Softmax outputs, and cross-entropy gradients | Numerical calculations match analytical formulas to 4 decimal places |
+| **Gate 5: AI & PyTorch Connection** | Autograd & Production Execution | Able to implement Kolmogorov verifications and autograd Softmax in PyTorch | 100% green assertions in standalone Python/PyTorch verification script |
+
+*Remediation Trigger:* If any gate feels uncertain, re-read the corresponding section (Gate 1 $\to$ Section 3; Gate 2 $\to$ Section 2; Gate 3 $\to$ Section 4; Gate 4 $\to$ Section 9; Gate 5 $\to$ Section 11).
 
 ---
 
 ## 14. 🌐 Section 14: Curated External Learning References & Further Study
 
-| Resource & Link | Type & Authority | Specific Section / Scope | Why It Is Included & What It Clarifies | Verification & Status |
-| :--- | :--- | :--- | :--- | :--- |
-| [Andrey Kolmogorov: Foundations of the Theory of Probability (1933)](https://archive.org/details/foundationsofthe00kolm) | Seminal Foundation Paper / Monograph | Chapter 1: Elementary Theory of Probability (Axioms 1–3) | The historical origin of modern axiomatic probability; establishes the rigorous set-theoretic foundation. | ✅ Active Internet Archive Classic |
-| [Seeing Theory: Chapter 1 - Basic Probability](https://seeing-theory.brown.edu/basic-probability/index.html) | Visual / Interactive Intuition (Brown Univ) | Sections on Chance Events, Expectation, and Conditional Probability | Dynamic browser-based visualizations of sample spaces, compound events, and Bayesian conditioning. | ✅ Active Open Educational Resource |
-| [3Blue1Brown: Bayes' Theorem with Geometric Boxes](https://www.youtube.com/watch?v=HZGCoVF3YvM) | Video Lesson & Visual Intuition | Full 18-minute visual geometric breakdown | Demonstrates probability as area and conditional probability as zooming into a sliced area. | ✅ Active YouTube Classic (Grant Sanderson) |
-| [Dimitri P. Bertsekas & John N. Tsitsiklis: Introduction to Probability (MIT)](http://athenasc.com/probbook.html) | Authoritative Standard Textbook | Chapter 1: Sample Space and Probability | The gold-standard university textbook on axiomatic probability, conditioning, and total probability. | ✅ Active Athena Scientific Reference |
-| [MIT OpenCourseWare 6.041: Probabilistic Systems Analysis](https://ocw.mit.edu/courses/6-041-probabilistic-systems-analysis-and-applied-probability-fall-2010/) | Top University Lecture Series | Lectures 1 & 2: Axioms, Conditioning, and Bayes' Rule | Full video lectures, problem sets, and official solutions by Prof. John Tsitsiklis. | ✅ Active MIT OCW Course Material |
-| [Stanford CS229: Probability Theory Review Notes](https://cs229.stanford.edu/summer2020/cs229-prob.pdf) | Top University Lecture Notes | Complete 10-page probability foundation review | Concise mathematical reference for machine learning practitioners covering probability spaces and conditioning. | ✅ Active Stanford Course Material |
-| [PyTorch Documentation: torch.distributions.Categorical](https://pytorch.org/docs/stable/distributions.html#categorical) | Official Engineering Reference | API spec for parameterizing discrete probability distributions | Details sampling, log-probabilities, entropy, and numerical validation on GPU tensors. | ✅ Active Official PyTorch Docs |
+To deepen your mathematical foundations of probability and its machine learning applications, explore these curated primary resources organized according to the 5-tier standard:
+
+### The 5-Tier Reference Standard
+
+1. **Tier 1 (Visualizer / Video):** Visual geometric intuition of sample spaces, probability masses, and Bayesian updating.
+2. **Tier 2 (Formal Foundation):** Kolmogorov's original axiomatic monograph establishing modern probability theory.
+3. **Tier 3 (Mandatory Textbook):** Definitive university textbook covering sample spaces, conditioning, and total probability.
+4. **Tier 4 (Mandatory Practice):** Exact problem sets with verified exercise numbers to cement pencil-and-paper mastery.
+5. **Tier 5 (Software Reference):** Official PyTorch framework documentation for categorical distributions and softmax.
+
+### Reference Verification Table
+
+| Resource and Author | Learning Job | Exact Starting Point | Readiness | Access | Checked Date and Evidence |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Tier 1: Visualizer**<br>Grant Sanderson (3Blue1Brown)<br>[Bayes' Theorem with Geometric Boxes](https://www.youtube.com/watch?v=HZGCoVF3YvM) | Build visual intuition for conditional probability as area scaling | Full 18-minute video lesson | Elementary algebra | Free (YouTube) | Verified Sept 2026; active URL |
+| **Tier 1: Interactive Tool**<br>Brown University<br>[Seeing Theory: Basic Probability](https://seeing-theory.brown.edu/basic-probability/index.html) | Interactive browser exploration of sample spaces and events | Chapter 1: Chance Events & Conditional Probability | Basic browser literacy | Free (Open Educational Resource) | Verified Sept 2026; interactive visualizations functional |
+| **Tier 2: Formal Foundation**<br>Andrey Kolmogorov (1933)<br>[Foundations of the Theory of Probability](https://archive.org/details/foundationsofthe00kolm) | Master the original set-theoretic axiomatic formulation | Chapter 1: Elementary Theory of Probability (§1–3) | High-school set notation | Free (Internet Archive Public Domain) | Verified Sept 2026; full text accessible |
+| **Tier 3: Mandatory Textbook**<br>Dimitri P. Bertsekas & John N. Tsitsiklis<br>[Introduction to Probability (2nd ed.)](http://athenasc.com/probbook.html) | Rigorous mathematical exposition of probability models | Chapter 1: §1.1 (Sets & Models), §1.2 (Conditioning), §1.3 (Total Prob & Bayes) | Elementary arithmetic and sets | Publisher open sample / Academic text | Verified Sept 2026; 2nd ed. Athena Scientific |
+| **Tier 4: Mandatory Practice**<br>Bertsekas & Tsitsiklis (2008)<br>[Introduction to Probability Problem Sets](https://ocw.mit.edu/courses/6-041-probabilistic-systems-analysis-and-applied-probability-fall-2010/) | Hands-on proof and calculation drills | Chapter 1 End-of-Chapter Problems: **1.3, 1.7, 1.12, 1.18, 1.23** | Completed Chapter 01 | Free via MIT OCW 6.041 course materials | Verified Sept 2026; exact problem numbers confirmed |
+| **Tier 5: Software Reference**<br>PyTorch Development Team<br>[torch.distributions.Categorical](https://pytorch.org/docs/stable/distributions.html#categorical) | Implement and sample valid probability simplexes on GPU tensors | API spec: `torch.distributions.Categorical` and `torch.nn.functional.softmax` | Python / PyTorch basics | Free (Official Docs) | Verified Sept 2026; PyTorch 2.x API active |
+

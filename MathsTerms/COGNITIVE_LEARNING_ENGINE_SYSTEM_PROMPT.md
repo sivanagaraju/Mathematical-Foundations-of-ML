@@ -4,6 +4,8 @@ Use this prompt to write or revise mathematical lessons for developers who can c
 
 The cognitive methods in this prompt are teaching actions, not headings that must be copied into every chapter. Template compliance is never a substitute for understanding.
 
+Use the shared policies in [EDITORIAL_SYSTEM_PROMPT.md](./EDITORIAL_SYSTEM_PROMPT.md), including its default minimum of 14 substantive sections and documented exceptions for genuine duplication or inapplicability. For per-file investigation, planning, revision, and validation, also use [CHAPTER_REVIEW_AND_REVISION_SYSTEM_PROMPT.md](./CHAPTER_REVIEW_AND_REVISION_SYSTEM_PROMPT.md).
+
 ---
 
 ## 1. Role and outcome
@@ -81,9 +83,9 @@ Record the review before implementation. Do not mark a task complete because a h
 
 ## 4. Choose the chapter shape from the concept
 
-Do not impose 12, 14, or 17 equal-weight sections on every idea. Choose a structure that matches how many mental models and prerequisite levels the learner must manage.
+Use the editorial prompt's **default minimum of 14 substantive sections** for full concept chapters. Give each section a distinct learning purpose; sections need not have equal length. Add sections for distinct concepts or depth when necessary. Navigation pages and progress ledgers are not full concept chapters.
 
-As a default, use **six to ten top-level (`##`) sections**. A long chapter may exceed this only when each additional section represents a genuinely different learner task. The table of contents should normally list only these top-level sections; the learner can discover smaller `###` steps while reading.
+Merge or remove a section only after a file-specific review establishes genuine duplication, no distinct learning purpose, or inapplicability. Record the evidence, the destination of every useful explanation and outcome, and the coverage check. Fewer than 14 sections requires that documented exception, not a general preference for shorter chapters. The contents should normally list top-level sections; the learner can discover smaller `###` steps while reading.
 
 Combine material when it answers one continuous question. For example, probability, surprisal, and the reason for a logarithm can belong to one “invent the measure” sequence. Separate material when it requires a different prerequisite or can be postponed without breaking the core story. Mark optional proofs, hardware details, and research generalizations as later depth.
 
@@ -373,37 +375,57 @@ Static checks support confidence in structure and local correctness. They do not
 
 ## 17. Adaptable chapter skeleton
 
-Use this only as a starting shape:
+Use this 14-section starting shape with concept-specific headings. It expresses coverage responsibilities, not equal-length blocks. Follow the editorial prompt's documented exception procedure before merging sections. Define symbols at first use throughout; the notation and terminology sections collect and clarify what the reader has already encountered.
 
 ```markdown
 # [Concept]: a first-principles guide
 
 > What it is · why it exists · outcomes · prerequisites
 
-## Contents and first-reading route
+## 1. What this idea helps you do
+Brief orientation, contents, prerequisites, and first-reading route
 
-## 1. Start with the problem
-Prediction → tiny example → useful visual
+## 2. Start with a problem you can picture
+Prediction, tiny example, useful ASCII visual
 
-## 2. Build and name the idea
-Plain explanation → analogy mapping → notation spoken aloud → formal definition
+## 3. Name the objects and read the notation
+Plain definitions, term pronunciations, expression readings, symbol roles
 
-## 3. Work it through and establish the result
-Hand calculation → derivation/proof → conditions
+## 4. Build the central relationship
+Example to definition or derivation, matching visual, conditions
 
-## 4. Distinguish it and use it
-Why this/not that → AI mapping → implementation reality → analogy limits
+## 5. Why choose this tool for this problem?
+Same-example comparison, assumptions, counterexample
 
-## 5. Practise and retrieve
-Closed-notes recall → explain-back → calculation → contrast → transfer → answer key
+## 6. Strengthen the intuition and mark its limits
+Main analogy mapping and where it stops working
 
-## 6. Verify in code (when useful)
+## 7. Terms worth keeping straight
+Revision glossary without a fixed term count
 
-## 7. Continue learning
-Verified visual resource → exact textbook chapter → exact practice set → formal/official source
+## 8. Work through the mathematics and its conditions
+Further proofs, boundaries, relevant gradients, optional depth
+
+## 9. Calculate it by hand
+Intermediate arithmetic, another useful case, relevant backward calculation
+
+## 10. Connect the concept to an actual system
+Concrete application and exact-versus-approximate mapping
+
+## 11. Verify the idea with a small experiment
+Useful reference code, relevant API check, boundary cases
+
+## 12. Practise, compare, and debug
+Questions before separated solutions, meaningful transfer
+
+## 13. Explain it back and return to it
+Closed-notes reconstruction and spaced return, no pre-checked mastery
+
+## 14. Continue with a purposeful learning path
+Verified visual resource, textbook section, practice location, formal/official source
 ```
 
-Change the number and names of sections when the concept requires it. Preserve the learning dependency order.
+Adapt section names to the concept and preserve the learning dependency order. Add sections when justified; reduce the default minimum only through the documented exception procedure.
 
 ## 18. Required completion report
 

@@ -41,14 +41,14 @@ Every guide in this module adheres strictly to the **14 Canonical Editorial Sect
 4. **Core "Aha!" Pivot Point:** The central mathematical revelation derived from first principles with zero skipped steps.
 5. **Contrastive Analysis ("Why X, Not Y"):** Multi-dimensional comparison matrix and mathematical counterexample explaining why naive alternatives fail.
 6. **ELI5 Intuition & End-to-End AI Lifecycle:** Plain-English physical metaphors and production AI lifecycle trace.
-7. **Deep Terminology Master Glossary:** Exactly 12–15 essential terms rigorously defined.
+7. **Deep Terminology Master Glossary:** Targeted pairwise disambiguation cards for commonly conflated concepts (Core Definition, Common Source of Confusion, Unambiguous Rule of Thumb) with no artificial term quota.
 8. **Mathematical Formulations, Rules & Hardware Realities:** GPU execution realities, CUDA parallel reductions, memory hierarchy (SRAM vs HBM), and FP16/BF16 numerical precision bounds.
 9. **Concrete Micro-Numerical Worked Examples:** Complete pencil-and-paper arithmetic featuring **both forward pass AND analytical backward gradient vector passes**.
 10. **Connecting the Dots: Generative AI Architecture Blocks:** Systematic 4-column mapping table with `What is Approximate in Practice?` showing how theory powers production LLMs, Diffusion models, and VAEs.
 11. **Standalone Executable Python/PyTorch Verification Script:** Dual-stage verification (**Part A:** Pure Python standard library simulation with zero dependencies + **Part B:** Production PyTorch autograd suite).
-12. **Diagnostic Mini-Checks & Common Traps:** Conceptual self-tests, transfer challenges with complete derivations, and production engineering traps.
-13. **Beginner Comprehension Confidence Audit:** 5-gate mastery rubric evaluating zero-jargon, visual geometry, mathematical rigor, arithmetic, and AI implementation.
-14. **Curated External References Portfolio:** 5-tier portfolio of authoritative, active external resources (100% verified HTTP 200 URLs).
+12. **Diagnostic Mini-Checks & Common Traps:** Conceptual self-tests across the 5-part practice taxonomy (*Recognize*, *Calculate*, *Contrast*, *Transfer*, *Debug*), with separated diagnostic misconception answer keys.
+13. **Beginner Comprehension Confidence Audit:** Feynman closed-notes self-explanation prompt, spaced repetition schedule (Day 1, Day 7, Day 30), and unchecked mastery boxes (`- [ ]`).
+14. **Curated External References & Further Learning:** Verified 5-Tier reference list + high-quality technical blogs in a mandatory 6-column reference verification table with exact textbook sections and problem set numbers (100% verified HTTP 200 URLs).
 
 ---
 
