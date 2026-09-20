@@ -35,28 +35,36 @@ Mathematical-Foundations-of-ML/
 You can maintain multiple independent ChatGPT accounts and sessions side-by-side using `--account 1`, `--account 2`, etc.
 
 ### ChatGPT Account 1 Login (Default):
+
 ```powershell
 python grok_image_automation/chatgpt_engine.py --login --account 1
 ```
+
 *(Or: `python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --login --account 1`)*
+
 - Chrome opens with `.chatgpt_profile/`.
 - Log in manually (enter email, password, passcode/2FA, verify).
 - Saved permanently into `.chatgpt_profile/`.
 
 ### ChatGPT Account 2 Login (New / Second Gmail Account):
+
 ```powershell
 python grok_image_automation/chatgpt_engine.py --login --account 2
 ```
+
 *(Or: `python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --login --account 2`)*
+
 - Chrome opens with an isolated, clean directory: `.chatgpt_profile_2/`.
 - Log in with your **second Gmail account**.
 - Saved permanently into `.chatgpt_profile_2/`. Both accounts exist side-by-side without interference!
 - Optional: Use `--wait 90` if you need more time.
 
 ### Grok Login:
+
 ```powershell
 python grok_image_automation/grok_imagine_runner.py --engine grok --login
 ```
+
 - Opens Chrome to `https://grok.com`. Log in and press `[Enter]` in the terminal.
 
 ---
@@ -147,33 +155,33 @@ python grok_image_automation/grok_imagine_runner.py --engine grok --range 14 33 
 ## CLI Options & Flags
 
 
-| Flag                      | Argument            | Description                                                             |
-| :-------------------------- | :-------------------- | :------------------------------------------------------------------------ |
-| `--engine`                | `grok` \| `chatgpt` | Engine to use for image generation (default:`grok`)                     |
-| `--account`               | `<id>`              | Account / session identifier (`1`, `2`, `'alt'`, etc., default: `1`)    |
-| `--login`                 | *(flag)*            | Launch browser to log in and save session to engine's profile           |
-| `--email`                 | `<email>`           | Account email for ChatGPT (default:`sivanagarajupachipulusu@gmail.com`) |
-| `--password`              | `<password>`        | Password for ChatGPT (default:`Pulk@_ta!nt_01!`)                        |
-| `--file`                  | `<path>`            | Path to a MathsTerms markdown file                                      |
-| `--category`              | `<name>`            | Category name or absolute path in MathsTerms                            |
-| `--all`                   | *(flag)*            | Process all files across all categories in MathsTerms                   |
-| `--topic`                 | `1 2 3...` or `1,2` | Specific topic numbers to run (accepts space or comma-separated)         |
-| `--parallel`              | `1-3`               | Number of parallel generation tabs (default: 2)                         |
-| `--skip-existing`         | *(flag)*            | Automatically skip topics that already have valid images (**Default: TRUE**) |
-| `--regenerate`, `--force` | *(flag)*            | Force re-generate topics even if images already exist on disk           |
-| `--no-skip-existing`      | *(flag)*            | Disable skipping existing images                                        |
-| `--max-retries`           | `N`                 | Number of retries for incomplete topics (default:`2`)                   |
-| `--include-all-sections`  | *(flag)*            | Include non-image sections (References & Beginner Comprehension, skipped by default) |
+| Flag                      | Argument            | Description                                                                                |
+| :-------------------------- | :-------------------- | :------------------------------------------------------------------------------------------- |
+| `--engine`                | `grok` \| `chatgpt` | Engine to use for image generation (default:`grok`)                                        |
+| `--account`               | `<id>`              | Account / session identifier (`1`, `2`, `'alt'`, etc., default: `1`)                       |
+| `--login`                 | *(flag)*            | Launch browser to log in and save session to engine's profile                              |
+| `--email`                 | `<email>`           | Account email for ChatGPT (default:`sivanagarajupachipulusu@gmail.com`)                    |
+| `--password`              | `<password>`        | Password for ChatGPT (default:`Pulk@_ta!nt_01!`)                                           |
+| `--file`                  | `<path>`            | Path to a MathsTerms markdown file                                                         |
+| `--category`              | `<name>`            | Category name or absolute path in MathsTerms                                               |
+| `--all`                   | *(flag)*            | Process all files across all categories in MathsTerms                                      |
+| `--topic`                 | `1 2 3...` or `1,2` | Specific topic numbers to run (accepts space or comma-separated)                           |
+| `--parallel`              | `1-3`               | Number of parallel generation tabs (default: 2)                                            |
+| `--skip-existing`         | *(flag)*            | Automatically skip topics that already have valid images (**Default: TRUE**)               |
+| `--regenerate`, `--force` | *(flag)*            | Force re-generate topics even if images already exist on disk                              |
+| `--no-skip-existing`      | *(flag)*            | Disable skipping existing images                                                           |
+| `--max-retries`           | `N`                 | Number of retries for incomplete topics (default:`2`)                                      |
+| `--include-all-sections`  | *(flag)*            | Include non-image sections (References & Beginner Comprehension, skipped by default)       |
 | `--clean-ignored`         | *(flag)*            | Clean/delete obsolete generated image files for ignored sections (e.g. topic-13, topic-14) |
-| `--delay`                 | `N`                 | Cooldown seconds between batches (default:`6`)                          |
-| `--profile-dir`           | `<path>`            | Custom Chrome profile directory                                         |
+| `--delay`                 | `N`                 | Cooldown seconds between batches (default:`6`)                                             |
+| `--profile-dir`           | `<path>`            | Custom Chrome profile directory                                                            |
 
 > [!TIP]
 > **Automatic Non-Image Section Skipping**:
 > By default, `grok_mathsterms_runner.py` automatically skips generating images for non-visual sections:
+>
 > - **Section 13:** Beginner Comprehension Confidence Audit (rubrics / checklists)
 > - **Section 14:** Curated External Learning References & Further Study (link portfolios / tables)
 >
 > Pass `--include-all-sections` if you wish to generate images for these sections as well.
 > Pass `--clean-ignored` to automatically delete any existing image files for these sections from output folders.
-

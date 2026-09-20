@@ -33,6 +33,10 @@
 
 ## 1. 🧭 Section 1: Executive Summary & Metadata Header
 
+<!-- maths-animation:m01_03_convexity_and_jensens_inequality:convexity_jensen_executive:start -->
+![Convex bowl curve with secant chord demonstrating Jensen inequality gap and the variational lower bound.](gifs/03-convexity-and-jensens-inequality/convexity-jensen-executive.gif)
+<!-- maths-animation:m01_03_convexity_and_jensens_inequality:convexity_jensen_executive:end -->
+
 > [!NOTE]
 > ### 🎓 Four-Question Chapter Onboarding & Foundational Lineage
 > **1. What is this chapter about?**  
@@ -223,6 +227,10 @@ $$f(y) \ge f(x) + f'(x)(y - x) \quad \forall x, y$$
 ---
 
 ### Proof 2: 2-Point Jensen's Inequality (Geometric Base Case)
+
+<!-- maths-animation:m01_03_convexity_and_jensens_inequality:jensen_secant_gap:start -->
+![Convex parabola showing secant chord hanging above the curve, demonstrating Jensen inequality gap.](gifs/03-convexity-and-jensens-inequality/jensen-secant-gap.gif)
+<!-- maths-animation:m01_03_convexity_and_jensens_inequality:jensen_secant_gap:end -->
 **Claim:** For any convex function $f$ and any two points $x_1, x_2$ with probabilities $p_1, p_2 \ge 0$ such that $p_1 + p_2 = 1$:
 $$f(p_1 x_1 + p_2 x_2) \le p_1 f(x_1) + p_2 f(x_2)$$
 

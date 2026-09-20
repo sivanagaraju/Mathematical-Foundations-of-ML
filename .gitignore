@@ -13,3 +13,7 @@ htmldesigns/*
 __pycache__
 .chatgpt_profile
 .chatgpt_profile_2
+media/
+visualizations/outputs/
+visualizations/.build/
+visualizations/

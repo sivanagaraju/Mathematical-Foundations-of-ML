@@ -72,7 +72,8 @@ try:
         wait_and_download_chatgpt_images,
         extract_image_elements,
         dismiss_chatgpt_modals,
-        get_chatgpt_profile_dir
+        get_chatgpt_profile_dir,
+        CHATGPT_FOLLOWUP_IMAGE_PROMPT
     )
 except ImportError:
     try:
@@ -89,13 +90,15 @@ except ImportError:
             wait_and_download_chatgpt_images,
             extract_image_elements,
             dismiss_chatgpt_modals,
-            get_chatgpt_profile_dir
+            get_chatgpt_profile_dir,
+            CHATGPT_FOLLOWUP_IMAGE_PROMPT
         )
     except ImportError:
         CHATGPT_PROFILE_DIR = SCRIPT_DIR / ".chatgpt_profile"
         CHATGPT_IMAGES_URL = "https://chatgpt.com/images"
         DEFAULT_EMAIL = "sivanagarajupachipulusu@gmail.com"
         DEFAULT_PASSWORD = "Pulk@_ta!nt_01!"
+        CHATGPT_FOLLOWUP_IMAGE_PROMPT = "generate the image for the details"
         def get_chatgpt_profile_dir(account="1", custom_dir=""):
             return Path(custom_dir).resolve() if custom_dir else SCRIPT_DIR / ".chatgpt_profile"
 
@@ -647,7 +650,8 @@ def run_topic_batch(context, chunk, doc_title: str, output_dir: Path, engine: st
                 pre_urls,
                 expected_count=1,
                 max_wait=180,
-                initial_wait=5 if len(chunk) > 1 else 20
+                initial_wait=5 if len(chunk) > 1 else 20,
+                follow_up_message=CHATGPT_FOLLOWUP_IMAGE_PROMPT
             )
             print(f"  [Tab {tab_idx+1}] Topic {t['num']:02d} complete: {len(downloaded)} image(s).", flush=True)
             results.append((t, downloaded))

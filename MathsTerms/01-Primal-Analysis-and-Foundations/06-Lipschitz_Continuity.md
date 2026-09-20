@@ -33,6 +33,10 @@
 
 ## 1. 🧭 Section 1: Executive Summary & Metadata Header
 
+<!-- maths-animation:m01_06_lipschitz_continuity:lipschitz_continuity_executive:start -->
+![Lipschitz double cone sliding along function curve, demonstrating slope confinement and gradient stabilization.](gifs/06-lipschitz-continuity/lipschitz-continuity-executive.gif)
+<!-- maths-animation:m01_06_lipschitz_continuity:lipschitz_continuity_executive:end -->
+
 > [!NOTE]
 > ### 🧭 Four-Question Onboarding & Scope
 > - **What is this chapter about?** A global mathematical speed limit bounding how rapidly a function's output can change relative to changes in its input.
@@ -205,6 +209,11 @@ Never let mathematical shorthand be an obstacle. Use this Rosetta Stone before d
 ---
 
 #### Proof 2: The Derivative Bound in One Dimension via Mean Value Theorem
+
+<!-- maths-animation:m01_06_lipschitz_continuity:lipschitz_double_cone:start -->
+![Function curve trapped inside double cone with slope K, demonstrating Lipschitz continuity condition.](gifs/06-lipschitz-continuity/lipschitz-double-cone.gif)
+<!-- maths-animation:m01_06_lipschitz_continuity:lipschitz_double_cone:end -->
+
 
 **Claim:** Let $f: [a, b] \to \mathbb{R}$ be continuous on $[a, b]$ and differentiable on $(a, b)$. If there exists a constant $K \ge 0$ such that $|f'(t)| \le K$ for all $t \in (a, b)$, then $f$ is $K$-Lipschitz on $[a, b]$:
 $$|f(x) - f(y)| \le K |x - y| \quad \forall x, y \in [a, b]$$

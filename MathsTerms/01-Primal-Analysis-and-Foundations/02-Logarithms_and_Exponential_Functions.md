@@ -33,6 +33,10 @@
 
 ## 1. 🧭 Section 1: Executive Summary & Metadata Header
 
+<!-- maths-animation:m01_02_logarithms_and_exponential_functions:log_exp_executive:start -->
+![Log-Sum-Exp diagram demonstrating logit max-subtraction shift preventing float32 overflow and underflow in Softmax attention.](gifs/02-logarithms-and-exponential-functions/log-exp-executive.gif)
+<!-- maths-animation:m01_02_logarithms_and_exponential_functions:log_exp_executive:end -->
+
 > [!NOTE]
 > ### 🎓 Four-Question Chapter Onboarding & Foundational Lineage
 > **1. What is this chapter about?**  
@@ -174,6 +178,10 @@ $$\ln \left( \sum_{k=1}^K e^{z_k} \right) = c + \ln \left( \sum_{k=1}^K e^{z_k -
 ---
 
 ### Proof 2: The Product-to-Sum Rule ($\ln(ab) = \ln a + \ln b$)
+
+<!-- maths-animation:m01_02_logarithms_and_exponential_functions:log_product_to_sum:start -->
+![Logarithm curve transforming multiplication of numbers into addition of horizontal coordinates, preventing underflow.](gifs/02-logarithms-and-exponential-functions/log-product-to-sum.gif)
+<!-- maths-animation:m01_02_logarithms_and_exponential_functions:log_product_to_sum:end -->
 **Claim:** The natural logarithm of a product of positive numbers equals the sum of their individual logarithms.
 
 **Step-by-step Derivation:**

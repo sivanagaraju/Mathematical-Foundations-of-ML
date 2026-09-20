@@ -436,6 +436,33 @@ def extract_image_elements(page) -> list:
         pass
     return image_urls
 
+CHATGPT_FOLLOWUP_IMAGE_PROMPT = "generate the image for the details"
+
+def check_chatgpt_text_message(page) -> str:
+    """
+    Check if ChatGPT responded with a text message instead of generating an image.
+    Inspects the latest assistant conversation turn.
+    Returns the message text if detected and no image was created, otherwise empty string.
+    """
+    try:
+        turns = page.locator("[data-message-author-role='assistant'], article:has([data-message-author-role='assistant']), div.markdown").all()
+        if turns:
+            last_turn = turns[-1]
+            turn_imgs = last_turn.locator("img").all()
+            has_generated_img = False
+            for img in turn_imgs:
+                src = img.get_attribute("src") or ""
+                if "oaiusercontent.com" in src or "blob:" in src or (src.startswith("http") and not any(icon in src for icon in ["avatar", "icon", "favicon", "profile"])):
+                    has_generated_img = True
+                    break
+            if not has_generated_img:
+                txt = last_turn.inner_text().strip()
+                if txt:
+                    return txt
+    except Exception:
+        pass
+    return ""
+
 def wait_and_download_chatgpt_images(
     context,
     page,
@@ -444,24 +471,48 @@ def wait_and_download_chatgpt_images(
     pre_existing_urls: set,
     expected_count: int = 1,
     max_wait: int = 180,
-    initial_wait: int = 25
+    initial_wait: int = 25,
+    follow_up_message: str = CHATGPT_FOLLOWUP_IMAGE_PROMPT
 ) -> list:
     """
     Wait for ChatGPT image generation to finish and download the newly created image(s).
     Includes generous max_wait (up to 180s), periodic modal dismissal, and progress heartbeat.
+    If ChatGPT responds with a text message rather than generating an image, automatically sends
+    the follow-up message: 'generate the image for the details' to trigger image generation.
     """
     start_time = time.time()
     output_dir.mkdir(parents=True, exist_ok=True)
     downloaded_files = []
+    follow_up_sent = False
 
     if initial_wait > 0:
         print(f"Waiting initial {initial_wait}s for ChatGPT to generate...", flush=True)
-        for _ in range(initial_wait // 5):
-            time.sleep(5)
+        for step in range(max(1, initial_wait // 3)):
+            time.sleep(3)
             dismiss_chatgpt_modals(page, cooldown_if_rate_limited=False)
-        rem_init = initial_wait % 5
-        if rem_init > 0:
-            time.sleep(rem_init)
+
+            # Check if ChatGPT prematurely stopped or responded with text instead of generating
+            if step >= 1:
+                gen_now = is_chatgpt_generating(page)
+                curr_urls = extract_image_elements(page)
+                fr_urls = [u for u in curr_urls if u not in pre_existing_urls]
+
+                # If images are already ready
+                if not gen_now and len(fr_urls) >= 1:
+                    break
+
+                # If ChatGPT stopped generating with NO images and gave a text response
+                if not gen_now and len(fr_urls) == 0:
+                    text_resp = check_chatgpt_text_message(page)
+                    if text_resp:
+                        preview = (text_resp[:120] + "...") if len(text_resp) > 120 else text_resp
+                        print(f"  [TEXT RESPONSE DETECTED] ChatGPT replied with message rather than image: '{preview}'", flush=True)
+                        print(f"  [FOLLOW-UP] Sending: '{follow_up_message}'...", flush=True)
+                        submit_chatgpt_prompt(page, follow_up_message)
+                        follow_up_sent = True
+                        start_time = time.time()
+                        time.sleep(4)
+                        break
 
     new_urls = []
     last_heartbeat = time.time()
@@ -481,6 +532,21 @@ def wait_and_download_chatgpt_images(
             new_urls = fresh_urls
             print(f"Reached expected count ({len(new_urls)} images).", flush=True)
             break
+
+        # If not generating and no fresh images, check if ChatGPT responded with a text message
+        if not generating and len(fresh_urls) == 0 and not follow_up_sent:
+            text_resp = check_chatgpt_text_message(page)
+            elapsed = time.time() - start_time
+            if text_resp or elapsed >= 15:
+                preview = (text_resp[:120] + "...") if len(text_resp) > 120 else (text_resp or "No image generated, editor idle")
+                print(f"  [TEXT RESPONSE DETECTED] ChatGPT replied with message rather than image: '{preview}'", flush=True)
+                print(f"  [FOLLOW-UP] Sending: '{follow_up_message}'...", flush=True)
+                submit_chatgpt_prompt(page, follow_up_message)
+                follow_up_sent = True
+                start_time = time.time()
+                last_heartbeat = time.time()
+                time.sleep(4)
+                continue
 
         # Progress heartbeat every 15 seconds
         if time.time() - last_heartbeat >= 15:
@@ -509,7 +575,7 @@ def wait_and_download_chatgpt_images(
                         print(f"  [SAVED] {save_path.name} ({save_path.stat().st_size:,} bytes)", flush=True)
                         downloaded_files.append(save_path)
                         continue
-                
+
                 print(f"  Attempting canvas/blob extraction for image {idx}...", flush=True)
                 img_loc = page.locator(f"img[src='{img_url}']").first
                 if img_loc.is_visible():

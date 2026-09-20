@@ -26,7 +26,7 @@
 - [10. 🔗 Connecting the Dots: Generative AI Architecture Blocks](#10-connecting-the-dots-generative-ai-architecture-blocks)
 - [11. 💻 Standalone Executable Python/PyTorch Verification Script](#11-standalone-executable-pythonpytorch-verification-script)
 - [12. 🩺 Diagnostic Mini-Checks & Common Traps](#12-diagnostic-mini-checks-common-traps)
-- [13. 🏆 Beginner Comprehension Confidence Audit](#13-beginner-comprehension-confidence-audit)
+- [13. 🏆 Explain It Back and Return to It](#13-explain-it-back-and-return-to-it)
 - [14. 🌐 Curated External Learning References & Further Study](#14-curated-external-learning-references-further-study)
 
 ---
@@ -51,19 +51,29 @@
 > Lipschitz continuity and gradient bounds ([Module 01, Chapter 06](../01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md)), continuous distributions and expectations ([Module 04, Chapter 02](../04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md)), and vector norms ([Module 02, Chapter 02](../02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md)).
 
 ```text
- ===================================================================================================
-                 OPTIMAL TRANSPORT & KANTOROVICH-RUBINSTEIN WGAN ARCHITECTURE
- ===================================================================================================
+================================================================================
+          OPTIMAL TRANSPORT & KANTOROVICH-RUBINSTEIN WGAN ARCHITECTURE
+================================================================================
 
-  PRIMAL EARTH MOVER'S DISTANCE                   KANTOROVICH-RUBINSTEIN DUALITY      WGAN CRITIC WITH 1-LIPSCHITZ
-  Minimum cost transport plan γ(x, y)             1-Lipschitz witness function f      Critic with Gradient Penalty
-  ┌──────────────────────────────┐                ┌──────────────────────────────┐   ┌──────────────────────────────┐
-  │ W₁(P, Q) =                   │ ───Dual Map──► │ W₁(P, Q) =                   │──►│ L_WGAN =                     │
-  │ inf_γ E_{(x,y)~γ}[ ||x - y||]│  (Kantorovich) │ sup_{||f||_L ≤ 1} {          │   │ E_data[D(x)] - E_G[D(G(z))]  │
-  │ Intractable infimum over all │                │   E_P[f(x)] - E_Q[f(y)] }    │   │ + λ E[(||∇_x̂ D(x̂)||₂ - 1)²]  │
-  │ joint coupling plans Π(P, Q) │                │ • Constant non-zero gradients│   │ • Solves vanishing gradients!│
-  └──────────────────────────────┘                └──────────────────────────────┘   └──────────────────────────────┘
- ===================================================================================================
+ [ PRIMAL: EARTH MOVER'S DISTANCE ]
+   W₁(P, Q) = inf_{γ ∈ Π(P, Q)} 𝔼_{(x, y)~γ}[ ||x - y|| ]
+   • Minimum physical work to transport mass from P to Q.
+   • Intractable linear program O(N³) over coupling plans in high dimensions.
+                            │
+                            │  Kantorovich-Rubinstein Duality
+                            ▼
+ [ DUAL: 1-LIPSCHITZ ELEVATION WITNESS ]
+   W₁(P, Q) = sup_{||f||_L ≤ 1} { 𝔼_P[f(x)] - 𝔼_Q[f(y)] }
+   • Replaces joint couplings with an optimal 1-Lipschitz critic surface.
+   • Non-zero linear gradients everywhere, even on disjoint supports!
+                            │
+                            │  Deep Learning Parameterization
+                            ▼
+ [ WGAN-GP OBJECTIVE WITH GRADIENT PENALTY ]
+   ℒ_critic = 𝔼[D(x̃)] - 𝔼[D(x)] + λ 𝔼[(||∇_x̂ D(x̂)||₂ - 1)²]
+   • Enforces 1-Lipschitz continuity along interpolations x̂ = ε x + (1-ε)x̃.
+   • Eliminates mode collapse and saturating vanishing gradients.
+================================================================================
 ```
 
 ---
@@ -78,16 +88,28 @@ In high-dimensional machine learning (like 4K image generation):
 - **Monge (1781) and Kantorovich (1942) invented Optimal Transport (Wasserstein Distance)** to measure the physical work ($\text{Mass} \times \text{Distance}$) needed to shovel dirt from one distribution to another, providing smooth, non-vanishing gradients across disjoint spaces!
 
 ```text
-            WHY WASSERSTEIN DISTANCE PROVIDES SMOOTH GRADIENTS ON DISJOINT MANIFOLDS
- 
-   DISJOINT IMAGE MANIFOLDS (Real vs Fake)        JSD GRADIENT LANDSCAPE (Dead)       WGAN GRADIENT LANDSCAPE (Smooth)
-   Real P: [ 0, 0, 0 ]                           ∇_θ D_JS = 0.0                      ∇_θ W₁ = 1.0 (Clean Vector!)
-   Fake Q: [ θ, 0, 0 ]                           (Discriminator wins 100%,           (Points generator directly
-                                                  generator gets NO clues)            toward real data manifold!)
-   ┌──────────────────────────────┐              ┌──────────────────────────────┐    ┌──────────────────────────────┐
-   │ Real P ●            ● Fake Q │═════════════►│ Flat plateau: Loss = ln(2)   │═══►│ Linear slope: Loss = |θ|     │
-   │ Distance = |θ|               │              │ Zero learning signal!        │    │ Continuous learning signal!  │
-   └──────────────────────────────┘              └──────────────────────────────┘    └──────────────────────────────┘
+================================================================================
+    WHY WASSERSTEIN DISTANCE PROVIDES SMOOTH GRADIENTS ON DISJOINT MANIFOLDS
+================================================================================
+
+  DISJOINT IMAGE MANIFOLDS (Real P vs Fake Q):
+  Real P: [ 0, 0, 0 ]  <-------- Distance = |θ| -------->  Fake Q: [ θ, 0, 0 ]
+  Supports have ZERO overlap: supp(P) ∩ supp(Q) = ∅
+
+  1. JENSEN-SHANNON DIVERGENCE (JSD) LANDSCAPE:
+     D_JS(P || Q) = ln(2) ≈ 0.6931  (FLAT CONSTANT PLATEAU)
+     ∇_θ D_JS = 0.0000              (ZERO LEARNING SIGNAL!)
+     ┌────────────────────────────────────────────────────────────────────────┐
+     │ Flat loss plateau: Discriminator wins 100%, generator gradient freezes │
+     └────────────────────────────────────────────────────────────────────────┘
+
+  2. WASSERSTEIN-1 DISTANCE (W₁) LANDSCAPE:
+     W₁(P, Q) = |θ|                 (LINEAR METRIC CONE)
+     ∇_θ W₁ = sign(θ) = ±1.0        (CONSTANT CLEAN DIRECTIONAL VECTOR!)
+     ┌────────────────────────────────────────────────────────────────────────┐
+     │ Continuous slope: Guides generator straight toward data manifold!      │
+     └────────────────────────────────────────────────────────────────────────┘
+================================================================================
 ```
 
 ---
@@ -111,23 +133,26 @@ In high-dimensional machine learning (like 4K image generation):
 > **Wasserstein Distance is a moving truck measuring the minimum gas bill to move all your furniture from your old house to your new house! Unlike a binary alarm (KL/JSD) that just screams that you're lost, Wasserstein distance gives turn-by-turn GPS countdowns telling the generator exactly which direction to move.**
 
 ```text
-      PRIMAL COUPLING MATRIX vs DUAL KANTOROVICH-RUBINSTEIN ELEVATION SURFACE
-      
-  PRIMAL: Optimal Transport Coupling γ(x, y)      DUAL: 1-Lipschitz Witness Surface f(x)
-  [Mass transport plan minimizing work]           [Elevation landscape maximizing drop]
-  
-          Destination y (Fake Q)                          Critic Elevation f(x)
-          y₁      y₂      y₃                               ▲
-      ┌───────┬───────┬───────┐                            │       f(x_real)
-   x₁ │  γ₁₁  │  γ₁₂  │  γ₁₃  │  Total = P(x₁)             │       ┌─────────┐
-      ├───────┼───────┼───────┤                            │      /           \     Slope ≤ 1.0
-   x₂ │  γ₂₁  │  γ₂₂  │  γ₂₃  │  Total = P(x₂)             │     /  Max Slope  \   (45° Max Angle)
-      ├───────┼───────┼───────┤                            │    /  ||∇f|| ≤ 1   \
-   x₃ │  γ₃₁  │  γ₃₂  │  γ₃₃  │  Total = P(x₃)             │   /                 \      f(x_fake)
-      └───────┴───────┴───────┘                            │  /                   \    ┌─────────┐
-       Q(y₁)   Q(y₂)   Q(y₃)                               0 ┴─────────────────────┴───┴─────────┴─► x
-       
-  Primal: W₁(P, Q) = inf_γ ∑ γ_{ij} ||x_i - y_j||   Dual: W₁(P, Q) = sup_{||f||_L ≤ 1} 𝔼_P[f] - 𝔼_Q[f]
+================================================================================
+    PRIMAL COUPLING MATRIX vs DUAL KANTOROVICH-RUBINSTEIN ELEVATION SURFACE
+================================================================================
+
+ 1. PRIMAL: Transport Coupling γ(x, y)      2. DUAL: 1-Lipschitz Witness f(x)
+    [Coupling plan minimizing work]            [Elevation surface maximizing drop]
+
+         Destination y (Fake Q)                   Critic Elevation f(x)
+         y₁     y₂     y₃                          ▲
+      ┌──────┬──────┬──────┐                       │       f(x_real)
+   x₁ │ γ₁₁  │ γ₁₂  │ γ₁₃  │  Total P(x₁)          │       ┌─────────┐
+      ├──────┼──────┼──────┤                       │      /           \  Slope ≤ 1
+   x₂ │ γ₂₁  │ γ₂₂  │ γ₂₃  │  Total P(x₂)          │     /  Max Slope  \ (45° max)
+      ├──────┼──────┼──────┤                       │    /  ||∇f|| ≤ 1   \
+   x₃ │ γ₃₁  │ γ₃₂  │ γ₃₃  │  Total P(x₃)          │   /                 \ f(x_fake)
+      └──────┴──────┴──────┘                       │  /                   \ ┌───┐
+       Q(y₁)  Q(y₂)  Q(y₃)                         0 ┴─────────────────────┴┴───┴─► x
+
+ Primal: W₁(P, Q) = inf_γ ∑ γ_ij ||x_i - y_j||   Dual: W₁ = sup_{||f||_L≤1} 𝔼_P[f]-𝔼_Q[f]
+================================================================================
 ```
 
 ### Complete First-Principles Proof: The Parallel Lines Theorem (WGAN vs JSD)
@@ -219,18 +244,23 @@ Let us compute the distance under both metrics:
 ## 6. 👶 ELI5 Intuition: The End-to-End AI Lifecycle
 
 ```text
- ===================================================================================================
-           END-TO-END AI LIFECYCLE: WASSERSTEIN GAN WITH GRADIENT PENALTY (WGAN-GP)
- ===================================================================================================
+================================================================================
+    END-TO-END AI LIFECYCLE: WASSERSTEIN GAN WITH GRADIENT PENALTY (WGAN-GP)
+================================================================================
 
-  SAMPLE LATENT z ──► [ 1. Generator G_θ ] ──► Synthetic Image x̃
+  [Latent Vector z] ──► [1. Generator G_θ] ──► Synthetic Sample x̃ = G_θ(z)
                                                       │
                                                       ▼
-  [ 4. Generator updates weights with clean gradient! ] ◄── [ 2. Interpolate: x̂ = ε x_real + (1-ε) x̃ ]
-               ▲                                                      │
-               │                                                      ▼
-  [ Loss = 𝔼[D(x̃)] - 𝔼[D(x)] + 10·𝔼[(||∇_x̂ D||₂ - 1)²] ] ◄── [ 3. Critic D computes 1-Lipschitz slope ]
- ===================================================================================================
+  [Real Sample x]   ─────────────────────────► [2. Random Interpolation]
+                                               x̂ = ε x + (1-ε) x̃
+                                                      │
+                                                      ▼
+  [4. Generator Updates Weights]               [3. 1-Lipschitz Critic D_w]
+  ∇_θ 𝔼[D(G_θ(z))] gives clean,                Computes elevation difference:
+  un-saturating learning vector!               ℒ = 𝔼[D(x̃)] - 𝔼[D(x)]
+         ▲                                         + 10 · 𝔼[(||∇_x̂ D||₂ - 1)²]
+         └────────────────────────────────────────────┘
+================================================================================
 ```
 
 ### Everyday Real-World Metaphors
@@ -278,13 +308,19 @@ The physical earth mover / dirt pile shifting metaphor depicts shoveling discret
 ## 8. 📐 Mathematical Formulations, Rules & Hardware Realities
 
 ```text
- ===================================================================================================
-                 THE THREE WASSERSTEIN FORMULATIONS
- ===================================================================================================
+================================================================================
+                      THE THREE WASSERSTEIN FORMULATIONS
+================================================================================
 
-    1. 1D CLOSED-FORM CDF:                2. KANTOROVICH DUALITY:               3. WGAN-GP OBJECTIVE:
-    W₁(P, Q) = ∫ |F_P(x) - F_Q(x)| dx     W₁ = sup_{||f||_L ≤ 1} 𝔼_P[f] - 𝔼_Q[f] ℒ = 𝔼[D(x̃)] - 𝔼[D(x)] + λ 𝔼[(||∇_x̂ D|| - 1)²]
- ===================================================================================================
+ 1. 1D CLOSED-FORM CDF INTEGRAL:
+    W₁(P, Q) = ∫_{-∞}^{+∞} |F_P(x) - F_Q(x)| dx
+
+ 2. KANTOROVICH-RUBINSTEIN DUALITY (Any Dimension):
+    W₁(P, Q) = sup_{||f||_L ≤ 1} { 𝔼_{x~P}[f(x)] - 𝔼_{y~Q}[f(y)] }
+
+ 3. WGAN-GP PRACTICAL SURROGATE OBJECTIVE:
+    ℒ_critic = 𝔼_{x̃}[D(x̃)] - 𝔼_x[D(x)] + λ · 𝔼_{x̂}[( ||∇_{x̂} D(x̂)||₂ - 1 )²]
+================================================================================
 ```
 
 ### Core Mathematical Equations
@@ -375,19 +411,24 @@ Evaluate at initial shift $\theta = 3.00$.
 ## 10. 🔗 Connecting the Dots: Generative AI Architecture Blocks
 
 ```text
- ===================================================================================================
-                 WASSERSTEIN METRICS ACROSS GENERATIVE AI
- ===================================================================================================
+================================================================================
+                    WASSERSTEIN METRICS ACROSS GENERATIVE AI
+================================================================================
 
-    1. WGAN-GP TRAINING LOOP                          2. FRÉCHET INCEPTION DISTANCE (FID)
-    Enforces ||∇_x̂ D(x̂)||₂ ≈ 1 via Interpolation      W₂² between Inception feature Gaussians
-    ┌────────────────────────────────────────┐        ┌────────────────────────────────────────┐
-    │ Real Image x ~ p_data                  │        │ 50,000 Real Images ──► 𝒩(μ_r, Σ_r)     │
-    │ Synthetic Image x̃ = G(z)               │        │ 50,000 Fake Images ──► 𝒩(μ_g, Σ_g)     │
-    │ Random Blend x̂ = ε x + (1-ε) x̃        │        │ Metric: ||μ_r - μ_g||² + Tr(Σ_r + Σ_g  │
-    │ Penalizes (||\nabla_x̂ D|| - 1)²         │        │         - 2(Σ_r^{1/2} Σ_g Σ_r^{1/2})½)│
-    └────────────────────────────────────────┘        └────────────────────────────────────────┘
- ===================================================================================================
+ 1. WGAN-GP TRAINING LOOP:
+    ┌────────────────────────────────────────────────────────────────────────┐
+    │ Real Image x ~ p_data; Synthetic Image x̃ = G(z)                       │
+    │ Random Blend: x̂ = ε x + (1-ε) x̃ for ε ~ Uniform(0, 1)                 │
+    │ Gradient Penalty: ℒ_GP = λ · 𝔼[(||∇_x̂ D(x̂)||₂ - 1)²]                  │
+    └────────────────────────────────────────────────────────────────────────┘
+
+ 2. FRÉCHET INCEPTION DISTANCE (FID) EVALUATION:
+    ┌────────────────────────────────────────────────────────────────────────┐
+    │ Extract 2048-dim features from Inception-v3 pool3 layer                │
+    │ Fit Gaussians: Real ~ 𝒩(μ_r, Σ_r), Generated ~ 𝒩(μ_g, Σ_g)              │
+    │ Closed-form W₂²: ||μ_r - μ_g||² + Tr(Σ_r + Σ_g - 2(Σ_r½ Σ_g Σ_r½)½)    │
+    └────────────────────────────────────────────────────────────────────────┘
+================================================================================
 ```
 
 | Generative System | Chosen Wasserstein Formulation | Architectural Implementation | What is Approximate in Practice? |
@@ -437,6 +478,12 @@ print(f"   • Samples P:                 {samples_P}")
 print(f"   • Samples Q:                 {samples_Q}")
 print(f"   • Computed W1 Distance:      {w1_val:.4f} (Analytic: 4.0000)")
 assert abs(w1_val - 4.0000) < 1e-12, "1D Wasserstein calculation error!"
+assert wasserstein_1d_pure(samples_P, samples_Q) == (
+    wasserstein_1d_pure(samples_Q, samples_P)
+), "Metric symmetry violated!"
+assert (
+    wasserstein_1d_pure(samples_P, samples_P) == 0.0
+), "Identity of indiscernibles violated!"
 print("   • Exact match with analytical Monge transport work! [PASS]")
 
 # 2. Metric Properties Verification: Triangle Inequality
@@ -519,6 +566,9 @@ interpolates = (alpha * real_imgs + (1.0 - alpha) * fake_imgs).requires_grad_(Tr
 
 # Step 2: Critic evaluation
 d_interpolates = critic_net(interpolates)
+assert d_interpolates.shape == (batch_size, 1), (
+    "Critic output shape mismatch!"
+)
 
 # Step 3: Compute gradients w.r.t interpolated pixels
 grads = torch.autograd.grad(
@@ -528,6 +578,9 @@ grads = torch.autograd.grad(
     create_graph=True,
     retain_graph=True
 )[0]
+assert grads.shape == interpolates.shape, (
+    "Gradient shape mismatch!"
+)
 
 # Step 4: Gradient Penalty E[(||grad||_2 - 1)^2]
 grad_norms = grads.view(batch_size, -1).norm(2, dim=1)
@@ -588,14 +641,6 @@ print("=" * 78)
 
 ---
 
-### 📅 Spaced Return & Retention Plan
-
-- [ ] **Tomorrow (24-Hour Recall Check):** Write down the Kantorovich-Rubinstein duality formula: $W_1(P, Q) = \sup_{\|f\|_L \le 1} \mathbb{E}_P[f] - \mathbb{E}_Q[f]$. Explain why the 1-Lipschitz constraint replaces the cross-entropy discriminator with an elevation landscape.
-- [ ] **In One Week (Derivation Re-Verification):** Re-derive the Parallel Lines theorem for $P_0$ at $x=0$ and $P_\theta$ at $x=\theta$ to show why $W_1 = |\theta|$ has constant gradient $\pm 1$ while JSD vanishes to 0.
-- [ ] **In One Month (Cross-Topic Synthesis):** Explain to a peer how Wasserstein distance powers both training (WGAN-GP) and evaluation (Fréchet Inception Distance / FID) in modern generative AI.
-
----
-
 ### ⚠️ Common Engineering Traps
 
 | Trap | Why It Fails | Production Fix |
@@ -607,20 +652,42 @@ print("=" * 78)
 ---
 
 ### 📋 Summary Checklist
-- [x] Wasserstein-1 Distance ($W_1$) measures the minimal expected physical work to transport mass from distribution $P$ to $Q$.
-- [x] Kantorovich-Rubinstein Duality converts the transport coupling search into finding an optimal 1-Lipschitz critic function: $\sup_{\|f\|_L \le 1} \mathbb{E}_P[f] - \mathbb{E}_Q[f]$.
-- [x] Parallel Lines Theorem: $W_1$ maintains constant, non-vanishing gradients even when distributions have completely disjoint supports.
-- [x] WGAN-GP enforces 1-Lipschitz continuity via Gradient Penalty on random interpolates $\hat{x}$.
-- [x] FID Metric applies 2-Wasserstein distance ($W_2^2$) between Gaussian feature representations to benchmark image generation.
+- [ ] Wasserstein-1 Distance ($W_1$) measures the minimal expected physical work to transport mass from distribution $P$ to $Q$.
+- [ ] Kantorovich-Rubinstein Duality converts the transport coupling search into finding an optimal 1-Lipschitz critic function: $\sup_{\|f\|_L \le 1} \mathbb{E}_P[f] - \mathbb{E}_Q[f]$.
+- [ ] Parallel Lines Theorem: $W_1$ maintains constant, non-vanishing gradients even when distributions have completely disjoint supports.
+- [ ] WGAN-GP enforces 1-Lipschitz continuity via Gradient Penalty on random interpolates $\hat{x}$.
+- [ ] FID Metric applies 2-Wasserstein distance ($W_2^2$) between Gaussian feature representations to benchmark image generation.
 
 ---
 
-## 13. 🏆 Beginner Comprehension Confidence Audit
-- [x] **Gate 1: Zero-Jargon Gate** — Every mathematical symbol ($W_1(P, Q), \gamma(x, y), \sup_{\|f\|_L \le 1}, D(x), \lambda, W_2^2$) is defined in plain English before use.
-- [x] **Gate 2: Visual Geometry Gate** — Clear visual ASCII diagrams depict optimal transport coupling schedules, disjoint parallel lines, and WGAN-GP critic landscapes.
-- [x] **Gate 3: No-Magic-Formulas Gate** — The 1D closed-form CDF integral and Parallel Lines Theorem gradient are proven algebraically step-by-step.
-- [x] **Gate 4: Zero-Skipped-Arithmetic Gate** — Micro-numerical examples show every transport work product, CDF area integral, and dual witness evaluation explicitly with vector directions.
-- [x] **Gate 5: AI & PyTorch Connection Gate** — WGAN-GP gradient penalty, Fréchet Inception Distance (FID), and a dual-stage Python/PyTorch verification script confirm complete functionality.
+## 13. 🏆 Explain It Back and Return to It
+
+### The Feynman Technique Challenge
+To prove deep comprehension, explain the core concepts of this chapter to a software engineer who knows basic Python and deep learning but has never studied optimal transport or measure theory. Complete these two prompts with your notes closed:
+
+1. **Closed-Notes Intuitive Explanation (Zero Technical Jargon):**
+   > *"Why does Jensen-Shannon divergence completely freeze neural network training when two distributions do not overlap, and how does Earth Mover's Distance solve this by thinking about physical dirt and moving trucks? Why does the 1-Lipschitz slope constraint prevent the critic from cheating, and how does WGAN-GP enforce this without clipping weights?"*
+   <details>
+   <summary>Click to view model answer after your attempt</summary>
+
+   *Model Answer:* In high-dimensional spaces like 4K photos, real data and generated images live on razor-thin manifolds that almost never collide initially. When distributions do not overlap, traditional divergence metrics like JSD max out at a flat ceiling ($\ln 2$). Because the loss surface is completely flat, its derivative is zero ($\nabla Loss = 0$), so the generator gets zero hints on where to move. Earth Mover's Distance treats probability distributions like piles of dirt: instead of asking 'do these piles overlap?', it asks 'how much physical work (mass times distance) does it take to shovel dirt from pile A into pile B?'. Even if pile A is 10 miles away from pile B, moving it closer reduces the gas bill linearly, giving the generator a steady, continuous GPS compass pointing straight to the data manifold. However, searching over all possible shipping schedules in high dimensions is computationally impossible. Kantorovich-Rubinstein duality flips the problem: instead of planning truck routes, we train an elevation landscape (the critic). To prevent the critic from cheating by making the real mountain infinitely tall and the fake valley infinitely deep, we enforce a strict speed limit (the 1-Lipschitz condition): the landscape's slope cannot exceed a 45-degree angle ($|\nabla D| \le 1$) anywhere. WGAN-GP enforces this smoothly by picking random points along the straight lines connecting real and generated images and penalizing the critic whenever its slope norm deviates from 1.0.
+   </details>
+
+2. **Mathematical Notation Restoration:**
+   > *"Now rewrite your explanation using formal mathematical notation: the primal Monge-Kantorovich infimum $W_1(P, Q) = \inf_{\gamma \in \Pi(P, Q)} \mathbb{E}_{(x, y) \sim \gamma}[\|x - y\|]$, the Kantorovich-Rubinstein dual supremum $W_1(P, Q) = \sup_{\|f\|_L \le 1} \left( \mathbb{E}_P[f(x)] - \mathbb{E}_Q[f(y)] \right)$, the Parallel Lines gradient $\nabla_\theta W_1 = \text{sign}(\theta)$, and the WGAN-GP objective $\mathcal{L} = \mathbb{E}[D(\tilde{x})] - \mathbb{E}[D(x)] + \lambda \mathbb{E}[(\|\nabla_{\hat{x}} D(\hat{x})\|_2 - 1)^2]$."*
+
+### Spaced Repetition Review Schedule
+- **Day 1 (Immediate Recall):** Without looking at notes, write down the Kantorovich-Rubinstein duality formula: $W_1(P, Q) = \sup_{\|f\|_L \le 1} \mathbb{E}_P[f] - \mathbb{E}_Q[f]$. Explain why the 1-Lipschitz constraint replaces the cross-entropy discriminator with an elevation landscape.
+- **Day 7 (Analytical Derivation):** On scratch paper, re-derive the Parallel Lines theorem for $P_0$ at $x=0$ and $P_\theta$ at $x=\theta$ to prove why $W_1 = |\theta|$ has constant unit gradient $\pm 1$ while JSD vanishes to 0.
+- **Day 30 (Cross-Topic Synthesis):** Connect this chapter to [Module 05, Chapter 03 (Jensen-Shannon Divergence)](03-Jensen_Shannon_Divergence.md) and [Module 05, Chapter 06 (Variational Divergence Minimization)](06-Variational_Divergence_Minimization_VDM.md). Contrast the non-overlapping support behavior of $f$-divergences versus optimal transport.
+
+### Unchecked Self-Assessment Checklist
+- [ ] I can pronounce every symbol ($W_1, \gamma(x, y), \Pi(P, Q), \sup_{\|f\|_L \le 1}, \lambda, W_2^2$) aloud accurately.
+- [ ] I can explain the moving truck / dirt shoveling physical intuition without technical jargon.
+- [ ] I can prove why JSD yields zero gradients on disjoint manifolds while $W_1$ yields unit gradients $\pm 1$.
+- [ ] I can derive the 1D closed-form CDF integral $W_1 = \int |F_P(x) - F_Q(x)| dx$ step-by-step.
+- [ ] I can explain why BatchNorm breaks the 1-Lipschitz constraint while LayerNorm and Spectral Norm preserve it.
+- [ ] I can formulate the WGAN-GP gradient penalty on random interpolates $\hat{x} = \epsilon x + (1-\epsilon)\tilde{x}$.
 
 ---
 
@@ -628,15 +695,17 @@ print("=" * 78)
 
 To deepen your mathematical grasp of optimal transport, Wasserstein distance, and WGAN architectures:
 
-| Resource & Link | Type & Authority | Specific Section / Scope | Why It Is Included & What It Clarifies | Verification & Status |
-| :--- | :--- | :--- | :--- | :--- |
-| [Martin Arjovsky, Soumith Chintala, Léon Bottou: Wasserstein GAN (2017)](https://arxiv.org/abs/1701.07875) | Seminal Foundation Paper | Sections 2 & 3: Different Distances & WGAN | Introduces the Kantorovich-Rubinstein dual formulation to solve GAN training instability and proves the Parallel Lines Theorem. | ✅ Published ICML Classic |
-| [Ishaan Gulrajani et al.: Improved Training of Wasserstein GANs (2017)](https://arxiv.org/abs/1704.00028) | Applied Deep Learning Paper | Section 3: Background & Gradient Penalty | Introduces the Gradient Penalty (WGAN-GP) to enforce the 1-Lipschitz condition reliably without weight clipping. | ✅ Published NeurIPS Classic |
-| [Martin Heusel et al.: GANs Trained by a Two Time-Scale Update Rule (2017)](https://arxiv.org/abs/1706.08500) | Seminal Evaluation Paper | Section 3: Fréchet Inception Distance | The original paper deriving the Fréchet Inception Distance (FID) as the 2-Wasserstein metric on Gaussian features. | ✅ Published NeurIPS Classic |
-| [Gabriel Peyré & Marco Cuturi: Computational Optimal Transport (2019)](https://optimaltransport.github.io/) | Comprehensive Open Textbook | Chapters 2 & 4: Monge-Kantorovich & Sinkhorn | Complete mathematical foundation of Monge-Kantorovich problems, Sinkhorn divergences, and Wasserstein geometry. | ✅ Active Open Access Classic |
-| [Marco Cuturi: Sinkhorn Distances: Lightspeed Computation of Optimal Transport (2013)](https://arxiv.org/abs/1306.0895) | Seminal Algorithmic Paper | Full Paper | Introduces entropic regularization enabling GPU-accelerated matrix-scaling optimal transport. | ✅ Published NeurIPS Classic |
-| [Yannic Kilcher: Wasserstein GAN (Paper Explained)](https://www.youtube.com/watch?v=sI9pWqvhqZg) | Visual / Video Tutorial | Complete Walkthrough | Exceptional visual explanation of why high-dimensional manifolds do not overlap and how earth mover distance fixes gradients. | ✅ Verified YouTube (200 OK) |
-| [Vincent Herrmann: Wasserstein GAN and the Kantorovich-Rubinstein Duality](https://vincentherrmann.github.io/blog/wasserstein/) | Deep Technical Blog | Full Walkthrough | Clear, visual, step-by-step mathematical explanation of the Kantorovich-Rubinstein dual proof and critic elevation surfaces. | ✅ Active Engineering Blog |
-| [Lilian Weng: From GAN to WGAN (2017)](https://lilianweng.github.io/posts/2017-08-20-gan/) | Deep Technical Blog | Sections: Wasserstein Distance & WGAN | Canonical industry reference detailing why JSD stalls and how Earth Mover's Distance provides linear gradients everywhere. | ✅ Active Engineering Blog |
-| [Stanford CS236: Deep Generative Models (Prof. Stefano Ermon)](https://deepgenerativemodels.github.io/) | University Course Material | Lecture Notes: Wasserstein GANs | Graduate-level formal lecture notes on Kantorovich duality, Lipschitz continuous critics, and optimal transport. | ✅ Active Stanford Course |
-| [POT: Python Optimal Transport Library Documentation](https://pythonot.github.io/) | Official Engineering Reference | Tutorials: 1D OT & Sinkhorn Solvers | Canonical open-source scientific library for computing Wasserstein distance, Sinkhorn matrix scaling, and barycenters. | ✅ Active Python Library |
+### Mandatory 6-Column Reference Verification Table
+
+| Resource and Author | Learning Job | Exact Starting Point | Readiness | Access | Checked Date and Evidence |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **[Martin Arjovsky et al.: Wasserstein GAN (2017)](https://arxiv.org/abs/1701.07875)** | **Seminal Foundation Paper:** Introduces Kantorovich-Rubinstein duality to solve GAN training instability and proves the Parallel Lines Theorem | Sections 2 & 3 (pp. 2–7): Different Distances & WGAN | Multivariable calculus and probability metrics | Free Open Access (arXiv:1701.07875) | Verified Sep 2026; HTTP 200 OK |
+| **[Ishaan Gulrajani et al.: Improved Training of Wasserstein GANs (2017)](https://arxiv.org/abs/1704.00028)** | **Architecture Classic:** Introduces the Gradient Penalty (WGAN-GP) to enforce the 1-Lipschitz condition reliably without weight clipping | Section 3 (pp. 2–5): Background & Gradient Penalty | Calculus and deep neural network training | Free Open Access (arXiv:1704.00028) | Verified Sep 2026; HTTP 200 OK |
+| **[Martin Heusel et al.: GANs Trained by a Two Time-Scale Update Rule (2017)](https://arxiv.org/abs/1706.08500)** | **Evaluation Classic:** Derives the Fréchet Inception Distance (FID) as the 2-Wasserstein metric on Gaussian features | Section 3 (pp. 4–7): Fréchet Inception Distance | Multivariate Gaussian distributions and matrix algebra | Free Open Access (arXiv:1706.08500) | Verified Sep 2026; HTTP 200 OK |
+| **[Computational Optimal Transport](https://optimaltransport.github.io/)** (Gabriel Peyré & Marco Cuturi) | **Mandatory Textbook Tier:** Canonical comprehensive textbook on Monge-Kantorovich problems, Sinkhorn divergences, and OT geometry | Chapters 2 & 4 (§2.1–§2.3, pp. 15–28; §4.1–§4.3, pp. 61–75) | Linear algebra, convex analysis, and multivariable calculus | Free Open Access Web & PDF Book | Verified Sep 2026; HTTP 200 OK |
+| **[Marco Cuturi: Sinkhorn Distances: Lightspeed Computation of Optimal Transport (2013)](https://arxiv.org/abs/1306.0895)** | **Algorithmic Classic:** Introduces entropic regularization enabling GPU-accelerated matrix-scaling optimal transport | Full Paper (Sections 1–4, pp. 1–6) | Matrix algebra and Lagrange multipliers | Free Open Access (arXiv:1306.0895) | Verified Sep 2026; HTTP 200 OK |
+| **[Yannic Kilcher: Wasserstein GAN (Paper Explained)](https://www.youtube.com/watch?v=sI9pWqvhqZg)** | **Visual / Video Tier:** Visual breakdown of why high-dimensional manifolds do not overlap and how earth mover distance fixes gradients | Full 27-minute walkthrough video | Introductory machine learning concepts | Free Public Access (YouTube) | Verified Sep 2026; HTTP 200 OK |
+| **[Vincent Herrmann: Wasserstein GAN and the Kantorovich-Rubinstein Duality](https://vincentherrmann.github.io/blog/wasserstein/)** | **Deep Technical Blog Tier:** Step-by-step mathematical explanation of the Kantorovich-Rubinstein dual proof and critic elevation surfaces | Full Walkthrough Blog Post | Multivariable calculus and linear algebra | Free Open Web Classic | Verified Sep 2026; HTTP 200 OK |
+| **[From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan/)** (Lilian Weng) | **Deep Technical Blog Tier:** Canonical industry reference detailing why JSD stalls and how Earth Mover's Distance provides linear gradients everywhere | Sections: "Wasserstein Distance" and "WGAN" | Calculus and basic neural networks | Free Open Web Classic | Verified Sep 2026; HTTP 200 OK |
+| **[Stanford CS236: Deep Generative Models](https://deepgenerativemodels.github.io/)** (Prof. Stefano Ermon) | **University Course Tier:** Graduate-level formal lecture notes on Kantorovich duality, Lipschitz continuous critics, and optimal transport | Lecture Notes: Wasserstein GANs | Machine learning foundations and PyTorch | Free Stanford Course Notes | Verified Sep 2026; HTTP 200 OK |
+| **[POT: Python Optimal Transport Library Documentation](https://pythonot.github.io/)** (POT Development Team) | **Software Reference Tier:** Canonical open-source scientific library for computing Wasserstein distance, Sinkhorn matrix scaling, and barycenters | Tutorials: 1D Optimal Transport & Exact Solvers | Basic Python and NumPy programming | Free Official Documentation | Verified Sep 2026; HTTP 200 OK |

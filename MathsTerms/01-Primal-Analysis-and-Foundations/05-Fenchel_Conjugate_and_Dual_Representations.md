@@ -33,6 +33,10 @@
 
 ## 1. 🧭 Section 1: Executive Summary & Metadata Header
 
+<!-- maths-animation:m01_05_fenchel_conjugate_and_dual_representations:fenchel_duality_executive:start -->
+![Convex curve reconstructed by envelope of supporting tangent lines parameterized by dual slopes.](gifs/05-fenchel-conjugate-and-dual-representations/fenchel-duality-executive.gif)
+<!-- maths-animation:m01_05_fenchel_conjugate_and_dual_representations:fenchel_duality_executive:end -->
+
 > [!NOTE]
 > ### 🧭 Four-Question Onboarding & Scope
 > - **What is this chapter about?** Representing a convex curve through its slopes and intercepts (the dual perspective) rather than individual point coordinates.
@@ -209,6 +213,11 @@ This six-stage dependency progression connects foundational convex analysis to m
 ---
 
 ### Proof 1: The Fenchel--Young Inequality and Variational Lower Bound
+
+<!-- maths-animation:m01_05_fenchel_conjugate_and_dual_representations:fenchel_supporting_slope:start -->
+![Convex parabola with supporting tangent line illustrating Fenchel conjugate intercept and lower bound gap.](gifs/05-fenchel-conjugate-and-dual-representations/fenchel-supporting-slope.gif)
+<!-- maths-animation:m01_05_fenchel_conjugate_and_dual_representations:fenchel_supporting_slope:end -->
+
 Why does the Fenchel Dual create a guaranteed lower bound on statistical divergence?
 
 $$\begin{aligned}

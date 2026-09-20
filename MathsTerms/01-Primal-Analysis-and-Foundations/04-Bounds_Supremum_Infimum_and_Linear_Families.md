@@ -33,6 +33,10 @@
 
 ## 1. 🧭 Section 1: Executive Summary & Metadata Header
 
+<!-- maths-animation:m01_04_bounds_supremum_infimum_and_linear_families:bounds_supremum_executive:start -->
+![Supremum ceiling pressing down to tightest upper bound with supporting linear family forming variational envelope.](gifs/04-bounds-supremum-infimum-and-linear-families/bounds-supremum-executive.gif)
+<!-- maths-animation:m01_04_bounds_supremum_infimum_and_linear_families:bounds_supremum_executive:end -->
+
 > [!NOTE]
 > ### 🎓 Four-Question Chapter Onboarding & Foundational Lineage
 > **1. What is this chapter about?**  
@@ -193,6 +197,11 @@ This seven-stage dependency ladder traces the analytical path from foundational 
 ---
 
 ### Proof 1: Why the Supremum Exists Even When the Maximum Fails
+
+<!-- maths-animation:m01_04_bounds_supremum_infimum_and_linear_families:supremum_open_interval:start -->
+![Number line showing half open interval approaching one, where supremum exists but maximum fails.](gifs/04-bounds-supremum-infimum-and-linear-families/supremum-open-interval.gif)
+<!-- maths-animation:m01_04_bounds_supremum_infimum_and_linear_families:supremum_open_interval:end -->
+
 **Theorem:** Let $S = [0, 1) = \{x \in \mathbb{R} : 0 \le x < 1\}$. Then $S$ has no maximum element, but its supremum is $\sup S = 1.0$.
 
 **Step-by-step Derivation:**

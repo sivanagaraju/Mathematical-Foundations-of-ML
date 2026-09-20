@@ -34,6 +34,10 @@
 
 ## 1. 🧭 Section 1: Executive Summary & Metadata Header
 
+<!-- maths-animation:m01_01_probability_basics_and_axioms:kolmogorov_axioms_executive:start -->
+![Three-tier Kolmogorov probability diagram showing sample space outcomes mapped through event sets to calibrated probabilities summing to one.](gifs/01-probability-basics-and-axioms/kolmogorov-axioms-executive.gif)
+<!-- maths-animation:m01_01_probability_basics_and_axioms:kolmogorov_axioms_executive:end -->
+
 > [!NOTE]
 > ### 1. What is this chapter about?
 > Assigning and updating sensible numerical beliefs between $0.0$ and $1.0$ when an outcome is uncertain, governed by Kolmogorov's 3 non-negotiable axioms.
@@ -190,6 +194,10 @@ $$\begin{aligned}
 ---
 
 ### 📜 Proof 2: The Complement Rule ($P(A^c) = 1.0 - P(A)$)
+
+<!-- maths-animation:m01_01_probability_basics_and_axioms:probability_complement:start -->
+![Unit probability bar showing event A expanding while complement Ac shrinks to preserve total probability mass of one.](gifs/01-probability-basics-and-axioms/probability-complement.gif)
+<!-- maths-animation:m01_01_probability_basics_and_axioms:probability_complement:end -->
 
 **Claim:** The probability that an event does *not* happen is $1.0$ minus the probability that it *does* happen.
 
