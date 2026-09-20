@@ -35,6 +35,10 @@
 
 ## 1. 🧭 Section 1: Executive Summary & Metadata Header
 
+<!-- maths-animation:m02_01_vectors_and_matrices:vector_transform_executive:start -->
+![2D Cartesian coordinate grid with standard basis vectors warping linearly under matrix W into transformed basis vectors.](gifs/01-vectors-and-matrices/vector-transform-executive.gif)
+<!-- maths-animation:m02_01_vectors_and_matrices:vector_transform_executive:end -->
+
 > [!NOTE]
 > ### 🧭 Four-Question Intuitive Onboarding
 >

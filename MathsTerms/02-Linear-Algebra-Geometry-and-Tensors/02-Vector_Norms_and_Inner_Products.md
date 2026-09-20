@@ -33,6 +33,10 @@
 
 ## 1. 🧭 Section 1: Executive Summary & Metadata Header
 
+<!-- maths-animation:m02_02_vector_norms_and_inner_products:vector_norms_unit_balls_executive:start -->
+![2D Cartesian coordinate plane displaying nested geometric unit balls for L1 diamond, L2 circle, and Linf square with test vector evaluation.](gifs/02-vector-norms-and-inner-products/vector-norms-unit-balls-executive.gif)
+<!-- maths-animation:m02_02_vector_norms_and_inner_products:vector_norms_unit_balls_executive:end -->
+
 > [!NOTE]
 > ### 🧭 Four-Question Intuitive Onboarding
 > 1. **What physical or practical problem forced humans to invent vector norms and inner products?**  
@@ -122,6 +126,10 @@ In multi-dimensional data science, data points are high-dimensional vectors (arr
 ---
 
 ## 4. 💡 Section 4: The Core "Aha!" Pivot Point: Metric Geometry & First-Principles Proofs
+
+<!-- maths-animation:m02_02_vector_norms_and_inner_products:l1_sparsity_vs_l2_shrinkage:start -->
+![Constrained optimization geometry showing loss contour ellipses touching the sharp corner of an L1 diamond at w1=0 versus smooth tangential contact on an L2 circle.](gifs/02-vector-norms-and-inner-products/l1-sparsity-vs-l2-shrinkage.gif)
+<!-- maths-animation:m02_02_vector_norms_and_inner_products:l1_sparsity_vs_l2_shrinkage:end -->
 
 > 💡 **The Core "Aha!" Discovery:**  
 > **A Norm is an objective ruler measuring vector length, while an Inner Product is a protractor measuring angular alignment. Together, they establish metric geometry in $\mathbb{R}^n$, guaranteeing that projection lengths never exceed vector magnitudes!**
@@ -372,6 +380,10 @@ The Manhattan grid ($L_1$) and crow-flies ruler ($L_2$) metaphors give intuitive
 ---
 
 ## 8. 📐 Section 8: Mathematical Formulations, Rules & Hardware Realities
+
+<!-- maths-animation:m02_02_vector_norms_and_inner_products:cauchy_schwarz_projection_bound:start -->
+![Geometric vector projection illustrating Cauchy-Schwarz bound where dot product equals length product times cosine, achieving equality only when collinear.](gifs/02-vector-norms-and-inner-products/cauchy-schwarz-projection-bound.gif)
+<!-- maths-animation:m02_02_vector_norms_and_inner_products:cauchy_schwarz_projection_bound:end -->
 
 ```text
 +------------------------------------------------------------------------+

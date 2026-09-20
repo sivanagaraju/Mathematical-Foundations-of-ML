@@ -33,6 +33,10 @@
 
 ## 1. 🧭 Section 1: Executive Summary & Metadata Header
 
+<!-- maths-animation:m02_03_dot_product_and_similarity:dot_product_shadow_executive:start -->
+![2D geometric diagram of vector a projecting a perpendicular dashed shadow onto vector b, with live calculation panel multiplying shadow length by vector b length.](gifs/03-dot-product-and-similarity/dot-product-shadow-executive.gif)
+<!-- maths-animation:m02_03_dot_product_and_similarity:dot_product_shadow_executive:end -->
+
 > [!NOTE]
 > ### 🧭 Four-Question Intuitive Onboarding
 > 1. **What physical or practical problem forced humans to invent the dot product?**  
@@ -129,6 +133,10 @@ In 1844, German mathematician **Hermann Grassmann** generalized this into the mu
 ---
 
 ## 4. 💡 Section 4: The Core "Aha!" Pivot Point: The Shadow Projection Law & Equivalence Proof
+
+<!-- maths-animation:m02_03_dot_product_and_similarity:dot_product_three_states:start -->
+![Vector u fixed horizontally while vector v rotates through parallel 0 degrees, orthogonal 90 degrees, and opposite 180 degrees states.](gifs/03-dot-product-and-similarity/dot-product-three-states.gif)
+<!-- maths-animation:m02_03_dot_product_and_similarity:dot_product_three_states:end -->
 
 > 💡 **The Core "Aha!" Discovery:**  
 > **The Dot Product $\vec{a} \cdot \vec{b}$ simply drops a flashlight perpendicular to $\vec{b}$ to measure the length of $\vec{a}$'s shadow, and multiplies that shadow length by the length of $\vec{b}$!**
@@ -365,6 +373,10 @@ The flashlight shadow / alignment compass metaphors model dot products as simple
 ---
 
 ## 8. 📐 Section 8: Mathematical Formulations: Dot Product, Cosine Similarity & Hardware Realities
+
+<!-- maths-animation:m02_03_dot_product_and_similarity:dot_product_vs_cosine_attention:start -->
+![Side-by-side comparison of short and long query-key vectors showing raw dot product inflating with length while cosine similarity stays invariant.](gifs/03-dot-product-and-similarity/dot-product-vs-cosine-attention.gif)
+<!-- maths-animation:m02_03_dot_product_and_similarity:dot_product_vs_cosine_attention:end -->
 
 ```text
 +------------------------------------------------------------------------+
