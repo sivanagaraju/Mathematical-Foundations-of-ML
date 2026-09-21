@@ -1,7 +1,7 @@
 # Implementation Plan — Folder-by-Folder Upgrade for `/goal` Autonomous Execution
 
-> **Specification Authority:** [`UPGRADE_SPEC.md`](./UPGRADE_SPEC.md)  
-> **Execution Model:** **Folder-by-Folder (Module-by-Module) Autonomous Loop**. Each folder is an atomic, self-contained milestone delivering the **7-Pillar Production Learning Suite** (`PREREQUISITES.md`, `NOTES.md`, `references.md`, `examples/`, `glossary.md`, `formulae_sheet.md`, `quiz.html`). All prerequisite, sibling curriculum ([`Mathematical-foundation-ml`](../Mathematical-foundation-ml)), and lecture-specific [`MathsTerms`](./MathsTerms) are dynamically identified, built, and cross-referenced. Runnable Python simulations are executed and tested via `validate_package.py`, and a formal **Done Review with Pedagogical Confidence Scoring** is delivered before advancing to the next module.
+> **Specification Authority:** [`UPGRADE_SPEC.md`](../../UPGRADE_SPEC.md)  
+> **Execution Model:** **Folder-by-Folder (Module-by-Module) Autonomous Loop**. Each folder is an atomic, self-contained milestone delivering the **7-Pillar Production Learning Suite** (`PREREQUISITES.md`, `NOTES.md`, `references.md`, `examples/`, `glossary.md`, `formulae_sheet.md`, `quiz.html`). All prerequisite, sibling curriculum ([`Mathematical-foundation-ml`](../../Mathematical-foundation-ml)), and lecture-specific [`MathsTerms`](../../MathsTerms) are dynamically identified, built, and cross-referenced. Runnable Python simulations are executed and tested via `validate_package.py`, and a formal **Done Review with Pedagogical Confidence Scoring** is delivered before advancing to the next module.
 
 ---
 
@@ -32,7 +32,7 @@ When a lecture relies on foundational concepts covered in the sibling course `Ma
 ### B. Dynamic "On-Demand" `MathsTerms/` Discovery
 Do **not** restrict math terms to a fixed list. During the processing of **each folder**:
 1. **Aggressive Term Discovery:** Scan the lecture transcript, raw claims, notes, and prerequisites for **every single mathematical term, statistical concept, matrix operation, distribution, loss function, or optimization technique**.
-2. **Creation Standard:** If a term does not exist in [`MathsTerms/`](./MathsTerms), create a dedicated markdown file following the 7-section visual gold standard of [`Softmax.md`](./MathsTerms/02-Multivariate-Calculus-and-Optimization/06-Softmax.md):
+2. **Creation Standard:** If a term does not exist in [`MathsTerms/`](../../MathsTerms), create a dedicated markdown file following the 7-section visual gold standard of [`Softmax.md`](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/06-Softmax.md):
    - **§1:** Title & High-Impact 3-Stage Visual ASCII Pipeline.
    - **§2:** 👶 **ELI5 Intuition** (Physical analogy / concrete story).
    - **§3:** 🔍 **Plain-English Breakdown & Notation Rosetta Stone Table**.
