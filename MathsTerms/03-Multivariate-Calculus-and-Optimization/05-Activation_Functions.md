@@ -604,6 +604,227 @@ Suppose the intermediate projections produce:
 
 ---
 
+## 9B. ✍️ Prof. Tom Yeh's "AI by Hand": The Complete 12-Activation Suite
+
+In Prof. Tom Yeh's pedagogy (*AI by Hand ✍️*), activation functions are never treated as sterile, abstract math equations. Instead, they represent physical gates, financial balances, bubble-tea bouncers, and water pumps. Every activation operates on a clear vector dataflow with discrete, step-by-step arithmetic that anyone can calculate with a single pencil and sheet of paper.
+
+### The Complete 12-Activation ByHand Reference Directory
+
+| # | Activation Function | Story / Metaphor | Primary Formula | ByHand.ai Lesson & Interactive Diagram |
+| :-: | :--- | :--- | :--- | :--- |
+| **1** | **Softmax** | *The QQ Scale & Bubble Tea Menu* | $\frac{e^{z_i}}{\sum_j e^{z_j}}$ | [Softmax by Hand](https://www.byhand.ai/p/library-math-activation-softmax) • [Interactive Canvas](https://byhand.ai/canvas?id=math-activation-softmax) |
+| **2** | **Sigmoid ($\sigma$)** | *The Probability Dimmer Switch* | $\frac{1}{1 + e^{-z}}$ | [Sigmoid by Hand](https://www.byhand.ai/p/library-math-activation-sigmoid) • [Interactive Canvas](https://byhand.ai/canvas?id=math-activation-sigmoid) |
+| **3** | **Tanh** | *The Bipolar Centered Spring* | $\frac{e^z - e^{-z}}{e^z + e^{-z}}$ | [Tanh by Hand](https://www.byhand.ai/p/library-math-activation-tanh) • [Interactive Canvas](https://byhand.ai/canvas?id=math-activation-tanh) |
+| **4** | **ReLU** | *The Harsh Bankruptcy Court* | $\max(0, z)$ | [ReLU by Hand](https://www.byhand.ai/p/library-math-activation-relu) • [Interactive Canvas](https://byhand.ai/canvas?id=math-activation-relu) |
+| **5** | **Leaky ReLU** | *The Bankruptcy Mercy Rule* | $\max(\alpha z, z)$ | [Leaky ReLU by Hand](https://www.byhand.ai/p/library-math-activation-leaky-relu) • [Interactive Canvas](https://byhand.ai/canvas?id=math-activation-leaky-relu) |
+| **6** | **ELU** | *The Smooth Safety Net* | $\begin{cases} z & z > 0 \\ \alpha(e^z - 1) & z \le 0 \end{cases}$ | [ELU by Hand](https://www.byhand.ai/p/library-math-activation-elu) • [Interactive Canvas](https://byhand.ai/canvas?id=math-activation-elu) |
+| **7** | **SiLU / Swish** | *The Self-Weighted Gate* | $z \cdot \sigma(z)$ | [SiLU by Hand](https://www.byhand.ai/p/library-math-activation-silu) • [Interactive Canvas](https://byhand.ai/canvas?id=math-activation-silu) |
+| **8** | **GELU** | *The Quantum Coin-Toss Bouncer* | $z \cdot \Phi(z)$ | [GELU by Hand](https://www.byhand.ai/p/library-math-activation-gelu) • [Interactive Canvas](https://byhand.ai/canvas?id=math-activation-gelu) |
+| **9** | **Log-Sum-Exp (LSE)**| *The Safe Typhoon Flood Evacuation* | $\log\left(\sum_j e^{z_j}\right)$ | [Log-Sum-Exp by Hand](https://www.byhand.ai/p/library-math-activation-lse) • [Interactive Canvas](https://byhand.ai/canvas?id=math-activation-lse) |
+| **10**| **Softplus** | *The Smooth Rollercoaster Ramp* | $\log(1 + e^z)$ | [Softplus by Hand](https://www.byhand.ai/p/library-math-activation-softplus) • [Interactive Canvas](https://byhand.ai/canvas?id=math-activation-softplus) |
+| **11**| **GLU** | *The Two-Lane Valve Pipeline* | $(x W_1 + b_1) \otimes \sigma(x W_2 + b_2)$ | [GLU by Hand](https://www.byhand.ai/p/library-math-activation-glu) • [Interactive Canvas](https://byhand.ai/canvas?id=math-activation-glu) |
+| **12**| **SwiGLU** | *The Modern Frontier LLM Gate* | $(x W_{\text{up}}) \odot \text{SiLU}(x W_{\text{gate}})$ | [SwiGLU by Hand](https://www.byhand.ai/p/library-math-activation-swiglu) • [Interactive Canvas](https://byhand.ai/canvas?id=math-activation-swiglu) |
+
+---
+
+### Arc 1: The QQ Scale & Probability Converters (Softmax, Sigmoid, Tanh)
+
+These three functions are the "probability distributors" of deep learning. They take unbounded real numbers $(-\infty, \infty)$ and compress them into constrained, normalized physical ranges.
+
+```
+Logits z ∈ (-∞, +∞) ───► [ Exponentiation / Squashing ] ───► Bounded Real-World Outputs
+   • Sigmoid: Single-output confidence ∈ (0, 1)
+   • Tanh: Zero-centered push-pull dynamics ∈ (-1, +1)
+   • Softmax: Multi-class mutually exclusive competition, ∑ P_i = 1.00
+```
+
+#### 1. Softmax (The QQ Scale & Bubble Tea Menu)
+- **Pronunciation:** `/ˈsɒft.mæks/` (Soft-Max)
+- **The Story:** Imagine a bubble-tea shop where three friends order toppings based on their "sweetness craving" scores: Taro ($1$), Boba ($2$), and Pudding ($3$). You can't just serve negative or uncalibrated portions. First, exponentiate each craving ($e^z$) to turn negative scores positive and magnify high desires. Second, sum all exponential orders into a total cup volume ($S = \sum e^{z_j}$). Third, divide each order by the sum ($e^{z_i} / S$). The result is a perfect 100% volume allocation!
+- **By Hand Calculation:** Let $\mathbf{z} = [1.0, 2.0, 3.0]^\top$:
+  $$\begin{aligned}
+  e^1 &\approx 2.718, \quad e^2 \approx 7.389, \quad e^3 \approx 20.086 \\
+  \sum &= 2.718 + 7.389 + 20.086 = 30.193 \\
+  P_1 &= 2.718 / 30.193 \approx \mathbf{0.090} \quad (9.0\%) \\
+  P_2 &= 7.389 / 30.193 \approx \mathbf{0.245} \quad (24.5\%) \\
+  P_3 &= 20.086 / 30.193 \approx \mathbf{0.665} \quad (66.5\%)
+  \end{aligned}$$
+- **Key Insight:** Softmax is a *vector-in, vector-out* operation. The components compete with one another; boosting one component automatically depresses the others.
+- **Modern Verdict:** Standard final layer for all multi-class classification and core foundation of Multi-Head Self-Attention.
+
+#### 2. Sigmoid ($\sigma$) (The Probability Dimmer Switch)
+- **Pronunciation:** `/ˈsɪɡ.mɔɪd/` (Sig-Moyd)
+- **The Story:** A room lighting dimmer switch with continuous dial settings from $-\infty$ (pitch black, $0.0$) to $+\infty$ (maximum blinding brightness, $1.0$). At exactly $z = 0$, the room is half-lit ($0.5$).
+- **By Hand Calculation:** Let $z = [-2.0, 0.0, 3.0]$:
+  $$\begin{aligned}
+  \sigma(-2.0) &= \frac{1}{1 + e^2} = \frac{1}{1 + 7.389} = \frac{1}{8.389} \approx \mathbf{0.1192} \\
+  \sigma(0.0) &= \frac{1}{1 + e^0} = \frac{1}{1 + 1} = \frac{1}{2} = \mathbf{0.5000} \\
+  \sigma(3.0) &= \frac{1}{1 + e^{-3}} = \frac{1}{1 + 0.0498} = \frac{1}{1.0498} \approx \mathbf{0.9526}
+  \end{aligned}$$
+- **The Fatal Flaw:** Saturation! When $|z| > 4$, the curve becomes completely horizontal. Its derivative $\sigma'(z) = \sigma(z)(1 - \sigma(z))$ drops below $0.01$, killing gradients in deep networks.
+- **Modern Verdict:** Replaced in hidden layers by ReLU/GELU; retained for binary classification, multi-label prediction, and gating valves (LSTM, GRU, GLU).
+
+#### 3. Tanh (The Bipolar Centered Spring)
+- **Pronunciation:** `/ˈtæn.tʃ/` or `/tæn.eɪtʃ/` (Tan-H)
+- **The Story:** A double-acting hydraulic spring centered at zero. Unlike Sigmoid (which is strictly positive), Tanh can push forward ($+1.0$) or pull backward ($-1.0$). A neutral signal ($z = 0$) exerts zero force.
+- **By Hand Calculation:** $\tanh(z) = 2\sigma(2z) - 1$:
+  $$\begin{aligned}
+  \tanh(-2.0) &= \frac{e^{-2} - e^2}{e^{-2} + e^2} = \frac{0.135 - 7.389}{0.135 + 7.389} = \frac{-7.254}{7.524} \approx \mathbf{-0.9640} \\
+  \tanh(0.0) &= \frac{1 - 1}{1 + 1} = \frac{0}{2} = \mathbf{0.0000} \\
+  \tanh(3.0) &= \frac{20.086 - 0.050}{20.086 + 0.050} = \frac{20.036}{20.136} \approx \mathbf{0.9951}
+  \end{aligned}$$
+- **Key Advantage over Sigmoid:** Zero-centered output prevents systematic directional gradient zig-zagging during backpropagation.
+- **Modern Verdict:** Core activation inside recurrent cell gates (LSTM cell state update, GRU candidate hidden state).
+
+---
+
+### Arc 2: The Boba Shop & Bankruptcy Court (ReLU, Leaky ReLU, ELU, SiLU, GELU)
+
+This family deals with piecewise thresholds, negative signal pruning, and smooth probabilistic gating.
+
+```
+       Harsh Rectification                     Smooth Probabilistic Gating
+   ┌───────────────────────────┐           ┌──────────────────────────────────┐
+   │ ReLU:     max(0, z)       │           │ SiLU: z · σ(z)                   │
+   │ LeakyReLU:max(αz, z)      │    ───►   │ GELU: z · Φ(z)                   │
+   │ ELU:      z or α(e^z - 1) │           │ (Smooth negative dip + linear +) │
+   └───────────────────────────┘           └──────────────────────────────────┘
+```
+
+#### 4. ReLU (Rectified Linear Unit: The Harsh Bankruptcy Court)
+- **Pronunciation:** `/ˈreɪ.luː/` or `/ˈriː.luː/` (Ray-Loo)
+- **The Story:** A strict bankruptcy court. If your business has positive profit ($z > 0$), you keep 100% of your earnings ($f(z) = z$). If your balance sheet is negative ($z \le 0$), you are immediately liquidated to zero ($f(z) = 0$). No mercy, no debt rollover!
+- **By Hand Calculation:** Let $z = [-2.0, 0.0, 3.0]$:
+  $$\begin{aligned}
+  \text{ReLU}(-2.0) &= \max(0, -2.0) = \mathbf{0.0000} \\
+  \text{ReLU}(0.0) &= \max(0, 0.0) = \mathbf{0.0000} \\
+  \text{ReLU}(3.0) &= \max(0, 3.0) = \mathbf{3.0000}
+  \end{aligned}$$
+- **The "Dying ReLU" Catastrophe:** If a large negative update knocks a neuron into $z < 0$, its gradient is permanently $0$. It will never fire or learn again.
+- **Modern Verdict:** Revolutionized deep vision (AlexNet, ResNet). Still widely used when memory and speed are paramount.
+
+#### 5. Leaky ReLU (The Bankruptcy Mercy Rule)
+- **Pronunciation:** `/ˈliː.ki ˈreɪ.luː/`
+- **The Story:** The court introduces a mercy rule: if you are bankrupt ($z < 0$), you don't get liquidated to absolute zero. You are allowed to keep a small penny-on-the-dollar fraction ($\alpha = 0.01$) so you can gradually repay debt and stage a comeback.
+- **By Hand Calculation:** With $\alpha = 0.01$:
+  $$\begin{aligned}
+  \text{LeakyReLU}(-2.0) &= 0.01 \times (-2.0) = \mathbf{-0.0200} \\
+  \text{LeakyReLU}(0.0) &= \mathbf{0.0000} \\
+  \text{LeakyReLU}(3.0) &= \mathbf{3.0000}
+  \end{aligned}$$
+- **Modern Verdict:** Default choice in Generative Adversarial Network (GAN) Discriminators where dead neurons destabilize min-max game dynamics.
+
+#### 6. ELU (Exponential Linear Unit: The Smooth Safety Net)
+- **Pronunciation:** `/ˈiː.ɛl.juː/`
+- **The Story:** Rather than a sharp corner or a harsh straight line into negative territory, ELU provides an exponential safety net. Negative values smoothly decelerate toward a horizontal asymptote at $-\alpha$ (typically $-1.0$).
+- **By Hand Calculation:** $\alpha = 1.0$:
+  $$\begin{aligned}
+  \text{ELU}(-2.0) &= 1.0 \times (e^{-2.0} - 1.0) = 0.1353 - 1.0 = \mathbf{-0.8647} \\
+  \text{ELU}(0.0) &= \mathbf{0.0000} \\
+  \text{ELU}(3.0) &= \mathbf{3.0000}
+  \end{aligned}$$
+- **Key Advantage:** Brings the mean activation of neurons closer to zero without hard cutoff cliffs, accelerating convergence.
+- **Modern Verdict:** Highly regarded in deep autoencoders and control tasks; superseded by GELU/SiLU in Transformers due to exponentiation compute cost.
+
+#### 7. SiLU / Swish (The Self-Weighted Gate)
+- **Pronunciation:** `/ˈsaɪ.luː/` (Sy-Loo) or Swish
+- **The Story:** A self-evaluating smart gate. A worker's output is their raw performance $z$ multiplied by their confidence rating $\sigma(z)$. When performance is high ($z = 3$), confidence is near $1.0$, passing $95\%$ through. When performance is negative ($z = -2$), confidence is low ($0.119$), but rather than cutting off sharply, it dips slightly negative ($-0.238$) before curving back.
+- **By Hand Calculation:** $\text{SiLU}(z) = z \cdot \sigma(z)$:
+  $$\begin{aligned}
+  \text{SiLU}(-2.0) &= -2.0 \times \sigma(-2.0) = -2.0 \times 0.1192 = \mathbf{-0.2384} \\
+  \text{SiLU}(0.0) &= 0.0 \times 0.5000 = \mathbf{0.0000} \\
+  \text{SiLU}(3.0) &= 3.0 \times \sigma(3.0) = 3.0 \times 0.9526 = \mathbf{2.8577}
+  \end{aligned}$$
+- **Modern Verdict:** Ubiquitous in modern diffusion architectures (Stable Diffusion 3, Flux, DiT) and modern CNN backbones (EfficientNet).
+
+#### 8. GELU (Gaussian Error Linear Unit: The Quantum Bouncer)
+- **Pronunciation:** `/ˈdʒɛl.juː/` (Jell-Yoo)
+- **The Story:** A probabilistic nightclub bouncer. Instead of deciding entry deterministically based on whether $z > 0$, the bouncer tests $z$ against standard Gaussian noise $\mathcal{N}(0, 1)$. If $z$ is large positive ($+3$), the probability of entry $\Phi(z)$ is $99.87\%$. If $z = -2$, probability is only $2.28\%$. The expected passed value is $z \cdot \Phi(z)$.
+- **By Hand Calculation:** $\text{GELU}(z) = z \cdot \Phi(z)$:
+  $$\begin{aligned}
+  \text{GELU}(-2.0) &= -2.0 \times \Phi(-2.0) = -2.0 \times 0.02275 = \mathbf{-0.0455} \\
+  \text{GELU}(0.0) &= 0.0 \times 0.5000 = \mathbf{0.0000} \\
+  \text{GELU}(3.0) &= 3.0 \times \Phi(3.0) = 3.0 \times 0.99865 = \mathbf{2.9960}
+  \end{aligned}$$
+- **The Curvature Secret:** Notice that at $z = -2.0$, GELU outputs $-0.0455$, while at $z = -0.75$, it reaches its global minimum $\approx -0.17$. This non-monotonic smooth valley allows gradient flow even for small negative signals!
+- **Modern Verdict:** The absolute standard activation for BERT, GPT-2, GPT-3, GPT-4, and Vision Transformers (ViT).
+
+---
+
+### Arc 3: The Typhoon & Flood Pump (Log-Sum-Exp, Softplus, GLU, SwiGLU)
+
+These advanced functions protect against numerical overflow, guarantee strict mathematical positivity, and provide multiplicative dual-stream gating.
+
+```
+       Safe Numerical Scalers                     Multiplicative Dual Gates
+   ┌───────────────────────────┐           ┌──────────────────────────────────────┐
+   │ Log-Sum-Exp: Safe Max     │           │ GLU:    Content ⊙ σ(Gate)            │
+   │ Softplus:    Smooth ReLU  │    ───►   │ SwiGLU: (x W_up) ⊙ SiLU(x W_gate)    │
+   │   log(1 + e^z)            │           │ (Separates WHAT to say from HOW MUCH)│
+   └───────────────────────────┘           └──────────────────────────────────────┘
+```
+
+#### 9. Log-Sum-Exp (LSE: The Safe Typhoon Flood Evacuation)
+- **Pronunciation:** `/lɒɡ sʌm ɛks/`
+- **The Story:** During a typhoon flood, raw water levels $[1000, 1002, 1005]$ will instantly overflow standard digital meters if you calculate $e^{1000} = \infty$. To prevent catastrophic overflow, find the highest elevation ground $M = \max(\mathbf{z}) = 1005$. Subtract $M$ from all water levels before exponentiating, sum them up, take the logarithm, and add $M$ back. The water never breaches the bank!
+- **Formula:**
+  $$\text{LSE}(\mathbf{z}) = \log\left(\sum_{j=1}^K e^{z_j}\right) = M + \log\left(\sum_{j=1}^K e^{z_j - M}\right), \quad M = \max_k z_k$$
+- **By Hand Calculation:** Let $\mathbf{z} = [1000, 1001, 1002]$:
+  $$\begin{aligned}
+  M &= 1002 \\
+  \mathbf{z} - M &= [-2, -1, 0] \\
+  e^{-2} &\approx 0.1353, \quad e^{-1} \approx 0.3679, \quad e^0 = 1.0000 \\
+  \sum e^{z_j - M} &= 0.1353 + 0.3679 + 1.0000 = 1.5032 \\
+  \log(1.5032) &\approx 0.4076 \\
+  \text{LSE}(\mathbf{z}) &= 1002 + 0.4076 = \mathbf{1002.4076}
+  \end{aligned}$$
+- **Key Property:** LSE is the smooth, fully differentiable approximation of the `max` function: $\max(\mathbf{z}) < \text{LSE}(\mathbf{z}) \le \max(\mathbf{z}) + \log(K)$.
+- **Modern Verdict:** The numerical bedrock of Cross-Entropy Loss computation and FlashAttention log-sum-exp state tracking.
+
+#### 10. Softplus (The Smooth Rollercoaster Ramp)
+- **Pronunciation:** `/ˈsɒft.plʌs/`
+- **The Story:** A smooth skateboarding ramp that rounds out the sharp corner of ReLU. Instead of snapping instantly from $0$ to linear at $z = 0$, it curves smoothly with a gentle bend. At $z = 0$, while ReLU is $0$, Softplus is $\log(2) \approx 0.693$.
+- **Formula:**
+  $$\text{Softplus}(z) = \log(1 + e^z)$$
+- **By Hand Calculation:** Let $z = [-2.0, 0.0, 3.0]$:
+  $$\begin{aligned}
+  \text{Softplus}(-2.0) &= \log(1 + e^{-2}) = \log(1 + 0.1353) = \log(1.1353) \approx \mathbf{0.1269} \\
+  \text{Softplus}(0.0) &= \log(1 + e^0) = \log(2) \approx \mathbf{0.6931} \\
+  \text{Softplus}(3.0) &= \log(1 + e^3) = \log(1 + 20.0855) = \log(21.0855) \approx \mathbf{3.0486}
+  \end{aligned}$$
+- **Derivative Connection:** $\frac{d}{dz}\text{Softplus}(z) = \frac{e^z}{1 + e^z} = \sigma(z)$! The derivative of Softplus is the Sigmoid function.
+- **Modern Verdict:** Used in Variational Autoencoders (VAEs) and Bayesian Neural Networks to enforce strictly positive variance parameters ($\sigma^2 > 0$).
+
+#### 11. GLU (Gated Linear Unit: The Two-Lane Valve Pipeline)
+- **Pronunciation:** `/ˈɡluː/` (Glue)
+- **The Story:** A two-lane industrial aqueduct. Lane 1 carries the actual water (the content signal $x W_1 + b_1$). Lane 2 connects to an electronic valve (the gate signal $x W_2 + b_2$) controlled by a Sigmoid switch $\sigma$. If Lane 2 evaluates to a high positive value, the valve opens ($100\%$), letting Lane 1 flow freely. If Lane 2 is negative, the valve shuts, stopping Lane 1 in its tracks.
+- **Formula:**
+  $$\text{GLU}(x) = (x W_1 + b_1) \otimes \sigma(x W_2 + b_2)$$
+- **By Hand Calculation:** Let $x W_1 = [2.0, -1.0]$, $x W_2 = [3.0, -3.0]$:
+  $$\begin{aligned}
+  \text{Content} &= [2.0, -1.0] \\
+  \text{Gate} &= \sigma([3.0, -3.0]) = [0.9526, 0.0474] \\
+  \text{GLU}(x) &= [2.0 \times 0.9526, \quad -1.0 \times 0.0474] = [\mathbf{1.9052}, \quad \mathbf{-0.0474}]
+  \end{aligned}$$
+- **Key Architectural Benefit:** Gives the neural network a linear path for gradient flow through the content stream, completely bypassing the vanishing gradient problem.
+- **Modern Verdict:** Pioneered in Dauphin et al.'s Gated Convolutional Networks; laid the theoretical foundation for SwiGLU.
+
+#### 12. SwiGLU (The Modern Frontier LLM Gate)
+- **Pronunciation:** `/ˈswɪ.ɡluː/` (Swih-Glue)
+- **The Story:** The peak evolution of neural network activations. Take GLU, but upgrade the valve switch from Sigmoid to SiLU ($\text{Swish}_1$). Instead of just opening between $0$ and $1$, the valve can slightly invert signals (due to SiLU's negative dip) and pass unbounded positive signals without premature saturation.
+- **Formula:**
+  $$\text{SwiGLU}(x) = \Big( (x W_{\text{up}}) \odot \text{SiLU}(x W_{\text{gate}}) \Big) W_{\text{down}}$$
+- **By Hand Calculation:** Let $h_{\text{up}} = [3.0, -2.0]$ and $h_{\text{gate}} = [3.0, -2.0]$:
+  $$\begin{aligned}
+  \text{Gate} &= \text{SiLU}([3.0, -2.0]) = [2.8577, -0.2384] \\
+  \text{Hadamard Product} &= [3.0 \times 2.8577, \quad -2.0 \times (-0.2384)] \\
+  &= [\mathbf{8.5731}, \quad \mathbf{0.4768}]
+  \end{aligned}$$
+  *Notice:* Position 1 is powerfully amplified ($3.0 \to 8.5731$), while Position 2 is suppressed ($|-2.0| \to 0.4768$).
+- **Modern Verdict:** The reigning king of Large Language Model activations. Used exclusively in **LLaMA-1/2/3, Mistral, Mixtral, Gemma, and DeepSeek-V2/V3**.
+
+---
+
 ## 10. 🔗 Section 10: Connecting the Dots: Generative AI Architecture Blocks
 
 ```

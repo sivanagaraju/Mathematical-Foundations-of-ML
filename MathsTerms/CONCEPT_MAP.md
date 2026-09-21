@@ -3,7 +3,7 @@
 ## From Axiomatic Primitives to Modern Generative AI Architectures
 
 > `🏷️ Document Type:` Master Concept Roadmap & Dependency Matrix
-> `🎯 Purpose:` Connect all 49 mathematical foundation guides in `MathsTerms/` into an unbroken logical lineage from foundational math to state-of-the-art Generative AI (Diffusion Models, Autoregressive LLMs, VAEs, GANs, Flow Matching).
+> `🎯 Purpose:` Connect all 50 mathematical foundation guides in `MathsTerms/` into an unbroken logical lineage from foundational math to state-of-the-art Generative AI (Diffusion Models, Autoregressive LLMs, VAEs, GANs, Flow Matching).
 > `📐 Pedagogical Standard:` 5-Point Pedagogical Bridge (ELI5 $\iff$ Plain English $\iff$ Micro-Numbers $\iff$ Formal Proofs $\iff$ PyTorch Code)
 
 ---
@@ -25,7 +25,7 @@
    - [Track 2: The Path to LLMs, Transformers & Autoregressive AI](#track-2-the-path-to-llms-transformers--autoregressive-ai)
    - [Track 3: The Path to Variational Autoencoders (VAEs) & Latent Diffusion](#track-3-the-path-to-variational-autoencoders-vaes--latent-diffusion)
    - [Track 4: The Path to GANs, Optimal Transport & WGAN-GP](#track-4-the-path-to-gans-optimal-transport--wgan-gp)
-6. [📚 Complete 49-Guide Master Rosetta Cross-Reference Table](#6--complete-49-guide-master-rosetta-cross-reference-table)
+6. [📚 Complete 50-Guide Master Rosetta Cross-Reference Table](#6--complete-49-guide-master-rosetta-cross-reference-table)
 
 ---
 
@@ -44,18 +44,22 @@ Every algorithm in modern Generative AI is built upon a layered stack of mathema
             ▼                                             ▼                         ▼
   [TIER 2: LINEAR ALGEBRA & SPACES]             [TIER 3: MULTIVARIATE CALCULUS & OPTIMIZATION]
   • Vectors, Matrices & Spans                   • Functions, Derivatives & Calculus Rules
-  • Vector Norms (L1, L2, L∞) & Inner Products  • Gradients, Directional Derivatives & Jacobians
-  • Dot Product & Cosine Similarity             • Chain Rule & Reverse-Mode Backpropagation (DAGs)
-  • Tensors, Shapes & Stride Layouts            • Activation Functions (ReLU, GELU, SwiGLU)
-  • Tensor Broadcasting Arithmetic              • Softmax (Logit Squashing) & Argmax / Gumbel-Softmax
-  • Singular Value Decomposition (SVD / LoRA)   • Loss Functions (MSE, BCE, CCE, Huber, Hinge)
-  • One-Hot, Categorical & Position (RoPE)      • Gradient Descent, Momentum & Adam Optimizers
-            │                                   • Exponential Moving Average (EMA Shadow Weights)
-            │                                   • Batch Normalization & Spectral Normalization (1-Lipschitz)
+  • Basis, Spans & Orthogonality                • Gradients, Directional Derivatives & Jacobians
+  • Determinants & Volume Scaling (Flows)       • The Hessian Matrix & Curvature (Saddles)
+  • Vector Norms (L1, L2, L∞) & Inner Products  • Chain Rule & Reverse-Mode Backpropagation (DAGs)
+  • Dot Product & Cosine Similarity             • Activation Functions (ReLU, GELU, SwiGLU)
+  • Tensors, Shapes & Stride Layouts            • Softmax (Logit Squashing) & Argmax / Gumbel-Softmax
+  • Tensor Broadcasting Arithmetic              • Loss Functions (MSE, BCE, CCE, Huber, Hinge)
+  • Eigenvalues, Eigenvectors & Spectral Norm   • Gradient Descent, Momentum & Adam Optimizers
+  • Singular Value Decomposition (SVD / LoRA)   • Exponential Moving Average (EMA Shadow Weights)
+  • One-Hot, Categorical & Position (RoPE)      • Batch Normalization & Spectral Normalization (1-Lipschitz)
+            │                                   
+            │                                   
             └───────────────────────────┬───────────────────────────────────────────┘
                                         ▼
   [TIER 4: PROBABILITY THEORY & STATISTICAL ESTIMATION]
   • Random Variables (Discrete PMF vs Continuous PDF) & LOTUS Expectations
+  • Law of Large Numbers (LLN) & Monte Carlo Estimation (Mini-Batch SGD)
   • Common Distributions: Gaussian / Multivariate Normal, Bernoulli, Categorical, Uniform
   • Joint, Marginal & Conditional Distributions (Bayes' Theorem & Chain Rule)
   • Likelihood & Log-Likelihood Formulations
@@ -112,10 +116,13 @@ flowchart TD
 
     subgraph TIER2 ["📐 Tier 2: Linear Algebra, Geometry & Tensors"]
         VecMat["Vectors & Matrices"]:::t2
+        BasisSpans["Basis, Spans & Orthogonality"]:::t2
+        Determinants["Determinants & Volume Scaling"]:::t2
         VecNorms["Vector Norms & Inner Products"]:::t2
         DotProd["Dot Product & Cosine Similarity"]:::t2
         Tensors["Tensors & Memory Shapes"]:::t2
         Broadcasting["Tensor Broadcasting"]:::t2
+        Eigen["Eigenvalues & Eigenvectors"]:::t2
         SVD["Singular Value Decomposition (SVD)"]:::t2
         OneHot["One-Hot Encoding"]:::t2
         Embeddings["Categorical Encodings & Embeddings"]:::t2
@@ -125,6 +132,7 @@ flowchart TD
     subgraph TIER3 ["⚡ Tier 3: Multivariate Calculus & Optimization"]
         CalcRules["Functions, Derivatives & Rules"]:::t3
         Gradients["Derivatives, Gradients & Jacobians"]:::t3
+        Hessian["The Hessian Matrix & Curvature"]:::t3
         Jacobian["The Jacobian Matrix & Volume Warping"]:::t3
         ChainRule["Chain Rule & Backpropagation (DAGs)"]:::t3
         Activations["Activation Functions (ReLU, GELU, SwiGLU)"]:::t3
@@ -138,6 +146,7 @@ flowchart TD
 
     subgraph TIER4 ["🎲 Tier 4: Probability Theory & Statistical Estimation"]
         RandVars["Random Variables & Distributions (PDF/PMF)"]:::t4
+        LLN["Law of Large Numbers & Monte Carlo"]:::t4
         Distributions["Common Probability Distributions (Gaussian)"]:::t4
         JointMargCond["Joint, Marginal & Conditional (Bayes)"]:::t4
         Likelihood["Likelihood & Log-Likelihood"]:::t4
@@ -148,6 +157,7 @@ flowchart TD
 
     subgraph TIER5 ["📡 Tier 5: Information Theory, Divergences & Optimal Transport"]
         Entropy["Entropy, Cross-Entropy & CCE"]:::t5
+        JointEntropy["Joint/Cond Entropy & Mutual Information"]:::t5
         KLDivergence["Kullback-Leibler (KL) Divergence"]:::t5
         JSDivergence["Jensen-Shannon Divergence (JSD)"]:::t5
         FDivergence["f-Divergence Family & Csiszár Generators"]:::t5
@@ -177,6 +187,18 @@ flowchart TD
     Convexity --> Bounds
     Bounds --> Fenchel
     Lipschitz --> Wasserstein
+    VecMat --> BasisSpans
+    BasisSpans --> VecNorms
+    VecMat --> Determinants
+    Determinants --> Eigen
+    Eigen --> SVD
+    Eigen --> Norms
+    Gradients --> Hessian
+    Hessian --> GradDesc
+    RandVars --> LLN
+    LLN --> GradDesc
+    LLN --> LOTUS
+    LLN --> ELBO
     Lipschitz --> Norms
     Fenchel --> FDivergence
     Fenchel --> VDM
@@ -438,7 +460,9 @@ The mathematical measurement of statistical distances, relative entropy, diverge
 
 ```mermaid
 flowchart TD
-    Entropy["1. Entropy, Cross-Entropy & CCE<br/>H(P) = -∑ p ln p, H(P,Q) = -∑ p ln q"] --> KLDivergence["2. Kullback-Leibler Divergence<br/>D_KL(P || Q) = ∫ p ln(p/q) dx"]
+    Entropy["1. Entropy, Cross-Entropy & CCE<br/>H(P) = -∑ p ln p, H(P,Q) = -∑ p ln q"] --> JointEntropy["7. Joint, Conditional & Mutual Information<br/>I(X; Y) = H(X) - H(X|Y) = D_KL(P_XY || P_X P_Y)"]
+    Entropy --> KLDivergence["2. Kullback-Leibler Divergence<br/>D_KL(P || Q) = ∫ p ln(p/q) dx"]
+    JointEntropy --> KLDivergence
     KLDivergence --> JSDivergence["3. Jensen-Shannon Divergence<br/>JSD(P || Q) = 0.5 D_KL(P||M) + 0.5 D_KL(Q||M)"]
     KLDivergence --> FDivergence["4. f-Divergence & Csiszár Generators<br/>D_f(P || Q) = ∫ q f(p/q) dx"]
     JSDivergence --> FDivergence
@@ -747,6 +771,7 @@ flowchart LR
 | **47** | **[Vectors & Matrices](./02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md)**                                 | $y = Wx + b, \quad \text{rank}(A) \le \min(m, n)$                                                                                | Linear Algebra               | Dense Neural Network Layers         | Tut 02, Tut 03         |
 | **48** | **[Wasserstein Distance & EMD](./05-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md)**                 | $W_1(P, Q) = \sup_{\|f\|_L \le 1} \mathbb{E}_P[f] - \mathbb{E}_Q[f]$                                                             | Lipschitz, Distributions     | WGAN-GP, Flow Matching, FID         | Lec 18, Tut 12         |
 | **49** | **[$f$-Divergence & Csiszár Generators](./05-Information-Theory-and-Divergences/04-f_Divergence.md)**                       | $D_f(P \parallel Q) = \int q(x) f\left(\frac{p(x)}{q(x)}\right) dx$                                                              | Convexity, KLDivergence      | $f$-GAN, Variational Bounds         | Lec 03, Tut 11         |
+| **50** | **[Joint & Conditional Entropy & Mutual Information](./05-Information-Theory-and-Divergences/07-Joint_Conditional_Entropy_and_Mutual_Information.md)** | $I(X; Y) = H(X) - H(X \mid Y) = D_{\text{KL}}(P(X, Y) \parallel P(X)P(Y))$                                                       | Entropy, JointMargCond, KLDivergence | Multi-Modal CLIP, InfoNCE, MINE     | Lec 01, Lec 11         |
 
 ---
 
