@@ -12,7 +12,7 @@ Prerequisites & Foundations:
     - PREREQUISITES.md#p4-kl-divergence
     - PREREQUISITES.md#p5-elbo-decomposition
     - MathsTerms/06-Deep-Architectures-and-Generative-Models/07-ELBO_and_Variational_Inference.md
-    - MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md
+    - MathsTerms/04-Information-Theory-and-Divergences/02-KL_Divergence.md
 Hardware Requirements:
     - Pure CPU execution (device = torch.device('cpu'))
     - Deterministic execution with fixed seeds (seed = 42)

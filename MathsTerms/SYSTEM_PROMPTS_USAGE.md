@@ -19,8 +19,8 @@ Use the supplied editorial, chapter-review, and cognitive-learning system prompt
 
 Mode: Review and revise.
 Targets: All full concept Markdown chapters in these two folders:
-- MathsTerms/04-Probability-and-Statistical-Estimation/
-- MathsTerms/05-Information-Theory-and-Divergences/
+- MathsTerms/03-Probability-and-Statistical-Estimation/
+- MathsTerms/04-Information-Theory-and-Divergences/
 
 Reader: A developer who can write basic Python but needs mathematical concepts
 built carefully from explicitly stated prerequisites.

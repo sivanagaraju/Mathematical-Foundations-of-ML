@@ -22,8 +22,8 @@ Welcome to the foundational guide for Wasserstein Generative Adversarial Network
 
 | Sibling Module | Core Mathematical Concept | How it Unlocks This Lecture |
 |:---|:---|:---|
-| [MathsTerms: Wasserstein Distance](../../MathsTerms/05-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md) | Primal optimal transport and Earth Mover's Distance | Provides the geometric foundation for the WGAN loss function |
-| [MathsTerms: Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md) | Gradient norm bounds and Lipschitz constants | Explains why weight clipping bounds the network's rate of change |
+| [MathsTerms: Wasserstein Distance](../../MathsTerms/04-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md) | Primal optimal transport and Earth Mover's Distance | Provides the geometric foundation for the WGAN loss function |
+| [MathsTerms: Lipschitz Continuity](../../MathsTerms/05-Convexity-Duality-and-Metric-Analysis/04-Lipschitz_Continuity.md) | Gradient norm bounds and Lipschitz constants | Explains why weight clipping bounds the network's rate of change |
 | [MathsTerms: Minimax Game and GANs](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/09-Minimax_Game_and_GANs.md) | Zero-sum adversarial games and JS divergence | Highlights the vanishing gradient problem that WGAN solves |
 | [Lec 11: Beta-VAE](../22-Lec11-Beta-VAE/NOTES.md) | Variational density fitting trade-offs | Connects latent generation to distribution matching |
 

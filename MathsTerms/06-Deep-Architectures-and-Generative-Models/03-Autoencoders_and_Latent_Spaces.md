@@ -29,8 +29,8 @@ An **Autoencoder (AE)** is a neural network trained to copy its input to its out
 
 **Prerequisites**
 
-- **Required now:** Matrix-vector multiplication, linear projections, and partial derivatives. [Vectors and matrices, §9](../02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) reviews matrix products and outer products. [Loss functions in machine learning, §3](../03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) introduces mean squared error and cross-entropy.
-- **Required for optional depth:** Singular Value Decomposition (SVD) and low-rank matrix approximations; see [Singular value decomposition, §4](../02-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md). These support the Eckart-Young-Mirsky PCA equivalence proof in §4 and §8.
+- **Required now:** Matrix-vector multiplication, linear projections, and partial derivatives. [Vectors and matrices, §9](../01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) reviews matrix products and outer products. [Loss functions in machine learning, §3](../02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) introduces mean squared error and cross-entropy.
+- **Required for optional depth:** Singular Value Decomposition (SVD) and low-rank matrix approximations; see [Singular value decomposition, §4](../01-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md). These support the Eckart-Young-Mirsky PCA equivalence proof in §4 and §8.
 - **Useful context:** [Latent variable models](05-Latent_Variable_Models.md) for probabilistic foundations, and [ELBO and variational inference](07-ELBO_and_Variational_Inference.md) for regularizing latent spaces into generative distributions.
 
 **Target systems:** Latent image compression in Stable Diffusion and FLUX ($512 \times 512 \times 3 \to 64 \times 64 \times 4$), discrete visual and audio tokenization in VQ-VAE and AudioCraft, self-supervised representation pretraining in Masked Autoencoders (MAE), and industrial anomaly detection.

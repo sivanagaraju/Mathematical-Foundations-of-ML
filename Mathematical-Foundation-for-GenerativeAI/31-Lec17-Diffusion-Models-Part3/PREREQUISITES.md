@@ -202,9 +202,9 @@ verify_cfg_extrapolation()
 
 | Concept | Upstream Prerequisite | Downstream Application in Lecture 17 |
 | :--- | :--- | :--- |
-| Convolutional Neural Networks | [04-Tensors_and_Shapes.md](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Constructing isomorphic U-Net down/up blocks |
-| Positional Embeddings | [09-Positional_Encodings.md](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/09-Positional_Encodings.md) | Modulating shared model layers across continuous time $t$ |
-| Conditional Probability & Bayes | [03-Joint_Marginal_Conditional_Dist.md](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Decomposing conditional score into unconditional plus classifier guidance |
+| Convolutional Neural Networks | [04-Tensors_and_Shapes.md](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Constructing isomorphic U-Net down/up blocks |
+| Positional Embeddings | [09-Positional_Encodings.md](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/09-Positional_Encodings.md) | Modulating shared model layers across continuous time $t$ |
+| Conditional Probability & Bayes | [03-Joint_Marginal_Conditional_Dist.md](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Decomposing conditional score into unconditional plus classifier guidance |
 
 ---
 

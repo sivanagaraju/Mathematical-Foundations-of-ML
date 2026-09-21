@@ -24,8 +24,8 @@ Welcome to the foundational implementation guide for Vector Quantised Variationa
 |:---|:---|:---|
 | [Lec 12: VQ-VAE Foundations](../23-Lec12-Vector-Quantised-VAE/NOTES.md) | Theoretical formulation of discrete codebooks | Establishes the tripartite loss and STE theory implemented in this tutorial |
 | [Tutorial 15: VAE & Beta-VAE](../26-Tutorial15-VAE-Beta-VAE-Implementation/NOTES.md) | Continuous latent autoencoders | Contrasts continuous Gaussian bottlenecks with discrete codebook lookups |
-| [MathsTerms: Categorical Embeddings](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md) | PyTorch `nn.Embedding` mechanics | Formulates dictionary lookup matrices and weight storage |
-| [MathsTerms: Dot Product & Similarity](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md) | Vector inner products and metric geometry | Explains why expanding squared norms into matrix products speeds up distance checks |
+| [MathsTerms: Categorical Embeddings](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md) | PyTorch `nn.Embedding` mechanics | Formulates dictionary lookup matrices and weight storage |
+| [MathsTerms: Dot Product & Similarity](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md) | Vector inner products and metric geometry | Explains why expanding squared norms into matrix products speeds up distance checks |
 
 ---
 

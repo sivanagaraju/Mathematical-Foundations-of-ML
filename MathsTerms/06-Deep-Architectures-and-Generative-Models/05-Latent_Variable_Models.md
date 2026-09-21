@@ -41,8 +41,8 @@ In deep neural networks, this continuous integral is mathematically intractable.
 
 **Prerequisites**
 
-- **Required now:** Joint, marginal, and conditional probability distributions. [Joint, marginal and conditional distributions, §3](../04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) reviews conditional conditioning $p(x, z) = p(x \mid z)p(z)$ and marginal integration $\int p(x, z) dz$. [Likelihood and log-likelihood, §2](../04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) introduces maximum likelihood estimation.
-- **Required for optional depth:** Convexity and Jensen's inequality; see [Convexity and Jensen's inequality, §3](../01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md). These support the step-by-step ELBO derivation in §4 and §8.
+- **Required now:** Joint, marginal, and conditional probability distributions. [Joint, marginal and conditional distributions, §3](../03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) reviews conditional conditioning $p(x, z) = p(x \mid z)p(z)$ and marginal integration $\int p(x, z) dz$. [Likelihood and log-likelihood, §2](../03-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) introduces maximum likelihood estimation.
+- **Required for optional depth:** Convexity and Jensen's inequality; see [Convexity and Jensen's inequality, §3](../05-Convexity-Duality-and-Metric-Analysis/01-Convexity_and_Jensens_Inequality.md). These support the step-by-step ELBO derivation in §4 and §8.
 - **Useful context:** [Autoencoders and latent spaces](03-Autoencoders_and_Latent_Spaces.md) for deterministic bottlenecks and [Expectation-maximization algorithm](06-Expectation_Maximization_Algorithm.md) for coordinate-ascent latent inference.
 
 **Target systems:** Variational Autoencoders (VAEs), Latent Diffusion Models (Stable Diffusion, FLUX), Gaussian Mixture Models (GMMs), Latent Dirichlet Allocation (LDA), and Hidden Markov Models (HMMs).

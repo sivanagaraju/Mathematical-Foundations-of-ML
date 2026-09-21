@@ -32,8 +32,8 @@ In high-dimensional continuous domains like photorealistic images, the true data
 3. Goodfellow et al. (2014) proved that at the theoretical minimax saddle-point equilibrium, the generator recovers the exact true data distribution ($p_g = p_{\text{data}}$) by minimizing the **Jensen-Shannon Divergence** ($D_{\text{JS}}(p_{\text{data}} \parallel p_g)$) to zero.
 
 **Prerequisites**
-- **Required now:** Binary cross-entropy loss ([Loss functions, §3](../03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md)). Gradient descent and saddle points ([Gradient descent, §2](../03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md)).
-- **Required for optional depth:** Jensen-Shannon Divergence ([Jensen-Shannon divergence, §2](../05-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md)).
+- **Required now:** Binary cross-entropy loss ([Loss functions, §3](../02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md)). Gradient descent and saddle points ([Gradient descent, §2](../02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md)).
+- **Required for optional depth:** Jensen-Shannon Divergence ([Jensen-Shannon divergence, §2](../04-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md)).
 - **Useful context:** [Autoencoders and latent spaces](03-Autoencoders_and_Latent_Spaces.md) for latent generators.
 
 **Target systems:** StyleGAN3 (photorealistic face and texture synthesis), PatchGAN in Pix2Pix and CycleGAN (image-to-image translation), adversarial loss terms in Latent Diffusion VAEs, and BigGAN.

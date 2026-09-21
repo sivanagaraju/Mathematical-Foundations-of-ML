@@ -637,11 +637,11 @@ The recipe now has a named, computable estimator. What remains for later lecture
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Kullback-Leibler Divergence Minimization** | [Kullback-Leibler Divergence Minimization](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) | Minimizing $D_{\text{KL}}(p_{\text{data}} \parallel p_\theta)$ with respect to model parameters $\theta$ |
-| **Maximum Likelihood Estimation (MLE)** | [Maximum Likelihood Estimation (MLE)](../../MathsTerms/04-Probability-and-Statistical-Estimation/05-MLE.md) | Formal equivalence proof: $\arg\min_\theta D_{\text{KL}}(p_{\text{data}} \parallel p_\theta) \equiv \arg\max_\theta \sum_{i=1}^n \ln p_\theta(x_i)$ |
-| **Likelihood & Log-Likelihood** | [Likelihood & Log-Likelihood](../../MathsTerms/04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Empirical log-likelihood as the Monte Carlo estimator of negative cross-entropy |
-| **Loss Functions** | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Negative Log-Likelihood (NLL) loss formulation in modern neural network training |
-| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Gradient-based optimization of log-likelihood objectives |
+| **Kullback-Leibler Divergence Minimization** | [Kullback-Leibler Divergence Minimization](../../MathsTerms/04-Information-Theory-and-Divergences/02-KL_Divergence.md) | Minimizing $D_{\text{KL}}(p_{\text{data}} \parallel p_\theta)$ with respect to model parameters $\theta$ |
+| **Maximum Likelihood Estimation (MLE)** | [Maximum Likelihood Estimation (MLE)](../../MathsTerms/03-Probability-and-Statistical-Estimation/05-MLE.md) | Formal equivalence proof: $\arg\min_\theta D_{\text{KL}}(p_{\text{data}} \parallel p_\theta) \equiv \arg\max_\theta \sum_{i=1}^n \ln p_\theta(x_i)$ |
+| **Likelihood & Log-Likelihood** | [Likelihood & Log-Likelihood](../../MathsTerms/03-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Empirical log-likelihood as the Monte Carlo estimator of negative cross-entropy |
+| **Loss Functions** | [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Negative Log-Likelihood (NLL) loss formulation in modern neural network training |
+| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Gradient-based optimization of log-likelihood objectives |
 
 ---
 

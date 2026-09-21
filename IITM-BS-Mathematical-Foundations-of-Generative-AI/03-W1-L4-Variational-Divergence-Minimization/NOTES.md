@@ -568,11 +568,11 @@ Concludes the lecture by charting the path forward: transitioning from defining 
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **f-Divergence & Statistical Discrepancies** | [f-Divergence & Statistical Discrepancies](../../MathsTerms/05-Information-Theory-and-Divergences/04-f_Divergence.md) | General definition, convex generator functions, and properties |
-| **Convexity & Jensen's Inequality** | [Convexity & Jensen's Inequality](../../MathsTerms/01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md) | Proof of $D_f(p \parallel q) \ge 0$ with equality iff $p = q$ via Jensen's inequality |
-| **Fenchel Convex Conjugate & Dual Representations** | [Fenchel Convex Conjugate & Dual Representations](../../MathsTerms/01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md) | Variational supremum $f^*(t) = \sup_{u} \{ ut - f(u) \}$ and dual lower bounds |
-| **Kullback-Leibler (KL) Divergence** | [Kullback-Leibler (KL) Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) | KL divergence derived as a special case with $f(u) = u \ln u$ |
-| **Jensen-Shannon Divergence** | [Jensen-Shannon Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md) | Symmetric divergence foundation leading to vanilla GAN objectives |
+| **f-Divergence & Statistical Discrepancies** | [f-Divergence & Statistical Discrepancies](../../MathsTerms/04-Information-Theory-and-Divergences/04-f_Divergence.md) | General definition, convex generator functions, and properties |
+| **Convexity & Jensen's Inequality** | [Convexity & Jensen's Inequality](../../MathsTerms/05-Convexity-Duality-and-Metric-Analysis/01-Convexity_and_Jensens_Inequality.md) | Proof of $D_f(p \parallel q) \ge 0$ with equality iff $p = q$ via Jensen's inequality |
+| **Fenchel Convex Conjugate & Dual Representations** | [Fenchel Convex Conjugate & Dual Representations](../../MathsTerms/05-Convexity-Duality-and-Metric-Analysis/03-Fenchel_Conjugate_and_Dual_Representations.md) | Variational supremum $f^*(t) = \sup_{u} \{ ut - f(u) \}$ and dual lower bounds |
+| **Kullback-Leibler (KL) Divergence** | [Kullback-Leibler (KL) Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/02-KL_Divergence.md) | KL divergence derived as a special case with $f(u) = u \ln u$ |
+| **Jensen-Shannon Divergence** | [Jensen-Shannon Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md) | Symmetric divergence foundation leading to vanilla GAN objectives |
 | **ELBO & Variational Inference** | [ELBO & Variational Inference](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/07-ELBO_and_Variational_Inference.md) | Variational bounding techniques and saddle point optimization |
 
 ---

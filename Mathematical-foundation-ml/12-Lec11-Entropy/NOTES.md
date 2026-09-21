@@ -448,9 +448,9 @@ Next: use information-theoretic measures to define distances between pairs of di
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Entropy, Cross-Entropy & Categorical Cross-Entropy** | [Entropy, Cross-Entropy & Categorical Cross-Entropy](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Surprisal $-\log p(x)$, Shannon entropy $H(p)$, and expected uncertainty |
-| **Kullback-Leibler (KL) Divergence** | [Kullback-Leibler (KL) Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) | Transitioning from self-entropy to relative divergence between two distributions |
-| **Loss Functions** | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Cross-entropy loss as the negative log-likelihood of categorical targets |
+| **Entropy, Cross-Entropy & Categorical Cross-Entropy** | [Entropy, Cross-Entropy & Categorical Cross-Entropy](../../MathsTerms/04-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Surprisal $-\log p(x)$, Shannon entropy $H(p)$, and expected uncertainty |
+| **Kullback-Leibler (KL) Divergence** | [Kullback-Leibler (KL) Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/02-KL_Divergence.md) | Transitioning from self-entropy to relative divergence between two distributions |
+| **Loss Functions** | [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Cross-entropy loss as the negative log-likelihood of categorical targets |
 
 ---
 

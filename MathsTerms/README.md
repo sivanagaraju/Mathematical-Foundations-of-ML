@@ -4,7 +4,7 @@ Welcome to the **Mathematical Terms (MathsTerms) Knowledge Base** for the *Mathe
 
 > ✍️ **Maintainer guide:** Use the [Cognitive Learning Engine](./COGNITIVE_LEARNING_ENGINE_SYSTEM_PROMPT.md) for chapter-level teaching and recall design, the [First-Principles Editorial System Prompt](./EDITORIAL_SYSTEM_PROMPT.md) for repository workflow and accuracy, the [Curriculum Restructure Plan](./CURRICULUM_RESTRUCTURE_PLAN.md) for rollout decisions, and the live [Progress and Evidence Ledger](./CURRICULUM_RESTRUCTURE_PROGRESS.md) for evidence.
 
-Each guide should form a continuous learning conversation: a concrete problem leads to a small example, plain language, decoded notation, formal mathematics, boundary cases, and an honest AI connection. The visible headings should follow the needs of the concept rather than a fixed number of generated sections. The [entropy pilot](./05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) demonstrates the structure currently being evaluated before it is applied to the other guides.
+Each guide should form a continuous learning conversation: a concrete problem leads to a small example, plain language, decoded notation, formal mathematics, boundary cases, and an honest AI connection. The visible headings should follow the needs of the concept rather than a fixed number of generated sections. The [entropy pilot](./04-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) demonstrates the structure currently being evaluated before it is applied to the other guides.
 
 ```
  ===================================================================================================
@@ -21,13 +21,13 @@ Each guide should form a continuous learning conversation: a concrete problem le
 ## 🗺️ Master Dependency Graph & Concept Roadmap
 
 > 🚀 **Looking to connect all the dots?**  
-> Explore the comprehensive **[Grand Unified Concept Map & Mathematical Dependency Graph](./CONCEPT_MAP.md)** connecting all 54 guides from first-principles axioms to Generative AI architectures (VAEs, GANs, Diffusion Models, Autoregressive LLMs, Flow Matching), featuring interactive Mermaid diagrams, ASCII pipelines, sub-term lineage, and 4 specialized learning tracks.
+> Explore the comprehensive **[Grand Unified Concept Map & Mathematical Dependency Graph](./CONCEPT_MAP.md)** connecting all 55 guides from first-principles axioms to Generative AI architectures (VAEs, GANs, Diffusion Models, Autoregressive LLMs, Flow Matching), featuring interactive Mermaid diagrams, ASCII pipelines, sub-term lineage, and 4 specialized learning tracks.
 
 ---
 
 ## 🧭 The 7-Phase Pedagogical Sequence (For Zero-Math Background Learners)
 
-If you are coming to this material without a formal mathematics degree, **do not read the folders in numerical order (01 to 06)**! Chapter 1 contains advanced functional analysis (Fenchel duality, Lipschitz continuity) designed for VAE/GAN research. Instead, follow the natural human learning path:
+With our comprehensive 6-pillar curriculum restructuring, the physical folders (`01` through `06`) now **directly mirror** this natural human learning path! You can now proceed through the folders in sequential order, building from intuitive geometric vectors all the way to deep generative architectures:
 
 ```text
 ===================================================================================================
@@ -57,94 +57,95 @@ If you are coming to this material without a formal mathematics degree, **do not
 
 ---
 
-## 🧭 Master Directory Index (54 Curated Guides in 6 Sequenced Categories)
+## 🧭 Master Directory Index (55 Curated Guides in 6 Sequenced Categories)
 
-### 1. ⚡ [01-Primal-Analysis-and-Foundations](./01-Primal-Analysis-and-Foundations/README.md)
+### 1. 📐 [01-Linear-Algebra-Geometry-and-Tensors](./01-Linear-Algebra-Geometry-and-Tensors/README.md)
 
-> 🌱 **Starting from zero?** Use the [First-Principles Route](./01-Primal-Analysis-and-Foundations/START_HERE.md) before treating the catalogue numbers as a study sequence. Notice that advanced duality topics (Fenchel, Lipschitz) are best studied in **Phase 6** after Calculus and Probability!
+> 🌱 **Starting from zero?** Use the [First-Principles Route](./01-Linear-Algebra-Geometry-and-Tensors/START_HERE.md) before treating the catalogue numbers as a study sequence.
 
 | Mathematical Guide | Core Focus & Key Formula | Primary Modules |
 | :--- | :--- | :--- |
-| **[Probability Basics & Axioms](./01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md)** | Sample spaces, $\sigma$-algebras, measure non-negativity, countable additivity | Tut 07 |
-| **[Logarithms & Exponential Functions](./01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md)** | Numerical stability, log-space arithmetic, preventing underflow ($\ln(ab) = \ln a + \ln b$) | Tut 02, Lec 01, Tut 10 |
-| **[Convexity & Jensen's Inequality](./01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md)** | Convex functions, secant lines, and lower bounds ($f(\mathbb{E}[X]) \le \mathbb{E}[f(X)]$) | Lec 03, Lec 20 |
-| **[Bounds, Supremum, Infimum & Linear Families](./01-Primal-Analysis-and-Foundations/04-Bounds_Supremum_Infimum_and_Linear_Families.md)** | Lower bounds, $\sup$ vs $\max$, open sets, family of lines, highest linear supporting bound | Lec 04, Lec 05 |
-| **[Fenchel Conjugate & Dual Variational Representations](./01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md)** | Legendre-Fenchel transformation ($f^*(t) = \sup_u \{tu - f(u)\}$), slope scanning & unzipping | Lec 04, Lec 05, Lec 18 |
-| **[Lipschitz Continuity](./01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md)** | Bounded gradient slope $\|f(x) - f(y)\| \le K \|x - y\|$, Kantorovich-Rubinstein dual | Lec 18, Tut 12 |
+| **[Vectors & Matrices](./01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md)** | Linear transformations, coordinate bases, matrix multiplication ($y = Wx + b$) | Tut 02, Tut 03, Tut 06 |
+| **[Basis, Spans & Orthogonality](./01-Linear-Algebra-Geometry-and-Tensors/01b-Basis_Spans_and_Orthogonality.md)** | Coordinate systems, linear independence, Gram-Schmidt, orthonormal basis ($Q^T Q = I$) | Tut 02, Tut 06 |
+| **[Determinants & Volume Scaling](./01-Linear-Algebra-Geometry-and-Tensors/01c-Determinants_and_Volume_Scaling.md)** | Area/volume expansion, orientation flips, triangular shortcuts, Normalizing Flows ($\det(A)$) | Tut 02, Lec 01 |
+| **[Vector Norms & Inner Products](./01-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md)** | $L_1, L_2, L_\infty$ geometry, Lasso sparsity vs Ridge weight decay | Tut 02, Lec 18 |
+| **[Similarity with Dot Product](./01-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md)** | Vector projections, cosine similarity, Scaled Attention ($\vec{a} \cdot \vec{b} = \|\vec{a}\|\|\vec{b}\|\cos\theta$) | Tut 02, Tut 03, Tut 06 |
+| **[Tensors, Shapes & Dimensional Broadcasting](./01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md)** | Multidimensional arrays, PyTorch strided layouts, contiguous memory buffers | Tut 02, Tut 03 |
+| **[Tensor Broadcasting](./01-Linear-Algebra-Geometry-and-Tensors/05-Tensor_Broadcasting.md)** | Memory strides, 3 golden broadcasting rules, zero-copy expansion (stride = 0) | Tut 02, Tut 03 |
+| **[Eigenvalues & Eigenvectors](./01-Linear-Algebra-Geometry-and-Tensors/05b-Eigenvalues_and_Eigenvectors.md)** | Un-rotated directions, spectral theorem, PCA, spectral normalization in GANs ($Ax = \lambda x$) | Tut 06, Lec 18 |
+| **[Singular Value Decomposition (SVD)](./01-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md)** | Rotate-Stretch-Rotate factorization, Eckart-Young theorem, LoRA ($A = U \Sigma V^T$) | Tut 06, Lec 01 |
+| **[One-Hot Encoding](./01-Linear-Algebra-Geometry-and-Tensors/07-One_Hot_Encoding.md)** | Sparse categorical representation, cross-entropy target vectors | Lec 01, Tut 10 |
+| **[Encodings & Categorical Embeddings](./01-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md)** | Discrete token IDs to continuous coordinates, BPE tokenization, embedding lookup tables | Tut 03, Lec 01 |
+| **[Positional Encodings & RoPE](./01-Linear-Algebra-Geometry-and-Tensors/09-Positional_Encodings.md)** | Sequence order, Sinusoidal, Learned, ALiBi, and Rotary Position Embeddings in LLMs | Tut 03, Lec 01 |
 
 ---
 
-### 2. 📐 [02-Linear-Algebra-Geometry-and-Tensors](./02-Linear-Algebra-Geometry-and-Tensors/README.md)
+### 2. ⚡ [02-Multivariate-Calculus-and-Optimization](./02-Multivariate-Calculus-and-Optimization/README.md)
 
-> 🌱 **Starting from zero?** Use the [First-Principles Route](./02-Linear-Algebra-Geometry-and-Tensors/START_HERE.md) before treating the catalogue numbers as a study sequence.
+> 🌱 **Starting from zero?** Use the [First-Principles Route](./02-Multivariate-Calculus-and-Optimization/START_HERE.md) before treating the catalogue numbers as a study sequence.
 
 | Mathematical Guide | Core Focus & Key Formula | Primary Modules |
 | :--- | :--- | :--- |
-| **[Vectors & Matrices](./02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md)** | Linear transformations, coordinate bases, matrix multiplication ($y = Wx + b$) | Tut 02, Tut 03, Tut 06 |
-| **[Basis, Spans & Orthogonality](./02-Linear-Algebra-Geometry-and-Tensors/01b-Basis_Spans_and_Orthogonality.md)** | Coordinate systems, linear independence, Gram-Schmidt, orthonormal basis ($Q^T Q = I$) | Tut 02, Tut 06 |
-| **[Determinants & Volume Scaling](./02-Linear-Algebra-Geometry-and-Tensors/01c-Determinants_and_Volume_Scaling.md)** | Area/volume expansion, orientation flips, triangular shortcuts, Normalizing Flows ($\det(A)$) | Tut 02, Lec 01 |
-| **[Vector Norms & Inner Products](./02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md)** | $L_1, L_2, L_\infty$ geometry, Lasso sparsity vs Ridge weight decay | Tut 02, Lec 18 |
-| **[Similarity with Dot Product](./02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md)** | Vector projections, cosine similarity, Scaled Attention ($\vec{a} \cdot \vec{b} = \|\vec{a}\|\|\vec{b}\|\cos\theta$) | Tut 02, Tut 03, Tut 06 |
-| **[Tensors, Shapes & Dimensional Broadcasting](./02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md)** | Multidimensional arrays, PyTorch strided layouts, contiguous memory buffers | Tut 02, Tut 03 |
-| **[Tensor Broadcasting](./02-Linear-Algebra-Geometry-and-Tensors/05-Tensor_Broadcasting.md)** | Memory strides, 3 golden broadcasting rules, zero-copy expansion (stride = 0) | Tut 02, Tut 03 |
-| **[Eigenvalues & Eigenvectors](./02-Linear-Algebra-Geometry-and-Tensors/05b-Eigenvalues_and_Eigenvectors.md)** | Un-rotated directions, spectral theorem, PCA, spectral normalization in GANs ($Ax = \lambda x$) | Tut 06, Lec 18 |
-| **[Singular Value Decomposition (SVD)](./02-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md)** | Rotate-Stretch-Rotate factorization, Eckart-Young theorem, LoRA ($A = U \Sigma V^T$) | Tut 06, Lec 01 |
-| **[One-Hot Encoding](./02-Linear-Algebra-Geometry-and-Tensors/07-One_Hot_Encoding.md)** | Sparse categorical representation, cross-entropy target vectors | Lec 01, Tut 10 |
-| **[Encodings & Categorical Embeddings](./02-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md)** | Discrete token IDs to continuous coordinates, BPE tokenization, embedding lookup tables | Tut 03, Lec 01 |
-| **[Positional Encodings & RoPE](./02-Linear-Algebra-Geometry-and-Tensors/09-Positional_Encodings.md)** | Sequence order, Sinusoidal, Learned, ALiBi, and Rotary Position Embeddings in LLMs | Tut 03, Lec 01 |
+| **[Logarithms & Exponential Functions](./02-Multivariate-Calculus-and-Optimization/00-Logarithms_and_Exponential_Functions.md)** | Numerical stability, log-space arithmetic, preventing underflow ($\ln(ab) = \ln a + \ln b$) | Tut 02, Lec 01, Tut 10 |
+| **[Functions, Derivatives & Rules](./02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md)** | Power, product, quotient rules, limit definition ($f'(x) = \lim \frac{f(x+h)-f(x)}{h}$) | Tut 03, Lec 01 |
+| **[Derivatives, Gradients & Jacobians](./02-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md)** | Multivariable calculus, autograd computational graphs, Jacobian matrices | Tut 03, Lec 04, Lec 18 |
+| **[The Hessian Matrix & Curvature](./02-Multivariate-Calculus-and-Optimization/02b-Hessian_Matrix_and_Curvature.md)** | Second-order partials, local curvature, saddle points, Newton-Raphson ($H = \nabla^2 f$) | Tut 03, Lec 01, Lec 05 |
+| **[The Jacobian Matrix](./02-Multivariate-Calculus-and-Optimization/03-Jacobian_Matrix.md)** | Vector-valued derivatives, local volume warping, VJP/JVP ($J_{ij} = \partial f_i / \partial x_j$) | Tut 03, Tut 06, Lec 01 |
+| **[The Chain Rule & Backpropagation](./02-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md)** | Reverse-mode automatic differentiation, DAG computation graphs ($\frac{dz}{dx} = \frac{dz}{dy} \frac{dy}{dx}$) | Tut 03, Tut 04, Lec 01 |
+| **[Activation Functions](./02-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md)** | Non-linearities: ReLU, LeakyReLU, GELU, SwiGLU, Sigmoid ($\sigma(z), \text{GELU}(z)$) | Lec 01, Tut 03, Tut 04 |
+| **[Softmax Function](./02-Multivariate-Calculus-and-Optimization/06-Softmax.md)** | Probability normalization, logits squashing, temperature scaling ($\frac{e^{z_i/\tau}}{\sum e^{z_j/\tau}}$) | Lec 01, Tut 03, Tut 10 |
+| **[Argmax & Soft-Argmax](./02-Multivariate-Calculus-and-Optimization/07-Argmax.md)** | Non-differentiable discrete selection vs differentiable Gumbel-Softmax | Tut 03, Lec 02 |
+| **[Loss Functions in Machine Learning](./02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md)** | MSE, MAE, Huber, BCE, CCE, Hinge, Wasserstein objectives | Tut 03, Tut 10, Lec 05 |
+| **[Gradient Descent & Optimizers](./02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md)** | SGD, Momentum, RMSprop, Adam first/second moment updates ($\theta \leftarrow \theta - \eta \nabla L$) | Tut 03, Lec 05, Lec 19 |
+| **[Exponential Moving Average (EMA)](./02-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md)** | Shadow weights in Diffusion, Adam momentum ($\theta_{\text{EMA}} = \beta \theta_{\text{EMA}} + (1-\beta)\theta$) | Tut 03, Lec 01, Lec 18 |
+| **[Batch Normalization & Spectral Norm](./02-Multivariate-Calculus-and-Optimization/11-Batch_Normalization_and_Spectral_Norm.md)** | Layer normalization & 1-Lipschitz matrix spectral norm ($\|W\|_2 \le 1, W / \sigma(W)$) | Tut 04, Lec 18, Tut 12 |
 
 ---
 
-### 3. ⚡ [03-Multivariate-Calculus-and-Optimization](./03-Multivariate-Calculus-and-Optimization/README.md)
+### 3. 🎲 [03-Probability-and-Statistical-Estimation](./03-Probability-and-Statistical-Estimation/README.md)
 
-> 🌱 **Starting from zero?** Use the [First-Principles Route](./03-Multivariate-Calculus-and-Optimization/START_HERE.md) before treating the catalogue numbers as a study sequence.
+> 🌱 **Starting from zero?** Use the [First-Principles Route](./03-Probability-and-Statistical-Estimation/START_HERE.md) before treating the catalogue numbers as a study sequence.
 
 | Mathematical Guide | Core Focus & Key Formula | Primary Modules |
 | :--- | :--- | :--- |
-| **[Functions, Derivatives & Rules](./03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md)** | Power, product, quotient rules, limit definition ($f'(x) = \lim \frac{f(x+h)-f(x)}{h}$) | Tut 03, Lec 01 |
-| **[Derivatives, Gradients & Jacobians](./03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md)** | Multivariable calculus, autograd computational graphs, Jacobian matrices | Tut 03, Lec 04, Lec 18 |
-| **[The Hessian Matrix & Curvature](./03-Multivariate-Calculus-and-Optimization/02b-Hessian_Matrix_and_Curvature.md)** | Second-order partials, local curvature, saddle points, Newton-Raphson ($H = \nabla^2 f$) | Tut 03, Lec 01, Lec 05 |
-| **[The Jacobian Matrix](./03-Multivariate-Calculus-and-Optimization/03-Jacobian_Matrix.md)** | Vector-valued derivatives, local volume warping, VJP/JVP ($J_{ij} = \partial f_i / \partial x_j$) | Tut 03, Tut 06, Lec 01 |
-| **[The Chain Rule & Backpropagation](./03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md)** | Reverse-mode automatic differentiation, DAG computation graphs ($\frac{dz}{dx} = \frac{dz}{dy} \frac{dy}{dx}$) | Tut 03, Tut 04, Lec 01 |
-| **[Activation Functions](./03-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md)** | Non-linearities: ReLU, LeakyReLU, GELU, SwiGLU, Sigmoid ($\sigma(z), \text{GELU}(z)$) | Lec 01, Tut 03, Tut 04 |
-| **[Softmax Function](./03-Multivariate-Calculus-and-Optimization/06-Softmax.md)** | Probability normalization, logits squashing, temperature scaling ($\frac{e^{z_i/\tau}}{\sum e^{z_j/\tau}}$) | Lec 01, Tut 03, Tut 10 |
-| **[Argmax & Soft-Argmax](./03-Multivariate-Calculus-and-Optimization/07-Argmax.md)** | Non-differentiable discrete selection vs differentiable Gumbel-Softmax | Tut 03, Lec 02 |
-| **[Loss Functions in Machine Learning](./03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md)** | MSE, MAE, Huber, BCE, CCE, Hinge, Wasserstein objectives | Tut 03, Tut 10, Lec 05 |
-| **[Gradient Descent & Optimizers](./03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md)** | SGD, Momentum, RMSprop, Adam first/second moment updates ($\theta \leftarrow \theta - \eta \nabla L$) | Tut 03, Lec 05, Lec 19 |
-| **[Exponential Moving Average (EMA)](./03-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md)** | Shadow weights in Diffusion, Adam momentum ($\theta_{\text{EMA}} = \beta \theta_{\text{EMA}} + (1-\beta)\theta$) | Tut 03, Lec 01, Lec 18 |
-| **[Batch Normalization & Spectral Norm](./03-Multivariate-Calculus-and-Optimization/11-Batch_Normalization_and_Spectral_Norm.md)** | Layer normalization & 1-Lipschitz matrix spectral norm ($\|W\|_2 \le 1, W / \sigma(W)$) | Tut 04, Lec 18, Tut 12 |
+| **[Probability Basics & Axioms](./03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md)** | Sample spaces, $\sigma$-algebras, measure non-negativity, countable additivity | Tut 07 |
+| **[Random Variables & Probability Distributions](./03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md)** | Discrete PMF vs continuous PDF, expectation, variance, law of total probability | Tut 07, Tut 08 |
+| **[Law of Large Numbers & Monte Carlo](./03-Probability-and-Statistical-Estimation/01b-Law_of_Large_Numbers_and_Monte_Carlo.md)** | Sample mean convergence $\frac{1}{N}\sum x_i \to \mathbb{E}[X]$, mini-batch SGD, VAE/Diffusion sampling | Tut 07, Tut 10, Lec 20 |
+| **[Common Probability Distributions](./03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md)** | Gaussian, Uniform, Bernoulli, Categorical, multivariate covariance matrices | Tut 07, Tut 08, Lec 18 |
+| **[Joint, Marginal & Conditional Distributions](./03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md)** | Bayes' Theorem, continuous slices, chain rule ($p(x, z) = p(x \mid z) p(z)$) | Tut 09, Lec 19, Lec 20 |
+| **[Likelihood & Log-Likelihood](./03-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md)** | Parameter scoring given fixed data ($L(\theta; X) = \prod p(x_i \mid \theta)$) | Tut 08, Tut 10, Lec 20 |
+| **[Maximum Likelihood Estimation (MLE)](./03-Probability-and-Statistical-Estimation/05-MLE.md)** | Optimal parameter estimation, score equations ($\hat{\theta}_{\text{MLE}} = \arg\max \sum \ln p(x_i)$) | Tut 10, Lec 02, Lec 20 |
+| **[Negative Log-Likelihood (NLL)](./03-Probability-and-Statistical-Estimation/06-NLL.md)** | Supervised & generative training loss ($\mathcal{L}_{\text{NLL}} = -\sum_{i=1}^N \ln p_\theta(y_i \mid x_i)$) | Lec 01, Tut 10 |
+| **[LOTUS & Empirical Expectations](./03-Probability-and-Statistical-Estimation/07-LOTUS_and_Empirical_Expectation_Estimation.md)** | $\mathbb{E}[g(X)] = \int g(x)p(x)dx$, push-forward measures, sampling latents $z \sim \mathcal{N}(0, I)$ | Lec 04, Lec 20 |
 
 ---
 
-### 4. 🎲 [04-Probability-and-Statistical-Estimation](./04-Probability-and-Statistical-Estimation/README.md)
+### 4. 🌐 [04-Information-Theory-and-Divergences](./04-Information-Theory-and-Divergences/README.md)
 
-> 🌱 **Starting from zero?** Use the [First-Principles Route](./04-Probability-and-Statistical-Estimation/START_HERE.md) before treating the catalogue numbers as a study sequence.
+> 🌱 **Starting from zero?** Use the [First-Principles Route](./04-Information-Theory-and-Divergences/START_HERE.md) before treating the catalogue numbers as a study sequence.
 
 | Mathematical Guide | Core Focus & Key Formula | Primary Modules |
 | :--- | :--- | :--- |
-| **[Random Variables & Probability Distributions](./04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md)** | Discrete PMF vs continuous PDF, expectation, variance, law of total probability | Tut 07, Tut 08 |
-| **[Law of Large Numbers & Monte Carlo](./04-Probability-and-Statistical-Estimation/01b-Law_of_Large_Numbers_and_Monte_Carlo.md)** | Sample mean convergence $\frac{1}{N}\sum x_i \to \mathbb{E}[X]$, mini-batch SGD, VAE/Diffusion sampling | Tut 07, Tut 10, Lec 20 |
-| **[Common Probability Distributions](./04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md)** | Gaussian, Uniform, Bernoulli, Categorical, multivariate covariance matrices | Tut 07, Tut 08, Lec 18 |
-| **[Joint, Marginal & Conditional Distributions](./04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md)** | Bayes' Theorem, continuous slices, chain rule ($p(x, z) = p(x \mid z) p(z)$) | Tut 09, Lec 19, Lec 20 |
-| **[Likelihood & Log-Likelihood](./04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md)** | Parameter scoring given fixed data ($L(\theta; X) = \prod p(x_i \mid \theta)$) | Tut 08, Tut 10, Lec 20 |
-| **[Maximum Likelihood Estimation (MLE)](./04-Probability-and-Statistical-Estimation/05-MLE.md)** | Optimal parameter estimation, score equations ($\hat{\theta}_{\text{MLE}} = \arg\max \sum \ln p(x_i)$) | Tut 10, Lec 02, Lec 20 |
-| **[Negative Log-Likelihood (NLL)](./04-Probability-and-Statistical-Estimation/06-NLL.md)** | Supervised & generative training loss ($\mathcal{L}_{\text{NLL}} = -\sum_{i=1}^N \ln p_\theta(y_i \mid x_i)$) | Lec 01, Tut 10 |
-| **[LOTUS & Empirical Expectations](./04-Probability-and-Statistical-Estimation/07-LOTUS_and_Empirical_Expectation_Estimation.md)** | $\mathbb{E}[g(X)] = \int g(x)p(x)dx$, push-forward measures, sampling latents $z \sim \mathcal{N}(0, I)$ | Lec 04, Lec 20 |
+| **[Entropy, Cross-Entropy & Categorical Cross-Entropy](./04-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md)** | Shannon surprise, cross-entropy loss, negative log-likelihood ($H(P, Q) = -\sum p \log q$) | Lec 01, Tut 10 |
+| **[Kullback-Leibler (KL) Divergence](./04-Information-Theory-and-Divergences/02-KL_Divergence.md)** | Relative entropy, forward vs reverse KL mode covering/dropping ($D_{\text{KL}}(P \parallel Q) = \int p \ln \frac{p}{q} dx$) | Lec 02, Lec 03, Lec 20 |
+| **[Jensen-Shannon Divergence](./04-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md)** | Symmetric divergence, strict $[0, \ln 2]$ bounds, GAN minimax connection | Lec 03, Lec 05, Tut 12 |
+| **[f-Divergence & Csiszár Generators](./04-Information-Theory-and-Divergences/04-f_Divergence.md)** | Unified divergence family, non-negativity, convexity ($D_f(P \parallel Q) = \int q f(p/q) dx$) | Lec 03, Tut 11, Lec 04 |
+| **[Wasserstein Distance & Earth Mover's Distance (EMD)](./04-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md)** | Optimal transport, Kantorovich-Rubinstein dual ($\sup_{\|f\|_L \le 1} \mathbb{E}_P[f] - \mathbb{E}_Q[f]$), WGAN-GP | Lec 18, Tut 12 |
+| **[Variational Divergence Minimization (VDM)](./04-Information-Theory-and-Divergences/06-Variational_Divergence_Minimization_VDM.md)** | Intractable integrals $\to$ dual function probe $T(x) \to$ Minimax saddle $\min_\theta \max_w$ | Lec 04, Lec 05 |
+| **[Joint/Conditional Entropy & Mutual Information](./04-Information-Theory-and-Divergences/07-Joint_Conditional_Entropy_and_Mutual_Information.md)** | Information transmission, channel capacity, InfoGAN disentanglement | Lec 01, Tut 10 |
 
 ---
 
-### 5. 🌐 [05-Information-Theory-and-Divergences](./05-Information-Theory-and-Divergences/README.md)
+### 5. ⚡ [05-Convexity-Duality-and-Metric-Analysis](./05-Convexity-Duality-and-Metric-Analysis/README.md)
 
-> 🌱 **Starting from zero?** Use the [First-Principles Route](./05-Information-Theory-and-Divergences/START_HERE.md) before treating the catalogue numbers as a study sequence.
+> 🌱 **Starting from zero?** Study this cluster in **Phase 6**, after completing Linear Algebra, Calculus, and Probability! It provides the theoretical keys to unlock the deep generative models in Phase 7.
 
 | Mathematical Guide | Core Focus & Key Formula | Primary Modules |
 | :--- | :--- | :--- |
-| **[Entropy, Cross-Entropy & Categorical Cross-Entropy](./05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md)** | Shannon surprise, cross-entropy loss, negative log-likelihood ($H(P, Q) = -\sum p \log q$) | Lec 01, Tut 10 |
-| **[Kullback-Leibler (KL) Divergence](./05-Information-Theory-and-Divergences/02-KL_Divergence.md)** | Relative entropy, forward vs reverse KL mode covering/dropping ($D_{\text{KL}}(P \parallel Q) = \int p \ln \frac{p}{q} dx$) | Lec 02, Lec 03, Lec 20 |
-| **[Jensen-Shannon Divergence](./05-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md)** | Symmetric divergence, strict $[0, \ln 2]$ bounds, GAN minimax connection | Lec 03, Lec 05, Tut 12 |
-| **[f-Divergence & Csiszár Generators](./05-Information-Theory-and-Divergences/04-f_Divergence.md)** | Unified divergence family, non-negativity, convexity ($D_f(P \parallel Q) = \int q f(p/q) dx$) | Lec 03, Tut 11, Lec 04 |
-| **[Wasserstein Distance & Earth Mover's Distance (EMD)](./05-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md)** | Optimal transport, Kantorovich-Rubinstein dual ($\sup_{\|f\|_L \le 1} \mathbb{E}_P[f] - \mathbb{E}_Q[f]$), WGAN-GP | Lec 18, Tut 12 |
-| **[Variational Divergence Minimization (VDM)](./05-Information-Theory-and-Divergences/06-Variational_Divergence_Minimization_VDM.md)** | Intractable integrals $\to$ dual function probe $T(x) \to$ Minimax saddle $\min_\theta \max_w$ | Lec 04, Lec 05 |
+| **[Convexity & Jensen's Inequality](./05-Convexity-Duality-and-Metric-Analysis/01-Convexity_and_Jensens_Inequality.md)** | Convex functions, secant lines, and lower bounds ($f(\mathbb{E}[X]) \le \mathbb{E}[f(X)]$) | Lec 03, Lec 20 |
+| **[Bounds, Supremum, Infimum & Linear Families](./05-Convexity-Duality-and-Metric-Analysis/02-Bounds_Supremum_Infimum_and_Linear_Families.md)** | Lower bounds, $\sup$ vs $\max$, open sets, family of lines, highest linear supporting bound | Lec 04, Lec 05 |
+| **[Fenchel Conjugate & Dual Variational Representations](./05-Convexity-Duality-and-Metric-Analysis/03-Fenchel_Conjugate_and_Dual_Representations.md)** | Legendre-Fenchel transformation ($f^*(t) = \sup_u \{tu - f(u)\}$), slope scanning & unzipping | Lec 04, Lec 05, Lec 18 |
+| **[Lipschitz Continuity](./05-Convexity-Duality-and-Metric-Analysis/04-Lipschitz_Continuity.md)** | Bounded gradient slope $\|f(x) - f(y)\| \le K \|x - y\|$, Kantorovich-Rubinstein dual | Lec 18, Tut 12 |
 
 ---
 
@@ -171,12 +172,12 @@ If you are coming to this material without a formal mathematics degree, **do not
 
 To link to any mathematical term from a lecture or tutorial note in `Mathematical-Foundation-for-GenerativeAI/`, use standard relative paths:
 ```text
-[Functions, Derivatives & Rules]       --> ../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md
-[The Chain Rule & Backpropagation]    --> ../../MathsTerms/03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md
-[The Jacobian Matrix]                 --> ../../MathsTerms/03-Multivariate-Calculus-and-Optimization/03-Jacobian_Matrix.md
-[Singular Value Decomposition]        --> ../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md
-[Exponential Moving Average (EMA)]    --> ../../MathsTerms/03-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md
-[Similarity with Dot Product]         --> ../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md
-[Tensor Broadcasting]                 --> ../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/05-Tensor_Broadcasting.md
-[Positional Encodings & RoPE]         --> ../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/09-Positional_Encodings.md
+[Functions, Derivatives & Rules]       --> ../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md
+[The Chain Rule & Backpropagation]    --> ../../MathsTerms/02-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md
+[The Jacobian Matrix]                 --> ../../MathsTerms/02-Multivariate-Calculus-and-Optimization/03-Jacobian_Matrix.md
+[Singular Value Decomposition]        --> ../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md
+[Exponential Moving Average (EMA)]    --> ../../MathsTerms/02-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md
+[Similarity with Dot Product]         --> ../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md
+[Tensor Broadcasting]                 --> ../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/05-Tensor_Broadcasting.md
+[Positional Encodings & RoPE]         --> ../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/09-Positional_Encodings.md
 ```

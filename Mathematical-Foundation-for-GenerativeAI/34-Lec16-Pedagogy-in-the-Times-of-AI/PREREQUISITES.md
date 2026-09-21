@@ -200,5 +200,5 @@ verify_kalman_pedagogy()
 | Concept | Upstream Prerequisite | Downstream Application in Lecture 16 |
 | :--- | :--- | :--- |
 | Information Theory | [05-Latent_Variable_Models.md](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/05-Latent_Variable_Models.md) | Formulating cognitive load and entropy in classroom learning |
-| Probability & Estimation | [03-Joint_Marginal_Conditional_Dist.md](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Modeling the student-teacher dialectic as Bayesian filtering |
-| Optimization & Gradients | [02-Derivatives_Gradients_and_Jacobians.md](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Inverting execution vs. verification complexity in machine learning |
+| Probability & Estimation | [03-Joint_Marginal_Conditional_Dist.md](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Modeling the student-teacher dialectic as Bayesian filtering |
+| Optimization & Gradients | [02-Derivatives_Gradients_and_Jacobians.md](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Inverting execution vs. verification complexity in machine learning |

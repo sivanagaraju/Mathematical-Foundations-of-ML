@@ -654,10 +654,10 @@ Next: ERM equivalence, then linear models — still the same three-step system.
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Vector Norms & Inner Products** | [Vector Norms & Inner Products](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md) | Euclidean ($L_2$) and Manhattan ($L_1$) distance collapse in high dimensions |
-| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Geometry of high-dimensional unit hyperspheres and distance concentration |
-| **Loss Functions & Regularization** | [Loss Functions & Regularization](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Loss design, norm penalties ($L_1, L_2$), and combatting overfitting |
-| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Ill-conditioned curvature and optimization challenges in high dimensions |
+| **Vector Norms & Inner Products** | [Vector Norms & Inner Products](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md) | Euclidean ($L_2$) and Manhattan ($L_1$) distance collapse in high dimensions |
+| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Geometry of high-dimensional unit hyperspheres and distance concentration |
+| **Loss Functions & Regularization** | [Loss Functions & Regularization](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Loss design, norm penalties ($L_1, L_2$), and combatting overfitting |
+| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Ill-conditioned curvature and optimization challenges in high dimensions |
 
 ---
 

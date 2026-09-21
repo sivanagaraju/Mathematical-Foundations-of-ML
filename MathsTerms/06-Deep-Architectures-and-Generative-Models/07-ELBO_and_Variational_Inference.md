@@ -50,8 +50,8 @@ is equally impossible because it requires the exact same intractable denominator
 3. The ELBO is a strict lower bound on true evidence: $\mathcal{L}(\theta, \phi; x) \le \ln p_\theta(x)$, with equality if and only if $q_\phi(z \mid x) = p_\theta(z \mid x)$.
 
 **Prerequisites**
-- **Required now:** Multivariate Gaussian distributions, expectations, and Kullback-Leibler divergence ([KL divergence, §2](../05-Information-Theory-and-Divergences/02-KL_Divergence.md)).
-- **Required for optional depth:** Jensen's inequality on concave logarithms ([Convexity and Jensen's inequality, §2](../01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md)).
+- **Required now:** Multivariate Gaussian distributions, expectations, and Kullback-Leibler divergence ([KL divergence, §2](../04-Information-Theory-and-Divergences/02-KL_Divergence.md)).
+- **Required for optional depth:** Jensen's inequality on concave logarithms ([Convexity and Jensen's inequality, §2](../05-Convexity-Duality-and-Metric-Analysis/01-Convexity_and_Jensens_Inequality.md)).
 - **Useful context:** [Latent variable models](05-Latent_Variable_Models.md) and [Autoencoders and latent spaces](03-Autoencoders_and_Latent_Spaces.md).
 
 **Target systems:** Variational Autoencoders (VAEs), Latent Diffusion Models (Stable Diffusion, FLUX.1 latent stage), continuous trajectory modeling in robotics, and Bayesian neural networks.

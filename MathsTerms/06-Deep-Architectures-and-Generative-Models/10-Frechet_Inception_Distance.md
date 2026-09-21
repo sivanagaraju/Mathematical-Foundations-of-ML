@@ -36,8 +36,8 @@ The **Fréchet Inception Distance (FID)**, introduced by Heusel et al. (NeurIPS 
 3. The 2-Wasserstein optimal transport distance computes the minimum physical work needed to transport the synthetic Gaussian cloud $\mathcal{N}(\mu_g, \Sigma_g)$ to the real Gaussian cloud $\mathcal{N}(\mu_r, \Sigma_r)$.
 
 **Prerequisites**
-- **Required now:** Multivariate Gaussian distributions ([Common probability distributions, §2](../04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md)). Matrix trace and matrix square roots ([Vectors and matrices, §1](../02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md)).
-- **Required for optional depth:** 2-Wasserstein metric and Earth Mover's Distance ([Wasserstein distance and EMD, §5](../05-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md)).
+- **Required now:** Multivariate Gaussian distributions ([Common probability distributions, §2](../03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md)). Matrix trace and matrix square roots ([Vectors and matrices, §1](../01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md)).
+- **Required for optional depth:** 2-Wasserstein metric and Earth Mover's Distance ([Wasserstein distance and EMD, §5](../04-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md)).
 - **Useful context:** [Minimax games and GANs](09-Minimax_Game_and_GANs.md) for adversarial evaluation.
 
 **Target systems:** Benchmarking Stable Diffusion (SDXL, SD3, FLUX), StyleGAN-3, Midjourney, DALL-E 3, and Flow Matching architectures on image fidelity and diversity.

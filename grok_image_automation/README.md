@@ -80,19 +80,19 @@ Dynamically parses topic sections (`### 1.`, `### 2.`, etc.) from monolithic mar
 python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --all --parallel 2 --skip-existing
 
 # 2. Run all files in Category 01 in parallel (2 tabs):
-python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --category "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\MathsTerms\01-Primal-Analysis-and-Foundations" --parallel 2 --skip-existing
+python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --category "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\MathsTerms\05-Convexity-Duality-and-Metric-Analysis" --parallel 2 --skip-existing
 
 # 3. Or using category folder name shorthand (3 parallel tabs):
-python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --category "01-Primal-Analysis-and-Foundations" --parallel 3 --skip-existing
+python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --category "05-Convexity-Duality-and-Metric-Analysis" --parallel 3 --skip-existing
 
 # 4. Generate images for Topic 1 of a specific file:
-python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 1
+python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md" --topic 1
 
 # 5. Generate multiple topics (e.g. Topics 1, 2, 4) in parallel:
-python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 1 2 4 --parallel 3
+python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md" --topic 1 2 4 --parallel 3
 
 # 6. Process all topics in a single file (parallel 2 tabs):
-python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --parallel 2 --skip-existing
+python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md" --parallel 2 --skip-existing
 
 # 7. Run using your SECOND ChatGPT account (--account 2):
 python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --account 2 --all --parallel 2 --skip-existing
@@ -106,13 +106,13 @@ python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --accoun
 
 ```powershell
 # 1. Run Category 01 with Grok (parallel 2 tabs):
-python grok_image_automation/grok_mathsterms_runner.py --engine grok --category "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\MathsTerms\01-Primal-Analysis-and-Foundations" --parallel 2 --skip-existing
+python grok_image_automation/grok_mathsterms_runner.py --engine grok --category "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\MathsTerms\05-Convexity-Duality-and-Metric-Analysis" --parallel 2 --skip-existing
 
 # 2. Run all topics for a file in parallel (2 tabs):
-python grok_image_automation/grok_mathsterms_runner.py --engine grok --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --parallel 2
+python grok_image_automation/grok_mathsterms_runner.py --engine grok --file "MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md" --parallel 2
 
 # 3. Force regenerate a specific topic:
-python grok_image_automation/grok_mathsterms_runner.py --engine grok --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 4 --regenerate
+python grok_image_automation/grok_mathsterms_runner.py --engine grok --file "MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md" --topic 4 --regenerate
 ```
 
 ### Output Folder Structure:

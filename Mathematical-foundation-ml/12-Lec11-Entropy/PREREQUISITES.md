@@ -37,11 +37,11 @@ Before diving into the foundational pillars, use this reference table to decode 
 
 | Symbol / Notation | Spoken English (Phonetics) | Mathematical Concept | Plain-English Intuition | Dedicated MathsTerm Link |
 | :--- | :--- | :--- | :--- | :--- |
-| $I(A) = -\log_2 P(A)$ | **INFO OF AY EQUALS NEG-uh-tiv LOG-TWO OF PEE OF AY** | Self-Information (Surprisal) | Bits of uncertainty or shock received upon learning event $A$ occurred | [Entropy & Cross-Entropy](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) |
-| $H(P) = -\sum_{x} P(x) \log_2 P(x)$ | **AYCH OF PEE** | Shannon Entropy | Expected or average surprise across all outcomes; minimum bits needed to encode a draw | [Entropy & Cross-Entropy](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) |
-| $\text{bits vs nats}$ | **BITS VERSUS NATS** | Information Units | Log base 2 measures information in bits; natural log ($\ln$) measures in nats | [Logarithms & Exponential Functions](../../MathsTerms/01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md) |
-| $\lim_{p \to 0^+} p \log p = 0$ | **LIH-mit AZ PEE GOES TO ZERO FROM RIGHT** | Limiting Entropy Zero-Product | Impossible events carry zero total entropy contribution because they never happen | [Logarithms & Exponential Functions](../../MathsTerms/01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md) |
-| $H(P) \le \log_2 |\mathcal{X}|$ | **AYCH LESS THAN LOG CARDINALITY** | Maximum Entropy Bound | Uniform distribution over $|\mathcal{X}|$ states has maximal uncertainty and highest entropy | [Entropy & Cross-Entropy](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) |
+| $I(A) = -\log_2 P(A)$ | **INFO OF AY EQUALS NEG-uh-tiv LOG-TWO OF PEE OF AY** | Self-Information (Surprisal) | Bits of uncertainty or shock received upon learning event $A$ occurred | [Entropy & Cross-Entropy](../../MathsTerms/04-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) |
+| $H(P) = -\sum_{x} P(x) \log_2 P(x)$ | **AYCH OF PEE** | Shannon Entropy | Expected or average surprise across all outcomes; minimum bits needed to encode a draw | [Entropy & Cross-Entropy](../../MathsTerms/04-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) |
+| $\text{bits vs nats}$ | **BITS VERSUS NATS** | Information Units | Log base 2 measures information in bits; natural log ($\ln$) measures in nats | [Logarithms & Exponential Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/00-Logarithms_and_Exponential_Functions.md) |
+| $\lim_{p \to 0^+} p \log p = 0$ | **LIH-mit AZ PEE GOES TO ZERO FROM RIGHT** | Limiting Entropy Zero-Product | Impossible events carry zero total entropy contribution because they never happen | [Logarithms & Exponential Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/00-Logarithms_and_Exponential_Functions.md) |
+| $H(P) \le \log_2 |\mathcal{X}|$ | **AYCH LESS THAN LOG CARDINALITY** | Maximum Entropy Bound | Uniform distribution over $|\mathcal{X}|$ states has maximal uncertainty and highest entropy | [Entropy & Cross-Entropy](../../MathsTerms/04-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) |
 
 ---
 
@@ -381,9 +381,9 @@ Prior: [Lec 10 Challenges](../11-Lec10-Challenges-of-ML/NOTES.md).
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Entropy, Cross-Entropy & Categorical Cross-Entropy** | [Entropy, Cross-Entropy & Categorical Cross-Entropy](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Surprisal $-\log p(x)$, Shannon entropy $H(p)$, and expected uncertainty |
-| **Kullback-Leibler (KL) Divergence** | [Kullback-Leibler (KL) Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) | Transitioning from self-entropy to relative divergence between two distributions |
-| **Loss Functions** | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Cross-entropy loss as the negative log-likelihood of categorical targets |
+| **Entropy, Cross-Entropy & Categorical Cross-Entropy** | [Entropy, Cross-Entropy & Categorical Cross-Entropy](../../MathsTerms/04-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Surprisal $-\log p(x)$, Shannon entropy $H(p)$, and expected uncertainty |
+| **Kullback-Leibler (KL) Divergence** | [Kullback-Leibler (KL) Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/02-KL_Divergence.md) | Transitioning from self-entropy to relative divergence between two distributions |
+| **Loss Functions** | [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Cross-entropy loss as the negative log-likelihood of categorical targets |
 
 ---
 

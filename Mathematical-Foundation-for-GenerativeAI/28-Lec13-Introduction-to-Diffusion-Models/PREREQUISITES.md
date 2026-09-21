@@ -203,8 +203,8 @@ print(f"Denoiser forward pass valid. Drift shape: {predicted_drift.shape}")
 
 | Concept | Upstream Prerequisite | Downstream Application in Lecture 13 |
 | :--- | :--- | :--- |
-| Gaussian Distribution | [02-Common_Probability_Distributions.md](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Forward transition kernel $q(x_t \mid x_{t-1})$ and prior distribution $p(x_T) = \mathcal{N}(0, I)$ |
-| Markov Chains | [02-Markov_Chains_and_Stationary_Distributions.md](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Unrolling joint forward trajectory $q(x_{1:T} \mid x_0)$ and reverse generative chain |
+| Gaussian Distribution | [02-Common_Probability_Distributions.md](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Forward transition kernel $q(x_t \mid x_{t-1})$ and prior distribution $p(x_T) = \mathcal{N}(0, I)$ |
+| Markov Chains | [02-Markov_Chains_and_Stationary_Distributions.md](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Unrolling joint forward trajectory $q(x_{1:T} \mid x_0)$ and reverse generative chain |
 | Latent Variable Models | [01-Latent_Variable_Models_and_ELBO.md](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/05-Latent_Variable_Models.md) | Formulating diffusion as a hierarchical $T$-step latent model with Evidence Lower Bound |
 
 ---

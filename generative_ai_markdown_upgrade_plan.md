@@ -32,7 +32,7 @@ When a lecture relies on foundational concepts covered in the sibling course `Ma
 ### B. Dynamic "On-Demand" `MathsTerms/` Discovery
 Do **not** restrict math terms to a fixed list. During the processing of **each folder**:
 1. **Aggressive Term Discovery:** Scan the lecture transcript, raw claims, notes, and prerequisites for **every single mathematical term, statistical concept, matrix operation, distribution, loss function, or optimization technique**.
-2. **Creation Standard:** If a term does not exist in [`MathsTerms/`](./MathsTerms), create a dedicated markdown file following the 7-section visual gold standard of [`Softmax.md`](./MathsTerms/03-Multivariate-Calculus-and-Optimization/06-Softmax.md):
+2. **Creation Standard:** If a term does not exist in [`MathsTerms/`](./MathsTerms), create a dedicated markdown file following the 7-section visual gold standard of [`Softmax.md`](./MathsTerms/02-Multivariate-Calculus-and-Optimization/06-Softmax.md):
    - **§1:** Title & High-Impact 3-Stage Visual ASCII Pipeline.
    - **§2:** 👶 **ELI5 Intuition** (Physical analogy / concrete story).
    - **§3:** 🔍 **Plain-English Breakdown & Notation Rosetta Stone Table**.

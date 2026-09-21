@@ -11,7 +11,7 @@ Prerequisites & Foundations:
     - PREREQUISITES.md#p6-score-function-estimator
     - PREREQUISITES.md#p7-lotus-coordinate-transforms
     - MathsTerms/06-Deep-Architectures-and-Generative-Models/08-Reparameterization_Trick.md
-    - MathsTerms/03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md
+    - MathsTerms/02-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md
 Hardware Requirements:
     - Pure CPU execution (device = torch.device('cpu'))
     - Deterministic execution with fixed seeds (seed = 42)

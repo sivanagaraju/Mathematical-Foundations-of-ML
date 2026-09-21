@@ -187,7 +187,7 @@ A naive wrong move is assuming that training loss convergence guarantees high-qu
   assert torch.isclose(kl_loss, torch.tensor(0.0))
   print(f"Topic 1 Clean: Collapsed encoder yields KL = {kl_loss.item():.4f} nats")
   ```
-- `🔗 MathsTerm Link`: [Gradient Descent](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md).
+- `🔗 MathsTerm Link`: [Gradient Descent](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why does posterior collapse happen in VAEs but never in deterministic autoencoders? Deterministic autoencoders lack any distributional prior constraint on the latent space ($D_{KL} = 0$ implicitly). They are free to scatter latent representations across arbitrary regions of space to maximize reconstruction sharpness, completely avoiding collapse at the expense of latent space fragmentation.
@@ -267,7 +267,7 @@ A naive wrong move is treating autoencoder training as a pure reconstruction gam
   assert kl_penalties[-1] > kl_penalties[0]
   print(f"Topic 2 Clean: KL barrier at sigma=0.001 is {kl_penalties[-1]:.2f} nats")
   ```
-- `🔗 MathsTerm Link`: [Convexity and Jensen's Inequality](../../MathsTerms/01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md).
+- `🔗 MathsTerm Link`: [Convexity and Jensen's Inequality](../../MathsTerms/05-Convexity-Duality-and-Metric-Analysis/01-Convexity_and_Jensens_Inequality.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why does modern generative modeling require continuous Gaussian latent distributions rather than simple discrete lookup codes? A continuous Gaussian latent space guarantees that any point in the latent volume maps to a valid observation, enabling smooth interpolation, continuous latent walks, and well-behaved ancestral generation.
@@ -347,7 +347,7 @@ A common wrong move is believing that regularization only applies to weight matr
   assert weights.grad is not None and latents.grad is not None
   print("Topic 3 Clean: Symmetrical backprop through weights and activations verified.")
   ```
-- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
+- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why do we impose a prior on the latent codes $z$ instead of relying solely on L2 weight decay on encoder weights $\phi$? Weight decay only bounds the magnitude of matrix transformations; it does not force the latent codes into a compact, continuous, spherical probability distribution. Without an explicit distributional prior on $z$, the encoder can still carve out fragmented, disjoint latent spaces.
@@ -412,9 +412,11 @@ $$\mathcal{L}_{	ext{ELBO}} = \mathbb{E}_{q_\phi(z|x)}[\log p_	heta(x|z)] - D_{KL
 one notices an immediate engineering deficiency: the multiplier in front of the relative entropy term is rigidly fixed to $1.0$. There is no hyperparameter knob available to adjust the trade-off.
 
 To resolve this, Higgins et al. (2017) reformulated representation learning through the lens of **constrained optimization**. Suppose our primary goal is to maximize the expected reconstruction log-likelihood, but we enforce an explicit information budget constraint on the latent representation:
-$$\max_{\phi, 	heta} \mathbb{E}_{x}\left[ \mathbb{E}_{q_\phi(z|x)}[\log p_	heta(x|z)] ight] \quad 	ext{subject to } D_{KL}(q_\phi(z|x) \parallel p(z)) \le \epsilon$$
+$$\max_{\phi, 	heta} \mathbb{E}_{x}\left[ \mathbb{E}_{q_\phi(z|x)}[\log p_	heta(x|z)] 
+ight] \quad 	ext{subject to } D_{KL}(q_\phi(z|x) \parallel p(z)) \le \epsilon$$
 Here, $\epsilon$ represents the maximum allowable divergence budget. Formulating the unconstrained Lagrangian dual problem yields:
-$$\mathcal{L}(	heta, \phi, eta) = \mathbb{E}_{q_\phi(z|x)}[\log p_	heta(x|z)] - eta \left( D_{KL}(q_\phi(z|x) \parallel p(z)) - \epsilon ight)$$
+$$\mathcal{L}(	heta, \phi, eta) = \mathbb{E}_{q_\phi(z|x)}[\log p_	heta(x|z)] - eta \left( D_{KL}(q_\phi(z|x) \parallel p(z)) - \epsilon 
+ight)$$
 Treating the Lagrange multiplier $eta \ge 0$ as a tunable hyperparameter gives rise to the **$eta$-VAE** objective:
 $$\mathcal{L}_eta = \mathbb{E}_{q_\phi(z|x)}[\log p_	heta(x|z)] - eta D_{KL}(q_\phi(z|x) \parallel p(z))$$
 This simple scalar multiplier transforms the rigid ELBO into an adjustable engineering control knob, allowing practitioners to navigate between reconstruction fidelity and latent regularization.
@@ -443,7 +445,7 @@ abla_\phi D_{KL}(q_\phi(z|x) \parallel p(z))$$
   assert torch.isclose(loss_b4, torch.tensor(120.0))
   print(f"Topic 4 Clean: Beta loss evaluated successfully: beta=1 -> {loss_b1}, beta=4 -> {loss_b4}")
   ```
-- `🔗 MathsTerm Link`: [Functions, Derivatives, and Rules](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md).
+- `🔗 MathsTerm Link`: [Functions, Derivatives, and Rules](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why not solve for the exact optimal Lagrange multiplier $eta^*$ using dual gradient ascent? In deep neural networks, the reconstruction loss landscape is non-convex and non-stationary. Solving the exact dual problem requires slow inner-loop optimization that often destabilizes training. Treating $eta$ as an empirical hyperparameter tuned on a validation set provides superior stability and engineering flexibility.
@@ -532,7 +534,7 @@ A naive wrong move is seeking a single $eta$ that maximizes both sharp reconstr
   assert beta_high_kl < beta_low_kl
   print("Topic 5 Clean: Pareto frontier verified: high beta trades reconstruction for KL compression.")
   ```
-- `🔗 MathsTerm Link`: [Vector Norms and Inner Products](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md).
+- `🔗 MathsTerm Link`: [Vector Norms and Inner Products](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why not use Generative Adversarial Networks (GANs) if sharp image generation is the sole objective? GANs produce sharper images because their adversarial discriminator evaluates realism rather than pixel-wise Euclidean averages. However, GANs lack an encoder for inference, are notoriously difficult to train, and suffer from mode collapse. $eta$-VAE provides a principled, stable probabilistic framework with bidirectional encoding and decoding.
@@ -612,7 +614,9 @@ A common wrong move is assuming that generative modeling requires unimodal stand
 - `🔍 Plain-English Breakdown`: Real data has many distinct clusters; forcing all clusters into a single bell curve causes distortion. Using a mixture of priors or discrete dictionaries solves this mismatch.
 - `🔢 Concrete Numbers`: In a 10-class dataset like MNIST, an isotropic prior forces all 10 digit classes into 1 central sphere. VampPrior uses $K = 500$ learnable pseudo-inputs to form a rich 500-component mixture prior that models digit sub-styles naturally.
 - `📐 Formal Math`: The relative entropy under VampPrior evaluates to:
-  $$\mathcal{L}_{	ext{Vamp}} = \mathbb{E}_{q_\phi(z|x)}[\log p_	heta(x|z)] - \mathbb{E}_{q_\phi(z|x)}\left[ \log q_\phi(z|x) - \log \left( rac{1}{K}\sum_{k=1}^K q_\phi(z|u_k) ight) ight]$$
+  $$\mathcal{L}_{	ext{Vamp}} = \mathbb{E}_{q_\phi(z|x)}[\log p_	heta(x|z)] - \mathbb{E}_{q_\phi(z|x)}\left[ \log q_\phi(z|x) - \log \left( rac{1}{K}\sum_{k=1}^K q_\phi(z|u_k) 
+ight) 
+ight]$$
 - `💻 Runnable Code`:
   ```python
   import torch
@@ -625,7 +629,7 @@ A common wrong move is assuming that generative modeling requires unimodal stand
   assert dists.shape == (1, K)
   print(f"Topic 6 Clean: VampPrior distance to {K} pseudo-components computed cleanly.")
   ```
-- `🔗 MathsTerm Link`: [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md).
+- `🔗 MathsTerm Link`: [Common Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why not use a standard Gaussian Mixture Model with learned means $\mu_k$ and covariances $\Sigma_k$ instead of VampPrior? Directly optimizing unconstrained GMM parameters in high-dimensional latent spaces often suffers from numerical singularities (components collapsing onto single data points with zero variance). VampPrior constrains each mixture component to be an encoder output $q_\phi(z|u_k)$, preventing variance collapse.

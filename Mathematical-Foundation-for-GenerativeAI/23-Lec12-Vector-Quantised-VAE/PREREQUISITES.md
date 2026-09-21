@@ -24,8 +24,8 @@ Welcome to the foundational guide for Vector Quantised Variational Autoencoders 
 |:---|:---|:---|
 | [Lec 10: VAEs Part 2](../21-Lec10-VAEs-Part2/NOTES.md) | Gaussian reparameterization & posterior collapse | Demonstrates why continuous latent bottlenecks fail on high-resolution images |
 | [Lec 11: Beta-VAE](../22-Lec11-Beta-VAE/NOTES.md) | Information bottleneck Lagrangian formulation | Details how capacity constraints control representation organization |
-| [MathsTerms: Categorical Embeddings](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md) | Lookup matrices & embedding gradients | Formulates dictionary lookup mechanics in PyTorch |
-| [MathsTerms: Exponential Moving Average](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md) | Rolling parameter estimation | Unlocks stable codebook centroid updates without SGD |
+| [MathsTerms: Categorical Embeddings](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md) | Lookup matrices & embedding gradients | Formulates dictionary lookup mechanics in PyTorch |
+| [MathsTerms: Exponential Moving Average](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md) | Rolling parameter estimation | Unlocks stable codebook centroid updates without SGD |
 
 ---
 

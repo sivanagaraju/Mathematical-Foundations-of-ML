@@ -174,7 +174,7 @@ A naive wrong move is attempting to fix blurriness by arbitrarily expanding cont
   assert bits_per_token == 9.0
   print(f"Topic 1 Clean: Token information capacity = {bits_per_token} bits")
   ```
-- `🔗 MathsTerm Link`: [Encodings Categorical & Embeddings](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md).
+- `🔗 MathsTerm Link`: [Encodings Categorical & Embeddings](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why choose discrete codebook representations (X) rather than continuous unimodal Gaussian densities (Y)? Discrete representations eliminate the continuous KL penalty that drives posterior collapse, preserving sharp visual edges and categorical distinctiveness.
@@ -251,7 +251,7 @@ angle$$
   assert chosen_idx == 0
   print(f"Topic 2 Clean: Vectorized distance check selected code index {chosen_idx}")
   ```
-- `🔗 MathsTerm Link`: [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md).
+- `🔗 MathsTerm Link`: [Vectors & Matrices](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why choose deterministic nearest-neighbor lookup (X) rather than stochastic Gumbel-Softmax sampling (Y)? Deterministic nearest-neighbor lookup guarantees exact discrete codebook token assignment without introducing sampling variance or delicate temperature annealing schedules.
@@ -338,7 +338,7 @@ abla_{z_q} \mathcal{L}$$
   assert torch.isclose(ze.grad, torch.tensor([-14.0]))
   print(f"Topic 3 Clean: STE delivered exact upstream gradient {ze.grad.item()}")
   ```
-- `🔗 MathsTerm Link`: [Chain Rule & Backpropagation](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md).
+- `🔗 MathsTerm Link`: [Chain Rule & Backpropagation](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why choose the Straight-Through Estimator (X) rather than REINFORCE score-function estimators (Y)? REINFORCE exhibits severe gradient variance that requires millions of rollout samples, whereas STE provides a deterministic, low-variance surrogate gradient that trains deep convolutional encoders stably.
@@ -423,7 +423,7 @@ abla_{z_q} \mathcal{L}_{recon} + 2eta(z_e - 	ext{sg}[e])$$
   assert ze.grad is not None and e.grad is not None
   print("Topic 4 Clean: Tripartite loss decoupled gradients successfully")
   ```
-- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
+- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why use two separate loss terms with stop-gradients (X) rather than a single joint MSE $||z_e - e||^2$ (Y)? A single joint MSE without stop-gradients causes encoder and codebook to rapidly shrink toward zero or drift in tandem without anchoring to reconstruction signals.
@@ -505,7 +505,7 @@ A naive wrong move is tuning codebook learning rates across dozens of grid searc
   assert np.allclose(new_e, [2.0049, 3.0049], atol=1e-3)
   print(f"Topic 5 Clean: EMA update verified, centroid = {new_e.round(4)}")
   ```
-- `🔗 MathsTerm Link`: [Exponential Moving Average EMA](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md).
+- `🔗 MathsTerm Link`: [Exponential Moving Average EMA](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why choose EMA codebook updates (X) rather than SGD with Adam (Y)? EMA completely eliminates codebook learning rate hyperparameter tuning and decouples dictionary stability from optimizer momentum noise.

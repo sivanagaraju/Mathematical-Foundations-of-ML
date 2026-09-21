@@ -50,7 +50,7 @@ This transformation turns the stochastic sampling node into a standard linear op
 2. In the reparameterized graph, randomness enters as an external input $\epsilon$, making $z = \mu + \sigma \odot \epsilon$ a differentiable node that allows standard chain-rule backpropagation.
 
 **Prerequisites**
-- **Required now:** Multivariate chain rule and computational graphs ([Chain rule and backpropagation, §4](../03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md)). Gaussian distributions ([Common probability distributions, §2](../04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md)).
+- **Required now:** Multivariate chain rule and computational graphs ([Chain rule and backpropagation, §4](../02-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md)). Gaussian distributions ([Common probability distributions, §2](../03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md)).
 - **Required for optional depth:** The ELBO objective ([ELBO and variational inference, §4](07-ELBO_and_Variational_Inference.md)).
 - **Useful context:** [Autoencoders and latent spaces](03-Autoencoders_and_Latent_Spaces.md) for latent bottlenecks.
 

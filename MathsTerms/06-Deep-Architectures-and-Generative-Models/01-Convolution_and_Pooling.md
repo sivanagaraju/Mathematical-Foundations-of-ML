@@ -8,8 +8,8 @@ A camera image contains the same kinds of local patterns at many positions. A co
 
 **Prerequisites**
 
-- **Required now:** multiplication, finite sums, indexing, and the derivative of a weighted sum. [Vectors and matrices, §9](../02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) works through a linear layer and its gradients. [Tensors and shapes, §§2–3](../02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) introduces logical image axes. This chapter restates the conventions it uses.
-- **Required for optional depth:** the multibranch chain rule and transpose of a linear map; see [Chain rule and backpropagation, §4, Proofs 2–3](../03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md). These support the input-gradient and adjoint proofs in §8.
+- **Required now:** multiplication, finite sums, indexing, and the derivative of a weighted sum. [Vectors and matrices, §9](../01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) works through a linear layer and its gradients. [Tensors and shapes, §§2–3](../01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) introduces logical image axes. This chapter restates the conventions it uses.
+- **Required for optional depth:** the multibranch chain rule and transpose of a linear map; see [Chain rule and backpropagation, §4, Proofs 2–3](../02-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md). These support the input-gradient and adjoint proofs in §8.
 - **Useful context:** [autoencoders](03-Autoencoders_and_Latent_Spaces.md) for image compression and [GANs](09-Minimax_Game_and_GANs.md) for the training objective of the generator in §10. Neither is needed for the numerical convolution.
 
 **Target systems:** convolutional image encoders, image generators, and local components inside larger vision architectures. **Study time:** about 60–90 minutes for the core lesson, another 45–60 minutes for proofs, code inspection, and exercises.

@@ -617,9 +617,9 @@ Introduce PDFs so continuous estimation has the right objects.
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Likelihood & Log-Likelihood** | [Likelihood & Log-Likelihood](../../MathsTerms/04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Parametric likelihood functions $L(\theta; \mathcal{D})$ as measures of parameter goodness-of-fit |
-| **Maximum Likelihood Estimation (MLE)** | [Maximum Likelihood Estimation (MLE)](../../MathsTerms/04-Probability-and-Statistical-Estimation/05-MLE.md) | Foundational principles of fitting parametric distribution families $\arg\max_\theta \ell(\theta)$ |
-| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Gaussian, Bernoulli, Poisson, and categorical parametric models |
+| **Likelihood & Log-Likelihood** | [Likelihood & Log-Likelihood](../../MathsTerms/03-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Parametric likelihood functions $L(\theta; \mathcal{D})$ as measures of parameter goodness-of-fit |
+| **Maximum Likelihood Estimation (MLE)** | [Maximum Likelihood Estimation (MLE)](../../MathsTerms/03-Probability-and-Statistical-Estimation/05-MLE.md) | Foundational principles of fitting parametric distribution families $\arg\max_\theta \ell(\theta)$ |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Gaussian, Bernoulli, Poisson, and categorical parametric models |
 
 ---
 

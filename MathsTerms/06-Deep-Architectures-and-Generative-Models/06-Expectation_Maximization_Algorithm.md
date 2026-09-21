@@ -42,8 +42,8 @@ The **Expectation-Maximization (EM) Algorithm** is an iterative coordinate-ascen
 2. The M-step maximizes this concave surrogate bound in closed form, yielding updated parameters $\theta^{(t+1)}$ that strictly improve the true marginal likelihood: $\ln p(X \mid \theta^{(t+1)}) \ge \ln p(X \mid \theta^{(t)})$.
 
 **Prerequisites**
-- **Required now:** Joint, marginal, and conditional probabilities ([Joint, marginal and conditional distributions, §3](../04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md)). Maximum Likelihood Estimation ([MLE, §2](../04-Probability-and-Statistical-Estimation/05-MLE.md)).
-- **Required for optional depth:** Jensen's inequality and concave functions ([Convexity and Jensen's inequality, §2](../01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md)).
+- **Required now:** Joint, marginal, and conditional probabilities ([Joint, marginal and conditional distributions, §3](../03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md)). Maximum Likelihood Estimation ([MLE, §2](../03-Probability-and-Statistical-Estimation/05-MLE.md)).
+- **Required for optional depth:** Jensen's inequality and concave functions ([Convexity and Jensen's inequality, §2](../05-Convexity-Duality-and-Metric-Analysis/01-Convexity_and_Jensens_Inequality.md)).
 - **Useful context:** [Latent variable models](05-Latent_Variable_Models.md) for latent variable foundations, and [ELBO and variational inference](07-ELBO_and_Variational_Inference.md) for generalizing EM to deep continuous latent representations.
 
 **Target systems:** Gaussian Mixture Models (GMMs) for acoustic and tabular clustering, Hidden Markov Models (HMMs via Baum-Welch) in speech recognition and bio-sequence alignment, and the theoretical foundation for Variational Autoencoders (VAEs).

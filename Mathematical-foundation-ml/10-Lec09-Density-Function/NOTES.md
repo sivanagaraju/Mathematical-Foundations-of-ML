@@ -511,9 +511,9 @@ What makes estimating a free-form density from finite samples hard? Next lecture
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Random Variables & Continuous Distributions** | [Random Variables & Continuous Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Continuous densities $p(x)$, infinitesimal probability $p(x)dx$, and integration |
-| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Density height properties (why $p(x)$ can exceed 1) and normalization $\int p(x)dx = 1$ |
-| **Functions, Derivatives & Calculus Rules** | [Functions, Derivatives & Calculus Rules](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Calculus of densities: relationship between CDF $F(x)$ and derivative PDF $f(x)$ |
+| **Random Variables & Continuous Distributions** | [Random Variables & Continuous Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Continuous densities $p(x)$, infinitesimal probability $p(x)dx$, and integration |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Density height properties (why $p(x)$ can exceed 1) and normalization $\int p(x)dx = 1$ |
+| **Functions, Derivatives & Calculus Rules** | [Functions, Derivatives & Calculus Rules](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Calculus of densities: relationship between CDF $F(x)$ and derivative PDF $f(x)$ |
 
 ---
 

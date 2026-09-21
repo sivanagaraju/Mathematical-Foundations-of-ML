@@ -459,8 +459,8 @@ You own $X$ as the bridge from Lec 02’s triple to ML vectors. Next sessions an
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Formal definition of random variable $X: \Omega \to \mathbb{R}^d$, pre-images $X^{-1}(B)$, and CDF $P_X(x)$ |
-| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Discrete vs continuous probability support and distribution profiles |
+| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Formal definition of random variable $X: \Omega \to \mathbb{R}^d$, pre-images $X^{-1}(B)$, and CDF $P_X(x)$ |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Discrete vs continuous probability support and distribution profiles |
 
 ---
 

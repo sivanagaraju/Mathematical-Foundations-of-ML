@@ -639,7 +639,7 @@ Notice that the encoder outputs $64$ numbers, but the decoder expects $32$ numbe
    $$
 
 #### 💻 Runnable Code & Modern GenAI Systems
-Inspect the implementation of these two decoupled networks in [`examples/02_torch_autograd_simulation.py`](./examples/02_torch_autograd_simulation.py). Study how they map tensors across layers in [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md).
+Inspect the implementation of these two decoupled networks in [`examples/02_torch_autograd_simulation.py`](./examples/02_torch_autograd_simulation.py). Study how they map tensors across layers in [Tensors & Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md).
 
 ```python
 import torch
@@ -780,7 +780,7 @@ $$
 The interchange $\nabla_\phi \int q_\phi(\mathbf{z}) f(\mathbf{z}) d\mathbf{z} = \int \nabla_\phi [q_\phi(\mathbf{z}) f(\mathbf{z})] d\mathbf{z}$ is mathematically valid if $q_\phi(\mathbf{z}) f(\mathbf{z})$ and its partial derivatives $\nabla_\phi [q_\phi(\mathbf{z}) f(\mathbf{z})]$ are continuous and bounded by an integrable function $H(\mathbf{z})$ for all $\phi$.
 
 #### 💻 Runnable Code & Modern GenAI Systems
-Observe this gradient failure directly in [`examples/02_torch_autograd_simulation.py`](./examples/02_torch_autograd_simulation.py). Study how autograd tracks operations across graphs in [Derivatives, Gradients, & Jacobians](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md).
+Observe this gradient failure directly in [`examples/02_torch_autograd_simulation.py`](./examples/02_torch_autograd_simulation.py). Study how autograd tracks operations across graphs in [Derivatives, Gradients, & Jacobians](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md).
 
 ```python
 import torch
@@ -919,7 +919,7 @@ Because the function takes both positive and negative values and sums to zero, i
 - **Step 5:** Equating both sides proves the theorem: $\int_{\mathcal{Z}} \nabla_\phi q_\phi(\mathbf{z}) \, d\mathbf{z} \equiv \mathbf{0}$.
 
 #### 💻 Runnable Code & Modern GenAI Systems
-Verify this non-density property in [`examples/01_numerical_verification.py`](./examples/01_numerical_verification.py). Review foundational measure theory in [Derivatives, Gradients, & Jacobians](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md).
+Verify this non-density property in [`examples/01_numerical_verification.py`](./examples/01_numerical_verification.py). Review foundational measure theory in [Derivatives, Gradients, & Jacobians](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md).
 
 ```python
 import numpy as np
@@ -1205,7 +1205,7 @@ We have synthesized an exact Exponential variate from a uniform draw!
 - **Step 9:** Conclude that $Y \sim \mathcal{U}(0, 1)$ uniformly on the unit interval. Q.E.D.
 
 #### 💻 Runnable Code & Modern GenAI Systems
-Test this exact Probability Integral Transform in [`examples/01_numerical_verification.py`](./examples/01_numerical_verification.py). Explore discrete sampling methods in [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md).
+Test this exact Probability Integral Transform in [`examples/01_numerical_verification.py`](./examples/01_numerical_verification.py). Explore discrete sampling methods in [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md).
 
 ```python
 import numpy as np

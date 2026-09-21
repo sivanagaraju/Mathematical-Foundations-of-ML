@@ -51,11 +51,11 @@ Before diving into the foundational pillars, use this reference table to decode 
 
 | Symbol / Notation | Spoken English (Phonetics) | Mathematical Concept | Plain-English Intuition | Dedicated MathsTerm Link |
 | :--- | :--- | :--- | :--- | :--- |
-| $\text{IID}$ | **EYE-EYE-DEE** | Independent and Identically Distributed | Every data sample comes from the exact same rule, and no sample influences any other | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
-| $X_i \overset{\text{iid}}{\sim} P$ | **EKS-EYE EYE-EYE-DEE DRAWN FROM PEE** | IID Sampling Statement | Variable $X_i$ is sampled independently from probability law $P$ | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
-| $P(\mathbf{X}_1 \in A_1, \dots, \mathbf{X}_N \in A_N) = \prod_{i=1}^N P(\mathbf{X}_i \in A_i)$ | **PRODUCT OVER EYE OF PEE OF EKS-EYE** | Joint Product Factorization | Total joint likelihood of an entire dataset factors into the product of individual sample likelihoods | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
-| $P_{\text{train}} = P_{\text{test}}$ | **PEE-TRAIN EQUALS PEE-TEST** | Dataset Generalization Assumption | Training and test splits are drawn from the same underlying stationary distribution | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) |
-| $\mathcal{D} = \{\mathbf{x}_i\}_{i=1}^N$ | **CAL-ih-GRAF-ik DEE EQUALS SET OF EKS-EYE** | Empirical Sample Batch | An observed collection of $N$ points drawn from $P$ used to estimate properties of $P$ | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| $\text{IID}$ | **EYE-EYE-DEE** | Independent and Identically Distributed | Every data sample comes from the exact same rule, and no sample influences any other | [Probability Basics & Axioms](../../MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md) |
+| $X_i \overset{\text{iid}}{\sim} P$ | **EKS-EYE EYE-EYE-DEE DRAWN FROM PEE** | IID Sampling Statement | Variable $X_i$ is sampled independently from probability law $P$ | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $P(\mathbf{X}_1 \in A_1, \dots, \mathbf{X}_N \in A_N) = \prod_{i=1}^N P(\mathbf{X}_i \in A_i)$ | **PRODUCT OVER EYE OF PEE OF EKS-EYE** | Joint Product Factorization | Total joint likelihood of an entire dataset factors into the product of individual sample likelihoods | [Probability Basics & Axioms](../../MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md) |
+| $P_{\text{train}} = P_{\text{test}}$ | **PEE-TRAIN EQUALS PEE-TEST** | Dataset Generalization Assumption | Training and test splits are drawn from the same underlying stationary distribution | [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) |
+| $\mathcal{D} = \{\mathbf{x}_i\}_{i=1}^N$ | **CAL-ih-GRAF-ik DEE EQUALS SET OF EKS-EYE** | Empirical Sample Batch | An observed collection of $N$ points drawn from $P$ used to estimate properties of $P$ | [Tensors & Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
 
 ---
 
@@ -65,9 +65,9 @@ Before diving into the foundational pillars, review these key concepts from sibl
 
 | Assumed Concept | Primary Series Foundation | MathsTerms Deep-Dive | 1-Sentence Intuition Refresher |
 | :--- | :--- | :--- | :--- |
-| **Statistical Independence** | [Lec 02: Probability Recap 1](../../Mathematical-foundation-ml/03-Lec02-Recap-Probability-Theory-Part1/NOTES.md) | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) | Independence requires joint probability to factor as a product: $P(A \cap B) = P(A)P(B)$. |
-| **Joint Dataset Realizations** | [Lec 06: X-Ray Sample from Distribution](../../Mathematical-foundation-ml/07-Lec06-XRay-Sample-From-Distribution/NOTES.md) | [Joint, Marginal & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | A dataset $D = \{(\mathbf{x}_i, y_i)\}_{i=1}^N$ collects $N$ paired realizations from $P(\mathbf{X}, Y)$. |
-| **Distribution Estimation** | [Lec 08: Distribution Estimation](../../Mathematical-foundation-ml/09-Lec08-Distribution-Estimation/NOTES.md) | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | The fundamental goal of ML: estimating unknown $P$ from finite IID sample points. |
+| **Statistical Independence** | [Lec 02: Probability Recap 1](../../Mathematical-foundation-ml/03-Lec02-Recap-Probability-Theory-Part1/NOTES.md) | [Probability Basics & Axioms](../../MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md) | Independence requires joint probability to factor as a product: $P(A \cap B) = P(A)P(B)$. |
+| **Joint Dataset Realizations** | [Lec 06: X-Ray Sample from Distribution](../../Mathematical-foundation-ml/07-Lec06-XRay-Sample-From-Distribution/NOTES.md) | [Joint, Marginal & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | A dataset $D = \{(\mathbf{x}_i, y_i)\}_{i=1}^N$ collects $N$ paired realizations from $P(\mathbf{X}, Y)$. |
+| **Distribution Estimation** | [Lec 08: Distribution Estimation](../../Mathematical-foundation-ml/09-Lec08-Distribution-Estimation/NOTES.md) | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | The fundamental goal of ML: estimating unknown $P$ from finite IID sample points. |
 
 ---
 
@@ -390,8 +390,8 @@ Prior: [Lec 06](../07-Lec06-XRay-Sample-From-Distribution/NOTES.md).
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Joint, Marginal, & Conditional Distributions (IID Structure)** | [Joint, Marginal, & Conditional Distributions (IID Structure)](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Independent & Identically Distributed draws: joint factorization $\prod_{i=1}^n p(x_i)$ |
-| **Likelihood & Log-Likelihood** | [Likelihood & Log-Likelihood](../../MathsTerms/04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Likelihood product factorization under the IID data collection assumption |
-| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Distinguishing independence across data points from correlation within features |
+| **Joint, Marginal, & Conditional Distributions (IID Structure)** | [Joint, Marginal, & Conditional Distributions (IID Structure)](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Independent & Identically Distributed draws: joint factorization $\prod_{i=1}^n p(x_i)$ |
+| **Likelihood & Log-Likelihood** | [Likelihood & Log-Likelihood](../../MathsTerms/03-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Likelihood product factorization under the IID data collection assumption |
+| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Distinguishing independence across data points from correlation within features |
 
 ---

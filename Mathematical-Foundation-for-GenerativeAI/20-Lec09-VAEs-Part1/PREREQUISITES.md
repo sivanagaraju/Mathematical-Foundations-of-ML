@@ -21,18 +21,18 @@ Before diving into the foundational pillars, use this reference table to decode 
 
 | Symbol / Notation | Spoken English (Phonetics) | Formal Mathematical Meaning | Plain-English Software Analogy | Dedicated MathsTerm Link |
 | :--- | :--- | :--- | :--- | :--- |
-| $\mathbf{x} \in \mathbb{R}^d$ | **"EKS IN AR-DEE"** | Observable data vector in $d$-dimensional real Euclidean space | A 1D floating-point array of length $d$ (`float32[d]`) representing raw features (e.g., pixel intensities) | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| $\mathbf{x} \in \mathbb{R}^d$ | **"EKS IN AR-DEE"** | Observable data vector in $d$-dimensional real Euclidean space | A 1D floating-point array of length $d$ (`float32[d]`) representing raw features (e.g., pixel intensities) | [Tensors & Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
 | $\mathbf{z} \in \mathbb{R}^k$ | **"ZEE IN AR-KAY"** | Unobserved latent vector in $k$-dimensional latent feature space ($k \ll d$) | Low-dimensional compressed embedding bottleneck vector (`float32[k]`) | [Latent Variable Models](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/05-Latent_Variable_Models.md) |
-| $p_\theta(\mathbf{x})$ | **"PEE THAY-tuh OF EKS"** | Marginal data likelihood (evidence) parameterized by model weights $\theta$ | Overall probability score assigned to an observed sample across all possible hidden states | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
-| $p_\theta(\mathbf{x}, \mathbf{z})$ | **"PEE THAY-tuh OF EKS COMMA ZEE"** | Joint probability distribution over visible data $\mathbf{x}$ and hidden code $\mathbf{z}$ | Combined database record containing both the raw image and its hidden attributes | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $p_\theta(\mathbf{x})$ | **"PEE THAY-tuh OF EKS"** | Marginal data likelihood (evidence) parameterized by model weights $\theta$ | Overall probability score assigned to an observed sample across all possible hidden states | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $p_\theta(\mathbf{x}, \mathbf{z})$ | **"PEE THAY-tuh OF EKS COMMA ZEE"** | Joint probability distribution over visible data $\mathbf{x}$ and hidden code $\mathbf{z}$ | Combined database record containing both the raw image and its hidden attributes | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
 | $p_\theta(\mathbf{z} \mid \mathbf{x})$ | **"PEE THAY-tuh OF ZEE GIV-un EKS"** | True posterior distribution of latent codes given observed data sample $\mathbf{x}$ | Exact ideal encoder mapping an image to its true latent cause (analytically intractable) | [Latent Variable Models](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/05-Latent_Variable_Models.md) |
 | $q_\phi(\mathbf{z} \mid \mathbf{x})$ | **"KYOO FY OF ZEE GIV-un EKS"** | Variational approximation to the posterior distribution parameterized by encoder weights $\phi$ | Neural encoder network taking sample $\mathbf{x}$ and returning predicted distribution parameters $(\boldsymbol{\mu}, \boldsymbol{\sigma}^2)$ | [ELBO & Variational Inference](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/07-ELBO_and_Variational_Inference.md) |
 | $p_\theta(\mathbf{x} \mid \mathbf{z})$ | **"PEE THAY-tuh OF EKS GIV-un ZEE"** | Generative conditional likelihood (decoder) parameterized by weights $\theta$ | Neural decoder network expanding latent code $\mathbf{z}$ back into data space coordinates | [Latent Variable Models](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/05-Latent_Variable_Models.md) |
-| $D_{\text{KL}}(q \parallel p)$ | **"DEE KAY ELL OF KYOO PAR-uh-lel PEE"** | Kullback-Leibler divergence measuring relative statistical entropy from $q$ to $p$ | Asymmetric penalty calculating information loss when substituting prior $p$ for distribution $q$ | [KL Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) |
-| $\mathbb{E}_{\mathbf{z} \sim q}[f(\mathbf{z})]$ | **"EX-pek-TAY-shun OF EFF OF ZEE WEHR ZEE IS SAMPLED FROM KYOO"** | Expected value of function $f$ integrated over probability measure $q$ | Monte Carlo batch average `torch.mean(f(z))` across latent sample draws | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
-| $\nabla_\phi \mathcal{L}$ | **"DEL FY OF EL"** or **"GRAD-ee-yunt WITH RESPECT TO FY"** | Gradient vector of scalar objective $\mathcal{L}$ with respect to encoder parameter tensor $\phi$ | Backpropagation sensitivity tensor output by `loss.backward()` updating encoder weights | [Derivatives & Gradients](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) |
+| $D_{\text{KL}}(q \parallel p)$ | **"DEE KAY ELL OF KYOO PAR-uh-lel PEE"** | Kullback-Leibler divergence measuring relative statistical entropy from $q$ to $p$ | Asymmetric penalty calculating information loss when substituting prior $p$ for distribution $q$ | [KL Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/02-KL_Divergence.md) |
+| $\mathbb{E}_{\mathbf{z} \sim q}[f(\mathbf{z})]$ | **"EX-pek-TAY-shun OF EFF OF ZEE WEHR ZEE IS SAMPLED FROM KYOO"** | Expected value of function $f$ integrated over probability measure $q$ | Monte Carlo batch average `torch.mean(f(z))` across latent sample draws | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $\nabla_\phi \mathcal{L}$ | **"DEL FY OF EL"** or **"GRAD-ee-yunt WITH RESPECT TO FY"** | Gradient vector of scalar objective $\mathcal{L}$ with respect to encoder parameter tensor $\phi$ | Backpropagation sensitivity tensor output by `loss.backward()` updating encoder weights | [Derivatives & Gradients](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) |
 | $\boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ | **"EP-sih-lon FROM STANDARD NOR-mul"** | Standard isotropic Gaussian auxiliary random vector with mean zero and identity covariance | White Gaussian noise tensor generated via `torch.randn_like()` | [Reparameterization Trick](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/08-Reparameterization_Trick.md) |
-| $F_X^{-1}(u)$ | **"EFF IN-vers OF YOO"** | Quantile function (inverse cumulative distribution function) evaluated at probability $u \in [0, 1]$ | Lookup function converting uniform random percentage into physical distribution domain value | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $F_X^{-1}(u)$ | **"EFF IN-vers OF YOO"** | Quantile function (inverse cumulative distribution function) evaluated at probability $u \in [0, 1]$ | Lookup function converting uniform random percentage into physical distribution domain value | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
 
 ---
 
@@ -144,7 +144,7 @@ print(f"[PASS] Pillar 1: Marginal p(x=1) = {p_x[1]:.2f}, Posterior p(z=3|x=1) = 
 *Correct Answer:* **(B)**. High-dimensional continuous integrals suffer from the curse of dimensionality, growing exponentially as $O(M^k)$.
 
 ### 🔗 Dedicated Mathematical Concept Link
-Explore complete axiomatic proofs in [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md).
+Explore complete axiomatic proofs in [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md).
 
 ---
 
@@ -332,7 +332,7 @@ print(f"[PASS] Pillar 3: log(E[U]) = {log_of_mean:.4f} >= E[log U] = {mean_of_lo
 *Correct Answer:* **(B)**. For strictly concave functions like $\log$, equality holds if and only if the random variable is degenerate (constant), meaning $\text{Var}(U) = 0$.
 
 ### 🔗 Dedicated Mathematical Concept Link
-Study optimization bounds and convexity in [Derivatives, Gradients, & Jacobians](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md).
+Study optimization bounds and convexity in [Derivatives, Gradients, & Jacobians](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md).
 
 ---
 
@@ -444,7 +444,7 @@ print(f"[PASS] Pillar 4: Closed-form KL = {kl_analytical.item():.5f} matches PyT
 *Correct Answer:* **(B)**. As $\sigma \to 0$, the $\log(\sigma^2)$ term blows up to $-\infty$, driving $-0.5 \log(\sigma^2) \to +\infty$ and preventing deterministic mode collapse.
 
 ### 🔗 Dedicated Mathematical Concept Link
-Deep dive into statistical divergence measures in [KL Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md).
+Deep dive into statistical divergence measures in [KL Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/02-KL_Divergence.md).
 
 ---
 
@@ -661,7 +661,7 @@ print(f"[PASS] Pillar 6: Score-function mean = {mean_grad:.4f} matches exact 4.0
 *Correct Answer:* **(B)**. High variance is the fatal flaw of score-function estimators; while unbiased in expectation, individual sample gradients exhibit extreme variance that cripples deep backpropagation.
 
 ### 🔗 Dedicated Mathematical Concept Link
-Review gradient estimation frameworks in [Derivatives, Gradients, & Jacobians](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md).
+Review gradient estimation frameworks in [Derivatives, Gradients, & Jacobians](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md).
 
 ---
 

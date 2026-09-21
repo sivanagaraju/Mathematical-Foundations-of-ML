@@ -520,10 +520,10 @@ Harmonizes the mathematical nomenclature ($G_\theta, T_w$, Critic, Discriminator
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Encodings, Categorical & Embeddings** | [Encodings, Categorical & Embeddings](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md) | One-hot encodings, index lookups, and embedding representations |
-| **Tensors & Shapes** | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Mini-batch stacking $(B, C, H, W)$ and collation in DataLoaders |
-| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Empirical distribution $\hat{P}_N$ constructed from finite observed datasets |
-| **Joint, Marginal, & Conditional Distributions** | [Joint, Marginal, & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Sampling joint pairs $(x_i, y_i) \sim P_{XY}$ during training iterations |
+| **Encodings, Categorical & Embeddings** | [Encodings, Categorical & Embeddings](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md) | One-hot encodings, index lookups, and embedding representations |
+| **Tensors & Shapes** | [Tensors & Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Mini-batch stacking $(B, C, H, W)$ and collation in DataLoaders |
+| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Empirical distribution $\hat{P}_N$ constructed from finite observed datasets |
+| **Joint, Marginal, & Conditional Distributions** | [Joint, Marginal, & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Sampling joint pairs $(x_i, y_i) \sim P_{XY}$ during training iterations |
 
 ---
 

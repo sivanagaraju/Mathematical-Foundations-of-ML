@@ -211,7 +211,7 @@ If you attempt to sample directly inside the computational tape, autograd fails 
   assert torch.allclose(mu.grad, torch.tensor([1.0, 1.0]))
   assert torch.allclose(sigma.grad, eps)
   ```
-- `🔗 MathsTerm Link`: [Functions, Derivatives, and Rules](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md).
+- `🔗 MathsTerm Link`: [Functions, Derivatives, and Rules](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why do we perform the reparameterization trick rather than sampling directly from the encoder using `torch.normal(mu, sigma)`? If we sample directly inside the forward function, the sampling operator creates a dead-end leaf node in the autograd dynamic tape. PyTorch cannot calculate the derivative of a discrete stochastic draw with respect to the continuous parameters $\phi$. Without reparameterization, one would be forced to use high-variance score-function estimators (the REINFORCE algorithm), which require hundreds of thousands of samples to achieve acceptable gradient signal-to-noise ratios.
@@ -291,7 +291,7 @@ A naive wrong move is assuming the decoder must output samples; the right move i
   nll.backward()
   assert torch.allclose(x_hat.grad, torch.tensor([-0.2]))
   ```
-- `🔗 MathsTerm Link`: [Vector Norms and Inner Products](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md).
+- `🔗 MathsTerm Link`: [Vector Norms and Inner Products](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why do we fix the observation covariance to identity $I$ rather than learning a parameter-dependent variance $\sigma_\theta^2(z)$ for the decoder? Learning $\sigma_\theta^2(z)$ gives the decoder an undesirable loophole: it can achieve artificially low loss on easy pixels by shrinking $\sigma_\theta$ to zero, causing the log-determinant $-\log \sigma_\theta$ to explode towards infinity while ignoring harder regions of the image. Fixing the covariance to identity stabilizes training and guarantees that all spatial pixels contribute equally to the gradient.
@@ -378,7 +378,7 @@ Failing to bound binary predictions causes catastrophic gradient saturation; you
   bce.backward()
   assert torch.isclose(logits.grad, torch.tensor(0.8 - 1.0), atol=1e-3)
   ```
-- `🔗 MathsTerm Link`: [Activation Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md).
+- `🔗 MathsTerm Link`: [Activation Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why choose Bernoulli BCE over Gaussian MSE for normalized image data in $[0, 1]$? Gaussian MSE assumes that prediction errors are symmetric and unbounded, which can lead to dull gray predictions when the model averages conflicting pixel values. Bernoulli BCE treats pixel values as probabilities and heavily penalizes high-confidence mistakes (predicting 0 when target is 1), maintaining sharper contrast along digit boundaries.
@@ -465,7 +465,7 @@ Estimating the KL term via random sampling introduces heavy gradient variance; y
   kl.backward()
   assert torch.isclose(mu.grad, torch.tensor(0.5))
   ```
-- `🔗 MathsTerm Link`: [Logarithms and Exponential Functions](../../MathsTerms/01-Primal-Analysis-and-Foundations/02-Logarithms_and_Exponential_Functions.md).
+- `🔗 MathsTerm Link`: [Logarithms and Exponential Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/00-Logarithms_and_Exponential_Functions.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why do we compute the KL divergence analytically rather than approximating it via Monte Carlo sampling $\frac{1}{M}\sum [\log q(z^{(m)}) - \log p(z^{(m)})]$? While Monte Carlo estimation is mathematically unbiased, it injects severe sampling noise into the encoder gradients. The closed-form analytical formula provides an exact, zero-variance gradient, dramatically accelerating convergence and stabilizing training dynamics.
@@ -556,7 +556,7 @@ Treating the encoder and decoder as independent models is the wrong move; you ca
   optimizer.step()
   assert params_encoder[0].grad is not None and params_decoder[0].grad is not None
   ```
-- `🔗 MathsTerm Link`: [Gradient Descent](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md).
+- `🔗 MathsTerm Link`: [Gradient Descent](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why do modern implementations train $\phi$ and $\theta$ jointly with a single optimizer rather than strictly alternating full epochs? In deep networks, taking full coordinate epochs for $\phi$ holding $\theta$ fixed is computationally wasteful and can cause the encoder to overfit to an intermediate, suboptimal decoder. Simultaneous stochastic updates with small learning rates allow encoder and decoder representations to co-evolve smoothly along the joint manifold.
@@ -640,7 +640,7 @@ A common wrong move is attempting to generate new samples by feeding random nois
   assert synthetic_image.shape == (1, 784)
   assert (synthetic_image >= 0.0).all() and (synthetic_image <= 1.0).all()
   ```
-- `🔗 MathsTerm Link`: [Tensors and Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md).
+- `🔗 MathsTerm Link`: [Tensors and Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why do we perform generation using the prior $p(z) = \mathcal{N}(0, I)$ rather than sampling from the training posteriors $q_\phi(z|x)$? Sampling from $q_\phi(z|x)$ requires an existing real image $x$, which corresponds to reconstruction or denoising rather than genuine unconditional creation. The standard prior $p(z)$ provides an infinite, smooth reservoir of unconditioned latent coordinates.
@@ -728,7 +728,7 @@ The wrong move in tuning early training is allowing the KL divergence penalty to
   assert is_collapsed.item() is True
   print("Diagnostic Alert: Posterior collapse detected across all 16 latent dimensions!")
   ```
-- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
+- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why does posterior collapse plague VAEs with expressive autoregressive decoders (like Transformers or PixelCNNs) much more severely than standard MLP or CNN decoders? An expressive autoregressive decoder can predict the next pixel using previous pixels alone, without needing the latent code $z$. The network quickly discovers that it can minimize the KL term to exactly zero by ignoring $z$ while still achieving decent reconstruction using autoregression alone. Counteracting this requires KL annealing schedules or capacity constraints.

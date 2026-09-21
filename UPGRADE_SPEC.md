@@ -96,7 +96,7 @@ High-density mathematical reference cheat-sheet containing:
 ## 4. Dynamic "On-Demand" `MathsTerms/` Discovery & Creation Standard
 
 1. **Continuous Term Discovery:** During each module upgrade, scan transcripts, lecture slides, and notes for all mathematical entities (operators, distributions, theorems, divergences, optimization terms).
-2. **Authoring Standard:** If a term is missing from [`MathsTerms/`](./MathsTerms), immediately create a dedicated markdown file adhering to the 7-section visual gold standard of [`Softmax.md`](./MathsTerms/03-Multivariate-Calculus-and-Optimization/06-Softmax.md):
+2. **Authoring Standard:** If a term is missing from [`MathsTerms/`](./MathsTerms), immediately create a dedicated markdown file adhering to the 7-section visual gold standard of [`Softmax.md`](./MathsTerms/02-Multivariate-Calculus-and-Optimization/06-Softmax.md):
    - **§1:** Title & High-Impact 3-Stage Visual ASCII Pipeline.
    - **§2:** 👶 ELI5 Intuition (Physical analogy / concrete story).
    - **§3:** 🔍 Plain-English Breakdown & Notation Rosetta Stone Table.

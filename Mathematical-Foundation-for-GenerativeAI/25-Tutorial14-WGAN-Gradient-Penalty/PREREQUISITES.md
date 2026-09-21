@@ -23,9 +23,9 @@ Welcome to the foundational guide for Wasserstein GAN with Gradient Penalty (WGA
 | Sibling Module | Core Mathematical Concept | How it Unlocks This Lecture |
 |:---|:---|:---|
 | [Tutorial 13: WGAN Weight Clipping](../24-Tutorial13-WGAN-Weight-Clipping/NOTES.md) | Weight clipping failures and 1-Lipschitz dual constraints | Shows why hard parameter bounding must be replaced with a gradient penalty |
-| [MathsTerms: Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md) | Gradient norm bounds and Lipschitz constants | Formulates the equivalence $\|\nabla f(x)\|_2 \le 1 \iff \|f\|_L \le 1$ |
-| [MathsTerms: Batch Normalization & Spectral Norm](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/11-Batch_Normalization_and_Spectral_Norm.md) | Normalization mechanics and sample independence | Explains why BatchNorm destroys point-wise Lipschitz guarantees |
-| [MathsTerms: Backpropagation & Chain Rule](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md) | Computational graphs and second derivatives | Unlocks the mechanics of `torch.autograd.grad(create_graph=True)` |
+| [MathsTerms: Lipschitz Continuity](../../MathsTerms/05-Convexity-Duality-and-Metric-Analysis/04-Lipschitz_Continuity.md) | Gradient norm bounds and Lipschitz constants | Formulates the equivalence $\|\nabla f(x)\|_2 \le 1 \iff \|f\|_L \le 1$ |
+| [MathsTerms: Batch Normalization & Spectral Norm](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/11-Batch_Normalization_and_Spectral_Norm.md) | Normalization mechanics and sample independence | Explains why BatchNorm destroys point-wise Lipschitz guarantees |
+| [MathsTerms: Backpropagation & Chain Rule](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md) | Computational graphs and second derivatives | Unlocks the mechanics of `torch.autograd.grad(create_graph=True)` |
 
 ---
 

@@ -311,7 +311,7 @@ The wrong move is omitting `.contiguous()` and encountering runtime memory error
   assert x_flat.is_contiguous()
   print("Topic 2 Clean: Tensor permuted and flattened to contiguous shape (196, 16)")
   ```
-- `🔗 MathsTerm Link`: [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md).
+- `🔗 MathsTerm Link`: [Tensors & Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why use `nn.Embedding` (X) rather than an unconstrained `nn.Parameter` tensor (Y)? `nn.Embedding` provides optimized integer indexing lookup kernels that execute efficiently on both CPU and CUDA hardware.
@@ -401,7 +401,7 @@ The wrong move is using slow nested loops or unvectorized distance queries; the 
   assert dists.shape == (8, 32)
   print(f"Topic 3 Clean: Evaluated distance matrix of shape {dists.shape}")
   ```
-- `🔗 MathsTerm Link`: [Dot Product & Similarity](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md).
+- `🔗 MathsTerm Link`: [Dot Product & Similarity](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why expand squared norms into dot products (X) rather than computing `torch.cdist(Z, E)` (Y)? Expanded dot products allow reusing precomputed $\|e_k\|^2$ terms across training steps and eliminate intermediate 3D difference tensor memory allocations.
@@ -489,7 +489,7 @@ The wrong move is attempting to write custom autograd `Function` classes with ma
   assert ze.grad.item() == -4.0
   print(f"Topic 4 Clean: STE trick verified forward={ste.item()}, grad={ze.grad.item()}")
   ```
-- `🔗 MathsTerm Link`: [Chain Rule & Backpropagation](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md).
+- `🔗 MathsTerm Link`: [Chain Rule & Backpropagation](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why use `z_e + (z_q - z_e).detach()` (X) rather than defining a custom `torch.autograd.Function` (Y)? The `.detach()` trick stays within pure PyTorch tensor operations, allowing autograd to trace second-order derivatives and compile with `torch.compile` without graph breaks.
@@ -585,7 +585,7 @@ The wrong move is using a single joint loss `F.mse_loss(quantized, inputs)`; the
   assert ze.grad is not None and zq.grad is not None
   print("Topic 5 Clean: Tripartite loss decoupled gradients successfully")
   ```
-- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
+- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why use commitment multiplier $\beta = 0.25$ (X) rather than $\beta = 5.0$ (Y)? If $\beta$ is too large, the commitment loss overpowers the reconstruction loss, freezing the encoder and forcing reconstructions to be blocky and blurry.
@@ -677,7 +677,7 @@ The wrong move is monitoring reconstruction MSE alone; the right move is trackin
   assert perplexity.item() > 1.0 and perplexity.item() <= 8.0
   print(f"Topic 6 Clean: Tracked codebook perplexity = {perplexity.item():.2f}")
   ```
-- `🔗 MathsTerm Link`: [Entropy & Cross-Entropy](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md).
+- `🔗 MathsTerm Link`: [Entropy & Cross-Entropy](../../MathsTerms/04-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why track perplexity (X) rather than simple dead code counts (Y)? Perplexity weights codes by their actual frequency of usage, providing a smooth continuous metric that detects whether usage is balanced across active codes.

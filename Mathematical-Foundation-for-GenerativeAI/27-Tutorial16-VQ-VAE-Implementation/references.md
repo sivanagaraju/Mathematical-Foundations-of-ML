@@ -12,9 +12,9 @@ The mathematical concepts in this tutorial build directly upon discrete represen
   - **Relevance & Why Read This:** Directly preceding theoretical lecture deriving vector quantization, the straight-through estimator, and the tripartite objective function.
 - [Tutorial 15: VAE & Beta-VAE Implementation](../26-Tutorial15-VAE-Beta-VAE-Implementation/NOTES.md)
   - **Relevance & Why Read This:** Compares continuous Gaussian autoencoders with discrete codebook tokenization.
-- [MathsTerms: Encodings Categorical & Embeddings](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md)
+- [MathsTerms: Encodings Categorical & Embeddings](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md)
   - **Relevance & Why Read This:** Formulates vector lookup matrices and embedding gradients in PyTorch.
-- [MathsTerms: Exponential Moving Average](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md)
+- [MathsTerms: Exponential Moving Average](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md)
   - **Relevance & Why Read This:** Details parameter tracking mechanics for optimizer-free dictionary maintenance.
 
 ---

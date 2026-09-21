@@ -379,7 +379,7 @@ The wrong move is mixing different reduction modes; the right move is computing 
   assert torch.isclose(kl, torch.tensor(0.0))
   print(f"Topic 3 Clean: BCE={bce.item():.4f}, KL={kl.item():.4f}, Total={total.item():.4f}")
   ```
-- `🔗 MathsTerm Link`: [Entropy & Cross-Entropy](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md).
+- `🔗 MathsTerm Link`: [Entropy & Cross-Entropy](../../MathsTerms/04-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why use analytical Gaussian KL (X) rather than Monte Carlo sampled KL $\log q(z|x) - \log p(z)$ (Y)? The analytical formula evaluates in closed form with zero sampling variance, stabilizing gradient updates across all training epochs.
@@ -459,7 +459,7 @@ The wrong move is expecting $\beta = 10$ to produce photorealistic, perfectly di
   assert losses == [52.5, 55.0, 70.0, 100.0]
   print(f"Topic 4 Clean: Evaluated losses across beta spectrum: {[l.item() for l in losses]}")
   ```
-- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
+- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why use $\beta > 1.0$ (X) rather than standard $\beta = 1.0$ (Y)? If the downstream goal is representation learning, controllable generation, or downstream reinforcement learning state representation, disentangled features provide dramatically higher interpretability and transferability.
@@ -634,7 +634,7 @@ The wrong move is training with unannealed high $\beta$ and unclipped gradients;
   assert get_beta_warmup(15) == 4.0
   print("Topic 6 Clean: Linear KL warmup schedule verified")
   ```
-- `🔗 MathsTerm Link`: [Gradient Descent](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md).
+- `🔗 MathsTerm Link`: [Gradient Descent](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why use a linear warmup schedule (X) rather than constant $\beta$ (Y)? A linear warmup prevents early posterior collapse, ensuring that latent dimensions receive active information flow before compression begins.

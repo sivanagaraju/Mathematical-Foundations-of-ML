@@ -759,10 +759,10 @@ Tutorials will type this loop in PyTorch. Theory next is how this $f$ is a class
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
 | **Minimax Game & GAN Dynamics** | [Minimax Game & GAN Dynamics](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/09-Minimax_Game_and_GANs.md) | Optimal discriminator derivation $D^*(x) = \frac{p_x(x)}{p_x(x) + p_g(x)}$ |
-| **Jensen-Shannon Divergence** | [Jensen-Shannon Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md) | Proof that $V(G, D^*) = 2 \cdot \text{JSD}(p_x \parallel p_g) - 2\ln 2$ |
-| **Kullback-Leibler Divergence** | [Kullback-Leibler Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) | Information-theoretic KL components constituting Jensen-Shannon divergence |
-| **Loss Functions** | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Zero-gradient vanishing trap in $\log(1-D)$ vs heuristic $-\log D$ fix |
-| **Gradients & Directional Derivatives** | [Gradients & Directional Derivatives](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Generator gradient behavior and early-training signal saturation |
+| **Jensen-Shannon Divergence** | [Jensen-Shannon Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md) | Proof that $V(G, D^*) = 2 \cdot \text{JSD}(p_x \parallel p_g) - 2\ln 2$ |
+| **Kullback-Leibler Divergence** | [Kullback-Leibler Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/02-KL_Divergence.md) | Information-theoretic KL components constituting Jensen-Shannon divergence |
+| **Loss Functions** | [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Zero-gradient vanishing trap in $\log(1-D)$ vs heuristic $-\log D$ fix |
+| **Gradients & Directional Derivatives** | [Gradients & Directional Derivatives](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Generator gradient behavior and early-training signal saturation |
 
 ---
 

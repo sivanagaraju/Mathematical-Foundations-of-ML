@@ -203,5 +203,5 @@ verify_gaussian_kl()
 | Concept | Upstream Prerequisite | Downstream Application in Tutorial 17 |
 | :--- | :--- | :--- |
 | Hierarchical VAEs | [05-Latent_Variable_Models.md](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/05-Latent_Variable_Models.md) | Fixed forward Markov chain with equal-dimensional latents |
-| Conditional Distributions | [03-Joint_Marginal_Conditional_Dist.md](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Bayes' rule conversion from consistency term to denoising term |
-| Gaussian Distributions | [02-Common_Probability_Distributions.md](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Closed-form posterior $q(x_{t-1} \mid x_t, x_0)$ derivation |
+| Conditional Distributions | [03-Joint_Marginal_Conditional_Dist.md](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Bayes' rule conversion from consistency term to denoising term |
+| Gaussian Distributions | [02-Common_Probability_Distributions.md](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Closed-form posterior $q(x_{t-1} \mid x_t, x_0)$ derivation |

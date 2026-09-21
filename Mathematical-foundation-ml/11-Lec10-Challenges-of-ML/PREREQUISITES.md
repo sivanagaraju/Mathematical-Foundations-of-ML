@@ -38,11 +38,11 @@ Before diving into the foundational pillars, use this reference table to decode 
 
 | Symbol / Notation | Spoken English (Phonetics) | Mathematical Concept | Plain-English Intuition | Dedicated MathsTerm Link |
 | :--- | :--- | :--- | :--- | :--- |
-| $\mathcal{P} = \{p_\theta : \theta \in \Theta\}$ | **CAL-ih-GRAF-ik PEE** | Parametric Hypothesis Class | The family of candidate probability density models indexed by parameter vector $\theta$ | [Functions & Derivatives](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
-| $D(p, q)$ | **DEE OF PEE COMMA KYOO** | Statistical Divergence / Distance | Measure of statistical dissimilarity between true density $p$ and candidate model $q$ | [KL Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) |
-| $\theta^* = \arg\min_\theta D(p, p_\theta)$ | **ARG-MIN OVER THAY-tuh OF DEE** | Optimal Parameter Vector | The specific weight configuration that minimizes the discrepancy between true and modeled densities | [Functions & Derivatives](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
-| $\nabla_\theta \mathcal{L}(\theta)$ | **NAB-luh THAY-tuh OF EL** | Loss Gradient Vector | Direction of steepest error increase in parameter space used by optimizers to update weights | [Derivatives, Gradients & Jacobians](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) |
-| $\theta^{(t+1)} = \theta^{(t)} - \eta \nabla \mathcal{L}$ | **THAY-tuh AT TEE PLUS ONE** | Gradient Descent Update Step | Moving weights downhill against the loss gradient scaled by learning rate $\eta$ | [Gradient Descent](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) |
+| $\mathcal{P} = \{p_\theta : \theta \in \Theta\}$ | **CAL-ih-GRAF-ik PEE** | Parametric Hypothesis Class | The family of candidate probability density models indexed by parameter vector $\theta$ | [Functions & Derivatives](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
+| $D(p, q)$ | **DEE OF PEE COMMA KYOO** | Statistical Divergence / Distance | Measure of statistical dissimilarity between true density $p$ and candidate model $q$ | [KL Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/02-KL_Divergence.md) |
+| $\theta^* = \arg\min_\theta D(p, p_\theta)$ | **ARG-MIN OVER THAY-tuh OF DEE** | Optimal Parameter Vector | The specific weight configuration that minimizes the discrepancy between true and modeled densities | [Functions & Derivatives](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
+| $\nabla_\theta \mathcal{L}(\theta)$ | **NAB-luh THAY-tuh OF EL** | Loss Gradient Vector | Direction of steepest error increase in parameter space used by optimizers to update weights | [Derivatives, Gradients & Jacobians](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) |
+| $\theta^{(t+1)} = \theta^{(t)} - \eta \nabla \mathcal{L}$ | **THAY-tuh AT TEE PLUS ONE** | Gradient Descent Update Step | Moving weights downhill against the loss gradient scaled by learning rate $\eta$ | [Gradient Descent](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) |
 
 ---
 
@@ -434,10 +434,10 @@ Prior: [Lec 09 Density](../10-Lec09-Density-Function/NOTES.md).
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Vector Norms & Inner Products** | [Vector Norms & Inner Products](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md) | Euclidean ($L_2$) and Manhattan ($L_1$) distance collapse in high dimensions |
-| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Geometry of high-dimensional unit hyperspheres and distance concentration |
-| **Loss Functions & Regularization** | [Loss Functions & Regularization](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Loss design, norm penalties ($L_1, L_2$), and combatting overfitting |
-| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Ill-conditioned curvature and optimization challenges in high dimensions |
+| **Vector Norms & Inner Products** | [Vector Norms & Inner Products](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md) | Euclidean ($L_2$) and Manhattan ($L_1$) distance collapse in high dimensions |
+| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Geometry of high-dimensional unit hyperspheres and distance concentration |
+| **Loss Functions & Regularization** | [Loss Functions & Regularization](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Loss design, norm penalties ($L_1, L_2$), and combatting overfitting |
+| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Ill-conditioned curvature and optimization challenges in high dimensions |
 
 ---
 

@@ -578,8 +578,8 @@ You own the probability stack that makes statistical FA precise. Next lectures a
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Probability Basics & Kolmogorov Axioms** | [Probability Basics & Kolmogorov Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) | Random experiments, sample space $\Omega$, event $\sigma$-algebra $\mathcal{F}$, and probability measure $P$ |
-| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Measurable spaces and foundations of probabilistic reasoning |
+| **Probability Basics & Kolmogorov Axioms** | [Probability Basics & Kolmogorov Axioms](../../MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md) | Random experiments, sample space $\Omega$, event $\sigma$-algebra $\mathcal{F}$, and probability measure $P$ |
+| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Measurable spaces and foundations of probabilistic reasoning |
 
 ---
 

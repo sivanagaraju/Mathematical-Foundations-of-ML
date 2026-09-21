@@ -37,11 +37,11 @@ Before diving into the foundational pillars, use this reference table to decode 
 
 | Symbol / Notation | Spoken English (Phonetics) | Mathematical Concept | Plain-English Intuition | Dedicated MathsTerm Link |
 | :--- | :--- | :--- | :--- | :--- |
-| $\mathcal{P} = \{P_\theta : \theta \in \Theta\}$ | **CAL-ih-GRAF-ik PEE** | Statistical Model Family | Candidate hypothesis set of probability distributions parameterized by weight tensor $\theta$ | [Functions & Derivatives](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
-| $\hat{P} \approx P$ | **PEE-HAT APPROX-ih-MATE-ly PEE** | Distribution Estimation | Using finite empirical samples to recover the unknown data-generating distribution | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
-| $\mathbb{E}_{X \sim P}[g(X)]$ | **EX-pek-TAY-shun OF GEE OF EKS** | Expected Value (Statistical Moment) | Probability-weighted average summary statistic of function $g(X)$ under distribution $P$ | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
-| $P(Y \mid X)$ | **PEE OF WYE GIV-un EKS** | Discriminative Conditional Model | Probability of target label given observed input features; ignores marginal $P(X)$ | [Joint, Marginal & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
-| $P(X, Y)$ | **PEE OF EKS COMMA WYE** | Generative Joint Model | Full joint distribution of features and labels; models how data is generated | [Joint, Marginal & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
+| $\mathcal{P} = \{P_\theta : \theta \in \Theta\}$ | **CAL-ih-GRAF-ik PEE** | Statistical Model Family | Candidate hypothesis set of probability distributions parameterized by weight tensor $\theta$ | [Functions & Derivatives](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
+| $\hat{P} \approx P$ | **PEE-HAT APPROX-ih-MATE-ly PEE** | Distribution Estimation | Using finite empirical samples to recover the unknown data-generating distribution | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $\mathbb{E}_{X \sim P}[g(X)]$ | **EX-pek-TAY-shun OF GEE OF EKS** | Expected Value (Statistical Moment) | Probability-weighted average summary statistic of function $g(X)$ under distribution $P$ | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $P(Y \mid X)$ | **PEE OF WYE GIV-un EKS** | Discriminative Conditional Model | Probability of target label given observed input features; ignores marginal $P(X)$ | [Joint, Marginal & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
+| $P(X, Y)$ | **PEE OF EKS COMMA WYE** | Generative Joint Model | Full joint distribution of features and labels; models how data is generated | [Joint, Marginal & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
 
 ---
 
@@ -51,9 +51,9 @@ Before diving into the foundational pillars, review these key concepts from sibl
 
 | Assumed Concept | Primary Series Foundation | MathsTerms Deep-Dive | 1-Sentence Intuition Refresher |
 | :--- | :--- | :--- | :--- |
-| **Function Approximation Shift** | [Lec 01: Function Approximation](../../Mathematical-foundation-ml/02-Lec01-Overview-Function-Approximation/NOTES.md) | [Functions & Derivatives](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Moving from deterministic function fitting to statistical probability distribution estimation. |
-| **IID Sampling** | [Lec 07: IID Assumption](../../Mathematical-foundation-ml/08-Lec07-IID-Assumption/NOTES.md) | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) | Dataset $D$ consists of independent and identically distributed realizations from $P_{data}$. |
-| **Probability Densities** | [Lec 09: Density Function](../../Mathematical-foundation-ml/10-Lec09-Density-Function/NOTES.md) | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Continuous density functions represent the mathematical parameterization of estimated distributions. |
+| **Function Approximation Shift** | [Lec 01: Function Approximation](../../Mathematical-foundation-ml/02-Lec01-Overview-Function-Approximation/NOTES.md) | [Functions & Derivatives](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Moving from deterministic function fitting to statistical probability distribution estimation. |
+| **IID Sampling** | [Lec 07: IID Assumption](../../Mathematical-foundation-ml/08-Lec07-IID-Assumption/NOTES.md) | [Probability Basics & Axioms](../../MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md) | Dataset $D$ consists of independent and identically distributed realizations from $P_{data}$. |
+| **Probability Densities** | [Lec 09: Density Function](../../Mathematical-foundation-ml/10-Lec09-Density-Function/NOTES.md) | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Continuous density functions represent the mathematical parameterization of estimated distributions. |
 
 ---
 
@@ -408,8 +408,8 @@ Prior: [Lec 07](../08-Lec07-IID-Assumption/NOTES.md).
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Likelihood & Log-Likelihood** | [Likelihood & Log-Likelihood](../../MathsTerms/04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Parametric likelihood functions $L(\theta; \mathcal{D})$ as measures of parameter goodness-of-fit |
-| **Maximum Likelihood Estimation (MLE)** | [Maximum Likelihood Estimation (MLE)](../../MathsTerms/04-Probability-and-Statistical-Estimation/05-MLE.md) | Foundational principles of fitting parametric distribution families $\arg\max_\theta \ell(\theta)$ |
-| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Gaussian, Bernoulli, Poisson, and categorical parametric models |
+| **Likelihood & Log-Likelihood** | [Likelihood & Log-Likelihood](../../MathsTerms/03-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Parametric likelihood functions $L(\theta; \mathcal{D})$ as measures of parameter goodness-of-fit |
+| **Maximum Likelihood Estimation (MLE)** | [Maximum Likelihood Estimation (MLE)](../../MathsTerms/03-Probability-and-Statistical-Estimation/05-MLE.md) | Foundational principles of fitting parametric distribution families $\arg\max_\theta \ell(\theta)$ |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Gaussian, Bernoulli, Poisson, and categorical parametric models |
 
 ---

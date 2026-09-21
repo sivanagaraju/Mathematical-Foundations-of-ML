@@ -528,9 +528,9 @@ Proceed now to [NOTES.md](./NOTES.md) starting at the **Executive Summary Archit
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
 | **ELBO & Variational Inference** | [ELBO & Variational Inference](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/07-ELBO_and_Variational_Inference.md) | Variational bounds, tractable estimators, and optimization landscapes |
-| **Fenchel Convex Conjugate & Dual Representations** | [Fenchel Convex Conjugate & Dual Representations](../../MathsTerms/01-Primal-Analysis-and-Foundations/05-Fenchel_Conjugate_and_Dual_Representations.md) | Fenchel duality formulation for dual variational divergence estimation |
-| **f-Divergence** | [f-Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/04-f_Divergence.md) | Dual variational representation of $f$-divergence across arbitrary distributions |
+| **Fenchel Convex Conjugate & Dual Representations** | [Fenchel Convex Conjugate & Dual Representations](../../MathsTerms/05-Convexity-Duality-and-Metric-Analysis/03-Fenchel_Conjugate_and_Dual_Representations.md) | Fenchel duality formulation for dual variational divergence estimation |
+| **f-Divergence** | [f-Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/04-f_Divergence.md) | Dual variational representation of $f$-divergence across arbitrary distributions |
 | **Minimax Game & GANs** | [Minimax Game & GANs](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/09-Minimax_Game_and_GANs.md) | Two-player zero-sum game formulation between generator and discriminator |
-| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Alternating gradient ascent-descent dynamics on saddle point surfaces |
+| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Alternating gradient ascent-descent dynamics on saddle point surfaces |
 
 ---

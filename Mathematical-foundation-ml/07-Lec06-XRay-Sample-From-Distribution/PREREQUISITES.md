@@ -40,11 +40,11 @@ Before diving into the foundational pillars, use this reference table to decode 
 
 | Symbol / Notation | Spoken English (Phonetics) | Mathematical Concept | Plain-English Intuition | Dedicated MathsTerm Link |
 | :--- | :--- | :--- | :--- | :--- |
-| $\mathbf{x} \in [0, 255]^{H \times W} \subset \mathbb{R}^d$ | **BOLD EKS IN RANGE ZERO TO TWO-FIFTY-FIVE TO THE D** | Vectorized Realization | Flattened grayscale pixel intensities extracted from an X-ray scan | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
-| $X(\omega) = \mathbf{x}$ | **BIG EKS OF OH-meg-uh EQUALS LITTLE EKS** | Random Variable Realization | Observation produced by applying measurement apparatus to real physical patient $\omega$ | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
-| $P(\mathbf{X} \in B)$ | **PEE OF BOLD EKS IN BEE** | Probability Mass of Region $B$ | Frequency of drawing patient scans whose feature vectors land inside continuous box $B$ | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
-| $(\mathbf{x}_i, y_i) \sim P_{X, Y}$ | **EKS-EYE WYE-EYE DRAWN FROM PEE SUB EKS-WYE** | Supervised Joint Sample | Patient scan paired with diagnosis label sampled independently from the ground-truth distribution | [Joint, Marginal & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
-| $x_{i, j} \text{ vs } P(X = x)$ | **PIXEL VALUE VERSUS PROBABILITY** | Pixel Value vs Event Probability | A pixel intensity of 255 is sensory data, NOT a probability; probabilities quantify frequency of occurrence | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
+| $\mathbf{x} \in [0, 255]^{H \times W} \subset \mathbb{R}^d$ | **BOLD EKS IN RANGE ZERO TO TWO-FIFTY-FIVE TO THE D** | Vectorized Realization | Flattened grayscale pixel intensities extracted from an X-ray scan | [Tensors & Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| $X(\omega) = \mathbf{x}$ | **BIG EKS OF OH-meg-uh EQUALS LITTLE EKS** | Random Variable Realization | Observation produced by applying measurement apparatus to real physical patient $\omega$ | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $P(\mathbf{X} \in B)$ | **PEE OF BOLD EKS IN BEE** | Probability Mass of Region $B$ | Frequency of drawing patient scans whose feature vectors land inside continuous box $B$ | [Probability Basics & Axioms](../../MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md) |
+| $(\mathbf{x}_i, y_i) \sim P_{X, Y}$ | **EKS-EYE WYE-EYE DRAWN FROM PEE SUB EKS-WYE** | Supervised Joint Sample | Patient scan paired with diagnosis label sampled independently from the ground-truth distribution | [Joint, Marginal & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
+| $x_{i, j} \text{ vs } P(X = x)$ | **PIXEL VALUE VERSUS PROBABILITY** | Pixel Value vs Event Probability | A pixel intensity of 255 is sensory data, NOT a probability; probabilities quantify frequency of occurrence | [Probability Basics & Axioms](../../MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md) |
 
 ---
 
@@ -54,9 +54,9 @@ Before diving into the foundational pillars, review these key concepts from sibl
 
 | Assumed Concept | Primary Series Foundation | MathsTerms Deep-Dive | 1-Sentence Intuition Refresher |
 | :--- | :--- | :--- | :--- |
-| **Vector Stacking** | [Lec 01: Function Approximation](../../Mathematical-foundation-ml/02-Lec01-Overview-Function-Approximation/NOTES.md) | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | 2D pixel matrices are flattened into high-dimensional coordinate vectors $\mathbb{R}^d$. |
-| **Joint Distributions** | [Lec 05: Probability Recap Part 2](../../Mathematical-foundation-ml/06-Lec05-Recap-Probability-Theory-Part2/NOTES.md) | [Joint, Marginal & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Pairing image features $\mathbf{X}$ with diagnosis $Y$ under joint measure $P(\mathbf{X}, Y)$. |
-| **IID Assumption** | [Lec 07: IID Assumption](../../Mathematical-foundation-ml/08-Lec07-IID-Assumption/NOTES.md) | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) | Explains why patient images in a dataset are assumed independent and identically distributed. |
+| **Vector Stacking** | [Lec 01: Function Approximation](../../Mathematical-foundation-ml/02-Lec01-Overview-Function-Approximation/NOTES.md) | [Tensors & Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | 2D pixel matrices are flattened into high-dimensional coordinate vectors $\mathbb{R}^d$. |
+| **Joint Distributions** | [Lec 05: Probability Recap Part 2](../../Mathematical-foundation-ml/06-Lec05-Recap-Probability-Theory-Part2/NOTES.md) | [Joint, Marginal & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Pairing image features $\mathbf{X}$ with diagnosis $Y$ under joint measure $P(\mathbf{X}, Y)$. |
+| **IID Assumption** | [Lec 07: IID Assumption](../../Mathematical-foundation-ml/08-Lec07-IID-Assumption/NOTES.md) | [Probability Basics & Axioms](../../MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md) | Explains why patient images in a dataset are assumed independent and identically distributed. |
 
 ---
 
@@ -452,9 +452,9 @@ Prior: [Lec 05](../06-Lec05-Recap-Probability-Theory-Part2/NOTES.md).
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Random Variables & High-Dimensional Distributions** | [Random Variables & High-Dimensional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | High-dimensional data samples as realizations of continuous laws $P_X$ |
-| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Matrix pixel grids flattened into high-dimensional Euclidean coordinate vectors |
-| **Tensors, Dimensions & Shapes** | [Tensors, Dimensions & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Tensor representations of sensory data and high-dimensional spaces |
-| **Projections & Subspaces** | [Projections & Subspaces](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md) | The manifold hypothesis: data concentrated on low-dimensional sub-manifolds |
+| **Random Variables & High-Dimensional Distributions** | [Random Variables & High-Dimensional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | High-dimensional data samples as realizations of continuous laws $P_X$ |
+| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Matrix pixel grids flattened into high-dimensional Euclidean coordinate vectors |
+| **Tensors, Dimensions & Shapes** | [Tensors, Dimensions & Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Tensor representations of sensory data and high-dimensional spaces |
+| **Projections & Subspaces** | [Projections & Subspaces](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md) | The manifold hypothesis: data concentrated on low-dimensional sub-manifolds |
 
 ---

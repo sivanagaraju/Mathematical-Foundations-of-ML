@@ -58,11 +58,11 @@ This reference hub provides foundational textbooks, peer-reviewed literature, in
 
 | Mathematical Concept | Repository Guide | Role in Lecture 10 |
 | :--- | :--- | :--- |
-| **Maximum Likelihood Estimation** | [Maximum Likelihood Estimation (MLE)](../../MathsTerms/04-Probability-and-Statistical-Estimation/05-MLE.md) | The mathematical principle of fitting model family parameters $\theta$ to sample data |
-| **Negative Log-Likelihood (NLL)** | [Negative Log-Likelihood (NLL)](../../MathsTerms/04-Probability-and-Statistical-Estimation/06-NLL.md) | Standard loss function acting as a surrogate for distribution distance |
-| **Loss Functions** | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Formal definitions of point-wise loss $\ell(x; \theta)$ and empirical risk formulations |
-| **Gradient Descent** | [Gradient Descent](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | First-order optimization algorithm for finding $\arg\min_\theta \hat{R}(\theta)$ |
-| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Parametric density families $p_\theta(x)$ representing candidate models |
+| **Maximum Likelihood Estimation** | [Maximum Likelihood Estimation (MLE)](../../MathsTerms/03-Probability-and-Statistical-Estimation/05-MLE.md) | The mathematical principle of fitting model family parameters $\theta$ to sample data |
+| **Negative Log-Likelihood (NLL)** | [Negative Log-Likelihood (NLL)](../../MathsTerms/03-Probability-and-Statistical-Estimation/06-NLL.md) | Standard loss function acting as a surrogate for distribution distance |
+| **Loss Functions** | [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Formal definitions of point-wise loss $\ell(x; \theta)$ and empirical risk formulations |
+| **Gradient Descent** | [Gradient Descent](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | First-order optimization algorithm for finding $\arg\min_\theta \hat{R}(\theta)$ |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Parametric density families $p_\theta(x)$ representing candidate models |
 
 ---
 

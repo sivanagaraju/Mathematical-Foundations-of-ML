@@ -552,9 +552,9 @@ Ground the disease/X-ray problem in joints and conditionals; introduce densities
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Joint, Marginal, & Conditional Distributions** | [Joint, Marginal, & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Joint distributions $P_{XY}$, marginalization $\sum_y P_{XY}$, conditionals $P_{Y|X}$, and Bayes' rule |
-| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Vector random variables interpreted as joint collections of scalar variables |
-| **Entropy & Cross-Entropy** | [Entropy & Cross-Entropy](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Conditional entropy and information-theoretic measures on joint distributions |
+| **Joint, Marginal, & Conditional Distributions** | [Joint, Marginal, & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Joint distributions $P_{XY}$, marginalization $\sum_y P_{XY}$, conditionals $P_{Y|X}$, and Bayes' rule |
+| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Vector random variables interpreted as joint collections of scalar variables |
+| **Entropy & Cross-Entropy** | [Entropy & Cross-Entropy](../../MathsTerms/04-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Conditional entropy and information-theoretic measures on joint distributions |
 
 ---
 

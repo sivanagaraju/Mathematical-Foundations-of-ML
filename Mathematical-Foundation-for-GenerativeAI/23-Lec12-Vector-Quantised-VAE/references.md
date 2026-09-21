@@ -12,9 +12,9 @@ The mathematical concepts in this lecture build directly upon prior probability,
   - **Relevance & Why Read This:** Details continuous Gaussian latent bottlenecks, the reparameterization trick, and posterior collapse pathologies that VQ-VAE is specifically engineered to overcome.
 - [Lec 11: Beta-VAE](../22-Lec11-Beta-VAE/NOTES.md)
   - **Relevance & Why Read This:** Analyzes the information bottleneck Lagrangian trade-off between reconstruction fidelity and latent regularization pressure.
-- [MathsTerms: Encodings Categorical & Embeddings](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md)
+- [MathsTerms: Encodings Categorical & Embeddings](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/08-Encodings_Categorical_and_Embeddings.md)
   - **Relevance & Why Read This:** Formulates vector lookup matrices, categorical indexing, and embedding layer gradient routing.
-- [MathsTerms: Exponential Moving Average](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md)
+- [MathsTerms: Exponential Moving Average](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md)
   - **Relevance & Why Read This:** Establishes the mathematical tracking mechanics behind optimizer-free codebook updates.
 
 ---

@@ -251,7 +251,7 @@ A naive wrong move is assuming optimal transport requires transporting mass alon
   assert emd == 2.0
   print(f"Topic 2 Clean: Discrete 1D EMD = {emd:.2f} distance units")
   ```
-- `🔗 MathsTerm Link`: [Wasserstein Distance & EMD](../../MathsTerms/05-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md).
+- `🔗 MathsTerm Link`: [Wasserstein Distance & EMD](../../MathsTerms/04-Information-Theory-and-Divergences/05-Wasserstein_Distance_and_EMD.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why choose the Earth Mover's Distance (X) rather than total variation distance (Y)? Total variation distance evaluates whether two samples are identical without considering how close they are in space, making it discontinuous when distributions do not overlap.
@@ -331,7 +331,7 @@ The wrong move is allowing the Critic to output arbitrarily steep gradients to s
   assert slope.item() <= 1.0, "1-Lipschitz violated!"
   print(f"Topic 3 Clean: Verified 1-Lipschitz slope = {slope.item():.2f}")
   ```
-- `🔗 MathsTerm Link`: [Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md).
+- `🔗 MathsTerm Link`: [Lipschitz Continuity](../../MathsTerms/05-Convexity-Duality-and-Metric-Analysis/04-Lipschitz_Continuity.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why enforce 1-Lipschitz continuity (X) rather than unconstrained score maximization (Y)? Without the Lipschitz constraint, the supremum diverges to $+\infty$ and the objective ceases to be a valid metric.
@@ -412,7 +412,7 @@ A naive wrong move is leaving a Sigmoid on the final layer; the right move is ou
   assert out.shape == (4, 1)
   print(f"Topic 4 Clean: Linear Critic produced unconstrained outputs: {out.squeeze().tolist()}")
   ```
-- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
+- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why use a linear scalar output (X) rather than a sigmoid probability (Y)? Sigmoid saturates at $0$ and $1$, compressing output gradients to zero. A linear output maintains proportional gradients across the entire space.
@@ -495,7 +495,7 @@ A naive wrong move is setting clipping bound $c$ to an arbitrary large value lik
   assert torch.all(p >= -c) and torch.all(p <= c)
   print(f"Topic 5 Clean: Clamped parameter values: {p.tolist()}")
   ```
-- `🔗 MathsTerm Link`: [Gradient Descent](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md).
+- `🔗 MathsTerm Link`: [Gradient Descent](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why choose weight clipping (X) rather than unconstrained gradient descent (Y)? Without weight clipping, the Critic's parameters grow unboundedly to maximize score separation, destroying the 1-Lipschitz constraint and invalidating the Kantorovich-Rubinstein theorem.
@@ -582,7 +582,7 @@ The wrong move is training Critic and Generator 1:1 using Adam with momentum; th
   assert gen_steps == 10
   print(f"Topic 6 Clean: Completed {critic_steps} Critic steps across {gen_steps} Generator steps")
   ```
-- `🔗 MathsTerm Link`: [Gradient Descent](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md).
+- `🔗 MathsTerm Link`: [Gradient Descent](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why choose RMSprop without momentum (X) rather than Adam with $\beta_1 = 0.9$ (Y)? Adam's momentum buffer becomes corrupted when weights are clamped, while RMSprop scales learning rates cleanly without boundary thrashing.

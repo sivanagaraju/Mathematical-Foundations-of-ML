@@ -47,11 +47,11 @@ Before diving into the foundational pillars, use this reference table to decode 
 
 | Symbol / Notation | Spoken English (Phonetics) | Mathematical Concept | Plain-English Intuition | Dedicated MathsTerm Link |
 | :--- | :--- | :--- | :--- | :--- |
-| $P(A \cap B)$ | **PEE OF AY INTER-SECT BEE** | Joint Event Probability | Probability that outcome $\omega$ satisfies both event condition $A$ and condition $B$ simultaneously | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
-| $P(A \mid B) = \frac{P(A \cap B)}{P(B)}$ | **PEE OF AY GIV-un BEE** | Conditional Probability | Renormalizing probability mass by restricting the universe to condition $B$ ($P(B) > 0$) | [Joint, Marginal & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
-| $P(X_1 \in A) = \sum_{x_2} P(X_1 \in A, X_2 = x_2)$ | **PEE OF EKS-ONE IN AY** | Marginal Probability (Sum-Rule) | Total probability for variable $X_1$ obtained by collapsing/summing out all nuisance variables $X_2$ | [Joint, Marginal & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
-| $\mathbf{X} = [X_1, \dots, X_d]^T$ | **BOLD EKS EQUALS VECTOR OF SCALARS** | Random Vector Representation | Packaging $d$ scalar random variables into a single multidimensional tensor output | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
-| $P_{X, Y}(A \times B)$ | **PEE SUB EKS-WYE OF AY CART-EE-zhun BEE** | Pushforward Measure on Cartesian Product | Sizing the joint rectangular region in $\mathbb{R}^2$ via the preimage in $\Omega$ | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) |
+| $P(A \cap B)$ | **PEE OF AY INTER-SECT BEE** | Joint Event Probability | Probability that outcome $\omega$ satisfies both event condition $A$ and condition $B$ simultaneously | [Probability Basics & Axioms](../../MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md) |
+| $P(A \mid B) = \frac{P(A \cap B)}{P(B)}$ | **PEE OF AY GIV-un BEE** | Conditional Probability | Renormalizing probability mass by restricting the universe to condition $B$ ($P(B) > 0$) | [Joint, Marginal & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
+| $P(X_1 \in A) = \sum_{x_2} P(X_1 \in A, X_2 = x_2)$ | **PEE OF EKS-ONE IN AY** | Marginal Probability (Sum-Rule) | Total probability for variable $X_1$ obtained by collapsing/summing out all nuisance variables $X_2$ | [Joint, Marginal & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
+| $\mathbf{X} = [X_1, \dots, X_d]^T$ | **BOLD EKS EQUALS VECTOR OF SCALARS** | Random Vector Representation | Packaging $d$ scalar random variables into a single multidimensional tensor output | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $P_{X, Y}(A \times B)$ | **PEE SUB EKS-WYE OF AY CART-EE-zhun BEE** | Pushforward Measure on Cartesian Product | Sizing the joint rectangular region in $\mathbb{R}^2$ via the preimage in $\Omega$ | [Probability Basics & Axioms](../../MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md) |
 
 ---
 
@@ -61,9 +61,9 @@ Before diving into the foundational pillars, review these key concepts from sibl
 
 | Assumed Concept | Primary Series Foundation | MathsTerms Deep-Dive | 1-Sentence Intuition Refresher |
 | :--- | :--- | :--- | :--- |
-| **Random Variables & Preimages** | [Lec 03: Probability Recap 2](../../Mathematical-foundation-ml/04-Lec03-Recap-Probability-Theory-Part2/NOTES.md) | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Measurable mappings pulling coordinate intervals back to events in $\Omega$. |
-| **Product Geometry & Pushforward** | [Lec 04: Probability Recap 3](../../Mathematical-foundation-ml/05-Lec04-Recap-Probability-Theory-Part3/NOTES.md) | [Joint, Marginal & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | 2D CDF rectangles and the pushforward measure on coordinate hyper-rectangles. |
-| **X-Ray Vector Sampling** | [Lec 06: X-Ray Sample from Distribution](../../Mathematical-foundation-ml/07-Lec06-XRay-Sample-From-Distribution/NOTES.md) | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Applying joint distributions $P(X, Y)$ to high-dimensional medical feature vectors. |
+| **Random Variables & Preimages** | [Lec 03: Probability Recap 2](../../Mathematical-foundation-ml/04-Lec03-Recap-Probability-Theory-Part2/NOTES.md) | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Measurable mappings pulling coordinate intervals back to events in $\Omega$. |
+| **Product Geometry & Pushforward** | [Lec 04: Probability Recap 3](../../Mathematical-foundation-ml/05-Lec04-Recap-Probability-Theory-Part3/NOTES.md) | [Joint, Marginal & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | 2D CDF rectangles and the pushforward measure on coordinate hyper-rectangles. |
+| **X-Ray Vector Sampling** | [Lec 06: X-Ray Sample from Distribution](../../Mathematical-foundation-ml/07-Lec06-XRay-Sample-From-Distribution/NOTES.md) | [Tensors & Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Applying joint distributions $P(X, Y)$ to high-dimensional medical feature vectors. |
 
 ---
 
@@ -731,8 +731,8 @@ Prior: [Lec 04 Part 3](../05-Lec04-Recap-Probability-Theory-Part3/NOTES.md).
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Joint, Marginal, & Conditional Distributions** | [Joint, Marginal, & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Joint distributions $P_{XY}$, marginalization $\sum_y P_{XY}$, conditionals $P_{Y|X}$, and Bayes' rule |
-| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Vector random variables interpreted as joint collections of scalar variables |
-| **Entropy & Cross-Entropy** | [Entropy & Cross-Entropy](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Conditional entropy and information-theoretic measures on joint distributions |
+| **Joint, Marginal, & Conditional Distributions** | [Joint, Marginal, & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Joint distributions $P_{XY}$, marginalization $\sum_y P_{XY}$, conditionals $P_{Y|X}$, and Bayes' rule |
+| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Vector random variables interpreted as joint collections of scalar variables |
+| **Entropy & Cross-Entropy** | [Entropy & Cross-Entropy](../../MathsTerms/04-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Conditional entropy and information-theoretic measures on joint distributions |
 
 ---

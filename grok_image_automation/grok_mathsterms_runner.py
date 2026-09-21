@@ -13,16 +13,16 @@ Folder structure:
 
 RUN COMMANDS (Copy & Paste):
   # 1. Run all files in Category 01 with ChatGPT:
-  python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --category "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\MathsTerms\01-Primal-Analysis-and-Foundations" --skip-existing
+  python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --category "C:\Users\sivan\Learning\Code\GenerativeAI\Mathematical-Foundations-of-ML\MathsTerms\05-Convexity-Duality-and-Metric-Analysis" --skip-existing
 
   # 2. Run all topics for a specific file with ChatGPT:
-  python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --skip-existing
+  python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --file "MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md" --skip-existing
 
   # 3. Run all files in an entire category with Grok (parallel 2 tabs):
-  python grok_image_automation/grok_mathsterms_runner.py --engine grok --category "01-Primal-Analysis-and-Foundations" --parallel 2 --skip-existing
+  python grok_image_automation/grok_mathsterms_runner.py --engine grok --category "05-Convexity-Duality-and-Metric-Analysis" --parallel 2 --skip-existing
 
   # 4. Run specific topic(s) of a file (e.g. Topics 1, 2, 4):
-  python grok_image_automation/grok_mathsterms_runner.py --file "MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md" --topic 1 2 4
+  python grok_image_automation/grok_mathsterms_runner.py --file "MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md" --topic 1 2 4
 
   # 5. Run across all 46 files in MathsTerms with ChatGPT (skipping completed topics):
   python grok_image_automation/grok_mathsterms_runner.py --engine chatgpt --all --parallel 2 --skip-existing
@@ -860,7 +860,7 @@ def find_target_files(file_arg: str = "", category_arg: str = "", all_flag: bool
 
     else:
         # Default fallback: 01-Probability_Basics_and_Axioms.md
-        default_file = MATHS_TERMS_DIR / "01-Primal-Analysis-and-Foundations" / "01-Probability_Basics_and_Axioms.md"
+        default_file = MATHS_TERMS_DIR / "05-Convexity-Duality-and-Metric-Analysis" / "01-Probability_Basics_and_Axioms.md"
         if default_file.exists():
             target_files.append(default_file)
 
@@ -889,7 +889,7 @@ def main():
     parser.add_argument("--email", type=str, default=DEFAULT_EMAIL, help="Email for ChatGPT login (default: sivanagarajupachipulusu@gmail.com)")
     parser.add_argument("--password", type=str, default=DEFAULT_PASSWORD, help="Password for ChatGPT login")
     parser.add_argument("--file", type=str, default="", help="Path to specific MathsTerms markdown file")
-    parser.add_argument("--category", type=str, default="", help="Category folder name or number (e.g. 01-Primal-Analysis-and-Foundations)")
+    parser.add_argument("--category", type=str, default="", help="Category folder name or number (e.g. 05-Convexity-Duality-and-Metric-Analysis)")
     parser.add_argument("--all", action="store_true", help="Process all markdown files across all categories in MathsTerms")
     parser.add_argument("--topic", nargs="+", help="Specific topic number(s) to run (e.g. --topic 1 2 or --topic 1,2)")
     parser.add_argument("--parallel", type=int, default=2, help="Number of parallel generation tabs (1-3, default: 2)")

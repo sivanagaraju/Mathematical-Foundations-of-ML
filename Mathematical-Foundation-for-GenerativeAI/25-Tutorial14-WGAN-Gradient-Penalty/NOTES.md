@@ -202,7 +202,7 @@ The wrong move is attempting to fine-tune the clipping constant $c$ across hundr
   assert decay < 1e-7
   print(f"Topic 1 Clean: Gradient decay across {depth} layers = {decay:.2e}")
   ```
-- `🔗 MathsTerm Link`: [Lipschitz Continuity](../../MathsTerms/01-Primal-Analysis-and-Foundations/06-Lipschitz_Continuity.md).
+- `🔗 MathsTerm Link`: [Lipschitz Continuity](../../MathsTerms/05-Convexity-Duality-and-Metric-Analysis/04-Lipschitz_Continuity.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why penalize function gradients (X) rather than clipping weights (Y)? Weight clipping constrains parameters indirectly and exponentially with depth, whereas gradient penalty constrains the function's rate of change directly and uniformly across all layers.
@@ -283,7 +283,7 @@ The wrong move is viewing the 1-Lipschitz condition as an inequality constraint 
   assert torch.isclose(norm, torch.tensor(1.0))
   print(f"Topic 2 Clean: Verified unit gradient norm = {norm.item():.4f}")
   ```
-- `🔗 MathsTerm Link`: [Derivatives Gradients & Jacobians](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md).
+- `🔗 MathsTerm Link`: [Derivatives Gradients & Jacobians](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why target unit gradient norm $\|\nabla f\| = 1$ (X) rather than merely bounded norm $\|\nabla f\| \le 1$ (Y)? A Critic with $\|\nabla f\| \ll 1$ satisfies the Lipschitz condition but provides weak, flattened gradients to the generator, slowing down convergence.
@@ -369,7 +369,7 @@ The wrong move is sampling random Gaussian noise around real data points; the ri
   assert hat_x.shape == (B, C, H, W)
   print(f"Topic 3 Clean: Generated interpolated batch of shape {hat_x.shape}")
   ```
-- `🔗 MathsTerm Link`: [Convexity & Jensen's Inequality](../../MathsTerms/01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md).
+- `🔗 MathsTerm Link`: [Convexity & Jensen's Inequality](../../MathsTerms/05-Convexity-Duality-and-Metric-Analysis/01-Convexity_and_Jensens_Inequality.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why sample along line segments between real and fake points (X) rather than adding Gaussian noise around real points (Y)? Adding local noise only regularizes the neighborhood of real data, leaving the vast space between real and fake distributions unconstrained.
@@ -453,7 +453,7 @@ A naive wrong move is implementing a one-sided penalty $\max(0, \|\nabla D\| - 1
   assert torch.isclose(gp, torch.tensor(0.60))
   print(f"Topic 4 Clean: Batch gradient penalty = {gp.item():.4f}")
   ```
-- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
+- `🔗 MathsTerm Link`: [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why use penalty weight $\lambda = 10$ (X) rather than $\lambda = 0.1$ or $\lambda = 1000$ (Y)? If $\lambda \ll 1$, the Lipschitz constraint is ignored and training destabilizes; if $\lambda \gg 10$, the penalty dominates the loss, preventing the Critic from learning discriminating features.
@@ -561,7 +561,7 @@ The wrong move is using default Adam $\beta_1 = 0.9$, which can still cause mild
   assert w.grad is not None
   print(f"Topic 5 Clean: Second-order backprop delivered w.grad = {w.grad.item()}")
   ```
-- `🔗 MathsTerm Link`: [Chain Rule & Backpropagation](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md).
+- `🔗 MathsTerm Link`: [Chain Rule & Backpropagation](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why set Adam $\beta_1 = 0.0$ (X) rather than default $\beta_1 = 0.9$ (Y)? In adversarial minimax games, high first-moment momentum causes the optimizer to overshoot saddle points. Setting $\beta_1 = 0.0$ eliminates directional momentum while retaining adaptive second-moment scaling ($\beta_2 = 0.9$).
@@ -659,7 +659,7 @@ The wrong move is including `nn.BatchNorm2d` in the Critic because standard DCGA
   assert torch.all(batch.grad[1] == 0.0)
   print("Topic 6 Clean: LayerNorm verified: sample 0 gradient does not leak into sample 1")
   ```
-- `🔗 MathsTerm Link`: [Batch Normalization & Spectral Norm](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/11-Batch_Normalization_and_Spectral_Norm.md).
+- `🔗 MathsTerm Link`: [Batch Normalization & Spectral Norm](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/11-Batch_Normalization_and_Spectral_Norm.md).
 
 ### Contrastive Analysis: Why X, Not Y?
 Why use Layer Normalization (X) rather than Batch Normalization (Y) in the WGAN-GP Critic? LayerNorm computes normalization statistics independently per sample, satisfying the point-wise Lipschitz condition without cross-sample data leakage.

@@ -28,11 +28,11 @@ Before diving into the foundational pillars, use this reference table to decode 
 
 | Symbol / Notation | Spoken English (Phonetics) | Mathematical Concept | Plain-English Intuition | Dedicated MathsTerm Link |
 | :--- | :--- | :--- | :--- | :--- |
-| $F_X(x) = P(X \le x)$ | **EFF SUB EKS OF EKS** | Cumulative Distribution Function (1D CDF) | The running sum of total probability mass accumulated from $-\infty$ up to threshold $x$ | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
-| $F_{X_1, X_2}(x_1, x_2)$ | **EFF SUB EKS-ONE EKS-TWO OF EKS-ONE COMMA EKS-TWO** | Joint Cumulative Distribution Function | The probability that both coordinates fall inside the bottom-left infinite quadrant $(-\infty, x_1] \times (-\infty, x_2]$ | [Joint, Marginal & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
-| $f_X(x) = \frac{d}{dx} F_X(x)$ | **EFF SUB EKS OF EKS EQUALS DEE-EFF BY DEE-EKS** | Probability Density Function (PDF) | The local rate of probability accumulation (height/slope of CDF); must be integrated over an interval to get probability | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
-| $\lim_{\Delta x \to 0} \frac{P(x \le X \le x+\Delta x)}{\Delta x}$ | **LIH-mit AZ DEL-tuh EKS GOES TO ZERO** | Local Probability Concentration | Probability per unit length at point $x$; individual point probabilities are strictly zero | [Functions & Derivatives](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
-| $\Omega_1 \times \Omega_2$ | **OH-meg-uh-ONE CART-EE-zhun PRODUCT OH-meg-uh-TWO** | Product Sample Space | Combined physical space formed by pairing all possible outcomes from two experiments | [Joint, Marginal & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
+| $F_X(x) = P(X \le x)$ | **EFF SUB EKS OF EKS** | Cumulative Distribution Function (1D CDF) | The running sum of total probability mass accumulated from $-\infty$ up to threshold $x$ | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $F_{X_1, X_2}(x_1, x_2)$ | **EFF SUB EKS-ONE EKS-TWO OF EKS-ONE COMMA EKS-TWO** | Joint Cumulative Distribution Function | The probability that both coordinates fall inside the bottom-left infinite quadrant $(-\infty, x_1] \times (-\infty, x_2]$ | [Joint, Marginal & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
+| $f_X(x) = \frac{d}{dx} F_X(x)$ | **EFF SUB EKS OF EKS EQUALS DEE-EFF BY DEE-EKS** | Probability Density Function (PDF) | The local rate of probability accumulation (height/slope of CDF); must be integrated over an interval to get probability | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $\lim_{\Delta x \to 0} \frac{P(x \le X \le x+\Delta x)}{\Delta x}$ | **LIH-mit AZ DEL-tuh EKS GOES TO ZERO** | Local Probability Concentration | Probability per unit length at point $x$; individual point probabilities are strictly zero | [Functions & Derivatives](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
+| $\Omega_1 \times \Omega_2$ | **OH-meg-uh-ONE CART-EE-zhun PRODUCT OH-meg-uh-TWO** | Product Sample Space | Combined physical space formed by pairing all possible outcomes from two experiments | [Joint, Marginal & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) |
 
 ---
 
@@ -42,9 +42,9 @@ Before diving into the foundational pillars, review these key concepts from sibl
 
 | Assumed Concept | Primary Series Foundation | MathsTerms Deep-Dive | 1-Sentence Intuition Refresher |
 | :--- | :--- | :--- | :--- |
-| **Random Variables & Preimages** | [Lec 03: Probability Recap 2](../../Mathematical-foundation-ml/04-Lec03-Recap-Probability-Theory-Part2/NOTES.md) | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | The measurable mapping $X: \Omega \to \mathbb{R}^d$ that pulls Borel sets back to $\mathcal{F}$. |
-| **Probability Axioms** | [Lec 02: Probability Recap 1](../../Mathematical-foundation-ml/03-Lec02-Recap-Probability-Theory-Part1/NOTES.md) | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) | The underlying probability triplet $(\Omega, \mathcal{F}, P)$ sizing events. |
-| **Joint Distributions** | [Lec 05: Probability Recap Part 2](../../Mathematical-foundation-ml/06-Lec05-Recap-Probability-Theory-Part2/NOTES.md) | [Joint, Marginal & Conditional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Multivariate cumulative distribution functions over product geometries. |
+| **Random Variables & Preimages** | [Lec 03: Probability Recap 2](../../Mathematical-foundation-ml/04-Lec03-Recap-Probability-Theory-Part2/NOTES.md) | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | The measurable mapping $X: \Omega \to \mathbb{R}^d$ that pulls Borel sets back to $\mathcal{F}$. |
+| **Probability Axioms** | [Lec 02: Probability Recap 1](../../Mathematical-foundation-ml/03-Lec02-Recap-Probability-Theory-Part1/NOTES.md) | [Probability Basics & Axioms](../../MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md) | The underlying probability triplet $(\Omega, \mathcal{F}, P)$ sizing events. |
+| **Joint Distributions** | [Lec 05: Probability Recap Part 2](../../Mathematical-foundation-ml/06-Lec05-Recap-Probability-Theory-Part2/NOTES.md) | [Joint, Marginal & Conditional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Multivariate cumulative distribution functions over product geometries. |
 
 ---
 
@@ -491,8 +491,8 @@ Prior video package: [Lec 03 Part 2](../04-Lec03-Recap-Probability-Theory-Part2/
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Random Variables & Distributions (Expectation & Moments)** | [Random Variables & Distributions (Expectation & Moments)](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Expected value $\mathbb{E}[X]$, variance $\text{Var}(X)$, standard deviation, and covariance |
-| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Moments and expected values of canonical probability distributions |
-| **Convexity & Jensen's Inequality** | [Convexity & Jensen's Inequality](../../MathsTerms/01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md) | Jensen's inequality $f(\mathbb{E}[X]) \le \mathbb{E}[f(X)]$ for convex transformations |
+| **Random Variables & Distributions (Expectation & Moments)** | [Random Variables & Distributions (Expectation & Moments)](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Expected value $\mathbb{E}[X]$, variance $\text{Var}(X)$, standard deviation, and covariance |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Moments and expected values of canonical probability distributions |
+| **Convexity & Jensen's Inequality** | [Convexity & Jensen's Inequality](../../MathsTerms/05-Convexity-Duality-and-Metric-Analysis/01-Convexity_and_Jensens_Inequality.md) | Jensen's inequality $f(\mathbb{E}[X]) \le \mathbb{E}[f(X)]$ for convex transformations |
 
 ---

@@ -1063,11 +1063,11 @@ def safe_evaluate(test_loader, model, device):
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Neural Activation Functions** | [Neural Activation Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md) | Non-linearities: ReLU, LeakyReLU, Sigmoid, Tanh and saturation dynamics |
-| **Softmax Function** | [Softmax Function](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/06-Softmax.md) | Probability simplex mapping, temperature scaling, and Log-Sum-Exp trick |
-| **Loss Functions** | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Binary Cross-Entropy (BCE), Cross-Entropy, and Mean Squared Error (MSE) |
-| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Stochastic Gradient Descent (SGD), Momentum, RMSProp, and Adam |
-| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Fully connected affine layers $y = Wx + b$ |
+| **Neural Activation Functions** | [Neural Activation Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md) | Non-linearities: ReLU, LeakyReLU, Sigmoid, Tanh and saturation dynamics |
+| **Softmax Function** | [Softmax Function](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/06-Softmax.md) | Probability simplex mapping, temperature scaling, and Log-Sum-Exp trick |
+| **Loss Functions** | [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Binary Cross-Entropy (BCE), Cross-Entropy, and Mean Squared Error (MSE) |
+| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Stochastic Gradient Descent (SGD), Momentum, RMSProp, and Adam |
+| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Fully connected affine layers $y = Wx + b$ |
 
 ---
 

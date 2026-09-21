@@ -58,11 +58,11 @@ This reference hub provides foundational textbooks, peer-reviewed literature, in
 
 | Mathematical Concept | Repository Guide | Role in Lecture 13 |
 | :--- | :--- | :--- |
-| **Maximum Likelihood Estimation (MLE)** | [Maximum Likelihood Estimation (MLE)](../../MathsTerms/04-Probability-and-Statistical-Estimation/05-MLE.md) | The mathematical destination of the lecture: proving MLE $\equiv$ min-KL |
-| **Negative Log-Likelihood (NLL)** | [Negative Log-Likelihood (NLL)](../../MathsTerms/04-Probability-and-Statistical-Estimation/06-NLL.md) | Standard loss function representing empirical cross-entropy |
-| **Kullback-Leibler (KL) Divergence** | [KL Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) | The starting objective function minimized across parameter space |
-| **Loss Functions** | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Establishing loss functions as surrogates for population divergence |
-| **Expectation & Variance** | [Expectation & Variance](../../MathsTerms/04-Probability-and-Statistical-Estimation/06-NLL.md) | LOTUS and sample mean convergence via the Law of Large Numbers |
+| **Maximum Likelihood Estimation (MLE)** | [Maximum Likelihood Estimation (MLE)](../../MathsTerms/03-Probability-and-Statistical-Estimation/05-MLE.md) | The mathematical destination of the lecture: proving MLE $\equiv$ min-KL |
+| **Negative Log-Likelihood (NLL)** | [Negative Log-Likelihood (NLL)](../../MathsTerms/03-Probability-and-Statistical-Estimation/06-NLL.md) | Standard loss function representing empirical cross-entropy |
+| **Kullback-Leibler (KL) Divergence** | [KL Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/02-KL_Divergence.md) | The starting objective function minimized across parameter space |
+| **Loss Functions** | [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Establishing loss functions as surrogates for population divergence |
+| **Expectation & Variance** | [Expectation & Variance](../../MathsTerms/03-Probability-and-Statistical-Estimation/06-NLL.md) | LOTUS and sample mean convergence via the Law of Large Numbers |
 
 ---
 

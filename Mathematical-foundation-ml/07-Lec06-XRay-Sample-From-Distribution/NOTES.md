@@ -553,10 +553,10 @@ Unpack i.i.d.; continue toward densities and algorithms that estimate the distri
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Random Variables & High-Dimensional Distributions** | [Random Variables & High-Dimensional Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | High-dimensional data samples as realizations of continuous laws $P_X$ |
-| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Matrix pixel grids flattened into high-dimensional Euclidean coordinate vectors |
-| **Tensors, Dimensions & Shapes** | [Tensors, Dimensions & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Tensor representations of sensory data and high-dimensional spaces |
-| **Projections & Subspaces** | [Projections & Subspaces](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md) | The manifold hypothesis: data concentrated on low-dimensional sub-manifolds |
+| **Random Variables & High-Dimensional Distributions** | [Random Variables & High-Dimensional Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | High-dimensional data samples as realizations of continuous laws $P_X$ |
+| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Matrix pixel grids flattened into high-dimensional Euclidean coordinate vectors |
+| **Tensors, Dimensions & Shapes** | [Tensors, Dimensions & Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Tensor representations of sensory data and high-dimensional spaces |
+| **Projections & Subspaces** | [Projections & Subspaces](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md) | The manifold hypothesis: data concentrated on low-dimensional sub-manifolds |
 
 ---
 

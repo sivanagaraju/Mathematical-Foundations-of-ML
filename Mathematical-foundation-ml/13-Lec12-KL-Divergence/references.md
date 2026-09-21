@@ -58,11 +58,11 @@ This reference hub provides foundational textbooks, peer-reviewed literature, in
 
 | Mathematical Concept | Repository Guide | Role in Lecture 12 |
 | :--- | :--- | :--- |
-| **Kullback-Leibler (KL) Divergence** | [KL Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) | Canonical definitions, discrete and continuous formulas, and Gibbs' inequality |
-| **Shannon Entropy & Cross-Entropy** | [Entropy, Cross-Entropy & CCE](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Cross-entropy decomposition: $D_{KL}(P \parallel Q) = H(P, Q) - H(P)$ |
-| **Jensen-Shannon Divergence** | [Jensen-Shannon Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md) | Symmetric bounded counterpart resolving the directional asymmetry of KL |
-| **Loss Functions** | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Cross-entropy loss as empirical surrogate for KL minimization |
-| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Continuous Gaussian density pairs used for analytical KL calculations |
+| **Kullback-Leibler (KL) Divergence** | [KL Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/02-KL_Divergence.md) | Canonical definitions, discrete and continuous formulas, and Gibbs' inequality |
+| **Shannon Entropy & Cross-Entropy** | [Entropy, Cross-Entropy & CCE](../../MathsTerms/04-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Cross-entropy decomposition: $D_{KL}(P \parallel Q) = H(P, Q) - H(P)$ |
+| **Jensen-Shannon Divergence** | [Jensen-Shannon Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/03-Jensen_Shannon_Divergence.md) | Symmetric bounded counterpart resolving the directional asymmetry of KL |
+| **Loss Functions** | [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | Cross-entropy loss as empirical surrogate for KL minimization |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Continuous Gaussian density pairs used for analytical KL calculations |
 
 ---
 

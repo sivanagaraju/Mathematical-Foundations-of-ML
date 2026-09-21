@@ -555,9 +555,9 @@ Probability tools are in place. Next lectures name ML problems rigorously and de
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Joint, Marginal, & Conditional Distributions (IID Structure)** | [Joint, Marginal, & Conditional Distributions (IID Structure)](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Independent & Identically Distributed draws: joint factorization $\prod_{i=1}^n p(x_i)$ |
-| **Likelihood & Log-Likelihood** | [Likelihood & Log-Likelihood](../../MathsTerms/04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Likelihood product factorization under the IID data collection assumption |
-| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Distinguishing independence across data points from correlation within features |
+| **Joint, Marginal, & Conditional Distributions (IID Structure)** | [Joint, Marginal, & Conditional Distributions (IID Structure)](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Independent & Identically Distributed draws: joint factorization $\prod_{i=1}^n p(x_i)$ |
+| **Likelihood & Log-Likelihood** | [Likelihood & Log-Likelihood](../../MathsTerms/03-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Likelihood product factorization under the IID data collection assumption |
+| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Distinguishing independence across data points from correlation within features |
 
 ---
 

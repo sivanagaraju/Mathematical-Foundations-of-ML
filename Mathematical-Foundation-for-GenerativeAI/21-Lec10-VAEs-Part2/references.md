@@ -14,7 +14,7 @@ The mathematical machinery of VAE forward/backward dynamics rests directly on pr
   - **Relevance & Why Read This:** Details continuous multivariate random variable transformations, probability density functions, and Jacobian determinants under affine changes of variables.
 - [Lec 13: Minimization of KL & Variational Bounds](../../Mathematical-foundation-ml/14-Lec13-Minimization-of-KL/NOTES.md)
   - **Relevance & Why Read This:** Connects maximum likelihood estimation directly to I-projection and M-projection divergences, explaining why variational posteriors seek mode-covering or mean-seeking solutions.
-- [MathsTerms: Multivariate Gaussian Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md)
+- [MathsTerms: Multivariate Gaussian Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md)
   - **Relevance & Why Read This:** Provides rigorous geometric intuition and algebraic properties for quadratic forms, covariance determinants, and diagonal Gaussian factorization.
 
 ---

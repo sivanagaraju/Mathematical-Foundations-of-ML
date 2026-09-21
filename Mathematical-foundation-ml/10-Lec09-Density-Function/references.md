@@ -58,11 +58,11 @@ This reference hub provides foundational textbooks, peer-reviewed literature, in
 
 | Mathematical Concept | Repository Guide | Role in Lecture 09 |
 | :--- | :--- | :--- |
-| **Continuous Random Variables** | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Continuous densities $p(x)$, infinitesimal probability $p(x)dx$, and integration |
-| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Density height properties (why $p(x)$ can exceed 1) and normalization $\int p(x)dx = 1$ |
-| **Joint, Marginal & Conditional Distributions** | [Joint, Marginal & Conditional Dist.](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Joint density functions, volume integrals, and marginal density extraction |
-| **Likelihood Formulation** | [Likelihood & Log-Likelihood](../../MathsTerms/04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Transitioning from discrete likelihood $\prod P(X=x_i)$ to continuous product density $\prod f(x_i)$ |
-| **Derivatives & Calculus Rules** | [Functions, Derivatives & Rules](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Calculus of densities: fundamental theorem linking $F(x)$ and $f(x) = F'(x)$ |
+| **Continuous Random Variables** | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Continuous densities $p(x)$, infinitesimal probability $p(x)dx$, and integration |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Density height properties (why $p(x)$ can exceed 1) and normalization $\int p(x)dx = 1$ |
+| **Joint, Marginal & Conditional Distributions** | [Joint, Marginal & Conditional Dist.](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Joint density functions, volume integrals, and marginal density extraction |
+| **Likelihood Formulation** | [Likelihood & Log-Likelihood](../../MathsTerms/03-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Transitioning from discrete likelihood $\prod P(X=x_i)$ to continuous product density $\prod f(x_i)$ |
+| **Derivatives & Calculus Rules** | [Functions, Derivatives & Rules](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Calculus of densities: fundamental theorem linking $F(x)$ and $f(x) = F'(x)$ |
 
 ---
 

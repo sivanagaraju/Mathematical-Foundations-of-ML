@@ -193,8 +193,8 @@ verify_gaussian_kl()
 
 | Concept | Upstream Prerequisite | Downstream Application in Lecture 14 |
 | :--- | :--- | :--- |
-| KL Divergence | [02-KL_Divergence.md](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) | Formulating the denoising matching terms $L_{t-1}$ in ELBO |
-| Joint & Conditional Distributions | [03-Joint_Marginal_Conditional_Dist.md](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Expanding $q(x_{1:T} \mid x_0)$ and conditioning on $x_0$ |
+| KL Divergence | [02-KL_Divergence.md](../../MathsTerms/04-Information-Theory-and-Divergences/02-KL_Divergence.md) | Formulating the denoising matching terms $L_{t-1}$ in ELBO |
+| Joint & Conditional Distributions | [03-Joint_Marginal_Conditional_Dist.md](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Expanding $q(x_{1:T} \mid x_0)$ and conditioning on $x_0$ |
 | Latent Variable Models | [05-Latent_Variable_Models.md](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/05-Latent_Variable_Models.md) | Bounding marginal log-likelihood $\log p(x_0)$ via trajectory variational bound |
 
 ---

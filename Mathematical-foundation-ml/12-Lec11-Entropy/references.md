@@ -58,11 +58,11 @@ This reference hub provides foundational textbooks, peer-reviewed literature, in
 
 | Mathematical Concept | Repository Guide | Role in Lecture 11 |
 | :--- | :--- | :--- |
-| **Shannon Entropy & Cross-Entropy** | [Entropy, Cross-Entropy & CCE](../../MathsTerms/05-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Discrete entropy formulation $H(X) = -\sum p(x)\log p(x)$ and coding interpretation |
-| **Kullback-Leibler Divergence** | [KL Divergence](../../MathsTerms/05-Information-Theory-and-Divergences/02-KL_Divergence.md) | The direct extension from self-entropy to relative entropy between distributions |
-| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Calculating analytical entropies for Gaussians, Uniform, and Categorical distributions |
-| **Expectation & Moments** | [Expectation & Variance](../../MathsTerms/04-Probability-and-Statistical-Estimation/06-NLL.md) | Expected value formulation: interpreting entropy as the expectation of surprisal $\mathbb{E}[-\log p(X)]$ |
-| **Logarithms & Calculus** | [Functions, Derivatives & Rules](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Calculus of $\lim_{p \to 0^+} p \log p = 0$ using L'Hôpital's rule |
+| **Shannon Entropy & Cross-Entropy** | [Entropy, Cross-Entropy & CCE](../../MathsTerms/04-Information-Theory-and-Divergences/01-Entropy_CrossEntropy_CCE.md) | Discrete entropy formulation $H(X) = -\sum p(x)\log p(x)$ and coding interpretation |
+| **Kullback-Leibler Divergence** | [KL Divergence](../../MathsTerms/04-Information-Theory-and-Divergences/02-KL_Divergence.md) | The direct extension from self-entropy to relative entropy between distributions |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Calculating analytical entropies for Gaussians, Uniform, and Categorical distributions |
+| **Expectation & Moments** | [Expectation & Variance](../../MathsTerms/03-Probability-and-Statistical-Estimation/06-NLL.md) | Expected value formulation: interpreting entropy as the expectation of surprisal $\mathbb{E}[-\log p(X)]$ |
+| **Logarithms & Calculus** | [Functions, Derivatives & Rules](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Calculus of $\lim_{p \to 0^+} p \log p = 0$ using L'Hôpital's rule |
 
 ---
 

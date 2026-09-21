@@ -513,9 +513,9 @@ Refresh the listed probability tools; next sessions cast learning as estimating 
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Random Variables & Distributions (Expectation & Moments)** | [Random Variables & Distributions (Expectation & Moments)](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Expected value $\mathbb{E}[X]$, variance $\text{Var}(X)$, standard deviation, and covariance |
-| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Moments and expected values of canonical probability distributions |
-| **Convexity & Jensen's Inequality** | [Convexity & Jensen's Inequality](../../MathsTerms/01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md) | Jensen's inequality $f(\mathbb{E}[X]) \le \mathbb{E}[f(X)]$ for convex transformations |
+| **Random Variables & Distributions (Expectation & Moments)** | [Random Variables & Distributions (Expectation & Moments)](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Expected value $\mathbb{E}[X]$, variance $\text{Var}(X)$, standard deviation, and covariance |
+| **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Moments and expected values of canonical probability distributions |
+| **Convexity & Jensen's Inequality** | [Convexity & Jensen's Inequality](../../MathsTerms/05-Convexity-Duality-and-Metric-Analysis/01-Convexity_and_Jensens_Inequality.md) | Jensen's inequality $f(\mathbb{E}[X]) \le \mathbb{E}[f(X)]$ for convex transformations |
 
 ---
 

@@ -37,8 +37,8 @@ An **Autoregressive Model** solves this dilemma by applying the **probability ch
 
 **Prerequisites**
 
-- **Required now:** Conditional probability distributions and the chain rule of probability. [Joint, marginal and conditional distributions, §3](../04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) covers conditional conditioning $p(A \mid B) = p(A, B)/p(B)$. [Softmax function, §2](../03-Multivariate-Calculus-and-Optimization/06-Softmax.md) defines temperature-scaled categorical distributions over logits.
-- **Required for optional depth:** Negative Log-Likelihood and Kullback-Leibler divergence; see [Negative log-likelihood, §4](../04-Probability-and-Statistical-Estimation/06-NLL.md). These support the maximum likelihood estimation theorems in §4 and §8.
+- **Required now:** Conditional probability distributions and the chain rule of probability. [Joint, marginal and conditional distributions, §3](../03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) covers conditional conditioning $p(A \mid B) = p(A, B)/p(B)$. [Softmax function, §2](../02-Multivariate-Calculus-and-Optimization/06-Softmax.md) defines temperature-scaled categorical distributions over logits.
+- **Required for optional depth:** Negative Log-Likelihood and Kullback-Leibler divergence; see [Negative log-likelihood, §4](../03-Probability-and-Statistical-Estimation/06-NLL.md). These support the maximum likelihood estimation theorems in §4 and §8.
 - **Useful context:** [Recurrent neural networks](02-Recurrent_Neural_Networks.md) for sequential state transitions and [Autoencoders and latent spaces](03-Autoencoders_and_Latent_Spaces.md) for discrete tokenization via VQ-VAEs.
 
 **Target systems:** Large Language Models (GPT-4, Claude, LLaMA-3), autoregressive audio synthesis (AudioCraft, WaveNet), raster-scan image generation (Chameleon, PixelCNN), and robotic trajectory policies (RT-2, OpenVLA).

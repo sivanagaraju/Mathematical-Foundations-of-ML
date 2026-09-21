@@ -21,13 +21,13 @@ Before diving into the foundational pillars, use this reference table to decode 
 
 | Symbol / Notation | Spoken English (Phonetics) | Mathematical Concept | Plain-English Intuition | Dedicated MathsTerm Link |
 | :--- | :--- | :--- | :--- | :--- |
-| $f: X \to Y$ | **EFF FROM EKS TO WYE** | Target Mapping Function | The true ground-truth rule converting inputs into outputs | [Functions & Derivatives](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
-| $\hat{f}(x; \theta)$ | **EFF-HAT OF EKS GIV-un THAY-tuh** | Parametric Approximator | A neural network or polynomial model with trainable tensor weights | [Functions & Derivatives](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
-| $\theta \in \mathbb{R}^p$ | **THAY-tuh IN AR-PEE** | Parameter Vector | The collection of all trainable weights and biases (`model.parameters()`) | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) |
-| $\mathbf{x} \in \mathbb{R}^d$ | **BOLD EKS IN AR-DEE** | Feature Vector | Input data sample flattened into a 1D continuous tensor of length $d$ | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
-| $\mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^N$ | **DEE EQUALS SET OF PAIRS** | Supervised Training Dataset | A finite batch of labeled input-output examples loaded into memory | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
-| $\langle \mathbf{w}, \mathbf{x} \rangle$ | **INNER PRODUCT OF DUB-yoo AND EKS** | Euclidean Dot Product | Linear projection multiplying coordinate elements and summing: `torch.dot(w, x)` | [Dot Product & Similarity](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md) |
-| $\mathcal{L}(\theta)$ | **CAL-ih-GRAF-ik EL OF THAY-tuh** | Empirical Loss Function | Scalar error penalty computed over training instances: `criterion(pred, target)` | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) |
+| $f: X \to Y$ | **EFF FROM EKS TO WYE** | Target Mapping Function | The true ground-truth rule converting inputs into outputs | [Functions & Derivatives](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
+| $\hat{f}(x; \theta)$ | **EFF-HAT OF EKS GIV-un THAY-tuh** | Parametric Approximator | A neural network or polynomial model with trainable tensor weights | [Functions & Derivatives](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) |
+| $\theta \in \mathbb{R}^p$ | **THAY-tuh IN AR-PEE** | Parameter Vector | The collection of all trainable weights and biases (`model.parameters()`) | [Vectors & Matrices](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) |
+| $\mathbf{x} \in \mathbb{R}^d$ | **BOLD EKS IN AR-DEE** | Feature Vector | Input data sample flattened into a 1D continuous tensor of length $d$ | [Tensors & Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| $\mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^N$ | **DEE EQUALS SET OF PAIRS** | Supervised Training Dataset | A finite batch of labeled input-output examples loaded into memory | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| $\langle \mathbf{w}, \mathbf{x} \rangle$ | **INNER PRODUCT OF DUB-yoo AND EKS** | Euclidean Dot Product | Linear projection multiplying coordinate elements and summing: `torch.dot(w, x)` | [Dot Product & Similarity](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/03-Dot_Product_and_Similarity.md) |
+| $\mathcal{L}(\theta)$ | **CAL-ih-GRAF-ik EL OF THAY-tuh** | Empirical Loss Function | Scalar error penalty computed over training instances: `criterion(pred, target)` | [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) |
 
 ---
 
@@ -37,9 +37,9 @@ Before diving into the foundational pillars, review these key concepts from sibl
 
 | Assumed Concept | Primary Series Foundation | MathsTerms Deep-Dive | 1-Sentence Intuition Refresher |
 | :--- | :--- | :--- | :--- |
-| **Probability Triplet** | [Lec 02: Probability Theory Part 1](../../Mathematical-foundation-ml/03-Lec02-Recap-Probability-Theory-Part1/NOTES.md) | [Probability Basics & Axioms](../../MathsTerms/01-Primal-Analysis-and-Foundations/01-Probability_Basics_and_Axioms.md) | Moving from deterministic function approximation to statistical modeling requires formal sample spaces. |
-| **Vector-Valued Data** | [Lec 06: X-Ray Sample from Distribution](../../Mathematical-foundation-ml/07-Lec06-XRay-Sample-From-Distribution/NOTES.md) | [Tensors & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Sensory matrices are flattened into high-dimensional continuous coordinate spaces $\mathbb{R}^d$. |
-| **Distribution Estimation** | [Lec 08: Distribution Estimation](../../Mathematical-foundation-ml/09-Lec08-Distribution-Estimation/NOTES.md) | [Random Variables & Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | The fundamental paradigm shift from fitting $f(x) \approx y$ to learning probability densities $p(x, y)$. |
+| **Probability Triplet** | [Lec 02: Probability Theory Part 1](../../Mathematical-foundation-ml/03-Lec02-Recap-Probability-Theory-Part1/NOTES.md) | [Probability Basics & Axioms](../../MathsTerms/03-Probability-and-Statistical-Estimation/00-Probability_Basics_and_Axioms.md) | Moving from deterministic function approximation to statistical modeling requires formal sample spaces. |
+| **Vector-Valued Data** | [Lec 06: X-Ray Sample from Distribution](../../Mathematical-foundation-ml/07-Lec06-XRay-Sample-From-Distribution/NOTES.md) | [Tensors & Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Sensory matrices are flattened into high-dimensional continuous coordinate spaces $\mathbb{R}^d$. |
+| **Distribution Estimation** | [Lec 08: Distribution Estimation](../../Mathematical-foundation-ml/09-Lec08-Distribution-Estimation/NOTES.md) | [Random Variables & Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | The fundamental paradigm shift from fitting $f(x) \approx y$ to learning probability densities $p(x, y)$. |
 
 ---
 
@@ -214,9 +214,9 @@ Quiz later: [quiz.html](./quiz.html) Part A = this file.
 
 | Mathematical Concept | Dedicated Guide | Role & Significance in This Lecture |
 | :--- | :--- | :--- |
-| **Functions, Derivatives & Rules** | [Functions, Derivatives & Rules](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Function approximation fundamentals, domain, range, and unknown mapping $f: X \to Y$ |
-| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Vector representations of physical observations and data points |
-| **Tensors, Dimensions & Shapes** | [Tensors, Dimensions & Shapes](../../MathsTerms/02-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Image stacking into high-dimensional coordinate vectors $\mathbb{R}^{PQ}$ |
-| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/04-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Transitioning from deterministic function approximation to probabilistic modeling |
+| **Functions, Derivatives & Rules** | [Functions, Derivatives & Rules](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Function approximation fundamentals, domain, range, and unknown mapping $f: X \to Y$ |
+| **Vectors & Matrices** | [Vectors & Matrices](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) | Vector representations of physical observations and data points |
+| **Tensors, Dimensions & Shapes** | [Tensors, Dimensions & Shapes](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) | Image stacking into high-dimensional coordinate vectors $\mathbb{R}^{PQ}$ |
+| **Random Variables & Probability Distributions** | [Random Variables & Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Transitioning from deterministic function approximation to probabilistic modeling |
 
 ---

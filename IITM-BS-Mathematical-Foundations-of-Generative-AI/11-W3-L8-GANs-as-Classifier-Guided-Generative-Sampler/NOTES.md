@@ -830,9 +830,9 @@ This completes the dual formulation of GANs as classifier-guided generative samp
 | :--- | :--- | :--- |
 | **Minimax Game & Density Ratio Estimation** | [Minimax Game & Density Ratio Estimation](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/09-Minimax_Game_and_GANs.md) | The optimal discriminator as an exact density ratio estimator $r(x) = p_x(x) / p_g(x)$ |
 | **Diffusion & Score Matching** | [Diffusion & Score Matching](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/07-ELBO_and_Variational_Inference.md) | Classifier guidance gradients $\nabla_x \log p(y \mid x)$ and Langevin dynamics |
-| **Likelihood & Log-Likelihood** | [Likelihood & Log-Likelihood](../../MathsTerms/04-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Likelihood-ratio tilting in generative sampling and importance weights |
-| **Maximum Likelihood Estimation** | [Maximum Likelihood Estimation](../../MathsTerms/04-Probability-and-Statistical-Estimation/05-MLE.md) | Connection between density ratio matching and maximum likelihood principles |
-| **Exponential Moving Average (EMA)** | [Exponential Moving Average (EMA)](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md) | EMA parameter smoothing for high-fidelity generator sample evaluation |
+| **Likelihood & Log-Likelihood** | [Likelihood & Log-Likelihood](../../MathsTerms/03-Probability-and-Statistical-Estimation/04-Likelihood_and_Log_Likelihood.md) | Likelihood-ratio tilting in generative sampling and importance weights |
+| **Maximum Likelihood Estimation** | [Maximum Likelihood Estimation](../../MathsTerms/03-Probability-and-Statistical-Estimation/05-MLE.md) | Connection between density ratio matching and maximum likelihood principles |
+| **Exponential Moving Average (EMA)** | [Exponential Moving Average (EMA)](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/10-Exponential_Moving_Average_EMA.md) | EMA parameter smoothing for high-fidelity generator sample evaluation |
 
 ---
 

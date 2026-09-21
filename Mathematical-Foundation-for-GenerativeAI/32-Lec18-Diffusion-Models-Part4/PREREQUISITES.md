@@ -204,8 +204,8 @@ verify_sde_drift()
 
 | Concept | Upstream Prerequisite | Downstream Application in Lecture 18 |
 | :--- | :--- | :--- |
-| Derivatives & Gradients | [02-Derivatives_Gradients_and_Jacobians.md](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Computing the score function $\nabla_{x_t} \log p(x_t)$ |
-| Conditional Distributions | [03-Joint_Marginal_Conditional_Dist.md](../../MathsTerms/04-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Bayes decomposition of conditional score $\nabla \log p(x_t \mid y)$ |
+| Derivatives & Gradients | [02-Derivatives_Gradients_and_Jacobians.md](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/02-Derivatives_Gradients_and_Jacobians.md) | Computing the score function $\nabla_{x_t} \log p(x_t)$ |
+| Conditional Distributions | [03-Joint_Marginal_Conditional_Dist.md](../../MathsTerms/03-Probability-and-Statistical-Estimation/03-Joint_Marginal_Conditional_Dist.md) | Bayes decomposition of conditional score $\nabla \log p(x_t \mid y)$ |
 | Latent Variable Models | [05-Latent_Variable_Models.md](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/05-Latent_Variable_Models.md) | Formulating two-stage Latent Diffusion Models (LDM) |
 
 ---

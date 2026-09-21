@@ -10,9 +10,9 @@ A **Recurrent Neural Network (RNN)** maintains an internal latent memory state t
 
 **Prerequisites**
 
-- **Required now:** Matrix-vector multiplication, linear layers, and partial derivatives. [Vectors and matrices, §9](../02-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) works through linear projections and outer products. [Activation functions, §2](../03-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md) introduces $\tanh$ and the logistic sigmoid.
-- **Required for optional depth:** The multibranch chain rule across time (Backpropagation Through Time) and matrix operator norms; see [Chain rule and backpropagation, §4](../03-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md). These support the repeated Jacobian product and contraction proofs in §8.
-- **Useful context:** [Autoregressive models](04-Autoregressive_Models.md) for causal sequence likelihood factorizations, and [Module 02, Chapter 06](../02-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md) for matrix singular values.
+- **Required now:** Matrix-vector multiplication, linear layers, and partial derivatives. [Vectors and matrices, §9](../01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) works through linear projections and outer products. [Activation functions, §2](../02-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md) introduces $\tanh$ and the logistic sigmoid.
+- **Required for optional depth:** The multibranch chain rule across time (Backpropagation Through Time) and matrix operator norms; see [Chain rule and backpropagation, §4](../02-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md). These support the repeated Jacobian product and contraction proofs in §8.
+- **Useful context:** [Autoregressive models](04-Autoregressive_Models.md) for causal sequence likelihood factorizations, and [Module 02, Chapter 06](../01-Linear-Algebra-Geometry-and-Tensors/06-Singular_Value_Decomposition.md) for matrix singular values.
 
 **Target systems:** Real-time audio streaming (WaveNet, Voice AI), sequential speech encoders (RNN-T), streaming telemetry monitors, and the mathematical foundations of modern linear State-Space Models (Mamba, S4).
 

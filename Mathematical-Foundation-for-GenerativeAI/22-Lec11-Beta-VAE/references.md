@@ -14,7 +14,7 @@ The mathematical concepts in this lecture build directly upon prior probability,
   - **Relevance & Why Read This:** Explores variational bounds and I-projections, directly explaining why scaling the relative entropy regularizer forces posterior distributions to compress toward the prior.
 - [Lec 10: VAEs Part 2](../21-Lec10-VAEs-Part2/NOTES.md)
   - **Relevance & Why Read This:** Preceding operational lecture establishing the reparameterized forward/backward pass, Gaussian MSE loss equivalence, and closed-form relative entropy derivations.
-- [MathsTerms: Convexity and Jensen's Inequality](../../MathsTerms/01-Primal-Analysis-and-Foundations/03-Convexity_and_Jensens_Inequality.md)
+- [MathsTerms: Convexity and Jensen's Inequality](../../MathsTerms/05-Convexity-Duality-and-Metric-Analysis/01-Convexity_and_Jensens_Inequality.md)
   - **Relevance & Why Read This:** Provides rigorous proofs for variational lower bounding techniques and concave logarithmic transformations.
 
 ---

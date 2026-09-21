@@ -894,10 +894,10 @@ Vanilla MLP-GAN on MNIST is a complete runnable object. Later tutorials change t
 | :--- | :--- | :--- |
 | **Minimax Game & GAN Implementations** | [Minimax Game & GAN Implementations](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/09-Minimax_Game_and_GANs.md) | Full training loop, alternating optimizer steps, and adversarial updates |
 | **Convolution & Pooling Operations** | [Convolution & Pooling Operations](../../MathsTerms/06-Deep-Architectures-and-Generative-Models/01-Convolution_and_Pooling.md) | DCGAN convolutional strides, transposed convolutions, and spatial upsampling |
-| **Batch Normalization & Spectral Norm** | [Batch Normalization & Spectral Norm](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/11-Batch_Normalization_and_Spectral_Norm.md) | Stabilizing GAN generator and discriminator internal activations |
-| **Neural Activation Functions** | [Neural Activation Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md) | LeakyReLU in discriminator and Tanh generator output normalization |
-| **Loss Functions** | [Loss Functions](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | `BCEWithLogitsLoss` for numerical stability against sigmoid exponent overflows |
-| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/03-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Adam optimizer tuning (learning rate 0.0002, $\beta_1 = 0.5$) for GAN stability |
+| **Batch Normalization & Spectral Norm** | [Batch Normalization & Spectral Norm](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/11-Batch_Normalization_and_Spectral_Norm.md) | Stabilizing GAN generator and discriminator internal activations |
+| **Neural Activation Functions** | [Neural Activation Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md) | LeakyReLU in discriminator and Tanh generator output normalization |
+| **Loss Functions** | [Loss Functions](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) | `BCEWithLogitsLoss` for numerical stability against sigmoid exponent overflows |
+| **Optimization Algorithms** | [Optimization Algorithms](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) | Adam optimizer tuning (learning rate 0.0002, $\beta_1 = 0.5$) for GAN stability |
 
 ---
 
