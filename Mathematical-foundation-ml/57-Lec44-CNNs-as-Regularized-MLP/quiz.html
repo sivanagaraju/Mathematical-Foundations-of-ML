@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lecture 44: CNNs as Regularized MLPs</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Lecture 44: CNNs as Regularized MLPs</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "Q1-PREREQ-TENSOR-LAYOUT", "part": "prerequisites", "flavor": "definition", "anchor": "PREREQUISITES.md#p1", "prompt": "In standard C-contiguous (row-major) memory layout, what is the exact 1D memory index formula for an element at coordinates (i, j, c) within a tensor of shape [P, Q, R]?", "options": [{"key": "A", "text": "flat_idx = i * (Q * R) + j * R + c"}, {"key": "B", "text": "flat_idx = c * (P * Q) + i * Q + j"}, {"key": "C", "text": "flat_idx = (i + j + c) * (P * Q * R)"}, {"key": "D", "text": "flat_idx = i * P + j * Q + c * R"}], "answer": "A", "whyCorrect": "In row-major ordering, the last index (c) changes fastest, preceded by the column index (j) with stride R, and the row index (i) with stride Q * R.", "whyOthers": {"B": "This represents channel-first planar ordering [R, P, Q], not row-major interleaved channel ordering [P, Q, R].", "C": "Adding indices linearly scrambles distinct coordinate locations into overlapping memory slots.", "D": "Fails dimensional analysis; strides must multiply the product of remaining trailing dimension sizes."}, "diagram": "flat_idx = i * (Q * R) + j * R + c", "useLater": "Essential for designing custom CUDA kernels and understanding memory strides in Topic 3."}, {"id": "Q2-PREREQ-CONV-VS-CORR", "part": "prerequisites", "flavor": "compare", "anchor": "PREREQUISITES.md#p2", "prompt": "Why is the 2D operation implemented in deep learning frameworks technically cross-correlation rather than true mathematical convolution, and why does this distinction have no negative effect on model training?", "options": [{"key": "A", "text": "Deep learning omits spatial kernel flipping; this is harmless because filter weights are learnable parameters initialized randomly, allowing backpropagation to learn whichever orientation minimizes empirical risk."}, {"key": "B", "text": "Cross-correlation is non-linear while mathematical convolution is strictly linear."}, {"key": "C", "text": "Mathematical convolution can only be computed in continuous frequency domains via Fourier transforms."}, {"key": "D", "text": "Cross-correlation requires 10 times fewer floating-point operations than convolution."}], "answer": "A", "whyCorrect": "Mathematical convolution requires double-flipping the kernel across horizontal and vertical axes; because neural network filters are learned via ERM, any required reflection is absorbed directly into the learned weight values.", "whyOthers": {"B": "Both cross-correlation and convolution are linear operators before applying activation functions.", "C": "Both operations have standard discrete formulations defined directly on pixel grids in the spatial domain.", "D": "Flipping a filter is an index reversal taking O(1) pointer operations; computational arithmetic FLOPs are identical."}, "diagram": "Cross-corr: sum X[i+u, j+v] K[u,v]  vs  Conv: sum X[i-u, j-v] K[u,v]", "useLater": "Clarifies Prof. Prathosh's emphasis in Topic 1 that 'convolutional neural network is a bit of a misnomer'."}, {"id": "Q3-PREREQ-CHANNEL-MARGINALIZATION", "part": "prerequisites", "flavor": "connect", "anchor": "PREREQUISITES.md#p3", "prompt": "When a 3D filter of dimensions [k, k, R] slides over an input tensor with R channels, how does the layer compute each output spatial activation, and what happens to the channel dimension R?", "options": [{"key": "A", "text": "It computes component-wise products across all k * k * R elements and sums them all into a single scalar, completely marginalizing (collapsing) the input channel dimension."}, {"key": "B", "text": "It preserves the R channels independently, producing an output tensor with R channels per filter."}, {"key": "C", "text": "It takes the maximum value along the channel axis without computing any inner products."}, {"key": "D", "text": "It requires the channel dimension R to equal the spatial width k."}], "answer": "A", "whyCorrect": "The 3D Frobenius inner product sums across all spatial coordinates and all R channels simultaneously, reducing the rank-3 patch to a single scalar pre-activation value.", "whyOthers": {"B": "This describes depthwise convolution without channel mixing; standard 3D convolutions sum out the channel axis.", "C": "Inner products compute linear combinations of features, not channel-wise max pooling.", "D": "Channel count R and spatial filter size k are independent hyperparameters."}, "diagram": "Sum_{c=1}^R Sum_{u,v} W[u,v,c] * X[u,v,c] + b  --->  Scalar z[i,j]", "useLater": "Explains why output channel count in Topic 4 is strictly determined by filter count L, independent of R."}, {"id": "Q4-PREREQ-SPATIAL-DIMENSIONS", "part": "prerequisites", "flavor": "trap", "anchor": "PREREQUISITES.md#p4", "prompt": "An input feature map has spatial resolution P = 224. If a convolutional layer applies kernel size k = 7, stride s = 2, and zero-padding p = 3, what is the exact output spatial resolution P_out?", "options": [{"key": "A", "text": "112"}, {"key": "B", "text": "111"}, {"key": "C", "text": "114"}, {"key": "D", "text": "224"}], "answer": "A", "whyCorrect": "Using the floor recurrence: P_out = floor((224 - 7 + 2*3) / 2) + 1 = floor(223 / 2) + 1 = 111 + 1 = 112 (the classic ResNet-50 conv1 spatial dimension).", "whyOthers": {"B": "Forgets to add the +1 term in the discrete window count recurrence.", "C": "Incorrectly evaluates padding as additive output pixels rather than dividing by stride.", "D": "Stride s = 2 downsamples spatial resolution by approximately half; it does not preserve 224."}, "diagram": "P_out = floor((224 - 7 + 6)/2) + 1 = floor(223/2) + 1 = 112", "useLater": "Directly applied in designing multi-stage backbones in Topic 7 and U-Net encoder paths in Topic 8."}, {"id": "Q5-NOTES-REGULARIZED-MLP-VIEW", "part": "notes", "flavor": "map", "anchor": "NOTES.md#executive-summary-tensor-convolutions-architectural-blueprint", "prompt": "On the master map of deep learning architectures, what is the core point of this lecture regarding how Convolutional Neural Networks (CNNs) connect to standard Multi-Layer Perceptrons (MLPs)?", "options": [{"key": "A", "text": "A CNN is an entirely different non-parametric algorithm that cannot be expressed with matrices."}, {"key": "B", "text": "A CNN is mathematically a standard MLP whose dense weight matrix has been subjected to two hard regularizers: local receptive fields (structural sparsity) and parameter sharing (weight tying)."}, {"key": "C", "text": "A CNN is an unconstrained MLP where activation functions are omitted to speed up training."}, {"key": "D", "text": "A CNN is an MLP that only operates on continuous audio waveforms and cannot process images."}], "answer": "B", "whyCorrect": "A CNN operates on the isomorphic flattened vector space of an image, but forces non-local weights to zero and constrains local weights to identical values across spatial coordinates, forming a banded Toeplitz matrix.", "whyOthers": {"A": "CNN forward and backward passes are linear matrix/tensor operations governed by multivariable calculus.", "C": "Pointwise non-linear activations remain mandatory to preserve Universal Approximation Theorem capacity.", "D": "CNNs were originally developed for 2D spatial image grids and generalize to 1D signals and 3D volumes."}, "diagram": "Dense MLP W in R^{M x d}  --->  Local Receptive Field (Sparsity)  --->  Parameter Sharing (Toeplitz CNN)", "useLater": "Unifies the core conceptual foundation of Lecture 43 and Lecture 44."}, {"id": "Q6-NOTES-MULTI-FILTER-NECESSITY", "part": "notes", "flavor": "tradeoff", "anchor": "NOTES.md#topic-2-multi-filter-stacking-feature-specialization-and-3d-activation-tensors-06001200", "prompt": "Why is deploying a single convolutional filter per layer (L = 1) insufficient for complex visual representation learning, and what does multi-filter stacking achieve?", "options": [{"key": "A", "text": "A single filter only projects local patches onto a 1D scalar line, capturing only one spatial primitive; stacking L filters produces a multi-dimensional basis expansion yielding a 3D activation tensor."}, {"key": "B", "text": "A single filter violates the Universal Approximation Theorem by making the network non-convex."}, {"key": "C", "text": "PyTorch and CUDA GPUs cannot physically execute layers that contain only one filter."}, {"key": "D", "text": "A single filter forces all output pixels to take negative values."}], "answer": "A", "whyCorrect": "A single filter extracts only one visual feature (e.g. horizontal edge); deploying L filters allows the network to learn L complementary features (edges, textures, color gradients) stacked into a 3D tensor of shape [P_out, Q_out, L].", "whyOthers": {"B": "Neural network empirical risk minimization is non-convex regardless of filter count L.", "C": "Hardware libraries easily support layers with out_channels=1.", "D": "Output activations are determined by inner products and non-linear squashing functions, not filter count."}, "diagram": "L=1 -> 2D slice [P_out x Q_out]  vs  L filters -> 3D tensor [P_out x Q_out x L]", "useLater": "Motivates filter bank hyperparameter tuning in deep vision architectures."}, {"id": "Q7-NOTES-INTER-LAYER-RECURRENCE", "part": "notes", "flavor": "connect", "anchor": "NOTES.md#topic-4-3d-tensor-convolutions-channel-marginalization-and-stride-padding-arithmetic-18002400", "prompt": "In a deep multi-layer CNN, how is the channel depth dimension of filters in layer l determined by the architectural choices made in layer l-1?", "options": [{"key": "A", "text": "The filter depth in layer l must strictly equal the number of filters chosen in layer l-1: R^[l] = L^[l-1]."}, {"key": "B", "text": "The filter depth in layer l must equal the spatial image width P divided by layer depth l."}, {"key": "C", "text": "Filter depth is always fixed at 3 for all layers because input images have RGB channels."}, {"key": "D", "text": "Filter depth in layer l is an unconstrained free hyperparameter that can be chosen arbitrarily."}], "answer": "A", "whyCorrect": "Because layer l-1 produces an activation tensor with L^[l-1] channels, filters in layer l must span all L^[l-1] channels to compute valid 3D inner products and marginalize them.", "whyOthers": {"B": "Spatial width P governs grid dimensions, not channel depth.", "C": "Only layer 1 has filter depth equal to 3 (matching raw RGB inputs); subsequent layers match intermediate channel depths.", "D": "Filter depth is geometrically constrained to match input tensor channel count; choosing an arbitrary depth causes a shape mismatch error."}, "diagram": "Layer l-1: L^[l-1] filters  --->  Tensor A has L^[l-1] channels  --->  Layer l filters: k x k x L^[l-1]", "useLater": "Crucial invariant for building modular deep neural network code without shape mismatches."}, {"id": "Q8-NOTES-SYMMETRY-TRAP", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#topic-5-optimization-dynamics-under-erm-filter-symmetry-breaking-overparameterization-and-bias-variance-24003000", "prompt": "What happens if all L convolutional filters in a layer are initialized with identical constant weights (e.g., all 0.1), and how does deep learning overcome this issue?", "options": [{"key": "A", "text": "All filters produce identical forward activations and receive identical backprop gradients, trapping the network in a degenerate rank-1 symmetric subspace; random initialization breaks symmetry to allow diverse feature learning."}, {"key": "B", "text": "The loss immediately diverges to positive infinity during the first forward pass."}, {"key": "C", "text": "Identical initialization accelerates training by ensuring all filters learn the most optimal edge filter simultaneously."}, {"key": "D", "text": "The optimizer automatically converts the layer into an average pooling layer."}], "answer": "A", "whyCorrect": "Prof. Prathosh explains that ERM offers no guarantee of feature diversity; identical initialization forces identical gradients dL/dW^(1) = dL/dW^(2), requiring stochastic initialization to break symmetry.", "whyOthers": {"B": "Forward activations are finite real numbers; loss does not diverge to infinity.", "C": "Identical filters are completely redundant, wasting parameter capacity without improving accuracy.", "D": "Optimizers only update parameter values via gradient descent; they cannot rewrite computational graph architectures."}, "diagram": "W^(1) = W^(2)  ==>  dL/dW^(1) = dL/dW^(2)  ==>  W^(1)(t) == W^(2)(t) forever", "useLater": "Directly verified in Workplace Debugging Scenario 1."}, {"id": "Q9-NOTES-POOLING-MECHANICS", "part": "notes", "flavor": "compare", "anchor": "NOTES.md#topic-6-spatial-subsampling-average-pooling-as-fixed-filters-vs-max-pooling-subgradient-routing-30003500", "prompt": "How do average pooling and max pooling fundamentally differ in terms of their mathematical formulation and backpropagation mechanics?", "options": [{"key": "A", "text": "Average pooling is a fixed convolution with constant weights 1/k_p^2 distributing gradients uniformly, whereas max pooling is a non-linear operator routing gradients exclusively to the argmax coordinate."}, {"key": "B", "text": "Average pooling has learnable weights while max pooling has fixed weights."}, {"key": "C", "text": "Max pooling preserves spatial resolution while average pooling reduces spatial resolution by half."}, {"key": "D", "text": "Average pooling can only be used on 1D audio while max pooling is exclusive to 2D images."}], "answer": "A", "whyCorrect": "Average pooling is a linear low-pass filter with uniform subgradient distribution delta / k_p^2; max pooling is non-linear and routes upstream sensitivity delta via an argmax subgradient mask.", "whyOthers": {"B": "Both classical average and max pooling layers have zero learnable parameters.", "C": "Both pooling layers downsample spatial resolution by factor s_p.", "D": "Both pooling operations apply universally across 1D, 2D, and 3D grid data."}, "diagram": "AvgPool: distribute delta / k_p^2 uniformly  |  MaxPool: route delta exclusively to argmax", "useLater": "Implemented and verified against PyTorch in examples/02_pooling_and_transposed_conv.py."}, {"id": "Q10-NOTES-DENSE-PREDICTION-UNET", "part": "notes", "flavor": "definition", "anchor": "NOTES.md#topic-8-dense-prediction-architectures-u-net-semantic-segmentation-bottlenecks-and-transposed-convolutions-40004456", "prompt": "In dense prediction tasks like semantic segmentation, why do architectures like U-Net eliminate vector flattening, and how do they restore full spatial resolution?", "options": [{"key": "A", "text": "Flattening destroys 2D spatial coordinate topology; U-Net preserves grids using a contracting encoder bottleneck and an expanding decoder powered by transposed convolutions and lateral skip connections."}, {"key": "B", "text": "Flattening causes memory leaks in GPU tensor cores that prevent backpropagation."}, {"key": "C", "text": "Semantic segmentation outputs a single scalar integer representing the most frequent class."}, {"key": "D", "text": "Transposed convolutions permanently delete channels to save disk storage."}], "answer": "A", "whyCorrect": "Dense prediction requires a pixel-wise class map of size [P, Q, K]; U-Net contracts features to learn abstract semantics, then expands resolution via transposed convolutions while passing high-frequency spatial details through lateral skips.", "whyOthers": {"B": "Flattening is a standard tensor reshape operation supported efficiently on all GPU hardware.", "C": "Semantic segmentation classifies every individual pixel, producing an entire image mask.", "D": "Transposed convolutions expand spatial resolution; they do not delete channels for disk storage."}, "diagram": "Input [P x Q x R]  --->  Encoder Bottleneck  --->  Transposed Conv Decoder + Lateral Skips  --->  Output [P x Q x K]", "useLater": "Forms the architectural foundation for generative segmentation, diffusion U-Nets, and medical imaging."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

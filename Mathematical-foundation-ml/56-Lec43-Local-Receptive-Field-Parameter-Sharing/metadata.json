@@ -1,0 +1,69 @@
+{
+  "title": "Lec 43 Local Receptive Field and Parameter Sharing",
+  "video_id": "rm0VmbTQE8Y",
+  "url": "https://www.youtube.com/watch?v=rm0VmbTQE8Y",
+  "duration_seconds": 2171,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A P",
+  "description": "Exploiting spatial structure and grid topologies via architectural inductive biases: local receptive fields, structural weight sparsity, parameter sharing across space, translation invariance, and discrete learnable filters.",
+  "playlist_index": 56,
+  "chapter_count": 0,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 6,
+  "package_variant": "standard",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": {
+    "captions_file": "raw/captions.en.vtt",
+    "timed_transcript_file": "raw/captions.en.timed.txt",
+    "video_file": "raw/lecture.mp4",
+    "screenshot_manifest": "screenshots/manifest.json",
+    "topic_ranges_file": "raw/topic-ranges.json"
+  },
+  "topics": [
+    {
+      "index": 1,
+      "title": "Architectural Classes & UAT vs Empirical ERM Optimization Search Spaces",
+      "start_seconds": 0,
+      "end_seconds": 360,
+      "panel_file": "screenshots/composites/ch01-seg01-panel1of1.png"
+    },
+    {
+      "index": 2,
+      "title": "Architectures as Bayesian Priors, Dirac Delta Regularization, & Grid Topologies",
+      "start_seconds": 360,
+      "end_seconds": 720,
+      "panel_file": "screenshots/composites/ch02-seg02-panel1of1.png"
+    },
+    {
+      "index": 3,
+      "title": "Regularizer 1: Local Receptive Fields, Connectivity Sparsity, & Parameter Geometry",
+      "start_seconds": 720,
+      "end_seconds": 1080,
+      "panel_file": "screenshots/composites/ch03-seg03-panel1of1.png"
+    },
+    {
+      "index": 4,
+      "title": "Computer Vision Foundations: Hierarchical Primitive Features & Receptive Field Expansion",
+      "start_seconds": 1080,
+      "end_seconds": 1440,
+      "panel_file": "screenshots/composites/ch04-seg04-panel1of1.png"
+    },
+    {
+      "index": 5,
+      "title": "Regularizer 2: Parameter Sharing across Space & Translation Invariance/Equivariance",
+      "start_seconds": 1440,
+      "end_seconds": 1800,
+      "panel_file": "screenshots/composites/ch05-seg05-panel1of1.png"
+    },
+    {
+      "index": 6,
+      "title": "Discrete Filtering, Classical Vision vs Learnable Filters, & Backprop under Weight Tying",
+      "start_seconds": 1800,
+      "end_seconds": 2171,
+      "panel_file": "screenshots/composites/ch06-seg06-panel1of1.png"
+    }
+  ]
+}

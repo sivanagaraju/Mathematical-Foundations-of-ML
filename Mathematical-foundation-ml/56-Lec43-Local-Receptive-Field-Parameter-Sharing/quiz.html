@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · Lec 43: Local Receptive Field & Parameter Sharing</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · Lec 43: Local Receptive Field & Parameter Sharing</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. Mathematical Foundations of Machine Learning</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "Q1-PREREQ-GRID-TOPOLOGY", "part": "prerequisites", "flavor": "definition", "anchor": "PREREQUISITES.md#p1", "prompt": "How does a grid-like topology (such as an image or audio spectrogram) fundamentally differ from a general permutation-invariant vector space in machine learning?", "options": [{"key": "A", "text": "In a grid topology, the geometric distance between coordinate indices carries critical mutual information, whereas in a permutation-invariant space coordinate order is arbitrary."}, {"key": "B", "text": "A grid topology can only contain integers, while a permutation-invariant space contains continuous real numbers."}, {"key": "C", "text": "In a grid topology, every pixel is statistically independent of its adjacent neighbors."}, {"key": "D", "text": "A grid topology eliminates the need for activation functions during the forward pass."}], "answer": "A", "whyCorrect": "Grid topologies assign geometric meaning to coordinate indices where adjacent spatial neighbors exhibit high mutual correlation, unlike general vector spaces where arbitrary permutations preserve coordinate independence.", "whyOthers": {"B": "Both spaces typically represent continuous real-valued pixel intensities or features in R^d.", "C": "Adjacent pixels in images are strongly autocorrelated, not statistically independent.", "D": "Non-linear activation functions remain mandatory in deep architectures to avoid collapsing into a single linear map."}, "diagram": "[Pixel (i,j)] <--- Correlated ---> [Pixel (i,j+1)]", "useLater": "Connects directly to the motivation for local receptive fields in Topic 3 and CNN 2D grid processing in Lecture 44."}, {"id": "Q2-PREREQ-DIRAC-DELTA-PRIOR", "part": "prerequisites", "flavor": "connect", "anchor": "PREREQUISITES.md#p2", "prompt": "In Bayesian MAP estimation, what type of prior on parameter space corresponds mathematically to permanently eliminating a connection between two neurons by hardcoding its weight to zero?", "options": [{"key": "A", "text": "A uniform prior across the interval [-1, 1]."}, {"key": "B", "text": "A singular Dirac delta prior centered at zero: p(w) = delta_0(w)."}, {"key": "C", "text": "A zero-mean Gaussian prior with infinite variance: N(0, infinity)."}, {"key": "D", "text": "A Laplace prior with scale parameter b = 1."}], "answer": "B", "whyCorrect": "A Dirac delta distribution concentrates infinite probability density at zero, ensuring that with probability 1 the weight takes value 0, unconditionally removing that parameter degree of freedom.", "whyOthers": {"A": "A uniform prior assigns equal non-zero probability density across the entire interval, allowing non-zero weights.", "C": "A Gaussian prior with infinite variance represents an uninformative prior with zero regularization penalty.", "D": "A Laplace prior corresponds to soft L1 Lasso regularization, which encourages sparsity but does not hardcode connections to zero."}, "diagram": "p(w) = +inf at w = 0, p(w) = 0 for w != 0", "useLater": "Formalizes Prof. Prathosh's worldview in Topic 2 that CNNs, RNNs, and Transformers are regularized MLPs."}, {"id": "Q3-PREREQ-TOEPLITZ-EQUIVALENCE", "part": "prerequisites", "flavor": "compare", "anchor": "PREREQUISITES.md#p3", "prompt": "Consider a 1D convolution with kernel w = [w0, w1, w2] and unit stride s = 1. What special matrix structure transforms discrete convolution into standard matrix-vector multiplication W x?", "options": [{"key": "A", "text": "A diagonal matrix with eigenvalues along the main diagonal."}, {"key": "B", "text": "A banded Toeplitz matrix where descending diagonals from left to right are constant."}, {"key": "C", "text": "A skew-symmetric matrix where W^T = -W."}, {"key": "D", "text": "An orthogonal projection matrix where W^T W = I."}], "answer": "B", "whyCorrect": "A banded Toeplitz matrix has identical constant entries along each descending diagonal, exactly matching the sliding inner product of a convolutional kernel.", "whyOthers": {"A": "A diagonal matrix acts as an element-wise scaling operator with zero spatial interaction.", "C": "Toeplitz convolution matrices are generally rectangular and not skew-symmetric.", "D": "Convolutional matrices are not orthogonal in general and do not satisfy W^T W = I."}, "diagram": "W = [[w0, w1, w2,  0], [0,  w0, w1, w2]]", "useLater": "Forms the mathematical backbone of Lecture 44, where 2D convolutions are proven to be doubly-blocked Toeplitz/circulant matrices."}, {"id": "Q4-PREREQ-TRANSLATION-EQUIVARIANCE", "part": "prerequisites", "flavor": "trap", "anchor": "PREREQUISITES.md#p4", "prompt": "Which of the following statements correctly distinguishes translation equivariance from translation invariance for a function f and spatial shift operator T_v?", "options": [{"key": "A", "text": "Equivariance means f(T_v x) = T_v f(x), whereas invariance means f(T_v x) = f(x)."}, {"key": "B", "text": "Equivariance applies only to scalar outputs, while invariance applies to multi-channel tensors."}, {"key": "C", "text": "Invariance means shifting the input shifts the output by twice the displacement: f(T_v x) = 2 T_v f(x)."}, {"key": "D", "text": "A standard convolutional layer is invariant to translations, while a global average pooling layer is equivariant."}], "answer": "A", "whyCorrect": "Equivariance means the transformation commutes with translation (shifting input shifts the output identically), while invariance means the output is unaffected by input translations.", "whyOthers": {"B": "Both equivariance and invariance apply to tensors of arbitrary spatial dimensionality.", "C": "Invariance implies zero change under transformation: f(T_v x) = f(x).", "D": "The roles are reversed: convolutional layers are equivariant, while global pooling enforces invariance."}, "diagram": "Equivariance: f(T_v x) == T_v f(x)  |  Invariance: g(T_v x) == g(x)", "useLater": "Critical distinction for designing object detectors (which require equivariance) versus whole-image classifiers (which require invariance)."}, {"id": "Q5-NOTES-MASTER-POINT", "part": "notes", "flavor": "map", "anchor": "NOTES.md#executive-summary-spatial-inductive-bias-architectural-blueprint", "prompt": "What is the master point of this lecture regarding why modern deep learning uses specialized architectures like CNNs instead of relying exclusively on single-hidden-layer MLPs?", "options": [{"key": "A", "text": "The Universal Approximation Theorem fails for images, so MLPs cannot mathematically represent continuous image functions."}, {"key": "B", "text": "While single-hidden-layer MLPs are theoretically universal, practical ERM on high-dimensional non-convex landscapes requires architectural restrictions (priors) like local receptive fields and parameter sharing to achieve optimization feasibility and sample efficiency."}, {"key": "C", "text": "CNNs can represent non-continuous Dirac impulses, which MLPs are strictly forbidden from approximating."}, {"key": "D", "text": "Backpropagation cannot be computed on fully connected MLPs with more than two layers."}], "answer": "B", "whyCorrect": "Prof. Prathosh emphasizes that UAT guarantees existential representation for MLPs, but practical gradient descent in millions of dimensions requires architectural inductive bias (Bayesian priors) to restrict search space and converge from finite datasets.", "whyOthers": {"A": "UAT holds for any compact domain, including pixel grids in [0, 1]^d.", "C": "Both architectures approximate continuous functions under squashing/ReLU non-linearities.", "D": "Backpropagation was explicitly derived and validated for arbitrary L-layer MLPs in Lecture 42."}, "diagram": "C(K) ---> Restrict via Inductive Bias ---> H_CNN (Feasible Optimization)", "useLater": "Unifies the entire Phase 4 progression across CNNs, RNNs, and Transformers."}, {"id": "Q6-NOTES-LOCAL-RECEPTIVE-FIELD-SPARSITY", "part": "notes", "flavor": "tradeoff", "anchor": "NOTES.md#topic-3-regularizer-1-local-receptive-fields-connectivity-sparsity-parameter-geometry-12001800", "prompt": "In an unshared locally connected layer processing an input of dimension d with M output neurons and filter width k, what is the exact parameter count, and how does it compare to a standard dense MLP?", "options": [{"key": "A", "text": "M * k weights, achieving a parameter reduction of (1 - k/d) compared to the dense MLP's M * d weights."}, {"key": "B", "text": "Exactly k weights, identical to a convolutional layer."}, {"key": "C", "text": "d^2 weights, doubling the parameter count of the MLP."}, {"key": "D", "text": "M + k weights, reducing multiplicative complexity to addition."}], "answer": "A", "whyCorrect": "Without parameter sharing, each of the M output neurons maintains its own independent k weights, requiring M * k parameters compared to M * d in a dense layer.", "whyOthers": {"B": "A parameter count of k requires parameter sharing (weight tying); an unshared local layer uses M * k.", "C": "Local connectivity reduces parameter count; it does not square input dimension.", "D": "Each neuron performs an inner product of length k, so parameters scale multiplicatively as M * k."}, "diagram": "Dense: M * d  --->  Local (No Share): M * k  --->  CNN (Shared): k", "useLater": "Highlights the distinction between the two independent regularizers analyzed in Topic 3 and Topic 5."}, {"id": "Q7-NOTES-RECEPTIVE-FIELD-EXPANSION", "part": "notes", "flavor": "connect", "anchor": "NOTES.md#topic-4-computer-vision-foundations-hierarchical-primitive-features-receptive-field-expansion-18002400", "prompt": "When stacking L convolutional layers where each layer has kernel size k and unit stride s = 1, how does the effective receptive field RF_L with respect to the raw input layer scale with depth L?", "options": [{"key": "A", "text": "RF_L remains strictly fixed at k regardless of depth."}, {"key": "B", "text": "RF_L grows exponentially as k^L."}, {"key": "C", "text": "RF_L expands linearly according to RF_L = 1 + L(k - 1)."}, {"key": "D", "text": "RF_L decreases inversely as k / L."}], "answer": "C", "whyCorrect": "Each successive layer adds k - 1 pixels of input context to the receptive field, producing the linear expansion recurrence RF_l = RF_{l-1} + (k - 1), yielding RF_L = 1 + L(k - 1).", "whyOthers": {"A": "Receptive fields compose hierarchically across layers; only layer 1 has RF equal to k.", "B": "Receptive field grows exponentially only when layers include downsampling strides s > 1 or pooling.", "D": "Receptive field expands monotonically with depth; it never contracts."}, "diagram": "Layer 1 (k=3) -> RF=3  |  Layer 2 -> RF=5  |  Layer 3 -> RF=7", "useLater": "Explains why modern deep vision architectures (VGG, ResNet) stack multiple small 3x3 convolutions to achieve large receptive fields with low parameter counts."}, {"id": "Q8-NOTES-SHARED-WEIGHT-BACKPROP", "part": "notes", "flavor": "definition", "anchor": "NOTES.md#topic-6-discrete-filtering-classical-vision-vs-learnable-filters-backprop-under-weight-tying-30003611", "prompt": "During backward error propagation through a convolutional layer with shared kernel weights w = [w0, ..., w_{k-1}], how is the gradient dL / dw_r evaluated with respect to upstream sensitivities delta_j = dL / dz_j?", "options": [{"key": "A", "text": "By taking only the sensitivity of the first spatial position: dL / dw_r = delta_0 * x_r."}, {"key": "B", "text": "By summing the sensitivities across all spatial positions: dL / dw_r = sum_{j=0}^{M-1} delta_j * x_{j*s + r}."}, {"key": "C", "text": "By averaging the input activations without considering upstream error sensitivities delta."}, {"key": "D", "text": "By computing the matrix inverse (W^T W)^{-1} delta."}], "answer": "B", "whyCorrect": "Because weight w_r participates in the pre-activation sum of every spatial output node z_j, the multivariable chain rule mandates summing partial derivatives across all M receptive field positions where w_r is reused.", "whyOthers": {"A": "Updating based only on delta_0 discards error signals from all remaining M - 1 spatial locations.", "C": "Gradient descent updates must be driven by error sensitivities delta = dL/dz.", "D": "Matrix inversion belongs to second-order normal equations, not first-order reverse-mode backpropagation."}, "diagram": "dL/dw_r = delta_0 * x[0*s + r] + delta_1 * x[1*s + r] + ... + delta_{M-1} * x[(M-1)*s + r]", "useLater": "Implemented and verified against PyTorch autograd in examples/02_conv1d_forward_and_backprop_from_scratch.py."}, {"id": "Q9-NOTES-CLASSICAL-VS-LEARNED-FILTERS", "part": "notes", "flavor": "compare", "anchor": "NOTES.md#topic-6-discrete-filtering-classical-vision-vs-learnable-filters-backprop-under-weight-tying-30003611", "prompt": "How does deep learning's approach to spatial filtering (ignorance modeling) contrast with classical image processing (e.g. Sobel, Canny, Gabor)?", "options": [{"key": "A", "text": "Classical vision manually handcrafts fixed filter weights based on mathematical differential operators, whereas deep learning initializes filter weights randomly and learns them automatically via ERM."}, {"key": "B", "text": "Classical vision uses non-linear filters, while deep learning convolutions are strictly linear with no activations."}, {"key": "C", "text": "Deep learning requires manual human tuning of every weight in a 3x3 filter before training begins."}, {"key": "D", "text": "Classical filters can only process 1D audio signals, while deep learning only processes 2D images."}], "answer": "A", "whyCorrect": "Prof. Prathosh contrasts classical engineering where researchers spent careers designing specific 3x3 masks with deep learning ignorance modeling, where the network learns optimal task-specific filters via gradient descent.", "whyOthers": {"B": "Both paradigms use non-linearities (e.g. ReLU/sigmoid in CNNs, thresholding/non-maximum suppression in Canny).", "C": "Deep learning initializes weights randomly and updates them via backpropagation.", "D": "Classical filters extensively process 2D images and multi-dimensional signals."}, "diagram": "Classical: Handcrafted Filter Mask ---> Deep Learning: W ~ N(0, 2/fan_in) + ERM", "useLater": "Prepares students for analyzing learned convolutional filters via Grad-CAM and feature visualization."}, {"id": "Q10-NOTES-HARD-VS-SOFT-REGULARIZERS", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#topic-2-architectures-as-bayesian-priors-dirac-delta-regularization-grid-topologies-06001200", "prompt": "Why can't soft regularization techniques like L2 weight decay or Dropout transform an unconstrained MLP into a Convolutional Neural Network during training?", "options": [{"key": "A", "text": "Soft regularizers penalize magnitudes or drop neurons stochastically, but lack the structural capacity to enforce deterministic Toeplitz parameter geometry and exact weight tying across space."}, {"key": "B", "text": "L2 weight decay only works for linear regression, not neural networks."}, {"key": "C", "text": "Dropout permanently sets weights to zero, causing the exact same effect as local receptive fields."}, {"key": "D", "text": "Soft regularizers increase the number of parameters in the model rather than reducing variance."}], "answer": "A", "whyCorrect": "Soft continuous priors penalize parameter magnitudes smoothly across all dimensions uniformly; they cannot hardcode structural zeros on non-local connections or mathematically force weights at different spatial positions to be identically equal.", "whyOthers": {"B": "L2 weight decay is universally applied across deep neural network optimization.", "C": "Dropout temporarily zeros activations with probability p during training; it does not permanently zero weights.", "D": "Soft regularizers constrain effective model capacity without increasing parameter count."}, "diagram": "Soft: ||W||_2^2 <= C (Sphere)  vs  Hard: W_ij = 0, W_{j, j+r} = w_r (Subspace)", "useLater": "Summarizes the architectural regularizer taxonomy discussed at the conclusion of Topic 6."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

@@ -128,26 +128,58 @@ MathsTerms/<Category>/chatgpt_images/<MarkdownFileStem>/
 
 ## 3. Lecture Transcripts Runner (`grok_imagine_runner.py`)
 
-Processes topic transcript files (`topic-*.txt` or `topic-*.md`) across lecture notes (`01-*` through `34-*`).
+Processes topic transcript files (`topic-*.txt` or `topic-*.md`) across lecture notes (`01-*` through `73-*`).
 
-### Using ChatGPT Images 2.5:
+### A. Run a Folder Range with Parallel Tabs (Recommended)
+
+Specify both the **parent directory** (`--dir`) and the **lecture number range** (`--range START END`):
 
 ```powershell
-# Run Topic 1 for Lecture 13:
-python grok_image_automation/grok_imagine_runner.py --engine chatgpt --run --dir "Mathematical-Foundation-for-GenerativeAI/13-Tutorial11-f-Divergence-Examples" --topic 1
+# 1. Run Folders 08 to 14 in 'Mathematical-foundation-ml' using ChatGPT (2 parallel tabs):
+python grok_image_automation/grok_imagine_runner.py --engine chatgpt --dir "Mathematical-foundation-ml" --range 8 14 --parallel 2
 
-# Run across all topics in a lecture folder in parallel (2 tabs):
-python grok_image_automation/grok_imagine_runner.py --engine chatgpt --run --dir "Mathematical-Foundation-for-GenerativeAI/13-Tutorial11-f-Divergence-Examples" --parallel 2 --skip-existing
+# 2. Run Folders 08 to 14 in 'Mathematical-foundation-ml' using Grok (3 parallel tabs):
+python grok_image_automation/grok_imagine_runner.py --engine grok --dir "Mathematical-foundation-ml" --range 8 14 --parallel 3
+
+# 3. Run Folders 14 to 33 in 'Mathematical-Foundation-for-GenerativeAI' using ChatGPT (2 parallel tabs):
+python grok_image_automation/grok_imagine_runner.py --engine chatgpt --dir "Mathematical-Foundation-for-GenerativeAI" --range 14 33 --parallel 2
+
+# 4. Force REGENERATE all topics across Folders 08 to 14 (overwrites existing images):
+python grok_image_automation/grok_imagine_runner.py --engine chatgpt --dir "Mathematical-foundation-ml" --range 8 14 --parallel 2 --regenerate
 ```
 
-### Using Grok Imagine:
+---
+
+### B. Run a Single Lecture Folder
 
 ```powershell
-# Run 3 parallel tabs:
-python grok_image_automation/grok_imagine_runner.py --engine grok --run --parallel 3
+# 1. Run all topics in Lecture 08 in parallel (2 tabs, ChatGPT):
+python grok_image_automation/grok_imagine_runner.py --engine chatgpt --run --dir "Mathematical-foundation-ml/08-Lec07-IID-Assumption" --parallel 2
 
-# Run across a range of lecture folders (e.g. 14 to 33):
-python grok_image_automation/grok_imagine_runner.py --engine grok --range 14 33 --parallel 3
+# 2. Run a specific topic (e.g. Topic 1) in a lecture folder:
+python grok_image_automation/grok_imagine_runner.py --engine chatgpt --run --dir "Mathematical-foundation-ml/08-Lec07-IID-Assumption" --topic 1
+
+# 3. Force regenerate a single topic:
+python grok_image_automation/grok_imagine_runner.py --engine chatgpt --run --dir "Mathematical-foundation-ml/08-Lec07-IID-Assumption" --topic 1 --regenerate
+```
+
+---
+
+### C. Direct Download from Existing ChatGPT Chat URL
+
+If an image already generated in your ChatGPT chat history, you can download the master image directly without re-generating:
+
+```powershell
+python grok_image_automation/grok_imagine_runner.py --dir "Mathematical-foundation-ml/08-Lec07-IID-Assumption" --topic 1 --chat-url "https://chatgpt.com/c/6ab96387-104c-83ee-8bfa-e5b8a76d463c"
+```
+
+---
+
+### D. Preview Topics Without Launching Browser (`--dry-run`)
+
+```powershell
+# Check which topics are DONE vs PENDING in a lecture folder:
+python grok_image_automation/grok_imagine_runner.py --engine chatgpt --dir "Mathematical-foundation-ml/08-Lec07-IID-Assumption" --dry-run
 ```
 
 ---
@@ -155,26 +187,32 @@ python grok_image_automation/grok_imagine_runner.py --engine grok --range 14 33 
 ## CLI Options & Flags
 
 
-| Flag                      | Argument            | Description                                                                                |
-| :-------------------------- | :-------------------- | :------------------------------------------------------------------------------------------- |
-| `--engine`                | `grok` \| `chatgpt` | Engine to use for image generation (default:`grok`)                                        |
-| `--account`               | `<id>`              | Account / session identifier (`1`, `2`, `'alt'`, etc., default: `1`)                       |
-| `--login`                 | *(flag)*            | Launch browser to log in and save session to engine's profile                              |
-| `--email`                 | `<email>`           | Account email for ChatGPT (default:`sivanagarajupachipulusu@gmail.com`)                    |
-| `--password`              | `<password>`        | Password for ChatGPT (default:`Pulk@_ta!nt_01!`)                                           |
-| `--file`                  | `<path>`            | Path to a MathsTerms markdown file                                                         |
-| `--category`              | `<name>`            | Category name or absolute path in MathsTerms                                               |
-| `--all`                   | *(flag)*            | Process all files across all categories in MathsTerms                                      |
-| `--topic`                 | `1 2 3...` or `1,2` | Specific topic numbers to run (accepts space or comma-separated)                           |
-| `--parallel`              | `1-3`               | Number of parallel generation tabs (default: 2)                                            |
-| `--skip-existing`         | *(flag)*            | Automatically skip topics that already have valid images (**Default: TRUE**)               |
-| `--regenerate`, `--force` | *(flag)*            | Force re-generate topics even if images already exist on disk                              |
-| `--no-skip-existing`      | *(flag)*            | Disable skipping existing images                                                           |
-| `--max-retries`           | `N`                 | Number of retries for incomplete topics (default:`2`)                                      |
-| `--include-all-sections`  | *(flag)*            | Include non-image sections (References & Beginner Comprehension, skipped by default)       |
-| `--clean-ignored`         | *(flag)*            | Clean/delete obsolete generated image files for ignored sections (e.g. topic-13, topic-14) |
-| `--delay`                 | `N`                 | Cooldown seconds between batches (default:`6`)                                             |
-| `--profile-dir`           | `<path>`            | Custom Chrome profile directory                                                            |
+| Flag                      | Argument            | Description                                                                                   |
+| :-------------------------- | :-------------------- | :---------------------------------------------------------------------------------------------- |
+| `--engine`                | `grok` \| `chatgpt` | Engine to use for image generation (default:`grok`)                                           |
+| `--dir`                   | `<path>`            | Target lecture directory or parent directory containing numbered lecture folders              |
+| `--range`                 | `START END`         | Process a range of numbered lecture folders (e.g.`--range 8 14`)                              |
+| `--parallel`              | `1-3`               | Number of parallel generation tabs/browsers (1 to 3, default:`1` for lectures, `2` for maths) |
+| `--run`                   | *(flag)*            | Run batch image generation for topics in a single target directory                            |
+| `--all`                   | *(flag)*            | Process all lecture/tutorial folders in the target directory                                  |
+| `--topic`                 | `1 2 3...` or `1,2` | Specific topic number(s) to run                                                               |
+| `--skip-existing`         | *(flag)*            | Automatically skip topics that already have complete images (**Default: TRUE**)               |
+| `--regenerate`, `--force` | *(flag)*            | Force re-generate topics even if images already exist on disk                                 |
+| `--no-skip-existing`      | *(flag)*            | Disable skipping existing images                                                              |
+| `--timeout`, `--max-wait` | `SECONDS`           | Maximum wait time in seconds for image generation (default:`360` / 6 min)                     |
+| `--chat-url`              | `<url>`             | Download generated image directly from an existing ChatGPT conversation URL                   |
+| `--dry-run`               | *(flag)*            | Print discovered topics and status without launching the browser                              |
+| `--account`               | `<id>`              | Account / session identifier (`1`, `2`, `'alt'`, etc., default: `1`)                          |
+| `--login`                 | *(flag)*            | Launch browser to log in and save session to engine's profile                                 |
+| `--email`                 | `<email>`           | Account email for ChatGPT (default:`sivanagarajupachipulusu@gmail.com`)                       |
+| `--password`              | `<password>`        | Password for ChatGPT                                                                          |
+| `--file`                  | `<path>`            | Path to a MathsTerms markdown file                                                            |
+| `--category`              | `<name>`            | Category name or absolute path in MathsTerms                                                  |
+| `--max-retries`           | `N`                 | Number of retries for incomplete topics (default:`2`)                                         |
+| `--include-all-sections`  | *(flag)*            | Include non-image sections (References & Beginner Comprehension, skipped by default)          |
+| `--clean-ignored`         | *(flag)*            | Clean/delete obsolete generated image files for ignored sections (e.g. topic-13, topic-14)    |
+| `--delay`                 | `N`                 | Cooldown seconds between batches (default:`6`)                                                |
+| `--profile-dir`           | `<path>`            | Custom Chrome profile directory                                                               |
 
 > [!TIP]
 > **Automatic Non-Image Section Skipping**:

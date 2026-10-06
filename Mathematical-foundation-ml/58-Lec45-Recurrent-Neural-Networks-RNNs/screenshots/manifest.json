@@ -1,0 +1,518 @@
+{
+  "duration_seconds": 2285.0,
+  "range_source": "synthetic",
+  "range_count": 7,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 360.0,
+      "slug": "seg01"
+    },
+    {
+      "index": 2,
+      "start": 360.0,
+      "end": 720.0,
+      "slug": "seg02"
+    },
+    {
+      "index": 3,
+      "start": 720.0,
+      "end": 1080.0,
+      "slug": "seg03"
+    },
+    {
+      "index": 4,
+      "start": 1080.0,
+      "end": 1440.0,
+      "slug": "seg04"
+    },
+    {
+      "index": 5,
+      "start": 1440.0,
+      "end": 1800.0,
+      "slug": "seg05"
+    },
+    {
+      "index": 6,
+      "start": 1800.0,
+      "end": 2160.0,
+      "slug": "seg06"
+    },
+    {
+      "index": 7,
+      "start": 2160.0,
+      "end": 2285.0,
+      "slug": "seg07"
+    }
+  ],
+  "raw_count": 28,
+  "composite_count": 7,
+  "raw": [
+    {
+      "file": "raw/001-ch01-seg01-t0028s.png",
+      "seconds": 28.8,
+      "chapter": 1,
+      "slug": "seg01",
+      "label": "00:28",
+      "range_start": 0.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "raw/002-ch01-seg01-t0129s.png",
+      "seconds": 129.6,
+      "chapter": 1,
+      "slug": "seg01",
+      "label": "02:09",
+      "range_start": 0.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "raw/003-ch01-seg01-t0230s.png",
+      "seconds": 230.4,
+      "chapter": 1,
+      "slug": "seg01",
+      "label": "03:50",
+      "range_start": 0.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "raw/004-ch01-seg01-t0331s.png",
+      "seconds": 331.2,
+      "chapter": 1,
+      "slug": "seg01",
+      "label": "05:31",
+      "range_start": 0.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "raw/005-ch02-seg02-t0388s.png",
+      "seconds": 388.8,
+      "chapter": 2,
+      "slug": "seg02",
+      "label": "06:28",
+      "range_start": 360.0,
+      "range_end": 720.0
+    },
+    {
+      "file": "raw/006-ch02-seg02-t0489s.png",
+      "seconds": 489.6,
+      "chapter": 2,
+      "slug": "seg02",
+      "label": "08:09",
+      "range_start": 360.0,
+      "range_end": 720.0
+    },
+    {
+      "file": "raw/007-ch02-seg02-t0590s.png",
+      "seconds": 590.4,
+      "chapter": 2,
+      "slug": "seg02",
+      "label": "09:50",
+      "range_start": 360.0,
+      "range_end": 720.0
+    },
+    {
+      "file": "raw/008-ch02-seg02-t0691s.png",
+      "seconds": 691.2,
+      "chapter": 2,
+      "slug": "seg02",
+      "label": "11:31",
+      "range_start": 360.0,
+      "range_end": 720.0
+    },
+    {
+      "file": "raw/009-ch03-seg03-t0748s.png",
+      "seconds": 748.8,
+      "chapter": 3,
+      "slug": "seg03",
+      "label": "12:28",
+      "range_start": 720.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "raw/010-ch03-seg03-t0849s.png",
+      "seconds": 849.6,
+      "chapter": 3,
+      "slug": "seg03",
+      "label": "14:09",
+      "range_start": 720.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "raw/011-ch03-seg03-t0950s.png",
+      "seconds": 950.4,
+      "chapter": 3,
+      "slug": "seg03",
+      "label": "15:50",
+      "range_start": 720.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "raw/012-ch03-seg03-t1051s.png",
+      "seconds": 1051.2,
+      "chapter": 3,
+      "slug": "seg03",
+      "label": "17:31",
+      "range_start": 720.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "raw/013-ch04-seg04-t1108s.png",
+      "seconds": 1108.8,
+      "chapter": 4,
+      "slug": "seg04",
+      "label": "18:28",
+      "range_start": 1080.0,
+      "range_end": 1440.0
+    },
+    {
+      "file": "raw/014-ch04-seg04-t1209s.png",
+      "seconds": 1209.6,
+      "chapter": 4,
+      "slug": "seg04",
+      "label": "20:09",
+      "range_start": 1080.0,
+      "range_end": 1440.0
+    },
+    {
+      "file": "raw/015-ch04-seg04-t1310s.png",
+      "seconds": 1310.4,
+      "chapter": 4,
+      "slug": "seg04",
+      "label": "21:50",
+      "range_start": 1080.0,
+      "range_end": 1440.0
+    },
+    {
+      "file": "raw/016-ch04-seg04-t1411s.png",
+      "seconds": 1411.2,
+      "chapter": 4,
+      "slug": "seg04",
+      "label": "23:31",
+      "range_start": 1080.0,
+      "range_end": 1440.0
+    },
+    {
+      "file": "raw/017-ch05-seg05-t1468s.png",
+      "seconds": 1468.8,
+      "chapter": 5,
+      "slug": "seg05",
+      "label": "24:28",
+      "range_start": 1440.0,
+      "range_end": 1800.0
+    },
+    {
+      "file": "raw/018-ch05-seg05-t1569s.png",
+      "seconds": 1569.6,
+      "chapter": 5,
+      "slug": "seg05",
+      "label": "26:09",
+      "range_start": 1440.0,
+      "range_end": 1800.0
+    },
+    {
+      "file": "raw/019-ch05-seg05-t1670s.png",
+      "seconds": 1670.4,
+      "chapter": 5,
+      "slug": "seg05",
+      "label": "27:50",
+      "range_start": 1440.0,
+      "range_end": 1800.0
+    },
+    {
+      "file": "raw/020-ch05-seg05-t1771s.png",
+      "seconds": 1771.2,
+      "chapter": 5,
+      "slug": "seg05",
+      "label": "29:31",
+      "range_start": 1440.0,
+      "range_end": 1800.0
+    },
+    {
+      "file": "raw/021-ch06-seg06-t1828s.png",
+      "seconds": 1828.8,
+      "chapter": 6,
+      "slug": "seg06",
+      "label": "30:28",
+      "range_start": 1800.0,
+      "range_end": 2160.0
+    },
+    {
+      "file": "raw/022-ch06-seg06-t1929s.png",
+      "seconds": 1929.6,
+      "chapter": 6,
+      "slug": "seg06",
+      "label": "32:09",
+      "range_start": 1800.0,
+      "range_end": 2160.0
+    },
+    {
+      "file": "raw/023-ch06-seg06-t2030s.png",
+      "seconds": 2030.4,
+      "chapter": 6,
+      "slug": "seg06",
+      "label": "33:50",
+      "range_start": 1800.0,
+      "range_end": 2160.0
+    },
+    {
+      "file": "raw/024-ch06-seg06-t2131s.png",
+      "seconds": 2131.2,
+      "chapter": 6,
+      "slug": "seg06",
+      "label": "35:31",
+      "range_start": 1800.0,
+      "range_end": 2160.0
+    },
+    {
+      "file": "raw/025-ch07-seg07-t2170s.png",
+      "seconds": 2170.0,
+      "chapter": 7,
+      "slug": "seg07",
+      "label": "36:10",
+      "range_start": 2160.0,
+      "range_end": 2285.0
+    },
+    {
+      "file": "raw/026-ch07-seg07-t2205s.png",
+      "seconds": 2205.0,
+      "chapter": 7,
+      "slug": "seg07",
+      "label": "36:45",
+      "range_start": 2160.0,
+      "range_end": 2285.0
+    },
+    {
+      "file": "raw/027-ch07-seg07-t2240s.png",
+      "seconds": 2240.0,
+      "chapter": 7,
+      "slug": "seg07",
+      "label": "37:20",
+      "range_start": 2160.0,
+      "range_end": 2285.0
+    },
+    {
+      "file": "raw/028-ch07-seg07-t2275s.png",
+      "seconds": 2275.0,
+      "chapter": 7,
+      "slug": "seg07",
+      "label": "37:55",
+      "range_start": 2160.0,
+      "range_end": 2285.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-seg01-panel1of1.png",
+      "chapter": 1,
+      "slug": "seg01",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-seg01-t0028s.png",
+        "002-ch01-seg01-t0129s.png",
+        "003-ch01-seg01-t0230s.png",
+        "004-ch01-seg01-t0331s.png"
+      ],
+      "labels": [
+        "ch1 00:28",
+        "ch1 02:09",
+        "ch1 03:50",
+        "ch1 05:31"
+      ],
+      "tile_seconds": [
+        28.8,
+        129.6,
+        230.4,
+        331.2
+      ],
+      "time_start": 28.8,
+      "time_end": 331.2,
+      "range_start": 0.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "composites/ch02-seg02-panel1of1.png",
+      "chapter": 2,
+      "slug": "seg02",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-seg02-t0388s.png",
+        "006-ch02-seg02-t0489s.png",
+        "007-ch02-seg02-t0590s.png",
+        "008-ch02-seg02-t0691s.png"
+      ],
+      "labels": [
+        "ch2 06:28",
+        "ch2 08:09",
+        "ch2 09:50",
+        "ch2 11:31"
+      ],
+      "tile_seconds": [
+        388.8,
+        489.6,
+        590.4,
+        691.2
+      ],
+      "time_start": 388.8,
+      "time_end": 691.2,
+      "range_start": 360.0,
+      "range_end": 720.0
+    },
+    {
+      "file": "composites/ch03-seg03-panel1of1.png",
+      "chapter": 3,
+      "slug": "seg03",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-seg03-t0748s.png",
+        "010-ch03-seg03-t0849s.png",
+        "011-ch03-seg03-t0950s.png",
+        "012-ch03-seg03-t1051s.png"
+      ],
+      "labels": [
+        "ch3 12:28",
+        "ch3 14:09",
+        "ch3 15:50",
+        "ch3 17:31"
+      ],
+      "tile_seconds": [
+        748.8,
+        849.6,
+        950.4,
+        1051.2
+      ],
+      "time_start": 748.8,
+      "time_end": 1051.2,
+      "range_start": 720.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "composites/ch04-seg04-panel1of1.png",
+      "chapter": 4,
+      "slug": "seg04",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-seg04-t1108s.png",
+        "014-ch04-seg04-t1209s.png",
+        "015-ch04-seg04-t1310s.png",
+        "016-ch04-seg04-t1411s.png"
+      ],
+      "labels": [
+        "ch4 18:28",
+        "ch4 20:09",
+        "ch4 21:50",
+        "ch4 23:31"
+      ],
+      "tile_seconds": [
+        1108.8,
+        1209.6,
+        1310.4,
+        1411.2
+      ],
+      "time_start": 1108.8,
+      "time_end": 1411.2,
+      "range_start": 1080.0,
+      "range_end": 1440.0
+    },
+    {
+      "file": "composites/ch05-seg05-panel1of1.png",
+      "chapter": 5,
+      "slug": "seg05",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-seg05-t1468s.png",
+        "018-ch05-seg05-t1569s.png",
+        "019-ch05-seg05-t1670s.png",
+        "020-ch05-seg05-t1771s.png"
+      ],
+      "labels": [
+        "ch5 24:28",
+        "ch5 26:09",
+        "ch5 27:50",
+        "ch5 29:31"
+      ],
+      "tile_seconds": [
+        1468.8,
+        1569.6,
+        1670.4,
+        1771.2
+      ],
+      "time_start": 1468.8,
+      "time_end": 1771.2,
+      "range_start": 1440.0,
+      "range_end": 1800.0
+    },
+    {
+      "file": "composites/ch06-seg06-panel1of1.png",
+      "chapter": 6,
+      "slug": "seg06",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-seg06-t1828s.png",
+        "022-ch06-seg06-t1929s.png",
+        "023-ch06-seg06-t2030s.png",
+        "024-ch06-seg06-t2131s.png"
+      ],
+      "labels": [
+        "ch6 30:28",
+        "ch6 32:09",
+        "ch6 33:50",
+        "ch6 35:31"
+      ],
+      "tile_seconds": [
+        1828.8,
+        1929.6,
+        2030.4,
+        2131.2
+      ],
+      "time_start": 1828.8,
+      "time_end": 2131.2,
+      "range_start": 1800.0,
+      "range_end": 2160.0
+    },
+    {
+      "file": "composites/ch07-seg07-panel1of1.png",
+      "chapter": 7,
+      "slug": "seg07",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-seg07-t2170s.png",
+        "026-ch07-seg07-t2205s.png",
+        "027-ch07-seg07-t2240s.png",
+        "028-ch07-seg07-t2275s.png"
+      ],
+      "labels": [
+        "ch7 36:10",
+        "ch7 36:45",
+        "ch7 37:20",
+        "ch7 37:55"
+      ],
+      "tile_seconds": [
+        2170.0,
+        2205.0,
+        2240.0,
+        2275.0
+      ],
+      "time_start": 2170.0,
+      "time_end": 2275.0,
+      "range_start": 2160.0,
+      "range_end": 2285.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

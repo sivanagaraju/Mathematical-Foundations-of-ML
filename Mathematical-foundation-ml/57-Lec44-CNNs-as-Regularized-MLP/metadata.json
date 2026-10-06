@@ -1,0 +1,83 @@
+{
+  "title": "Lec 44 Convolutional Neural Networks(CNNs) as Regularized MLP",
+  "video_id": "mSYTyrXCsA8",
+  "url": "https://www.youtube.com/watch?v=mSYTyrXCsA8",
+  "duration_seconds": 2696,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A P",
+  "description": "Rigorous derivation and unified architectural formulation of Convolutional Neural Networks as regularized Multi-Layer Perceptrons on grid topologies: discrete sliding inner products, multi-filter feature banks, 3D tensor convolutions across input channels, ERM filter specialization dynamics, subsampling/pooling layers, classic deep backbones, and dense prediction via U-Net transposed convolutions.",
+  "playlist_index": 57,
+  "chapter_count": 0,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 8,
+  "package_variant": "standard",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": {
+    "captions_file": "raw/captions.en.vtt",
+    "timed_transcript_file": "raw/captions.en.timed.txt",
+    "video_file": "raw/lecture.mp4",
+    "screenshot_manifest": "screenshots/manifest.json",
+    "topic_ranges_file": "raw/topic-ranges.json"
+  },
+  "topics": [
+    {
+      "index": 1,
+      "title": "CNNs as Regularized MLPs: Grid Topology, Sliding Inner Products, and Discrete Convolution Mechanics",
+      "start_seconds": 0,
+      "end_seconds": 360,
+      "panel_file": "screenshots/composites/ch01-seg01-panel1of1.png"
+    },
+    {
+      "index": 2,
+      "title": "Multi-Filter Stacking, Feature Specialization, and 3D Activation Tensors",
+      "start_seconds": 360,
+      "end_seconds": 720,
+      "panel_file": "screenshots/composites/ch02-seg02-panel1of1.png"
+    },
+    {
+      "index": 3,
+      "title": "Multi-Channel Input Tensors: Sensor Physics, Bayer Filter Arrays, and Medical Slices",
+      "start_seconds": 720,
+      "end_seconds": 1080,
+      "panel_file": "screenshots/composites/ch03-seg03-panel1of1.png"
+    },
+    {
+      "index": 4,
+      "title": "3D Tensor Convolutions, Channel Marginalization, and Stride-Padding Arithmetic",
+      "start_seconds": 1080,
+      "end_seconds": 1440,
+      "panel_file": "screenshots/composites/ch04-seg04-panel1of1.png"
+    },
+    {
+      "index": 5,
+      "title": "Optimization Dynamics under ERM: Filter Symmetry Breaking, Overparameterization, and Bias-Variance",
+      "start_seconds": 1440,
+      "end_seconds": 1800,
+      "panel_file": "screenshots/composites/ch05-seg05-panel1of1.png"
+    },
+    {
+      "index": 6,
+      "title": "Spatial Subsampling: Average Pooling as Fixed Filters vs Max-Pooling Subgradient Routing",
+      "start_seconds": 1800,
+      "end_seconds": 2160,
+      "panel_file": "screenshots/composites/ch06-seg06-panel1of1.png"
+    },
+    {
+      "index": 7,
+      "title": "End-to-End Classification & Regression Pipelines: Flattening, FC Heads, ResNet Skips, and Inception",
+      "start_seconds": 2160,
+      "end_seconds": 2520,
+      "panel_file": "screenshots/composites/ch07-seg07-panel1of1.png"
+    },
+    {
+      "index": 8,
+      "title": "Dense Prediction Architectures & U-Net: Semantic Segmentation, Bottlenecks, and Transposed Convolutions",
+      "start_seconds": 2520,
+      "end_seconds": 2696,
+      "panel_file": "screenshots/composites/ch08-seg08-panel1of1.png"
+    }
+  ]
+}

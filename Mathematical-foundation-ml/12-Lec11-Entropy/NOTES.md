@@ -2,6 +2,7 @@
 
 **Video:** [Lec 11 Entropy](https://www.youtube.com/watch?v=P6wjLz4dRTs) · NPTEL / IISc  
 **Warm-up first:** [PREREQUISITES.md](./PREREQUISITES.md)  
+**Interactive Visual Explainer:** [01-Entropy-Interactive-Explainer.html](./01-Entropy-Interactive-Explainer.html) *(Sliders, visual charts, and backprop simulator)*  
 **Previous:** [Lec 10 — Challenge With ML](../11-Lec10-Challenges-of-ML/NOTES.md)
 
 ---

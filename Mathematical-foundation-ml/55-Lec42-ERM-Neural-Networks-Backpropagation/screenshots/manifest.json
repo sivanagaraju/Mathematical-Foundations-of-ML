@@ -1,0 +1,713 @@
+{
+  "duration_seconds": 2864.0,
+  "range_source": "topic-ranges",
+  "range_count": 7,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 254.0,
+      "slug": "topic-01-erm-neural-networks-and-gradient-descen"
+    },
+    {
+      "index": 2,
+      "start": 254.0,
+      "end": 855.0,
+      "slug": "topic-02-notation-and-forward-computational-grap"
+    },
+    {
+      "index": 3,
+      "start": 855.0,
+      "end": 1554.0,
+      "slug": "topic-03-output-layer-error-delta-and-loss-gradi"
+    },
+    {
+      "index": 4,
+      "start": 1554.0,
+      "end": 2173.0,
+      "slug": "topic-04-recursive-error-backpropagation-hidden-"
+    },
+    {
+      "index": 5,
+      "start": 2173.0,
+      "end": 2356.0,
+      "slug": "topic-05-weight-bias-gradients-and-parameter-upd"
+    },
+    {
+      "index": 6,
+      "start": 2356.0,
+      "end": 2747.0,
+      "slug": "topic-06-vectorized-matrix-backpropagation-and-g"
+    },
+    {
+      "index": 7,
+      "start": 2747.0,
+      "end": 2864.0,
+      "slug": "topic-07-regularization-and-inductive-bias-previ"
+    }
+  ],
+  "raw_count": 40,
+  "composite_count": 10,
+  "raw": [
+    {
+      "file": "raw/001-ch01-topic-01-erm-neural-networks-and-gradient-descen-t0020s.png",
+      "seconds": 20.3,
+      "chapter": 1,
+      "slug": "topic-01-erm-neural-networks-and-gradient-descen",
+      "label": "00:20",
+      "range_start": 0.0,
+      "range_end": 254.0
+    },
+    {
+      "file": "raw/002-ch01-topic-01-erm-neural-networks-and-gradient-descen-t0091s.png",
+      "seconds": 91.4,
+      "chapter": 1,
+      "slug": "topic-01-erm-neural-networks-and-gradient-descen",
+      "label": "01:31",
+      "range_start": 0.0,
+      "range_end": 254.0
+    },
+    {
+      "file": "raw/003-ch01-topic-01-erm-neural-networks-and-gradient-descen-t0162s.png",
+      "seconds": 162.6,
+      "chapter": 1,
+      "slug": "topic-01-erm-neural-networks-and-gradient-descen",
+      "label": "02:42",
+      "range_start": 0.0,
+      "range_end": 254.0
+    },
+    {
+      "file": "raw/004-ch01-topic-01-erm-neural-networks-and-gradient-descen-t0233s.png",
+      "seconds": 233.7,
+      "chapter": 1,
+      "slug": "topic-01-erm-neural-networks-and-gradient-descen",
+      "label": "03:53",
+      "range_start": 0.0,
+      "range_end": 254.0
+    },
+    {
+      "file": "raw/005-ch02-topic-02-notation-and-forward-computational-grap-t0302s.png",
+      "seconds": 302.1,
+      "chapter": 2,
+      "slug": "topic-02-notation-and-forward-computational-grap",
+      "label": "05:02",
+      "range_start": 254.0,
+      "range_end": 855.0
+    },
+    {
+      "file": "raw/006-ch02-topic-02-notation-and-forward-computational-grap-t0374s.png",
+      "seconds": 374.2,
+      "chapter": 2,
+      "slug": "topic-02-notation-and-forward-computational-grap",
+      "label": "06:14",
+      "range_start": 254.0,
+      "range_end": 855.0
+    },
+    {
+      "file": "raw/007-ch02-topic-02-notation-and-forward-computational-grap-t0446s.png",
+      "seconds": 446.3,
+      "chapter": 2,
+      "slug": "topic-02-notation-and-forward-computational-grap",
+      "label": "07:26",
+      "range_start": 254.0,
+      "range_end": 855.0
+    },
+    {
+      "file": "raw/008-ch02-topic-02-notation-and-forward-computational-grap-t0518s.png",
+      "seconds": 518.4,
+      "chapter": 2,
+      "slug": "topic-02-notation-and-forward-computational-grap",
+      "label": "08:38",
+      "range_start": 254.0,
+      "range_end": 855.0
+    },
+    {
+      "file": "raw/009-ch02-topic-02-notation-and-forward-computational-grap-t0590s.png",
+      "seconds": 590.6,
+      "chapter": 2,
+      "slug": "topic-02-notation-and-forward-computational-grap",
+      "label": "09:50",
+      "range_start": 254.0,
+      "range_end": 855.0
+    },
+    {
+      "file": "raw/010-ch02-topic-02-notation-and-forward-computational-grap-t0662s.png",
+      "seconds": 662.7,
+      "chapter": 2,
+      "slug": "topic-02-notation-and-forward-computational-grap",
+      "label": "11:02",
+      "range_start": 254.0,
+      "range_end": 855.0
+    },
+    {
+      "file": "raw/011-ch02-topic-02-notation-and-forward-computational-grap-t0734s.png",
+      "seconds": 734.8,
+      "chapter": 2,
+      "slug": "topic-02-notation-and-forward-computational-grap",
+      "label": "12:14",
+      "range_start": 254.0,
+      "range_end": 855.0
+    },
+    {
+      "file": "raw/012-ch02-topic-02-notation-and-forward-computational-grap-t0806s.png",
+      "seconds": 806.9,
+      "chapter": 2,
+      "slug": "topic-02-notation-and-forward-computational-grap",
+      "label": "13:26",
+      "range_start": 254.0,
+      "range_end": 855.0
+    },
+    {
+      "file": "raw/013-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t0910s.png",
+      "seconds": 910.9,
+      "chapter": 3,
+      "slug": "topic-03-output-layer-error-delta-and-loss-gradi",
+      "label": "15:10",
+      "range_start": 855.0,
+      "range_end": 1554.0
+    },
+    {
+      "file": "raw/014-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t0994s.png",
+      "seconds": 994.8,
+      "chapter": 3,
+      "slug": "topic-03-output-layer-error-delta-and-loss-gradi",
+      "label": "16:34",
+      "range_start": 855.0,
+      "range_end": 1554.0
+    },
+    {
+      "file": "raw/015-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t1078s.png",
+      "seconds": 1078.7,
+      "chapter": 3,
+      "slug": "topic-03-output-layer-error-delta-and-loss-gradi",
+      "label": "17:58",
+      "range_start": 855.0,
+      "range_end": 1554.0
+    },
+    {
+      "file": "raw/016-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t1162s.png",
+      "seconds": 1162.6,
+      "chapter": 3,
+      "slug": "topic-03-output-layer-error-delta-and-loss-gradi",
+      "label": "19:22",
+      "range_start": 855.0,
+      "range_end": 1554.0
+    },
+    {
+      "file": "raw/017-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t1246s.png",
+      "seconds": 1246.4,
+      "chapter": 3,
+      "slug": "topic-03-output-layer-error-delta-and-loss-gradi",
+      "label": "20:46",
+      "range_start": 855.0,
+      "range_end": 1554.0
+    },
+    {
+      "file": "raw/018-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t1330s.png",
+      "seconds": 1330.3,
+      "chapter": 3,
+      "slug": "topic-03-output-layer-error-delta-and-loss-gradi",
+      "label": "22:10",
+      "range_start": 855.0,
+      "range_end": 1554.0
+    },
+    {
+      "file": "raw/019-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t1414s.png",
+      "seconds": 1414.2,
+      "chapter": 3,
+      "slug": "topic-03-output-layer-error-delta-and-loss-gradi",
+      "label": "23:34",
+      "range_start": 855.0,
+      "range_end": 1554.0
+    },
+    {
+      "file": "raw/020-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t1498s.png",
+      "seconds": 1498.1,
+      "chapter": 3,
+      "slug": "topic-03-output-layer-error-delta-and-loss-gradi",
+      "label": "24:58",
+      "range_start": 855.0,
+      "range_end": 1554.0
+    },
+    {
+      "file": "raw/021-ch04-topic-04-recursive-error-backpropagation-hidden--t1603s.png",
+      "seconds": 1603.5,
+      "chapter": 4,
+      "slug": "topic-04-recursive-error-backpropagation-hidden-",
+      "label": "26:43",
+      "range_start": 1554.0,
+      "range_end": 2173.0
+    },
+    {
+      "file": "raw/022-ch04-topic-04-recursive-error-backpropagation-hidden--t1677s.png",
+      "seconds": 1677.8,
+      "chapter": 4,
+      "slug": "topic-04-recursive-error-backpropagation-hidden-",
+      "label": "27:57",
+      "range_start": 1554.0,
+      "range_end": 2173.0
+    },
+    {
+      "file": "raw/023-ch04-topic-04-recursive-error-backpropagation-hidden--t1752s.png",
+      "seconds": 1752.1,
+      "chapter": 4,
+      "slug": "topic-04-recursive-error-backpropagation-hidden-",
+      "label": "29:12",
+      "range_start": 1554.0,
+      "range_end": 2173.0
+    },
+    {
+      "file": "raw/024-ch04-topic-04-recursive-error-backpropagation-hidden--t1826s.png",
+      "seconds": 1826.4,
+      "chapter": 4,
+      "slug": "topic-04-recursive-error-backpropagation-hidden-",
+      "label": "30:26",
+      "range_start": 1554.0,
+      "range_end": 2173.0
+    },
+    {
+      "file": "raw/025-ch04-topic-04-recursive-error-backpropagation-hidden--t1900s.png",
+      "seconds": 1900.6,
+      "chapter": 4,
+      "slug": "topic-04-recursive-error-backpropagation-hidden-",
+      "label": "31:40",
+      "range_start": 1554.0,
+      "range_end": 2173.0
+    },
+    {
+      "file": "raw/026-ch04-topic-04-recursive-error-backpropagation-hidden--t1974s.png",
+      "seconds": 1974.9,
+      "chapter": 4,
+      "slug": "topic-04-recursive-error-backpropagation-hidden-",
+      "label": "32:54",
+      "range_start": 1554.0,
+      "range_end": 2173.0
+    },
+    {
+      "file": "raw/027-ch04-topic-04-recursive-error-backpropagation-hidden--t2049s.png",
+      "seconds": 2049.2,
+      "chapter": 4,
+      "slug": "topic-04-recursive-error-backpropagation-hidden-",
+      "label": "34:09",
+      "range_start": 1554.0,
+      "range_end": 2173.0
+    },
+    {
+      "file": "raw/028-ch04-topic-04-recursive-error-backpropagation-hidden--t2123s.png",
+      "seconds": 2123.5,
+      "chapter": 4,
+      "slug": "topic-04-recursive-error-backpropagation-hidden-",
+      "label": "35:23",
+      "range_start": 1554.0,
+      "range_end": 2173.0
+    },
+    {
+      "file": "raw/029-ch05-topic-05-weight-bias-gradients-and-parameter-upd-t2187s.png",
+      "seconds": 2187.6,
+      "chapter": 5,
+      "slug": "topic-05-weight-bias-gradients-and-parameter-upd",
+      "label": "36:27",
+      "range_start": 2173.0,
+      "range_end": 2356.0
+    },
+    {
+      "file": "raw/030-ch05-topic-05-weight-bias-gradients-and-parameter-upd-t2238s.png",
+      "seconds": 2238.9,
+      "chapter": 5,
+      "slug": "topic-05-weight-bias-gradients-and-parameter-upd",
+      "label": "37:18",
+      "range_start": 2173.0,
+      "range_end": 2356.0
+    },
+    {
+      "file": "raw/031-ch05-topic-05-weight-bias-gradients-and-parameter-upd-t2290s.png",
+      "seconds": 2290.1,
+      "chapter": 5,
+      "slug": "topic-05-weight-bias-gradients-and-parameter-upd",
+      "label": "38:10",
+      "range_start": 2173.0,
+      "range_end": 2356.0
+    },
+    {
+      "file": "raw/032-ch05-topic-05-weight-bias-gradients-and-parameter-upd-t2341s.png",
+      "seconds": 2341.4,
+      "chapter": 5,
+      "slug": "topic-05-weight-bias-gradients-and-parameter-upd",
+      "label": "39:01",
+      "range_start": 2173.0,
+      "range_end": 2356.0
+    },
+    {
+      "file": "raw/033-ch06-topic-06-vectorized-matrix-backpropagation-and-g-t2387s.png",
+      "seconds": 2387.3,
+      "chapter": 6,
+      "slug": "topic-06-vectorized-matrix-backpropagation-and-g",
+      "label": "39:47",
+      "range_start": 2356.0,
+      "range_end": 2747.0
+    },
+    {
+      "file": "raw/034-ch06-topic-06-vectorized-matrix-backpropagation-and-g-t2496s.png",
+      "seconds": 2496.8,
+      "chapter": 6,
+      "slug": "topic-06-vectorized-matrix-backpropagation-and-g",
+      "label": "41:36",
+      "range_start": 2356.0,
+      "range_end": 2747.0
+    },
+    {
+      "file": "raw/035-ch06-topic-06-vectorized-matrix-backpropagation-and-g-t2606s.png",
+      "seconds": 2606.2,
+      "chapter": 6,
+      "slug": "topic-06-vectorized-matrix-backpropagation-and-g",
+      "label": "43:26",
+      "range_start": 2356.0,
+      "range_end": 2747.0
+    },
+    {
+      "file": "raw/036-ch06-topic-06-vectorized-matrix-backpropagation-and-g-t2715s.png",
+      "seconds": 2715.7,
+      "chapter": 6,
+      "slug": "topic-06-vectorized-matrix-backpropagation-and-g",
+      "label": "45:15",
+      "range_start": 2356.0,
+      "range_end": 2747.0
+    },
+    {
+      "file": "raw/037-ch07-topic-07-regularization-and-inductive-bias-previ-t2756s.png",
+      "seconds": 2756.4,
+      "chapter": 7,
+      "slug": "topic-07-regularization-and-inductive-bias-previ",
+      "label": "45:56",
+      "range_start": 2747.0,
+      "range_end": 2864.0
+    },
+    {
+      "file": "raw/038-ch07-topic-07-regularization-and-inductive-bias-previ-t2789s.png",
+      "seconds": 2789.1,
+      "chapter": 7,
+      "slug": "topic-07-regularization-and-inductive-bias-previ",
+      "label": "46:29",
+      "range_start": 2747.0,
+      "range_end": 2864.0
+    },
+    {
+      "file": "raw/039-ch07-topic-07-regularization-and-inductive-bias-previ-t2821s.png",
+      "seconds": 2821.9,
+      "chapter": 7,
+      "slug": "topic-07-regularization-and-inductive-bias-previ",
+      "label": "47:01",
+      "range_start": 2747.0,
+      "range_end": 2864.0
+    },
+    {
+      "file": "raw/040-ch07-topic-07-regularization-and-inductive-bias-previ-t2854s.png",
+      "seconds": 2854.6,
+      "chapter": 7,
+      "slug": "topic-07-regularization-and-inductive-bias-previ",
+      "label": "47:34",
+      "range_start": 2747.0,
+      "range_end": 2864.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-topic-01-erm-neural-networks-and-gradient-descen-panel1of1.png",
+      "chapter": 1,
+      "slug": "topic-01-erm-neural-networks-and-gradient-descen",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-topic-01-erm-neural-networks-and-gradient-descen-t0020s.png",
+        "002-ch01-topic-01-erm-neural-networks-and-gradient-descen-t0091s.png",
+        "003-ch01-topic-01-erm-neural-networks-and-gradient-descen-t0162s.png",
+        "004-ch01-topic-01-erm-neural-networks-and-gradient-descen-t0233s.png"
+      ],
+      "labels": [
+        "ch1 00:20",
+        "ch1 01:31",
+        "ch1 02:42",
+        "ch1 03:53"
+      ],
+      "tile_seconds": [
+        20.3,
+        91.4,
+        162.6,
+        233.7
+      ],
+      "time_start": 20.3,
+      "time_end": 233.7,
+      "range_start": 0.0,
+      "range_end": 254.0
+    },
+    {
+      "file": "composites/ch02-topic-02-notation-and-forward-computational-grap-panel1of2.png",
+      "chapter": 2,
+      "slug": "topic-02-notation-and-forward-computational-grap",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "005-ch02-topic-02-notation-and-forward-computational-grap-t0302s.png",
+        "006-ch02-topic-02-notation-and-forward-computational-grap-t0374s.png",
+        "007-ch02-topic-02-notation-and-forward-computational-grap-t0446s.png",
+        "008-ch02-topic-02-notation-and-forward-computational-grap-t0518s.png"
+      ],
+      "labels": [
+        "ch2 05:02",
+        "ch2 06:14",
+        "ch2 07:26",
+        "ch2 08:38"
+      ],
+      "tile_seconds": [
+        302.1,
+        374.2,
+        446.3,
+        518.4
+      ],
+      "time_start": 302.1,
+      "time_end": 518.4,
+      "range_start": 254.0,
+      "range_end": 855.0
+    },
+    {
+      "file": "composites/ch02-topic-02-notation-and-forward-computational-grap-panel2of2.png",
+      "chapter": 2,
+      "slug": "topic-02-notation-and-forward-computational-grap",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "009-ch02-topic-02-notation-and-forward-computational-grap-t0590s.png",
+        "010-ch02-topic-02-notation-and-forward-computational-grap-t0662s.png",
+        "011-ch02-topic-02-notation-and-forward-computational-grap-t0734s.png",
+        "012-ch02-topic-02-notation-and-forward-computational-grap-t0806s.png"
+      ],
+      "labels": [
+        "ch2 09:50",
+        "ch2 11:02",
+        "ch2 12:14",
+        "ch2 13:26"
+      ],
+      "tile_seconds": [
+        590.6,
+        662.7,
+        734.8,
+        806.9
+      ],
+      "time_start": 590.6,
+      "time_end": 806.9,
+      "range_start": 254.0,
+      "range_end": 855.0
+    },
+    {
+      "file": "composites/ch03-topic-03-output-layer-error-delta-and-loss-gradi-panel1of2.png",
+      "chapter": 3,
+      "slug": "topic-03-output-layer-error-delta-and-loss-gradi",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "013-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t0910s.png",
+        "014-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t0994s.png",
+        "015-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t1078s.png",
+        "016-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t1162s.png"
+      ],
+      "labels": [
+        "ch3 15:10",
+        "ch3 16:34",
+        "ch3 17:58",
+        "ch3 19:22"
+      ],
+      "tile_seconds": [
+        910.9,
+        994.8,
+        1078.7,
+        1162.6
+      ],
+      "time_start": 910.9,
+      "time_end": 1162.6,
+      "range_start": 855.0,
+      "range_end": 1554.0
+    },
+    {
+      "file": "composites/ch03-topic-03-output-layer-error-delta-and-loss-gradi-panel2of2.png",
+      "chapter": 3,
+      "slug": "topic-03-output-layer-error-delta-and-loss-gradi",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "017-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t1246s.png",
+        "018-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t1330s.png",
+        "019-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t1414s.png",
+        "020-ch03-topic-03-output-layer-error-delta-and-loss-gradi-t1498s.png"
+      ],
+      "labels": [
+        "ch3 20:46",
+        "ch3 22:10",
+        "ch3 23:34",
+        "ch3 24:58"
+      ],
+      "tile_seconds": [
+        1246.4,
+        1330.3,
+        1414.2,
+        1498.1
+      ],
+      "time_start": 1246.4,
+      "time_end": 1498.1,
+      "range_start": 855.0,
+      "range_end": 1554.0
+    },
+    {
+      "file": "composites/ch04-topic-04-recursive-error-backpropagation-hidden--panel1of2.png",
+      "chapter": 4,
+      "slug": "topic-04-recursive-error-backpropagation-hidden-",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "021-ch04-topic-04-recursive-error-backpropagation-hidden--t1603s.png",
+        "022-ch04-topic-04-recursive-error-backpropagation-hidden--t1677s.png",
+        "023-ch04-topic-04-recursive-error-backpropagation-hidden--t1752s.png",
+        "024-ch04-topic-04-recursive-error-backpropagation-hidden--t1826s.png"
+      ],
+      "labels": [
+        "ch4 26:43",
+        "ch4 27:57",
+        "ch4 29:12",
+        "ch4 30:26"
+      ],
+      "tile_seconds": [
+        1603.5,
+        1677.8,
+        1752.1,
+        1826.4
+      ],
+      "time_start": 1603.5,
+      "time_end": 1826.4,
+      "range_start": 1554.0,
+      "range_end": 2173.0
+    },
+    {
+      "file": "composites/ch04-topic-04-recursive-error-backpropagation-hidden--panel2of2.png",
+      "chapter": 4,
+      "slug": "topic-04-recursive-error-backpropagation-hidden-",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "025-ch04-topic-04-recursive-error-backpropagation-hidden--t1900s.png",
+        "026-ch04-topic-04-recursive-error-backpropagation-hidden--t1974s.png",
+        "027-ch04-topic-04-recursive-error-backpropagation-hidden--t2049s.png",
+        "028-ch04-topic-04-recursive-error-backpropagation-hidden--t2123s.png"
+      ],
+      "labels": [
+        "ch4 31:40",
+        "ch4 32:54",
+        "ch4 34:09",
+        "ch4 35:23"
+      ],
+      "tile_seconds": [
+        1900.6,
+        1974.9,
+        2049.2,
+        2123.5
+      ],
+      "time_start": 1900.6,
+      "time_end": 2123.5,
+      "range_start": 1554.0,
+      "range_end": 2173.0
+    },
+    {
+      "file": "composites/ch05-topic-05-weight-bias-gradients-and-parameter-upd-panel1of1.png",
+      "chapter": 5,
+      "slug": "topic-05-weight-bias-gradients-and-parameter-upd",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch05-topic-05-weight-bias-gradients-and-parameter-upd-t2187s.png",
+        "030-ch05-topic-05-weight-bias-gradients-and-parameter-upd-t2238s.png",
+        "031-ch05-topic-05-weight-bias-gradients-and-parameter-upd-t2290s.png",
+        "032-ch05-topic-05-weight-bias-gradients-and-parameter-upd-t2341s.png"
+      ],
+      "labels": [
+        "ch5 36:27",
+        "ch5 37:18",
+        "ch5 38:10",
+        "ch5 39:01"
+      ],
+      "tile_seconds": [
+        2187.6,
+        2238.9,
+        2290.1,
+        2341.4
+      ],
+      "time_start": 2187.6,
+      "time_end": 2341.4,
+      "range_start": 2173.0,
+      "range_end": 2356.0
+    },
+    {
+      "file": "composites/ch06-topic-06-vectorized-matrix-backpropagation-and-g-panel1of1.png",
+      "chapter": 6,
+      "slug": "topic-06-vectorized-matrix-backpropagation-and-g",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch06-topic-06-vectorized-matrix-backpropagation-and-g-t2387s.png",
+        "034-ch06-topic-06-vectorized-matrix-backpropagation-and-g-t2496s.png",
+        "035-ch06-topic-06-vectorized-matrix-backpropagation-and-g-t2606s.png",
+        "036-ch06-topic-06-vectorized-matrix-backpropagation-and-g-t2715s.png"
+      ],
+      "labels": [
+        "ch6 39:47",
+        "ch6 41:36",
+        "ch6 43:26",
+        "ch6 45:15"
+      ],
+      "tile_seconds": [
+        2387.3,
+        2496.8,
+        2606.2,
+        2715.7
+      ],
+      "time_start": 2387.3,
+      "time_end": 2715.7,
+      "range_start": 2356.0,
+      "range_end": 2747.0
+    },
+    {
+      "file": "composites/ch07-topic-07-regularization-and-inductive-bias-previ-panel1of1.png",
+      "chapter": 7,
+      "slug": "topic-07-regularization-and-inductive-bias-previ",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "037-ch07-topic-07-regularization-and-inductive-bias-previ-t2756s.png",
+        "038-ch07-topic-07-regularization-and-inductive-bias-previ-t2789s.png",
+        "039-ch07-topic-07-regularization-and-inductive-bias-previ-t2821s.png",
+        "040-ch07-topic-07-regularization-and-inductive-bias-previ-t2854s.png"
+      ],
+      "labels": [
+        "ch7 45:56",
+        "ch7 46:29",
+        "ch7 47:01",
+        "ch7 47:34"
+      ],
+      "tile_seconds": [
+        2756.4,
+        2789.1,
+        2821.9,
+        2854.6
+      ],
+      "time_start": 2756.4,
+      "time_end": 2854.6,
+      "range_start": 2747.0,
+      "range_end": 2864.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

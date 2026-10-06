@@ -5,6 +5,7 @@
 > `🎯 Where Do We Use This?:` **The universal training loss of Generative AI & Deep Learning** — Next-token prediction loss in Large Language Models (GPT-4, LLaMA-3, Claude), Multi-class image classification in Vision Transformers (ViT, ResNet), Policy gradient entropy regularization in Reinforcement Learning (PPO, SAC), and Target distribution matching.
 > `🎓 Course Module Mapping:` [Tut 08: Basic Probability 2](../../Mathematical-Foundation-for-GenerativeAI/09-Tutorial08-Review-Basic-Probability-2/NOTES.md) · [Tut 04: CNNs](../../Mathematical-Foundation-for-GenerativeAI/05-Tutorial04-CNNs-PyTorch/NOTES.md) · [Lec 01: Intro](../../Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/NOTES.md) · [Lec 20: VAEs](../../Mathematical-Foundation-for-GenerativeAI/19-Lec08-Latent-Variable-Models-VAE/NOTES.md)
 > `⏱️ Difficulty Level:` ⭐⭐☆☆☆ (Foundational & Accessible · 25 min read)
+> `🌐 Interactive Web Explainer:` [01-Entropy_CrossEntropy_CCE.html](./01-Entropy_CrossEntropy_CCE.html) *(Live probability sliders, gauges, and neural net simulator)*
 
 ---
 

@@ -6,11 +6,12 @@ Packages for NPTEL / IISc lectures (generative AI math foundations and related),
 
 Parent course of this repo. Prof. Prathosh A P · IISc · **106108841** · 89 videos · ~46.6 h.
 
-| File | What it is |
-|------|------------|
-| [`NOTES.md`](./NOTES.md) | Course map + full playlist catalog (title, link, summary, existing packages) · [YouTube playlist](https://www.youtube.com/playlist?list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu) |
+| File / Folder | What it is |
+|---------------|------------|
+| [`Mathematical-foundation-ml/NOTES.md`](./Mathematical-foundation-ml/NOTES.md) | Course map + full playlist catalog inside course directory · [YouTube playlist](https://www.youtube.com/playlist?list=PLgMDNELGJ1Cay-Q9Cn8KcpUcC58NDWuiu) |
+| [`NOTES.md`](./NOTES.md) | Root mirror of course map + full 89-video playlist catalog |
 
-Start at [`NOTES.md`](./NOTES.md). Numbered folders below (`02-Lec01-…`) are per-lecture study packages for a subset of that playlist.
+Start at [`Mathematical-foundation-ml/Notes.md`](./Mathematical-foundation-ml/Notes.md). Numbered folders inside `Mathematical-foundation-ml/` (`02-Lec01-…` through `14-Lec13-…`, `54-Lec41-…` through `63-Tutorial13-…`) are per-lecture 7-Pillar study packages.
 
 ## NPTEL — Mathematical Foundations of Generative AI
 
@@ -68,6 +69,16 @@ Law: `~/.grok/skills/youtube-lecture-tutor/`
 | [`12-Lec11-Entropy/`](./Mathematical-foundation-ml/12-Lec11-Entropy/) | [Lec 11 Entropy](https://www.youtube.com/watch?v=P6wjLz4dRTs) | math_technical | Surprisal −log P; entropy H=−∑p log p; need d |
 | [`13-Lec12-KL-Divergence/`](./Mathematical-foundation-ml/13-Lec12-KL-Divergence/) | [Lec 12 KL Divergence](https://www.youtube.com/watch?v=ihkGbIdbbxc) | math_technical | Cross-entropy; KL=CE−H; asymmetric divergence |
 | [`14-Lec13-Minimization-of-KL/`](./Mathematical-foundation-ml/14-Lec13-Minimization-of-KL/) | [Lec 13 Minimization of KL Divergence](https://www.youtube.com/watch?v=Ij4p5hLbfo4) | math_technical | min KL → drop H → LLN → MLE ≡ min-KL estimator |
+| [`54-Lec41-Neural-Networks-UAT/`](./Mathematical-foundation-ml/54-Lec41-Neural-Networks-UAT/) | [Lec 41 Neural Networks and UAT](https://www.youtube.com/watch?v=npYHSFuqnzs) | math_technical | MLP hypothesis class; Cybenko UAT density proof; shallow vs deep FFT analogy |
+| [`55-Lec42-ERM-Neural-Networks-Backpropagation/`](./Mathematical-foundation-ml/55-Lec42-ERM-Neural-Networks-Backpropagation/) | [Lec 42 ERM on Neural Networks and Backpropagation](https://www.youtube.com/watch?v=dONDRwX_83E) | math_technical | Multivariable chain rule; error sensitivity $\delta$; recursive hidden backprop; matrix GEMM vectorization |
+| [`56-Lec43-Local-Receptive-Field-Parameter-Sharing/`](./Mathematical-foundation-ml/56-Lec43-Local-Receptive-Field-Parameter-Sharing/) | [Lec 43 Local Receptive Field and Parameter Sharing](https://www.youtube.com/watch?v=rm0VmbTQE8Y) | math_technical | Spatial inductive bias; local receptive fields; parameter sharing; translation equivariance; Toeplitz convolution |
+| [`57-Lec44-CNNs-as-Regularized-MLP/`](./Mathematical-foundation-ml/57-Lec44-CNNs-as-Regularized-MLP/) | [Lec 44 CNNs as Regularized MLP](https://www.youtube.com/watch?v=mSYTyrXCsA8) | math_technical | CNNs as regularized MLPs; multi-channel tensor conv; filter symmetry breaking; subgradient pooling; ResNet & U-Net |
+| [`58-Lec45-Recurrent-Neural-Networks-RNNs/`](./Mathematical-foundation-ml/58-Lec45-Recurrent-Neural-Networks-RNNs/) | [Lec 45 Recurrent Neural Networks (RNNs)](https://www.youtube.com/watch?v=E2LLi7AB9lQ) | math_technical | Sequential data topologies; variable-length sequences; recurrent cell state $h_t = \sigma(W_{hh} h_{t-1} + W_{xh} x_t + b_h)$; unrolled computational graph; causal block-Toeplitz MLP |
+| [`59-Lec46-Backpropagation-in-RNNs-Vanishing-Gradients/`](./Mathematical-foundation-ml/59-Lec46-Backpropagation-in-RNNs-Vanishing-Gradients/) | [Lec 46 Backpropagation in RNNs and Vanishing Gradients Problem](https://www.youtube.com/watch?v=TVkaROL2FLw) | math_technical | Backpropagation Through Time (BPTT); multivariable chain rule on unrolled DAGs; local recurrent Jacobian chain; proof of exponential vanishing/exploding gradients; additive identity highways |
+| [`60-Lec47-LSTMs-and-GRUs/`](./Mathematical-foundation-ml/60-Lec47-LSTMs-and-GRUs/) | [Lec 47 LSTMs and GRUs](https://www.youtube.com/watch?v=Pkuwu4EMRj8) | math_technical | Gated architectures; unified additive formulation $h_t = \alpha_t \odot h_{t-1} + \beta_t \odot \tilde{h}_t$; Highway networks, GRUs, LSTMs; proof of unattenuated gradient transmission; spatial vs temporal skip duality |
+| [`61-Tutorial11-PyTorch-Tensors-DataLoaders/`](./Mathematical-foundation-ml/61-Tutorial11-PyTorch-Tensors-DataLoaders/) | [Tutorial 11 : Pytorch - Tensors and Data Loaders](https://www.youtube.com/watch?v=vm9FYVtM5ZA) | code_tutorial | PyTorch tensor mechanics; CPU vs CUDA device placement; zero-copy views; GEMM vs Hadamard; Dataset & DataLoader pipeline |
+| [`62-Tutorial12-PyTorch-Building-MLP-Autograd/`](./Mathematical-foundation-ml/62-Tutorial12-PyTorch-Building-MLP-Autograd/) | [Tutorial 12 : Pytorch - Building MLP and Auto Grad](https://www.youtube.com/watch?v=SEEQ2A2WN9g) | code_tutorial | Modular MLP construction via nn.Module; forward pass dynamics; Softmax invariants; dynamic computational graph DAG; autograd reverse VJPs; memory retention |
+| [`63-Tutorial13-PyTorch-Training-the-Model/`](./Mathematical-foundation-ml/63-Tutorial13-PyTorch-Training-the-Model/) | [Tutorial 13 : Pytorch - Training the Model](https://www.youtube.com/watch?v=5PruFG5g1C4) | code_tutorial | End-to-end training cycle: model.train(), zero_grad(), backward(), optimizer.step(); adaptive optimizers (SGD vs Adam); model.eval() and torch.no_grad() validation; safe state_dict serialization |
 | [`Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/`](./Mathematical-Foundation-for-GenerativeAI/01-Lec01-MFGAI-Introduction/) | [Lec 01 Introduction (MF Generative AI)](https://www.youtube.com/watch?v=H05WDy9Mngk) | math_technical | RE→Ω→P→RV→estimate P_X; GenAI roadmap |
 | [`Mathematical-Foundation-for-GenerativeAI/02-Lec02-Generative-Models-Problem-Formulation/`](./Mathematical-Foundation-for-GenerativeAI/02-Lec02-Generative-Models-Problem-Formulation/) | [Lec 02 Generative Models: Problem Formulation](https://www.youtube.com/watch?v=GKfv4l6r7hQ) | math_technical | data∈R^d; estimate p_x + sample; p_θ + min d |
 | [`Mathematical-Foundation-for-GenerativeAI/03-Tutorial02-Introduction-to-NumPy/`](./Mathematical-Foundation-for-GenerativeAI/03-Tutorial02-Introduction-to-NumPy/) | [Tutorial 2: Introduction to NumPy](https://www.youtube.com/watch?v=E79ld44pfGM) | code_tutorial | arrays→matmul→ReLU/softmax→conv/RNN→logreg |

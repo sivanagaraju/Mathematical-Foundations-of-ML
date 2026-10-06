@@ -5,6 +5,45 @@
 > Builds on [Lec 11 Entropy](../12-Lec11-Entropy/PREREQUISITES.md) (surprisal; $H=-\sum p\log p$).  
 > Strong basics: every formula decoded with micro numbers.
 
+---
+
+## ⚡ 3-Minute Executive Fast-Track Card
+
+```
+                 THE KL DIVERGENCE DECOMPOSITION BRIDGE
+                 
+   [ True Distribution P ]                  [ Candidate Model Q ]
+             │                                        │
+             ▼                                        ▼
+   True Entropy: H(P)                    Cross-Entropy: H(P, Q)
+   (Minimum code length                  (Actual code length using
+    under true reality)                   model Q's codebook on data P)
+             │                                        │
+             └───────────────────┬────────────────────┘
+                                 │
+                                 ▼
+                     D_KL(P || Q) = H(P, Q) - H(P)
+                     (Extra bits wasted by using model Q)
+                     - Always non-negative: D_KL >= 0
+                     - Equals 0 iff Q = P
+                     - Asymmetric: D_KL(P || Q) != D_KL(Q || P)
+```
+
+### 3 Core Mental Shifts
+1. **Divergence, Not Metric:** KL divergence is strictly directional ($D_{\text{KL}}(P \parallel Q) \neq D_{\text{KL}}(Q \parallel P)$) and violates the triangle inequality. It measures relative information penalty, not geometric distance.
+2. **First Slot is Ground Truth:** In $D_{\text{KL}}(P \parallel Q)$, the expectation is evaluated under the true data generator $P$; model $Q$ is scored inside the logarithm.
+3. **Cross-Entropy Minimization is KL Minimization:** Because the data entropy $H(P)$ is a constant with respect to model parameters $\theta$, minimizing cross-entropy loss $H(P, Q_\theta)$ during model training is mathematically identical to minimizing $D_{\text{KL}}(P \parallel Q_\theta)$.
+
+### 3-Question Instant Readiness Gate
+1. *Can KL divergence ever be negative ($D_{\text{KL}} < 0$)?*  
+   <details><summary>Reveal Answer</summary><b>Never!</b> By Gibbs' inequality, $D_{\text{KL}}(P \parallel Q) \ge 0$, with equality if and only if $P = Q$.</details>
+2. *Why do deep learning practitioners optimize cross-entropy rather than full KL divergence?*  
+   <details><summary>Reveal Answer</summary><b>Because data entropy $H(P)$ is constant with respect to model weights $\theta$.</b> $\arg\min_\theta H(P, P_\theta) = \arg\min_\theta D_{\text{KL}}(P \parallel P_\theta)$.</details>
+3. *What happens to $D_{\text{KL}}(P \parallel Q)$ if true data can produce an event $x$ where model $Q(x) = 0$?*  
+   <details><summary>Reveal Answer</summary><b>It explodes to $+\infty$.</b> Models must place non-zero probability mass everywhere true data can occur.</details>
+
+---
+
 ```
   After this warm-up you can say:
 
@@ -49,15 +88,13 @@ Before diving into the foundational pillars, use this reference table to decode 
 
 <a id="p1-entropy"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Imagine listening to white noise on an old television set. The level of static hiss is a single property describing how disorderly that specific TV channel is. Shannon entropy $H(p)$ measures that exact internal level of disorder and average surprise inside one solitary probability distribution.
 
-KL is built from entropy + cross-entropy.
-
-For discrete $p$:
-
-$$
-H(p)=\mathbb{E}_{X\sim p}\big[-\log p(X)\big]=-\sum_i p(x_i)\log p(x_i)
-$$
+### 🔍 Plain-English Breakdown
+Kullback-Leibler divergence is built from two components: entropy and cross-entropy.
+For a discrete probability distribution $p$:
+$$H(p) = \mathbb{E}_{X\sim p}\big[-\log p(X)\big] = -\sum_i p(x_i)\log p(x_i)$$
 
 | Reading | Meaning |
 |---------|---------|
@@ -65,7 +102,38 @@ $$
 | Units | bits if $\log_2$, nats if $\ln$ |
 | Scope | **one** law $p$ only |
 
-Micro (base 2): fair coin $H=1$ bit; sure outcome $H=0$.
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+- Fair Coin: $p = [0.50, 0.50]$ (base 2):
+  $$H(p) = -[0.5 \log_2(0.5) + 0.5 \log_2(0.5)] = -[0.5(-1) + 0.5(-1)] = 1.00 \text{ bit}$$
+- Deterministic Output: $p = [1.0, 0.0]$:
+  $$H(p) = -[1.0 \log_2(1.0) + 0] = 0.00 \text{ bits}$$
+- Entropy is strictly non-negative for discrete variables: $H(p) \ge 0$.
+
+### 💻 Standalone Executable Python Verification
+```python
+import numpy as np
+
+p_fair = np.array([0.5, 0.5])
+p_det = np.array([1.0, 0.0])
+
+h_fair = -np.sum(p_fair * np.log2(p_fair))
+h_det = -np.sum(p_det[p_det > 0] * np.log2(p_det[p_det > 0]))
+
+assert np.isclose(h_fair, 1.00)
+assert np.isclose(h_det, 0.00)
+print(f"Fair coin entropy: {h_fair:.1f} bit, Deterministic entropy: {h_det:.1f} bits")
+```
+
+### 🩺 Diagnostic Mini-Check
+Does Shannon entropy $H(p)$ tell you how well a candidate model $q$ matches true data $p$?
+<details><summary>Reveal Answer</summary>
+<b>No.</b> $H(p)$ depends entirely on $p$ alone. Scoring how well model $q$ matches $p$ requires a comparative divergence measure between two distributions.
+</details>
+
+<details><summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
+
+Let $P$ be a discrete probability measure on countable space $\mathcal{X}$. The entropy $H(P) = -\sum_{x \in \mathcal{X}} P(x) \log P(x)$ is concave in $P$ and attains its unique maximum $\log |\mathcal{X}|$ under the uniform distribution on compact alphabets.
+</details>
 
 ---
 
@@ -73,18 +141,50 @@ Micro (base 2): fair coin $H=1$ bit; sure outcome $H=0$.
 
 <a id="p2-two-pmfs"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Imagine two weather forecasters analyzing the exact same city on the same day. Forecaster 1 (Reality $P$) says there is an 80% chance of sunshine and 20% chance of rain. Forecaster 2 (Model $Q$) predicts a 50% chance of sunshine and 50% chance of rain. They agree on what events can happen (sunshine or rain), but disagree on the probability of each event.
 
-Pairwise scores need two laws $p$ and $q$ on the **same** outcomes.
+### 🔍 Plain-English Breakdown
+Pairwise divergence scores require two distributions $p$ and $q$ defined over the **exact same** sample space:
+$$p(x_i) \ge 0, \quad \sum_i p(x_i) = 1; \qquad q(x_i) \ge 0, \quad \sum_i q(x_i) = 1$$
 
-$$
-p(x_i)\ge 0,\ \sum_i p(x_i)=1;\qquad
-q(x_i)\ge 0,\ \sum_i q(x_i)=1
-$$
+- **Discrete:** $p$ and $q$ are Probability Mass Functions (PMFs).
+- **Continuous:** $p$ and $q$ are continuous Probability Density Functions.
 
-**Notation care (he stresses):** here $p,q$ are **PMFs** (discrete), not the abstract probability measure $P$ on $\Omega$. Continuous twin uses **densities** (small $p$).
+**The Absolute Continuity Trap:**
+If true reality has $p(x) > 0$ on an outcome where model $q(x) = 0$, then $\frac{p(x)}{q(x)} \to \infty$ and $\log \frac{p(x)}{q(x)} \to \infty$. A model that assigns zero probability to an event that can actually happen incurs infinite divergence penalty ($D_{\text{KL}} = \infty$)!
 
-**Support caution:** if $p(x)>0$ but $q(x)=0$, then $\log(p/q)$ blows up — KL can be $+\infty$. Models should put mass wherever truth has mass.
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+Let alphabet $\mathcal{X} = \{A, B\}$:
+- True law: $p = [0.80, 0.20] \implies \sum p_i = 0.80 + 0.20 = 1.00$.
+- Candidate model: $q = [0.50, 0.50] \implies \sum q_i = 0.50 + 0.50 = 1.00$.
+- Likelihood ratios:
+  $$\frac{p(A)}{q(A)} = \frac{0.80}{0.50} = 1.60, \qquad \frac{p(B)}{q(B)} = \frac{0.20}{0.50} = 0.40$$
+- Both ratios are finite and strictly positive, ensuring valid finite divergence.
+
+### 💻 Standalone Executable Python Verification
+```python
+import numpy as np
+
+p = np.array([0.80, 0.20])
+q = np.array([0.50, 0.50])
+
+assert np.isclose(np.sum(p), 1.00)
+assert np.isclose(np.sum(q), 1.00)
+assert np.all(p > 0) and np.all(q > 0), "Support condition satisfied"
+print(f"Likelihood ratios: p/q = {p / q}")
+```
+
+### 🩺 Diagnostic Mini-Check
+If $p(x_1) = 0.10$ and $q(x_1) = 0.00$, what is the resulting value of $D_{\text{KL}}(p \parallel q)$?
+<details><summary>Reveal Answer</summary>
+$+\infty$. Because $p(x_1) \log(p(x_1)/0) = +\infty$, the KL divergence diverges to positive infinity.
+</details>
+
+<details><summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
+
+Let $P$ and $Q$ be probability measures on $(\mathcal{X}, \mathcal{B})$. $P$ is absolutely continuous with respect to $Q$ ($P \ll Q$) if for every measurable set $A \in \mathcal{B}$, $Q(A) = 0 \implies P(A) = 0$. By the Radon-Nikodym theorem, the density ratio $\frac{dP}{dQ}$ exists if and only if $P \ll Q$; otherwise $D_{\mathrm{KL}}(P \parallel Q) = +\infty$.
+</details>
 
 ---
 
@@ -92,35 +192,56 @@ $$
 
 <a id="p3-cross-entropy"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Imagine preparing for an arctic expedition to Greenland ($P$) using a survival guidebook written for a beach vacation in Hawaii ($Q$). Reality forces you to endure freezing snowstorms ($P$), but your mind expected warm beaches and sunglasses ($Q$). Your level of shock and unpreparedness upon landing on the ice is cross-entropy: the average surprise when real data from $P$ strikes a mind expecting $Q$.
 
-The middle object of the lecture.
-
-$$
-\boxed{H(p,q)=\mathbb{E}_{X\sim p}\big[-\log q(X)\big]=-\sum_i p(x_i)\log q(x_i)}
-$$
+### 🔍 Plain-English Breakdown
+Cross-entropy measures the average surprisal of model $q$ when the data is drawn from true law $p$:
+$$\boxed{H(p, q) = \mathbb{E}_{X\sim p}\big[-\log q(X)\big] = -\sum_i p(x_i)\log q(x_i)}$$
 
 | Piece | Role |
 |-------|------|
-| $-\log q(x_i)$ | surprisal **as if** the law were $q$ |
-| weight by $p(x_i)$ | data actually come from **true** $p$ |
-| sum | average surprise of the **wrong** model on true data |
+| $-\log q(x_i)$ | surprisal computed under candidate model $q$ |
+| $p(x_i)$ | true sampling probability weight under nature $p$ |
+| $\sum$ | average surprise of the wrong model on true data |
 
-**Special case:** if $q=p$, then $H(p,p)=H(p)$.
+- If $q = p$, cross-entropy collapses to true entropy: $H(p, p) = H(p)$.
+- By Gibbs' inequality, cross-entropy is always greater than or equal to true entropy: $H(p, q) \ge H(p)$.
 
-**Not symmetric:** $H(p,q)$ and $H(q,p)$ swap who is “truth” vs “model.”
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+Let true law $p = [0.80, 0.20]$ and model $q = [0.50, 0.50]$ (base 2):
+- Cross-entropy calculation:
+  $$H(p, q) = -[0.80 \log_2(0.50) + 0.20 \log_2(0.50)] = -[0.80(-1.0) + 0.20(-1.0)] = -[-1.00] = 1.0000 \text{ bit}$$
+- True entropy calculation:
+  $$H(p) = -[0.80 \log_2(0.80) + 0.20 \log_2(0.20)] = -[0.80(-0.3219) + 0.20(-2.3219)] = 0.2575 + 0.4644 = 0.7219 \text{ bits}$$
+- Verification: $H(p, q) = 1.0000 > H(p) = 0.7219$. Using the incorrect model $q$ increased expected surprise by $0.2781$ bits!
 
-### Process story
+### 💻 Standalone Executable Python Verification
+```python
+import numpy as np
 
-1. Nature samples $X$ from true $p$.  
-2. You score with model $q$ using surprisal $-\log q(X)$.  
-3. Average over many draws → cross-entropy.
+p = np.array([0.80, 0.20])
+q = np.array([0.50, 0.50])
 
-### Why expect $H(p,q)\ge H(p)$? (intuition, not a full proof)
+cross_entropy = -np.sum(p * np.log2(q))
+true_entropy = -np.sum(p * np.log2(p))
 
-$H(p)$ is average surprise when you use the **correct** scoring rule $-\log p$.  
-$H(p,q)$ is average surprise when you use a **possibly wrong** rule $-\log q$ on the same true data.  
-A wrong codebook cannot make average surprise *smaller* than the true entropy (Gibbs inequality / information inequality — lecture leaves as homework). Equality only when $q=p$.
+assert np.isclose(cross_entropy, 1.0000)
+assert np.isclose(true_entropy, 0.7219, atol=1e-3)
+assert cross_entropy >= true_entropy
+print(f"Cross-Entropy: {cross_entropy:.4f} bits >= True Entropy: {true_entropy:.4f} bits")
+```
+
+### 🩺 Diagnostic Mini-Check
+Is cross-entropy symmetric? Does $H(p, q) = H(q, p)$?
+<details><summary>Reveal Answer</summary>
+<b>No.</b> $H(p, q)$ takes expectation under $p$ using model $q$; $H(q, p)$ takes expectation under $q$ using model $p$. Swapping truth and model yields completely different expectation sums.
+</details>
+
+<details><summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
+
+Under the Kraft-McMillan theorem, $-\log_2 q(x)$ represents the optimal codeword length for symbol $x$ under codebook $q$. Cross-entropy $H(P, Q) = \mathbb{E}_{X \sim P}[-\log_2 Q(X)]$ represents the expected code length when transmitting symbols generated by distribution $P$ using codebook $Q$.
+</details>
 
 ---
 
@@ -128,55 +249,60 @@ A wrong codebook cannot make average surprise *smaller* than the true entropy (G
 
 <a id="p4-kl"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Imagine taking a long-distance road trip. If you know the optimal highway route, the trip takes 100 miles (True Entropy $H(p)$). If you use a faulty navigation app, your actual route takes 140 miles (Cross-Entropy $H(p, q)$). The extra 40 miles you wasted driving in circles ($140 - 100 = 40$) is the KL Divergence ($D_{\text{KL}}$): the exact inefficiency penalty incurred by following the wrong map!
 
-The pairwise score for “how wrong is $q$ for $p$.”
+### 🔍 Plain-English Breakdown
+Kullback-Leibler (KL) divergence measures the excess information surprise caused by approximating $p$ with $q$:
+$$\boxed{D_{\mathrm{KL}}(p\|q) = H(p,q) - H(p) = \sum_i p(x_i)\log\frac{p(x_i)}{q(x_i)} = \mathbb{E}_{p}\Big[\log\frac{p(X)}{q(X)}\Big]}$$
 
-$$
-\boxed{D_{\mathrm{KL}}(p\|q)=H(p,q)-H(p)
-=\sum_i p(x_i)\log\frac{p(x_i)}{q(x_i)}
-=\mathbb{E}_{p}\Big[\log\frac{p(X)}{q(X)}\Big]}
-$$
+### Algebraic Proof of Equivalence:
+$$\begin{aligned}
+H(p,q) - H(p) &= \Big(-\sum_i p_i\log q_i\Big) - \Big(-\sum_i p_i\log p_i\Big) \\
+&= \sum_i p_i\log p_i - \sum_i p_i\log q_i = \sum_i p_i\log\frac{p_i}{q_i} = D_{\mathrm{KL}}(p\|q)
+\end{aligned}$$
 
-| Form | Reading |
-|------|---------|
-| $H(p,q)-H(p)$ | extra average surprise beyond true entropy |
-| $\sum p\log(p/q)$ | same algebra (log laws) |
-| $D_{\mathrm{KL}}(p\|q)$ | “KL of $p$ **to** $q$” (double bar $=$ directed) |
+- **Non-negativity:** $D_{\text{KL}}(p \parallel q) \ge 0$, with equality if and only if $p = q$.
+- **Classroom Trap:** Do not write "entropy minus cross-entropy"—that would produce a negative number! It is always **cross-entropy minus entropy**.
 
-**Order matters:** the first argument is the **reference / true** law (expectation under $p$); the second is the **model / approximation**.
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+Using our earlier values $H(p, q) = 1.0000$ and $H(p) = 0.7219$:
+$$D_{\text{KL}}(p \parallel q) = H(p, q) - H(p) = 1.0000 - 0.7219 = 0.2781 \text{ bits}$$
+Direct sum calculation check:
+$$D_{\text{KL}}(p \parallel q) = 0.80 \log_2\left(\frac{0.80}{0.50}\right) + 0.20 \log_2\left(\frac{0.20}{0.50}\right) = 0.80 \log_2(1.60) + 0.20 \log_2(0.40)$$
+$$= 0.80(0.6781) + 0.20(-1.3219) = 0.5425 - 0.2644 = 0.2781 \text{ bits}$$
+Both formulas yield exactly $0.2781$ bits $\ge 0$.
 
-### Algebra bridge (must see once)
+### 💻 Standalone Executable Python Verification
+```python
+import numpy as np
 
-$$
-\begin{aligned}
-H(p,q)-H(p)
-&= \Big(-\sum_i p_i\log q_i\Big)
-  -\Big(-\sum_i p_i\log p_i\Big) \\
-&= \sum_i p_i\log p_i - \sum_i p_i\log q_i
-  = \sum_i p_i\log\frac{p_i}{q_i}.
-\end{aligned}
-$$
+p = np.array([0.80, 0.20])
+q = np.array([0.50, 0.50])
 
-Same story with $\log(p/q)=\log p-\log q$ inside the expectation under $p$.
+ce = -np.sum(p * np.log2(q))
+h_p = -np.sum(p * np.log2(p))
+kl_from_ce = ce - h_p
+kl_direct = np.sum(p * np.log2(p / q))
 
-### Why non-negative? (idea only)
+assert np.isclose(kl_from_ce, kl_direct)
+assert np.isclose(kl_from_ce, 0.2781, atol=1e-3)
+assert kl_from_ce >= 0.0
+print(f"KL Divergence: {kl_from_ce:.4f} bits (Equivalence verified)")
+```
 
-From CE $\ge$ H: $D_{\mathrm{KL}}=H(p,q)-H(p)\ge 0$, with equality **iff** $p=q$.  
-Homework: prove non-negativity and the iff using log laws + definitions (lecture does not fully prove it on the board).
+### 🩺 Diagnostic Mini-Check
+If model $q$ matches true data $p$ perfectly ($q = p$), what is $D_{\text{KL}}(p \parallel q)$?
+<details><summary>Reveal Answer</summary>
+$0.0$ bits. When $q = p$, $H(p, p) = H(p)$, so $D_{\text{KL}}(p \parallel p) = H(p) - H(p) = 0$.
+</details>
 
-**Board caution:** he briefly wrote “entropy minus cross-entropy”; class corrected to **cross-entropy minus entropy** so the difference is non-negative.
+<details><summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
 
-### Training link (why people minimize CE)
-
-If truth $p$ is fixed (or fixed dataset) and model is $q=p_\theta$,
-
-$$
-\arg\min_\theta D_{\mathrm{KL}}(p\|p_\theta)
-=\arg\min_\theta H(p,p_\theta)
-$$
-
-because $H(p)$ does **not** depend on $\theta$. So minimizing cross-entropy training loss is the same as minimizing KL to the true law (when that makes sense).
+By Jensen's inequality applied to the strictly concave logarithm function:
+$$-D_{\mathrm{KL}}(P \parallel Q) = \mathbb{E}_P\left[\log \frac{dQ}{dP}\right] \le \log \mathbb{E}_P\left[\frac{dQ}{dP}\right] = \log \int_{\mathcal{X}} dQ = \log(1) = 0$$
+Multiplying by $-1$ reverses the inequality: $D_{\mathrm{KL}}(P \parallel Q) \ge 0$. Strict concavity guarantees equality holds if and only if $\frac{dQ}{dP} = 1$ almost everywhere.
+</details>
 
 ---
 
@@ -184,22 +310,58 @@ because $H(p)$ does **not** depend on $\theta$. So minimizing cross-entropy trai
 
 <a id="p5-not-metric"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Imagine walking down a steep snowy ski slope versus climbing up that exact same slope. Going down takes 2 minutes; climbing up takes 45 minutes of grueling effort. The difficulty depends entirely on the direction of travel! KL divergence is similarly directional: measuring error from reality $P$ to model $Q$ is completely different from measuring from $Q$ to $P$.
 
-Lec 10 put “metric” in quotes — KL is the classic reason.
+### 🔍 Plain-English Breakdown
+Lecture 10 placed "distance metric" in quotation marks because KL divergence fails fundamental metric axioms:
 
-| Property | True metric | KL |
-|----------|-------------|-----|
-| Non-negative | yes | yes (when defined) |
-| $=0$ iff same | yes | yes ($p=q$) |
-| Symmetric $d(a,b)=d(b,a)$ | required | **fails** in general |
-| Triangle inequality | required | **fails** (already fails symmetry) |
+| Property | True metric | KL Divergence |
+|----------|-------------|---------------|
+| Non-negative | required | yes ($D_{\text{KL}} \ge 0$) |
+| $=0$ iff identical | required | yes ($p=q$) |
+| Symmetric $d(a,b)=d(b,a)$ | required | **FAILS in general** |
+| Triangle inequality | required | **FAILS in general** |
 
-So KL is a **divergence**, not a distance metric. Still excellent for “how far is model from truth.”
+KL is a **statistical divergence**, not a metric distance:
+$$D_{\mathrm{KL}}(p\|q) \neq D_{\mathrm{KL}}(q\|p) \quad\text{(in general)}$$
 
-$$
-D_{\mathrm{KL}}(p\|q)\ \neq\ D_{\mathrm{KL}}(q\|p)\quad\text{(in general)}
-$$
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+Let $p = [0.90, 0.10]$ and $q = [0.50, 0.50]$ (base 2):
+- Direction 1: $D_{\text{KL}}(p \parallel q)$ (Reality $p$ vs Model $q$):
+  $$D_{\text{KL}}(p \parallel q) = 0.90 \log_2\left(\frac{0.90}{0.50}\right) + 0.10 \log_2\left(\frac{0.10}{0.50}\right) = 0.90(0.8480) + 0.10(-2.3219) = 0.7632 - 0.2322 = 0.5310 \text{ bits}$$
+- Direction 2: $D_{\text{KL}}(q \parallel p)$ (Reality $q$ vs Model $p$):
+  $$D_{\text{KL}}(q \parallel p) = 0.50 \log_2\left(\frac{0.50}{0.90}\right) + 0.50 \log_2\left(\frac{0.50}{0.10}\right) = 0.50(-0.8480) + 0.50(2.3219) = -0.4240 + 1.1610 = 0.7370 \text{ bits}$$
+- Asymmetry comparison: $0.5310 \neq 0.7370$ bits!
+
+### 💻 Standalone Executable Python Verification
+```python
+import numpy as np
+
+p = np.array([0.90, 0.10])
+q = np.array([0.50, 0.50])
+
+kl_forward = np.sum(p * np.log2(p / q))
+kl_reverse = np.sum(q * np.log2(q / p))
+
+assert np.isclose(kl_forward, 0.5310, atol=1e-3)
+assert np.isclose(kl_reverse, 0.7370, atol=1e-3)
+assert not np.isclose(kl_forward, kl_reverse), "KL divergence must be asymmetric"
+print(f"KL(p||q) = {kl_forward:.4f} != KL(q||p) = {kl_reverse:.4f} bits")
+```
+
+### 🩺 Diagnostic Mini-Check
+Why does $D_{\text{KL}}(p \parallel q) \neq D_{\text{KL}}(q \parallel p)$ disqualify KL divergence from being called a distance metric?
+<details><summary>Reveal Answer</summary>
+A mathematical metric $d(x, y)$ strictly requires symmetry ($d(x, y) = d(y, x)$ for all points). Because KL divergence is directional and asymmetric, it violates metric axioms.
+</details>
+
+<details><summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
+
+While $D_{\mathrm{KL}}$ is asymmetric, its infinitesimal local behavior is symmetric. Let $Q = P + \epsilon \Delta$. Taylor expansion yields:
+$$D_{\mathrm{KL}}(P \parallel P + \epsilon \Delta) = \frac{\epsilon^2}{2} \Delta^T \mathcal{I}(P) \Delta + \mathcal{O}(\epsilon^3)$$
+where $\mathcal{I}(P)$ is the symmetric Fisher Information Matrix, showing that infinitesimal KL divergence approximates a true Riemannian metric tensor.
+</details>
 
 ---
 
@@ -207,24 +369,52 @@ $$
 
 <a id="p6-continuous"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Imagine switching from measuring sand grains one by one in small jars (discrete) to pouring water through a continuous flow meter (continuous). The discrete summation $\sum$ smoothly transitions to a continuous Riemann-Lebesgue integral $\int$.
 
-Most ML data treated as continuous.
+### 🔍 Plain-English Breakdown
+Continuous distributions use probability density functions:
+$$h(p) = -\int p(x)\log p(x)\,dx, \qquad H(p,q) = -\int p(x)\log q(x)\,dx$$
+$$D_{\mathrm{KL}}(p\|q) = \int p(x)\log\frac{p(x)}{q(x)}\,dx$$
 
-**Differential** (continuous) objects:
+- $p, q$ are continuous densities (heights).
+- While differential entropy $h(p)$ can be negative, **continuous KL divergence is always non-negative** ($D_{\text{KL}} \ge 0$).
 
-$$
-h(p)=-\int p(x)\log p(x)\,dx,\qquad
-H(p,q)=-\int p(x)\log q(x)\,dx,\qquad
-D_{\mathrm{KL}}(p\|q)=\int p(x)\log\frac{p(x)}{q(x)}\,dx
-$$
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+Let $p \sim \mathcal{N}(0, 1)$ and $q \sim \mathcal{N}(3, 1)$ be two 1D Gaussian densities with unit variance ($\sigma_p^2 = \sigma_q^2 = 1.0$):
+Analytical Gaussian KL divergence formula:
+$$D_{\text{KL}}(p \parallel q) = \frac{1}{2}\left[\frac{\sigma_p^2 + (\mu_p - \mu_q)^2}{\sigma_q^2} - 1 + \ln\left(\frac{\sigma_q^2}{\sigma_p^2}\right)\right]$$
+Plugging in numbers:
+$$D_{\text{KL}}(p \parallel q) = \frac{1}{2}\left[\frac{1 + (0 - 3)^2}{1} - 1 + \ln(1)\right] = \frac{1}{2}[1 + 9 - 1 + 0] = \frac{9}{2} = 4.5000 \text{ nats}$$
 
-(same CE−H story when the integrals exist).
+### 💻 Standalone Executable Python Verification
+```python
+import numpy as np
 
-- $p,q$ are **densities** (heights; not probabilities at points).  
-- Structure matches discrete sum → integral.  
-- Differential entropy has a subtler interpretation than discrete $H$ (can be negative, etc.) — still used the same way to build KL.  
-- Lecture micro: true density mean $0$ vs model mean $3$ is about scoring samples from the true density with the wrong density (cross-entropy / KL story).
+# Gaussian parameters
+mu_p, mu_q = 0.0, 3.0
+var_p, var_q = 1.0, 1.0
+
+# Compute continuous KL divergence analytically
+kl_analytical = 0.5 * ((var_p + (mu_p - mu_q)**2) / var_q - 1.0 + np.log(var_q / var_p))
+
+assert np.isclose(kl_analytical, 4.5000)
+assert kl_analytical >= 0.0
+print(f"Continuous Gaussian KL Divergence: {kl_analytical:.4f} nats")
+```
+
+### 🩺 Diagnostic Mini-Check
+Can continuous differential entropy $h(p)$ be negative? Can continuous KL divergence $D_{\text{KL}}(p \parallel q)$ be negative?
+<details><summary>Reveal Answer</summary>
+Differential entropy $h(p)$ <b>can</b> be negative (for highly peaked densities where $p(x) > 1$). However, continuous KL divergence $D_{\text{KL}}(p \parallel q)$ is <b>always non-negative ($\ge 0$)</b>, equaling zero if and only if $p = q$ almost everywhere.
+</details>
+
+<details><summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
+
+For continuous densities $p, q \in L^1(\mathbb{R}^d)$ where $p \ll q$:
+$$D_{\mathrm{KL}}(p \parallel q) = \int_{\mathbb{R}^d} p(\mathbf{x}) \log \frac{p(\mathbf{x})}{q(\mathbf{x})} \, d\mathbf{x}$$
+Under affine transformations $\mathbf{y} = \mathbf{A}\mathbf{x} + \mathbf{b}$ with invertible $\mathbf{A}$, differential entropy transforms as $h(\mathbf{Y}) = h(\mathbf{X}) + \log |\det \mathbf{A}|$, but KL divergence is strictly invariant: $D_{\mathrm{KL}}(p_Y \parallel q_Y) = D_{\mathrm{KL}}(p_X \parallel q_X)$.
+</details>
 
 ---
 
@@ -232,18 +422,62 @@ $$
 
 <a id="p7-recipe"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Imagine a target archery tournament.
+1. The archer selects an arrow type $\to$ Model family $p_\theta$.
+2. The distance between the arrow hole and the dead bullseye center is measured $\to$ Discrepancy metric $D_{\text{KL}}(p_{\text{true}} \parallel p_\theta)$.
+3. The archer adjusts their aim and bow tension to eliminate the error $\to$ Optimization $\theta^* = \arg\min_\theta D_{\text{KL}}$.
 
+### 🔍 Plain-English Breakdown
+Connecting back to the 3-Step Machine Learning Recipe:
 ```
   (1) model p_θ
-  (2) d(true, model)     ← KL is one standard choice
+  (2) d(true, model)     ← KL divergence fills this exact slot!
   (3) θ* = argmin d
 ```
 
-Training often amounts to **minimizing KL** (or cross-entropy — same $\arg\min$ over $\theta$; see §4).  
-KL is one **$f$-divergence** example (whole family deferred to later / other courses).
+Training a model means **minimizing KL divergence**:
+$$\theta^\star = \arg\min_\theta D_{\mathrm{KL}}(p_{\text{true}} \parallel p_\theta)$$
+Because $D_{\text{KL}}(p \parallel p_\theta) = H(p, p_\theta) - H(p)$ and $H(p)$ does not depend on $\theta$:
+$$\arg\min_\theta D_{\mathrm{KL}}(p_{\text{true}} \parallel p_\theta) = \arg\min_\theta H(p_{\text{true}}, p_\theta)$$
+Minimizing cross-entropy loss is mathematically identical to minimizing KL divergence to the true distribution.
 
-**Convention in the recipe:** score $d(p_{\text{true}}, p_\theta)=D_{\mathrm{KL}}(p_{\text{true}}\|p_\theta)$ — truth first, model second (extra surprise of the model on true data). The reverse $D_{\mathrm{KL}}(p_\theta\|p_{\text{true}})$ is a *different* objective (sometimes called reverse KL); not the same training problem.
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+Suppose true data has fixed entropy $H(p) = 2.00$ bits.
+- Candidate Model 1 ($\theta_1$): Cross-Entropy $H(p, p_{\theta_1}) = 2.80$ bits $\implies D_{\text{KL}} = 2.80 - 2.00 = 0.80$ bits.
+- Candidate Model 2 ($\theta_2$): Cross-Entropy $H(p, p_{\theta_2}) = 2.15$ bits $\implies D_{\text{KL}} = 2.15 - 2.00 = 0.15$ bits.
+- Model 2 achieves lower cross-entropy ($2.15 < 2.80$) and lower KL divergence ($0.15 < 0.80$). Both objectives pick $\theta_2$ as superior!
+
+### 💻 Standalone Executable Python Verification
+```python
+import numpy as np
+
+# Constant data entropy
+h_true = 2.00
+ce_model_1 = 2.80
+ce_model_2 = 2.15
+
+kl_model_1 = ce_model_1 - h_true
+kl_model_2 = ce_model_2 - h_true
+
+assert np.isclose(kl_model_1, 0.80)
+assert np.isclose(kl_model_2, 0.15)
+assert (ce_model_1 - ce_model_2) == (kl_model_1 - kl_model_2)
+print(f"Optimal model selection invariant: Model 2 is superior by {kl_model_1 - kl_model_2:.2f} bits")
+```
+
+### 🩺 Diagnostic Mini-Check
+In the objective $\arg\min_\theta D_{\text{KL}}(p_{\text{data}} \parallel p_\theta)$, which distribution sits in the first slot, and which sits in the second slot?
+<details><summary>Reveal Answer</summary>
+The true data distribution $p_{\text{data}}$ sits in the <b>first slot</b> (reference truth under which expectation is taken); the parameterized candidate model $p_\theta$ sits in the <b>second slot</b> (evaluated inside the logarithm).
+</details>
+
+<details><summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
+
+Given empirical distribution $\hat{P}_n = \frac{1}{n}\sum_{i=1}^n \delta_{x_i}$:
+$$\arg\min_{\theta \in \Theta} D_{\mathrm{KL}}(\hat{P}_n \parallel P_\theta) = \arg\min_{\theta \in \Theta} \left(-\frac{1}{n}\sum_{i=1}^n \log p_\theta(x_i) - H(\hat{P}_n)\right) = \arg\max_{\theta \in \Theta} \sum_{i=1}^n \log p_\theta(x_i)$$
+The maximum likelihood estimator $\hat{\theta}_{\mathrm{MLE}}$ is the exact empirical projection that minimizes KL divergence to the empirical sample distribution.
+</details>
 
 ---
 
@@ -251,41 +485,58 @@ KL is one **$f$-divergence** example (whole family deferred to later / other cou
 
 <a id="p8-micro"></a>
 
-### Fair coin vs biased model (base 2)
+### 👶 Physical Analogy & Intuition
+Imagine predicting whether tomorrow will bring rain. If the weather is truly a 50/50 coin toss, but you stubbornly predict a 75% chance of rain, you will experience extra surprise every sunny morning. We can calculate that penalty down to exact fractional bits of information.
 
-True $p=(1/2,1/2)$. Model $q=(3/4,1/4)$.
+### 🔍 Plain-English Breakdown
+Detailed hand-calculations showing the arithmetic of KL divergence and its directional asymmetry on binary distributions.
 
-$$
-\begin{aligned}
-H(p)&=1\\
-H(p,q)&=-\tfrac12\log_2\tfrac34-\tfrac12\log_2\tfrac14
-\approx 0.5\cdot 0.415+0.5\cdot 2=1.207\\
-D_{\mathrm{KL}}(p\|q)&=H(p,q)-H(p)\approx 0.207\text{ bits}
-\end{aligned}
-$$
+### Case 1: True $p = (1/2, 1/2)$ vs Model $q = (3/4, 1/4)$ (base 2)
+$$H(p) = 1.0000 \text{ bit}$$
+$$H(p, q) = -\left[\frac{1}{2}\log_2\frac{3}{4} + \frac{1}{2}\log_2\frac{1}{4}\right] \approx 0.5(0.4150) + 0.5(2.0000) = 0.2075 + 1.0000 = 1.2075 \text{ bits}$$
+$$D_{\mathrm{KL}}(p\|q) = H(p,q) - H(p) = 1.2075 - 1.0000 \approx 0.2075 \text{ bits}$$
 
-Check the sum form:  
-$\tfrac12\log_2\frac{1/2}{3/4}+\tfrac12\log_2\frac{1/2}{1/4}
-=\tfrac12\log_2\frac23+\tfrac12\log_2 2\approx 0.5(-0.585)+0.5(1)=0.207$.
+### Case 2: Swapping roles — True $q = (3/4, 1/4)$ vs Model $p = (1/2, 1/2)$
+$$H(q) = -\left[\frac{3}{4}\log_2\frac{3}{4} + \frac{1}{4}\log_2\frac{1}{4}\right] \approx 0.75(0.4150) + 0.25(2.0000) = 0.3113 + 0.5000 = 0.8113 \text{ bits}$$
+$$H(q, p) = -\left[\frac{3}{4}\log_2\frac{1}{2} + \frac{1}{4}\log_2\frac{1}{2}\right] = -\log_2(0.5) = 1.0000 \text{ bit}$$
+$$D_{\mathrm{KL}}(q\|p) = H(q,p) - H(q) = 1.0000 - 0.8113 \approx 0.1887 \text{ bits}$$
 
-### Swap (asymmetry) — different number
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+- Direction 1: $D_{\text{KL}}(p \parallel q) \approx 0.2075$ bits.
+- Direction 2: $D_{\text{KL}}(q \parallel p) \approx 0.1887$ bits.
+- Difference: $|0.2075 - 0.1887| = 0.0188$ bits $\neq 0$.
+- Both directions are strictly positive, but numerical values differ, proving asymmetry.
 
-Now truth $=q=(3/4,1/4)$, model $=p=(1/2,1/2)$:
+### 💻 Standalone Executable Python Verification
+```python
+import numpy as np
 
-$$
-\begin{aligned}
-H(q)&=-\tfrac34\log_2\tfrac34-\tfrac14\log_2\tfrac14
-\approx 0.811\\
-H(q,p)&=-\tfrac34\log_2\tfrac12-\tfrac14\log_2\tfrac12=1\\
-D_{\mathrm{KL}}(q\|p)&=1-0.811\approx 0.189\text{ bits}
-\end{aligned}
-$$
+p = np.array([0.50, 0.50])
+q = np.array([0.75, 0.25])
 
-$\approx 0.189\neq 0.207$ — **asymmetric**. Same pair of laws, two different directed costs.
+kl_pq = np.sum(p * np.log2(p / q))
+kl_qp = np.sum(q * np.log2(q / p))
 
-### Match
+assert np.isclose(kl_pq, 0.2075, atol=1e-3)
+assert np.isclose(kl_qp, 0.1887, atol=1e-3)
+assert not np.isclose(kl_pq, kl_qp)
+print(f"KL(p||q) = {kl_pq:.4f} bits, KL(q||p) = {kl_qp:.4f} bits (Asymmetry confirmed)")
+```
 
-If $q=p$, then $H(p,q)=H(p)$ and $D_{\mathrm{KL}}=0$.
+### 🩺 Diagnostic Mini-Check
+Why does $D_{\text{KL}}(p \parallel q) = 0.2075$ bits while $D_{\text{KL}}(q \parallel p) = 0.1887$ bits for the exact same pair of distributions?
+<details><summary>Reveal Answer</summary>
+Because the expectation is taken over different distributions: in $D_{\text{KL}}(p \parallel q)$, outcome weights are $(0.5, 0.5)$, whereas in $D_{\text{KL}}(q \parallel p)$, outcome weights are $(0.75, 0.25)$.
+</details>
+
+<details><summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
+
+The directional difference is governed by:
+$$D_{\mathrm{KL}}(P \parallel Q) - D_{\mathrm{KL}}(Q \parallel P) = \int (p(x) - q(x)) \log \frac{p(x)}{q(x)} \, dx = \int (p(x) - q(x))(\log p(x) - \log q(x)) \, dx \ge 0$$
+since $(u - v)(\log u - \log v) \ge 0$ for all $u, v > 0$ due to the monotonicity of the logarithm.
+</details>
+
+---
 
 ### Paper check
 
@@ -304,7 +555,6 @@ If $q=p$, then $H(p,q)=H(p)$ and $D_{\mathrm{KL}}=0$.
 Ready → [NOTES.md](./NOTES.md).  
 Quiz: [quiz.html](./quiz.html).  
 Prior: [Lec 11 Entropy](../12-Lec11-Entropy/NOTES.md).
-
 
 ---
 
@@ -330,3 +580,5 @@ Prior: [Lec 11 Entropy](../12-Lec11-Entropy/NOTES.md).
 | **Three-Step Recipe Formulation** | [Lecture 10: Challenges of ML](../../Mathematical-foundation-ml/11-Lec10-Challenges-of-ML/NOTES.md) | Establishing KL divergence as the canonical distance measure in Step 2 | Contrast empirical surrogate with true population divergence |
 | **Information Entropy & Surprisal** | [Lecture 11: Entropy](../../Mathematical-foundation-ml/12-Lec11-Entropy/NOTES.md) | Decomposing KL into cross-entropy and self-entropy: $D_{KL}(P \parallel Q) = H(P, Q) - H(P)$ | Check $H(P)$ is constant with respect to model parameters $Q_\theta$ |
 | **Minimization of KL Divergence** | [Lecture 13: Minimization of KL](../../Mathematical-foundation-ml/14-Lec13-Minimization-of-KL/NOTES.md) | Proving that optimizing $\arg\min_\theta D_{KL}(p_{\text{data}} \parallel p_\theta)$ is equivalent to MLE | Derive the equivalence algebraically by dropping the data entropy term |
+
+---

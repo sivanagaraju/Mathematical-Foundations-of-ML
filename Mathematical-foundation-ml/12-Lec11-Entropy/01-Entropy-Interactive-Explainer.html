@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lec 11 Entropy — Master Interactive Explainer &amp; 3D Visualizer</title>
+
+<!-- KaTeX CDN Integration for In-Browser Formula Rendering -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    --ivory:     #FAF9F5;
+    --paper:     #FFFFFF;
+    --slate:     #141413;
+    --clay:      #D97757;
+    --clay-dark: #B85C3E;
+    --oat:       #E3DACC;
+    --olive:     #788C5D;
+    --sky:       #6A8CAF;
+    --purple:    #8E7CC3;
+    --rose:      #C85A5A;
+    --gray-100:  #F7F6F2;
+    --gray-150:  #F0EEE6;
+    --gray-200:  #E6E3DA;
+    --gray-300:  #D1CFC5;
+    --gray-500:  #87867F;
+    --gray-700:  #3D3D3A;
+    --serif:     ui-serif, Georgia, "Times New Roman", serif;
+    --sans:      system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono:      ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ivory);
+    color: var(--gray-700);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+    padding: 44px 20px 140px;
+  }
+
+  .page-container {
+    max-width: 1220px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 48px;
+    align-items: start;
+  }
+  @media (max-width: 1020px) {
+    .page-container { grid-template-columns: 1fr; }
+    aside.sidebar { order: 2; position: static; }
+  }
+
+  header.masthead {
+    border-bottom: 1.5px solid var(--gray-300);
+    padding-bottom: 32px;
+    margin-bottom: 40px;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--clay);
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 24px;
+    height: 1.5px;
+    background: var(--clay);
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(34px, 4.8vw, 54px);
+    line-height: 1.08;
+    color: var(--slate);
+    margin-bottom: 14px;
+    letter-spacing: -0.015em;
+  }
+  h1 em { font-style: italic; color: var(--clay); }
+  .lead { font-size: 17px; line-height: 1.6; color: var(--gray-700); max-width: 780px; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .pill { font-family: var(--mono); font-size: 11px; background: var(--gray-150); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--gray-200); color: var(--gray-700); }
+  .pill.highlight { background: var(--oat); border-color: var(--clay); color: var(--slate); font-weight: 600; }
+
+  section { margin-bottom: 64px; scroll-margin-top: 40px; }
+  h2 { font-family: var(--serif); font-size: 26px; font-weight: 500; color: var(--slate); margin-bottom: 16px; letter-spacing: -0.01em; display: flex; align-items: baseline; gap: 12px; }
+  h2 span.num { font-family: var(--mono); font-size: 13px; color: var(--clay); font-weight: 600; }
+  h3 { font-family: var(--sans); font-size: 17px; font-weight: 600; color: var(--slate); margin: 24px 0 10px; }
+  p { margin-bottom: 14px; }
+  strong { color: var(--slate); }
+
+  .callout {
+    border-left: 3px solid var(--clay);
+    background: var(--paper);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+    border-top: 1px solid var(--gray-200);
+    border-right: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .callout.green { border-left-color: var(--olive); }
+  .callout.sky   { border-left-color: var(--sky); }
+  .callout.rose  { border-left-color: var(--rose); }
+  .callout-title { font-family: var(--mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; color: var(--slate); margin-bottom: 6px; }
+
+  .formula-banner {
+    border: 1.5px solid var(--gray-300);
+    border-radius: 12px;
+    background: var(--paper);
+    padding: 22px;
+    margin: 24px 0;
+    text-align: center;
+  }
+  .formula-banner.highlight { background: var(--oat); border-color: var(--clay); }
+  .formula-main { font-family: var(--mono); font-size: 20px; font-weight: 600; color: var(--slate); margin-bottom: 6px; }
+  .formula-sub { font-family: var(--serif); font-size: 14px; color: var(--gray-500); font-style: italic; }
+
+  .visual-card {
+    border: 1.5px solid var(--gray-300);
+    border-radius: 12px;
+    background: var(--paper);
+    overflow: hidden;
+    margin: 24px 0;
+  }
+  .visual-card img { width: 100%; height: auto; display: block; border-bottom: 1px solid var(--gray-200); }
+  .visual-card .caption { padding: 12px 18px; font-family: var(--mono); font-size: 12px; color: var(--gray-500); background: var(--gray-100); }
+
+  .pipeline-card {
+    border: 1.5px solid var(--gray-300);
+    border-radius: 14px;
+    background: var(--paper);
+    padding: 24px;
+    margin: 28px 0;
+  }
+  .pipeline-nodes { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin: 18px 0; }
+  .p-node {
+    border: 1.5px solid var(--gray-300);
+    border-radius: 8px;
+    background: var(--gray-100);
+    padding: 10px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 140ms ease;
+  }
+  .p-node:hover { background: var(--oat); border-color: var(--slate); }
+  .p-node.active { background: var(--slate); color: #fff; border-color: var(--slate); }
+  .p-node .step-num { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--gray-500); display: block; margin-bottom: 2px; }
+  .p-node.active .step-num { color: var(--oat); }
+  .p-node .node-title { font-family: var(--serif); font-size: 13px; font-weight: 600; }
+
+  .pipeline-detail {
+    border: 1.5px solid var(--gray-300);
+    border-radius: 10px;
+    background: var(--gray-100);
+    padding: 20px;
+    margin-top: 14px;
+  }
+  .detail-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; border-bottom: 1px solid var(--gray-300); padding-bottom: 8px; }
+  .detail-head .title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--slate); }
+  .detail-head .badge { font-family: var(--mono); font-size: 11px; background: var(--paper); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--gray-300); }
+
+  .canvas-box { border: 1.5px solid var(--gray-300); border-radius: 14px; background: var(--paper); padding: 24px; margin: 28px 0; }
+  .canvas-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--gray-200); padding-bottom: 14px; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+  .canvas-grid { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: center; }
+  @media (max-width: 860px) { .canvas-grid { grid-template-columns: 1fr; } }
+  #simplexCanvas { width: 100%; height: 380px; background: #0D0E11; border-radius: 10px; cursor: crosshair; display: block; }
+
+  .slider-row { background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; }
+  .slider-labels { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 12px; margin-bottom: 4px; }
+  .slider-labels .name { font-weight: 600; color: var(--slate); }
+  .slider-labels .val  { color: var(--clay); font-weight: 600; }
+  input[type=range] { width: 100%; accent-color: var(--clay); cursor: pointer; }
+
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--paper);
+    border: 1.5px solid var(--gray-300);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 20px 0;
+    font-size: 13.5px;
+  }
+  table.data-table th, table.data-table td { padding: 10px 14px; border-bottom: 1px solid var(--gray-200); text-align: left; }
+  table.data-table th { background: var(--gray-150); font-family: var(--mono); font-size: 11px; text-transform: uppercase; color: var(--gray-700); }
+  table.data-table td.mono { font-family: var(--mono); font-size: 12.5px; }
+
+  .compare-box { border: 1.5px solid var(--gray-300); border-radius: 12px; background: var(--paper); padding: 22px; margin: 24px 0; }
+  #gradientCanvas { width: 100%; height: 220px; background: var(--gray-100); border-radius: 8px; border: 1px solid var(--gray-300); display: block; margin: 14px 0; }
+
+  aside.sidebar { position: sticky; top: 32px; border: 1.5px solid var(--gray-300); border-radius: 12px; background: var(--paper); padding: 22px 18px; font-size: 13px; }
+  aside.sidebar .head { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 12px; }
+  aside.sidebar nav a { display: block; color: var(--gray-700); text-decoration: none; padding: 4px 0 4px 10px; border-left: 2px solid transparent; margin-bottom: 2px; transition: all 100ms; }
+  aside.sidebar nav a:hover { color: var(--clay); border-left-color: var(--clay); }
+  aside.sidebar .mini-glossary { margin-top: 24px; border-top: 1px solid var(--gray-200); padding-top: 16px; }
+  aside.sidebar .g-item { margin-bottom: 12px; }
+  aside.sidebar .g-term { font-family: var(--mono); font-weight: 600; font-size: 11.5px; color: var(--slate); }
+  aside.sidebar .g-def { font-size: 12px; color: var(--gray-700); line-height: 1.35; }
+
+  footer { margin-top: 60px; border-top: 1.5px solid var(--gray-300); padding-top: 24px; display: flex; justify-content: space-between; font-size: 12.5px; color: var(--gray-500); flex-wrap: wrap; gap: 12px; }
+</style>
+</head>
+<body>
+
+<div class="page-container">
+  <main>
+    <header class="masthead">
+      <div class="eyebrow">Lecture 11 Study Suite · First-Principles Interactive Edition</div>
+      <h1>Lec 11: <em>Entropy</em> &amp; Neural Network Training</h1>
+      <p class="lead">
+        Comprehensive interactive companion to NPTEL IISc Lecture 11. 
+        Solving the Machine Learning recipe: from why we need distributional distance to how Shannon entropy measures the internal surprise of a distribution.
+      </p>
+      <div class="pill-row">
+        <span class="pill highlight">Lec 11 · 14-Section Authoritative Guide</span>
+        <span class="pill">Interactive 3D Simplex Visualizer</span>
+        <span class="pill">Connecting-the-Dots Pipeline</span>
+        <span class="pill">KaTeX Preview Validated</span>
+      </div>
+    </header>
+
+    <!-- SECTION 1: EXECUTIVE SUMMARY -->
+    <section id="sec-1">
+      <h2><span class="num">01</span> Executive Summary: The Master Blueprint</h2>
+      <p>
+        In Lecture 11, the instructor reloads the 3-step ML recipe:
+        <strong>(1) Parametric model $P_\theta$</strong> $\longrightarrow$ 
+        <strong>(2) Distance/divergence $d(P, P_\theta)$</strong> $\longrightarrow$ 
+        <strong>(3) Train via $\arg\min_\theta d$</strong>.
+        To build Step 2, we first need tools from Information Theory to measure uncertainty inside a <em>single</em> distribution.
+      </p>
+
+      <div class="visual-card">
+        <img src="./screenshots/composites/ch01-topic-01-recap-recipe-panel1of1.png" 
+             alt="Recap of ML Recipe and Dimension Fix" 
+             onerror="this.style.display='none'">
+        <div class="caption">Figure 1: Lecture capture — Stating the parametric recipe and correcting the bias dimension fix.</div>
+      </div>
+
+      <div class="formula-banner highlight">
+        <div class="formula-main">$$H(P, Q) = H(P) + D_{\text{KL}}(P \parallel Q)$$</div>
+        <div class="formula-sub">Total Taxi Fare = Unavoidable Direct Distance + Detour Charge Added by the Flawed Driver</div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: MISSING FOUNDATION -->
+    <section id="sec-2">
+      <h2><span class="num">02</span> The Missing Foundation: Physical Intuition &amp; Surprisal</h2>
+      <p>
+        The lecture establishes: <strong>Information is the amount of surprise you experience upon learning what happened.</strong>
+      </p>
+
+      <div class="visual-card">
+        <img src="./screenshots/composites/ch03-topic-03-surprisal-panel1of1.png" 
+             alt="Chalkboard capture on Surprisal" 
+             onerror="this.style.display='none'">
+        <div class="caption">Figure 2: Lecture capture — Defining Surprisal $I(A) = -\log P(A)$ from first principles.</div>
+      </div>
+
+      <div class="callout green">
+        <div class="callout-title">The Three Design Rules on the Blackboard</div>
+        <ul>
+          <li><strong>Full Sample Space ($\Omega$):</strong> $P(\Omega) = 1 \implies I(\Omega) = 0$ bits (something definitely happens, zero surprise).</li>
+          <li><strong>Null / Impossible Event ($\emptyset$):</strong> $P(\emptyset) = 0 \implies I(\emptyset) \to +\infty$ (infinite shock).</li>
+          <li><strong>Independence:</strong> $P(A \cap B) = P(A)P(B) \implies I(A \cap B) = I(A) + I(B)$ (chances multiply, surprises add!).</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION 3: ROSETTA STONE -->
+    <section id="sec-3">
+      <h2><span class="num">03</span> Mathematical Rosetta Stone</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Symbol</th>
+            <th>Spoken Phonetics</th>
+            <th>Plain-English Meaning</th>
+            <th>Role in Deep Learning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">$I(x) = -\log_2 p(x)$</td>
+            <td class="mono" style="color:var(--clay-dark);">"eye of ex" (Surprisal)</td>
+            <td>Surprise score of an individual outcome in bits.</td>
+            <td>Rare tokens deliver higher gradient shock than common words.</td>
+          </tr>
+          <tr>
+            <td class="mono">$H(P) = -\sum p_i \log_2 p_i$</td>
+            <td class="mono" style="color:var(--clay-dark);">"aych of pee" (Entropy)</td>
+            <td>Nature's unavoidable average surprise.</td>
+            <td>Baseline randomness of training data; compression limit.</td>
+          </tr>
+          <tr>
+            <td class="mono">$H(P, Q) = -\sum p_i \ln q_i$</td>
+            <td class="mono" style="color:var(--clay-dark);">"cross-entropy of P and Q"</td>
+            <td>Penalty when model $Q$ predicts reality $P$.</td>
+            <td>Standard classification loss (<code>nn.CrossEntropyLoss</code>).</td>
+          </tr>
+          <tr>
+            <td class="mono">$\nabla_z \mathcal{L} = \hat{p} - y$</td>
+            <td class="mono" style="color:var(--clay-dark);">"gradient equals p-hat minus y"</td>
+            <td>Error signal: Predicted minus Truth.</td>
+            <td>The clean linear subtraction driving backpropagation.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SECTION 4: 3D PROBABILITY SIMPLEX -->
+    <section id="sec-4">
+      <h2><span class="num">04</span> Modern 3D Probability Simplex &amp; Interactive Entropy Dome</h2>
+      <p>
+        For 3 discrete outcomes ($p_1 + p_2 + p_3 = 1$), all possible distributions live on an equilateral triangle (the 2-Simplex). 
+        Plotting Entropy $H(P)$ above this surface creates a <strong>3D Mountain / Dome</strong>:
+      </p>
+
+      <div class="canvas-box">
+        <div class="canvas-top">
+          <div>
+            <div style="font-family:var(--serif); font-size:18px; font-weight:600; color:var(--slate);">
+              Interactive 3D Simplex Explorer
+            </div>
+            <div style="font-family:var(--mono); font-size:11px; color:var(--gray-500);">
+              Drag inside canvas to rotate in 3D · Click buttons for instant states
+            </div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button class="p-btn" onclick="setSimplex(1, 0, 0)">Vertex A (0 Bits)</button>
+            <button class="p-btn" onclick="setSimplex(0.5, 0.5, 0)">Edge AB (1 Bit)</button>
+            <button class="p-btn active" onclick="setSimplex(0.333, 0.333, 0.334)">Peak Center (1.585 Bits)</button>
+          </div>
+        </div>
+
+        <div class="canvas-grid">
+          <canvas id="simplexCanvas"></canvas>
+
+          <div>
+            <div class="callout" style="margin-top:0; background:var(--gray-100);">
+              <div style="font-family:var(--mono); font-size:11px; text-transform:uppercase; color:var(--gray-500);">Current State Point</div>
+              <div style="font-family:var(--serif); font-size:32px; font-weight:600; color:var(--slate); margin:4px 0;" id="simplexEntropy">
+                1.58 <span style="font-size:13px; font-family:var(--mono); color:var(--gray-500);">bits</span>
+              </div>
+              <div style="font-family:var(--mono); font-size:12px; color:var(--clay);" id="simplexCoords">
+                p = [0.33, 0.33, 0.34]
+              </div>
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-labels"><span class="name">Outcome 1 (p₁)</span><span class="val" id="dispP1">0.33</span></div>
+              <input type="range" id="simS1" min="0" max="100" value="33" oninput="onSimplexSlider(1)">
+            </div>
+            <div class="slider-row">
+              <div class="slider-labels"><span class="name">Outcome 2 (p₂)</span><span class="val" id="dispP2">0.33</span></div>
+              <input type="range" id="simS2" min="0" max="100" value="33" oninput="onSimplexSlider(2)">
+            </div>
+            <div class="slider-row">
+              <div class="slider-labels"><span class="name">Outcome 3 (p₃)</span><span class="val" id="dispP3">0.34</span></div>
+              <input type="range" id="simS3" min="0" max="100" value="34" oninput="onSimplexSlider(3)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: MSE VS CCE -->
+    <section id="sec-5">
+      <h2><span class="num">05</span> Contrastive Analysis: Why CCE &amp; The MSE Vanishing Gradient Trap</h2>
+      
+      <p>
+        Why not use Mean Squared Error for classification? Because of the <strong>Sigmoid saturation derivative</strong> $\sigma'(z) = \hat{p}(1-\hat{p})$.
+      </p>
+
+      <div class="callout rose">
+        <div class="callout-title">The Dead-Wrong Failure Mode (Target $y=1$, Logit $z=-10 \implies \hat{p} \approx 0.0000454$)</div>
+        <p>
+          • <strong>MSE Gradient:</strong> $\frac{\partial \mathcal{L}_{\text{MSE}}}{\partial z} = 2(\hat{p} - 1) \cdot \hat{p}(1 - \hat{p}) \approx 2(-1) \cdot (0.0000454)(0.99995) \approx \mathbf{-0.00009} \to 0$.<br>
+          <em>The gradient completely vanishes! The network is dead wrong, yet learning freezes.</em><br><br>
+          • <strong>CCE Gradient:</strong> $\frac{\partial \mathcal{L}_{\text{CCE}}}{\partial z} = -\frac{1}{\hat{p}} \cdot \hat{p}(1 - \hat{p}) = \hat{p} - 1 \approx 0.0000454 - 1 \approx \mathbf{-1.00}$.<br>
+          <em>The $-\frac{1}{\hat{p}}$ log term cancels the $\hat{p}$ saturation term, delivering the maximum possible corrective kick!</em>
+        </p>
+      </div>
+
+      <div class="compare-box">
+        <div style="font-family:var(--sans); font-weight:600; font-size:15px; margin-bottom:8px;">Live Gradient Magnitude Comparison: MSE vs CCE</div>
+        <canvas id="gradientCanvas"></canvas>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:12px;">
+          <div style="background:var(--gray-100); padding:12px 14px; border-radius:8px; border-left:3px solid var(--rose);">
+            <div style="font-family:var(--mono); font-size:12px; font-weight:600; color:var(--rose);">Mean Squared Error (MSE)</div>
+            <div style="font-size:12.5px; margin-top:4px;">
+              $\nabla_z \mathcal{L}_{\text{MSE}} = 2(\hat{p} - 1)\hat{p}(1 - \hat{p}) \to 0$ when dead wrong. Freezes model learning!
+            </div>
+          </div>
+          <div style="background:var(--gray-100); padding:12px 14px; border-radius:8px; border-left:3px solid var(--olive);">
+            <div style="font-family:var(--mono); font-size:12px; font-weight:600; color:var(--olive);">Categorical Cross-Entropy (CCE)</div>
+            <div style="font-size:12.5px; margin-top:4px;">
+              $\nabla_z \mathcal{L}_{\text{CCE}} = \hat{p} - 1 \to -1.00$ when dead wrong. Delivers maximum restorative gradient!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: CONNECTING THE DOTS PIPELINE -->
+    <section id="sec-6">
+      <h2><span class="num">06</span> Connecting the Dots: From 1948 Telegraph to Modern Generative AI</h2>
+      
+      <div class="pipeline-card">
+        <div class="pipeline-nodes">
+          <div class="p-node active" onclick="showDot(0)"><span class="step-num">Step 01</span><div class="node-title">1948 Telegraph</div></div>
+          <div class="p-node" onclick="showDot(1)"><span class="step-num">Step 02</span><div class="node-title">Surprisal I(x)</div></div>
+          <div class="p-node" onclick="showDot(2)"><span class="step-num">Step 03</span><div class="node-title">Shannon H(P)</div></div>
+          <div class="p-node" onclick="showDot(3)"><span class="step-num">Step 04</span><div class="node-title">Cross-Entropy</div></div>
+          <div class="p-node" onclick="showDot(4)"><span class="step-num">Step 05</span><div class="node-title">Softmax ∇ = p̂ − y</div></div>
+          <div class="p-node" onclick="showDot(5)"><span class="step-num">Step 06</span><div class="node-title">LLM Next-Token</div></div>
+          <div class="p-node" onclick="showDot(6)"><span class="step-num">Step 07</span><div class="node-title">Perplexity (2^H)</div></div>
+          <div class="p-node" onclick="showDot(7)"><span class="step-num">Step 08</span><div class="node-title">RLHF &amp; Temp</div></div>
+        </div>
+
+        <div class="pipeline-detail" id="pipeDetail"></div>
+      </div>
+    </section>
+
+    <footer>
+      <div>Part of <em>Mathematical Foundations of ML · Lec 11 Entropy</em></div>
+      <div>Interactive KaTeX Formula Preview Enabled · 100% Offline Compatible</div>
+    </footer>
+  </main>
+
+  <!-- Sticky Sidebar -->
+  <aside class="sidebar">
+    <div class="head">Lecture Navigation</div>
+    <nav>
+      <a href="#sec-1">01 Executive Summary</a>
+      <a href="#sec-2">02 Physical Primitive</a>
+      <a href="#sec-3">03 Rosetta Stone</a>
+      <a href="#sec-4">04 3D Simplex Dome</a>
+      <a href="#sec-5">05 MSE vs CCE</a>
+      <a href="#sec-6">06 Connecting Dots</a>
+    </nav>
+
+    <div class="mini-glossary">
+      <div class="head">Key Formulas</div>
+      <div class="g-item">
+        <div class="g-term">$H(P) = -\sum p_i \log_2 p_i$</div>
+        <div class="g-def">Shannon entropy: nature's average surprise in bits.</div>
+      </div>
+      <div class="g-item">
+        <div class="g-term">$H(P, Q) = H(P) + D_{\text{KL}}$</div>
+        <div class="g-def">Master Identity: total loss equals entropy plus detour.</div>
+      </div>
+      <div class="g-item">
+        <div class="g-term">$\nabla_z \mathcal{L} = \hat{p} - y$</div>
+        <div class="g-def">Softmax CCE error signal for backprop.</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- Scripts -->
+<script>
+  // 1. Initialize KaTeX on DOM ready
+  document.addEventListener("DOMContentLoaded", function() {
+    if (typeof renderMathInElement === "function") {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false,
+        ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+      });
+    }
+  });
+
+  // 2. Connecting-the-dots interactive data
+  const dotsData = [
+    {
+      title: "Step 01: The 1948 Telegraph Problem",
+      badge: "Claude Shannon · Bell Labs",
+      body: "Claude Shannon needed to transmit English text across copper telegraph cables without wasting bandwidth or electrical power. Sending common letters like 'E' with long codes is wasteful. This forced the mathematical quantification of information as surprise."
+    },
+    {
+      title: "Step 02: Self-Information & Surprisal I(x)",
+      badge: "Logarithmic Scale",
+      body: "Surprisal is defined as I(x) = -log₂(p(x)). Because probabilities multiply for independent events (P(A ∩ B) = P(A)P(B)), information must add: I(A ∩ B) = I(A) + I(B). The logarithm is the unique continuous function that converts multiplication into addition."
+    },
+    {
+      title: "Step 03: Shannon Entropy H(P)",
+      badge: "Expected Surprise",
+      body: "Averaging surprisal across all possible outcomes using their true probabilities yields Shannon Entropy H(P) = -∑ pᵢ log₂ pᵢ. It sets the absolute physical lower bound on lossless compression."
+    },
+    {
+      title: "Step 04: Cross-Entropy & KL Divergence",
+      badge: "The Master Identity",
+      body: "When you use a model Q to encode messages from true reality P, you pay Cross-Entropy H(P, Q) = -∑ pᵢ log₂ qᵢ. The extra wasted bits is KL Divergence: H(P, Q) = H(P) + D_KL(P ∥ Q). Minimizing cross-entropy drives D_KL to zero!"
+    },
+    {
+      title: "Step 05: The Softmax Gradient ∇_z L = p̂ − y",
+      badge: "Backprop Miracle",
+      body: "Plugging Softmax into Cross-Entropy produces the clean backprop gradient ∇_z L = p̂ - y. The -1/p̂ derivative of the logarithm perfectly cancels the p̂(1-p̂) sigmoid saturation derivative, eliminating gradient vanishing!"
+    },
+    {
+      title: "Step 06: LLM Next-Token Prediction",
+      badge: "Autoregressive Loss",
+      body: "Large Language Models (GPT-4, Claude, LLaMA) predict the next token over a vocabulary of 128,000 words. The pre-training loss is literally Categorical Cross-Entropy evaluated across trillions of token positions."
+    },
+    {
+      title: "Step 07: Perplexity PPL = 2^H",
+      badge: "Evaluation Metric",
+      body: "Perplexity exponentiates the average cross-entropy loss: PPL = 2^(H(P, Q)). It represents the effective branching factor: how many equally likely tokens the model is confused between at each step."
+    },
+    {
+      title: "Step 08: Temperature & RLHF Alignment",
+      badge: "Control & Governance",
+      body: "At inference time, Temperature scaling (z/T) sharpens or flattens output entropy. During fine-tuning, RLHF uses KL divergence as a strict leash: Reward = R(x, y) - β · D_KL(π_θ ∥ π_ref), preventing models from drifting into gibberish."
+    }
+  ];
+
+  function showDot(idx) {
+    const d = dotsData[idx];
+    const container = document.getElementById("pipeDetail");
+    container.innerHTML = `
+      <div class="detail-head">
+        <div class="title">${d.title}</div>
+        <div class="badge">${d.badge}</div>
+      </div>
+      <p style="margin:0; font-size:14px; line-height:1.6;">${d.body}</p>
+    `;
+    document.querySelectorAll(".p-node").forEach((n, i) => {
+      n.classList.toggle("active", i === idx);
+    });
+  }
+  showDot(0);
+
+  // 3. Draw gradient curves
+  function drawGradients() {
+    const cvs = document.getElementById("gradientCanvas");
+    if (!cvs) return;
+    const ctx = cvs.getContext("2d");
+    const width = cvs.width = cvs.offsetWidth * window.devicePixelRatio;
+    const height = cvs.height = cvs.offsetHeight * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    const w = cvs.offsetWidth;
+    const h = cvs.offsetHeight;
+
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = "#D1CFC5"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(40, h - 30); ctx.lineTo(w - 20, h - 30); ctx.moveTo(40, 20); ctx.lineTo(40, h - 30); ctx.stroke();
+
+    ctx.fillStyle = "#87867F"; ctx.font = "10px ui-monospace";
+    ctx.fillText("Predicted Prob (p̂) →", w - 120, h - 12);
+    ctx.fillText("0.0", 35, h - 16); ctx.fillText("1.0", w - 35, h - 16);
+    ctx.fillText("Gradient Magnitude |∇|", 45, 25);
+
+    const pts = 100;
+    // CCE Gradient magnitude: |p - 1| = 1 - p
+    ctx.strokeStyle = "#788C5D"; ctx.lineWidth = 2.5; ctx.beginPath();
+    for (let i = 0; i <= pts; i++) {
+      let p = i / pts, grad = 1 - p;
+      let x = 40 + p * (w - 60), y = (h - 30) - grad * (h - 60);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // MSE Gradient magnitude: |2*(p-1)*p*(1-p)| = 2*(1-p)*p*(1-p)
+    ctx.strokeStyle = "#C85A5A"; ctx.lineWidth = 2.5; ctx.beginPath();
+    for (let i = 0; i <= pts; i++) {
+      let p = i / pts, grad = 2 * (1 - p) * p * (1 - p) * 2.5;
+      let x = 40 + p * (w - 60), y = (h - 30) - grad * (h - 60);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    ctx.fillStyle = "#788C5D"; ctx.fillText("■ CCE: Steep gradient when wrong (|∇| = 1.0 at p=0)", w - 270, 35);
+    ctx.fillStyle = "#C85A5A"; ctx.fillText("■ MSE: Vanishes to 0 at p=0! (Paralyzed)", w - 270, 50);
+  }
+  window.addEventListener('resize', drawGradients);
+  setTimeout(drawGradients, 100);
+
+  // 4. 3D Simplex Canvas
+  let rotX = 0.5, rotY = 0.4, isDragging = false, lastMouseX = 0, lastMouseY = 0;
+  let pSim = [0.333, 0.333, 0.334];
+  const sCanvas = document.getElementById("simplexCanvas");
+  const sCtx = sCanvas.getContext("2d");
+
+  function calcEntropy(p1, p2, p3) {
+    let h = 0;
+    if (p1 > 1e-6) h -= p1 * Math.log2(p1);
+    if (p2 > 1e-6) h -= p2 * Math.log2(p2);
+    if (p3 > 1e-6) h -= p3 * Math.log2(p3);
+    return h;
+  }
+
+  function renderSimplex() {
+    const width = sCanvas.width = sCanvas.offsetWidth * window.devicePixelRatio;
+    const height = sCanvas.height = sCanvas.offsetHeight * window.devicePixelRatio;
+    sCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    const w = sCanvas.offsetWidth;
+    const h = sCanvas.offsetHeight;
+
+    sCtx.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h / 2 + 20, R = Math.min(w, h) * 0.38, maxH = R * 0.75;
+
+    function project(x, y, z) {
+      let x1 = x * Math.cos(rotY) - z * Math.sin(rotY);
+      let z1 = x * Math.sin(rotY) + z * Math.cos(rotY);
+      let y2 = y * Math.cos(rotX) - z1 * Math.sin(rotX);
+      let z2 = y * Math.sin(rotX) + z1 * Math.cos(rotX);
+      return { x: cx + x1, y: cy - y2, z: z2 };
+    }
+
+    const v1 = { x: 0, y: 0, z: -R }, v2 = { x: -R * 0.866, y: 0, z: R * 0.5 }, v3 = { x: R * 0.866, y: 0, z: R * 0.5 };
+    sCtx.strokeStyle = "rgba(255, 255, 255, 0.25)"; sCtx.lineWidth = 1.5; sCtx.beginPath();
+    const pv1 = project(v1.x, v1.y, v1.z), pv2 = project(v2.x, v2.y, v2.z), pv3 = project(v3.x, v3.y, v3.z);
+    sCtx.moveTo(pv1.x, pv1.y); sCtx.lineTo(pv2.x, pv2.y); sCtx.lineTo(pv3.x, pv3.y); sCtx.closePath(); sCtx.stroke();
+
+    const steps = 14;
+    for (let i = 0; i <= steps; i++) {
+      for (let j = 0; j <= steps - i; j++) {
+        let k = steps - i - j;
+        let pA = i / steps, pB = j / steps, pC = k / steps;
+        let bx = pA * v1.x + pB * v2.x + pC * v3.x, bz = pA * v1.z + pB * v2.z + pC * v3.z;
+        let ent = calcEntropy(pA, pB, pC), by = (ent / 1.585) * maxH;
+        let pt = project(bx, by, bz);
+
+        if (j + 1 <= steps - i) {
+          let pB2 = (j + 1) / steps, pC2 = (k - 1) / steps;
+          let bx2 = pA * v1.x + pB2 * v2.x + pC2 * v3.x, bz2 = pA * v1.z + pB2 * v2.z + pC2 * v3.z;
+          let ent2 = calcEntropy(pA, pB2, pC2), by2 = (ent2 / 1.585) * maxH;
+          let pt2 = project(bx2, by2, bz2);
+          sCtx.strokeStyle = `hsla(${200 + ent * 40}, 80%, 65%, 0.35)`; sCtx.lineWidth = 1;
+          sCtx.beginPath(); sCtx.moveTo(pt.x, pt.y); sCtx.lineTo(pt2.x, pt2.y); sCtx.stroke();
+        }
+
+        if (i + 1 <= steps) {
+          let pA3 = (i + 1) / steps, pB3 = j / steps, pC3 = (k - 1) / steps;
+          let bx3 = pA3 * v1.x + pB3 * v2.x + pC3 * v3.x, bz3 = pA3 * v1.z + pB3 * v2.z + pC3 * v3.z;
+          let ent3 = calcEntropy(pA3, pB3, pC3), by3 = (ent3 / 1.585) * maxH;
+          let pt3 = project(bx3, by3, bz3);
+          sCtx.strokeStyle = `hsla(${200 + ent * 40}, 80%, 65%, 0.35)`; sCtx.lineWidth = 1;
+          sCtx.beginPath(); sCtx.moveTo(pt.x, pt.y); sCtx.lineTo(pt3.x, pt3.y); sCtx.stroke();
+        }
+      }
+    }
+
+    let curX = pSim[0] * v1.x + pSim[1] * v2.x + pSim[2] * v3.x, curZ = pSim[0] * v1.z + pSim[1] * v2.z + pSim[2] * v3.z;
+    let curEnt = calcEntropy(pSim[0], pSim[1], pSim[2]), curY = (curEnt / 1.585) * maxH;
+    let basePt = project(curX, 0, curZ), topPt = project(curX, curY, curZ);
+
+    sCtx.strokeStyle = "rgba(217, 119, 87, 0.8)"; sCtx.lineWidth = 2; sCtx.setLineDash([3, 3]);
+    sCtx.beginPath(); sCtx.moveTo(basePt.x, basePt.y); sCtx.lineTo(topPt.x, topPt.y); sCtx.stroke(); sCtx.setLineDash([]);
+
+    sCtx.fillStyle = "#D97757"; sCtx.beginPath(); sCtx.arc(topPt.x, topPt.y, 6, 0, Math.PI * 2); sCtx.fill();
+    sCtx.strokeStyle = "#FFFFFF"; sCtx.lineWidth = 1.5; sCtx.stroke();
+    sCtx.fillStyle = "rgba(255, 255, 255, 0.7)"; sCtx.beginPath(); sCtx.arc(basePt.x, basePt.y, 3.5, 0, Math.PI * 2); sCtx.fill();
+
+    document.getElementById("simplexEntropy").innerHTML = `${curEnt.toFixed(2)} <span style="font-size:13px; font-family:var(--mono); color:var(--gray-500);">bits</span>`;
+    document.getElementById("simplexCoords").innerText = `p = [${pSim[0].toFixed(2)}, ${pSim[1].toFixed(2)}, ${pSim[2].toFixed(2)}]`;
+    document.getElementById("dispP1").innerText = pSim[0].toFixed(2);
+    document.getElementById("dispP2").innerText = pSim[1].toFixed(2);
+    document.getElementById("dispP3").innerText = pSim[2].toFixed(2);
+    document.getElementById("simS1").value = Math.round(pSim[0] * 100);
+    document.getElementById("simS2").value = Math.round(pSim[1] * 100);
+    document.getElementById("simS3").value = Math.round(pSim[2] * 100);
+  }
+
+  sCanvas.addEventListener("mousedown", (e) => { isDragging = true; lastMouseX = e.clientX; lastMouseY = e.clientY; });
+  window.addEventListener("mouseup", () => isDragging = false);
+  window.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+    let dx = e.clientX - lastMouseX, dy = e.clientY - lastMouseY;
+    rotY += dx * 0.008;
+    rotX = Math.max(-0.2, Math.min(1.2, rotX + dy * 0.008));
+    lastMouseX = e.clientX; lastMouseY = e.clientY;
+    renderSimplex();
+  });
+
+  function setSimplex(a, b, c) {
+    pSim = [a, b, c];
+    document.querySelectorAll(".p-btn").forEach(btn => btn.classList.remove("active"));
+    event.target.classList.add("active");
+    renderSimplex();
+  }
+
+  function onSimplexSlider(idx) {
+    document.querySelectorAll(".p-btn").forEach(btn => btn.classList.remove("active"));
+    let v = parseFloat(document.getElementById(`simS${idx}`).value) / 100;
+    pSim[idx - 1] = v;
+    let others = [0, 1, 2].filter(i => i !== idx - 1);
+    let rem = 1.0 - v, oSum = pSim[others[0]] + pSim[others[1]];
+    if (rem <= 0) { pSim[idx - 1] = 1.0; others.forEach(i => pSim[i] = 0); }
+    else if (oSum > 0) { others.forEach(i => pSim[i] = (pSim[i] / oSum) * rem); }
+    else { others.forEach(i => pSim[i] = rem / 2); }
+    renderSimplex();
+  }
+
+  setTimeout(renderSimplex, 100);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+{
+  "title": "Lec 46 Back Prapogation in RNNs and Vanishing Gradients Problem",
+  "video_id": "TVkaROL2FLw",
+  "url": "https://www.youtube.com/watch?v=TVkaROL2FLw",
+  "duration_seconds": 1767,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "Back Prapogation through time(BPTT), Vanishing and exploding Gradients",
+  "playlist_index": 59,
+  "content_type": "math_technical",
+  "chapter_count": 5,
+  "topics": [
+    {
+      "index": 1,
+      "title": "Backpropagation Through Time (BPTT): Unrolled DAGs, Multi-Variable Chain Rule & Dual Gradient Flow Paths",
+      "time_range": "00:00\u201306:00",
+      "summary": "Prof. Prathosh formalizes Backpropagation Through Time (BPTT) using the multivariable chain rule on unrolled computational DAGs, highlighting the dual gradient flow paths: horizontal temporal recurrence across time and vertical spatial depth across stacked layers.",
+      "board_screenshot": "screenshots/composites/ch01-seg01-panel1of1.png"
+    },
+    {
+      "index": 2,
+      "title": "The Recurrent Jacobian Chain: Deriving Local Hidden State Transitions",
+      "time_range": "06:00\u201312:00",
+      "summary": "Derives the local Jacobian matrix dh_{k+1}/dh_k = diag(sigma'(z_{k+1})) * W_hh and formulates the long-term temporal dependence dh_T/dh_t as an expanding product chain of intermediate transition Jacobians.",
+      "board_screenshot": "screenshots/composites/ch02-seg02-panel1of1.png"
+    },
+    {
+      "index": 3,
+      "title": "Mathematical Proof of Vanishing & Exploding Gradients: Sub-Multiplicative Matrix Norms & Singular Values",
+      "time_range": "12:00\u201318:00",
+      "summary": "Presents the rigorous zero-leap proof bounding the gradient norm by (gamma * lambda_max)^{T-t} via Cauchy-Schwarz sub-multiplicative operator norms, demonstrating exponential decay (vanishing) when lambda_max < 1 and divergence (exploding) when lambda_max > 1.",
+      "board_screenshot": "screenshots/composites/ch03-seg03-panel1of1.png"
+    },
+    {
+      "index": 4,
+      "title": "Empirical Consequences & Modern Sequence Horizons: Recency Bias, Gradient Accumulation, and Subword Tokenization",
+      "time_range": "18:00\u201324:00",
+      "summary": "Examines parameter updates under empirical risk minimization, proving that vanishing gradients cause severe recency bias where early sequence tokens are ignored. Connects this to modern large language models, BPE tokenization, and million-token context windows.",
+      "board_screenshot": "screenshots/composites/ch04-seg04-panel1of1.png"
+    },
+    {
+      "index": 5,
+      "title": "Architectural Respite: Additive Identity Highways, Residual Connections, and the Conceptual Foundation of LSTMs",
+      "time_range": "24:00\u201329:28",
+      "summary": "Introduces the linear dynamical systems principle of adding an identity transformation path to break multiplicative Jacobian decay, motivating highway networks, residual shortcuts, and the gating mechanisms of LSTMs and GRUs.",
+      "board_screenshot": "screenshots/composites/ch05-seg05-panel1of1.png"
+    }
+  ],
+  "instructor": "Prof. Prathosh A P",
+  "skill": "youtube-lecture-tutor",
+  "topic_count": 5,
+  "package_variant": "standard",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true
+}

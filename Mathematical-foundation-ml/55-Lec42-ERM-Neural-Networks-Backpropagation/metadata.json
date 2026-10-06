@@ -1,0 +1,76 @@
+{
+  "title": "Lec 42 ERM on Neural Networks and Error Backpropagation",
+  "video_id": "dONDRwX_83E",
+  "url": "https://www.youtube.com/watch?v=dONDRwX_83E",
+  "duration_seconds": 2864,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A P",
+  "description": "Empirical Risk Minimization on Neural Networks, multivariable calculus chain rule, derivation of error sensitivity delta, recursive error backpropagation through hidden layers, weight/bias parameter updates, vectorized matrix backprop, and GPU acceleration.",
+  "playlist_index": 55,
+  "chapter_count": 0,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 7,
+  "package_variant": "standard",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": {
+    "captions_file": "raw/captions.en.vtt",
+    "timed_transcript_file": "raw/captions.en.timed.txt",
+    "video_file": "raw/lecture.mp4",
+    "screenshot_manifest": "screenshots/manifest.json",
+    "topic_ranges_file": "raw/topic-ranges.json"
+  },
+  "topics": [
+    {
+      "index": 1,
+      "title": "ERM Formulation for Neural Networks & Gradient Descent Setup",
+      "start_seconds": 0,
+      "end_seconds": 254,
+      "slug": "topic-01-erm-neural-networks-and-gradient-descent"
+    },
+    {
+      "index": 2,
+      "title": "Notation, Multilayer Architecture, & Forward Computational Graph",
+      "start_seconds": 254,
+      "end_seconds": 855,
+      "slug": "topic-02-notation-and-forward-computational-graph"
+    },
+    {
+      "index": 3,
+      "title": "Defining Layer Error Sensitivity delta and Output Layer Base Case",
+      "start_seconds": 855,
+      "end_seconds": 1554,
+      "slug": "topic-03-output-layer-error-delta-and-loss-gradients"
+    },
+    {
+      "index": 4,
+      "title": "The Recursive Error Backpropagation Equation in Hidden Layers",
+      "start_seconds": 1554,
+      "end_seconds": 2173,
+      "slug": "topic-04-recursive-error-backpropagation-hidden-layers"
+    },
+    {
+      "index": 5,
+      "title": "Weight & Bias Parameter Gradients and Gradient Descent Updates",
+      "start_seconds": 2173,
+      "end_seconds": 2356,
+      "slug": "topic-05-weight-bias-gradients-and-parameter-updates"
+    },
+    {
+      "index": 6,
+      "title": "Vectorized Matrix Backpropagation, Hardware Acceleration, & Training Loop",
+      "start_seconds": 2356,
+      "end_seconds": 2747,
+      "slug": "topic-06-vectorized-matrix-backpropagation-and-gpu-scaling"
+    },
+    {
+      "index": 7,
+      "title": "Regularized ERM & Architectural Inductive Bias Preview",
+      "start_seconds": 2747,
+      "end_seconds": 2864,
+      "slug": "topic-07-regularization-and-inductive-bias-preview"
+    }
+  ]
+}

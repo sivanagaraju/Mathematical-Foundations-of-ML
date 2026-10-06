@@ -1,0 +1,26 @@
+{
+  "title": "Lec 41 Neural Networks and Universal Approximation Theorem",
+  "video_id": "npYHSFuqnzs",
+  "url": "https://www.youtube.com/watch?v=npYHSFuqnzs",
+  "duration_seconds": 1842,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A P",
+  "description": "Perceptron, Multi Layer Perceptron, Universal Approximation Theorem",
+  "playlist_index": 54,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 6,
+  "package_variant": "educative-spine-v3",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": "E3",
+  "topics": [
+    "From Max-Margin SVMs to Neural Hypotheses",
+    "The Biological Perceptron & Perceptron Learning Algorithm (PLA)",
+    "Multi-Layer Perceptron (MLP): Matrix Formulation",
+    "The Universal Approximation Theorem (UAT)",
+    "Dimensionality Alignment & The Existential Trap of UAT",
+    "Deep & Narrow vs Shallow & Wide: The FFT Analogy"
+  ]
+}

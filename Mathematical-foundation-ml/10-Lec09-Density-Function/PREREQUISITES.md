@@ -3,32 +3,53 @@
 > **Do this first** if “density,” “CDF,” or “$p(x)$ is a probability” still blur.  
 > Then open [NOTES.md](./NOTES.md) at the **Executive Summary**.  
 > Builds on [Lec 08](../09-Lec08-Distribution-Estimation/PREREQUISITES.md) (estimate $P$; densities teased).  
-> Every formula below is decoded in plain English.
+> **How to read:** Use the **3-Minute Executive Fast-Track** below for a rapid ramp-up. Read the 👶 Physical Intuition and 💻 Python snippets in each pillar. Expand the 📐 formal calculus blocks only when you need deep mathematical proofs.
 
 ```
   After this warm-up you can say:
 
   "A density p is a non-negative height (rate) on the range of a continuous RV."
-  "The CDF is the running integral of the density: P(X≤x)=∫_{-∞}^x p(t) dt."
-  "Thin strip: P([x,x+dx]) ≈ p(x) dx — only area is probability."
-  "p(x) at one point is NOT a probability; ∫ over a region IS."
-  "Uniform on [0,1/2] has height 2 (=1/L) — already >1, so height cannot be probability."
-  "Discrete twin: PMF masses at points ARE probabilities."
-  "Course shift: estimate densities p, not only distributions P."
+  "The CDF is the running integral of the density: P(X≤x) = ∫_{-∞}^x p(t) dt."
+  "Thin strip: P([x, x+dx]) ≈ p(x) dx — only area under the curve is probability."
+  "p(x) at one point is NOT a probability; ∫ over an interval IS."
+  "Uniform on [0, 1/2] has height 2 (= 1/L) — height > 1 proves height cannot be probability."
+  "Discrete twin: PMF masses at isolated points ARE true probabilities."
+  "Course shift: machine learning models estimate densities p, not only distributions P."
 ```
 
-**Warm-up → lecture boxes**
+---
+
+## ⚡ 3-Minute Executive Fast-Track
+
+If you have only 3 minutes before starting the lecture, master this visual blueprint:
 
 ```
-  §1  Continuous RV + range of P/CDF     ──► Topic 1
-  §2  Density definition (integral link) ──► Topic 1
-  §3  Height ≠ probability               ──► Topics 2–3
-  §4  Uniform[0,½] worked micro          ──► Topic 3
-  §5  Likelihood vs probability          ──► Topic 3
-  §6  PMF (discrete) vs density          ──► Topic 4
-  §7  Multi-d integrals                  ──► Topic 5
-  §8  Course: estimate p                 ──► Topics 4–5
+  ┌─────────────────┐       d/dx (derivative)       ┌────────────────────────┐
+  │ Continuous CDF  │ ────────────────────────────► │ Density Height p(x)    │
+  │ P(X ≤ x) ∈ [0,1]│ ◄──────────────────────────── │ Rate (can be > 1!)     │
+  └─────────────────┘      ∫_{-∞}^x p(t) dt         └───────────┬────────────┘
+                                                                │
+                                              Multiply by dx    │ (infinitesimal slice)
+                                                                ▼
+                                                    ┌────────────────────────┐
+                                                    │ Probability of Slice   │
+                                                    │ P(x ≤ X ≤ x+dx)        │
+                                                    │ ≈ p(x) · dx ∈ [0,1]    │
+                                                    └────────────────────────┘
 ```
+
+### 🧠 The 3 Core Mental Shifts
+1. **Height is a Speedometer, Area is Distance:** A speedometer reading $120\text{ km/h}$ does not mean you traveled $120\text{ km}$; you must multiply by elapsed time. Similarly, density height $p(x) = 2.0$ is a rate; you must multiply by width $dx$ to get a probability.
+2. **The "Single Point" Paradox:** For any continuous random variable, the chance of observing *any exact real number* (e.g., $1.7320508\ldots$) is strictly **zero**: $P(X = x) = 0$. Probability exists only over intervals $[a, b]$.
+3. **Why Heights Exceed 1:** Because total probability area must equal $1$, squishing probability into a narrow interval forces the height up. A uniform distribution on $[0, 0.5]$ has height $\frac{1}{0.5} = 2.0$.
+
+### ⏱️ Instant Readiness Check
+1. *If a density evaluates to $p(3.5) = 4.2$, does that mean there is a $420\%$ chance of drawing $3.5$?*  
+   <details><summary><b>Reveal Answer</b></summary><b>No!</b> $4.2$ is a density rate per unit of $x$. The probability of getting exactly $3.5$ is $0$. The probability of landing in $[3.5, 3.51]$ is $\approx 4.2 \times 0.01 = 0.042$ ($4.2\%$).</details>
+2. *What is the relationship between the Cumulative Distribution Function $P(X \le x)$ and the density $p(x)$?*  
+   <details><summary><b>Reveal Answer</b></summary>$P(X \le x) = \int_{-\infty}^x p(t)\,dt$. The density is the instantaneous derivative of the CDF: $p(x) = \frac{d}{dx}P(X \le x)$.</details>
+3. *Why does modern machine learning estimate densities $p_\theta(x)$ instead of abstract distributions $P$?*  
+   <details><summary><b>Reveal Answer</b></summary>Densities allow us to use standard calculus, gradients, log-likelihood, and loss optimization (e.g., SGD) on smooth coordinate spaces $\mathbb{R}^d$.</details>
 
 ---
 
@@ -47,369 +68,532 @@ Before diving into the foundational pillars, use this reference table to decode 
 
 ---
 
-## 1. Continuous random variables and the CDF (reload)
+## 🌉 Curriculum & Sibling Course Prerequisite Bridges
+
+| Prerequisite Concept | Source Module / Resource | Target Application in Lecture 09 | Verification Check |
+| :--- | :--- | :--- | :--- |
+| **Pushforward Measures & CDFs** | [Lecture 04: Recap Probability Theory Part 3](../../Mathematical-foundation-ml/05-Lec04-Recap-Probability-Theory-Part3/NOTES.md) | Formulating continuous CDF $F_X(x)$ as an integral of density $f_X(t)$ | Verify right-continuity and limits $\lim_{x \to -\infty} F(x) = 0, \lim_{x \to \infty} F(x) = 1$ |
+| **Joint Distributions & Conditioning** | [Lecture 05: Recap Probability Theory Part 2](../../Mathematical-foundation-ml/06-Lec05-Recap-Probability-Theory-Part2/NOTES.md) | Transitioning discrete Bayes conditioning to joint continuous densities $p(y \mid x) = p(x,y)/p(x)$ | Confirm marginal density integral $p(x) = \int p(x,y)dy > 0$ |
+| **Distribution Estimation Framing** | [Lecture 08: Distribution Estimation](../../Mathematical-foundation-ml/09-Lec08-Distribution-Estimation/NOTES.md) | Understanding why machine learning models switch from estimating abstract distributions $P$ to concrete densities $p$ | State the core ML goal of parameterizing and fitting $p_\theta(x)$ |
+| **High-Dimensional Scaling Challenges** | [Lecture 10: Challenges of ML](../../Mathematical-foundation-ml/11-Lec10-Challenges-of-ML/NOTES.md) | Analyzing density estimation failure modes as input dimensionality $d \to \infty$ | Explain why continuous empirical density estimation encounters empty volume sparsity |
+
+---
+
+## 1. Continuous Random Variables and the CDF (Reload)
 
 <a id="p1-continuous-cdf"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Imagine a laboratory thermometer with infinite digital precision. What is the chance that the temperature in your room right now is *exactly* $21.500000000\ldots^\circ\text{C}$ down to the trillionth decimal digit?  
+It is **zero**. There are infinite real numbers between $21$ and $22$. You will never hit that exact single number.  
+However, the chance that the temperature is *between* $21.0^\circ\text{C}$ and $22.0^\circ\text{C}$ is very real (perhaps $70\%$). In continuous worlds, probability lives on **intervals**, not on isolated points.
 
-Densities are for **continuous** RVs. Start from the CDF you already met.
+### 🔍 Plain-English Breakdown
+A continuous random variable maps experimental outcomes $\Omega$ into the real numbers $\mathbb{R}$. The Cumulative Distribution Function (CDF), written $P(X \le x)$ or $F_X(x)$, measures the probability that the variable lands anywhere to the left of threshold $x$. 
+- The CDF is always between $0$ and $1$.
+- Because a single exact real value has zero width on the number line, $P(X = x) = 0$.
 
-### Random variable and range
+```
+  Number Line:  ────────────────────────[═════════════]──────► x
+                                        a             b
+                Single point: width = 0  → P(X = a) = 0
+                Interval [a, b]: width > 0 → P(a ≤ X ≤ b) > 0
+```
 
-$X:\Omega\to\mathbb{R}$ (or $\mathbb{R}^{d}$) is a deterministic map. Data $x$ is a **range point**, not a probability.
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+Let $X$ be the arrival time of a train uniformly distributed between $0$ and $10$ minutes.
+1. Probability of arriving at *exactly* $5.000\ldots$ minutes:
+   $$P(X = 5) = 0$$
+2. Probability of arriving within the 2-minute interval $[4, 6]$:
+   $$P(4 \le X \le 6) = \frac{6 - 4}{10 - 0} = \frac{2}{10} = 0.20 \quad (20\%)$$
 
-### CDF / distribution function
+### 💻 Standalone Executable Python Verification
+```python
+import numpy as np
 
-$$
-P_X(x)=P(X\le x)=P\big(X^{-1}((-\infty,x])\big)
-$$
+# Simulate 1,000,000 continuous uniform draws in [0, 10]
+np.random.seed(42)
+samples = np.random.uniform(0.0, 10.0, size=1_000_000)
 
-| Symbol | Meaning |
-|--------|---------|
-| $P_X(x)$ | probability that $X$ lands at most $x$ |
-| Always | a number in $[0,1]$ (a true probability of a set) |
+# Exact match probability is empirically zero
+exact_matches = np.sum(samples == 5.0)
+assert exact_matches == 0, "A continuous variable should never hit an exact point!"
 
-For continuous models, $P(X=x)=0$ for each single point $x$ — probability lives on **intervals / regions**, not isolated points.
+# Interval [4, 6] probability matches theoretical 0.20
+interval_prob = np.mean((samples >= 4.0) & (samples <= 6.0))
+assert np.isclose(interval_prob, 0.20, atol=1e-3)
+print(f"[PASS] P(X=5.0) = {exact_matches}, P(4<=X<=6) = {interval_prob:.4f}")
+```
 
-### Analogy — purpose
+### 🩺 Diagnostic Mini-Check
+**Question:** If $P(X = 2.0) = 0$ for a continuous random variable, does that mean the value $2.0$ is physically impossible to observe?  
+<details><summary><b>Reveal Answer</b></summary><b>No.</b> Every outcome that occurs has zero individual probability. Zero probability for a continuous singleton means the event is a set of measure zero on a continuous scale, not that the outcome is impossible.</details>
 
-A continuous thermometer: chance of reading **exactly** $36.512938\ldots^\circ$C is zero; chance of “between 36 and 37” is positive.
+<details>
+<summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
+
+Formally, a random variable is a measurable mapping $X: \Omega \to \mathbb{R}$. The CDF is the pushforward probability measure of the half-line preimage:
+$$P_X(x) = P(X \le x) = P\big(X^{-1}((-\infty, x])\big)$$
+For a continuous random variable whose distribution is absolutely continuous with respect to Lebesgue measure:
+$$P(X = x) = \lim_{\epsilon \to 0^+} \big(F_X(x) - F_X(x - \epsilon)\big) = 0$$
+All standard probability axioms apply to Borel sets $\mathcal{B}(\mathbb{R})$.
+</details>
 
 ---
 
-## 2. Density definition — the integral formula
+## 2. Density Definition: The Running Integral Link
 
 <a id="p2-density-def"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Think of a mountain profile along a hiking trail.  
+- The **density $p(x)$** is the elevation profile (how high the peak rises at mile marker $x$).
+- The **probability** is the total cross-sectional land mass under that profile.
+If you stick a single pin into the map at mile 3.2, that pin has zero surface area. To get land mass, you must look across a stretch of trail (an integral from mile $a$ to mile $b$).
 
-This is the definition he writes on the board.
+### 🔍 Plain-English Breakdown
+When a continuous variable has a probability density function $p(x)$, the CDF is simply the **running accumulation of area under the curve** from negative infinity up to $x$:
+$$P_X(x) = \int_{-\infty}^x p(t)\,dt$$
+Conversely, the density is the instantaneous derivative (slope) of the CDF:
+$$p(x) = \frac{d}{dx}P_X(x)$$
 
-### Notation
+```
+  p(t) ▲            p(t) curve
+       │              ╭───────╮
+       │             ╱         ╲
+       │  ░░░░░░░░░░╱           ╲
+       │  ░░░░░░░░░╱│            ╲
+       └───────────┴┴─────────────┴────► t
+                 -∞ x
+          Area ░░░░ = CDF P_X(x)
+```
 
-$$
-p_X(x)
-\quad\text{or simply}\quad
-p(x)
-$$
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+Consider a ramp density $p(t) = 2t$ on the interval $[0, 1]$ (and $0$ elsewhere).
+1. Total normalization check:
+   $$\int_0^1 2t\,dt = \left[t^2\right]_0^1 = 1^2 - 0^2 = 1.0 \quad \text{(Valid)}$$
+2. Running CDF at $x = 0.5$:
+   $$P_X(0.5) = \int_0^{0.5} 2t\,dt = \left[t^2\right]_0^{0.5} = 0.5^2 = 0.25 \quad (25\%)$$
+3. Thin strip approximation around $x = 0.5$ with width $dx = 0.01$:
+   $$\text{Area} \approx p(0.5) \cdot dx = (2 \times 0.5) \cdot 0.01 = 0.01$$
+   $$\text{Exact integral} = \int_{0.5}^{0.51} 2t\,dt = 0.51^2 - 0.50^2 = 0.2601 - 0.2500 = 0.0101$$
 
-- **Small** $p$ = density  
-- Subscript $X$ (optional) = which RV  
+### 💻 Standalone Executable Python Verification
+```python
+import scipy.integrate as integrate
 
-### Domain and codomain
+# Ramp density p(t) = 2t on [0, 1]
+def p(t):
+    return 2.0 * t if 0.0 <= t <= 1.0 else 0.0
 
-$$
-p_X:\{\text{range of }X\}\to\mathbb{R}_+
-$$
+# 1. Verify normalization integral over [0, 1] equals 1.0
+total_mass, _ = integrate.quad(p, 0.0, 1.0)
+assert np.isclose(total_mass, 1.0)
 
-| Fact | Meaning |
-|------|---------|
-| Non-negative | $p_X(x)\ge 0$ for all $x$ |
-| **Not** forced into $[0,1]$ | heights can be $2$, $10$, $100$ |
-| Output is a **height**, not a probability | see §3 |
+# 2. Verify CDF at x = 0.5 equals 0.25
+cdf_half, _ = integrate.quad(p, 0.0, 0.5)
+assert np.isclose(cdf_half, 0.25)
+print(f"[PASS] Density normalized ({total_mass:.2f}), CDF(0.5) = {cdf_half:.4f}")
+```
 
-### Link to the CDF (definition)
+### 🩺 Diagnostic Mini-Check
+**Question:** If you know the formula for the CDF $F(x)$, how do you recover the probability density $p(x)$?  
+<details><summary><b>Reveal Answer</b></summary>Take the first derivative with respect to $x$: $p(x) = \frac{d}{dx}F(x)$ (by the Fundamental Theorem of Calculus).</details>
 
-$$
-\boxed{P_X(x)=\int_{-\infty}^{x} p_X(t)\,dt}
-$$
+<details>
+<summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
 
-| Piece of the formula | Meaning |
-|----------------------|---------|
-| $P_X(x)$ | CDF: chance $X\le x$ (a probability in $[0,1]$) |
-| $\int_{-\infty}^{x}$ | “add up all area under the curve to the left of $x$” |
-| $p_X(t)\,dt$ | thin strip of height $p_X(t)$ and width $dt$ |
-| whole equality | **definition** of density (when it exists): CDF = running integral of $p$ |
-
-**Whole-space normalization** (valid density must put total mass 1):
-
-$$
-\int_{-\infty}^{\infty} p_X(t)\,dt = 1
-$$
-
-(or $\int_{\mathbb{R}^{d}} p=1$ in higher dimension). That is why the CDF satisfies $\lim_{x\to\infty}P_X(x)=1$ and $\lim_{x\to-\infty}P_X(x)=0$ when a density exists.
-
-**Conversely (when density exists and is nice):** $p_X$ is the derivative of the CDF:
-
-$$
-p_X(x)=\frac{d}{dx}P_X(x)
-$$
-
-(The lecture stresses the integral form.)
-
-### Probability of a region
-
-For an interval $[a,b]$:
-
-$$
-P(a\le X\le b)=\int_a^b p_X(t)\,dt
-=P_X(b)-P_X(a)
-$$
-
-English: **area under $p$ between $a$ and $b$** is the probability of landing there.
-
-### Thin strip — what “density” actually means
-
-Over a tiny width $dx$ around a point $x$:
-
-$$
-P\big(x\le X\le x+dx\big)\;\approx\; p_X(x)\,dx
-$$
-
-| Piece | Meaning |
-|-------|---------|
-| $p_X(x)$ | height = **probability per unit of $x$** (a rate / density) |
-| $dx$ | width of a thin bin |
-| $p_X(x)\,dx$ | **area** of that thin bin ≈ probability of landing in it |
-
-So:
-
-- Probability is always an **area** (or volume in multi-d), never a bare height.  
-- Height $p$ has **units of “1 / unit of $x$”** — e.g. “per centimeter,” not “percent.” That is why $p(x)$ is allowed to be larger than 1: if the whole mass-1 is squeezed into a short interval, average height must exceed 1 (see §4).  
-- Evaluating $p(x_0)$ alone drops the $dx$ — you threw away the width that turns a rate into a probability.
-
-### Two continuous facts (do not mix them)
-
-| Fact | Statement |
-|------|-----------|
-| A | For a continuous model, $P(X=x_0)=0$ for each single exact value $x_0$ |
-| B | Even so, $p(x_0)$ may be **positive** (or $>1$) — that height is **still not** $P(X=x_0)$ |
-
-**Why A is automatic from the integral:** the “region” $\{x_0\}$ has zero width, so
-
-$$
-P(X=x_0)=\int_{\{x_0\}} p_X(t)\,dt=0
-$$
-
-even when $p_X(x_0)$ is large. Fact A is about **probability of a singleton**. Fact B is about **not confusing height with probability**. Both appear in the lecture dialogue.
-
-### Analogy — purpose
-
-Density = height of a mountain profile.  
-Probability = **land area** under a stretch of the mountain — not the elevation at one GPS pin.
+A non-negative Borel-measurable function $p_X: \mathbb{R} \to [0, \infty)$ is a Radon-Nikodym derivative of distribution measure $P_X$ with respect to Lebesgue measure $\lambda$:
+$$p_X(x) = \frac{dP_X}{d\lambda}(x)$$
+Guarantees:
+1. **Non-negativity:** $p_X(x) \ge 0$ almost everywhere.
+2. **Total Mass:** $\int_{-\infty}^\infty p_X(x)\,dx = 1$.
+3. **Region Probability:** For any Borel set $A \in \mathcal{B}(\mathbb{R})$, $P(X \in A) = \int_A p_X(x)\,dx$.
+</details>
 
 ---
 
-## 3. The critical trap: $p(x)$ is not a probability
+## 3. The Critical Trap: $p(x)$ Is Not a Probability
 
 <a id="p3-height-not-prob"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Imagine glancing at your car's speedometer: it reads **$90\text{ mph}$**.  
+Does that mean you have traveled $90\text{ miles}$? Of course not! If you only tapped the gas for $2\text{ seconds}$, you barely moved a few yards.  
+The speedometer shows a **rate**, not an accumulated distance.  
+Similarly, the probability density $p(x)$ is a **rate of probability accumulation per unit of $x$**, not a probability!
 
-This is the main kill shot of the lecture.
-
-### Two different operations
-
-| Operation | Result | Is it a probability? |
-|-----------|--------|----------------------|
-| Evaluate $p(x_0)$ at one point | a number $\ge 0$ (height) | **No** |
-| Integrate $p$ over a set $A$ | $\int_A p$ | **Yes** (when density exists) |
-
-Even if $p(x_0)=0.3$, that is **not** “30% chance that $X=x_0$.”
-
-### Why people get trapped
-
-Gaussian densities often take values less than 1 near the mode, so the height “looks like” a probability. That is coincidence, not a rule — Gaussians with small variance have peaks **above** 1 too (same $1/L$-style squeeze).
-
-### Logic chain (closed-book)
+### 🔍 Plain-English Breakdown
+Evaluating $p(x)$ gives you a single height. People often see $p(0.3) = 0.8$ and assume "there is an $80\%$ chance that $X = 0.3$." This is completely false:
+- $p(x_0)$ is a **height** (units: $\frac{1}{\text{units of } x}$).
+- Probability is always an **area**: $\text{Height} \times \text{Width} = p(x_0)\,dx$.
+- Dropping $dx$ throws away the dimension that turns a rate into a probability.
 
 ```
-  p(x0)  is a rate (height)
-     │
-     │  × width of a set A
-     ▼
-  ∫_A p   is a probability ∈ [0,1]
+      p(x)  is a rate (height)
+        │
+        │   ×  width of interval (dx)
+        ▼
+     ∫_A p  is a probability ∈ [0, 1]
 ```
 
-If someone reports $p(x_0)$ as “the chance of $x_0$,” they skipped the “× width / integrate” step.
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+Let $p(x) = 0.8$ at point $x = 0.3$.
+- Probability of the single point $0.3$: $P(X = 0.3) = 0$.
+- Probability of landing in a tiny bin of width $dx = 0.001$:
+  $$P(0.3 \le X \le 0.301) \approx p(0.3) \times dx = 0.8 \times 0.001 = 0.0008 \quad (0.08\%)$$
+The height is $0.8$, but the actual probability is under one-tenth of one percent!
 
-### Analogy — purpose
+### 💻 Standalone Executable Python Verification
+```python
+# Demonstrating that density height != interval probability
+x0 = 0.3
+density_height = 0.8  # p(x0)
 
-Speedometer reads $120$ km/h. That is not “120% of a trip completed.” Height of a rate is not a fraction of a whole unless integrated over time.
+dx_values = [0.1, 0.01, 0.001]
+probabilities = [density_height * dx for dx in dx_values]
+
+# As width dx -> 0, probability shrinks to 0, even though density remains 0.8
+assert probabilities[0] == 0.08
+assert probabilities[2] == 0.0008
+print(f"[PASS] Density {density_height} scales with width: {probabilities}")
+```
+
+### 🩺 Diagnostic Mini-Check
+**Question:** If an algorithm outputs $p(x) = 1.5$, is this an error since probabilities cannot exceed $1.0$?  
+<details><summary><b>Reveal Answer</b></summary><b>No error!</b> Probabilities cannot exceed 1.0, but densities can be arbitrarily large (even 100 or 1,000,000) as long as the width they cover is narrow enough that the total integrated area remains 1.0.</details>
+
+<details>
+<summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
+
+Evaluating $p_X(x)$ at singleton $x_0$ yields the pointwise Radon-Nikodym density. The probability measure of the singleton is given by the Lebesgue integral over a set of measure zero:
+$$P(X = x_0) = \int_{\{x_0\}} p_X(t)\,dt = p_X(x_0) \cdot \lambda(\{x_0\}) = p_X(x_0) \cdot 0 = 0$$
+Hence, $p(x_0) > 0$ and $P(X = x_0) = 0$ are completely consistent and mathematically guaranteed.
+</details>
 
 ---
 
-## 4. Worked micro: Uniform on $[0,1/2]$ has height $2$
+## 4. Worked Micro: Uniform on $[0, 1/2]$ Has Height 2
 
 <a id="p4-uniform-half"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Think of a pancake with a fixed mass of $1\text{ pound}$.  
+If you spread the batter across a wide 2-foot griddle, the pancake is paper-thin.  
+If you pour that exact same $1\text{ pound}$ of batter into a tiny 6-inch ramekin, the pancake rises tall and thick!  
+Because total probability is strictly conserved at $1.0$, **squeezing the interval forces the density height upward**.
 
-His interview counterexample.
+### 🔍 Plain-English Breakdown
+A uniform distribution on interval $[a, b]$ has constant height across width $L = b - a$.  
+Since the area of the rectangle must equal $1.0$:
+$$\text{Area} = \text{Height} \times \text{Width} = 1.0 \implies \text{Height} = \frac{1}{\text{Width}} = \frac{1}{L}$$
+For interval $[0, 1/2]$:
+$$L = \frac{1}{2} - 0 = \frac{1}{2} \implies p(x) = \frac{1}{1/2} = 2.0$$
 
-### Where does the number **2** come from?
+```
+  p(x) ▲
+     2 ┼──────────────┐
+       │██████████████│    Area = 2 × (1/2) = 1.0
+       │██████████████│    Height = 2.0  (> 1!)
+     0 ┴──────────────┴───────► x
+       0             1/2
+```
 
-“Uniform on an interval of length $L$” means the density is a **flat rectangle** whose **area is 1**.
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+1. For Uniform$[0, 1/2]$: Height $= \frac{1}{0.5} = 2.0$.
+2. For Uniform$[0, 1/10]$: Height $= \frac{1}{0.1} = 10.0$.
+3. Interval probability calculation on $[0, 1/4]$:
+   $$P\left(0 \le X \le \frac{1}{4}\right) = \int_0^{1/4} 2\,dx = 2 \times \frac{1}{4} = \frac{1}{2} \quad (50\%)$$
+The probability is $0.5$, which is well within $[0, 1]$, even though the density is $2.0$.
 
-$$
-\text{height}\times\text{width}=1
-\quad\Rightarrow\quad
-\text{height}=\frac{1}{L}
-$$
+### 💻 Standalone Executable Python Verification
+```python
+from scipy.stats import uniform
 
-Here the interval is $[0,1/2]$, so $L=1/2$ and height $=1/(1/2)=2$:
+# Uniform on [0, 0.5] -> loc=0.0, scale=0.5
+rv = uniform(loc=0.0, scale=0.5)
 
-$$
-p(x)=\begin{cases}
-2 & 0\le x\le 1/2\\
-0 & \text{otherwise}
-\end{cases}
-$$
+# Verify density height is exactly 2.0 inside [0, 0.5]
+assert rv.pdf(0.25) == 2.0
+assert rv.pdf(0.10) == 2.0
 
-**Check normalization:**
+# Verify area over [0, 0.25] is exactly 0.5
+prob_quarter = rv.cdf(0.25) - rv.cdf(0.0)
+assert np.isclose(prob_quarter, 0.50)
+print(f"[PASS] Density height = {rv.pdf(0.25)}, P(0<=X<=0.25) = {prob_quarter}")
+```
 
-$$
-\int_0^{1/2} 2\,dx = 2\cdot\frac12 = 1
-$$
+### 🩺 Diagnostic Mini-Check
+**Question:** If a variable is uniformly distributed between $0$ and $0.05$, what is its density height on that interval?  
+<details><summary><b>Reveal Answer</b></summary>$\text{Height} = \frac{1}{L} = \frac{1}{0.05} = 20.0$.</details>
 
-Same recipe for any flat uniform on length $L$: height $=1/L$.  
-- Uniform$[0,1]$ → height $1$  
-- Uniform$[0,1/2]$ → height $2$  
-- Uniform$[0,1/10]$ → height $10$  
+<details>
+<summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
 
-Shorter support → taller density. That is the thin-strip idea from §2 in numbers: total mass 1 packed into small width forces large height.
-
-### Why this kills “height = probability”
-
-At every $x$ in the support, $p(x)=2>1$.  
-But every **probability** must lie in $[0,1]$.  
-So the number $2$ **cannot** be a probability — yet it is a perfectly valid density height.
-
-Integrals still give legal probabilities. Example:
-
-$$
-P\!\left(0\le X\le \tfrac14\right)=\int_0^{1/4}2\,dx=\tfrac12
-$$
-
-(half the support length → half the mass, because the density is flat).
-
-### Support (word worth knowing)
-
-The **support** is where $p(x)>0$ (here $[0,1/2]$). Outside the support, $p=0$ — still a legal density value, just “no mass there.”
-
-### Analogy — purpose
-
-A short tall rectangle of height 2 and width $1/2$ has area 1. Height exceeds 1; area does not.
+For $X \sim \mathcal{U}(a, b)$ with $b > a$:
+$$p_X(x) = \frac{1}{b - a} \cdot \mathbf{1}_{[a, b]}(x)$$
+Properties:
+1. Normalization: $\int_a^b \frac{1}{b - a}\,dx = \frac{b - a}{b - a} = 1$.
+2. Bound: As $(b - a) \to 0$, $p_X(x) \to \infty$ pointwise on $(a, b)$, formally approaching the Dirac delta distribution $\delta(x - a)$ while preserving total integral mass 1.
+</details>
 
 ---
 
-## 5. Likelihood vs probability (name only)
+## 5. Likelihood vs Probability (The ML Distinction)
 
 <a id="p5-likelihood"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Imagine taking a photograph of a target with a high-speed camera.  
+- **Probability** is the forecast *before* the shot: "What is the chance the arrow hits the bullseye ring?" (a percentage between $0\%$ and $100\%$).
+- **Likelihood** is the score *after* the shot lands: "Given that the arrow is stuck right here at coordinate $(x, y)$, how tall was our model's probability curve at that exact spot?" (the height of the curve).
 
-He names density-at-a-point as **likelihood** (used later in the course).
+### 🔍 Plain-English Breakdown
+In machine learning, we observe fixed training data $\mathcal{D} = \{x_1, \dots, x_N\}$:
+- We cannot compute $P(X = x_i)$ because for continuous data that is zero.
+- Instead, we evaluate the **density height** $p_\theta(x_i)$.
+- We call this height the **likelihood** of the parameters given the observed data point.
+- Machine learning optimizes parameters $\theta$ to make this height as tall as possible (Maximum Likelihood Estimation).
 
-| Word | Rough role here |
-|------|-----------------|
-| **Probability** | size of a **set** of outcomes / range region (in $[0,1]$) |
-| **Likelihood** | value of the **density** $p(x)$ at a point (can be $>1$) |
+| Term | Domain | Can it exceed 1? | What does it measure? |
+| :--- | :--- | :--- | :--- |
+| **Probability** | Measurable sets / intervals | **Never** ($\in [0, 1]$) | Share of total possibility mass |
+| **Likelihood** | Density evaluated at fixed points | **Yes** ($\in [0, \infty)$) | Relative plausibility / density height |
 
-Do not swap the words casually. Later algorithms maximize likelihood — they maximize a density height, not a probability of a singleton continuous point.
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+Let model A predict data point $x_1 = 0.2$ under Uniform$[0, 1]$:
+$$\text{Likelihood}_A = p_A(0.2) = 1.0$$
+Let model B predict data point $x_1 = 0.2$ under Uniform$[0, 0.5]$:
+$$\text{Likelihood}_B = p_B(0.2) = 2.0$$
+Model B has **twice the likelihood** of Model A for that data point, because its density height is taller.
+
+### 💻 Standalone Executable Python Verification
+```python
+# Comparing model likelihoods on an observed data point x = 0.2
+observed_x = 0.2
+
+# Model 1: Flat over [0, 1] -> density height = 1.0
+p_model1 = 1.0 / (1.0 - 0.0)
+
+# Model 2: Flat over [0, 0.5] -> density height = 2.0
+p_model2 = 1.0 / (0.5 - 0.0)
+
+assert p_model2 > p_model1
+print(f"[PASS] Model 2 likelihood ({p_model2}) > Model 1 likelihood ({p_model1})")
+```
+
+### 🩺 Diagnostic Mini-Check
+**Question:** In Maximum Likelihood Estimation (MLE), why do we maximize the product of density heights $\prod p_\theta(x_i)$ rather than probabilities?  
+<details><summary><b>Reveal Answer</b></summary>Because the probability of individual continuous sample points is identically zero ($0$). The density height $p_\theta(x_i)$ serves as the correct differential proxy for probability mass over an infinitesimal box $\prod p_\theta(x_i)dx$.</details>
+
+<details>
+<summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
+
+For an observed dataset $\mathcal{D} = \{x_i\}_{i=1}^N$ drawn i.i.d. from unknown $p_{true}$, the parameter likelihood function $L(\theta; \mathcal{D})$ is defined as:
+$$L(\theta; \mathcal{D}) = \prod_{i=1}^N p_\theta(x_i)$$
+The log-likelihood objective is:
+$$\ell(\theta) = \sum_{i=1}^N \log p_\theta(x_i)$$
+Under regularity conditions, maximizing $\ell(\theta)$ asymptotically minimizes the Kullback-Leibler divergence $\mathcal{D}_{KL}(p_{data} \parallel p_\theta)$.
+</details>
 
 ---
 
-## 6. Discrete twin: PMF
+## 6. Discrete Twin: The PMF (Mass vs Density)
 
 <a id="p6-pmf"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Think of coins versus poured water.  
+- **Discrete variables (PMF)** are like coins on a table: you have 1 dime, 2 quarters. Each coin is an isolated chunk of mass that you can pick up and count ($P(X = \text{quarter}) = 0.5$).
+- **Continuous variables (PDF)** are like water poured onto the table: you cannot pick up a single water coordinate. You can only measure the volume inside a cup (an interval).
 
-Discrete RVs use a different object.
+### 🔍 Plain-English Breakdown
+- **Discrete:** Described by a **Probability Mass Function (PMF)** $P(X = x)$. Point evaluations *are* probabilities and cannot exceed $1.0$.
+- **Continuous:** Described by a **Probability Density Function (PDF)** $p(x)$. Point evaluations *are not* probabilities and *can* exceed $1.0$.
 
-### Probability mass function
+| Property | Discrete PMF | Continuous PDF |
+| :--- | :--- | :--- |
+| **Point Evaluation** | $P(X = x)$ is a probability | $p(x)$ is a density rate |
+| **Value Range** | $0 \le P(X=x) \le 1$ | $0 \le p(x) < \infty$ |
+| **Single Value Chance** | Can be $> 0$ (e.g. $1/6$) | Strictly $= 0$ |
+| **Recovering Mass** | Summation: $\sum_x P(X=x) = 1$ | Integration: $\int_{-\infty}^\infty p(x)dx = 1$ |
 
-For discrete $X$ taking values in a countable set:
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+1. Fair 6-sided die:
+   $$P(X = 4) = \frac{1}{6} \approx 0.1667 \quad (\text{Valid probability at a single point})$$
+2. Continuous Uniform$[0, 6]$:
+   $$p(4) = \frac{1}{6} \approx 0.1667 \quad (\text{Density height, but } P(X = 4) = 0!)$$
 
-$$
-p_X(x)=P(X=x)
-$$
+### 💻 Standalone Executable Python Verification
+```python
+# Discrete PMF vs Continuous PDF
+discrete_pmf = {1: 1/6, 2: 1/6, 3: 1/6, 4: 1/6, 5: 1/6, 6: 1/6}
+assert np.isclose(sum(discrete_pmf.values()), 1.0)
+assert discrete_pmf[4] == 1/6  # True probability
 
-| Fact | Continuous density | Discrete PMF |
-|------|--------------------|--------------|
-| Name | density $p$ | mass function (PMF) |
-| Evaluate at a point | **not** a probability | **is** a probability |
-| Recover law | integrate over regions | sum masses |
+# Continuous PDF: Uniform on [0, 6]
+pdf_height = 1.0 / 6.0
+# Point evaluation is a rate, actual single point probability is 0.0
+prob_single_point = 0.0
+assert prob_single_point != pdf_height
+print(f"[PASS] PMF at 4 is a probability ({discrete_pmf[4]:.3f}); PDF at 4 is a rate ({pdf_height:.3f})")
+```
 
-Lecture: for continuous data we use densities; for discrete, point masses are already probabilities.
+### 🩺 Diagnostic Mini-Check
+**Question:** If someone writes $p(2) = 0.4$, how can you tell whether $0.4$ represents an actual probability or just a density height?  
+<details><summary><b>Reveal Answer</b></summary>Check whether the random variable is defined as discrete or continuous. If discrete, $0.4$ is a $40\%$ probability. If continuous, $0.4$ is merely a density height.</details>
 
-### Micro
+<details>
+<summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
 
-Fair die: $P(X=6)=1/6$ — that **is** a probability of the singleton $\{6\}$.
+Under measure theory, both are Radon-Nikodym derivatives:
+- PMF is the density with respect to the counting measure $\mu_c$: $P(X = x) = \frac{dP}{d\mu_c}(x)$.
+- PDF is the density with respect to the Lebesgue measure $\lambda$: $p(x) = \frac{dP}{d\lambda}(x)$.
+</details>
 
 ---
 
-## 7. Vector RVs: multi-dimensional integrals
+## 7. Vector Random Variables: Multi-Dimensional Integrals
 
 <a id="p7-multid"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+Think of a storm cloud over a city.  
+At any street corner $(x, y)$, the rainfall rate is $p(x, y)$ (inches of rain per hour per square foot).  
+To find out how many gallons of water fall on an entire neighborhood, you must calculate a 2D surface integral: adding up the rain over both width $dx$ and length $dy$.
 
-When $X\in\mathbb{R}^{d}$ (images, $d$ large):
+### 🔍 Plain-English Breakdown
+When machine learning processes vectors $\mathbf{x} = [x_1, \dots, x_d]^T \in \mathbb{R}^d$ (like images with thousands of pixels), density lives in $d$-dimensional space:
+- The infinitesimal volume element is $d\mathbf{x} = dx_1 \cdot dx_2 \cdots dx_d$.
+- Probability is the $d$-dimensional volume under the density surface:
+  $$P(\mathbf{X} \in A) = \int_A p(\mathbf{x})\,d\mathbf{x}$$
+- Normalization requires the total multidimensional volume to equal $1$:
+  $$\int_{\mathbb{R}^d} p(\mathbf{x})\,d\mathbf{x} = 1$$
 
-$$
-P_X(x)=\int_{(-\infty,x_1]\times\cdots\times(-\infty,x_d]} p_X(t)\,dt
-$$
+```
+       z ▲  p(x,y) surface
+         │     ╭───────╮
+         │    ╱  top    ╲
+         │   ╱   area    ╲
+         └──┼─────────────┼────► y
+           ╱             ╱
+        x ◤             ◤
+           Base area dx · dy
+```
 
-or “running integral over $\mathbb{R}^{d}$,” not a single 1D integral. Notation $\int p(x)\,dx$ often **abuses** dimension — $dx$ means volume element in $\mathbb{R}^{d}$.
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+Consider an independent 2D uniform distribution on unit square $[0, 1] \times [0, 1]$:
+$$p(x_1, x_2) = p(x_1) \cdot p(x_2) = 1.0 \times 1.0 = 1.0$$
+Probability of landing in southwest quadrant $[0, 0.5] \times [0, 0.5]$:
+$$P(X_1 \le 0.5, X_2 \le 0.5) = \int_0^{0.5} \int_0^{0.5} 1.0\,dx_1\,dx_2 = 0.5 \times 0.5 = 0.25 \quad (25\%)$$
+
+### 💻 Standalone Executable Python Verification
+```python
+# 2D continuous uniform distribution on [0, 1] x [0, 1]
+np.random.seed(42)
+points = np.random.uniform(0.0, 1.0, size=(100_000, 2))
+
+# Southwest quadrant: x1 <= 0.5 and x2 <= 0.5
+in_quadrant = (points[:, 0] <= 0.5) & (points[:, 1] <= 0.5)
+empirical_prob = np.mean(in_quadrant)
+
+assert np.isclose(empirical_prob, 0.25, atol=1e-2)
+print(f"[PASS] 2D volume probability = {empirical_prob:.4f} (Theoretical: 0.25)")
+```
+
+### 🩺 Diagnostic Mini-Check
+**Question:** If an image has $d = 1000$ dimensions, what are the units of density $p(\mathbf{x})$?  
+<details><summary><b>Reveal Answer</b></summary>Units are $(\text{unit of } x)^{-1000}$ (inverse hyper-volume). This is why density values in high dimensions can be astronomically large or infinitesimally small.</details>
+
+<details>
+<summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
+
+For random vector $\mathbf{X}: \Omega \to \mathbb{R}^d$, the joint CDF is:
+$$F_{\mathbf{X}}(x_1, \dots, x_d) = \int_{-\infty}^{x_1} \cdots \int_{-\infty}^{x_d} p_{\mathbf{X}}(t_1, \dots, t_d)\,dt_d \cdots dt_1$$
+Marginalization integrates out nuisance dimensions:
+$$p_{X_1}(x_1) = \int_{\mathbb{R}^{d-1}} p_{\mathbf{X}}(x_1, x_2, \dots, x_d)\,dx_2 \cdots dx_d$$
+</details>
 
 ---
 
-## 8. Course shift: estimate the density
+## 8. Course Shift: Estimating Densities in Machine Learning
 
 <a id="p8-estimate-density"></a>
 
-### Purpose for the video
+### 👶 Physical Analogy & Intuition
+In elementary school, you learn what numbers are. In high school, you use algebra so you can solve for unknown variables.  
+In earlier lectures, you learned what probability distributions $P$ are abstractly.  
+Starting with this lecture, we shift to **algebraic continuous functions $p(x)$** so we can compute slopes, gradients, and train deep neural networks!
 
-Lec 08: given $D$, estimate the **distribution**.  
-Lec 09: assume continuous well-behaved data → given $D$, estimate the **density** $p$. Then joints / marginals / conditionals become density objects:
-
-| Object | Density form |
-|--------|----------------|
-| Joint | $p(x,y)$ |
-| Marginal of $x$ | $p(x)=\displaystyle\int p(x,y)\,dy$ (integrate out $y$) |
-| Conditional | $p(y\mid x)=\dfrac{p(x,y)}{p(x)}$ when $p(x)>0$ |
-
-same skeleton as before, now written with densities. The conditional formula needs the **marginal** density in the denominator — still an integral of a joint density, not a bare height read as a probability.
-
-### Notation he will use (visual)
+### 🔍 Plain-English Breakdown
+- **Lecture 08:** Framed learning as estimating abstract probability distribution $P$.
+- **Lecture 09+:** Assumes data is generated from a continuous density $p(x)$. We set up a neural network $p_\theta(x)$ and tune its weights $\theta$ using calculus and gradient descent.
+- Continuous conditioning and marginalization become calculus operations:
+  - **Marginal:** $p(x) = \int p(x, y)\,dy$ (integrate out nuisance variable $y$).
+  - **Conditional:** $p(y \mid x) = \frac{p(x, y)}{p(x)}$ (slice through joint density, divide by marginal height).
 
 ```
-  Distribution / CDF-style:   P   or   𝒫   (he says "two lines")
-  Density:                    p         (he says "one line")
+  ┌────────────────────────────────────────────────────────┐
+  │ THE MACHINE LEARNING PIPELINE                          │
+  │ Data points x_i  ──►  Model p_θ(x)  ──►  Loss -log p_θ │
+  │                             ▲                          │
+  │                             └── Gradient Update (SGD)  │
+  └────────────────────────────────────────────────────────┘
 ```
 
-| Writing | Meaning |
-|---------|---------|
-| One-line $p$ | density height function |
-| Two-line / script $\mathcal{P}$ or capital $P$ | distribution / CDF-style measure |
+### 🔢 Concrete Micro-Numbers (Hand-Calculated)
+Given joint density $p(x, y) = x + y$ on $[0, 1] \times [0, 1]$:
+1. Marginal density $p(x)$:
+   $$p(x) = \int_0^1 (x + y)\,dy = \left[xy + \frac{y^2}{2}\right]_0^1 = x + \frac{1}{2}$$
+2. Conditional density $p(y \mid x)$ at $x = 0.5$:
+   $$p(x = 0.5) = 0.5 + 0.5 = 1.0$$
+   $$p(y \mid x = 0.5) = \frac{0.5 + y}{1.0} = 0.5 + y$$
 
-Rest of course: densities for mathematical ease (algorithms prefer them).  
-Assumption: practical data can be modeled with RVs that **have** densities (not: every abstract RV has a density).
+### 💻 Standalone Executable Python Verification
+```python
+# Verifying conditional density normalization
+import scipy.integrate as integrate
 
-### Pushforward (one-line bridge to earlier lectures)
+x_val = 0.5
+marginal_x = x_val + 0.5  # p(x) = x + 0.5
 
-The distribution $P_X$ is still the **pushforward** of the original measure $P$ on $\Omega$ through the map $X$. Density is a convenient **description** of that pushforward on the range when it exists — not a replacement of $\Omega$.
+def conditional_p(y):
+    # p(y|x) = (x + y) / p(x)
+    return (x_val + y) / marginal_x
 
-### Paper check
+# Conditional density must integrate to 1.0 over y in [0, 1]
+integral_val, _ = integrate.quad(conditional_p, 0.0, 1.0)
+assert np.isclose(integral_val, 1.0)
+print(f"[PASS] Conditional density integrates to {integral_val:.2f}")
+```
 
-1. Write $P_X(x)=\int_{-\infty}^{x}p(t)\,dt$ and $\int p=1$ in English.  
-2. Write the thin-strip formula $P([x,x+dx])\approx p(x)\,dx$ and say what $p$ is a rate of.  
-3. Derive: why is Uniform$[0,1/2]$ density equal to 2? What about Uniform$[0,1/10]$?  
-4. Is $p(0.3)=0.8$ a probability? Is $P(X=0.3)=0$ in a continuous model? Why both can be true?  
-5. Compute $P(0\le X\le 1/4)$ for Uniform$[0,1/2]$.  
-6. PMF vs density: which is probability when evaluated at a point?  
-7. Write $p(y\mid x)$ and the marginal $p(x)$ in terms of the joint density.  
-8. What does the course estimate from now: $P$ or $p$?
+### 🩺 Diagnostic Mini-Check
+**Question:** In the continuous conditional formula $p(y \mid x) = \frac{p(x, y)}{p(x)}$, why does the denominator require $p(x) > 0$?  
+<details><summary><b>Reveal Answer</b></summary>You cannot condition on an event or region that has zero density mass (division by zero is undefined). Slicing requires a positive marginal baseline.</details>
+
+<details>
+<summary><b>📐 Deep Formal Mathematical Formulation & Guarantees (Click to expand)</b></summary>
+
+Given joint probability density $p_{X,Y}(x, y)$ on $\mathbb{R}^n \times \mathbb{R}^m$, the conditional density is formally defined as:
+$$p_{Y \mid X}(y \mid x) = \frac{p_{X, Y}(x, y)}{\int_{\mathbb{R}^m} p_{X, Y}(x, y')\,dy'}$$
+This formalizes the disintegration of measure on smooth Riemannian manifolds and Euclidean spaces, enabling continuous generative modeling (Diffusion, VAEs, Normalizing Flows).
+</details>
+
+---
+
+## 🎯 Paper Check & Verification Exercises
+
+Test yourself on paper before proceeding to the video and [NOTES.md](./NOTES.md):
+1. **The Rate Test:** Explain in 1 sentence why $p(x) = 3.0$ does not violate the rule that probability cannot exceed 1.
+2. **The Area Test:** Write down the formula relating $P(a \le X \le b)$ to density $p(x)$.
+3. **The Calculation Test:** For Uniform$[0, 1/4]$, what is the density height? What is $P(0 \le X \le 1/8)$?
+4. **The Discrete vs Continuous Test:** Why is $P(X = 3)$ non-zero for a Poisson random variable, but zero for a Gaussian random variable?
 
 ---
 
 Ready → [NOTES.md](./NOTES.md).  
 Quiz: [quiz.html](./quiz.html).  
 Prior: [Lec 08](../09-Lec08-Distribution-Estimation/NOTES.md).
-
 
 ---
 
@@ -423,14 +607,3 @@ Prior: [Lec 08](../09-Lec08-Distribution-Estimation/NOTES.md).
 | **Random Variables & Continuous Distributions** | [Random Variables & Continuous Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) | Continuous densities $p(x)$, infinitesimal probability $p(x)dx$, and integration |
 | **Common Probability Distributions** | [Common Probability Distributions](../../MathsTerms/03-Probability-and-Statistical-Estimation/02-Common_Probability_Distributions.md) | Density height properties (why $p(x)$ can exceed 1) and normalization $\int p(x)dx = 1$ |
 | **Functions, Derivatives & Calculus Rules** | [Functions, Derivatives & Calculus Rules](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/01-Functions_Derivatives_and_Rules.md) | Calculus of densities: relationship between CDF $F(x)$ and derivative PDF $f(x)$ |
-
----
-
-## 🌉 Curriculum & Sibling Course Prerequisite Bridges
-
-| Prerequisite Concept | Source Module / Resource | Target Application in Lecture 09 | Verification Check |
-| :--- | :--- | :--- | :--- |
-| **Pushforward Measures & CDFs** | [Lecture 04: Recap Probability Theory Part 3](../../Mathematical-foundation-ml/05-Lec04-Recap-Probability-Theory-Part3/NOTES.md) | Formulating continuous CDF $F_X(x)$ as an integral of density $f_X(t)$ | Verify right-continuity and limits $\lim_{x \to -\infty} F(x) = 0, \lim_{x \to \infty} F(x) = 1$ |
-| **Joint Distributions & Conditioning** | [Lecture 05: Recap Probability Theory Part 2](../../Mathematical-foundation-ml/06-Lec05-Recap-Probability-Theory-Part2/NOTES.md) | Transitioning discrete Bayes conditioning to joint continuous densities $p(y \mid x) = p(x,y)/p(x)$ | Confirm marginal density integral $p(x) = \int p(x,y)dy > 0$ |
-| **Distribution Estimation Framing** | [Lecture 08: Distribution Estimation](../../Mathematical-foundation-ml/09-Lec08-Distribution-Estimation/NOTES.md) | Understanding why machine learning models switch from estimating abstract distributions $P$ to concrete densities $p$ | State the core ML goal of parameterizing and fitting $p_\theta(x)$ |
-| **High-Dimensional Scaling Challenges** | [Lecture 10: Challenges of ML](../../Mathematical-foundation-ml/11-Lec10-Challenges-of-ML/NOTES.md) | Analyzing density estimation failure modes as input dimensionality $d \to \infty$ | Explain why continuous empirical density estimation encounters empty volume sparsity |

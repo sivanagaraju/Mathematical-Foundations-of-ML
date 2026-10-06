@@ -11,7 +11,7 @@ This file is the **course map + catalog** for the NPTEL recording. Per-lecture s
 
 Same instructor and same math as the IIT Madras BS recording. **Different videos.** Full 12-week IITM catalog: [`../IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md`](../IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md)
 
-This is the **sequel** to Mathematical Foundations of Machine Learning: [`../NOTES.md`](../NOTES.md)
+This is the **sequel** to Mathematical Foundations of Machine Learning: [`../Mathematical-foundation-ml/NOTES.md`](../Mathematical-foundation-ml/NOTES.md) (mirror: [`../NOTES.md`](../NOTES.md))
 
 ---
 
@@ -371,7 +371,7 @@ In pedagogical sequence (learning order). URL links to the exact YouTube index.
 | YouTube playlist (official NPTEL) | https://www.youtube.com/playlist?list=PLgMDNELGJ1CaWZJn3tyRPI8JDrMQ_RqWK |
 | NPTEL course page | https://nptel.ac.in/courses/106108004 |
 | Swayam preview (noc26_cs97) | https://onlinecourses.nptel.ac.in/noc26_cs97/preview |
-| Parent — MFML catalog | [`../NOTES.md`](../NOTES.md) |
+| Parent — MFML catalog | [`../Mathematical-foundation-ml/NOTES.md`](../Mathematical-foundation-ml/NOTES.md) · [Root mirror](file:///c:/Users/sivan/Learning/Code/GenerativeAI/Mathematical-Foundations-of-ML/NOTES.md) |
 | Sibling — IITM BS GenAI catalog (full 73 videos) | [`../IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md`](../IITM-BS-Mathematical-Foundations-of-Generative-AI/NOTES.md) |
 | IITM PyTorch notebooks (same instructor, other recording) | https://github.com/Chandan-IISc/IITM_GenAI |
 

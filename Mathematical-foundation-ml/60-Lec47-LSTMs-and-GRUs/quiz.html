@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lecture 47: LSTMs and GRUs</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Lecture 47: LSTMs and GRUs</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. Two parts: <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "prereq-01", "part": "prerequisites", "flavor": "definition", "anchor": "PREREQUISITES.md#p1", "prompt": "When differentiating the Hadamard element-wise product $f(x) = u(x) \\odot x$ with respect to vector $x \\in \\mathbb{R}^m$, how does the multivariable product rule structure the resulting Jacobian matrix $\\frac{\\partial f}{\\partial x}$?", "options": [{"key": "A", "text": "It produces a dense skew-symmetric matrix whose diagonal elements are identically zero."}, {"key": "B", "text": "It equals the outer product $u(x) x^T$ multiplied by the scalar trace of the Hessian."}, {"key": "C", "text": "It produces the exact matrix sum of a diagonal matrix $\\operatorname{diag}(u(x))$ and an indirect cross-derivative term $\\operatorname{diag}(x) \\frac{\\partial u}{\\partial x}$."}, {"key": "D", "text": "It collapses to the scalar derivative $u'(x)$ multiplied by the identity operator $\\mathbf{I}_m$."}], "answer": "C", "whyCorrect": "By the multivariable product rule on component functions $f_i(x) = u_i(x) x_i$, the partial derivative is $\\frac{\\partial f_i}{\\partial x_j} = u_i(x) \\delta_{i, j} + x_i \\frac{\\partial u_i}{\\partial x_j}$, which in matrix notation is $\\frac{\\partial f}{\\partial x} = \\operatorname{diag}(u(x)) + \\operatorname{diag}(x) \\frac{\\partial u}{\\partial x}$.", "whyOthers": {"A": "Incorrect; the diagonal is $\\operatorname{diag}(u(x))$, which is non-zero whenever gating activations are positive.", "B": "Incorrect; differentiation of an element-wise product yields a diagonal operator, not an outer product.", "D": "Incorrect; vector functions require matrix calculus and Jacobian tensors, not scalar derivatives."}, "diagram": "d(u(x) * x)/dx = diag(u(x)) + diag(x) * du/dx", "useLater": "Foundation for deriving the additive single-step recurrent Jacobian in Topic 3."}, {"id": "prereq-02", "part": "prerequisites", "flavor": "compare", "anchor": "PREREQUISITES.md#p2", "prompt": "Why does a cumulative product of $K$ diagonal operators $\\prod_{k=1}^K \\operatorname{diag}(\\alpha_k)$ behave fundamentally differently during backward error propagation than a product of $K$ dense matrices $\\prod_{k=1}^K W_k$?", "options": [{"key": "A", "text": "Diagonal operators commute and act coordinate-by-coordinate without basis rotation, preventing singular vector collapse."}, {"key": "B", "text": "Diagonal matrices always have singular values strictly greater than 1.0, causing exponential explosion."}, {"key": "C", "text": "Dense matrices commute under arbitrary matrix multiplication, whereas diagonal matrices do not."}, {"key": "D", "text": "Diagonal operators invert the direction of time during the forward pass."}], "answer": "A", "whyCorrect": "Because diagonal matrices commute and have zero off-diagonal coupling, their cumulative product is simply $\\operatorname{diag}(\\bigodot_{k=1}^K \\alpha_k)$. Each coordinate scales independently along its coordinate axis without rotating into decaying eigenspaces.", "whyOthers": {"B": "Incorrect; diagonal matrices can have entries $< 1$, but each axis remains isolated without rotational contraction.", "C": "Incorrect; dense matrices in general do not commute ($A B \\neq B A$), whereas diagonal matrices always commute.", "D": "Incorrect; diagonal operators do not alter temporal direction; they scale activations."}, "diagram": "diag(a) * diag(b) = diag(a * b) = diag(b) * diag(a)", "useLater": "Explains how forget gates maintain coordinate-wise memory highways."}, {"id": "prereq-03", "part": "prerequisites", "flavor": "tradeoff", "anchor": "PREREQUISITES.md#p3", "prompt": "According to the reverse triangle inequality for operator norms, given single-step Jacobian $J = D + E$ where $D = \\operatorname{diag}(\\alpha)$ represents an identity highway and $E$ represents the candidate Jacobian, what guarantees that $\\|J\\|_2$ does not collapse to zero?", "options": [{"key": "A", "text": "The condition that $\\det(E) = 0$ at all timesteps."}, {"key": "B", "text": "Enforcing that $D$ and $E$ are orthogonal under the Frobenius inner product."}, {"key": "C", "text": "Setting all activation functions to linear identity maps throughout the network."}, {"key": "D", "text": "Whenever $\\|D\\|_2 > \\|E\\|_2$, the norm is bounded below by $\\|D\\|_2 - \\|E\\|_2 > 0$, preventing vanishing even when non-linear paths saturate."}], "answer": "D", "whyCorrect": "By the reverse triangle inequality $\\|D + E\\|_2 \\ge \\|D\\|_2 - \\|E\\|_2$. If the linear highway operator norm $\\|D\\|_2$ exceeds the candidate perturbation $\\|E\\|_2$, the combined Jacobian norm is strictly positive, guaranteeing non-zero gradient flow.", "whyOthers": {"A": "Incorrect; a singular matrix $E$ does not prevent $D + E$ from vanishing if $D = -E$.", "B": "Incorrect; orthogonality under Frobenius inner product does not guarantee a lower bound on the induced 2-norm.", "C": "Incorrect; non-linear activations are preserved; gating provides the lower bound without sacrificing non-linearity."}, "diagram": "||D + E|| >= ||D|| - ||E|| > 0", "useLater": "Core mathematical bound for unattenuated gradient transmission in Topic 3."}, {"id": "prereq-04", "part": "prerequisites", "flavor": "connect", "anchor": "PREREQUISITES.md#p5", "prompt": "How does the residual skip connection in a deep ResNet ($x^{[l]} = x^{[l-1]} + F(x^{[l-1]})$) mathematically mirror the cell state highway in an LSTM ($c_t = f_t \\odot c_{t-1} + i_t \\odot \\tilde{c}_t$)?", "options": [{"key": "A", "text": "Both discard all non-linear transformations and operate solely as linear regression models."}, {"key": "B", "text": "Both embed an unattenuated identity transmission channel ($\\mathbf{I}$) into their respective Jacobians, ResNets across spatial depth and LSTMs across temporal duration."}, {"key": "C", "text": "Both require sharing weight matrices identically across all layers and timesteps."}, {"key": "D", "text": "Both use convolution filters to achieve spatial translation equivariance across sequence time."}], "answer": "B", "whyCorrect": "As established by Prof. Prathosh in Topic 4, ResNets add an identity path across layer depth $\\frac{\\partial x^{[l]}}{\\partial x^{[l-1]}} = \\mathbf{I} + \\frac{\\partial F}{\\partial x}$, while LSTMs add an identity path across sequence time $\\frac{\\partial c_t}{\\partial c_{t-1}} \\approx \\mathbf{I}$. Both solve vanishing gradients via additive identity channels.", "whyOthers": {"A": "Incorrect; both models retain expressive non-linear branches ($F(x)$ and $\\tilde{c}_t$) in parallel with the identity skip.", "C": "Incorrect; ResNets do not share parameters across depth ($W^{[l]} \\neq W^{[l-1]}$), whereas RNNs share parameters across time.", "D": "Incorrect; LSTMs do not use 2D convolution filters; their operation is recurrent gating."}, "diagram": "ResNet: Space Depth (I + dF/dx)  <--->  LSTM: Time Duration (I + dCandidate/dc)", "useLater": "Load-bearing foundation for the Spatial vs Temporal Skip Duality in Topic 4."}, {"id": "notes-01", "part": "notes", "flavor": "map", "anchor": "NOTES.md#executive-summary", "prompt": "Where does Lecture 47 on LSTMs and GRUs sit on the master map of the course, and how does it bridge Phase 4 to Phase 5?", "options": [{"key": "A", "text": "In Phase 1, establishing probability axioms and measure spaces."}, {"key": "B", "text": "In Phase 4, concluding recurrent sequence modeling by resolving vanishing gradients via additive highways, preparing for attention mechanisms in Phase 5."}, {"key": "C", "text": "In Phase 6, deriving decision tree splitting criteria using Gini impurity."}, {"key": "D", "text": "In Phase 3, formulating the Lagrangian dual optimization of support vector machines."}], "answer": "B", "whyCorrect": "Lecture 47 sits at the conclusion of the sequence modeling block in Phase 4 (Lectures 45–47). It solves the fundamental optimization failure of vanilla RNNs, setting up the transition to Transformers in Phase 5 (Lecture 48).", "whyOthers": {"A": "Phase 1 covers probability spaces and density estimation (Lectures 1–13).", "C": "Phase 6 covers decision trees, bagging, and boosting (Lectures 54–59).", "D": "Phase 3 covers linear models and SVM duality (Lectures 28–40)."}, "diagram": "Phase 4: MLPs (41-42) -> CNNs (43-44) -> RNNs (45-46) -> LSTMs/GRUs (47) -> Phase 5: Transformers (48)", "useLater": "Contextualizes sequence learning within the broader trajectory toward modern Generative AI."}, {"id": "notes-02", "part": "notes", "flavor": "definition", "anchor": "NOTES.md#topic-1-from-multiplicative-jacobians-to-additive-state-transitions-the-unified-gating-formulation-00000600", "prompt": "In Prof. Prathosh's unified formulation $h_t = \\alpha_t \\odot h_{t-1} + \\beta_t \\odot \\tilde{h}_t$, what constitutes the two distinct channels through which historical state $h_{t-1}$ influences current state $h_t$?", "options": [{"key": "A", "text": "A stochastic dropout channel and a deterministic batch normalization channel."}, {"key": "B", "text": "A Fourier frequency decomposition channel and a wavelet compression channel."}, {"key": "C", "text": "A feedforward classification readout and a backward error projection."}, {"key": "D", "text": "A direct linear conveyor belt channel scaled by modulator $\\alpha_t$ and an indirect non-linear feature channel through candidate state $\\tilde{h}_t$."}], "answer": "D", "whyCorrect": "The state $h_t$ is an additive sum: the first term $\\alpha_t \\odot h_{t-1}$ provides a linear conveyor belt that transmits past memory without matrix multiplication, while the second term $\\beta_t \\odot \\tilde{h}_t$ injects newly computed non-linear candidate features.", "whyOthers": {"A": "Incorrect; dropout and batch normalization are regularization techniques, not the structural channels of the recurrence equation.", "B": "Incorrect; recurrence operates in the time/state domain, not the Fourier or wavelet transform domain.", "C": "Incorrect; both channels are forward recurrent paths within the recurrent cell."}, "diagram": "h_t = [alpha_t * h_{t-1}] (linear conveyor belt) + [beta_t * h_tilde_t] (candidate non-linearity)", "useLater": "Forms the bedrock of Topic 1's additive state transition paradigm."}, {"id": "notes-03", "part": "notes", "flavor": "compare", "anchor": "NOTES.md#topic-2-architectural-taxonomy--the-gating-spectrum-highway-networks-grus-and-lstms-06001200", "prompt": "Under the unified gating framework $h_t = \\alpha_t \\odot h_{t-1} + \\beta_t \\odot \\tilde{h}_t$, how do Highway Networks, GRUs, and LSTMs mathematically differ in their constraint and parameterization of $\\alpha_t$ and $\\beta_t$?", "options": [{"key": "A", "text": "Highway Networks fix $\\beta_t = \\mathbf{1}$; GRUs enforce convex coupling $\\beta_t = \\mathbf{1} - \\alpha_t$; LSTMs parameterize $\\alpha_t$ and $\\beta_t$ as independent learnable vector gates."}, {"key": "B", "text": "Highway Networks set $\\alpha_t = \\mathbf{0}$; GRUs set $\\beta_t = \\mathbf{0}$; LSTMs set both $\\alpha_t = \\beta_t = \\mathbf{1}$."}, {"key": "C", "text": "GRUs have four gates while LSTMs have only two gates."}, {"key": "D", "text": "LSTMs operate exclusively in the frequency domain, whereas Highway Networks operate in spatial pixel space."}], "answer": "A", "whyCorrect": "Prof. Prathosh demonstrates that Highway Networks set $\\beta_t = \\mathbf{1}$ (full candidate injection with transform gate $\\alpha_t$); GRUs couple gates convexly via update gate $z_t = \\mathbf{1} - \\alpha_t$; LSTMs uncouple them into independent learnable forget ($f_t$) and input ($i_t$) gates.", "whyOthers": {"B": "Incorrect; setting $\\alpha_t=0$ eliminates memory, which is the vanilla RNN failure mode.", "C": "Incorrect; GRUs have fewer parameters (two gates: update and reset), whereas LSTMs have three gates (forget, input, output).", "D": "Incorrect; all three architectures operate on vector state representations in temporal sequence processing."}, "diagram": "Highway: beta=1  |  GRU: beta = 1 - alpha  |  LSTM: alpha, beta independent learnable gates", "useLater": "Unifying taxonomy explored in Topic 2."}, {"id": "notes-04", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#topic-3-mathematical-proof-of-gradient-preservation-deriving-the-additive-jacobian--the-unattenuated-transmission-operator-12001800", "prompt": "When initializing an LSTM network for long-sequence tasks ($T > 100$), what critical engineering failure occurs if the forget gate bias is initialized to $b_f = 0.0$ instead of a positive constant like $+1.0$?", "options": [{"key": "A", "text": "The weight matrices become singular and raise division-by-zero exceptions in PyTorch."}, {"key": "B", "text": "The activation derivatives explode to infinity, causing floating-point overflow to NaN."}, {"key": "C", "text": "The sigmoid outputs $\\sigma(0) = 0.5$, causing the highway transmission to contract by $0.5^T$, which induces severe artificial gradient vanishing during early training."}, {"key": "D", "text": "The computational graph disconnects and disables automatic differentiation entirely."}], "answer": "C", "whyCorrect": "If $b_f = 0$, the initial forget gate activation is $\\sigma(0) = 0.5$. Over $T = 50$ steps, the gradient transmission factor decays by $0.5^{50} \\approx 8.8 \\times 10^{-16}$, destroying long-term credit assignment. Initializing $b_f = +1.0$ yields $\\sigma(1) \\approx 0.73$ (or higher), keeping the highway open.", "whyOthers": {"A": "Incorrect; linear weights are unaffected by bias zero-initialization; no matrix inversion occurs in standard forward/backward passes.", "B": "Incorrect; $\\sigma'(z) \\le 0.25$, so sigmoid derivatives never explode to infinity.", "D": "Incorrect; PyTorch Autograd remains fully connected; the issue is numerical magnitude, not graph topology."}, "diagram": "b_f = 0.0 -> sigma(0) = 0.5 -> 0.5^50 = 8.8e-16 (VANISHED!)  vs  b_f = +1.0 -> Highway Open", "useLater": "Workplace debugging postmortem and best practice highlighted in Topic 3."}, {"id": "notes-05", "part": "notes", "flavor": "connect", "anchor": "NOTES.md#topic-4-spatial-vs-temporal-skip-duality-resnets-transformers-deep-stacked-recurrent-networks-and-the-inductive-bias--regularization-worldview-18002218", "prompt": "In a deep stacked recurrent neural network, how do information and gradients propagate across the two physical dimensions of the architecture?", "options": [{"key": "A", "text": "Parameters are shared identically across both spatial layers and temporal timesteps."}, {"key": "B", "text": "Parameters are shared and additive highways operate horizontally across time, while distinct weights and residual skips operate vertically across spatial layer depth."}, {"key": "C", "text": "Gradients flow only horizontally across time, while spatial depth has zero backpropagated influence."}, {"key": "D", "text": "The model reduces to an unregularized polynomial kernel regression."}], "answer": "B", "whyCorrect": "As emphasized by Prof. Prathosh in Topic 4, deep stacked RNNs combine horizontal parameter sharing and temporal additive highways across time steps with vertical unshared weights and spatial residual skips across hierarchical depth.", "whyOthers": {"A": "Incorrect; weights are shared across time ($W_{hh}$), but each stacked vertical layer has distinct parameters ($W^{[l]} \\neq W^{[l-1]}$).", "C": "Incorrect; error sensitivities backpropagate both temporally across recurrence and spatially down through stacked layers.", "D": "Incorrect; stacked RNNs are non-linear neural networks regularized by structure, not polynomial kernel regressions."}, "diagram": "Horizontal Time: Shared Weights + Temporal Highway  |  Vertical Depth: Unshared Weights + Spatial ResNet Skips", "useLater": "Deep stacked sequence modeling architecture in Topic 4."}, {"id": "notes-06", "part": "notes", "flavor": "tradeoff", "anchor": "NOTES.md#topic-4-spatial-vs-temporal-skip-duality-resnets-transformers-deep-stacked-recurrent-networks-and-the-inductive-bias--regularization-worldview-18002218", "prompt": "From the perspective of the Bias-Variance tradeoff and statistical estimation, why is the transition from vanilla RNNs to LSTMs/GRUs classified as an inductive bias regularizer?", "options": [{"key": "A", "text": "Because it forces the model to ignore all historical observations and fit only white Gaussian noise."}, {"key": "B", "text": "Because it guarantees that empirical risk is zero on any arbitrary training set without optimization."}, {"key": "C", "text": "Because gating expands expressive capacity over long sequences (reducing underfitting bias) while constraining optimization toward identity gradient flow (controlling estimation variance)."}, {"key": "D", "text": "Because it eliminates all learnable parameters and replaces them with static heuristics."}], "answer": "C", "whyCorrect": "Vanilla RNNs suffer from extreme architectural bias on long sequences because vanishing gradients prevent learning dependencies beyond $T > 10$. Gated architectures provide an inductive bias that favors identity preservation, allowing the network to explore long-horizon hypothesis spaces while stabilizing optimization.", "whyOthers": {"A": "Incorrect; the goal is to capture genuine long-term temporal dependencies, not white noise.", "B": "Incorrect; zero empirical risk is not guaranteed and would typically represent catastrophic overfitting.", "D": "Incorrect; LSTMs have more parameters than vanilla RNNs ($4\\times$ parameters), which are learned via gradient descent."}, "diagram": "Vanilla RNN: High Bias (Amnesia)  --->  LSTM: Low Bias + Inductive Regularization (Identity Highway)", "useLater": "Worldview synthesis connecting deep learning to statistical estimation in Topic 4."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

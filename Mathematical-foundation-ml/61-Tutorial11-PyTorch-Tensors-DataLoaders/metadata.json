@@ -1,0 +1,68 @@
+{
+  "title": "Tutorial 11 : Pytorch - Tensors and Data Loaders",
+  "video_id": "vm9FYVtM5ZA",
+  "url": "https://www.youtube.com/watch?v=vm9FYVtM5ZA",
+  "duration_seconds": 2718,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "Tensors, Operations on Tensors, Data Loaders",
+  "playlist_index": 61,
+  "chapter_count": 0,
+  "instructor": "Teaching Assistant / Prof. Prathosh A P",
+  "skill": "youtube-lecture-tutor",
+  "topic_count": 6,
+  "package_variant": "standard",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "content_type": "code_tutorial",
+  "ingest_evidence": {
+    "captions_file": "raw/captions.en.vtt",
+    "video_file": "raw/lecture.mp4",
+    "screenshot_manifest": "screenshots/manifest.json",
+    "topic_ranges_file": "raw/topic-ranges.json"
+  },
+  "topics": [
+    {
+      "index": 1,
+      "title": "Hardware Acceleration & Tensor Creation: From CPU Memory to Accelerator-Ready Tensors",
+      "time_range": "00:00–07:30",
+      "summary": "Establishes why deep learning requires hardware accelerators (GPUs) over CPUs due to parallel GEMM core architectures; introduces the PyTorch tensor abstraction, comparing it to NumPy ndarrays, and demonstrates tensor construction from Python lists and NumPy arrays with zero-copy memory semantics.",
+      "board_screenshot": "screenshots/composites/ch01-hardware-acceleration-tensor-creation-from-cpu-m-panel1of3.png"
+    },
+    {
+      "index": 2,
+      "title": "Constructors, Memory Strides & Essential Attributes: Shape, Dtype, and the Device Matching Rule",
+      "time_range": "07:30–13:45",
+      "summary": "Details deterministic and stochastic tensor initialization (zeros, ones, rand, and *_like constructors); formalizes the core tensor attributes (shape, dtype=float32, device), and enforces the critical hardware constraint that all binary tensor operands must co-reside on the identical hardware device.",
+      "board_screenshot": "screenshots/composites/ch02-constructors-memory-strides-essential-attributes-panel1of3.png"
+    },
+    {
+      "index": 3,
+      "title": "Indexing, Multi-Axis Slicing, In-Place Modification & Concatenation Geometry",
+      "time_range": "13:45–19:00",
+      "summary": "Examines multidimensional tensor indexing, column and row slicing, and in-place tensor mutations; derives tensor concatenation along batch dimension (dim=0) versus feature dimension (dim=1), highlighting memory contiguity and stride layout.",
+      "board_screenshot": "screenshots/composites/ch03-indexing-multi-axis-slicing-in-place-modificatio-panel1of3.png"
+    },
+    {
+      "index": 4,
+      "title": "Linear Algebra & Arithmetic Operations: Matrix GEMM (@, matmul), Hadamard Products, and Reductions",
+      "time_range": "19:00–27:00",
+      "summary": "Formalizes the three PyTorch matrix multiplication interfaces (@, torch.matmul, and torch.mm with out preallocations), demonstrates element-wise Hadamard multiplication (*, torch.mul) connecting to convolutional sliding dot-products, and details scalar reduction operations (.sum(), .item()).",
+      "board_screenshot": "screenshots/composites/ch04-linear-algebra-arithmetic-operations-matrix-gemm-panel1of3.png"
+    },
+    {
+      "index": 5,
+      "title": "Academic Data Pipelines & Transforms: MNIST Ingestion, Normalization, and Channel Permutations",
+      "time_range": "27:00–35:30",
+      "summary": "Contrasts academic benchmark repositories (MNIST, Fashion-MNIST) with commercial dataset requirements; implements torchvision dataset downloading, automated train/test splits, and image transformation pipelines using transforms.ToTensor() for float scaling and channel transposition.",
+      "board_screenshot": "screenshots/composites/ch05-academic-data-pipelines-transforms-mnist-ingesti-panel1of3.png"
+    },
+    {
+      "index": 6,
+      "title": "Custom Dataset Architecture & DataLoader Integration: The __len__ and __getitem__ Contract",
+      "time_range": "35:30–45:18",
+      "summary": "Architects custom PyTorch Dataset classes inheriting from torch.utils.data.Dataset; implements the mandatory structural trinity (__init__, __len__, __getitem__), handles annotation CSV parsing, on-the-fly image decoding and transformations, and demonstrates batch iterator extraction and matplotlib visualization.",
+      "board_screenshot": "screenshots/composites/ch06-custom-dataset-architecture-dataloader-integrati-panel1of3.png"
+    }
+  ]
+}

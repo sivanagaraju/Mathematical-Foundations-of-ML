@@ -1,0 +1,54 @@
+{
+  "title": "Lec 47 LSTMs and GRUs",
+  "video_id": "Pkuwu4EMRj8",
+  "url": "https://www.youtube.com/watch?v=Pkuwu4EMRj8",
+  "duration_seconds": 1338,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "Highway networks, LSTMs and GRUs",
+  "playlist_index": 60,
+  "chapter_count": 0,
+  "instructor": "Prof. Prathosh A P",
+  "skill": "youtube-lecture-tutor",
+  "topic_count": 4,
+  "package_variant": "standard",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "content_type": "math_technical",
+  "ingest_evidence": {
+    "captions_file": "raw/captions.en.vtt",
+    "video_file": "raw/lecture.mp4",
+    "screenshot_manifest": "screenshots/manifest.json",
+    "topic_ranges_file": "raw/topic-ranges.json"
+  },
+  "topics": [
+    {
+      "index": 1,
+      "title": "From Multiplicative Jacobians to Additive State Transitions: The Unified Gating Formulation",
+      "time_range": "00:00\u201306:00",
+      "summary": "Prof. Prathosh reviews the multiplicative Jacobian contraction causing vanishing gradients in vanilla RNNs, dismisses the naive spectral norm fix lambda_max=1, and formalizes the general additive state transition ht = alpha_t * ht-1 + beta_t * h_tilde_t establishing an unattenuated memory conveyor belt.",
+      "board_screenshot": "screenshots/composites/ch01-seg01-panel1of1.png"
+    },
+    {
+      "index": 2,
+      "title": "Architectural Taxonomy & The Gating Spectrum: Highway Networks, GRUs, and LSTMs",
+      "time_range": "06:00\u201312:00",
+      "summary": "Derives Highway Networks (beta=1), Gated Recurrent Units (beta=1-alpha), and Long Short-Term Memory networks (independent learnable gates) as exact special cases of the unified additive abstraction, de-biologizing memory into learnable gating functions.",
+      "board_screenshot": "screenshots/composites/ch02-seg02-panel1of1.png"
+    },
+    {
+      "index": 3,
+      "title": "Mathematical Proof of Gradient Preservation: Deriving the Additive Jacobian & The Unattenuated Transmission Operator",
+      "time_range": "12:00\u201318:00",
+      "summary": "Presents the rigorous zero-leap proof deriving the additive Jacobian dht/dht-1 = diag(alpha_t) + E_t, expanding the cumulative multi-step Jacobian chain, and establishing unattenuated identity transmission approx I when alpha approx 1.",
+      "board_screenshot": "screenshots/composites/ch03-seg03-panel1of1.png"
+    },
+    {
+      "index": 4,
+      "title": "Spatial vs. Temporal Skip Duality: ResNets, Transformers, Deep Stacked Recurrent Networks, and the Inductive Bias / Regularization Worldview",
+      "time_range": "18:00\u201322:18",
+      "summary": "Establishes the structural duality between spatial residual skips (ResNets, Transformers) across depth and temporal additive highways across time steps, explores deep stacked RNNs, and anchors architectural innovations within bias-variance regularization and KL divergence minimization.",
+      "board_screenshot": "screenshots/composites/ch04-seg04-panel1of1.png"
+    }
+  ]
+}

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz: Lec 42 ERM on Neural Networks and Error Backpropagation</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz: Lec 42 ERM on Neural Networks and Error Backpropagation</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. Interactive assessment covering multivariate chain rule, error sensitivities, hidden layer recurrence, and vectorized matrix backpropagation.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q1", "part": "prerequisites", "tag": "Prereqs · Pre vs Post Activation", "anchor": "PREREQUISITES.md#p2", "prompt": "In the foundational artificial neuron model, what is the exact mathematical distinction between pre-activation z and post-activation a?", "options": [{"key": "A", "text": "Pre-activation is the affine sum z = w^T x + b; post-activation is the squashed output a = sigma(z)."}, {"key": "B", "text": "Pre-activation is the activated output; post-activation is the input data vector before multiplying by weights."}, {"key": "C", "text": "Pre-activation represents the layer error sensitivity delta; post-activation is the loss gradient."}, {"key": "D", "text": "Pre-activation and post-activation are identical scalar variables that can be used interchangeably."}], "answer": "A", "whyCorrect": "Every artificial neuron performs an affine projection z = sum w a + b (pre-activation), followed by element-wise non-linear evaluation a = sigma(z) (post-activation).", "whyOthers": {"B": "Inverts the chronological order of operations.", "C": "Confuses forward representations with backward gradient sensitivities.", "D": "Ignores the non-linear activation function entirely."}, "diagram": "  x ───> [ W · x + b ] ───> z (pre-activation) ───> [ σ(·) ] ───> a (post-activation)", "useLater": "Separating z from a isolates the linear parameters W, b from the non-linear activation derivative sigma'(z)."}, {"id": "q2", "part": "prerequisites", "tag": "Prereqs · Multivariate Chain Rule", "anchor": "PREREQUISITES.md#p1", "prompt": "Let scalar output f(u1, u2) = u1^2 + 3*u2, where u1(z) = 2*z + 1 and u2(z) = 4*z - 2. By the multivariable chain rule, what is df/dz evaluated at z = 1?", "options": [{"key": "A", "text": "df/dz = 12"}, {"key": "B", "text": "df/dz = 16"}, {"key": "C", "text": "df/dz = 24"}, {"key": "D", "text": "df/dz = 36"}], "answer": "C", "whyCorrect": "At z=1, u1 = 3 and u2 = 2. Downstream derivatives: df/du1 = 2*u1 = 6, df/du2 = 3. Link derivatives: du1/dz = 2, du2/dz = 4. Summing over paths: df/dz = (6)(2) + (3)(4) = 12 + 12 = 24.", "whyOthers": {"A": "Only evaluated the first branch: (6)(2) = 12, ignoring u2.", "B": "Substituted incorrectly into the chain rule.", "D": "Added the variables before differentiating."}, "diagram": "  df/dz = (∂f/∂u1)(du1/dz) + (∂f/∂u2)(du2/dz) = (6)(2) + (3)(4) = 24", "useLater": "This exact summation over parallel fan-out branches powers the hidden layer error recurrence."}, {"id": "q3", "part": "prerequisites", "tag": "Prereqs · Activation Saturation", "anchor": "PREREQUISITES.md#p6", "prompt": "What is the maximum mathematical value that the derivative of the standard logistic sigmoid function sigma'(z) can achieve, and what computational trap does this introduce?", "options": [{"key": "A", "text": "Maximum is 1.0 at z=0; causes exploding activations in shallow networks."}, {"key": "B", "text": "Maximum is 0.25 at z=0; causes exponential gradient vanishing across deep saturated layers."}, {"key": "C", "text": "Maximum is 0.50 at z=1; causes numerical underflow in the forward pass."}, {"key": "D", "text": "Maximum is infinite at z=0; requires gradient clipping to prevent overflow."}], "answer": "B", "whyCorrect": "Because sigma'(z) = sigma(z)(1 - sigma(z)) and sigma(z) in (0, 1), its peak is (0.5)(0.5) = 0.25 at z=0. In deep networks, multiplying by <= 0.25 across L layers causes error signals to decay exponentially by (0.25)^L.", "whyOthers": {"A": "The peak of the derivative is 0.25, not 1.0.", "C": "0.5 is the activation value sigma(0), not its derivative.", "D": "Sigmoid derivative is bounded strictly in [0, 0.25]."}, "diagram": "  σ'(z) = σ(z)(1 - σ(z)) <= 0.25  ===>  Error shrinks >= 4x per saturated layer", "useLater": "Motivates non-saturating activations like ReLU and GELU in modern deep architectures."}, {"id": "q4", "part": "prerequisites", "tag": "Prereqs · Outer Product Gradients", "anchor": "PREREQUISITES.md#p4", "prompt": "If layer l has N_l = 4 neurons and preceding layer l-1 has N_{l-1} = 3 neurons, what is the shape of the outer product delta^[l] (a^[l-1])^T, and which parameter tensor does it match?", "options": [{"key": "A", "text": "Shape [3, 4], matching the bias vector b^[l]."}, {"key": "B", "text": "Shape [4, 3], matching the weight matrix W^[l]."}, {"key": "C", "text": "Shape [4, 4], matching the activation covariance matrix."}, {"key": "D", "text": "Shape [12, 1], matching the flattened input tensor."}], "answer": "B", "whyCorrect": "The outer product of a column error vector delta^[l] in R^4 and a row activation vector (a^[l-1])^T in R^{1 x 3} produces a 4 x 3 matrix, matching the shape of weight matrix W^[l] identically.", "whyOthers": {"A": "Swaps row and column dimensions, producing [3, 4] instead of [4, 3].", "C": "Evaluates a square Gram matrix instead of rectangular weight gradient.", "D": "Vectorizes the tensor prematurely."}, "diagram": "  δ^[l] [4 x 1]  @  (a^[l-1])^T [1 x 3]  =  ∇_W^[l] [4 x 3]", "useLater": "Directly enables dense GEMM outer product computation on GPU tensor cores."}, {"id": "q5", "part": "notes", "tag": "Notes · Master Map of Backpropagation", "anchor": "NOTES.md#topic-1-erm-formulation-for-neural-networks--gradient-descent-setup-00000414", "prompt": "What is the master map and central pedagogical point of this whole lecture on Empirical Risk Minimization and Error Backpropagation?", "options": [{"key": "A", "text": "To replace gradient descent with closed-form matrix inversions like Ordinary Least Squares."}, {"key": "B", "text": "To prove that single-layer neural networks can approximate any continuous function without training."}, {"key": "C", "text": "To provide an exact O(P) reverse-mode chain rule algorithm that evaluates gradients of nested composite neural networks in a single backward pass."}, {"key": "D", "text": "To demonstrate that neural network weights should be optimized via genetic algorithms."}], "answer": "C", "whyCorrect": "The central goal of the entire lecture is establishing that deep neural networks are trained via Empirical Risk Minimization using first-order Gradient Descent, where the exact gradient nabla_theta R_hat is evaluated in linear time O(P) through the reverse-mode chain rule (Error Backpropagation).", "whyOthers": {"A": "OLS closed-form solutions fail for non-linear composite neural networks.", "B": "Confuses the Universal Approximation Theorem of Lec 41 with the optimization engine of Lec 42.", "D": "First-order gradient descent via backpropagation is the core optimization workhorse."}, "diagram": "  Master Map:  Loss ──> Output δ^[L] ──> Hidden δ^[l] ──> Gradients ∇_W R_hat ──> SGD Update", "useLater": "Forms the universal algorithmic backbone for all deep learning from MLPs to Transformers."}, {"id": "q6", "part": "notes", "tag": "Notes · Computational Complexity", "anchor": "NOTES.md#topic-1-erm-formulation-for-neural-networks--gradient-descent-setup-00000414", "prompt": "How does the computational complexity of Error Backpropagation compare to Numerical Finite Differences when training a model with P = 10^9 parameters?", "options": [{"key": "A", "text": "Backprop scales as O(P) requiring 1 backward pass, while finite differences scales as O(P^2) requiring 10^9 forward passes."}, {"key": "B", "text": "Backprop scales as O(P^2), while finite differences scales as O(P)."}, {"key": "C", "text": "Both algorithms require exactly the same number of floating-point operations."}, {"key": "D", "text": "Finite differences is exponentially faster because it avoids storing intermediate activations."}], "answer": "A", "whyCorrect": "Finite differences requires perturbing each parameter individually, requiring P+1 forward passes (~10^9 evaluations). Backpropagation traverses the computational graph in reverse once, evaluating all P gradients in a single pass of O(P) operations.", "whyOthers": {"B": "Inverts the computational scaling of both algorithms.", "C": "Finite differences requires a billion-fold more computations than backpropagation.", "D": "Finite differences is vastly slower despite having lower memory overhead."}, "diagram": "  Finite Differences: (P+1) Forward Passes ===> O(P^2) ops\n  Error Backprop:     1 Forward + 1 Backward ===> O(P) ops", "useLater": "Explains why modern foundation models can only be trained with reverse-mode automatic differentiation."}, {"id": "q7", "part": "notes", "tag": "Notes · Output Layer Base Case", "anchor": "NOTES.md#topic-3-defining-layer-error-sensitivity-delta-and-output-layer-base-case-14152554", "prompt": "An output neuron has pre-activation z^{[L]} = 0.0, activation sigma(z) = 1 / (1 + e^{-z}), and target label y = 1.0. Under Half-MSE loss l = 0.5 * (a^{[L]} - y)^2, what is the output error sensitivity delta^{[L]}?", "options": [{"key": "A", "text": "delta^{[L]} = -0.5000"}, {"key": "B", "text": "delta^{[L]} = -0.1250"}, {"key": "C", "text": "delta^{[L]} = +0.2500"}, {"key": "D", "text": "delta^{[L]} = -0.2500"}], "answer": "B", "whyCorrect": "At z=0.0, a^{[L]} = sigma(0) = 0.5. Loss derivative is a^{[L]} - y = 0.5 - 1.0 = -0.5. Activation derivative is sigma'(0) = (0.5)(1 - 0.5) = 0.25. Therefore, delta^{[L]} = (a^{[L]} - y) * sigma'(z^{[L]}) = (-0.5)(0.25) = -0.1250.", "whyOthers": {"A": "Forgot to multiply by the activation derivative sigma'(0) = 0.25.", "C": "Only computed the activation derivative, ignoring the loss error.", "D": "Substituted the loss incorrectly."}, "diagram": "  δ^[L] = (a^[L] - y) · σ'(z^[L]) = (-0.5) · (0.25) = -0.1250", "useLater": "Serves as the inductive base case initializing the backward recurrence."}, {"id": "q8", "part": "notes", "tag": "Notes · Forward-Backward Duality", "anchor": "NOTES.md#topic-4-the-recursive-error-backpropagation-equation-in-hidden-layers-25543613", "prompt": "In the hidden layer recurrence delta_j^{[l]} = (sum_i delta_i^{[l+1]} w_{ij}^{[l+1]}) * sigma'(z_j^{[l]}), what mathematical relationship connects the backward error flow to the forward activation pass?", "options": [{"key": "A", "text": "Backward error message-passing uses the transpose matrix (W^{[l+1]})^T of the exact forward synaptic weights."}, {"key": "B", "text": "Backward pass requires inverting the weight matrix (W^{[l+1]})^{-1}."}, {"key": "C", "text": "Backward pass generates entirely new random projection matrices that are uncorrelated with W."}, {"key": "D", "text": "Backward pass replaces weights with identity matrices."}], "answer": "A", "whyCorrect": "The term sum_i delta_i^{[l+1]} w_{ij}^{[l+1]} evaluates the vector-matrix product (W^{[l+1]})^T delta^{[l+1]}, demonstrating the beautiful mathematical duality that error signals propagate backward along the exact same physical wires, transposed.", "whyOthers": {"B": "Matrix inversion is not required and would fail for non-square weight matrices.", "C": "Backward weights are identical to forward weights, not random projections.", "D": "Omitting weights breaks gradient tracking across layers."}, "diagram": "  Forward Pass:  z^[l+1] = W^[l+1] · a^[l] + b\n  Backward Pass: δ^[l]   = (W^[l+1])^T · δ^[l+1] ⊙ σ'(z^[l])", "useLater": "Underlies the adjoint operator formulation in functional analysis and reverse-mode AD."}, {"id": "q9", "part": "notes", "tag": "Notes · Compute FLOP Profile", "anchor": "NOTES.md#topic-6-vectorized-matrix-backpropagation-hardware-acceleration--training-loop-39164547", "prompt": "Why does training a neural network for one gradient step require approximately 3x the floating-point operations (FLOPs) of forward inference?", "options": [{"key": "A", "text": "Because forward inference evaluates loss 3 times."}, {"key": "B", "text": "Because 1 step requires 1 forward pass (~2P FLOPs) plus 1 backward pass (~4P FLOPs) to compute both layer sensitivities and parameter gradients."}, {"key": "C", "text": "Because the GPU must run 3 separate gradient descent optimizers concurrently."}, {"key": "D", "text": "Because regularized ERM triples the parameter count during backprop."}], "answer": "B", "whyCorrect": "Forward inference takes ~2P FLOPs per sample. The backward pass takes ~4P FLOPs (~2P to backpropagate error sensitivities Delta through transposed weights, and ~2P to compute outer-product parameter gradients nabla_W). Total training FLOPs ~ 6P, exactly 3x inference.", "whyOthers": {"A": "Forward inference does not evaluate the loss multiple times.", "C": "Only one optimizer instance runs per step.", "D": "Regularization does not alter parameter count."}, "diagram": "  Forward Pass:  2P FLOPs\n  Backward Pass: 4P FLOPs (2P sensitivity + 2P weight grad)\n  Total Step:    6P FLOPs = 3 x Forward", "useLater": "Standard Chinchilla and OpenAI compute scaling law factor: 6P FLOPs per token during training."}, {"id": "q10", "part": "notes", "tag": "Notes · Regularization Best Practices", "anchor": "NOTES.md#topic-7-regularized-erm--architectural-inductive-bias-preview-45474744", "prompt": "When implementing Regularized Empirical Risk Minimization with L2 weight decay, why should weight decay be applied to weight matrices W but typically NOT to layer bias vectors b?", "options": [{"key": "A", "text": "Biases cannot be differentiated by backpropagation."}, {"key": "B", "text": "Decaying biases causes gradient explosion in GPU memory."}, {"key": "C", "text": "Biases control affine translation thresholds without increasing hypothesis curvature or exploding function Lipschitz constants."}, {"key": "D", "text": "Biases are always fixed to zero during neural network training."}], "answer": "C", "whyCorrect": "Layer biases b simply shift the coordinate origin of the decision boundary without altering model capacity, curvature, or Lipschitz smoothness. Penalizing biases restrains the model's ability to center data representations without providing generalization benefits.", "whyOthers": {"A": "Bias gradients are simply delta, easily differentiated.", "B": "Decaying biases does not cause gradient explosion.", "D": "Biases are standard trainable parameters initialized near zero."}, "diagram": "  Weight decay penalty:  Ω(W) = (1/2) ||W||_F^2  (Apply to W, skip b)", "useLater": "Standard engineering practice implemented across PyTorch, JAX, and Hugging Face optimizers."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

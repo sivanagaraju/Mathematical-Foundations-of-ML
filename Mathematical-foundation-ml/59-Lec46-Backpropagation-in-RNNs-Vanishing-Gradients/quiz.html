@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lecture 46: Backpropagation in RNNs and Vanishing Gradients Problem</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Lecture 46: Backpropagation in RNNs and Vanishing Gradients Problem</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. Two parts: <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "prereq-01", "part": "prerequisites", "flavor": "definition", "anchor": "PREREQUISITES.md#p1", "prompt": "In an unrolled computational DAG of an RNN with step-wise outputs, how does the multivariable chain rule decompose the total error sensitivity with respect to intermediate hidden state $h_t$?", "options": [{"key": "A", "text": "It consists solely of the horizontal temporal path from $h_{t+1}$, ignoring local readouts until the terminal time step."}, {"key": "B", "text": "It is the direct sum of the local vertical path from readout $\\hat{y}_t$ and the recursive horizontal temporal path from successor state $h_{t+1}$."}, {"key": "C", "text": "It equals the Hadamard element-wise product of all forward activations from time $1$ to $t$."}, {"key": "D", "text": "It multiplies the loss derivative by the inverse transpose of the input projection matrix $W_{xh}$."}], "answer": "B", "whyCorrect": "By the multivariable chain rule on DAGs, when a node $h_t$ influences the objective through multiple forward children (here local prediction $\\hat{y}_t$ and future state $h_{t+1}$), the total derivative is the exact sum of gradients along both causal paths: $\\frac{\\partial \\mathcal{L}}{\\partial h_t} = (\\frac{\\partial \\hat{y}_t}{\\partial h_t})^T \\frac{\\partial \\mathcal{L}}{\\partial \\hat{y}_t} + (\\frac{\\partial h_{t+1}}{\\partial h_t})^T \\frac{\\partial \\mathcal{L}}{\\partial h_{t+1}}$.", "whyOthers": {"A": "Incorrect; if step-wise outputs exist, the local vertical branch contributes an immediate direct gradient.", "C": "Incorrect; gradients add across divergent DAG paths; they do not form Hadamard products across forward activations.", "D": "Incorrect; the chain rule does not invert weight matrices; it multiplies by Jacobians."}, "diagram": "", "useLater": "Load-bearing foundation for BPTT gradient routing in Topic 1."}, {"id": "prereq-02", "part": "prerequisites", "flavor": "numerical", "anchor": "PREREQUISITES.md#p2", "prompt": "For recurrent state transition $h_t = \\tanh(W_{hh} h_{t-1} + W_{xh} x_t + b_h)$ with $m=2$, let pre-activation be $z_t = [0.0, 1.0]^T$ and $W_{hh} = \\begin{bmatrix} 1.0 & 2.0 \\\\ -1.0 & 0.5 \\end{bmatrix}$. Given $\\tanh(0.0) = 0.0$ and $\\tanh(1.0) \\approx 0.7616$ (so $\\sigma'(1.0) \\approx 0.4200$), what is the exact local transition Jacobian $J = \\frac{\\partial h_t}{\\partial h_{t-1}}$?", "options": [{"key": "A", "text": "\\begin{bmatrix} 0.0 & 0.0 \\\\ -1.0 & 0.5 \\end{bmatrix}"}, {"key": "B", "text": "\\begin{bmatrix} 1.0 & 0.84 \\\\ -0.42 & 0.21 \\end{bmatrix}"}, {"key": "C", "text": "\\begin{bmatrix} 0.42 & 0.84 \\\\ -0.42 & 0.21 \\end{bmatrix}"}, {"key": "D", "text": "\\begin{bmatrix} 1.0 & 2.0 \\\\ -0.42 & 0.21 \\end{bmatrix}"}], "answer": "D", "whyCorrect": "The Jacobian is $J = \\operatorname{diag}(\\sigma'(z_t)) \\cdot W_{hh}$. Here $\\sigma'(0.0) = 1 - 0^2 = 1.0$ and $\\sigma'(1.0) = 1 - 0.7616^2 = 0.4200$. Multiplying $\\begin{bmatrix} 1.0 & 0.0 \\\\ 0.0 & 0.42 \\end{bmatrix} \\begin{bmatrix} 1.0 & 2.0 \\\\ -1.0 & 0.5 \\end{bmatrix}$ scales row 1 by $1.0$ and row 2 by $0.42$, yielding $\\begin{bmatrix} 1.0 & 2.0 \\\\ -0.42 & 0.21 \\end{bmatrix}$.", "whyOthers": {"A": "Incorrect; $\\sigma'(0.0) = 1.0$, not $0.0$. Saturated tanh has zero derivative at infinity, not at zero.", "B": "Incorrect; row 1 column 2 is scaled by $\\sigma'(z_1) = 1.0$, so it remains $2.0$, not $0.84$.", "C": "Incorrect; row 1 is scaled by $1.0$, not $0.42$."}, "diagram": "", "useLater": "Directly computes intermediate transition matrices in Topic 2."}, {"id": "prereq-03", "part": "prerequisites", "flavor": "tradeoff", "anchor": "PREREQUISITES.md#p3", "prompt": "What is the critical distinction between the spectral radius $\\rho(A)$ and the induced 2-norm (spectral norm) $\\|A\\|_2$ when analyzing recurrent stability over finite time steps?", "options": [{"key": "A", "text": "For non-normal matrices, $\\|A\\|_2$ can strictly exceed $1.0$ even when $\\rho(A) < 1.0$, allowing transient amplification of gradient vectors over short horizons."}, {"key": "B", "text": "Spectral radius $\\rho(A)$ equals the largest singular value, while $\\|A\\|_2$ equals the smallest eigenvalue."}, {"key": "C", "text": "Spectral radius only applies to symmetric matrices, whereas operator norm applies to non-square matrices."}, {"key": "D", "text": "There is no difference; Gelfand's formula proves they are identically equal for all matrices at every power $k$."}], "answer": "A", "whyCorrect": "By SVD and matrix theory, $\\|A\\|_2 = \\sigma_{\\max}(A) \\ge \\rho(A)$. When $A$ is non-normal ($A^T A \\neq A A^T$), its largest singular value can be significantly greater than $1.0$ even when all eigenvalues satisfy $|\\lambda_i| < 1.0$. Thus, a non-normal recurrent matrix can exhibit transient exponential gradient growth over finite time steps before asymptotic decay dominates.", "whyOthers": {"B": "Incorrect; spectral norm $\\|A\\|_2$ equals the largest singular value, while spectral radius $\\rho(A)$ equals the largest absolute eigenvalue.", "C": "Incorrect; spectral radius is defined for all square matrices.", "D": "Incorrect; Gelfand's formula $\\lim_{k \\to \\infty} \\|A^k\\|^{1/k} = \\rho(A)$ is an asymptotic limit as $k \\to \\infty$, not an identity for finite $k$."}, "diagram": "", "useLater": "Explains transient gradient explosion in Topic 3."}, {"id": "prereq-04", "part": "prerequisites", "flavor": "compare", "anchor": "PREREQUISITES.md#p6", "prompt": "How does differentiating an additive identity residual formulation $h_t = \\alpha h_{t-1} + F(h_{t-1}, x_t)$ contrast with differentiating a standard multiplicative recurrent transition $h_t = \\sigma(W_{hh} h_{t-1} + W_{xh} x_t)$?", "options": [{"key": "A", "text": "The additive formulation eliminates the need for backpropagation entirely by computing analytical matrix inversions."}, {"key": "B", "text": "The multiplicative transition prevents vanishing gradients, whereas the additive formulation always causes numerical underflow."}, {"key": "C", "text": "The additive formulation ensures the transition Jacobian contains an explicit identity matrix component $\\alpha I + J_F$, allowing gradients to bypass saturated non-linearities without multiplicative decay."}, {"key": "D", "text": "The additive formulation converts vector states into scalar scalars, drastically lowering parameter count."}], "answer": "C", "whyCorrect": "In an additive formulation, differentiating yields $\\frac{\\partial h_t}{\\partial h_{t-1}} = \\alpha I + \\frac{\\partial F}{\\partial h_{t-1}}$. When the non-linear branch $F$ saturates and its Jacobian vanishes ($J_F \\to \\mathbf{0}$), the total Jacobian does not collapse to zero; instead, it preserves the identity term $\\alpha I$, providing an intact gradient highway across arbitrary time steps.", "whyOthers": {"A": "Incorrect; reverse-mode automatic differentiation is still used; no matrix inversion is performed.", "B": "Incorrect; inverted claim; multiplicative transitions cause severe vanishing gradients, which the additive shortcut cures.", "D": "Incorrect; state dimensions $m$ remain unchanged vectors."}, "diagram": "", "useLater": "Direct conceptual bridge to Highway networks and LSTMs in Topic 5."}, {"id": "notes-01", "part": "notes", "flavor": "map", "anchor": "NOTES.md#topic-1-backpropagation-through-time-bptt-unrolled-dags-multi-variable-chain-rule--dual-gradient-flow-paths-00000600", "prompt": "In an unrolled deep multi-layer RNN, what are the two distinct directions along which error gradients must propagate during BPTT?", "options": [{"key": "A", "text": "Forward temporal flow (left-to-right across time steps $1 \\to T$) and bottom-up spatial flow (input-to-output)."}, {"key": "B", "text": "Diagonal cross-attention flow and orthogonal kernel projection flow."}, {"key": "C", "text": "Horizontal temporal flow (right-to-left across time steps $T \\to 1$) and vertical spatial flow (top-to-bottom across stacked layers $L \\to 1$)."}, {"key": "D", "text": "Primal Lagrangian slack flow and dual coordinate descent flow."}], "answer": "C", "whyCorrect": "As established by Prof. Prathosh in Topic 1, unrolling a multi-layer RNN creates a 2D grid of computational nodes. Backpropagation must traverse horizontally backwards through time ($T \\to 1$) to account for temporal recurrence, and vertically downwards through depth ($L \\to 1$) to account for hierarchical feature abstraction.", "whyOthers": {"A": "Incorrect; gradients propagate in the reverse direction of the forward pass, moving from right-to-left in time and top-to-bottom in depth.", "B": "Incorrect; these terms belong to Transformers and SVMs, not vanilla BPTT.", "D": "Incorrect; these are optimization concepts from SVM duality, unrelated to recurrent backpropagation."}, "diagram": "", "useLater": "Reinforces the topological grid of BPTT in NOTES.md Topic 1."}, {"id": "notes-02", "part": "notes", "flavor": "connect", "anchor": "NOTES.md#topic-2-the-recurrent-jacobian-chain-deriving-local-hidden-state-transitions-06001200", "prompt": "Why does evaluating the gradient of the terminal loss with respect to recurrent weight matrix $\\frac{\\partial \\mathcal{L}_T}{\\partial W_{hh}}$ inherently depend on the cumulative Jacobian chain $\\frac{\\partial h_T}{\\partial h_t}$?", "options": [{"key": "A", "text": "Because parameter sharing ties $W_{hh}$ identically across all timesteps, so the loss dependence on $W_{hh}$ is the sum of dependencies through every intermediate state $h_t$, each of which reaches the loss via $\\frac{\\partial h_T}{\\partial h_t}$."}, {"key": "B", "text": "Because $W_{hh}$ only exists at step $T$, so all earlier states must be projected to step $T$ via matrix inverses."}, {"key": "C", "text": "Because empirical risk minimization requires the weight matrix to commute with the input tensor."}, {"key": "D", "text": "Because the multivariable chain rule cancels all diagonal activation matrices when unrolling beyond 3 steps."}], "answer": "A", "whyCorrect": "Because $W_{hh}$ is shared identically at every time step $t$, the multivariable chain rule requires summing gradients: $\\frac{\\partial \\mathcal{L}_T}{\\partial W_{hh}} = \\sum_{t=1}^T \\frac{\\partial \\mathcal{L}_T}{\\partial h_t} \\frac{\\partial h_t}{\\partial W_{hh}}$. In many-to-one sequence classification, $h_t$ influences the loss exclusively through its forward chain to terminal state $h_T$, meaning $\\frac{\\partial \\mathcal{L}_T}{\\partial h_t} = \\frac{\\partial \\mathcal{L}_T}{\\partial h_T} \\frac{\\partial h_T}{\\partial h_t}$.", "whyOthers": {"B": "Incorrect; $W_{hh}$ exists and is shared across all timesteps $t=1, \\dots, T$.", "C": "Incorrect; matrix commutativity is neither assumed nor true.", "D": "Incorrect; diagonal activation derivative matrices multiply and accumulate; they never cancel."}, "diagram": "", "useLater": "Load-bearing bridge connecting the chain rule to vanishing gradients in Topic 2."}, {"id": "notes-03", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#topic-3-mathematical-proof-of-vanishing--exploding-gradients-sub-multiplicative-matrix-norms--singular-values-12001800", "prompt": "A junior engineer argues: 'If we replace $\\tanh$ with a standard logistic sigmoid $\\sigma(z) = \\frac{1}{1 + e^{-z}}$, we can eliminate vanishing gradients because sigmoid outputs are strictly positive $(0, 1)$.' What is the fatal mathematical flaw in this assertion?", "options": [{"key": "A", "text": "Sigmoid outputs produce imaginary numbers when multiplied by negative weight matrices."}, {"key": "B", "text": "Sigmoid activations have infinite derivative at $z=0$, causing instantaneous gradient explosion instead."}, {"key": "C", "text": "Sigmoid functions violate the Cauchy-Schwarz inequality, making Jacobians non-invertible."}, {"key": "D", "text": "The derivative of sigmoid satisfies $\\sigma'(z) \\le 0.25$, which forces a contractive scaling factor of at least $4\\times$ per temporal step, causing gradients to vanish dramatically faster than $\\tanh$."}], "answer": "D", "whyCorrect": "For logistic sigmoid, $\\sigma'(z) = \\sigma(z)(1 - \\sigma(z))$. The maximum value occurs at $z=0$ where $\\sigma'(0) = 0.5 \\times 0.5 = 0.25$. Therefore, $\\gamma = 0.25$. Under repeated backward multiplication, $(\\gamma)^{T-t} = (0.25)^{T-t}$, which attenuates gradients by a factor of over $1,000$ every $5$ timesteps even if $\\|W_{hh}\\|_2 = 1.0$. This makes sigmoid far worse than $\\tanh$ (where $\\gamma = 1.0$).", "whyOthers": {"A": "Incorrect; real matrix multiplication on real inputs never generates imaginary numbers.", "B": "Incorrect; the derivative of sigmoid is bounded in $(0, 0.25]$ and never approaches infinity.", "C": "Incorrect; all valid vector norms obey Cauchy-Schwarz; sigmoid does not violate functional analysis axioms."}, "diagram": "", "useLater": "Warns practitioners against activation traps in Topic 3."}, {"id": "notes-04", "part": "notes", "flavor": "numerical", "anchor": "NOTES.md#topic-3-mathematical-proof-of-vanishing--exploding-gradients-sub-multiplicative-matrix-norms--singular-values-12001800", "prompt": "An unrolled RNN processes a sequence of length $T = 30$. At every step, the recurrent matrix has spectral norm $\\lambda_{\\max} = 0.8$, and activations operate in the linear regime where $\\sigma'(z) \\approx 1.0$. What is the theoretical upper bound on the relative gradient magnitude $\\frac{\\|\\partial h_T / \\partial h_1\\|_2}{\\|\\partial h_T / \\partial h_{29}\\|_2}$?", "options": [{"key": "A", "text": "$0.8^{1} = 0.80$"}, {"key": "B", "text": "$0.8^{28} \\approx 1.93 \\times 10^{-3}$"}, {"key": "C", "text": "$0.8^{30} \\approx 1.24 \\times 10^{-3}$"}, {"key": "D", "text": "$1.0$ (because gradients are scale-invariant under ERM)"}], "answer": "B", "whyCorrect": "The temporal distance between $T=30$ and $t=29$ is $1$ step ($J_{30, 29}$ with norm $\\le 0.8^1$). The temporal distance between $T=30$ and $t=1$ is $29$ steps ($0.8^{29}$). The relative ratio is $\\frac{0.8^{29}}{0.8^1} = 0.8^{28} \\approx 0.001934$ (or roughly $1.93 \\times 10^{-3}$). The gradient from step 1 is attenuated by more than $500\\times$ compared to step 29.", "whyOthers": {"A": "Incorrect; this is the decay over a single step, not the 28-step differential.", "C": "Incorrect; the exponent counts the number of transition steps $28$, not the total sequence length $30$.", "D": "Incorrect; gradients decay exponentially with depth in multiplicative chains; they are not scale-invariant."}, "diagram": "", "useLater": "Quantifies exponential vanishing decay in Topic 3."}, {"id": "notes-05", "part": "notes", "flavor": "compare", "anchor": "NOTES.md#topic-4-empirical-consequences--modern-sequence-horizons-recency-bias-gradient-accumulation-and-subword-tokenization-18002400", "prompt": "How does the vanishing gradient problem in vanilla RNNs manifest empirically as a 'recency bias' during training?", "options": [{"key": "A", "text": "Because gradients from earlier timesteps decay to zero, the parameter update $\\nabla_{W_{hh}} \\mathcal{L}$ is dominated almost entirely by the most recent 5–10 timesteps, causing the network to act as a short-memory Markov model."}, {"key": "B", "text": "The model learns to generate tokens backwards from right to left."}, {"key": "C", "text": "The model allocates all memory parameters to the vocabulary embedding table and deletes the hidden state vector."}, {"key": "D", "text": "The network's training loss drops to zero instantly while test loss diverges."}], "answer": "A", "whyCorrect": "Under empirical risk minimization, the weight update is $W_{hh} \\leftarrow W_{hh} - \\eta \\sum_{t=1}^T \\frac{\\partial \\mathcal{L}}{\\partial z_t} h_{t-1}^T$. If $\\frac{\\partial \\mathcal{L}}{\\partial z_t} \\approx \\mathbf{0}$ for all $t < T - 10$, the summation terms for the early $90\\%$ of the sequence contribute nothing to parameter learning. The network effectively learns only local short-term dependencies, exhibiting severe amnesia regarding distant past context.", "whyOthers": {"B": "Incorrect; the model still processes tokens left to right; it simply fails to retain early context.", "C": "Incorrect; parameters are not deleted; their gradients simply vanish during backward propagation.", "D": "Incorrect; when earlier tokens contain the true causal signals, training loss fails to decrease (plateaus)."}, "diagram": "", "useLater": "Directly explains temporal amnesia in Topic 4."}, {"id": "notes-06", "part": "notes", "flavor": "tradeoff", "anchor": "NOTES.md#topic-5-architectural-respite-additive-identity-highways-residual-connections-and-the-conceptual-foundation-of-lstms-24002928", "prompt": "According to Prof. Prathosh's derivation in Topic 5, why is simply adding a fixed identity shortcut ($h_t = h_{t-1} + F(h_{t-1}, x_t)$) insufficient for general sequence modeling, necessitating adaptive learnable gating as in LSTMs?", "options": [{"key": "A", "text": "Because fixed identity connections cause matrix multiplication dimensions to become non-square."}, {"key": "B", "text": "Because PyTorch does not support addition operations inside recurrent loops."}, {"key": "C", "text": "Because the derivative of an identity matrix is zero, blocking all backward error signals."}, {"key": "D", "text": "Because true intelligence requires selective forgetting; a fixed identity shortcut accumulates all historical noise indefinitely, whereas learnable gates allow the network to decide what, when, and how much to forget."}], "answer": "D", "whyCorrect": "As Prof. Prathosh highlights, 'Wisdom is knowing what to forget, when to forget, and what not to forget.' While a permanent identity shortcut preserves gradients, it forces the network to retain all past observations indefinitely, saturating memory with irrelevant tokens. LSTMs and GRUs introduce data-dependent gating functions ($f_t, i_t$) that dynamically modulate the identity highway, selectively opening or closing the gradient conduit based on contextual relevance.", "whyOthers": {"A": "Incorrect; state vectors and identity matrices have compatible square dimensions $m \\times m$.", "B": "Incorrect; PyTorch trivially supports tensor addition in loops.", "C": "Incorrect; the derivative of the identity map $f(x) = x$ with respect to $x$ is the identity matrix $I$, which is non-zero and conserves gradient norm."}, "diagram": "", "useLater": "Sets up the transition to Lecture 47 (LSTMs & GRUs) in Topic 5."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{
+  "title": "Lec 45 Recurrent Neural Networks(RNNs)",
+  "video_id": "E2LLi7AB9lQ",
+  "url": "https://www.youtube.com/watch?v=E2LLi7AB9lQ",
+  "duration_seconds": 2285,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh A P",
+  "description": "Rigorous mathematical formulation of Recurrent Neural Networks (RNNs) for sequence modeling: data tensor topologies, failure modes of dense MLPs on variable-length sequences, latent state transitions ht = sigma(Whh ht-1 + Wxh xt + bh), computational graph unrolling, temporal parameter sharing, dynamical systems analogies, sequence classification vs seq2seq encoder-decoder topologies, unrolled RNNs as causal block-Toeplitz regularized MLPs, and auto-regressive generative modeling.",
+  "playlist_index": 58,
+  "chapter_count": 0,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 7,
+  "package_variant": "standard",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "ingest_evidence": {
+    "captions_file": "raw/captions.en.vtt",
+    "video_file": "raw/lecture.mp4",
+    "screenshot_manifest": "screenshots/manifest.json",
+    "topic_ranges_file": "raw/topic-ranges.json"
+  },
+  "topics": [
+    {
+      "index": 1,
+      "title": "Data Topologies & Sequence Modeling Prelude: Representing Temporal Observation Vectors",
+      "start_seconds": 0,
+      "end_seconds": 300,
+      "slug": "topic-01",
+      "panel": "screenshots/composites/ch01-seg01-panel1of1.png"
+    },
+    {
+      "index": 2,
+      "title": "Supervised Sequence Tasks & The Variable Length Failure of Dense MLPs",
+      "start_seconds": 300,
+      "end_seconds": 690,
+      "slug": "topic-02",
+      "panel": "screenshots/composites/ch02-seg02-panel1of1.png"
+    },
+    {
+      "index": 3,
+      "title": "The Recurrent Cell & Mathematical State Transition Equations",
+      "start_seconds": 690,
+      "end_seconds": 1080,
+      "slug": "topic-03",
+      "panel": "screenshots/composites/ch03-seg03-panel1of1.png"
+    },
+    {
+      "index": 4,
+      "title": "Computational Graph Unrolling & Parameter Sharing Across Time",
+      "start_seconds": 1080,
+      "end_seconds": 1470,
+      "slug": "topic-04",
+      "panel": "screenshots/composites/ch04-seg04-panel1of1.png"
+    },
+    {
+      "index": 5,
+      "title": "Sequence Topologies: Sequence Classification vs Sequence-to-Sequence",
+      "start_seconds": 1470,
+      "end_seconds": 1800,
+      "slug": "topic-05",
+      "panel": "screenshots/composites/ch05-seg05-panel1of1.png"
+    },
+    {
+      "index": 6,
+      "title": "Deep Stacked RNNs & RNNs as Structured Causal Block-Toeplitz MLPs",
+      "start_seconds": 1800,
+      "end_seconds": 2040,
+      "slug": "topic-06",
+      "panel": "screenshots/composites/ch06-seg06-panel1of1.png"
+    },
+    {
+      "index": 7,
+      "title": "Probabilistic Auto-regressive Generation & Multi-Modal Vision-Language Pipelines",
+      "start_seconds": 2040,
+      "end_seconds": 2285,
+      "slug": "topic-07",
+      "panel": "screenshots/composites/ch07-seg07-panel1of1.png"
+    }
+  ]
+}

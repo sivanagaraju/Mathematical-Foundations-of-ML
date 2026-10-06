@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lecture 45: Recurrent Neural Networks (RNNs)</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Lecture 45: Recurrent Neural Networks (RNNs)</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "Q1-PREREQ-BLOCK-FUSION", "part": "prerequisites", "flavor": "definition", "anchor": "PREREQUISITES.md#p1", "prompt": "What is the operational role of the block-matrix formulation W_joint = [W_hh, W_xh] in an RNN cell?", "options": [{"key": "A", "text": "It diagonalizes the recurrent state space to eliminate cross-talk between memory and sensations."}, {"key": "B", "text": "It fuses the memory stream W_hh h_{t-1} and sensation stream W_xh x_t into a single affine transformation over the concatenated direct-sum space R^m + R^d."}, {"key": "C", "text": "It computes an orthogonal projection onto the kernel of the observation matrix to enforce state sparsity."}, {"key": "D", "text": "It performs singular value decomposition to truncate non-dominant temporal singular vectors."}], "answer": "B", "whyCorrect": "Multiplying joint matrix [W_hh, W_xh] by the concatenated vector [h_{t-1}^T, x_t^T]^T is mathematically identical to computing W_hh h_{t-1} + W_xh x_t, casting dual-stream fusion as a single dense GEMM operation.", "whyOthers": {"A": "Joint concatenation does not diagonalize the state space; it concatenates weight matrices horizontally.", "C": "It is an affine linear map, not an orthogonal null-space projection.", "D": "It is a standard linear transformation, not an SVD rank truncation."}, "diagram": "[W_hh | W_xh] * [h_{t-1} ; x_t] + b_h = z_t", "useLater": "Foundation for high-throughput vectorized RNN cell implementations in Topic 3 and CUDA kernels."}, {"id": "Q2-PREREQ-TANH-DERIVATIVE", "part": "prerequisites", "flavor": "numerical", "anchor": "PREREQUISITES.md#p2", "prompt": "Compute the derivative of the hyperbolic tangent activation d/dz tanh(z) evaluated at pre-activation z = 0. What is the value?", "options": [{"key": "A", "text": "0.0"}, {"key": "B", "text": "0.5"}, {"key": "C", "text": "1.0"}, {"key": "D", "text": "0.25"}], "answer": "C", "whyCorrect": "Because d/dz tanh(z) = 1 - tanh^2(z), and tanh(0) = 0, the derivative at z = 0 evaluates exactly to 1 - 0^2 = 1.0.", "whyOthers": {"A": "0.0 is the value of tanh(0), not its derivative; the derivative at 0 is maximal.", "B": "0.5 is the value of sigmoid(0), not the derivative of tanh.", "D": "0.25 is the maximum derivative of the logistic sigmoid function, d/dz sigmoid(0) = 0.5 * (1 - 0.5) = 0.25."}, "diagram": "d/dz tanh(z) = 1 - tanh^2(z) -> at z=0: 1 - 0 = 1.0", "useLater": "Critical for analyzing backpropagation gradient saturation through recurrent cells in Lecture 46."}, {"id": "Q3-PREREQ-LTI-DYNAMICAL-SYSTEMS", "part": "prerequisites", "flavor": "compare", "anchor": "PREREQUISITES.md#p4", "prompt": "How does an autonomous Linear Time-Invariant (LTI) dynamical system s_t = A s_{t-1} + B u_t contrast with a vanilla Recurrent Neural Network?", "options": [{"key": "A", "text": "The LTI system employs purely linear state transitions without activation saturation, whereas an RNN introduces non-linear squashing sigma(.) bounding the state dynamic range."}, {"key": "B", "text": "The LTI system allows state matrices to mutate randomly across time steps, whereas an RNN holds them strictly constant."}, {"key": "C", "text": "The LTI system cannot handle external control inputs u_t, whereas an RNN requires external observations."}, {"key": "D", "text": "The LTI system requires complex-valued frequency domains, whereas an RNN is restricted to discrete integers."}], "answer": "A", "whyCorrect": "Autonomous LTI dynamical systems use linear transition operators (A, B) without non-linear saturation; RNNs wrap the affine state transition in a non-linear activation like tanh to bound state energies and learn non-linear functions.", "whyOthers": {"B": "Linear Time-Invariant systems have constant matrices by definition; they do not mutate randomly across time.", "C": "Both systems accept external inputs: control inputs u_t in LTI systems and observation tokens x_t in RNNs.", "D": "Both systems operate naturally over real vector spaces."}, "diagram": "LTI: s_t = A s_{t-1} + B u_t  vs  RNN: h_t = tanh(W_hh h_{t-1} + W_xh x_t + b_h)", "useLater": "Explains why Prof. Prathosh compares parameter sharing across time to Kalman filter and dynamical system state matrices in Topic 4."}, {"id": "Q4-PREREQ-MLP-VARIABLE-LENGTH-TRAP", "part": "prerequisites", "flavor": "trap", "anchor": "PREREQUISITES.md#p6", "prompt": "Why does a standard dense feedforward MLP fail when presented with variable-length sequential sentences, creating a structural trap?", "options": [{"key": "A", "text": "MLPs can only represent convex decision boundaries and cannot learn non-linear language structures."}, {"key": "B", "text": "MLPs require all weights to be strictly positive integers, which prevents negative word embeddings."}, {"key": "C", "text": "MLPs cannot use stochastic gradient descent when input tokens contain discrete character strings."}, {"key": "D", "text": "Dense MLP weight matrices require a fixed, static input dimension d * T, crashing on variable sequence lengths and ignoring chronological ordering."}], "answer": "D", "whyCorrect": "Dense MLPs require a fixed input vector size. Because real sentences have variable word count T, concatenating into a d * T vector crashes across varying lengths and destroys sequential inductive bias under coordinate permutation.", "whyOthers": {"A": "By the Universal Approximation Theorem, deep MLPs can represent complex non-convex functions.", "B": "MLP parameters are unconstrained continuous real numbers, not positive integers.", "C": "SGD works with discrete tokens once embedded into continuous vector spaces."}, "diagram": "MLP: W in R^{M x (d*T)} (fixed T required)  vs  RNN: cell reused for arbitrary T", "useLater": "Motivates the foundational problem setting and need for recurrent architectures in Topic 2."}, {"id": "Q5-NOTES-MASTER-MAP-ORIENTATION", "part": "notes", "flavor": "map", "anchor": "NOTES.md#executive-summary", "prompt": "Where does Lecture 45 on Recurrent Neural Networks sit on the master map of the course?", "options": [{"key": "A", "text": "In Phase 1 as an axiomatic foundation of sigma-algebras and probability measures."}, {"key": "B", "text": "In Phase 4, marking the transition from spatial 2D grid inductive biases (CNNs) to sequential temporal recurrence and auto-regressive generation."}, {"key": "C", "text": "In Phase 6 as an ensemble decision tree algorithm fitting negative loss gradients."}, {"key": "D", "text": "In Phase 3 as a Lagrangian dual formulation of maximal margin support vector machines."}], "answer": "B", "whyCorrect": "Lecture 45 opens the sequence modeling block of Phase 4 (Deep Learning, Convolutions & Recurrence), bridging spatial grid priors (CNNs) to temporal recurrence and auto-regressive language generation.", "whyOthers": {"A": "Phase 1 covers probability spaces, random variables, and KL divergence (Lectures 1-13).", "C": "Phase 6 covers decision trees, bagging, and gradient boosting (Lectures 54-59).", "D": "Phase 3 covers linear models, Ridge/Lasso, and SVM dual kernels (Lectures 28-40)."}, "diagram": "Phase 4: MLPs (Lec 41-42) -> CNNs (Lec 43-44) -> RNNs (Lec 45) -> BPTT (Lec 46)", "useLater": "Contextualizes sequence learning within the broader trajectory toward modern Generative AI."}, {"id": "Q6-NOTES-RECURRENT-CELL-EQUATION", "part": "notes", "flavor": "definition", "anchor": "NOTES.md#topic-3-the-recurrent-cell--mathematical-state-transition-equations-11301800", "prompt": "In a vanilla RNN cell, what mathematical operation formally defines the latent hidden state h_t?", "options": [{"key": "A", "text": "A soft argmax over the entire future observation sequence x_{t+1:T}."}, {"key": "B", "text": "An unweighted running average of all preceding inputs: h_t = (1/t) sum_{k=1}^t x_k."}, {"key": "C", "text": "A pointwise non-linear composition applied to an affine fusion of the previous state and current input: h_t = sigma(W_hh h_{t-1} + W_xh x_t + b_h)."}, {"key": "D", "text": "The outer product of input vector x_t with target label y_t."}], "answer": "C", "whyCorrect": "As established by Prof. Prathosh in Topic 3, the recurrent cell computes pre-activation z_t = W_hh h_{t-1} + W_xh x_t + b_h, followed by non-linear squashing h_t = sigma(z_t).", "whyOthers": {"A": "Causality strictly forbids conditioning on future observations x_{t+1:T}.", "B": "A simple running average discards temporal order and lacks non-linear representation capacity.", "D": "The hidden state is computed from input and prior state, completely independent of target label y_t."}, "diagram": "h_t = tanh(W_hh * h_{t-1} + W_xh * x_t + b_h)", "useLater": "Core recurrence formula implemented in examples/01_vanilla_rnn_forward_cell_scratch.py."}, {"id": "Q7-NOTES-PARAMETER-SHARING-TRADEOFF", "part": "notes", "flavor": "tradeoff", "anchor": "NOTES.md#topic-4-computational-graph-unrolling--parameter-sharing-across-time-18002430", "prompt": "When would a machine learning engineering team prefer temporal parameter sharing across time steps rather than training independent weights for each timestep?", "options": [{"key": "A", "text": "When input sequences vary in length T and the underlying generating process exhibits temporal stationarity (e.g. grammar rules and physical laws do not change over time)."}, {"key": "B", "text": "When the sequence length T is guaranteed to be strictly fixed at 2 and parameters must not be reused."}, {"key": "C", "text": "When training data is infinite and memory capacity on the GPU is unbounded."}, {"key": "D", "text": "When every time step requires an orthogonal coordinate frame that shares zero information with past history."}], "answer": "A", "whyCorrect": "Parameter sharing enforces temporal translation equivariance and enables the model to process variable length inputs using a constant parameter count O(1) w.r.t. sequence length T.", "whyOthers": {"B": "If T is fixed at 2, a simple MLP could be used without parameter sharing.", "C": "Parameter sharing is motivated by sample efficiency and generalization, not unbounded hardware capacity.", "D": "If time steps share zero information, sequential modeling is inappropriate."}, "diagram": "W_hh^(1) = W_hh^(2) = ... = W_hh^(T) = W_hh (T-invariant)", "useLater": "Governs parameter allocation and memory budgeting in sequence models."}, {"id": "Q8-NOTES-SEQ2SEQ-PIPELINE-CHAIN", "part": "notes", "flavor": "connect", "anchor": "NOTES.md#topic-5-sequence-topologies-sequence-classification-vs-sequence-to-sequence-24303000", "prompt": "Which chain correctly describes how the many-to-many Encoder-Decoder architecture links the input sequence (x_1, ..., x_T) to the generative decoder?", "options": [{"key": "A", "text": "x_t -> Dense Layer -> MaxPool -> Softmax -> Decoder State -> Output Class."}, {"key": "B", "text": "Input sequence -> Flatten -> MLP Head -> Identity Highway -> Single Continuous Scalar."}, {"key": "C", "text": "Input sequence -> Spatial Filter Bank -> Fourier Transform -> Output Matrix."}, {"key": "D", "text": "(x_1, ..., x_T) -> Encoder RNN -> Context Vector c = h_T -> Decoder Initial State s_0 -> Auto-regressive Token Generation -> <EOS>."}], "answer": "D", "whyCorrect": "The input sequence is compressed by an encoder RNN into terminal state context c = h_T, which initializes decoder state s_0; the decoder generates tokens auto-regressively until predicting <EOS>.", "whyOthers": {"A": "This describes a convolutional classifier, not a sequence-to-sequence architecture.", "B": "This describes a regression model with residual connections, not a Seq2Seq pipeline.", "C": "Fourier filter banks do not perform recurrent sequence generation."}, "diagram": "(x_1 ... x_T) -> Encoder -> c=h_T -> Decoder(s_0=c) -> (y_1 ... y_{T_y})", "useLater": "Directly implemented in examples/02_seq2seq_encoder_decoder_scratch.py."}, {"id": "Q9-NOTES-CAUSAL-BLOCK-TOEPLITZ-COMPARE", "part": "notes", "flavor": "compare", "anchor": "NOTES.md#topic-6-deep-stacked-rnns--rnns-as-structured-causal-block-toeplitz-mlps-30003400", "prompt": "How does the effective global weight matrix of an unrolled RNN differ from that of an arbitrary unconstrained Multi-Layer Perceptron?", "options": [{"key": "A", "text": "The RNN matrix is dense and unstructured, whereas the MLP matrix is strictly diagonal."}, {"key": "B", "text": "The unrolled RNN matrix is strictly block lower-triangular (causality) with identical subdiagonal blocks (parameter tying), whereas an MLP allows arbitrary non-zero upper and lower weights."}, {"key": "C", "text": "The RNN matrix is antisymmetric and orthogonal, whereas the MLP matrix is skew-symmetric."}, {"key": "D", "text": "The RNN matrix has non-zero entries only in the top-right block, reflecting anti-causal future planning."}], "answer": "B", "whyCorrect": "An unrolled RNN viewed as an MLP exhibits strict block lower-triangular sparsity (future cannot affect past) and block-Toeplitz structure where subdiagonals contain tied powers W_hh^k W_xh.", "whyOthers": {"A": "The RNN matrix is highly structured and sparse; it is not unstructured.", "C": "General RNN transition matrices are neither orthogonal nor skew-symmetric.", "D": "Upper triangular entries represent anti-causal connections from future to past, which are strictly zero."}, "diagram": "Causal Block-Toeplitz: M_{i,j} = 0 for j > i; M_{i,j} = W_hh^{i-j} * W_xh for j <= i", "useLater": "Unifies RNNs under the regularized MLP framework taught across Lectures 43, 44, and 45."}, {"id": "Q10-NOTES-TEACHER-FORCING-TRAP", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#topic-7-probabilistic-auto-regressive-generation--multi-modal-vision-language-pipelines-34003805", "prompt": "In auto-regressive sequence generation, what is the bad trap of training with teacher forcing versus inference without ground truth?", "options": [{"key": "A", "text": "Teacher forcing causes the learning rate to decay to zero after the first training epoch."}, {"key": "B", "text": "Ground truth tokens cannot be converted into one-hot vectors during training."}, {"key": "C", "text": "Teacher forcing feeds ground truth tokens y_{t-1} during training, but inference feeds imperfect model predictions, causing errors to compound down the sequence (exposure bias)."}, {"key": "D", "text": "Auto-regressive decoding produces non-differentiable loss values that prevent backpropagation."}], "answer": "C", "whyCorrect": "Under teacher forcing, the decoder never encounters its own mistakes during training; at test time, an early erroneous token prediction creates out-of-distribution inputs that compound downstream.", "whyOthers": {"A": "Teacher forcing stabilizes training gradients; it does not force learning rates to zero.", "B": "Ground truth tokens are easily represented as categorical indices or one-hot vectors.", "D": "Teacher forcing uses cross-entropy loss, which is smooth and fully differentiable."}, "diagram": "Train: y_{t-1} (Ground Truth) -> Cell  vs  Inference: y_hat_{t-1} (Prediction) -> Cell", "useLater": "Crucial postmortem debugging topic analyzed in the workplace debugging scenarios."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

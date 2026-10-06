@@ -91,7 +91,8 @@ except ImportError:
             extract_image_elements,
             dismiss_chatgpt_modals,
             get_chatgpt_profile_dir,
-            CHATGPT_FOLLOWUP_IMAGE_PROMPT
+            CHATGPT_FOLLOWUP_IMAGE_PROMPT,
+            download_from_chatgpt_chat_url
         )
     except ImportError:
         CHATGPT_PROFILE_DIR = SCRIPT_DIR / ".chatgpt_profile"
@@ -99,6 +100,8 @@ except ImportError:
         DEFAULT_EMAIL = "sivanagarajupachipulusu@gmail.com"
         DEFAULT_PASSWORD = "Pulk@_ta!nt_01!"
         CHATGPT_FOLLOWUP_IMAGE_PROMPT = "generate the image for the details"
+        def download_from_chatgpt_chat_url(*args, **kwargs):
+            return None
         def get_chatgpt_profile_dir(account="1", custom_dir=""):
             return Path(custom_dir).resolve() if custom_dir else SCRIPT_DIR / ".chatgpt_profile"
 
@@ -209,7 +212,7 @@ def parse_markdown_topics(file_path: Path) -> tuple:
 def format_mathsterms_prompt(topic_num: int, topic_title: str, doc_title: str, content: str) -> str:
     """Format prompt combining educational infographic directive, topic context, and section content."""
     prompt = (
-        f"Comprehensive educational technical infographic clearly explaining the core mechanics of '{topic_title}' in '{doc_title}'. "
+        f"Generate an image: Comprehensive educational technical infographic clearly explaining the core mechanics of '{topic_title}' in '{doc_title}'. "
         f"Critical is for given context need to work and explain that. "
         f"Step-by-step visual explanation with annotated mathematical formulas, labeled architecture block diagrams, directional data flow arrows, and structured explanation. "
         f"Topic content:\n{content}"
@@ -591,7 +594,7 @@ def clean_ignored_section_images(output_dir: Path, topics: list) -> int:
                         print(f"  [ERROR] Failed to delete {f.name}: {e}", flush=True)
     return removed
 
-def run_topic_batch(context, chunk, doc_title: str, output_dir: Path, engine: str = "grok"):
+def run_topic_batch(context, chunk, doc_title: str, output_dir: Path, engine: str = "grok", timeout: int = 360):
     """Submit prompts for a chunk of topics across tabs and download generated images."""
     if engine == "chatgpt":
         while len(context.pages) < len(chunk):
@@ -612,12 +615,12 @@ def run_topic_batch(context, chunk, doc_title: str, output_dir: Path, engine: st
                 dismiss_chatgpt_modals(tab, cooldown_if_rate_limited=True, cooldown_seconds=45)
             except Exception:
                 pass
-            ensure_chatgpt_images_page(tab, reset=(tab_idx == 0))
+            ensure_chatgpt_images_page(tab, reset=True)
 
             prompt = format_mathsterms_prompt(t_num, t_title, doc_title, t["content"])
             pre_urls = set(extract_image_elements(tab))
 
-            ok = submit_chatgpt_prompt(tab, prompt)
+            ok = submit_chatgpt_prompt(tab, prompt, reset_conversation=False)
             if not ok:
                 print(f"  [Tab {tab_idx+1}] Notice: Initial submit attempt not confirmed, checking modals & retrying...", flush=True)
                 try:
@@ -625,7 +628,7 @@ def run_topic_batch(context, chunk, doc_title: str, output_dir: Path, engine: st
                 except Exception:
                     pass
                 time.sleep(2)
-                submit_chatgpt_prompt(tab, prompt)
+                submit_chatgpt_prompt(tab, prompt, reset_conversation=False)
 
             batch_info.append((tab, t, file_prefix, pre_urls))
             time.sleep(2)
@@ -641,7 +644,7 @@ def run_topic_batch(context, chunk, doc_title: str, output_dir: Path, engine: st
                 dismiss_chatgpt_modals(tab, cooldown_if_rate_limited=False)
             except Exception:
                 pass
-            print(f"  [Tab {tab_idx+1}] Downloading ChatGPT image for {file_prefix}...", flush=True)
+            print(f"  [Tab {tab_idx+1}] Downloading ChatGPT image for {file_prefix} (timeout: {timeout}s)...", flush=True)
             downloaded = wait_and_download_chatgpt_images(
                 context,
                 tab,
@@ -649,7 +652,7 @@ def run_topic_batch(context, chunk, doc_title: str, output_dir: Path, engine: st
                 file_prefix,
                 pre_urls,
                 expected_count=1,
-                max_wait=180,
+                max_wait=timeout,
                 initial_wait=5 if len(chunk) > 1 else 20,
                 follow_up_message=CHATGPT_FOLLOWUP_IMAGE_PROMPT
             )
@@ -732,7 +735,8 @@ def process_single_mathsterms_file(
     skip_existing: bool = False,
     max_retries: int = 2,
     engine: str = "grok",
-    include_all_sections: bool = False
+    include_all_sections: bool = False,
+    timeout: int = 360
 ):
     """Process a single MathsTerms markdown file, creating its segregated images directory."""
     doc_title, all_topics = parse_markdown_topics(md_file)
@@ -775,6 +779,7 @@ def process_single_mathsterms_file(
     print(f"TITLE:   {doc_title}")
     print(f"TOPICS:  {len(topics_to_process)} / {len(all_topics)} topic(s) to generate (Ignored non-image sections: {ignored_count}, Expected: {len(topics_to_process) * expected_imgs} images)")
     print(f"OUTPUT:  {output_dir}")
+    print(f"TIMEOUT: {timeout}s")
     print("=" * 75, flush=True)
 
     parallel = max(1, min(parallel, 3))
@@ -784,7 +789,7 @@ def process_single_mathsterms_file(
         chunk_nums = [t["num"] for t in chunk]
         print(f"\n>>> Starting Batch: Topics {chunk_nums} ({len(chunk)} tab(s))", flush=True)
 
-        run_topic_batch(context, chunk, doc_title, output_dir, engine=engine)
+        run_topic_batch(context, chunk, doc_title, output_dir, engine=engine, timeout=timeout)
 
         # Retry loop for any topic in this chunk that is incomplete
         retry_queue = [t for t in chunk if not is_topic_complete(output_dir, t, expected_count=expected_imgs)]
@@ -793,7 +798,7 @@ def process_single_mathsterms_file(
             missing_nums = [t["num"] for t in retry_queue]
             print(f"\n⚠️ Topic(s) {missing_nums} not fully generated (missing {expected_imgs} valid images). Retrying attempt {retry_count}/{max_retries}...", flush=True)
             time.sleep(3)
-            run_topic_batch(context, retry_queue, doc_title, output_dir, engine=engine)
+            run_topic_batch(context, retry_queue, doc_title, output_dir, engine=engine, timeout=timeout)
             retry_queue = [t for t in chunk if not is_topic_complete(output_dir, t, expected_count=expected_imgs)]
             retry_count += 1
 
@@ -809,7 +814,7 @@ def process_single_mathsterms_file(
         print(f"\n⚠️ Final Sweep: Topic(s) {inc_nums} still missing images. Running retry sweep {sweep_count}/{max_retries}...", flush=True)
         for j in range(0, len(incomplete), parallel):
             sweep_chunk = incomplete[j : j + parallel]
-            run_topic_batch(context, sweep_chunk, doc_title, output_dir, engine=engine)
+            run_topic_batch(context, sweep_chunk, doc_title, output_dir, engine=engine, timeout=timeout)
             time.sleep(3)
         incomplete = [t for t in topics_to_process if not is_topic_complete(output_dir, t, expected_count=expected_imgs)]
         sweep_count += 1
@@ -898,6 +903,8 @@ def main():
     parser.add_argument("--regenerate", "--force", dest="regenerate", action="store_true", help="Force regenerate all topics even if images exist")
     parser.add_argument("--max-retries", type=int, default=2, help="Max retries for incomplete topics (default: 2)")
     parser.add_argument("--delay", type=int, default=6, help="Cooldown delay (seconds) between batches (default: 6)")
+    parser.add_argument("--timeout", "--max-wait", dest="timeout", type=int, default=360, help="Maximum wait time in seconds for image generation (default: 360s / 6 min)")
+    parser.add_argument("--chat-url", type=str, default="", help="Download generated image directly from an existing ChatGPT conversation URL")
     parser.add_argument("--profile-dir", type=str, default="", help="Custom Chrome profile directory (overrides --account)")
     parser.add_argument("--include-all-sections", action="store_true", default=False, help="Include non-image sections like Curated References and Beginner Comprehension (default: False, these sections are skipped)")
     parser.add_argument("--clean-ignored", action="store_true", default=False, help="Delete existing generated image files for ignored sections (e.g. topic-13, topic-14) from output directories")
@@ -924,6 +931,50 @@ def main():
             else:
                 from grok_imagine_runner import interactive_login
                 interactive_login(profile_path)
+        return
+
+    if args.chat_url:
+        target_files = find_target_files(args.file, args.category, args.all)
+        if not target_files:
+            target_files = list(MATHS_TERMS_DIR.glob("**/*.md"))
+        target_file = target_files[0] if target_files else None
+        if target_file:
+            doc_title, all_topics = parse_markdown_topics(target_file)
+            topic_num = parse_topic_arg(args.topic)[0] if args.topic else 1
+            t_obj = next((t for t in all_topics if t["num"] == topic_num), None)
+            slug = t_obj["slug"] if t_obj else "topic"
+            prefix = f"topic-{topic_num:02d}_{slug}"
+            out_dir = target_file.parent / "chatgpt_images" / target_file.stem
+        else:
+            out_dir = SCRIPT_DIR / "chatgpt_images"
+            prefix = "topic-01"
+
+        out_dir.mkdir(parents=True, exist_ok=True)
+        print("=" * 75, flush=True)
+        print("DOWNLOADING IMAGE DIRECTLY FROM CHAT CONVERSATION")
+        print(f"Chat URL:    {args.chat_url}")
+        print(f"Target file: {out_dir / f'{prefix}_img1.jpg'}")
+        print("=" * 75, flush=True)
+
+        with sync_playwright() as p:
+            context = launch_chatgpt_browser(p, profile_path, headless=False)
+            try:
+                page = context.pages[0] if context.pages else context.new_page()
+                saved = download_from_chatgpt_chat_url(
+                    context=context,
+                    page=page,
+                    chat_url=args.chat_url,
+                    output_dir=out_dir,
+                    file_prefix=prefix,
+                    idx=1,
+                    max_wait=args.timeout
+                )
+                if saved and saved.exists():
+                    print(f"\n✅ [SUCCESS] Master full-resolution image saved to:\n  {saved} ({saved.stat().st_size:,} bytes)\n", flush=True)
+                else:
+                    print(f"\n❌ [ERROR] Could not download image from {args.chat_url}\n", flush=True)
+            finally:
+                context.close()
         return
 
     target_files = find_target_files(args.file, args.category, args.all)
@@ -1038,7 +1089,8 @@ def main():
                     skip_existing=skip_existing,
                     max_retries=args.max_retries,
                     engine=args.engine,
-                    include_all_sections=args.include_all_sections
+                    include_all_sections=args.include_all_sections,
+                    timeout=args.timeout
                 )
 
             while len(context.pages) > 1:

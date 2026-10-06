@@ -1,0 +1,376 @@
+{
+  "duration_seconds": 1767.0,
+  "range_source": "synthetic",
+  "range_count": 5,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 360.0,
+      "slug": "seg01"
+    },
+    {
+      "index": 2,
+      "start": 360.0,
+      "end": 720.0,
+      "slug": "seg02"
+    },
+    {
+      "index": 3,
+      "start": 720.0,
+      "end": 1080.0,
+      "slug": "seg03"
+    },
+    {
+      "index": 4,
+      "start": 1080.0,
+      "end": 1440.0,
+      "slug": "seg04"
+    },
+    {
+      "index": 5,
+      "start": 1440.0,
+      "end": 1767.0,
+      "slug": "seg05"
+    }
+  ],
+  "raw_count": 20,
+  "composite_count": 5,
+  "raw": [
+    {
+      "file": "raw/001-ch01-seg01-t0028s.png",
+      "seconds": 28.8,
+      "chapter": 1,
+      "slug": "seg01",
+      "label": "00:28",
+      "range_start": 0.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "raw/002-ch01-seg01-t0129s.png",
+      "seconds": 129.6,
+      "chapter": 1,
+      "slug": "seg01",
+      "label": "02:09",
+      "range_start": 0.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "raw/003-ch01-seg01-t0230s.png",
+      "seconds": 230.4,
+      "chapter": 1,
+      "slug": "seg01",
+      "label": "03:50",
+      "range_start": 0.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "raw/004-ch01-seg01-t0331s.png",
+      "seconds": 331.2,
+      "chapter": 1,
+      "slug": "seg01",
+      "label": "05:31",
+      "range_start": 0.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "raw/005-ch02-seg02-t0388s.png",
+      "seconds": 388.8,
+      "chapter": 2,
+      "slug": "seg02",
+      "label": "06:28",
+      "range_start": 360.0,
+      "range_end": 720.0
+    },
+    {
+      "file": "raw/006-ch02-seg02-t0489s.png",
+      "seconds": 489.6,
+      "chapter": 2,
+      "slug": "seg02",
+      "label": "08:09",
+      "range_start": 360.0,
+      "range_end": 720.0
+    },
+    {
+      "file": "raw/007-ch02-seg02-t0590s.png",
+      "seconds": 590.4,
+      "chapter": 2,
+      "slug": "seg02",
+      "label": "09:50",
+      "range_start": 360.0,
+      "range_end": 720.0
+    },
+    {
+      "file": "raw/008-ch02-seg02-t0691s.png",
+      "seconds": 691.2,
+      "chapter": 2,
+      "slug": "seg02",
+      "label": "11:31",
+      "range_start": 360.0,
+      "range_end": 720.0
+    },
+    {
+      "file": "raw/009-ch03-seg03-t0748s.png",
+      "seconds": 748.8,
+      "chapter": 3,
+      "slug": "seg03",
+      "label": "12:28",
+      "range_start": 720.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "raw/010-ch03-seg03-t0849s.png",
+      "seconds": 849.6,
+      "chapter": 3,
+      "slug": "seg03",
+      "label": "14:09",
+      "range_start": 720.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "raw/011-ch03-seg03-t0950s.png",
+      "seconds": 950.4,
+      "chapter": 3,
+      "slug": "seg03",
+      "label": "15:50",
+      "range_start": 720.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "raw/012-ch03-seg03-t1051s.png",
+      "seconds": 1051.2,
+      "chapter": 3,
+      "slug": "seg03",
+      "label": "17:31",
+      "range_start": 720.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "raw/013-ch04-seg04-t1108s.png",
+      "seconds": 1108.8,
+      "chapter": 4,
+      "slug": "seg04",
+      "label": "18:28",
+      "range_start": 1080.0,
+      "range_end": 1440.0
+    },
+    {
+      "file": "raw/014-ch04-seg04-t1209s.png",
+      "seconds": 1209.6,
+      "chapter": 4,
+      "slug": "seg04",
+      "label": "20:09",
+      "range_start": 1080.0,
+      "range_end": 1440.0
+    },
+    {
+      "file": "raw/015-ch04-seg04-t1310s.png",
+      "seconds": 1310.4,
+      "chapter": 4,
+      "slug": "seg04",
+      "label": "21:50",
+      "range_start": 1080.0,
+      "range_end": 1440.0
+    },
+    {
+      "file": "raw/016-ch04-seg04-t1411s.png",
+      "seconds": 1411.2,
+      "chapter": 4,
+      "slug": "seg04",
+      "label": "23:31",
+      "range_start": 1080.0,
+      "range_end": 1440.0
+    },
+    {
+      "file": "raw/017-ch05-seg05-t1466s.png",
+      "seconds": 1466.2,
+      "chapter": 5,
+      "slug": "seg05",
+      "label": "24:26",
+      "range_start": 1440.0,
+      "range_end": 1767.0
+    },
+    {
+      "file": "raw/018-ch05-seg05-t1557s.png",
+      "seconds": 1557.7,
+      "chapter": 5,
+      "slug": "seg05",
+      "label": "25:57",
+      "range_start": 1440.0,
+      "range_end": 1767.0
+    },
+    {
+      "file": "raw/019-ch05-seg05-t1649s.png",
+      "seconds": 1649.3,
+      "chapter": 5,
+      "slug": "seg05",
+      "label": "27:29",
+      "range_start": 1440.0,
+      "range_end": 1767.0
+    },
+    {
+      "file": "raw/020-ch05-seg05-t1740s.png",
+      "seconds": 1740.8,
+      "chapter": 5,
+      "slug": "seg05",
+      "label": "29:00",
+      "range_start": 1440.0,
+      "range_end": 1767.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-seg01-panel1of1.png",
+      "chapter": 1,
+      "slug": "seg01",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-seg01-t0028s.png",
+        "002-ch01-seg01-t0129s.png",
+        "003-ch01-seg01-t0230s.png",
+        "004-ch01-seg01-t0331s.png"
+      ],
+      "labels": [
+        "ch1 00:28",
+        "ch1 02:09",
+        "ch1 03:50",
+        "ch1 05:31"
+      ],
+      "tile_seconds": [
+        28.8,
+        129.6,
+        230.4,
+        331.2
+      ],
+      "time_start": 28.8,
+      "time_end": 331.2,
+      "range_start": 0.0,
+      "range_end": 360.0
+    },
+    {
+      "file": "composites/ch02-seg02-panel1of1.png",
+      "chapter": 2,
+      "slug": "seg02",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-seg02-t0388s.png",
+        "006-ch02-seg02-t0489s.png",
+        "007-ch02-seg02-t0590s.png",
+        "008-ch02-seg02-t0691s.png"
+      ],
+      "labels": [
+        "ch2 06:28",
+        "ch2 08:09",
+        "ch2 09:50",
+        "ch2 11:31"
+      ],
+      "tile_seconds": [
+        388.8,
+        489.6,
+        590.4,
+        691.2
+      ],
+      "time_start": 388.8,
+      "time_end": 691.2,
+      "range_start": 360.0,
+      "range_end": 720.0
+    },
+    {
+      "file": "composites/ch03-seg03-panel1of1.png",
+      "chapter": 3,
+      "slug": "seg03",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-seg03-t0748s.png",
+        "010-ch03-seg03-t0849s.png",
+        "011-ch03-seg03-t0950s.png",
+        "012-ch03-seg03-t1051s.png"
+      ],
+      "labels": [
+        "ch3 12:28",
+        "ch3 14:09",
+        "ch3 15:50",
+        "ch3 17:31"
+      ],
+      "tile_seconds": [
+        748.8,
+        849.6,
+        950.4,
+        1051.2
+      ],
+      "time_start": 748.8,
+      "time_end": 1051.2,
+      "range_start": 720.0,
+      "range_end": 1080.0
+    },
+    {
+      "file": "composites/ch04-seg04-panel1of1.png",
+      "chapter": 4,
+      "slug": "seg04",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-seg04-t1108s.png",
+        "014-ch04-seg04-t1209s.png",
+        "015-ch04-seg04-t1310s.png",
+        "016-ch04-seg04-t1411s.png"
+      ],
+      "labels": [
+        "ch4 18:28",
+        "ch4 20:09",
+        "ch4 21:50",
+        "ch4 23:31"
+      ],
+      "tile_seconds": [
+        1108.8,
+        1209.6,
+        1310.4,
+        1411.2
+      ],
+      "time_start": 1108.8,
+      "time_end": 1411.2,
+      "range_start": 1080.0,
+      "range_end": 1440.0
+    },
+    {
+      "file": "composites/ch05-seg05-panel1of1.png",
+      "chapter": 5,
+      "slug": "seg05",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-seg05-t1466s.png",
+        "018-ch05-seg05-t1557s.png",
+        "019-ch05-seg05-t1649s.png",
+        "020-ch05-seg05-t1740s.png"
+      ],
+      "labels": [
+        "ch5 24:26",
+        "ch5 25:57",
+        "ch5 27:29",
+        "ch5 29:00"
+      ],
+      "tile_seconds": [
+        1466.2,
+        1557.7,
+        1649.3,
+        1740.8
+      ],
+      "time_start": 1466.2,
+      "time_end": 1740.8,
+      "range_start": 1440.0,
+      "range_end": 1767.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

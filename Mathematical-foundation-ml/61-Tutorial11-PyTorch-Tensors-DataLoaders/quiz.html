@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · Tutorial 11 : PyTorch - Tensors and Data Loaders</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · Tutorial 11 : PyTorch - Tensors and Data Loaders</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "prereq-01", "part": "prerequisites", "flavor": "definition", "anchor": "PREREQUISITES.md#p1", "prompt": "A computer vision model receives an input mini-batch tensor with shape (64, 3, 224, 224) storing 32-bit floating point pixels. What is the mathematical rank of this tensor, and what is its exact memory footprint in RAM?", "options": [{"key": "A", "text": "Rank 2 (batch and pixels); Memory: 64 x 224 bytes (~14 KB)."}, {"key": "B", "text": "Rank 3 (channels, height, width); Memory: 3 x 224 x 224 bytes (~150 KB)."}, {"key": "C", "text": "Rank 4 (axes: Batch, Channels, Height, Width); Memory: 9,633,792 floats x 4 bytes (~38.53 MB)."}, {"key": "D", "text": "Rank 4 (axes: Batch, Channels, Height, Width); Memory: 9,633,792 floats x 8 bytes (~77.07 MB)."}], "answer": "C", "whyCorrect": "The rank of a tensor equals the number of coordinate axes (here 4: B, C, H, W). The total element count is 64 * 3 * 224 * 224 = 9,633,792 scalars. In float32 (4 bytes per scalar), the memory footprint is 9,633,792 * 4 = 38,535,168 bytes (~38.53 MB).", "whyOthers": {"A": "Incorrect; batch and spatial axes are distinct tensor dimensions, not collapsed into rank 2.", "B": "Incorrect; omitting the batch dimension ignores the sample axis, which is rank 4.", "D": "Incorrect; 8 bytes corresponds to 64-bit float64, whereas standard PyTorch tensors default to float32 (4 bytes)."}, "diagram": "(B, C, H, W) -> Rank 4 -> Total Bytes = 64 * 3 * 224 * 224 * 4 B ~= 38.53 MB", "useLater": "Essential for dimension sanity checks in CNN convolutional layers in Tutorial 14."}, {"id": "prereq-02", "part": "prerequisites", "flavor": "trap", "anchor": "PREREQUISITES.md#p2", "prompt": "A developer creates a PyTorch tensor using t = torch.from_numpy(arr) where arr is a NumPy ndarray. Subsequently, the developer executes arr[0, 0] = 99.0. What is the value of t[0, 0], and why?", "options": [{"key": "A", "text": "The value is unchanged because PyTorch tensors are always immutable deep copies."}, {"key": "B", "text": "The value is 99.0 because torch.from_numpy creates a zero-copy view sharing the exact same underlying memory buffer address."}, {"key": "C", "text": "The program crashes with MemoryAccessViolation because NumPy and PyTorch heaps cannot overlap."}, {"key": "D", "text": "The value becomes NaN due to pointer desynchronization across the Python C-API."}], "answer": "B", "whyCorrect": "torch.from_numpy() points a new torch.Tensor header directly to the existing data pointer of the NumPy array without allocating new memory. In-place mutations on either structure reflect in both.", "whyOthers": {"A": "Incorrect; torch.tensor() makes a copy, but torch.from_numpy() creates a zero-copy view.", "C": "Incorrect; NumPy and PyTorch both use standard C-contiguous heap allocations and interoperate smoothly.", "D": "Incorrect; pointer sharing is fully synchronized at the operating system memory page level."}, "diagram": "arr (NumPy) ---> [ 99.0 | 20.0 | 30.0 ] <--- t (PyTorch Tensor)", "useLater": "Crucial for high-speed scientific data pipelines avoiding memory duplication."}, {"id": "prereq-03", "part": "prerequisites", "flavor": "tradeoff", "anchor": "PREREQUISITES.md#p3", "prompt": "Why do modern deep learning frameworks require hardware accelerators (GPUs) rather than relying exclusively on high-performance multi-core CPUs?", "options": [{"key": "A", "text": "Deep learning is dominated by repetitive General Matrix Multiplications (GEMM) across massive datasets; GPUs provide thousands of parallel SIMD and Tensor cores optimized for matrix throughput, whereas CPUs are optimized for low-latency sequential logic."}, {"key": "B", "text": "CPUs lack 32-bit floating point hardware, requiring software emulation."}, {"key": "C", "text": "GPUs provide lower latency for single-threaded sequential pointer chasing than CPU L1 caches."}, {"key": "D", "text": "Reverse-mode automatic differentiation cannot be mathematically formulated on CPU architectures."}], "answer": "A", "whyCorrect": "Matrix multiplication requires O(M^3) arithmetic operations that are embarrassingly parallel. GPUs utilize thousands of arithmetic execution units and high-bandwidth memory (HBM) to deliver teraflops of throughput.", "whyOthers": {"B": "Incorrect; modern CPUs have robust IEEE 754 floating point vector units (AVX-512).", "C": "Incorrect; CPUs have far lower single-thread latency and larger hierarchical caches than GPUs.", "D": "Incorrect; autograd executes identically on CPU and GPU; the only difference is execution speed."}, "diagram": "CPU: Few fast complex cores (Low throughput, low latency) vs GPU: 10,000 parallel SIMD cores (High throughput)", "useLater": "Guides hardware deployment choices for training vs latency-critical edge inference."}, {"id": "prereq-04", "part": "prerequisites", "flavor": "connect", "anchor": "PREREQUISITES.md#p4", "prompt": "Tensor A has shape (3, 1, 5) and Tensor B has shape (2, 5). Under PyTorch broadcasting semantics, what is the shape of the resulting tensor A + B?", "options": [{"key": "A", "text": "Addition is invalid because tensors must possess identical rank and shapes."}, {"key": "B", "text": "The shape is (3, 2, 10) due to inner dimension concatenation."}, {"key": "C", "text": "The shape is (5, 5) because dimension 1 is collapsed."}, {"key": "D", "text": "The shape is (3, 2, 5) because Tensor B is prepended with a singleton dimension (1, 2, 5) and both expand virtually along size-1 axes."}], "answer": "D", "whyCorrect": "Broadcasting right-aligns dimensions: A is (3, 1, 5) and B is prepended to (1, 2, 5). Along each axis, dimensions match or expand from 1: axis 0 is max(3, 1)=3, axis 1 is max(1, 2)=2, axis 2 is max(5, 5)=5, yielding (3, 2, 5).", "whyOthers": {"A": "Incorrect; broadcasting explicitly allows arithmetic across mismatched shapes with compatible trailing dimensions.", "B": "Incorrect; broadcasting does not concatenate dimensions; it aligns coordinate axes.", "C": "Incorrect; broadcasting never sums or collapses dimensions; reductions do."}, "diagram": "(3, 1, 5) + (1, 2, 5) ===> (3, 2, 5) with zero stride expansion along size-1 axes", "useLater": "Used constantly when adding bias vectors b in R^d to batch matrices X in R^{B x d}."}, {"id": "notes-01", "part": "notes", "flavor": "compare", "anchor": "NOTES.md#topic-1", "prompt": "What is the critical memory difference between constructing a tensor via torch.tensor(py_list) versus torch.from_numpy(np_arr)?", "options": [{"key": "A", "text": "torch.tensor(py_list) generates an autograd variable while from_numpy generates a static tensor."}, {"key": "B", "text": "torch.tensor(py_list) allocates a new contiguous memory buffer and copies all elements, whereas torch.from_numpy(np_arr) constructs a zero-copy view sharing the existing memory pointer."}, {"key": "C", "text": "torch.tensor(py_list) automatically moves memory to GPU VRAM, whereas from_numpy stays on CPU."}, {"key": "D", "text": "There is no difference; both functions allocate new memory and perform deep copies."}], "answer": "B", "whyCorrect": "torch.tensor() always copies memory, whereas torch.from_numpy() creates an O(1) view sharing the NumPy array's existing memory buffer without memory reallocation.", "whyOthers": {"A": "Incorrect; both functions return standard torch.Tensor instances with requires_grad=False by default.", "C": "Incorrect; both functions construct tensors in host CPU RAM by default.", "D": "Incorrect; from_numpy is explicitly designed as a zero-copy memory bridge."}, "diagram": "py_list -> [Allocate New Buffer & Copy] vs np_arr -> [Share Same Data Pointer]", "useLater": "Essential for preventing OOM when interfacing NumPy data pipelines with PyTorch."}, {"id": "notes-02", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#topic-2", "prompt": "A practitioner creates tensor a = torch.ones(3, 3) on the CPU and tensor b = torch.ones(3, 3).to('cuda') on the GPU. What occurs when executing c = a + b?", "options": [{"key": "A", "text": "PyTorch automatically copies tensor a to GPU memory and executes the addition."}, {"key": "B", "text": "PyTorch converts both tensors to native Python lists and executes on CPU."}, {"key": "C", "text": "PyTorch raises RuntimeError: Expected all tensors to be on the same device, enforcing the strict Device Matching Law."}, {"key": "D", "text": "PyTorch executes the addition asynchronously and returns a pinned host tensor."}], "answer": "C", "whyCorrect": "PyTorch strictly forbids implicit cross-device arithmetic to prevent hidden PCIe bus transfer bottlenecks from silently degrading training throughput.", "whyOthers": {"A": "Incorrect; PyTorch never performs silent cross-device memory transfers during arithmetic.", "B": "Incorrect; PyTorch does not convert tensors to Python lists during binary operations.", "D": "Incorrect; cross-device addition is rejected at the ATen dispatch level with a RuntimeError."}, "diagram": "CPU RAM [ a ] + GPU VRAM [ b ] ===> [RuntimeError: Expected all tensors to be on the same device!]", "useLater": "One of the most common workplace debugging postmortems in distributed deep learning."}, {"id": "notes-03", "part": "notes", "flavor": "map", "anchor": "NOTES.md#topic-3", "prompt": "Given a 2D tensor Z with shape (3, 4), what are the resulting shapes of torch.cat([Z, Z], dim=0) and torch.cat([Z, Z, Z], dim=1) respectively?", "options": [{"key": "A", "text": "dim=0 yields shape (6, 4) (batch stacking); dim=1 yields shape (3, 12) (feature stacking)."}, {"key": "B", "text": "dim=0 yields shape (3, 8); dim=1 yields shape (9, 4)."}, {"key": "C", "text": "Both yield shape (6, 12) due to Cartesian expansion."}, {"key": "D", "text": "dim=0 yields (3, 4, 2); dim=1 yields (3, 4, 3) by appending a new rank axis."}], "answer": "A", "whyCorrect": "Concatenation along dim=0 sums dimension sizes along axis 0 (3+3=6, keeping columns at 4 -> (6, 4)). Concatenation along dim=1 sums dimension sizes along axis 1 (4+4+4=12, keeping rows at 3 -> (3, 12)).", "whyOthers": {"B": "Incorrect; dim=0 affects rows, not columns; dim=1 affects columns, not rows.", "C": "Incorrect; concatenation only affects the single specified target dimension.", "D": "Incorrect; adding a new axis is stack(), whereas cat() concatenates along an existing axis."}, "diagram": "cat([Z, Z], dim=0): [3, 4] + [3, 4] -> [6, 4] | cat([Z, Z, Z], dim=1): [3, 4] + [3, 4] + [3, 4] -> [3, 12]", "useLater": "Foundational for skip connections in U-Nets and multi-modal feature fusion."}, {"id": "notes-04", "part": "notes", "flavor": "compare", "anchor": "NOTES.md#topic-4", "prompt": "PyTorch provides multiple syntax options for matrix multiplication: @, torch.matmul(A, B), and torch.mm(A, B, out=Y). What is the primary engineering advantage of using torch.mm(A, B, out=Y) in high-throughput inference engines?", "options": [{"key": "A", "text": "torch.mm computes higher-order curvature terms during the forward pass."}, {"key": "B", "text": "torch.mm operates exclusively on sparse CSR matrices."}, {"key": "C", "text": "torch.mm automatically quantizes floats into 8-bit integers."}, {"key": "D", "text": "torch.mm writes the product directly into pre-allocated memory buffer Y, eliminating repeated dynamic memory allocation and garbage collection overhead."}], "answer": "D", "whyCorrect": "In real-time inference loops, dynamic memory allocations cause memory fragmentation and trigger Python garbage collection pauses. Passing a pre-allocated tensor to out=Y reuses existing memory buffers.", "whyOthers": {"A": "Incorrect; torch.mm is purely a first-order linear GEMM operation.", "B": "Incorrect; torch.mm operates on dense 2D floating-point tensors.", "C": "Incorrect; torch.mm does not alter the underlying numeric dtype."}, "diagram": "Dynamic @: [Alloc Buffer] -> [Compute] -> [Free Buffer] vs mm(out=Y): [Reuse Existing Buffer Y]", "useLater": "Standard optimization in TensorRT, ONNX runtime, and low-latency serving microservices."}, {"id": "notes-05", "part": "notes", "flavor": "connect", "anchor": "NOTES.md#topic-4", "prompt": "How does Tutorial 11 connect element-wise Hadamard multiplication (*, torch.mul) to the spatial 2D convolution operation derived in Lectures 43 and 44?", "options": [{"key": "A", "text": "Convolution is computed via outer products and matrix determinant evaluations."}, {"key": "B", "text": "Convolution between a receptive field patch P and filter kernel K is algebraically decomposed into an element-wise Hadamard product followed by a scalar summation reduction: (P * K).sum()."}, {"key": "C", "text": "Convolution requires inverting the filter kernel matrix using LU decomposition."}, {"key": "D", "text": "Convolution cannot be expressed using Hadamard products because it requires Fourier space transformations."}], "answer": "B", "whyCorrect": "2D spatial convolution sliding window evaluates Y = sum_{u,v} W_{uv} X_{uv}. In PyTorch, this equals the coordinate-wise Hadamard product (P * K) followed by the sum reduction .sum().", "whyOthers": {"A": "Incorrect; convolution does not compute outer products or determinants.", "C": "Incorrect; convolution filters are not inverted; they are correlated/convolved directly.", "D": "Incorrect; while FFT convolution exists for large kernels, standard spatial convolution is exactly Hadamard plus sum."}, "diagram": "Y = sum_{u, v} W_{uv} X_{uv} <===> (P * K).sum()", "useLater": "Bridges tensor primitives directly to CNN architectures in Lecture 43/44 and Tutorial 14."}, {"id": "notes-06", "part": "notes", "flavor": "tradeoff", "anchor": "NOTES.md#topic-6", "prompt": "When subclassing torch.utils.data.Dataset for a large commercial dataset, why is it mandatory to perform image reading and transformation inside __getitem__ rather than loading all images during __init__?", "options": [{"key": "A", "text": "PyTorch forbids storing tensors as class instance attributes."}, {"key": "B", "text": "Loading images in __init__ breaks multi-GPU distributed data parallelism synchronization."}, {"key": "C", "text": "Loading all images in __init__ consumes hundreds of gigabytes of RAM, causing system Out-Of-Memory (OOM) crashes; lazy loading in __getitem__ bounds memory usage to the current mini-batch size."}, {"key": "D", "text": "The DataLoader cannot shuffle datasets if samples are loaded during __init__."}], "answer": "C", "whyCorrect": "Decoupled dataset indexing stores only lightweight metadata (strings/integers) in __init__. Lazy loading in __getitem__ materializes pixel arrays only when requested by the active batch, ensuring RAM consumption is bounded and independent of dataset cardinality.", "whyOthers": {"A": "Incorrect; Python and PyTorch allow arbitrary class attributes.", "B": "Incorrect; DDP can synchronize eager datasets, but memory exhaustion crashes the node before training begins.", "D": "Incorrect; DataLoader can shuffle in-memory lists, but system RAM is exhausted for large datasets."}, "diagram": "Eager Ingestion: O(N * ImageSize) [OOM CRASH] vs Lazy Ingestion: O(B * ImageSize) [Deterministic & Safe]", "useLater": "Universal production standard across all industrial PyTorch vision and NLP pipelines."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

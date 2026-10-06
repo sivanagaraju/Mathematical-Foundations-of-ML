@@ -1,0 +1,20 @@
+# Glossary & Mathematical Dictionary: ERM & Error Backpropagation
+
+> **Package:** `55-Lec42-ERM-Neural-Networks-Backpropagation`  
+> **Course:** NPTEL / IISc — Mathematical Foundations of Machine Learning  
+> **Instructor:** Prof. Prathosh A P (IISc Bengaluru)  
+> **Skill Standard:** Canonical 7-Pillar Production Learning Suite (`/youtube-lecture-tutor`)
+
+This dictionary establishes standard terminology, exact mathematical formulas, genuine spoken English pronunciations, intuitive plain-English meanings, and cross-references to the core repository knowledge base.
+
+| Term / Symbol | Spoken English (Phonetics) | Category | Formal Mathematical Definition | Plain-English Intuition | MathsTerms Link |
+|:--------------|:---------------------------|:---------|:-------------------------------|:------------------------|:----------------|
+| **Empirical Risk** $\hat{R}(\theta)$ | "em-PEER-ih-kul RISK of THAY-tuh" | Optimization | $\hat{R}(\theta) = \frac{1}{n} \sum_{i=1}^n \ell(y_i, h_\theta(x_i))$ | The average penalty or error a model makes across a finite training dataset. | [`08-Loss_Functions.md`](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/08-Loss_Functions.md) |
+| **Pre-activation** $z_j^{[l]}$ | "pree-ak-tih-VAY-shun ZEE" | Architecture | $z_j^{[l]} = \sum_k w_{jk}^{[l]} a_k^{[l-1]} + b_j^{[l]}$ | The raw linear combination of incoming inputs and weights before applying non-linearity. | [`01-Vectors_and_Matrices.md`](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) |
+| **Post-activation** $a_j^{[l]}$ | "post-ak-tih-VAY-shun AY" | Architecture | $a_j^{[l]} = \sigma(z_j^{[l]})$ | The squashed non-linear feature produced by running raw pre-activation through an activation function. | [`05-Activation_Functions.md`](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/05-Activation_Functions.md) |
+| **Error Sensitivity** $\delta_j^{[l]}$ | "AIR-er sen-sih-TIV-ih-tee DEL-tuh" | Calculus / Backprop | $\delta_j^{[l]} \equiv \frac{\partial \hat{R}}{\partial z_j^{[l]}}$ | How much the overall network loss changes when the pre-activation of neuron $j$ is nudged by one unit. | [`04-Chain_Rule_and_Backpropagation.md`](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md) |
+| **Error Backpropagation** | "AIR-er BACK prop-uh-GAY-shun" | Algorithm | $\delta_j^{[l]} = \left( \sum_i \delta_i^{[l+1]} w_{ij}^{[l+1]} \right) \sigma'(z_j^{[l]})$ | An efficient recursive algorithm that transmits output error signals backward through network layers. | [`04-Chain_Rule_and_Backpropagation.md`](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/04-Chain_Rule_and_Backpropagation.md) |
+| **Outer Product Gradient** | "OW-ter PROD-ukt GRAY-dee-unt" | Linear Algebra | $\nabla_{W^{[l]}} \hat{R} = \delta^{[l]} (a^{[l-1]})^T$ | Multiplying a column error vector by a row activation vector to compute gradients for every switch in a layer. | [`01-Vectors_and_Matrices.md`](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) |
+| **Hadamard Product** $\odot$ | "HAD-uh-mard PROD-ukt / CIR-cul-dot" | Linear Algebra | $(u \odot v)_i = u_i \cdot v_i$ | Multiplying two arrays element-by-element without summing across dimensions. | [`04-Tensors_and_Shapes.md`](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| **Gradient Descent** | "GRAY-dee-unt deh-SENT" | Optimization | $\theta_{t+1} = \theta_t - \eta \nabla_\theta \hat{R}(\theta_t)$ | Walking downhill step-by-step in parameter space along the direction of steepest loss decrease. | [`09-Gradient_Descent.md`](../../MathsTerms/02-Multivariate-Calculus-and-Optimization/09-Gradient_Descent.md) |
+| **Weight Decay** | "WAYT deh-KAY" | Regularization | $\Omega(W) = \frac{1}{2} \|W\|_F^2 \implies \nabla_W \Omega = W$ | Constraining weight magnitudes during training to prevent overfitting, mathematically identical to Gaussian prior MAP. | [`02-Vector_Norms_and_Inner_Products.md`](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/02-Vector_Norms_and_Inner_Products.md) |
