@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A practical architecture report for long-running pipeline APIs orchestrated by AutoSys on OpenShift, with an offline interactive walkthrough.">
+<title>AutoSys + OpenShift | Reliable long-running pipeline APIs</title>
+<style>
+:root{--ink:#152536;--muted:#526578;--bg:#f2f5f8;--paper:#fff;--line:#d8e1e9;--navy:#0c2339;--blue:#255bb4;--teal:#007d75;--orange:#9b4f00;--red:#b13445;--soft:#e8f5f2;--mono:ui-monospace,SFMono-Regular,Consolas,monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:var(--blue);text-underline-offset:3px}button,select{font:inherit;min-height:44px}button{background:var(--navy);color:white;border:1px solid var(--navy);border-radius:8px;padding:8px 16px;cursor:pointer}button.secondary{background:#fff;color:var(--navy);border-color:var(--line)}button:disabled{opacity:.45;cursor:default}button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #e6ab2d;outline-offset:3px}select{background:#fff;border:1px solid #99acbd;border-radius:6px;padding:8px;max-width:100%;color:var(--ink)}
+.hero{background:var(--navy);color:#fff;padding:48px max(24px,calc((100vw - 1160px)/2));border-bottom:6px solid #32b9a8}.eyebrow{font-size:13px;letter-spacing:1.7px;text-transform:uppercase;color:#8ae2d4;font-weight:750}.hero h1{font-size:clamp(29px,4.5vw,48px);line-height:1.16;max-width:910px;margin:14px 0 20px}.hero p{max-width:850px;color:#d7e3ed;font-size:18px}.meta{font-size:13px;color:#b3c6d7}.hero .pill{display:inline-block;padding:5px 12px;border:1px solid #446174;border-radius:20px;color:#cceae6;margin:0 8px 12px 0;font-size:13px}.layout{max-width:1208px;margin:auto;display:grid;grid-template-columns:218px minmax(0,1fr);gap:28px;padding:28px 24px 60px}.sidebar{align-self:start;position:sticky;top:20px}.sidebar nav{display:flex;flex-direction:column;gap:6px}.sidebar a{color:var(--muted);text-decoration:none;font-size:14px;padding:7px 10px;border-left:3px solid transparent}.sidebar a:hover{color:var(--blue);border-left-color:var(--teal);background:white}.sidebar button{margin-top:20px;width:100%}.sidebar p{font-size:12px;color:var(--muted);padding:0 10px}main{min-width:0}.section{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:30px;margin-bottom:24px;scroll-margin-top:20px}h2{font-size:25px;line-height:1.3;margin:0 0 15px;letter-spacing:-.4px}h3{font-size:18px;line-height:1.4;margin:25px 0 10px}p{margin:10px 0 15px}.lead{font-size:18px}.num{color:var(--teal);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;font-weight:800;margin-bottom:8px}.callout{border-left:4px solid var(--teal);background:var(--soft);padding:14px 18px;margin:20px 0}.callout.warning{border-color:#bb710b;background:#fff5e5}.callout strong{display:block;margin-bottom:4px}.small,figcaption{font-size:13px;color:var(--muted)}.pair{display:grid;grid-template-columns:1fr 1fr;gap:20px}.pair>div{min-width:0}.panel{padding:18px;border-radius:10px;border:1px solid var(--line);background:#f8fafc}.panel h3{margin-top:0}.table-wrap{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;background:#edf3f8;font-size:13px}th,td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}code{font-family:var(--mono);font-size:.87em;background:#eef2f6;padding:2px 4px;border-radius:4px;overflow-wrap:anywhere}pre{background:#10283e;color:#e1edf6;padding:20px;border-radius:9px;overflow-x:auto;font-size:12.5px;line-height:1.6;tab-size:4;margin:14px 0}pre code{background:transparent;color:inherit;padding:0;overflow-wrap:normal;font-size:inherit}li{margin:7px 0}ul,ol{padding-left:23px}figure{margin:20px 0}.flow{display:grid;grid-template-columns:1fr 70px 1fr 70px 1fr;align-items:center;gap:8px}.node{border:1px solid #b2c3d1;border-top:4px solid var(--blue);border-radius:8px;padding:15px 12px;min-width:0;background:#f8fbff}.node b{display:block;line-height:1.35;margin-bottom:8px}.node span{display:block;font-size:13px;color:var(--muted)}.node.green{border-top-color:var(--teal);background:#f1faf7}.arrow{color:var(--blue);text-align:center;font-size:25px;line-height:1.3}.arrow small{display:block;font-size:11px;color:var(--muted)}.flow-row{margin:12px 0}.branch{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}.branch .node{min-height:112px}.connector{font-size:13px;color:var(--teal);font-weight:650;margin:12px 0}.state-flow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.state{display:inline-block;padding:9px 15px;border:1px solid #bacbd8;border-radius:7px;background:#f4f8fb;font-size:13px;font-family:var(--mono);font-weight:700}.state.good{background:#e6f6ef;border-color:#6bb493;color:#075e45}.state.bad{background:#fff0f1;border-color:#d9939d;color:#902a3b}.terminal{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.seq{display:grid;gap:0}.seq-row{display:grid;grid-template-columns:62px 1fr;gap:16px;border-bottom:1px solid var(--line);padding:14px 0}.seq-row:last-child{border:0}.time{font-family:var(--mono);font-size:12px;color:var(--teal);padding-top:3px;font-weight:750}.seq-row p{margin:3px 0;font-size:14px}.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:12px 0}.swatch{display:inline-block;width:12px;height:12px;background:var(--blue);vertical-align:middle;margin-right:6px}.swatch.green{background:var(--teal)}.lane{display:grid;grid-template-columns:155px 1fr;gap:12px;align-items:center;margin:15px 0;font-size:13px}.track{height:34px;background:#eaf0f5;position:relative;border-radius:5px;overflow:hidden}.bar{position:absolute;top:0;bottom:0;left:0;background:var(--blue);color:white;display:flex;align-items:center;padding:0 10px;font-size:12px;white-space:nowrap}.bar.worker{background:var(--teal)}.pulses{height:100%;background:repeating-linear-gradient(to right,var(--blue) 0,var(--blue) 3px,transparent 3px,transparent 32px)}.axis{display:flex;justify-content:space-between;margin-left:167px;font-size:12px;color:var(--muted)}
+.sim-controls{display:flex;flex-wrap:wrap;align-items:end;gap:12px}.sim-controls label{flex:1;min-width:200px;font-size:13px;font-weight:700}.sim-controls label select{display:block;width:100%;margin-top:5px}.sim-controls .buttons{display:flex;gap:8px;flex-wrap:wrap}.sim-heading{display:flex;gap:15px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin:20px 0 10px}.badge{font-size:12px;border-radius:20px;padding:5px 10px;background:#e8f2fc;color:#174a84;font-weight:750}.sim-actors{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.actor{padding:16px;border:1px solid var(--line);border-radius:8px;background:#f9fbfd;min-width:0}.actor .label{font-size:12px;color:var(--muted);display:block;margin-bottom:9px}.actor b{display:block;font-size:15px;line-height:1.4;overflow-wrap:anywhere}.sim-detail{padding:15px 0;border-top:1px solid var(--line);min-height:100px}.sim-detail p{margin:5px 0}.sim-stats{font-size:13px;color:var(--muted);display:flex;gap:18px;flex-wrap:wrap}.event-log{padding-left:21px;font-size:13px;color:var(--muted)}.event-log li{margin:5px 0}.event-log li:last-child{color:var(--ink);font-weight:600}details{margin:18px 0;border-top:1px solid var(--line);padding-top:12px}summary{cursor:pointer;font-weight:700;font-size:15px;min-height:36px;padding:5px 0}.ref-list{font-size:14px}.ref-list li{margin:15px 0}.footer{color:var(--muted);font-size:12px;padding:0 3px}sup a{font-size:11px;text-decoration:none}.no-js{padding:12px;background:#fff4e3}.key-rule{font-family:var(--mono);font-size:14px;line-height:1.8;background:#eef6f5;padding:16px;margin:15px 0;overflow-wrap:anywhere}
+@media(max-width:950px){.layout{grid-template-columns:1fr;max-width:900px}.sidebar{position:static}.sidebar nav{flex-direction:row;flex-wrap:wrap;gap:4px}.sidebar a{padding:6px 10px;background:#fff;border:1px solid var(--line);border-radius:5px}.sidebar button{width:auto;margin:12px 0 0}.sidebar p{display:inline-block}.section{padding:25px}}
+@media(max-width:620px){body{font-size:15px}.hero{padding:30px 20px}.hero p{font-size:16px}.layout{padding:18px 12px 40px;gap:18px}.section{padding:21px 17px}h2{font-size:22px}.pair,.branch,.sim-actors{grid-template-columns:1fr}.flow{grid-template-columns:1fr;gap:7px}.arrow{font-size:23px;transform:none}.arrow .dir{display:inline-block;transform:rotate(90deg)}.arrow small{display:inline;margin-left:10px}.lane{grid-template-columns:1fr;gap:5px}.axis{margin-left:0}.actor{padding:13px}.sim-detail{min-height:0}pre{font-size:12px;padding:14px}.seq-row{grid-template-columns:50px 1fr;gap:10px}.sim-controls label{min-width:100%}.sidebar p{display:block;padding:0}th,td{padding:9px;min-width:90px}.hero .pill{font-size:12px}.lead{font-size:16px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{body{background:white;font-size:10.5pt}.hero{background:white;color:var(--ink);padding:0 0 20px;border-bottom:2px solid var(--teal)}.hero p,.hero .meta{color:var(--muted)}.eyebrow{color:var(--teal)}.hero h1{font-size:28pt}.hero .pill{color:var(--muted);border-color:var(--line)}.layout{display:block;padding:18px 0;max-width:none}.sidebar,.sim-controls{display:none}.section{border:none;border-radius:0;padding:0 0 18px;margin:20px 0;break-inside:auto}.panel,.node,.actor,pre,.callout,tr{break-inside:avoid}h2,h3{break-after:avoid}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f4f7;color:var(--ink);font-size:8.5pt}.sim-detail{min-height:0}a{color:var(--ink)}.bar{-webkit-print-color-adjust:exact;print-color-adjust:exact}details>summary{list-style:none}.section{scroll-margin:0}}
+</style>
+</head>
+<body>
+<header class="hero">
+ <div class="eyebrow">Architecture report · Prepared for Siva</div>
+ <h1>Reliable pipeline execution with<br>AutoSys + OpenShift</h1>
+ <p>Submit a pipeline in seconds. Execute it independently. Let AutoSys report success only after the data work has actually succeeded.</p>
+ <span class="pill">Short HTTP calls</span><span class="pill">Durable run tracking</span><span class="pill">Safe retries</span><span class="pill">Interactive walkthrough</span>
+ <div class="meta">6 October 2026 · Self-contained HTML · Works offline · Architecture proposal, not a deployment record</div>
+</header>
+<div class="layout">
+ <aside class="sidebar" aria-label="Report navigation">
+  <nav><a href="#recommendation">1 · Recommendation</a><a href="#problem">2 · What changes</a><a href="#architecture">3 · Architecture</a><a href="#walkthrough">4 · Try the scenarios</a><a href="#contract">5 · API contract</a><a href="#reliability">6 · Reliability mechanics</a><a href="#implementation">7 · Implementation examples</a><a href="#operations">8 · Timeouts & operations</a><a href="#alternatives">9 · Other approaches</a><a href="#validation">10 · Prove it works</a><a href="#references">Official references</a></nav>
+  <button id="print-btn" type="button">Print / save as PDF</button>
+  <p>The simulator is local. It does not call your API or cluster.</p>
+ </aside>
+ <main>
+ <section class="section" id="recommendation">
+  <div class="num">01 / Main recommendation</div><h2>Keep execution outside the request lifecycle</h2>
+  <p class="lead">For a pipeline that takes 10–60 minutes, use <strong>submit → run ID → poll status → final exit code</strong>. The submission API records the request durably and returns quickly. A separate worker performs the pipeline.</p>
+  <div class="callout"><strong>AutoSys still waits. The HTTP connection does not.</strong>The wrapper stays running and sleeps between status checks. It returns exit code <code>0</code> only for a durable <code>SUCCEEDED</code> result. Acceptance, a running pod, and an HTTP <code>200</code> status lookup are separate milestones.</div>
+  <p>Think of a parcel shipment: obtaining a tracking number means the shipment has been registered; the delivery status tells you when the work is complete. The run ID is your pipeline’s tracking number.</p>
+  <div class="pair"><div class="panel"><h3>What you described</h3><ul><li>A request supplies a pipeline name.</li><li>The API retrieves source-to-destination metadata and performs a long process.</li><li>AutoSys invokes it through your OpenShift setup.</li><li>AutoSys needs the real completion result.</li></ul></div><div class="panel"><h3>Assumptions for this proposal</h3><ul><li>You can modify the API and add shared durable storage.</li><li>Your execution code can run in a separate worker.</li><li>A Kubernetes Job is suitable if each run needs its own pod.</li><li>Pipeline names, endpoints, timings and deployment snippets here are illustrative.</li></ul></div></div>
+  <p class="small">AutoSys, its agent, your API deployment, and a pipeline worker are different roles. Your organization’s launcher or integration may create pods; a JIL definition alone does not tell us which component creates them. If the current pod is just a launcher, create the execution worker separately.</p>
+ </section>
+ <section class="section" id="problem">
+  <div class="num">02 / Before and after</div><h2>The fragile part is one long request</h2>
+  <p>A synchronous request can work in a controlled environment. Its completion depends on a chain of client, proxy, route and server timeouts, plus connection and process survival. An async web framework may handle waiting efficiently, but it still leaves the result tied to that request.</p>
+  <div class="table-wrap"><table><thead><tr><th>Concern</th><th>One long request</th><th>Submit and monitor</th></tr></thead><tbody><tr><td>Connection drops at minute 25</td><td>The caller may not know whether work stopped, continued or finished.</td><td>The caller queries the same durable run.</td></tr><tr><td>Submission response is lost</td><td>A blind retry can start duplicate work.</td><td>The same idempotency key returns the same run.</td></tr><tr><td>API pod restarts</td><td>In-process execution may be interrupted.</td><td>The worker and run record survive independently, subject to their own infrastructure.</td></tr><tr><td>Final success</td><td>Usually the final response, if it arrives.</td><td>The run’s committed terminal state, translated to the wrapper exit code.</td></tr><tr><td>Resource use</td><td>Long-lived request state; blocked threads depend on framework.</td><td>Short requests; a lightweight monitoring process still exists.</td></tr></tbody></table></div>
+  <figure aria-label="Illustrative thirty-minute timeline comparing a continuous HTTP request with short polling requests">
+   <div class="legend"><span><i class="swatch"></i>HTTP activity</span><span><i class="swatch green"></i>Pipeline execution</span></div>
+   <div class="lane"><b>Current HTTP request</b><div class="track"><div class="bar" style="width:100%">Connection held for ~30 minutes</div></div></div>
+   <div class="lane"><b>Proposed HTTP calls</b><div class="track"><div class="pulses"></div></div></div>
+   <div class="lane"><b>Independent worker</b><div class="track"><div class="bar worker" style="width:100%">Execute → validate → commit</div></div></div>
+   <div class="axis"><span>Submit · 0 min</span><span>Finish · 30 min</span></div>
+   <figcaption>Illustrative, not measured: polling is shown as pulses. Both approaches take roughly the same pipeline time. The proposed design improves recovery and tracking, not the ETL runtime itself.</figcaption>
+  </figure>
+  <p>OpenShift supports route timeout configuration. Increasing it may be a temporary mitigation, but every other timeout layer still needs review. Use your deployed OpenShift version’s documentation and actual ingress settings. <sup><a href="#ref3">[3]</a></sup></p>
+ </section>
+ <section class="section" id="architecture">
+  <div class="num">03 / Reference architecture</div><h2>Separate orchestration, tracking and execution</h2>
+  <figure>
+   <div class="flow flow-row"><div class="node"><b>AutoSys wrapper</b><span>Submit once logically; monitor; map terminal state to exit code.</span></div><div class="arrow"><span class="dir">→</span><small>POST / GET</small></div><div class="node"><b>Pipeline API</b><span>Authenticate, validate, deduplicate and expose run status.</span></div><div class="arrow"><span class="dir">→</span><small>transaction</small></div><div class="node green"><b>Shared run database</b><span>Run record + durable dispatch intent, written together.</span></div></div>
+   <div class="connector">From durable dispatch intent ↓</div>
+   <div class="flow flow-row"><div class="node green"><b>Dispatcher / reconciler</b><span>Claims intent; creates or locates the deterministic Job; repairs gaps.</span></div><div class="arrow"><span class="dir">→</span><small>create / find</small></div><div class="node green"><b>OpenShift worker Job</b><span>Fetch metadata; read source; transform; stage and publish output.</span></div><div class="arrow"><span class="dir">→</span><small>persist result</small></div><div class="node green"><b>Shared run database</b><span>Phase, attempt, heartbeat, error and verified final result.</span></div></div>
+   <figcaption>The database shown twice is one shared store. The API reads it for status. Heavy execution happens in the worker. A queue can replace database dispatch scanning if you already operate one; keep the handoff durable.</figcaption>
+  </figure>
+  <h3>A 30-minute example</h3>
+  <div class="seq"><div class="seq-row"><span class="time">00:00</span><div><b>Submit DAILY_BALANCE_LOAD</b><p>AutoSys starts the wrapper. It posts the pipeline name, business date and stable invocation ID.</p></div></div><div class="seq-row"><span class="time">00:02*</span><div><b>Accept durably</b><p>The API commits run <code>r-001</code> and dispatch intent, then returns <code>202 Accepted</code>. The wrapper remains running.</p></div></div><div class="seq-row"><span class="time">00:10*</span><div><b>Start the worker</b><p>The dispatcher creates Job <code>pipeline-r-001</code>. The worker records <code>RUNNING</code> and processes the pipeline.</p></div></div><div class="seq-row"><span class="time">00:30<br>…</span><div><b>Monitor with short calls</b><p>Approximately every 30 seconds, <code>GET /runs/r-001</code> reports the latest durable state. Temporary network failures trigger bounded retries.</p></div></div><div class="seq-row"><span class="time">30:00*</span><div><b>Publish and finalize</b><p>Output is committed, completion checks pass, and <code>SUCCEEDED</code> is stored. The wrapper observes it and exits <code>0</code>; AutoSys can release dependent jobs.</p></div></div></div>
+  <p class="small">*Illustrative timings. Polling adds up to roughly one polling interval to discovery under normal conditions. Worker startup, queueing and outages may add delay.</p>
+ </section>
+ <section class="section" id="walkthrough">
+  <div class="num">04 / Interactive walkthrough</div><h2>Step through success and recovery</h2>
+  <p>Select a scenario, then advance through the events. These are deterministic teaching examples. They show the behavior the implementation should provide.</p>
+  <noscript><p class="no-js">Enable JavaScript for the simulator. The architecture, contracts, examples and failure matrix below remain readable without it.</p></noscript>
+  <div class="sim-controls"><label for="scenario">Scenario<select id="scenario"><option value="success">Normal success</option><option value="lost">Submission reply is lost</option><option value="restart">API pod restarts</option><option value="failure">Pipeline fails</option><option value="deadline">Monitoring deadline expires</option></select></label><div class="buttons"><button class="secondary" id="back" type="button">Back</button><button id="next" type="button">Next step</button><button class="secondary" id="reset" type="button">Reset</button></div></div>
+  <div class="sim-heading"><b id="sim-title">Ready to submit</b><span class="badge" id="sim-step">Step 1 of 5</span></div>
+  <div class="sim-actors"><div class="actor"><span class="label">AutoSys / wrapper</span><b id="sim-auto">RUNNING · wrapper starts</b></div><div class="actor"><span class="label">API / durable record</span><b id="sim-api">No run yet</b></div><div class="actor"><span class="label">Execution worker</span><b id="sim-worker">Not launched</b></div></div>
+  <div class="sim-detail" aria-live="polite" aria-atomic="true"><b id="sim-event">The wrapper has a stable invocation key.</b><p id="sim-explanation">The same key is reused if submission must be retried.</p></div>
+  <div class="sim-stats"><span id="sim-count">Logical runs: 0</span><span id="sim-exit">Wrapper exit: none</span></div>
+  <ol class="event-log" id="event-log" aria-label="Scenario event history"></ol>
+  <div class="callout warning"><strong>A monitoring failure is not a pipeline verdict.</strong>If the wrapper times out, it can exit nonzero while the pipeline continues. Operators must inspect the same run; resubmission with the same key attaches to it. Cancellation is a separate, explicit operation.</div>
+ </section>
+ <section class="section" id="contract">
+  <div class="num">05 / Proposed API contract</div><h2>Two essential endpoints</h2>
+  <p>This contract is a design choice for your service. HTTP <code>202</code> indicates acceptance, not completion; HTTP itself does not later deliver another final status for the original request. <sup><a href="#ref1">[1]</a></sup></p>
+  <h3>1. Submit a logical run</h3>
+  <pre><code>POST /runs
+Authorization: Bearer &lt;service-credential&gt;
+Idempotency-Key: &lt;stable-key-for-this-invocation&gt;
+Content-Type: application/json
+
+{
+  "pipeline_name": "DAILY_BALANCE_LOAD",
+  "logical_date": "2026-10-06",
+  "invocation_id": "scheduled-2026-10-06-v1"
+}
+
+HTTP/1.1 202 Accepted
+Location: /runs/r-001
+Cache-Control: no-store
+
+{
+  "schema_version": 1,
+  "run_id": "r-001",
+  "state": "QUEUED",
+  "status_url": "/runs/r-001"
+}</code></pre>
+  <p>Commit the run and dispatch intent <em>before</em> returning <code>202</code>. For the same key and same canonical payload, return the existing run (for example <code>200</code>) without launching another. For the same key with a different payload, return <code>409 Conflict</code>. Invalid metadata or unauthorized callers receive an appropriate error, not acceptance.</p>
+  <h3>2. Inspect that run</h3>
+  <pre><code>GET /runs/r-001
+
+HTTP/1.1 200 OK
+Cache-Control: no-store
+
+{
+  "schema_version": 1,
+  "run_id": "r-001",
+  "pipeline_name": "DAILY_BALANCE_LOAD",
+  "state": "RUNNING",
+  "phase": "TRANSFORM",
+  "attempt": 1,
+  "heartbeat_at": "2026-10-06T04:35:00Z",
+  "result": null,
+  "error": null
+}</code></pre>
+  <p>A successful status lookup returns <code>200</code> even when the pipeline is running or failed. The wrapper must inspect <code>state</code>. On success, <code>result</code> can include output identifiers and reconciliation counts. On failure, return a stable error code and a safe message; retain detailed logs in your observability system.</p>
+  <h3>A small state machine</h3>
+  <div class="state-flow" aria-label="Normal state progression: queued to running to succeeded"><span class="state">QUEUED</span><span aria-hidden="true">→</span><span class="state">RUNNING</span><span aria-hidden="true">→</span><span class="state good">SUCCEEDED</span></div>
+  <div class="terminal"><span class="state bad">FAILED</span><span class="state bad">TIMED_OUT</span><span class="state">CANCELLED</span></div>
+  <p class="small">The lower row contains alternative terminal outcomes. QUEUED can fail during dispatch; RUNNING can fail during execution. TIMED_OUT is an execution deadline verified by the backend, not the wrapper’s monitoring deadline. Within one run, worker retries are attempt changes, not new logical runs. Make terminal results immutable; a deliberate rerun gets a new invocation ID.</p>
+  <div class="table-wrap"><table><thead><tr><th>Observed condition</th><th>Wrapper action</th><th>Exit code in this example</th></tr></thead><tbody><tr><td>QUEUED or RUNNING</td><td>Continue checking the same run.</td><td>No exit</td></tr><tr><td>SUCCEEDED</td><td>Log result; release success.</td><td>0</td></tr><tr><td>FAILED / TIMED_OUT / CANCELLED</td><td>Log known terminal outcome.</td><td>2</td></tr><tr><td>Monitoring budget exhausted</td><td>Report outcome unknown; retain run identity.</td><td>3</td></tr><tr><td>Auth, conflict or contract error</td><td>Stop and report the integration issue.</td><td>4</td></tr></tbody></table></div>
+  <p>These nonzero codes are proposed conventions. Configure AutoSys to recognize only <code>0</code> as success; explicit <code>success_codes</code> settings govern which codes it accepts. <sup><a href="#ref4">[4]</a></sup></p>
+ </section>
+ <section class="section" id="reliability">
+  <div class="num">06 / Reliability mechanics</div><h2>The run ID is useful only if it is durable</h2>
+  <h3>Atomic acceptance and dispatch intent</h3>
+  <p>Writing a run row and then publishing a queue message separately creates a gap: the API could crash between them. A transactional outbox closes that local gap. Store both records in one database transaction; a dispatcher reads the outbox and launches work later. This is the recommended implementation pattern here, not a guarantee provided by <code>202</code>.</p>
+  <pre><code>submission transaction:
+  authenticate and authorize pipeline access
+  validate canonical request
+  reserve UNIQUE(principal_scope, idempotency_key)
+  if an existing key is found:
+      compare request_hash; return existing run or 409
+  insert run(state=QUEUED, request_hash, pipeline_version, ...)
+  insert outbox(run_id, event="START_RUN")
+  commit
+return 202 with the committed run_id
+
+dispatcher:
+  claim outbox item using a lease / row lock
+  ensure Job named from run_id exists (create-or-read)
+  verify existing Job belongs to this run
+  persist Job UID; mark intent delivered
+  reconcile after crashes; do not generate a fresh Job name</code></pre>
+  <p>If Job creation succeeds but the dispatcher crashes before saving the result, it discovers the same Job on retry. Retain Job identity and durable dispatch state so cleanup cannot cause an old intent to start another execution.</p>
+  <h3>Idempotency has two layers</h3>
+  <div class="pair"><div class="panel"><h3>Submission idempotency</h3><p>One intended invocation maps to one run. Use a stable business date plus invocation ID; scope the key to the caller or tenant. Automatic retries keep the same key. An approved new execution uses a new ID.</p></div><div class="panel"><h3>Output idempotency</h3><p>A restarted worker must not duplicate data or external effects. Use run-scoped staging, transactional publication or a manifest, and unique business keys. Choose one writer per output partition when runs can overlap.</p></div></div>
+  <p>Kubernetes Jobs can start the same program more than once, even with one completion and parallelism one. A Job therefore does not provide exactly-once business execution. <sup><a href="#ref2">[2]</a></sup> Use compare-and-set attempt ownership and fencing tokens where concurrent attempts could publish. A lease alone does not stop an old worker from writing after its lease expires.</p>
+  <h3>Make “success” an application result</h3>
+  <p>A pod being <code>Running</code> means the container is active. A process exiting successfully is useful evidence only if the worker defines success correctly. Verify required steps, data checks and final output publication before persisting <code>SUCCEEDED</code>. If output commits but the status update fails, a retry or reconciler checks the run’s durable output manifest and repairs status without republishing.</p>
+  <div class="table-wrap"><table><thead><tr><th>Failure</th><th>Expected recovery</th><th>Required mechanism</th></tr></thead><tbody><tr><td>Reply lost after acceptance</td><td>Retry submit; retrieve the original run.</td><td>Unique idempotency key and payload hash.</td></tr><tr><td>API pod restarts</td><td>Poll another API instance; execution continues independently.</td><td>Shared database; external worker.</td></tr><tr><td>API crash before transaction commit</td><td>Retry creates the run once.</td><td>Database transaction rollback.</td></tr><tr><td>Dispatcher crash after Job creation</td><td>Find the existing Job and repair bookkeeping.</td><td>Deterministic name, UID checks, reconciliation.</td></tr><tr><td>Worker dies mid-load</td><td>Retry a safe attempt or fail durably.</td><td>Idempotent output, checkpoints, bounded retries.</td></tr><tr><td>Heartbeat becomes stale</td><td>Investigate and reconcile before finalizing.</td><td>Heartbeat plus worker/Job evidence; avoid false failure from a temporary outage.</td></tr><tr><td>Wrapper pod disappears</td><td>Restart monitor; recover the same run via the same key.</td><td>Invocation ID outside ephemeral pod storage.</td></tr><tr><td>Database is unavailable</td><td>Do not accept untracked work; retry within budget.</td><td>Fail closed for acceptance, restore tracking availability.</td></tr></tbody></table></div>
+ </section>
+ <section class="section" id="implementation">
+  <div class="num">07 / Implementation examples</div><h2>Keep your processing logic; move its owner</h2>
+  <p>Extract the long operation into a callable such as <code>execute_pipeline(run_id)</code>. The API owns acceptance. The worker owns execution. The reconciler owns recovery of tracking gaps. Do not depend on an API pod’s in-memory thread, background task, or local filesystem for run durability.</p>
+  <details><summary>Python AutoSys wrapper — illustrative reference</summary>
+  <p class="small">Uses Python 3.12 and <code>requests</code>. Adapt authentication, certificate trust and logging to your platform. The total monitoring budget is approximate: a request already in progress may finish after it. This example has not been exercised against your service.</p>
+  <pre><code id="python-example">import hashlib
+import json
+import os
+import random
+import sys
+import time
+from pathlib import Path
+from urllib.parse import quote, urlsplit
+
+import requests
+
+# Platform supplies these values; do not put tokens in JIL or CLI args.
+BASE = os.environ["PIPELINE_API_BASE"].rstrip("/")
+TOKEN_FILE = Path(os.environ["PIPELINE_TOKEN_FILE"])
+pipeline, logical_date, invocation_id = sys.argv[1:4]
+body = dict(pipeline_name=pipeline, logical_date=logical_date,
+            invocation_id=invocation_id)
+canonical = json.dumps(body, sort_keys=True, separators=(",", ":"))
+key = hashlib.sha256(canonical.encode()).hexdigest()
+deadline = time.monotonic() + 7200  # example: 2-hour monitor budget
+transient = {408, 429, 500, 502, 503, 504}
+terminal_failure = {"FAILED", "TIMED_OUT", "CANCELLED"}
+session = requests.Session()
+
+def finish(code, message):
+    print(message, flush=True)
+    raise SystemExit(code)
+
+def pause(seconds):
+    remaining = deadline - time.monotonic()
+    if remaining &gt; 0:
+        time.sleep(min(seconds, remaining))
+
+def call(method, path, payload=None):
+    delay = 2.0
+    while time.monotonic() &lt; deadline:
+        try:
+            token = TOKEN_FILE.read_text().strip()
+            response = session.request(
+                method, BASE + path, json=payload,
+                headers={"Authorization": "Bearer " + token,
+                         "Idempotency-Key": key},
+                timeout=(5, 10), allow_redirects=False)
+        except (requests.ConnectionError, requests.Timeout):
+            # Outcome may be unknown. POST retries retain the same key.
+            response = None
+        except (OSError, requests.RequestException):
+            finish(4, "Credential or HTTP client configuration error")
+
+        if response is not None and response.status_code not in transient:
+            return response
+
+        # Example supports delta-seconds Retry-After; add HTTP-date
+        # support if your API uses that form. Never exceed the budget.
+        wait = delay
+        if response is not None:
+            value = response.headers.get("Retry-After", "")
+            if value.isdigit():
+                wait = max(wait, float(value))
+        pause(wait + random.uniform(0, 1))
+        delay = min(delay * 2, 30)
+    finish(3, f"Outcome unknown; invocation_id={invocation_id}; resume same key")
+
+def decode(response, allowed_codes):
+    if response.status_code not in allowed_codes:
+        finish(4, f"API contract/auth error: HTTP {response.status_code}")
+    try:
+        data = response.json()
+    except ValueError:
+        finish(4, "API returned invalid JSON")
+    if not isinstance(data, dict) or data.get("schema_version") != 1:
+        finish(4, "Unexpected API schema")
+    return data
+
+if urlsplit(BASE).scheme != "https":
+    finish(4, "HTTPS is required")
+
+# Re-running this command with identical arguments recovers the run.
+accepted = decode(call("POST", "/runs", body), {200, 202})
+run_id = accepted.get("run_id")
+if not isinstance(run_id, str) or not run_id or len(run_id) &gt; 128:
+    finish(4, "Missing or invalid run_id")
+print(f"run_id={run_id}; invocation_id={invocation_id}", flush=True)
+
+while time.monotonic() &lt; deadline:
+    status = decode(call("GET", "/runs/" + quote(run_id, safe="")), {200})
+    if status.get("run_id") != run_id:
+        finish(4, "Status response run_id mismatch")
+    state = status.get("state")
+    print(f"run_id={run_id}; state={state}", flush=True)
+    if state == "SUCCEEDED":
+        finish(0, f"Pipeline succeeded: {run_id}")
+    if state in terminal_failure:
+        finish(2, f"Pipeline terminal failure: {run_id}; state={state}")
+    if state not in {"QUEUED", "RUNNING"}:
+        finish(4, "Unknown state; refusing to report success")
+    pause(30 + random.uniform(0, 3))
+
+finish(3, f"Monitoring deadline; outcome unknown for {run_id}")</code></pre>
+  <p>Production additions: validate arguments, emit structured logs and metrics, support your credential renewal flow, handle termination signals, and persist invocation identity in the scheduler’s durable context. The server must implement the idempotency contract before POST retries are safe.</p>
+  </details>
+  <details><summary>JIL command job — adapt to your launcher</summary>
+  <pre><code>insert_job: PIPELINE_DAILY_BALANCE_MONITOR
+job_type: CMD
+machine: &lt;registered-agent-or-launcher&gt;
+command: /opt/pipeline/bin/run-and-monitor DAILY_BALANCE_LOAD 2026-10-06 scheduled-2026-10-06-v1
+description: "Submit and monitor DAILY_BALANCE_LOAD to terminal outcome"
+success_codes: 0
+alarm_if_fail: 1</code></pre>
+  <p>The command invokes the wrapper directly or through your organization’s OpenShift launcher. Supply the logical date and invocation ID from durable scheduler parameters. The literal values above represent one example invocation; do not reuse that invocation ID for every future schedule. Downstream jobs depend on this monitor job’s success, not just the submit step.</p>
+  <p class="small">Your agent registration, container launcher, calendars, retry settings, log paths and maximum job runtime are environment-specific. If a launcher detaches immediately, its exit status cannot represent pipeline completion unless it also implements monitoring or a supported scheduler completion integration.</p>
+  </details>
+  <details><summary>Kubernetes Job — one execution pod per run</summary>
+  <pre><code>apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pipeline-r-001  # derive from durable run ID
+  labels:
+    app: pipeline-worker
+    run-id: r-001
+spec:
+  completions: 1
+  parallelism: 1
+  backoffLimit: 0       # start here until worker retries are safe
+  activeDeadlineSeconds: 5400  # example execution budget: 90 min
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      labels:
+        app: pipeline-worker
+        run-id: r-001
+    spec:
+      serviceAccountName: pipeline-worker
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+      containers:
+      - name: worker
+        image: registry.example.internal/pipeline-worker:release-tag
+        command: ["python", "-m", "pipeline_worker"]
+        args: ["--run-id", "r-001"]
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "2"
+            memory: "2Gi"
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: RuntimeDefault</code></pre>
+  <p>The image must support the OpenShift-assigned user identity. Supply database and source credentials through approved secret mechanisms. Create the referenced service account and appropriate access policies. Resource values are placeholders to size from measurements.</p>
+  <p><code>activeDeadlineSeconds</code> bounds the Job’s execution lifetime; <code>backoffLimit</code> bounds retries. A Job deadline failure is separate from a client-side monitoring timeout. <sup><a href="#ref2">[2]</a></sup> Raise retry limits only after output idempotency and error handling are implemented. Keep run history after Job cleanup, and reconcile terminal status before deleting evidence.</p>
+  </details>
+ </section>
+ <section class="section" id="operations">
+  <div class="num">08 / Operating the design</div><h2>Use separate budgets for separate responsibilities</h2>
+  <div class="table-wrap"><table><thead><tr><th>Budget / control</th><th>Illustrative starting value</th><th>Purpose</th></tr></thead><tbody><tr><td>HTTP connect / read timeout</td><td>5 s / 10 s</td><td>Bound each network attempt; these are not an end-to-end request deadline.</td></tr><tr><td>Submission target</td><td>Normally a few seconds</td><td>Validate and persist; do not run ETL inside submission.</td></tr><tr><td>Polling cadence</td><td>30 s + small jitter</td><td>Balance completion visibility and request volume.</td></tr><tr><td>Queue-age policy</td><td>10 min, then reconcile and alert</td><td>Detect dispatch or capacity problems before workers start.</td></tr><tr><td>Worker Job deadline</td><td>90 min</td><td>Bound execution separately from observation.</td></tr><tr><td>Wrapper monitor budget</td><td>2 h</td><td>Allow queueing, execution and result recovery.</td></tr><tr><td>Scheduler / launcher runtime cap</td><td>Above the wrapper budget + cleanup margin</td><td>Avoid killing monitoring before it can report its own result.</td></tr></tbody></table></div>
+  <p>Set these from your pipeline SLA, observed duration and failure recovery policy. Align proxy and route timeouts with the short API calls. Do not copy example values as production defaults.</p>
+  <div class="key-rule">30-minute run ÷ 30-second interval ≈ 60 status checks<br>100 active runs ÷ 30-second interval ≈ 3.3 GET requests/second</div>
+  <p class="small">Nominal estimates exclude the first/final checks, jitter and retries. Each waiting wrapper uses little active CPU while sleeping, but still reserves its process or pod resources.</p>
+  <h3>Data worth retaining</h3>
+  <p>Store the run ID, principal scope, idempotency key, canonical request hash, pipeline version or metadata snapshot reference, business date, state version, phase, attempt, timestamps, heartbeat, Job name and UID, final output manifest, and safe error code. Record input snapshot references where reproducibility matters.</p>
+  <h3>Useful operational signals</h3>
+  <ul><li><strong>Queue age and dispatch latency:</strong> distinguish “accepted” from “started.”</li><li><strong>Execution and phase duration:</strong> identify slow transformations or destination commits.</li><li><strong>Stale heartbeats and status lag:</strong> trigger investigation and reconciliation, not immediate success or failure.</li><li><strong>Deduplication hits and attempt count:</strong> identify retries while keeping logical run counts accurate.</li><li><strong>Unknown outcomes:</strong> track monitor failures separately from known pipeline failures.</li></ul>
+  <p>Correlate logs using the run ID across AutoSys, API, dispatcher and worker. Protect submit, status and cancel endpoints with service authentication and pipeline-level authorization. Scope worker permissions to its task; do not grant broad cluster access just to poll run status.</p>
+ </section>
+ <section class="section" id="alternatives">
+  <div class="num">09 / Choosing an approach</div><h2>Polling is the practical first step</h2>
+  <div class="table-wrap"><table><thead><tr><th>Approach</th><th>Best fit</th><th>Tradeoff</th></tr></thead><tbody><tr><td><strong>Submit + poll + exit</strong></td><td>Your current AutoSys command-job model.</td><td>Simple completion mapping; monitor process or pod stays alive.</td></tr><tr><td>Submit job + separate monitor job</td><td>You want acceptance and completion visible separately.</td><td>Persist run identity between jobs; downstream jobs depend on monitor success.</td></tr><tr><td>Callback / event completion</td><td>You need to release waiting pods, and your scheduler has a supported completion integration.</td><td>Implement authenticated delivery, duplicate handling, event ordering and reconciliation; capability depends on your installed integration.</td></tr><tr><td>AutoSys launches a worker Job directly</td><td>The launcher already supports Kubernetes Jobs and terminal result tracking.</td><td>Can simplify the path; still needs durable identity, output safety and business-result semantics.</td></tr><tr><td>Extend synchronous timeouts</td><td>Short-term mitigation for bounded, controlled workloads.</td><td>Does not resolve lost-response ambiguity or duplicate side effects.</td></tr></tbody></table></div>
+  <p><strong>Suggested rollout:</strong> implement durable submit/status endpoints and the wrapper first; use an existing durable worker system if available. Add a Job dispatcher if per-run execution pods suit your workloads. Consider scheduler-native event completion when waiting pod cost or scale justifies the additional integration.</p>
+ </section>
+ <section class="section" id="validation">
+  <div class="num">10 / Evidence before adoption</div><h2>Prove the behavior with controlled failures</h2>
+  <p>This architecture can make the process recoverable and observable when its durable handoff, execution and output rules are implemented. No HTML example can guarantee performance or correctness in your cluster. Validate these scenarios with the actual API, launcher, database and worker.</p>
+  <div class="table-wrap"><table><thead><tr><th>Exercise</th><th>Passing observation</th></tr></thead><tbody><tr><td>Run a 30–60 minute pipeline</td><td>Submission returns promptly; AutoSys stays running; downstream jobs wait for verified success.</td></tr><tr><td>Drop the submit response after commit</td><td>Retry returns the same run ID; no additional logical run or duplicate publication.</td></tr><tr><td>Submit the same key concurrently</td><td>One run row and one durable intent; mismatched payload gives 409.</td></tr><tr><td>Restart API and dispatcher pods at handoff boundaries</td><td>The run remains discoverable; dispatch resumes or attaches to the existing Job.</td></tr><tr><td>Kill the worker during write and after output commit</td><td>Partial output stays unpublished; committed output is recovered without duplication.</td></tr><tr><td>Fail a transformation or data validation</td><td>A terminal failure is recorded and the wrapper exits nonzero; downstream jobs do not start.</td></tr><tr><td>Interrupt status calls or exhaust monitor time</td><td>No false success; outcome unknown is distinguishable; resuming keeps the same run identity.</td></tr><tr><td>Exercise execution deadline and Job cleanup</td><td>Reconciled terminal state survives pod/Job deletion; old dispatch intents cannot relaunch work.</td></tr></tbody></table></div>
+  <div class="callout"><strong>The invariant to protect</strong>One intended invocation has one durable run identity. Execution can have multiple attempts. Published business effects remain controlled and deduplicated. AutoSys success is emitted only after the durable business result is successful.</div>
+ </section>
+ <section class="section" id="references">
+  <div class="num">Source notes</div><h2>Official references</h2>
+  <p class="small">Consulted 6 October 2026. These sources support the platform and HTTP facts marked above; the proposed contract, sample timings, outbox design and implementation choices are engineering recommendations for your scenario.</p>
+  <ol class="ref-list"><li id="ref1"><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.3.3">RFC 9110 §15.3.3 — 202 Accepted</a><br><span class="small">Acceptance is not completion; the response should provide a way to inspect status.</span></li><li id="ref2"><a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/">Kubernetes — Jobs</a><br><span class="small">Job retries, duplicate program starts, deadlines, terminal conditions and cleanup. Check the Kubernetes version bundled with your OpenShift release.</span></li><li id="ref3"><a href="https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/ingress_and_load_balancing/routes">Red Hat OpenShift 4.20 — Routes and timeout configuration</a><br><span class="small">Route timeouts can be configured; external load balancer settings also matter. Your deployed version is not known from the conversation.</span></li><li id="ref4"><a href="https://knowledge.broadcom.com/external/article/196875">Broadcom — AutoSys success_codes and exit code interpretation</a><br><span class="small">An explicit success_codes list determines which wrapper exit codes AutoSys treats as success.</span></li></ol>
+ </section>
+ <footer class="footer">Prepared for the pipeline API scenario discussed by Siva. Single HTML file: diagrams, styles and simulation are embedded; reference links require internet access. Code snippets are examples, not a completed backend implementation.</footer>
+ </main>
+</div>
+<script>
+'use strict';
+const step=(title,auto,api,worker,event,explanation,runs=1,exit='none')=>({title,auto,api,worker,event,explanation,runs,exit});
+const ready=step('Ready to submit','RUNNING · wrapper starts','No run yet','Not launched','The wrapper has a stable invocation key.','The same key and canonical request are reused for automatic retries.',0);
+const accepted=step('Accepted durably','RUNNING · monitor waits','r-001 · QUEUED','Dispatch pending','Run and dispatch intent are committed; API returns 202.','The HTTP request ends. Acceptance is recorded, but AutoSys cannot report pipeline success yet.');
+const running=step('Execution is independent','RUNNING · status polling','r-001 · RUNNING','Attempt 1 · TRANSFORM','The dispatcher starts the worker Job.','Short GET calls retrieve the shared run record. The wrapper sleeps between checks.');
+const committed=step('Data is committed','RUNNING · awaiting next check','r-001 · SUCCEEDED','Output published and verified','The worker records the durable successful result.','The output commit and business checks happen before SUCCEEDED is exposed. A reconciler repairs a missing status update from the output manifest.');
+const succeeded=step('AutoSys receives success','SUCCESS · wrapper exits 0','r-001 · SUCCEEDED','Complete','The next status check sees SUCCEEDED.','The wrapper exits 0. With success_codes: 0, AutoSys can release downstream jobs.',1,'0 · known success');
+const scenarios={
+ success:[ready,accepted,running,committed,succeeded],
+ lost:[ready,step('The reply is lost','RUNNING · submit times out','r-001 · QUEUED','Dispatch pending','The transaction committed, but the 202 reply never reached the client.','A network timeout does not tell the client whether submission was accepted.'),step('Retry attaches to the original run','RUNNING · recovered r-001','r-001 · same existing run','One logical execution','The wrapper repeats POST with the same key and payload.','The database uniqueness rule returns r-001. It does not insert another run or dispatch intent.'),running,committed,succeeded],
+ restart:[ready,accepted,running,step('API instance is unavailable','RUNNING · temporary GET failure','Durable record remains RUNNING','Attempt 1 continues','The API pod restarts while the worker processes data.','The worker belongs to a separate execution lifecycle. The database and cluster must remain available for progress to continue.'),step('Monitoring recovers','RUNNING · GET succeeds','r-001 · RUNNING','Attempt 1 continues','A ready API instance reads the same shared record.','The wrapper did not launch new work while status lookup was unavailable.'),committed,succeeded],
+ failure:[ready,accepted,running,step('Pipeline has a known failure','RUNNING · next poll pending','r-001 · FAILED','Validation failed; output unpublished','The worker persists a safe error code and failed result.','Application validation controls the result. A running container or a successful status lookup cannot override it.'),step('AutoSys receives failure','FAILURE · wrapper exits 2','r-001 · FAILED','Stopped','The wrapper observes FAILED and returns a nonzero exit.','Downstream success dependencies remain blocked. A deliberate new run needs a new invocation ID.',1,'2 · known terminal failure')],
+ deadline:[ready,accepted,running,step('Monitoring budget is exhausted','FAILURE · wrapper exits 3','r-001 · RUNNING','Work may still continue','The wrapper stops observing after its budget expires.','Exit 3 means the outcome is unknown to this monitor. It does not cancel the worker or set the run to TIMED_OUT.',1,'3 · outcome unknown'),step('Resume the same run','RUNNING · new monitor attaches','r-001 · RUNNING','Same logical execution','An operator resumes using the original invocation key.','The API returns the original run. A new monitoring window does not mean a new pipeline execution.'),committed,succeeded]
+};
+let index=0;
+const $=id=>document.getElementById(id);
+function render(){const steps=scenarios[$('scenario').value];const s=steps[index];$('sim-title').textContent=s.title;$('sim-step').textContent=`Step ${index+1} of ${steps.length}`;$('sim-auto').textContent=s.auto;$('sim-api').textContent=s.api;$('sim-worker').textContent=s.worker;$('sim-event').textContent=s.event;$('sim-explanation').textContent=s.explanation;$('sim-count').textContent=`Logical runs: ${s.runs}`;$('sim-exit').textContent=`Wrapper exit: ${s.exit}`;$('back').disabled=index===0;$('next').disabled=index===steps.length-1;const log=$('event-log');log.replaceChildren();for(const item of steps.slice(0,index+1)){const li=document.createElement('li');li.textContent=item.event;log.appendChild(li);}}
+$('scenario').addEventListener('change',()=>{index=0;render()});$('back').addEventListener('click',()=>{if(index>0){index--;render()}});$('next').addEventListener('click',()=>{if(index<scenarios[$('scenario').value].length-1){index++;render()}});$('reset').addEventListener('click',()=>{index=0;render()});$('print-btn').addEventListener('click',()=>window.print());let detailsState=[];window.addEventListener('beforeprint',()=>{detailsState=Array.from(document.querySelectorAll('details')).map(d=>d.open);document.querySelectorAll('details').forEach(d=>d.open=true)});window.addEventListener('afterprint',()=>document.querySelectorAll('details').forEach((d,i)=>d.open=detailsState[i]));render();
+</script>
+</body>
+</html>
