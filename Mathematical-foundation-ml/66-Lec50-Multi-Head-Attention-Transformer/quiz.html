@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lecture 50: Multi-Head Attention and Transformer Architecture Quiz</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Lecture 50: Multi-Head Attention and Transformer Architecture Quiz</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. Multi-Head Subspace Projections, Normalization Mechanics, and Residual Streams</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q01", "part": "prerequisites", "anchor": "PREREQUISITES.md#p1", "prompt": "If a Transformer has hidden dimension D = 512 and sequence length T = 128, compute the ratio of total attention FLOPs for M = 8 heads of size D_k = 64 compared to a single head of size D = 512: Ratio = ?", "options": ["8.0", "1.0", "0.125", "64.0"], "answer": "B", "whyCorrect": "The FLOP conservation theorem states that M heads of dimension D/M require M * (4 T^2 (D/M)) = 4 T^2 D operations, which is identical (ratio 1.0) to a single head of dimension D.", "whyOthers": "Option A assumes FLOPs scale linearly with head count without accounting for the reduced head dimension D/M. Option C inverts the ratio. Option D squares the head count.", "diagram": "FLOPs(M heads of size D/M) = M * (4 T^2 * D/M) = 4 T^2 D = FLOPs(1 head of size D)"}, {"id": "q02", "part": "prerequisites", "anchor": "PREREQUISITES.md#p4", "prompt": "How does Layer Normalization contrast geometrically with Batch Normalization when processing a sequence tensor of shape [B, T, D]?", "options": ["Layer Normalization reduces across the batch dimension B, while Batch Normalization reduces across the sequence dimension T.", "Batch Normalization standardizes each token vector in isolation without requiring running statistics.", "Layer Normalization computes statistics across feature dimension D independently per token, whereas Batch Normalization reduces across batch and sequence dimensions per channel.", "Both normalizations compute identical statistics but apply different learnable activation functions."], "answer": "C", "whyCorrect": "LayerNorm operates horizontally across the feature channels D for each (b, t) coordinate independently, guaranteeing zero cross-sample leakage. BatchNorm reduces vertically across [B, T] for each feature channel d.", "whyOthers": "Option A inverts the operations. Option B describes LayerNorm, not BatchNorm. Option D is mathematically false as their reduction axes and statistical dependencies are completely different.", "diagram": "LayerNorm: stats over D per (b, t) vs BatchNorm: stats over [B, T] per d"}, {"id": "q03", "part": "prerequisites", "anchor": "PREREQUISITES.md#p5", "prompt": "Why does the mathematical derivative of a residual connection dy/dx = I + dF/dx prevent gradient vanishing in deep architectures?", "options": ["The identity matrix I guarantees that a constant gradient of magnitude >= 1.0 flows directly back without passing through sub-layer weights.", "The identity matrix forces the sub-layer Jacobian dF/dx to always be strictly positive definite.", "The residual connection eliminates all non-linear activation functions from the backpropagation chain.", "The identity term converts matrix multiplications into scalar additions during the forward pass."], "answer": "A", "whyCorrect": "Because dy/dx = I + dF/dx, expanding gradients across L layers yields a sum containing the identity operator I, ensuring an unattenuated signal path even when sub-layer Jacobians dF/dx vanish.", "whyOthers": "Option B is incorrect; dF/dx can be arbitrary or zero. Option C is false; non-linearities remain inside F(x). Option D misrepresents the role of residual connections in matrix calculus.", "diagram": "dL/dx = dL/dy * (I + dF/dx) ==> Even if dF/dx -> 0, dL/dx receives dL/dy * I"}, {"id": "q04", "part": "prerequisites", "anchor": "PREREQUISITES.md#p6", "prompt": "According to the Bayesian worldview presented in the lecture, what does choosing a specific neural network architecture represent mathematically?", "options": ["A deterministic guarantee of zero empirical generalization error on unseen test distributions.", "An automated procedure to eliminate the need for Empirical Risk Minimization during training.", "A hardware-specific optimization that has no effect on the underlying hypothesis space.", "Imposing an inductive bias or prior probability distribution P(theta) over the hypothesis space to guide optimization."], "answer": "D", "whyCorrect": "Architectural design choices (like translation equivariance in CNNs or relational self-attention in Transformers) act as Bayesian priors that regularize hypothesis space and constrain ERM toward solutions matching data properties.", "whyOthers": "Option A violates statistical learning bounds (no architecture guarantees zero test error). Option B is false; ERM is still required to optimize parameters. Option C ignores that architecture defines the hypothesis space.", "diagram": "Architecture Selection <===> Setting Prior P(theta) in Bayesian Learning"}, {"id": "q05", "part": "notes", "anchor": "NOTES.md#topic-1-multi-head-attention-formulation-and-subspace-projection-00000530", "prompt": "What is the critical functional role of the output projection matrix W^O in Multi-Head Attention?", "options": ["It normalizes attention probabilities so that their scalar sum equals 1.0 across heads.", "It transposes the sequence dimension T with the batch dimension B to prepare for residual addition.", "It linearly blends the concatenated head representations, enabling features discovered by different heads to interact.", "It applies a non-linear ReLU activation function to ensure universal function approximation."], "answer": "C", "whyCorrect": "Concatenation merely places the M head vectors side-by-side; the linear projection W^O in R^{(M D_v) x D} enables cross-head communication and projects the composite tensor back into the nominal model space.", "whyOthers": "Option A describes softmax, not W^O. Option B would corrupt tensor memory layout. Option D is false because W^O is a pure linear projection without activation.", "diagram": "MHA(X) = Concat(head_1, ..., head_M) * W^O  (Cross-head linear fusion)"}, {"id": "q06", "part": "notes", "anchor": "NOTES.md#topic-2-architectural-inductive-biases-as-bayesian-priors-05310815", "prompt": "How does Multi-Head Attention conceptually compare to multi-channel convolution layers in Convolutional Neural Networks?", "options": ["Multi-head attention allows different heads to specialize in distinct relational patterns, exactly as multiple CNN kernels specialize in distinct spatial features.", "Multi-head attention strictly restricts receptive fields to local 3x3 grids, identical to CNN filter kernels.", "Convolutional kernels require quadratic O(T^2) memory, whereas multi-head attention operates in linear O(T) space.", "Both mechanisms enforce hardcoded translation invariance across 1D sequence tokens."], "answer": "A", "whyCorrect": "Just as a CNN uses multiple filter kernels to detect diverse local patterns (edges, textures, colors), multi-head attention uses multiple projection heads to capture diverse sequence relations (syntax, coreference, semantics).", "whyOthers": "Option B is false; attention has a global receptive field of length T. Option C inverts the memory complexities (standard attention is quadratic). Option D is false; attention is permutation equivariant, not shift-invariant.", "diagram": "CNN: Filter bank [K_1, ..., K_C] (Spatial) <===> MHA: Head bank [Z_1, ..., Z_M] (Relational)"}, {"id": "q07", "part": "notes", "anchor": "NOTES.md#topic-3-activity-regularization-vs-parameter-regularization-08161100", "prompt": "In composite hypothesis functions h_theta(x) = W_2 Z where Z = sigma(W_1 x), what distinguishes activity regularization from parameter regularization?", "options": ["Activity regularization penalizes the number of training epochs, whereas parameter regularization limits learning rates.", "Parameter regularization is applied only during inference, whereas activity regularization is applied during pre-processing.", "Parameter regularization modifies loss functions by constraining data labels y rather than model representations.", "Parameter regularization constrains the weight matrices theta directly, whereas activity regularization standardizes or bounds the intermediate latent representations Z."], "answer": "D", "whyCorrect": "Parameter regularization (like L2 weight decay) constrains the weights theta, while activity regularization (like LayerNorm or activation penalties) directly bounds or normalizes the intermediate representations Z.", "whyOthers": "Option A confuses training hyperparameters with regularization. Option B is false; both are training mechanics. Option C describes label smoothing, not parameter regularization.", "diagram": "Parameter Reg: ||theta|| <= C vs Activity Reg: E[Z]=0, Var(Z)=1"}, {"id": "q08", "part": "notes", "anchor": "NOTES.md#topic-4-normalization-mechanics-batch-normalization-vs-layer-normalization-11011712", "prompt": "Why does Batch Normalization fail on variable-length natural language sequences compared to Layer Normalization?", "options": ["BatchNorm cannot be implemented on GPUs due to lack of tensor core support.", "Zero-padding tokens in variable-length batches distort the batch mean and variance, corrupting legitimate token representations.", "BatchNorm requires computing an inverse matrix of size T x T for every sequence token.", "BatchNorm forces the attention weights matrix to become non-negative and symmetric."], "answer": "B", "whyCorrect": "Variable-length text batches contain padding zeros to match rectangular tensor dimensions. BatchNorm averages across all sequence positions, causing padding zeros to skew running statistics and degrade inference on clean text.", "whyOthers": "Option A is false; cuDNN has highly optimized BatchNorm kernels. Option C is false; BatchNorm involves scalar reductions, not matrix inversions. Option D confuses normalization with attention matrices.", "diagram": "Padding Zeros in Batch ==> Distorted mu_B, sigma_B^2 ==> Inference Accuracy Collapse"}, {"id": "q09", "part": "notes", "anchor": "NOTES.md#executive-summary", "prompt": "Which sequential architectural chain accurately captures the complete Transformer block connecting input tokens to non-linear contextual representations across the whole lecture?", "options": ["Input X -> Multi-Head Attention -> Residual Stream (X + MHA) -> LayerNorm -> Position-wise MLP -> Residual Stream + LayerNorm -> Output", "Input X -> BatchNorm -> Softmax -> Single-Head Attention -> MLP -> Residual Connection", "Input X -> Position-wise MLP -> Convolution Filter -> Residual Addition -> Softmax -> Output", "Input X -> Recurrent Hidden Layer -> Additive Attention -> Linear Projection -> Output"], "answer": "A", "whyCorrect": "This sequence represents the canonical Transformer block derived in Lecture 50: multi-head subspace attention with residual addition and LayerNorm, followed by position-wise non-linear MLP expansion with a secondary residual connection and LayerNorm.", "whyOthers": "Option B uses BatchNorm and places softmax before attention. Option C introduces convolutional filters not present in standard Transformers. Option D describes recurrent attention (Bahdanau).", "diagram": "X -> MHA(X) -> Add & Norm -> FFN -> Add & Norm -> Block Output"}, {"id": "q10", "part": "notes", "anchor": "NOTES.md#scenario-1-model-divergence-due-to-head-dimension-indivisibility", "prompt": "In the workplace debugging postmortem where a custom Transformer crashes with shape mismatch errors during tensor reshaping, what mathematical invariant was violated?", "options": ["The sequence length T must be an exact power of 2.", "The attention logits must have variance strictly equal to 0.0.", "The model embedding dimension D must be strictly divisible by the head count M without remainder.", "The number of heads M must equal the number of transformer layers L."], "answer": "C", "whyCorrect": "Splitting tensor [B, T, D] into [B, T, M, D_k] requires that D = M * D_k where D_k is an integer. If D % M != 0, integer truncation drops feature dimensions, triggering tensor shape mismatch exceptions.", "whyOthers": "Option A is untrue (arbitrary sequence lengths are supported). Option B would cause uniform attention collapse. Option D is an arbitrary configuration, not a mathematical constraint.", "diagram": "Invariant: embed_dim % num_heads == 0  (Strict integer divisibility)"}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

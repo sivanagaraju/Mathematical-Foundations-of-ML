@@ -1,0 +1,52 @@
+{
+  "title": "Tutorial 14 Part 2 : Transfer Learning using CNNs",
+  "video_id": "vocN0cxAT7I",
+  "url": "https://www.youtube.com/watch?v=vocN0cxAT7I",
+  "duration_seconds": 1729,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Teaching Assistant / Prof. Prathosh A P",
+  "playlist_index": 71,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 5,
+  "package_variant": "production",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "topics": [
+    {
+      "index": 1,
+      "title": "Pretrained Vision Models: VGG & ResNet Architectures",
+      "start_time": "00:00",
+      "end_time": "05:26",
+      "duration_seconds": 326
+    },
+    {
+      "index": 2,
+      "title": "Pretrained Inference & Top-K Predictions on ImageNet",
+      "start_time": "05:26",
+      "end_time": "14:37",
+      "duration_seconds": 551
+    },
+    {
+      "index": 3,
+      "title": "Modifying Classifier Heads & Parameter Freezing",
+      "start_time": "14:37",
+      "end_time": "21:58",
+      "duration_seconds": 441
+    },
+    {
+      "index": 4,
+      "title": "Spatial Input Resolution & Dimension Recomputation",
+      "start_time": "21:58",
+      "end_time": "23:00",
+      "duration_seconds": 62
+    },
+    {
+      "index": 5,
+      "title": "Decoupled Feature Extraction & Latent Embeddings",
+      "start_time": "23:00",
+      "end_time": "28:50",
+      "duration_seconds": 350
+    }
+  ]
+}

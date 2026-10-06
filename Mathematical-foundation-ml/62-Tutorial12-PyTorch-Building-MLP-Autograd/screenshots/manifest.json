@@ -1,0 +1,837 @@
+{
+  "duration_seconds": 2567.0,
+  "range_source": "youtube-chapters",
+  "range_count": 6,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 582.0,
+      "slug": "designing-the-mlp-architecture"
+    },
+    {
+      "index": 2,
+      "start": 582.0,
+      "end": 1045.0,
+      "slug": "coding-the-neural-network"
+    },
+    {
+      "index": 3,
+      "start": 1045.0,
+      "end": 1392.0,
+      "slug": "forward-propagation"
+    },
+    {
+      "index": 4,
+      "start": 1392.0,
+      "end": 1729.0,
+      "slug": "visualizing-layer-operations"
+    },
+    {
+      "index": 5,
+      "start": 1729.0,
+      "end": 2144.0,
+      "slug": "backpropagation-concepts"
+    },
+    {
+      "index": 6,
+      "start": 2144.0,
+      "end": 2567.0,
+      "slug": "gradient-tracking-controls"
+    }
+  ],
+  "raw_count": 48,
+  "composite_count": 12,
+  "raw": [
+    {
+      "file": "raw/001-ch01-designing-the-mlp-architecture-t0046s.png",
+      "seconds": 46.6,
+      "chapter": 1,
+      "slug": "designing-the-mlp-architecture",
+      "label": "00:46",
+      "range_start": 0.0,
+      "range_end": 582.0
+    },
+    {
+      "file": "raw/002-ch01-designing-the-mlp-architecture-t0116s.png",
+      "seconds": 116.4,
+      "chapter": 1,
+      "slug": "designing-the-mlp-architecture",
+      "label": "01:56",
+      "range_start": 0.0,
+      "range_end": 582.0
+    },
+    {
+      "file": "raw/003-ch01-designing-the-mlp-architecture-t0186s.png",
+      "seconds": 186.2,
+      "chapter": 1,
+      "slug": "designing-the-mlp-architecture",
+      "label": "03:06",
+      "range_start": 0.0,
+      "range_end": 582.0
+    },
+    {
+      "file": "raw/004-ch01-designing-the-mlp-architecture-t0256s.png",
+      "seconds": 256.1,
+      "chapter": 1,
+      "slug": "designing-the-mlp-architecture",
+      "label": "04:16",
+      "range_start": 0.0,
+      "range_end": 582.0
+    },
+    {
+      "file": "raw/005-ch01-designing-the-mlp-architecture-t0325s.png",
+      "seconds": 325.9,
+      "chapter": 1,
+      "slug": "designing-the-mlp-architecture",
+      "label": "05:25",
+      "range_start": 0.0,
+      "range_end": 582.0
+    },
+    {
+      "file": "raw/006-ch01-designing-the-mlp-architecture-t0395s.png",
+      "seconds": 395.8,
+      "chapter": 1,
+      "slug": "designing-the-mlp-architecture",
+      "label": "06:35",
+      "range_start": 0.0,
+      "range_end": 582.0
+    },
+    {
+      "file": "raw/007-ch01-designing-the-mlp-architecture-t0465s.png",
+      "seconds": 465.6,
+      "chapter": 1,
+      "slug": "designing-the-mlp-architecture",
+      "label": "07:45",
+      "range_start": 0.0,
+      "range_end": 582.0
+    },
+    {
+      "file": "raw/008-ch01-designing-the-mlp-architecture-t0535s.png",
+      "seconds": 535.4,
+      "chapter": 1,
+      "slug": "designing-the-mlp-architecture",
+      "label": "08:55",
+      "range_start": 0.0,
+      "range_end": 582.0
+    },
+    {
+      "file": "raw/009-ch02-coding-the-neural-network-t0619s.png",
+      "seconds": 619.0,
+      "chapter": 2,
+      "slug": "coding-the-neural-network",
+      "label": "10:19",
+      "range_start": 582.0,
+      "range_end": 1045.0
+    },
+    {
+      "file": "raw/010-ch02-coding-the-neural-network-t0674s.png",
+      "seconds": 674.6,
+      "chapter": 2,
+      "slug": "coding-the-neural-network",
+      "label": "11:14",
+      "range_start": 582.0,
+      "range_end": 1045.0
+    },
+    {
+      "file": "raw/011-ch02-coding-the-neural-network-t0730s.png",
+      "seconds": 730.2,
+      "chapter": 2,
+      "slug": "coding-the-neural-network",
+      "label": "12:10",
+      "range_start": 582.0,
+      "range_end": 1045.0
+    },
+    {
+      "file": "raw/012-ch02-coding-the-neural-network-t0785s.png",
+      "seconds": 785.7,
+      "chapter": 2,
+      "slug": "coding-the-neural-network",
+      "label": "13:05",
+      "range_start": 582.0,
+      "range_end": 1045.0
+    },
+    {
+      "file": "raw/013-ch02-coding-the-neural-network-t0841s.png",
+      "seconds": 841.3,
+      "chapter": 2,
+      "slug": "coding-the-neural-network",
+      "label": "14:01",
+      "range_start": 582.0,
+      "range_end": 1045.0
+    },
+    {
+      "file": "raw/014-ch02-coding-the-neural-network-t0896s.png",
+      "seconds": 896.8,
+      "chapter": 2,
+      "slug": "coding-the-neural-network",
+      "label": "14:56",
+      "range_start": 582.0,
+      "range_end": 1045.0
+    },
+    {
+      "file": "raw/015-ch02-coding-the-neural-network-t0952s.png",
+      "seconds": 952.4,
+      "chapter": 2,
+      "slug": "coding-the-neural-network",
+      "label": "15:52",
+      "range_start": 582.0,
+      "range_end": 1045.0
+    },
+    {
+      "file": "raw/016-ch02-coding-the-neural-network-t1007s.png",
+      "seconds": 1008.0,
+      "chapter": 2,
+      "slug": "coding-the-neural-network",
+      "label": "16:47",
+      "range_start": 582.0,
+      "range_end": 1045.0
+    },
+    {
+      "file": "raw/017-ch03-forward-propagation-t1072s.png",
+      "seconds": 1072.8,
+      "chapter": 3,
+      "slug": "forward-propagation",
+      "label": "17:52",
+      "range_start": 1045.0,
+      "range_end": 1392.0
+    },
+    {
+      "file": "raw/018-ch03-forward-propagation-t1114s.png",
+      "seconds": 1114.4,
+      "chapter": 3,
+      "slug": "forward-propagation",
+      "label": "18:34",
+      "range_start": 1045.0,
+      "range_end": 1392.0
+    },
+    {
+      "file": "raw/019-ch03-forward-propagation-t1156s.png",
+      "seconds": 1156.0,
+      "chapter": 3,
+      "slug": "forward-propagation",
+      "label": "19:16",
+      "range_start": 1045.0,
+      "range_end": 1392.0
+    },
+    {
+      "file": "raw/020-ch03-forward-propagation-t1197s.png",
+      "seconds": 1197.7,
+      "chapter": 3,
+      "slug": "forward-propagation",
+      "label": "19:57",
+      "range_start": 1045.0,
+      "range_end": 1392.0
+    },
+    {
+      "file": "raw/021-ch03-forward-propagation-t1239s.png",
+      "seconds": 1239.3,
+      "chapter": 3,
+      "slug": "forward-propagation",
+      "label": "20:39",
+      "range_start": 1045.0,
+      "range_end": 1392.0
+    },
+    {
+      "file": "raw/022-ch03-forward-propagation-t1280s.png",
+      "seconds": 1281.0,
+      "chapter": 3,
+      "slug": "forward-propagation",
+      "label": "21:20",
+      "range_start": 1045.0,
+      "range_end": 1392.0
+    },
+    {
+      "file": "raw/023-ch03-forward-propagation-t1322s.png",
+      "seconds": 1322.6,
+      "chapter": 3,
+      "slug": "forward-propagation",
+      "label": "22:02",
+      "range_start": 1045.0,
+      "range_end": 1392.0
+    },
+    {
+      "file": "raw/024-ch03-forward-propagation-t1364s.png",
+      "seconds": 1364.2,
+      "chapter": 3,
+      "slug": "forward-propagation",
+      "label": "22:44",
+      "range_start": 1045.0,
+      "range_end": 1392.0
+    },
+    {
+      "file": "raw/025-ch04-visualizing-layer-operations-t1418s.png",
+      "seconds": 1419.0,
+      "chapter": 4,
+      "slug": "visualizing-layer-operations",
+      "label": "23:38",
+      "range_start": 1392.0,
+      "range_end": 1729.0
+    },
+    {
+      "file": "raw/026-ch04-visualizing-layer-operations-t1459s.png",
+      "seconds": 1459.4,
+      "chapter": 4,
+      "slug": "visualizing-layer-operations",
+      "label": "24:19",
+      "range_start": 1392.0,
+      "range_end": 1729.0
+    },
+    {
+      "file": "raw/027-ch04-visualizing-layer-operations-t1499s.png",
+      "seconds": 1499.8,
+      "chapter": 4,
+      "slug": "visualizing-layer-operations",
+      "label": "24:59",
+      "range_start": 1392.0,
+      "range_end": 1729.0
+    },
+    {
+      "file": "raw/028-ch04-visualizing-layer-operations-t1540s.png",
+      "seconds": 1540.3,
+      "chapter": 4,
+      "slug": "visualizing-layer-operations",
+      "label": "25:40",
+      "range_start": 1392.0,
+      "range_end": 1729.0
+    },
+    {
+      "file": "raw/029-ch04-visualizing-layer-operations-t1580s.png",
+      "seconds": 1580.7,
+      "chapter": 4,
+      "slug": "visualizing-layer-operations",
+      "label": "26:20",
+      "range_start": 1392.0,
+      "range_end": 1729.0
+    },
+    {
+      "file": "raw/030-ch04-visualizing-layer-operations-t1621s.png",
+      "seconds": 1621.2,
+      "chapter": 4,
+      "slug": "visualizing-layer-operations",
+      "label": "27:01",
+      "range_start": 1392.0,
+      "range_end": 1729.0
+    },
+    {
+      "file": "raw/031-ch04-visualizing-layer-operations-t1661s.png",
+      "seconds": 1661.6,
+      "chapter": 4,
+      "slug": "visualizing-layer-operations",
+      "label": "27:41",
+      "range_start": 1392.0,
+      "range_end": 1729.0
+    },
+    {
+      "file": "raw/032-ch04-visualizing-layer-operations-t1702s.png",
+      "seconds": 1702.0,
+      "chapter": 4,
+      "slug": "visualizing-layer-operations",
+      "label": "28:22",
+      "range_start": 1392.0,
+      "range_end": 1729.0
+    },
+    {
+      "file": "raw/033-ch05-backpropagation-concepts-t1762s.png",
+      "seconds": 1762.2,
+      "chapter": 5,
+      "slug": "backpropagation-concepts",
+      "label": "29:22",
+      "range_start": 1729.0,
+      "range_end": 2144.0
+    },
+    {
+      "file": "raw/034-ch05-backpropagation-concepts-t1812s.png",
+      "seconds": 1812.0,
+      "chapter": 5,
+      "slug": "backpropagation-concepts",
+      "label": "30:12",
+      "range_start": 1729.0,
+      "range_end": 2144.0
+    },
+    {
+      "file": "raw/035-ch05-backpropagation-concepts-t1861s.png",
+      "seconds": 1861.8,
+      "chapter": 5,
+      "slug": "backpropagation-concepts",
+      "label": "31:01",
+      "range_start": 1729.0,
+      "range_end": 2144.0
+    },
+    {
+      "file": "raw/036-ch05-backpropagation-concepts-t1911s.png",
+      "seconds": 1911.6,
+      "chapter": 5,
+      "slug": "backpropagation-concepts",
+      "label": "31:51",
+      "range_start": 1729.0,
+      "range_end": 2144.0
+    },
+    {
+      "file": "raw/037-ch05-backpropagation-concepts-t1961s.png",
+      "seconds": 1961.4,
+      "chapter": 5,
+      "slug": "backpropagation-concepts",
+      "label": "32:41",
+      "range_start": 1729.0,
+      "range_end": 2144.0
+    },
+    {
+      "file": "raw/038-ch05-backpropagation-concepts-t2011s.png",
+      "seconds": 2011.2,
+      "chapter": 5,
+      "slug": "backpropagation-concepts",
+      "label": "33:31",
+      "range_start": 1729.0,
+      "range_end": 2144.0
+    },
+    {
+      "file": "raw/039-ch05-backpropagation-concepts-t2061s.png",
+      "seconds": 2061.0,
+      "chapter": 5,
+      "slug": "backpropagation-concepts",
+      "label": "34:21",
+      "range_start": 1729.0,
+      "range_end": 2144.0
+    },
+    {
+      "file": "raw/040-ch05-backpropagation-concepts-t2110s.png",
+      "seconds": 2110.8,
+      "chapter": 5,
+      "slug": "backpropagation-concepts",
+      "label": "35:10",
+      "range_start": 1729.0,
+      "range_end": 2144.0
+    },
+    {
+      "file": "raw/041-ch06-gradient-tracking-controls-t2177s.png",
+      "seconds": 2177.8,
+      "chapter": 6,
+      "slug": "gradient-tracking-controls",
+      "label": "36:17",
+      "range_start": 2144.0,
+      "range_end": 2567.0
+    },
+    {
+      "file": "raw/042-ch06-gradient-tracking-controls-t2228s.png",
+      "seconds": 2228.6,
+      "chapter": 6,
+      "slug": "gradient-tracking-controls",
+      "label": "37:08",
+      "range_start": 2144.0,
+      "range_end": 2567.0
+    },
+    {
+      "file": "raw/043-ch06-gradient-tracking-controls-t2279s.png",
+      "seconds": 2279.4,
+      "chapter": 6,
+      "slug": "gradient-tracking-controls",
+      "label": "37:59",
+      "range_start": 2144.0,
+      "range_end": 2567.0
+    },
+    {
+      "file": "raw/044-ch06-gradient-tracking-controls-t2330s.png",
+      "seconds": 2330.1,
+      "chapter": 6,
+      "slug": "gradient-tracking-controls",
+      "label": "38:50",
+      "range_start": 2144.0,
+      "range_end": 2567.0
+    },
+    {
+      "file": "raw/045-ch06-gradient-tracking-controls-t2380s.png",
+      "seconds": 2380.9,
+      "chapter": 6,
+      "slug": "gradient-tracking-controls",
+      "label": "39:40",
+      "range_start": 2144.0,
+      "range_end": 2567.0
+    },
+    {
+      "file": "raw/046-ch06-gradient-tracking-controls-t2431s.png",
+      "seconds": 2431.6,
+      "chapter": 6,
+      "slug": "gradient-tracking-controls",
+      "label": "40:31",
+      "range_start": 2144.0,
+      "range_end": 2567.0
+    },
+    {
+      "file": "raw/047-ch06-gradient-tracking-controls-t2482s.png",
+      "seconds": 2482.4,
+      "chapter": 6,
+      "slug": "gradient-tracking-controls",
+      "label": "41:22",
+      "range_start": 2144.0,
+      "range_end": 2567.0
+    },
+    {
+      "file": "raw/048-ch06-gradient-tracking-controls-t2533s.png",
+      "seconds": 2533.2,
+      "chapter": 6,
+      "slug": "gradient-tracking-controls",
+      "label": "42:13",
+      "range_start": 2144.0,
+      "range_end": 2567.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-designing-the-mlp-architecture-panel1of2.png",
+      "chapter": 1,
+      "slug": "designing-the-mlp-architecture",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "001-ch01-designing-the-mlp-architecture-t0046s.png",
+        "002-ch01-designing-the-mlp-architecture-t0116s.png",
+        "003-ch01-designing-the-mlp-architecture-t0186s.png",
+        "004-ch01-designing-the-mlp-architecture-t0256s.png"
+      ],
+      "labels": [
+        "ch1 00:46",
+        "ch1 01:56",
+        "ch1 03:06",
+        "ch1 04:16"
+      ],
+      "tile_seconds": [
+        46.6,
+        116.4,
+        186.2,
+        256.1
+      ],
+      "time_start": 46.6,
+      "time_end": 256.1,
+      "range_start": 0.0,
+      "range_end": 582.0
+    },
+    {
+      "file": "composites/ch01-designing-the-mlp-architecture-panel2of2.png",
+      "chapter": 1,
+      "slug": "designing-the-mlp-architecture",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "005-ch01-designing-the-mlp-architecture-t0325s.png",
+        "006-ch01-designing-the-mlp-architecture-t0395s.png",
+        "007-ch01-designing-the-mlp-architecture-t0465s.png",
+        "008-ch01-designing-the-mlp-architecture-t0535s.png"
+      ],
+      "labels": [
+        "ch1 05:25",
+        "ch1 06:35",
+        "ch1 07:45",
+        "ch1 08:55"
+      ],
+      "tile_seconds": [
+        325.9,
+        395.8,
+        465.6,
+        535.4
+      ],
+      "time_start": 325.9,
+      "time_end": 535.4,
+      "range_start": 0.0,
+      "range_end": 582.0
+    },
+    {
+      "file": "composites/ch02-coding-the-neural-network-panel1of2.png",
+      "chapter": 2,
+      "slug": "coding-the-neural-network",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "009-ch02-coding-the-neural-network-t0619s.png",
+        "010-ch02-coding-the-neural-network-t0674s.png",
+        "011-ch02-coding-the-neural-network-t0730s.png",
+        "012-ch02-coding-the-neural-network-t0785s.png"
+      ],
+      "labels": [
+        "ch2 10:19",
+        "ch2 11:14",
+        "ch2 12:10",
+        "ch2 13:05"
+      ],
+      "tile_seconds": [
+        619.0,
+        674.6,
+        730.2,
+        785.7
+      ],
+      "time_start": 619.0,
+      "time_end": 785.7,
+      "range_start": 582.0,
+      "range_end": 1045.0
+    },
+    {
+      "file": "composites/ch02-coding-the-neural-network-panel2of2.png",
+      "chapter": 2,
+      "slug": "coding-the-neural-network",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "013-ch02-coding-the-neural-network-t0841s.png",
+        "014-ch02-coding-the-neural-network-t0896s.png",
+        "015-ch02-coding-the-neural-network-t0952s.png",
+        "016-ch02-coding-the-neural-network-t1007s.png"
+      ],
+      "labels": [
+        "ch2 14:01",
+        "ch2 14:56",
+        "ch2 15:52",
+        "ch2 16:47"
+      ],
+      "tile_seconds": [
+        841.3,
+        896.8,
+        952.4,
+        1008.0
+      ],
+      "time_start": 841.3,
+      "time_end": 1008.0,
+      "range_start": 582.0,
+      "range_end": 1045.0
+    },
+    {
+      "file": "composites/ch03-forward-propagation-panel1of2.png",
+      "chapter": 3,
+      "slug": "forward-propagation",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "017-ch03-forward-propagation-t1072s.png",
+        "018-ch03-forward-propagation-t1114s.png",
+        "019-ch03-forward-propagation-t1156s.png",
+        "020-ch03-forward-propagation-t1197s.png"
+      ],
+      "labels": [
+        "ch3 17:52",
+        "ch3 18:34",
+        "ch3 19:16",
+        "ch3 19:57"
+      ],
+      "tile_seconds": [
+        1072.8,
+        1114.4,
+        1156.0,
+        1197.7
+      ],
+      "time_start": 1072.8,
+      "time_end": 1197.7,
+      "range_start": 1045.0,
+      "range_end": 1392.0
+    },
+    {
+      "file": "composites/ch03-forward-propagation-panel2of2.png",
+      "chapter": 3,
+      "slug": "forward-propagation",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "021-ch03-forward-propagation-t1239s.png",
+        "022-ch03-forward-propagation-t1280s.png",
+        "023-ch03-forward-propagation-t1322s.png",
+        "024-ch03-forward-propagation-t1364s.png"
+      ],
+      "labels": [
+        "ch3 20:39",
+        "ch3 21:20",
+        "ch3 22:02",
+        "ch3 22:44"
+      ],
+      "tile_seconds": [
+        1239.3,
+        1281.0,
+        1322.6,
+        1364.2
+      ],
+      "time_start": 1239.3,
+      "time_end": 1364.2,
+      "range_start": 1045.0,
+      "range_end": 1392.0
+    },
+    {
+      "file": "composites/ch04-visualizing-layer-operations-panel1of2.png",
+      "chapter": 4,
+      "slug": "visualizing-layer-operations",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "025-ch04-visualizing-layer-operations-t1418s.png",
+        "026-ch04-visualizing-layer-operations-t1459s.png",
+        "027-ch04-visualizing-layer-operations-t1499s.png",
+        "028-ch04-visualizing-layer-operations-t1540s.png"
+      ],
+      "labels": [
+        "ch4 23:38",
+        "ch4 24:19",
+        "ch4 24:59",
+        "ch4 25:40"
+      ],
+      "tile_seconds": [
+        1419.0,
+        1459.4,
+        1499.8,
+        1540.3
+      ],
+      "time_start": 1419.0,
+      "time_end": 1540.3,
+      "range_start": 1392.0,
+      "range_end": 1729.0
+    },
+    {
+      "file": "composites/ch04-visualizing-layer-operations-panel2of2.png",
+      "chapter": 4,
+      "slug": "visualizing-layer-operations",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "029-ch04-visualizing-layer-operations-t1580s.png",
+        "030-ch04-visualizing-layer-operations-t1621s.png",
+        "031-ch04-visualizing-layer-operations-t1661s.png",
+        "032-ch04-visualizing-layer-operations-t1702s.png"
+      ],
+      "labels": [
+        "ch4 26:20",
+        "ch4 27:01",
+        "ch4 27:41",
+        "ch4 28:22"
+      ],
+      "tile_seconds": [
+        1580.7,
+        1621.2,
+        1661.6,
+        1702.0
+      ],
+      "time_start": 1580.7,
+      "time_end": 1702.0,
+      "range_start": 1392.0,
+      "range_end": 1729.0
+    },
+    {
+      "file": "composites/ch05-backpropagation-concepts-panel1of2.png",
+      "chapter": 5,
+      "slug": "backpropagation-concepts",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "033-ch05-backpropagation-concepts-t1762s.png",
+        "034-ch05-backpropagation-concepts-t1812s.png",
+        "035-ch05-backpropagation-concepts-t1861s.png",
+        "036-ch05-backpropagation-concepts-t1911s.png"
+      ],
+      "labels": [
+        "ch5 29:22",
+        "ch5 30:12",
+        "ch5 31:01",
+        "ch5 31:51"
+      ],
+      "tile_seconds": [
+        1762.2,
+        1812.0,
+        1861.8,
+        1911.6
+      ],
+      "time_start": 1762.2,
+      "time_end": 1911.6,
+      "range_start": 1729.0,
+      "range_end": 2144.0
+    },
+    {
+      "file": "composites/ch05-backpropagation-concepts-panel2of2.png",
+      "chapter": 5,
+      "slug": "backpropagation-concepts",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "037-ch05-backpropagation-concepts-t1961s.png",
+        "038-ch05-backpropagation-concepts-t2011s.png",
+        "039-ch05-backpropagation-concepts-t2061s.png",
+        "040-ch05-backpropagation-concepts-t2110s.png"
+      ],
+      "labels": [
+        "ch5 32:41",
+        "ch5 33:31",
+        "ch5 34:21",
+        "ch5 35:10"
+      ],
+      "tile_seconds": [
+        1961.4,
+        2011.2,
+        2061.0,
+        2110.8
+      ],
+      "time_start": 1961.4,
+      "time_end": 2110.8,
+      "range_start": 1729.0,
+      "range_end": 2144.0
+    },
+    {
+      "file": "composites/ch06-gradient-tracking-controls-panel1of2.png",
+      "chapter": 6,
+      "slug": "gradient-tracking-controls",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "041-ch06-gradient-tracking-controls-t2177s.png",
+        "042-ch06-gradient-tracking-controls-t2228s.png",
+        "043-ch06-gradient-tracking-controls-t2279s.png",
+        "044-ch06-gradient-tracking-controls-t2330s.png"
+      ],
+      "labels": [
+        "ch6 36:17",
+        "ch6 37:08",
+        "ch6 37:59",
+        "ch6 38:50"
+      ],
+      "tile_seconds": [
+        2177.8,
+        2228.6,
+        2279.4,
+        2330.1
+      ],
+      "time_start": 2177.8,
+      "time_end": 2330.1,
+      "range_start": 2144.0,
+      "range_end": 2567.0
+    },
+    {
+      "file": "composites/ch06-gradient-tracking-controls-panel2of2.png",
+      "chapter": 6,
+      "slug": "gradient-tracking-controls",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "045-ch06-gradient-tracking-controls-t2380s.png",
+        "046-ch06-gradient-tracking-controls-t2431s.png",
+        "047-ch06-gradient-tracking-controls-t2482s.png",
+        "048-ch06-gradient-tracking-controls-t2533s.png"
+      ],
+      "labels": [
+        "ch6 39:40",
+        "ch6 40:31",
+        "ch6 41:22",
+        "ch6 42:13"
+      ],
+      "tile_seconds": [
+        2380.9,
+        2431.6,
+        2482.4,
+        2533.2
+      ],
+      "time_start": 2380.9,
+      "time_end": 2533.2,
+      "range_start": 2144.0,
+      "range_end": 2567.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

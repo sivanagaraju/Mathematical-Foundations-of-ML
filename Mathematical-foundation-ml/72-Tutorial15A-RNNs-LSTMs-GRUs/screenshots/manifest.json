@@ -1,0 +1,506 @@
+{
+  "duration_seconds": 2046.0,
+  "range_source": "topic-ranges",
+  "range_count": 5,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 375.0,
+      "slug": "sequence-tensor-geometry-vanilla-rnn-cell-mechan"
+    },
+    {
+      "index": 2,
+      "start": 375.0,
+      "end": 870.0,
+      "slug": "vanishing-gradients-gated-recurrent-unit-gru-for"
+    },
+    {
+      "index": 3,
+      "start": 870.0,
+      "end": 1365.0,
+      "slug": "long-short-term-memory-lstm-cell-states-triple-g"
+    },
+    {
+      "index": 4,
+      "start": 1365.0,
+      "end": 1710.0,
+      "slug": "mathematical-parameter-counting-recurrent-cell-c"
+    },
+    {
+      "index": 5,
+      "start": 1710.0,
+      "end": 2046.0,
+      "slug": "pytorch-recurrent-layers-sequence-classification"
+    }
+  ],
+  "raw_count": 28,
+  "composite_count": 7,
+  "raw": [
+    {
+      "file": "raw/001-ch01-sequence-tensor-geometry-vanilla-rnn-cell-mechan-t0030s.png",
+      "seconds": 30.0,
+      "chapter": 1,
+      "slug": "sequence-tensor-geometry-vanilla-rnn-cell-mechan",
+      "label": "00:30",
+      "range_start": 0.0,
+      "range_end": 375.0
+    },
+    {
+      "file": "raw/002-ch01-sequence-tensor-geometry-vanilla-rnn-cell-mechan-t0135s.png",
+      "seconds": 135.0,
+      "chapter": 1,
+      "slug": "sequence-tensor-geometry-vanilla-rnn-cell-mechan",
+      "label": "02:15",
+      "range_start": 0.0,
+      "range_end": 375.0
+    },
+    {
+      "file": "raw/003-ch01-sequence-tensor-geometry-vanilla-rnn-cell-mechan-t0240s.png",
+      "seconds": 240.0,
+      "chapter": 1,
+      "slug": "sequence-tensor-geometry-vanilla-rnn-cell-mechan",
+      "label": "04:00",
+      "range_start": 0.0,
+      "range_end": 375.0
+    },
+    {
+      "file": "raw/004-ch01-sequence-tensor-geometry-vanilla-rnn-cell-mechan-t0345s.png",
+      "seconds": 345.0,
+      "chapter": 1,
+      "slug": "sequence-tensor-geometry-vanilla-rnn-cell-mechan",
+      "label": "05:45",
+      "range_start": 0.0,
+      "range_end": 375.0
+    },
+    {
+      "file": "raw/005-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0414s.png",
+      "seconds": 414.6,
+      "chapter": 2,
+      "slug": "vanishing-gradients-gated-recurrent-unit-gru-for",
+      "label": "06:54",
+      "range_start": 375.0,
+      "range_end": 870.0
+    },
+    {
+      "file": "raw/006-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0474s.png",
+      "seconds": 474.0,
+      "chapter": 2,
+      "slug": "vanishing-gradients-gated-recurrent-unit-gru-for",
+      "label": "07:54",
+      "range_start": 375.0,
+      "range_end": 870.0
+    },
+    {
+      "file": "raw/007-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0533s.png",
+      "seconds": 533.4,
+      "chapter": 2,
+      "slug": "vanishing-gradients-gated-recurrent-unit-gru-for",
+      "label": "08:53",
+      "range_start": 375.0,
+      "range_end": 870.0
+    },
+    {
+      "file": "raw/008-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0592s.png",
+      "seconds": 592.8,
+      "chapter": 2,
+      "slug": "vanishing-gradients-gated-recurrent-unit-gru-for",
+      "label": "09:52",
+      "range_start": 375.0,
+      "range_end": 870.0
+    },
+    {
+      "file": "raw/009-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0652s.png",
+      "seconds": 652.2,
+      "chapter": 2,
+      "slug": "vanishing-gradients-gated-recurrent-unit-gru-for",
+      "label": "10:52",
+      "range_start": 375.0,
+      "range_end": 870.0
+    },
+    {
+      "file": "raw/010-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0711s.png",
+      "seconds": 711.6,
+      "chapter": 2,
+      "slug": "vanishing-gradients-gated-recurrent-unit-gru-for",
+      "label": "11:51",
+      "range_start": 375.0,
+      "range_end": 870.0
+    },
+    {
+      "file": "raw/011-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0771s.png",
+      "seconds": 771.0,
+      "chapter": 2,
+      "slug": "vanishing-gradients-gated-recurrent-unit-gru-for",
+      "label": "12:51",
+      "range_start": 375.0,
+      "range_end": 870.0
+    },
+    {
+      "file": "raw/012-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0830s.png",
+      "seconds": 830.4,
+      "chapter": 2,
+      "slug": "vanishing-gradients-gated-recurrent-unit-gru-for",
+      "label": "13:50",
+      "range_start": 375.0,
+      "range_end": 870.0
+    },
+    {
+      "file": "raw/013-ch03-long-short-term-memory-lstm-cell-states-triple-g-t0909s.png",
+      "seconds": 909.6,
+      "chapter": 3,
+      "slug": "long-short-term-memory-lstm-cell-states-triple-g",
+      "label": "15:09",
+      "range_start": 870.0,
+      "range_end": 1365.0
+    },
+    {
+      "file": "raw/014-ch03-long-short-term-memory-lstm-cell-states-triple-g-t0969s.png",
+      "seconds": 969.0,
+      "chapter": 3,
+      "slug": "long-short-term-memory-lstm-cell-states-triple-g",
+      "label": "16:09",
+      "range_start": 870.0,
+      "range_end": 1365.0
+    },
+    {
+      "file": "raw/015-ch03-long-short-term-memory-lstm-cell-states-triple-g-t1028s.png",
+      "seconds": 1028.4,
+      "chapter": 3,
+      "slug": "long-short-term-memory-lstm-cell-states-triple-g",
+      "label": "17:08",
+      "range_start": 870.0,
+      "range_end": 1365.0
+    },
+    {
+      "file": "raw/016-ch03-long-short-term-memory-lstm-cell-states-triple-g-t1087s.png",
+      "seconds": 1087.8,
+      "chapter": 3,
+      "slug": "long-short-term-memory-lstm-cell-states-triple-g",
+      "label": "18:07",
+      "range_start": 870.0,
+      "range_end": 1365.0
+    },
+    {
+      "file": "raw/017-ch03-long-short-term-memory-lstm-cell-states-triple-g-t1147s.png",
+      "seconds": 1147.2,
+      "chapter": 3,
+      "slug": "long-short-term-memory-lstm-cell-states-triple-g",
+      "label": "19:07",
+      "range_start": 870.0,
+      "range_end": 1365.0
+    },
+    {
+      "file": "raw/018-ch03-long-short-term-memory-lstm-cell-states-triple-g-t1206s.png",
+      "seconds": 1206.6,
+      "chapter": 3,
+      "slug": "long-short-term-memory-lstm-cell-states-triple-g",
+      "label": "20:06",
+      "range_start": 870.0,
+      "range_end": 1365.0
+    },
+    {
+      "file": "raw/019-ch03-long-short-term-memory-lstm-cell-states-triple-g-t1266s.png",
+      "seconds": 1266.0,
+      "chapter": 3,
+      "slug": "long-short-term-memory-lstm-cell-states-triple-g",
+      "label": "21:06",
+      "range_start": 870.0,
+      "range_end": 1365.0
+    },
+    {
+      "file": "raw/020-ch03-long-short-term-memory-lstm-cell-states-triple-g-t1325s.png",
+      "seconds": 1325.4,
+      "chapter": 3,
+      "slug": "long-short-term-memory-lstm-cell-states-triple-g",
+      "label": "22:05",
+      "range_start": 870.0,
+      "range_end": 1365.0
+    },
+    {
+      "file": "raw/021-ch04-mathematical-parameter-counting-recurrent-cell-c-t1392s.png",
+      "seconds": 1392.6,
+      "chapter": 4,
+      "slug": "mathematical-parameter-counting-recurrent-cell-c",
+      "label": "23:12",
+      "range_start": 1365.0,
+      "range_end": 1710.0
+    },
+    {
+      "file": "raw/022-ch04-mathematical-parameter-counting-recurrent-cell-c-t1489s.png",
+      "seconds": 1489.2,
+      "chapter": 4,
+      "slug": "mathematical-parameter-counting-recurrent-cell-c",
+      "label": "24:49",
+      "range_start": 1365.0,
+      "range_end": 1710.0
+    },
+    {
+      "file": "raw/023-ch04-mathematical-parameter-counting-recurrent-cell-c-t1585s.png",
+      "seconds": 1585.8,
+      "chapter": 4,
+      "slug": "mathematical-parameter-counting-recurrent-cell-c",
+      "label": "26:25",
+      "range_start": 1365.0,
+      "range_end": 1710.0
+    },
+    {
+      "file": "raw/024-ch04-mathematical-parameter-counting-recurrent-cell-c-t1682s.png",
+      "seconds": 1682.4,
+      "chapter": 4,
+      "slug": "mathematical-parameter-counting-recurrent-cell-c",
+      "label": "28:02",
+      "range_start": 1365.0,
+      "range_end": 1710.0
+    },
+    {
+      "file": "raw/025-ch05-pytorch-recurrent-layers-sequence-classification-t1736s.png",
+      "seconds": 1736.9,
+      "chapter": 5,
+      "slug": "pytorch-recurrent-layers-sequence-classification",
+      "label": "28:56",
+      "range_start": 1710.0,
+      "range_end": 2046.0
+    },
+    {
+      "file": "raw/026-ch05-pytorch-recurrent-layers-sequence-classification-t1830s.png",
+      "seconds": 1831.0,
+      "chapter": 5,
+      "slug": "pytorch-recurrent-layers-sequence-classification",
+      "label": "30:30",
+      "range_start": 1710.0,
+      "range_end": 2046.0
+    },
+    {
+      "file": "raw/027-ch05-pytorch-recurrent-layers-sequence-classification-t1925s.png",
+      "seconds": 1925.0,
+      "chapter": 5,
+      "slug": "pytorch-recurrent-layers-sequence-classification",
+      "label": "32:05",
+      "range_start": 1710.0,
+      "range_end": 2046.0
+    },
+    {
+      "file": "raw/028-ch05-pytorch-recurrent-layers-sequence-classification-t2019s.png",
+      "seconds": 2019.1,
+      "chapter": 5,
+      "slug": "pytorch-recurrent-layers-sequence-classification",
+      "label": "33:39",
+      "range_start": 1710.0,
+      "range_end": 2046.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-sequence-tensor-geometry-vanilla-rnn-cell-mechan-panel1of1.png",
+      "chapter": 1,
+      "slug": "sequence-tensor-geometry-vanilla-rnn-cell-mechan",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-sequence-tensor-geometry-vanilla-rnn-cell-mechan-t0030s.png",
+        "002-ch01-sequence-tensor-geometry-vanilla-rnn-cell-mechan-t0135s.png",
+        "003-ch01-sequence-tensor-geometry-vanilla-rnn-cell-mechan-t0240s.png",
+        "004-ch01-sequence-tensor-geometry-vanilla-rnn-cell-mechan-t0345s.png"
+      ],
+      "labels": [
+        "ch1 00:30",
+        "ch1 02:15",
+        "ch1 04:00",
+        "ch1 05:45"
+      ],
+      "tile_seconds": [
+        30.0,
+        135.0,
+        240.0,
+        345.0
+      ],
+      "time_start": 30.0,
+      "time_end": 345.0,
+      "range_start": 0.0,
+      "range_end": 375.0
+    },
+    {
+      "file": "composites/ch02-vanishing-gradients-gated-recurrent-unit-gru-for-panel1of2.png",
+      "chapter": 2,
+      "slug": "vanishing-gradients-gated-recurrent-unit-gru-for",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "005-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0414s.png",
+        "006-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0474s.png",
+        "007-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0533s.png",
+        "008-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0592s.png"
+      ],
+      "labels": [
+        "ch2 06:54",
+        "ch2 07:54",
+        "ch2 08:53",
+        "ch2 09:52"
+      ],
+      "tile_seconds": [
+        414.6,
+        474.0,
+        533.4,
+        592.8
+      ],
+      "time_start": 414.6,
+      "time_end": 592.8,
+      "range_start": 375.0,
+      "range_end": 870.0
+    },
+    {
+      "file": "composites/ch02-vanishing-gradients-gated-recurrent-unit-gru-for-panel2of2.png",
+      "chapter": 2,
+      "slug": "vanishing-gradients-gated-recurrent-unit-gru-for",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "009-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0652s.png",
+        "010-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0711s.png",
+        "011-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0771s.png",
+        "012-ch02-vanishing-gradients-gated-recurrent-unit-gru-for-t0830s.png"
+      ],
+      "labels": [
+        "ch2 10:52",
+        "ch2 11:51",
+        "ch2 12:51",
+        "ch2 13:50"
+      ],
+      "tile_seconds": [
+        652.2,
+        711.6,
+        771.0,
+        830.4
+      ],
+      "time_start": 652.2,
+      "time_end": 830.4,
+      "range_start": 375.0,
+      "range_end": 870.0
+    },
+    {
+      "file": "composites/ch03-long-short-term-memory-lstm-cell-states-triple-g-panel1of2.png",
+      "chapter": 3,
+      "slug": "long-short-term-memory-lstm-cell-states-triple-g",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "013-ch03-long-short-term-memory-lstm-cell-states-triple-g-t0909s.png",
+        "014-ch03-long-short-term-memory-lstm-cell-states-triple-g-t0969s.png",
+        "015-ch03-long-short-term-memory-lstm-cell-states-triple-g-t1028s.png",
+        "016-ch03-long-short-term-memory-lstm-cell-states-triple-g-t1087s.png"
+      ],
+      "labels": [
+        "ch3 15:09",
+        "ch3 16:09",
+        "ch3 17:08",
+        "ch3 18:07"
+      ],
+      "tile_seconds": [
+        909.6,
+        969.0,
+        1028.4,
+        1087.8
+      ],
+      "time_start": 909.6,
+      "time_end": 1087.8,
+      "range_start": 870.0,
+      "range_end": 1365.0
+    },
+    {
+      "file": "composites/ch03-long-short-term-memory-lstm-cell-states-triple-g-panel2of2.png",
+      "chapter": 3,
+      "slug": "long-short-term-memory-lstm-cell-states-triple-g",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "017-ch03-long-short-term-memory-lstm-cell-states-triple-g-t1147s.png",
+        "018-ch03-long-short-term-memory-lstm-cell-states-triple-g-t1206s.png",
+        "019-ch03-long-short-term-memory-lstm-cell-states-triple-g-t1266s.png",
+        "020-ch03-long-short-term-memory-lstm-cell-states-triple-g-t1325s.png"
+      ],
+      "labels": [
+        "ch3 19:07",
+        "ch3 20:06",
+        "ch3 21:06",
+        "ch3 22:05"
+      ],
+      "tile_seconds": [
+        1147.2,
+        1206.6,
+        1266.0,
+        1325.4
+      ],
+      "time_start": 1147.2,
+      "time_end": 1325.4,
+      "range_start": 870.0,
+      "range_end": 1365.0
+    },
+    {
+      "file": "composites/ch04-mathematical-parameter-counting-recurrent-cell-c-panel1of1.png",
+      "chapter": 4,
+      "slug": "mathematical-parameter-counting-recurrent-cell-c",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch04-mathematical-parameter-counting-recurrent-cell-c-t1392s.png",
+        "022-ch04-mathematical-parameter-counting-recurrent-cell-c-t1489s.png",
+        "023-ch04-mathematical-parameter-counting-recurrent-cell-c-t1585s.png",
+        "024-ch04-mathematical-parameter-counting-recurrent-cell-c-t1682s.png"
+      ],
+      "labels": [
+        "ch4 23:12",
+        "ch4 24:49",
+        "ch4 26:25",
+        "ch4 28:02"
+      ],
+      "tile_seconds": [
+        1392.6,
+        1489.2,
+        1585.8,
+        1682.4
+      ],
+      "time_start": 1392.6,
+      "time_end": 1682.4,
+      "range_start": 1365.0,
+      "range_end": 1710.0
+    },
+    {
+      "file": "composites/ch05-pytorch-recurrent-layers-sequence-classification-panel1of1.png",
+      "chapter": 5,
+      "slug": "pytorch-recurrent-layers-sequence-classification",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch05-pytorch-recurrent-layers-sequence-classification-t1736s.png",
+        "026-ch05-pytorch-recurrent-layers-sequence-classification-t1830s.png",
+        "027-ch05-pytorch-recurrent-layers-sequence-classification-t1925s.png",
+        "028-ch05-pytorch-recurrent-layers-sequence-classification-t2019s.png"
+      ],
+      "labels": [
+        "ch5 28:56",
+        "ch5 30:30",
+        "ch5 32:05",
+        "ch5 33:39"
+      ],
+      "tile_seconds": [
+        1736.9,
+        1831.0,
+        1925.0,
+        2019.1
+      ],
+      "time_start": 1736.9,
+      "time_end": 2019.1,
+      "range_start": 1710.0,
+      "range_end": 2046.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

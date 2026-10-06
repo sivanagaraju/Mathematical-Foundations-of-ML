@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tutorial 13 : PyTorch - Training the Model</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Tutorial 13 : PyTorch - Training the Model</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. Interactive Knowledge Verification & Diagnostic Self-Assessment</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "prereq-01", "part": "prerequisites", "flavor": "numerical", "anchor": "PREREQUISITES.md#p1", "prompt": "Given a mini-batch of 4 samples with individual sample losses l_1 = 0.8, l_2 = 1.2, l_3 = 0.4, and l_4 = 1.6, and respective 2D parameter gradient vectors g_1 = [2, -1], g_2 = [1, 3], g_3 = [-1, 0], and g_4 = [2, 2]. If parameter vector theta_0 = [5.0, 5.0] and learning rate eta = 0.1, what is the empirical risk R_emp and updated parameter vector theta_1 under batch gradient descent?", "options": [{"key": "A", "text": "R_emp = 4.0, and theta_1 = [4.6, 4.6]."}, {"key": "B", "text": "R_emp = 1.0, and theta_1 = [4.9, 4.9]."}, {"key": "C", "text": "R_emp = 1.0, and theta_1 = [5.1, 5.1]."}, {"key": "D", "text": "R_emp = 1.0, and theta_1 = [4.0, 4.0]."}], "answer": "B", "whyCorrect": "The empirical risk is the arithmetic mean: R_emp = (0.8 + 1.2 + 0.4 + 1.6)/4 = 4.0/4 = 1.0. The average gradient vector is g_avg = ([2, -1] + [1, 3] + [-1, 0] + [2, 2])/4 = [4.0, 4.0]/4 = [1.0, 1.0]. The gradient step is theta_1 = theta_0 - eta * g_avg = [5.0, 5.0] - 0.1 * [1.0, 1.0] = [4.9, 4.9].", "whyOthers": {"A": "Incorrect; 4.0 is the unnormalized sum of losses, not the average empirical risk.", "C": "Incorrect; adding eta * g_avg performs gradient ascent rather than minimization.", "D": "Incorrect; subtracting the unscaled gradient [1.0, 1.0] ignores the learning rate eta = 0.1."}, "diagram": "Losses: [0.8, 1.2, 0.4, 1.6] ---> Mean Loss R_emp = 1.0\nGradients: Sum=[4, 4] ---> Mean Grad = [1, 1] ---> theta_1 = [5, 5] - 0.1*[1, 1] = [4.9, 4.9]", "useLater": "Foundation for understanding mini-batch loss reduction and parameter updates in Topic 1."}, {"id": "prereq-02", "part": "prerequisites", "flavor": "tradeoff", "anchor": "PREREQUISITES.md#p2", "prompt": "Why does Adam optimization incorporate bias-corrected moment estimates (hat{m}_t = m_t / (1 - beta_1^t) and hat{v}_t = v_t / (1 - beta_2^t)) during the initial iterations of neural network training?", "options": [{"key": "A", "text": "Because PyTorch tensors cannot compute square roots of unnormalized vectors."}, {"key": "B", "text": "To prevent gradients from exceeding the floating point limit of 65,504 in FP16 precision."}, {"key": "C", "text": "Because m_t and v_t are initialized to zero vectors, causing early uncorrected exponential moving averages to be heavily biased toward zero, leading to vanishingly small initial step sizes without bias correction."}, {"key": "D", "text": "Because bias correction transforms Adam into stochastic gradient descent with constant momentum."}], "answer": "C", "whyCorrect": "Initializing m_0 = 0 and v_0 = 0 causes m_1 = (1 - beta_1) g_1. When beta_1 = 0.9, m_1 is only 0.1 * g_1. Dividing by (1 - beta_1^1) = 0.1 scales hat{m}_1 back up to 1.0 * g_1, ensuring unbiased expectation E[hat{m}_t] = E[g_t] even at step 1.", "whyOthers": {"A": "Incorrect; tensor square roots work element-wise on any non-negative floats regardless of normalization.", "B": "Incorrect; mixed precision dynamic scaling handles FP16 range limits, not Adam bias correction.", "D": "Incorrect; Adam remains an adaptive coordinate-wise optimizer; bias correction does not convert it into SGD."}, "diagram": "m_0 = 0 ---> m_1 = (1 - beta_1) * g_1 (severely dampened toward 0)\n             hat{m}_1 = m_1 / (1 - beta_1^1) = g_1 (unbiased estimator restored)", "useLater": "Guides optimizer selection (Adam vs SGD) in Topic 2."}, {"id": "prereq-03", "part": "prerequisites", "flavor": "trap", "anchor": "PREREQUISITES.md#p3", "prompt": "What catastrophic numerical error occurs if a machine learning practitioner evaluates cross-entropy loss by explicitly computing torch.log(torch.softmax(logits, dim=1)) when logits contain large magnitudes such as [1000.0, 1001.0, 1002.0]?", "options": [{"key": "A", "text": "The Softmax operator mutates input logits in-place, corrupting model weights."}, {"key": "B", "text": "PyTorch throws a compile-time TypeError because Softmax outputs cannot be logged."}, {"key": "C", "text": "The gradient becomes strictly zero everywhere, freezing model training forever."}, {"key": "D", "text": "Direct exponentiation exp(1002.0) exceeds 32-bit floating point range (~3.4e38), overflowing to +inf, producing inf / inf = NaN; whereas nn.CrossEntropyLoss uses the Log-Sum-Exp trick to preserve exact numerical stability."}], "answer": "D", "whyCorrect": "Single precision float32 overflows when values exceed ~88.7 in exponentiation. Evaluating exp(1000.0) yields +inf, causing Softmax to return NaN. nn.CrossEntropyLoss internally subtracts max(z) prior to exponentiation (LogSumExp), ensuring bounded non-overflowing computation.", "whyOthers": {"A": "Incorrect; Softmax allocates an output tensor and does not mutate model weights in-place.", "B": "Incorrect; torch.log accepts float tensors as valid input; the failure is runtime arithmetic overflow, not a type error.", "C": "Incorrect; the result is NaN (Not a Number), not zero gradients."}, "diagram": "Raw Logits [1000, 1002] ---> exp(1002) = +inf ---> inf/inf = NaN (CRASH)\nWith LogSumExp: [1000-1002, 1002-1002] = [-2, 0] ---> exp(0) = 1.0 (STABLE)", "useLater": "Explains why raw logits must be fed directly into nn.CrossEntropyLoss in Topics 1 and 4."}, {"id": "prereq-04", "part": "prerequisites", "flavor": "intuition", "anchor": "PREREQUISITES.md#p6", "prompt": "Why is serializing a model via torch.save(model.state_dict(), path) strongly preferred over saving the full instance via torch.save(model, path) in production machine learning systems?", "options": [{"key": "A", "text": "state_dict serializes purely numerical parameter and buffer tensor dictionaries, decoupling trained weights from arbitrary Python class code, preventing refactoring import crashes and eliminating remote code execution vulnerabilities."}, {"key": "B", "text": "Saving the full model compresses parameters with lossy 8-bit quantization, degrading validation accuracy."}, {"key": "C", "text": "state_dict converts all model weights into JSON text strings for human readability."}, {"key": "D", "text": "PyTorch deprecates torch.save(model, path) with an immediate runtime exception."}], "answer": "A", "whyCorrect": "torch.save(model) pickles the entire Python class hierarchy and directory path. If the class is moved or renamed, deserialization fails. Furthermore, unpickling arbitrary Python objects exposes systems to remote code execution. state_dict saves only raw weight tensors in a clean dictionary.", "whyOthers": {"B": "Incorrect; torch.save does not perform lossy quantization unless explicitly requested.", "C": "Incorrect; state_dict files are binary zip archives containing raw tensor buffers, not JSON text.", "D": "Incorrect; saving the full object is supported in PyTorch, but considered an anti-pattern."}, "diagram": "state_dict: {'layer.weight': Tensor[...]} ---> Pure numerical arrays (Safe, Refactor-proof)\nFull object: __main__.NeuralNet + bytecode ---> Fragile, RCE pickle vulnerability", "useLater": "Directly applied in Topic 6 when implementing model checkpointing and serialization."}, {"id": "notes-01", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#topic-04", "prompt": "What catastrophic algorithmic failure occurs during neural network training if a developer mistakenly omits optimizer.zero_grad() before calling loss.backward() in the training loop?", "options": [{"key": "A", "text": "PyTorch autograd throws a RuntimeError: 'Gradients not cleared before backward pass'."}, {"key": "B", "text": "PyTorch autograd accumulates (adds) new gradients into existing parameter .grad buffers from prior mini-batches, causing effective gradient magnitudes to blow up continuously across iterations, resulting in gradient explosion and divergence."}, {"key": "C", "text": "The optimizer resets all model weights to uniform random initialization."}, {"key": "D", "text": "The model instantly stops training because parameter gradients are overwritten with zeros."}], "answer": "B", "whyCorrect": "By design, PyTorch accumulates gradients in parameter .grad tensors (param.grad += new_grad) to support multi-step gradient accumulation. If optimizer.zero_grad() is omitted, the buffer retains and sums gradients from all preceding mini-batches, destroying the mini-batch stochastic approximation.", "whyOthers": {"A": "Incorrect; PyTorch does not throw an error because gradient accumulation is valid intentional syntax for large virtual batches.", "C": "Incorrect; weights are updated via parameter - lr * grad; they are never randomly re-initialized.", "D": "Incorrect; gradients are summed, not overwritten with zeros."}, "diagram": "Batch 1: grad = [0.1] ---> param.grad = [0.1]\nBatch 2: grad = [0.2] ---> param.grad = [0.1] + [0.2] = [0.3] (ACCUMULATING!)\nBatch 100: param.grad = [58.4] ---> EXPLODING GRADIENTS!", "useLater": "Core rule of the 5-step training loop sequence."}, {"id": "notes-02", "part": "notes", "flavor": "connect", "anchor": "NOTES.md#executive-summary", "prompt": "How do the components of the PyTorch training and evaluation master workflow connect in sequence to form a sound, leak-free machine learning lifecycle?", "options": [{"key": "A", "text": "model.eval() -> loss.backward() -> optimizer.zero_grad() -> optimizer.step() -> model.train() -> DataLoader -> save full model."}, {"key": "B", "text": "optimizer.step() -> loss.backward() -> forward pass -> torch.no_grad() -> DataLoader batches -> model.train()."}, {"key": "C", "text": "DataLoader batches -> model.train() -> optimizer.zero_grad() -> forward loss -> loss.backward() -> optimizer.step() -> model.eval() with torch.no_grad() -> state_dict checkpointing."}, {"key": "D", "text": "DataLoader batches -> torch.no_grad() -> forward pass -> loss.backward() -> optimizer.zero_grad() -> model.train()."}], "answer": "C", "whyCorrect": "The master workflow strictly requires: (1) loading batches, (2) enabling training mode, (3) clearing old gradients, (4) computing forward loss, (5) backpropagating gradients via reverse-mode AD, (6) stepping optimizer, (7) evaluating under eval mode and no_grad, and (8) safely saving state_dict.", "whyOthers": {"A": "Incorrect; calling backward in eval mode before forward pass violates graph execution dependencies.", "B": "Incorrect; optimizer step cannot execute before gradients are computed by backward.", "D": "Incorrect; loss.backward() crashes inside torch.no_grad() because no gradient computation graph is constructed."}, "diagram": "Data Batch -> [train()] -> [zero_grad()] -> [Forward] -> [Loss] -> [Backward] -> [Step] -> [eval()+no_grad()] -> [save(state_dict)]", "useLater": "Master map connecting all six topics of the lecture."}, {"id": "notes-03", "part": "notes", "flavor": "compare", "anchor": "NOTES.md#topic-05", "prompt": "What is the critical functional difference between setting model.eval() versus wrapping inference in with torch.no_grad(): during the evaluation phase?", "options": [{"key": "A", "text": "model.eval() prevents backpropagation, while torch.no_grad() enables GPU multiprocessing."}, {"key": "B", "text": "They are completely interchangeable aliases in modern PyTorch releases."}, {"key": "C", "text": "torch.no_grad() modifies layer weights, while model.eval() leaves weights intact."}, {"key": "D", "text": "model.eval() alters layer operational behavior (disabling Dropout and freezing BatchNorm running statistics), whereas torch.no_grad() is a context manager that disables autograd graph construction to save memory and compute."}], "answer": "D", "whyCorrect": "model.eval() toggles model mode flags (_is_training = False), ensuring layers like Dropout and BatchNorm behave deterministically for test data. torch.no_grad() alters the global autograd execution context, ensuring intermediate activations are not saved for backward passes. Both are necessary.", "whyOthers": {"A": "Incorrect; model.eval() does not disable autograd; gradients can still be computed in eval mode unless no_grad is used.", "B": "Incorrect; they control two orthogonal aspects of the framework (module state vs autograd tape recording).", "C": "Incorrect; neither modifies parameter weights."}, "diagram": "model.eval()       ---> Toggles Dropout to Identity, fixes BatchNorm stats\ntorch.no_grad()    ---> Suppresses Autograd tape creation, frees activation VRAM\nProduction Eval    ---> REQUIRES BOTH CONCURRENTLY!", "useLater": "Prevents silent validation corruption and memory leaks in Topic 5."}, {"id": "notes-04", "part": "notes", "flavor": "numerical", "anchor": "NOTES.md#topic-03", "prompt": "Given the MNIST training dataset with N = 60,000 images and a DataLoader configured with batch_size = 64 and drop_last = False. How many iterations (mini-batches) constitute exactly one complete training epoch, and what is the sample count in the final batch?", "options": [{"key": "A", "text": "938 iterations total; the first 937 batches contain 64 samples, and the final 938th batch contains 32 samples."}, {"key": "B", "text": "937 iterations total; all batches contain 64 samples."}, {"key": "C", "text": "1,000 iterations total; the final batch contains 64 samples."}, {"key": "D", "text": "938 iterations total; all 938 batches contain exactly 64 samples."}], "answer": "A", "whyCorrect": "The number of mini-batches is ceil(60,000 / 64) = ceil(937.5) = 938 iterations. 937 full batches contain 937 * 64 = 59,968 samples. The final batch contains the remainder: 60,000 - 59,968 = 32 samples.", "whyOthers": {"B": "Incorrect; floor division 937 drops 32 samples when drop_last=False.", "C": "Incorrect; 60,000 / 64 is ~937.5, not 1,000.", "D": "Incorrect; 938 * 64 = 60,032 samples, which exceeds the dataset size by 32."}, "diagram": "60,000 samples / 64 per batch = 937 full batches (59,968 samples) + 1 remainder batch (32 samples) = 938 iterations", "useLater": "Used in Topic 3 to understand DataLoader iteration dynamics and epoch progression."}, {"id": "notes-05", "part": "notes", "flavor": "definition", "anchor": "NOTES.md#topic-02", "prompt": "According to deep learning optimization principles, why is the learning rate (eta) considered the single most sensitive hyperparameter when training neural networks?", "options": [{"key": "A", "text": "Because changing the learning rate alters the dimensionality of the hidden layer weight matrices."}, {"key": "B", "text": "Because it directly scales the gradient step vector: setting it too large causes parameter updates to overshoot valleys and diverge to infinity/NaN, while setting it too small results in agonizingly slow convergence or premature stagnation in shallow local sub-optima."}, {"key": "C", "text": "Because learning rate determines whether the input data is normalized to unit variance."}, {"key": "D", "text": "Because PyTorch crashes if learning rate is set to any value other than 0.001."}], "answer": "B", "whyCorrect": "The learning rate scales the magnitude of parameter displacement Delta theta = -eta * grad. If eta > 2 / L_smooth, gradient descent diverges. If eta << 1 / L_smooth, optimization requires impractical numbers of epochs to make progress.", "whyOthers": {"A": "Incorrect; learning rate is an optimization scalar and has no effect on tensor matrix dimensions.", "C": "Incorrect; input normalization is a data preprocessing step handled by torchvision transforms.", "D": "Incorrect; PyTorch accepts any positive float for learning rates."}, "diagram": "Large eta:   Oscillates violently, overshoots minimum ---> Divergence / NaN\nSmall eta:   Creeps imperceptibly, traps in plateaus ---> Stagnation\nTuned eta:   Smooth, exponential descent to minimum", "useLater": "Establishes hyperparameter tuning intuition in Topic 2."}, {"id": "notes-06", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#topic-05", "prompt": "In multi-batch training and evaluation loops, why does accumulating losses using 'running_loss += loss' inevitably crash long-running jobs with CUDA Out-Of-Memory (OOM), and how does 'running_loss += loss.item()' fix it?", "options": [{"key": "A", "text": "loss.item() converts the loss to 16-bit precision to save 50% memory."}, {"key": "B", "text": "PyTorch tensors cannot be summed across more than 10 iterations without triggering an internal assertion."}, {"key": "C", "text": "The tensor 'loss' maintains a pointer to its autograd backward computation graph; summing raw tensors chains every batch's entire activation graph into one monolithic graph spanning the whole epoch, while 'loss.item()' extracts a pure Python float that frees the graph."}, {"key": "D", "text": "running_loss += loss forces PyTorch to execute model inference twice per batch."}], "answer": "C", "whyCorrect": "Because 'loss' is a node in the dynamic computation graph with grad_fn, adding it to a running tensor variable keeps the entire history of operations and intermediate tensors alive across all iterations. .item() extracts the underlying scalar float, severing the graph reference and allowing immediate memory reclamation.", "whyOthers": {"A": "Incorrect; .item() returns a standard Python float (double precision 64-bit), not FP16.", "B": "Incorrect; PyTorch allows summing tensors arbitrarily; the issue is GPU VRAM retention of graph dependencies.", "D": "Incorrect; no second forward pass is executed."}, "diagram": "running_loss += loss       ---> Retains Batch 1 Graph + Batch 2 Graph + ... + Batch 1000 Graph (CUDA OOM!)\nrunning_loss += loss.item()  ---> Retains scalar float (e.g., 0.42) and drops all graph memory instantly", "useLater": "Critical memory hygiene practice in Topic 5 and workplace debugging."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

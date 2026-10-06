@@ -1,0 +1,48 @@
+{
+  "title": "Lec 48 Attention Part1",
+  "video_id": "00DOOSYFyJA",
+  "url": "https://www.youtube.com/watch?v=00DOOSYFyJA",
+  "duration_seconds": 1411,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "Attention Mechanism, Sequence to Sequence Methods, Representation Learning, and Query-Key-Value Projections",
+  "playlist_index": 64,
+  "chapter_count": 4,
+  "instructor": "Prof. Prathosh A P",
+  "skill": "youtube-lecture-tutor",
+  "topic_count": 4,
+  "package_variant": "standard",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "content_type": "math_technical",
+  "ingest_evidence": {
+    "captions_file": "raw/captions.en.vtt",
+    "topic_ranges_file": "raw/topic-ranges.json"
+  },
+  "topics": [
+    {
+      "index": 1,
+      "title": "Representation Learning Worldview: From Fixed Transforms to Learned Non-Linear Embeddings",
+      "time_range": "00:00–08:35",
+      "summary": "Prof. Prathosh establishes the foundational worldview of representation learning, contrasting fixed classical transforms (Fourier, Z-transforms, Polynomial/RBF Kernels) with deep neural networks as hierarchical, parameterized changes of basis, framing architectural design as inductive bias regularization."
+    },
+    {
+      "index": 2,
+      "title": "The Sequence-to-Sequence Bottleneck: Information Compression in Recurrent Encoders",
+      "time_range": "08:36–11:00",
+      "summary": "Formalizes the sequence-to-sequence paradigm with variable sequence lengths T and T', exposing the severe informational bottleneck where an encoder forces an entire historical sequence X_1, ..., X_T into a single fixed-dimensional latent vector H_T."
+    },
+    {
+      "index": 3,
+      "title": "Historical Genesis of Attention: Dynamic Linear Combinations of Hidden States",
+      "time_range": "11:01–15:45",
+      "summary": "Traces the evolution from Bahdanau encoder-state tapping (weighted linear combinations sum alpha_i H_i) to the radical breakthrough of 'Attention Is All You Need' (Vaswani et al.), which completely dispenses with recurrence to capture pairwise token interactions in parallel."
+    },
+    {
+      "index": 4,
+      "title": "Mathematical Formulation of Query, Key, and Value Projections",
+      "time_range": "15:46–23:31",
+      "summary": "Defines the token sequence data matrix X in R^{T x D} and derives the learnable linear projections Q = X W_Q, K = X W_K, and V = X W_V, proving that row vectors correspond to token-specific projections onto learned subspaces."
+    }
+  ]
+}

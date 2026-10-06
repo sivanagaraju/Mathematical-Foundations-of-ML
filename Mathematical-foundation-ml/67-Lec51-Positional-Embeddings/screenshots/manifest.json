@@ -1,0 +1,447 @@
+{
+  "duration_seconds": 809.0,
+  "range_source": "youtube-chapters",
+  "range_count": 6,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 32.0,
+      "slug": "introduction-to-class"
+    },
+    {
+      "index": 2,
+      "start": 32.0,
+      "end": 185.0,
+      "slug": "transformer-sequence-issues"
+    },
+    {
+      "index": 3,
+      "start": 185.0,
+      "end": 420.0,
+      "slug": "positional-embeddings"
+    },
+    {
+      "index": 4,
+      "start": 420.0,
+      "end": 661.0,
+      "slug": "sinusoidal-encoding"
+    },
+    {
+      "index": 5,
+      "start": 661.0,
+      "end": 756.0,
+      "slug": "self-and-cross-attention"
+    },
+    {
+      "index": 6,
+      "start": 756.0,
+      "end": 809.0,
+      "slug": "training-techniques"
+    }
+  ],
+  "raw_count": 24,
+  "composite_count": 6,
+  "raw": [
+    {
+      "file": "raw/001-ch01-introduction-to-class-t0002s.png",
+      "seconds": 2.6,
+      "chapter": 1,
+      "slug": "introduction-to-class",
+      "label": "00:02",
+      "range_start": 0.0,
+      "range_end": 32.0
+    },
+    {
+      "file": "raw/002-ch01-introduction-to-class-t0011s.png",
+      "seconds": 11.5,
+      "chapter": 1,
+      "slug": "introduction-to-class",
+      "label": "00:11",
+      "range_start": 0.0,
+      "range_end": 32.0
+    },
+    {
+      "file": "raw/003-ch01-introduction-to-class-t0020s.png",
+      "seconds": 20.5,
+      "chapter": 1,
+      "slug": "introduction-to-class",
+      "label": "00:20",
+      "range_start": 0.0,
+      "range_end": 32.0
+    },
+    {
+      "file": "raw/004-ch01-introduction-to-class-t0029s.png",
+      "seconds": 29.4,
+      "chapter": 1,
+      "slug": "introduction-to-class",
+      "label": "00:29",
+      "range_start": 0.0,
+      "range_end": 32.0
+    },
+    {
+      "file": "raw/005-ch02-transformer-sequence-issues-t0044s.png",
+      "seconds": 44.2,
+      "chapter": 2,
+      "slug": "transformer-sequence-issues",
+      "label": "00:44",
+      "range_start": 32.0,
+      "range_end": 185.0
+    },
+    {
+      "file": "raw/006-ch02-transformer-sequence-issues-t0087s.png",
+      "seconds": 87.1,
+      "chapter": 2,
+      "slug": "transformer-sequence-issues",
+      "label": "01:27",
+      "range_start": 32.0,
+      "range_end": 185.0
+    },
+    {
+      "file": "raw/007-ch02-transformer-sequence-issues-t0129s.png",
+      "seconds": 129.9,
+      "chapter": 2,
+      "slug": "transformer-sequence-issues",
+      "label": "02:09",
+      "range_start": 32.0,
+      "range_end": 185.0
+    },
+    {
+      "file": "raw/008-ch02-transformer-sequence-issues-t0172s.png",
+      "seconds": 172.8,
+      "chapter": 2,
+      "slug": "transformer-sequence-issues",
+      "label": "02:52",
+      "range_start": 32.0,
+      "range_end": 185.0
+    },
+    {
+      "file": "raw/009-ch03-positional-embeddings-t0203s.png",
+      "seconds": 203.8,
+      "chapter": 3,
+      "slug": "positional-embeddings",
+      "label": "03:23",
+      "range_start": 185.0,
+      "range_end": 420.0
+    },
+    {
+      "file": "raw/010-ch03-positional-embeddings-t0269s.png",
+      "seconds": 269.6,
+      "chapter": 3,
+      "slug": "positional-embeddings",
+      "label": "04:29",
+      "range_start": 185.0,
+      "range_end": 420.0
+    },
+    {
+      "file": "raw/011-ch03-positional-embeddings-t0335s.png",
+      "seconds": 335.4,
+      "chapter": 3,
+      "slug": "positional-embeddings",
+      "label": "05:35",
+      "range_start": 185.0,
+      "range_end": 420.0
+    },
+    {
+      "file": "raw/012-ch03-positional-embeddings-t0401s.png",
+      "seconds": 401.2,
+      "chapter": 3,
+      "slug": "positional-embeddings",
+      "label": "06:41",
+      "range_start": 185.0,
+      "range_end": 420.0
+    },
+    {
+      "file": "raw/013-ch04-sinusoidal-encoding-t0439s.png",
+      "seconds": 439.3,
+      "chapter": 4,
+      "slug": "sinusoidal-encoding",
+      "label": "07:19",
+      "range_start": 420.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "raw/014-ch04-sinusoidal-encoding-t0506s.png",
+      "seconds": 506.8,
+      "chapter": 4,
+      "slug": "sinusoidal-encoding",
+      "label": "08:26",
+      "range_start": 420.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "raw/015-ch04-sinusoidal-encoding-t0574s.png",
+      "seconds": 574.2,
+      "chapter": 4,
+      "slug": "sinusoidal-encoding",
+      "label": "09:34",
+      "range_start": 420.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "raw/016-ch04-sinusoidal-encoding-t0641s.png",
+      "seconds": 641.7,
+      "chapter": 4,
+      "slug": "sinusoidal-encoding",
+      "label": "10:41",
+      "range_start": 420.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "raw/017-ch05-self-and-cross-attention-t0668s.png",
+      "seconds": 668.6,
+      "chapter": 5,
+      "slug": "self-and-cross-attention",
+      "label": "11:08",
+      "range_start": 661.0,
+      "range_end": 756.0
+    },
+    {
+      "file": "raw/018-ch05-self-and-cross-attention-t0695s.png",
+      "seconds": 695.2,
+      "chapter": 5,
+      "slug": "self-and-cross-attention",
+      "label": "11:35",
+      "range_start": 661.0,
+      "range_end": 756.0
+    },
+    {
+      "file": "raw/019-ch05-self-and-cross-attention-t0721s.png",
+      "seconds": 721.8,
+      "chapter": 5,
+      "slug": "self-and-cross-attention",
+      "label": "12:01",
+      "range_start": 661.0,
+      "range_end": 756.0
+    },
+    {
+      "file": "raw/020-ch05-self-and-cross-attention-t0748s.png",
+      "seconds": 748.4,
+      "chapter": 5,
+      "slug": "self-and-cross-attention",
+      "label": "12:28",
+      "range_start": 661.0,
+      "range_end": 756.0
+    },
+    {
+      "file": "raw/021-ch06-training-techniques-t0760s.png",
+      "seconds": 760.2,
+      "chapter": 6,
+      "slug": "training-techniques",
+      "label": "12:40",
+      "range_start": 756.0,
+      "range_end": 809.0
+    },
+    {
+      "file": "raw/022-ch06-training-techniques-t0775s.png",
+      "seconds": 775.1,
+      "chapter": 6,
+      "slug": "training-techniques",
+      "label": "12:55",
+      "range_start": 756.0,
+      "range_end": 809.0
+    },
+    {
+      "file": "raw/023-ch06-training-techniques-t0789s.png",
+      "seconds": 789.9,
+      "chapter": 6,
+      "slug": "training-techniques",
+      "label": "13:09",
+      "range_start": 756.0,
+      "range_end": 809.0
+    },
+    {
+      "file": "raw/024-ch06-training-techniques-t0804s.png",
+      "seconds": 804.8,
+      "chapter": 6,
+      "slug": "training-techniques",
+      "label": "13:24",
+      "range_start": 756.0,
+      "range_end": 809.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-introduction-to-class-panel1of1.png",
+      "chapter": 1,
+      "slug": "introduction-to-class",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-introduction-to-class-t0002s.png",
+        "002-ch01-introduction-to-class-t0011s.png",
+        "003-ch01-introduction-to-class-t0020s.png",
+        "004-ch01-introduction-to-class-t0029s.png"
+      ],
+      "labels": [
+        "ch1 00:02",
+        "ch1 00:11",
+        "ch1 00:20",
+        "ch1 00:29"
+      ],
+      "tile_seconds": [
+        2.6,
+        11.5,
+        20.5,
+        29.4
+      ],
+      "time_start": 2.6,
+      "time_end": 29.4,
+      "range_start": 0.0,
+      "range_end": 32.0
+    },
+    {
+      "file": "composites/ch02-transformer-sequence-issues-panel1of1.png",
+      "chapter": 2,
+      "slug": "transformer-sequence-issues",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-transformer-sequence-issues-t0044s.png",
+        "006-ch02-transformer-sequence-issues-t0087s.png",
+        "007-ch02-transformer-sequence-issues-t0129s.png",
+        "008-ch02-transformer-sequence-issues-t0172s.png"
+      ],
+      "labels": [
+        "ch2 00:44",
+        "ch2 01:27",
+        "ch2 02:09",
+        "ch2 02:52"
+      ],
+      "tile_seconds": [
+        44.2,
+        87.1,
+        129.9,
+        172.8
+      ],
+      "time_start": 44.2,
+      "time_end": 172.8,
+      "range_start": 32.0,
+      "range_end": 185.0
+    },
+    {
+      "file": "composites/ch03-positional-embeddings-panel1of1.png",
+      "chapter": 3,
+      "slug": "positional-embeddings",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-positional-embeddings-t0203s.png",
+        "010-ch03-positional-embeddings-t0269s.png",
+        "011-ch03-positional-embeddings-t0335s.png",
+        "012-ch03-positional-embeddings-t0401s.png"
+      ],
+      "labels": [
+        "ch3 03:23",
+        "ch3 04:29",
+        "ch3 05:35",
+        "ch3 06:41"
+      ],
+      "tile_seconds": [
+        203.8,
+        269.6,
+        335.4,
+        401.2
+      ],
+      "time_start": 203.8,
+      "time_end": 401.2,
+      "range_start": 185.0,
+      "range_end": 420.0
+    },
+    {
+      "file": "composites/ch04-sinusoidal-encoding-panel1of1.png",
+      "chapter": 4,
+      "slug": "sinusoidal-encoding",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-sinusoidal-encoding-t0439s.png",
+        "014-ch04-sinusoidal-encoding-t0506s.png",
+        "015-ch04-sinusoidal-encoding-t0574s.png",
+        "016-ch04-sinusoidal-encoding-t0641s.png"
+      ],
+      "labels": [
+        "ch4 07:19",
+        "ch4 08:26",
+        "ch4 09:34",
+        "ch4 10:41"
+      ],
+      "tile_seconds": [
+        439.3,
+        506.8,
+        574.2,
+        641.7
+      ],
+      "time_start": 439.3,
+      "time_end": 641.7,
+      "range_start": 420.0,
+      "range_end": 661.0
+    },
+    {
+      "file": "composites/ch05-self-and-cross-attention-panel1of1.png",
+      "chapter": 5,
+      "slug": "self-and-cross-attention",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-self-and-cross-attention-t0668s.png",
+        "018-ch05-self-and-cross-attention-t0695s.png",
+        "019-ch05-self-and-cross-attention-t0721s.png",
+        "020-ch05-self-and-cross-attention-t0748s.png"
+      ],
+      "labels": [
+        "ch5 11:08",
+        "ch5 11:35",
+        "ch5 12:01",
+        "ch5 12:28"
+      ],
+      "tile_seconds": [
+        668.6,
+        695.2,
+        721.8,
+        748.4
+      ],
+      "time_start": 668.6,
+      "time_end": 748.4,
+      "range_start": 661.0,
+      "range_end": 756.0
+    },
+    {
+      "file": "composites/ch06-training-techniques-panel1of1.png",
+      "chapter": 6,
+      "slug": "training-techniques",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-training-techniques-t0760s.png",
+        "022-ch06-training-techniques-t0775s.png",
+        "023-ch06-training-techniques-t0789s.png",
+        "024-ch06-training-techniques-t0804s.png"
+      ],
+      "labels": [
+        "ch6 12:40",
+        "ch6 12:55",
+        "ch6 13:09",
+        "ch6 13:24"
+      ],
+      "tile_seconds": [
+        760.2,
+        775.1,
+        789.9,
+        804.8
+      ],
+      "time_start": 760.2,
+      "time_end": 804.8,
+      "range_start": 756.0,
+      "range_end": 809.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

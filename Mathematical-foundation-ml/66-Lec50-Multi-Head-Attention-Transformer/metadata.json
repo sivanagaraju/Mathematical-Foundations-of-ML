@@ -1,0 +1,59 @@
+{
+  "title": "Lec 50 Multi-Head Attention and Transformer Architecture",
+  "video_id": "NQyNZ6Plxzs",
+  "url": "https://www.youtube.com/watch?v=NQyNZ6Plxzs",
+  "duration_seconds": 1645,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh AP",
+  "playlist_index": 66,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 6,
+  "package_variant": "production",
+  "requires_claim_mining": true,
+  "beginner_prereqs": false,
+  "topics": [
+    {
+      "index": 1,
+      "title": "Multi-Head Attention Formulation and Subspace Projection",
+      "start_time": "00:00",
+      "end_time": "05:30",
+      "duration_seconds": 330
+    },
+    {
+      "index": 2,
+      "title": "Architectural Inductive Biases as Bayesian Priors",
+      "start_time": "05:31",
+      "end_time": "08:15",
+      "duration_seconds": 165
+    },
+    {
+      "index": 3,
+      "title": "Activity Regularization vs Parameter Regularization",
+      "start_time": "08:16",
+      "end_time": "11:00",
+      "duration_seconds": 165
+    },
+    {
+      "index": 4,
+      "title": "Normalization Mechanics: Batch Normalization vs Layer Normalization",
+      "start_time": "11:01",
+      "end_time": "17:12",
+      "duration_seconds": 371
+    },
+    {
+      "index": 5,
+      "title": "The Full Transformer Block: Residual Stream and Sub-Layer Composition",
+      "start_time": "17:13",
+      "end_time": "22:00",
+      "duration_seconds": 288
+    },
+    {
+      "index": 6,
+      "title": "Extending Attention Beyond Sequences: Vision Transformers and State Space Models",
+      "start_time": "22:01",
+      "end_time": "27:25",
+      "duration_seconds": 325
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "title": "Tutorial 13 : Pytorch - Training the Model",
+  "video_id": "5PruFG5g1C4",
+  "url": "https://www.youtube.com/watch?v=5PruFG5g1C4",
+  "duration_seconds": 2016,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "Comprehensive tutorial on building end-to-end training and inference loops in PyTorch for classification problems, covering hyperparameters, optimizers, gradient zeroing, validation protocols, and model serialization.",
+  "instructor": "Teaching Assistant / Prof. Prathosh A P",
+  "playlist_index": 63,
+  "chapter_count": 6,
+  "skill": "youtube-lecture-tutor",
+  "topic_count": 6,
+  "package_variant": "standard",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "content_type": "code_tutorial",
+  "ingest_evidence": {
+    "captions_file": "raw/captions.en.vtt",
+    "video_file": "raw/lecture.mp4",
+    "screenshot_manifest": "screenshots/manifest.json",
+    "topic_ranges_file": "raw/topic-ranges.json"
+  },
+  "topics": [
+    {
+      "index": 1,
+      "title": "Training Mechanics & Optimization Foundations: Forward Pass, Empirical Risk, Iterations vs. Epochs",
+      "time_range": "00:00–06:00",
+      "summary": "Establishes supervised empirical risk minimization, contrasting full-dataset risk against stochastic mini-batch estimators and formalizing the mathematical distinction between iterations and epochs.",
+      "board_screenshot": "screenshots/composites/ch01-seg01-panel1of1.png"
+    },
+    {
+      "index": 2,
+      "title": "Hyperparameters, Optimization Landscape & Architectural Design: Learning Rates, Adaptive Optimizers (SGD, RMSProp, Adam)",
+      "time_range": "06:00–12:00",
+      "summary": "Examines hyperparameter sensitivities focusing on learning rate tuning, and derives adaptive moment estimation mechanics in Adam and RMSProp compared to vanilla stochastic gradient descent.",
+      "board_screenshot": "screenshots/composites/ch02-seg02-panel1of1.png"
+    },
+    {
+      "index": 3,
+      "title": "Data Ingestion & Batching Mechanics: Shuffling, I.I.D. Sampling, Batch Invariance & Device Placement",
+      "time_range": "12:00–18:00",
+      "summary": "Covers DataLoader configuration, random dataset permutations for I.I.D. mini-batch sampling, and explicit tensor collocation in accelerator memory via .to(device).",
+      "board_screenshot": "screenshots/composites/ch03-seg03-panel1of1.png"
+    },
+    {
+      "index": 4,
+      "title": "The Core Training Loop: zero_grad, Gradient Accumulation Prevention, Backward Pass, and Parameter Updates",
+      "time_range": "18:00–24:00",
+      "summary": "Implements the canonical 5-step training cycle, analyzing gradient accumulation mechanics in param.grad, the critical role of zero_grad, and in-place parameter updates.",
+      "board_screenshot": "screenshots/composites/ch04-seg04-panel1of1.png"
+    },
+    {
+      "index": 5,
+      "title": "Evaluation & Validation Protocols: model.eval(), torch.no_grad(), Relational Accuracy & Scalar Memory Management",
+      "time_range": "24:00–30:00",
+      "summary": "Details evaluation protocols, distinguishing model.eval() layer mode toggling from torch.no_grad() autograd suppression, computing classification accuracy, and preventing memory leaks via loss.item().",
+      "board_screenshot": "screenshots/composites/ch05-seg05-panel1of1.png"
+    },
+    {
+      "index": 6,
+      "title": "Multi-Epoch Convergence Dynamics, Loss Fluctuations, and Model Serialization (state_dict vs Full Graph)",
+      "time_range": "30:00–33:36",
+      "summary": "Tracks multi-epoch training convergence trajectories, explains stochastic mini-batch loss fluctuations, and demonstrates secure model serialization using model.state_dict().",
+      "board_screenshot": "screenshots/composites/ch06-seg06-panel1of1.png"
+    }
+  ]
+}

@@ -1,0 +1,518 @@
+{
+  "duration_seconds": 1168.0,
+  "range_source": "youtube-chapters",
+  "range_count": 7,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 172.0,
+      "slug": "gradient-descent-basics"
+    },
+    {
+      "index": 2,
+      "start": 172.0,
+      "end": 254.0,
+      "slug": "adaptive-learning-rates"
+    },
+    {
+      "index": 3,
+      "start": 254.0,
+      "end": 430.0,
+      "slug": "sgd-with-momentum"
+    },
+    {
+      "index": 4,
+      "start": 430.0,
+      "end": 577.0,
+      "slug": "rms-prop"
+    },
+    {
+      "index": 5,
+      "start": 577.0,
+      "end": 752.0,
+      "slug": "adam-optimizer"
+    },
+    {
+      "index": 6,
+      "start": 752.0,
+      "end": 1040.0,
+      "slug": "optimization-challenges"
+    },
+    {
+      "index": 7,
+      "start": 1040.0,
+      "end": 1168.0,
+      "slug": "training-and-evaluation"
+    }
+  ],
+  "raw_count": 28,
+  "composite_count": 7,
+  "raw": [
+    {
+      "file": "raw/001-ch01-gradient-descent-basics-t0013s.png",
+      "seconds": 13.8,
+      "chapter": 1,
+      "slug": "gradient-descent-basics",
+      "label": "00:13",
+      "range_start": 0.0,
+      "range_end": 172.0
+    },
+    {
+      "file": "raw/002-ch01-gradient-descent-basics-t0061s.png",
+      "seconds": 61.9,
+      "chapter": 1,
+      "slug": "gradient-descent-basics",
+      "label": "01:01",
+      "range_start": 0.0,
+      "range_end": 172.0
+    },
+    {
+      "file": "raw/003-ch01-gradient-descent-basics-t0110s.png",
+      "seconds": 110.1,
+      "chapter": 1,
+      "slug": "gradient-descent-basics",
+      "label": "01:50",
+      "range_start": 0.0,
+      "range_end": 172.0
+    },
+    {
+      "file": "raw/004-ch01-gradient-descent-basics-t0158s.png",
+      "seconds": 158.2,
+      "chapter": 1,
+      "slug": "gradient-descent-basics",
+      "label": "02:38",
+      "range_start": 0.0,
+      "range_end": 172.0
+    },
+    {
+      "file": "raw/005-ch02-adaptive-learning-rates-t0178s.png",
+      "seconds": 178.6,
+      "chapter": 2,
+      "slug": "adaptive-learning-rates",
+      "label": "02:58",
+      "range_start": 172.0,
+      "range_end": 254.0
+    },
+    {
+      "file": "raw/006-ch02-adaptive-learning-rates-t0201s.png",
+      "seconds": 201.5,
+      "chapter": 2,
+      "slug": "adaptive-learning-rates",
+      "label": "03:21",
+      "range_start": 172.0,
+      "range_end": 254.0
+    },
+    {
+      "file": "raw/007-ch02-adaptive-learning-rates-t0224s.png",
+      "seconds": 224.5,
+      "chapter": 2,
+      "slug": "adaptive-learning-rates",
+      "label": "03:44",
+      "range_start": 172.0,
+      "range_end": 254.0
+    },
+    {
+      "file": "raw/008-ch02-adaptive-learning-rates-t0247s.png",
+      "seconds": 247.4,
+      "chapter": 2,
+      "slug": "adaptive-learning-rates",
+      "label": "04:07",
+      "range_start": 172.0,
+      "range_end": 254.0
+    },
+    {
+      "file": "raw/009-ch03-sgd-with-momentum-t0268s.png",
+      "seconds": 268.1,
+      "chapter": 3,
+      "slug": "sgd-with-momentum",
+      "label": "04:28",
+      "range_start": 254.0,
+      "range_end": 430.0
+    },
+    {
+      "file": "raw/010-ch03-sgd-with-momentum-t0317s.png",
+      "seconds": 317.4,
+      "chapter": 3,
+      "slug": "sgd-with-momentum",
+      "label": "05:17",
+      "range_start": 254.0,
+      "range_end": 430.0
+    },
+    {
+      "file": "raw/011-ch03-sgd-with-momentum-t0366s.png",
+      "seconds": 366.6,
+      "chapter": 3,
+      "slug": "sgd-with-momentum",
+      "label": "06:06",
+      "range_start": 254.0,
+      "range_end": 430.0
+    },
+    {
+      "file": "raw/012-ch03-sgd-with-momentum-t0415s.png",
+      "seconds": 415.9,
+      "chapter": 3,
+      "slug": "sgd-with-momentum",
+      "label": "06:55",
+      "range_start": 254.0,
+      "range_end": 430.0
+    },
+    {
+      "file": "raw/013-ch04-rms-prop-t0441s.png",
+      "seconds": 441.8,
+      "chapter": 4,
+      "slug": "rms-prop",
+      "label": "07:21",
+      "range_start": 430.0,
+      "range_end": 577.0
+    },
+    {
+      "file": "raw/014-ch04-rms-prop-t0482s.png",
+      "seconds": 482.9,
+      "chapter": 4,
+      "slug": "rms-prop",
+      "label": "08:02",
+      "range_start": 430.0,
+      "range_end": 577.0
+    },
+    {
+      "file": "raw/015-ch04-rms-prop-t0524s.png",
+      "seconds": 524.1,
+      "chapter": 4,
+      "slug": "rms-prop",
+      "label": "08:44",
+      "range_start": 430.0,
+      "range_end": 577.0
+    },
+    {
+      "file": "raw/016-ch04-rms-prop-t0565s.png",
+      "seconds": 565.2,
+      "chapter": 4,
+      "slug": "rms-prop",
+      "label": "09:25",
+      "range_start": 430.0,
+      "range_end": 577.0
+    },
+    {
+      "file": "raw/017-ch05-adam-optimizer-t0591s.png",
+      "seconds": 591.0,
+      "chapter": 5,
+      "slug": "adam-optimizer",
+      "label": "09:51",
+      "range_start": 577.0,
+      "range_end": 752.0
+    },
+    {
+      "file": "raw/018-ch05-adam-optimizer-t0640s.png",
+      "seconds": 640.0,
+      "chapter": 5,
+      "slug": "adam-optimizer",
+      "label": "10:40",
+      "range_start": 577.0,
+      "range_end": 752.0
+    },
+    {
+      "file": "raw/019-ch05-adam-optimizer-t0689s.png",
+      "seconds": 689.0,
+      "chapter": 5,
+      "slug": "adam-optimizer",
+      "label": "11:29",
+      "range_start": 577.0,
+      "range_end": 752.0
+    },
+    {
+      "file": "raw/020-ch05-adam-optimizer-t0738s.png",
+      "seconds": 738.0,
+      "chapter": 5,
+      "slug": "adam-optimizer",
+      "label": "12:18",
+      "range_start": 577.0,
+      "range_end": 752.0
+    },
+    {
+      "file": "raw/021-ch06-optimization-challenges-t0775s.png",
+      "seconds": 775.0,
+      "chapter": 6,
+      "slug": "optimization-challenges",
+      "label": "12:55",
+      "range_start": 752.0,
+      "range_end": 1040.0
+    },
+    {
+      "file": "raw/022-ch06-optimization-challenges-t0855s.png",
+      "seconds": 855.7,
+      "chapter": 6,
+      "slug": "optimization-challenges",
+      "label": "14:15",
+      "range_start": 752.0,
+      "range_end": 1040.0
+    },
+    {
+      "file": "raw/023-ch06-optimization-challenges-t0936s.png",
+      "seconds": 936.3,
+      "chapter": 6,
+      "slug": "optimization-challenges",
+      "label": "15:36",
+      "range_start": 752.0,
+      "range_end": 1040.0
+    },
+    {
+      "file": "raw/024-ch06-optimization-challenges-t1016s.png",
+      "seconds": 1017.0,
+      "chapter": 6,
+      "slug": "optimization-challenges",
+      "label": "16:56",
+      "range_start": 752.0,
+      "range_end": 1040.0
+    },
+    {
+      "file": "raw/025-ch07-training-and-evaluation-t1050s.png",
+      "seconds": 1050.2,
+      "chapter": 7,
+      "slug": "training-and-evaluation",
+      "label": "17:30",
+      "range_start": 1040.0,
+      "range_end": 1168.0
+    },
+    {
+      "file": "raw/026-ch07-training-and-evaluation-t1086s.png",
+      "seconds": 1086.1,
+      "chapter": 7,
+      "slug": "training-and-evaluation",
+      "label": "18:06",
+      "range_start": 1040.0,
+      "range_end": 1168.0
+    },
+    {
+      "file": "raw/027-ch07-training-and-evaluation-t1121s.png",
+      "seconds": 1121.9,
+      "chapter": 7,
+      "slug": "training-and-evaluation",
+      "label": "18:41",
+      "range_start": 1040.0,
+      "range_end": 1168.0
+    },
+    {
+      "file": "raw/028-ch07-training-and-evaluation-t1157s.png",
+      "seconds": 1157.8,
+      "chapter": 7,
+      "slug": "training-and-evaluation",
+      "label": "19:17",
+      "range_start": 1040.0,
+      "range_end": 1168.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-gradient-descent-basics-panel1of1.png",
+      "chapter": 1,
+      "slug": "gradient-descent-basics",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-gradient-descent-basics-t0013s.png",
+        "002-ch01-gradient-descent-basics-t0061s.png",
+        "003-ch01-gradient-descent-basics-t0110s.png",
+        "004-ch01-gradient-descent-basics-t0158s.png"
+      ],
+      "labels": [
+        "ch1 00:13",
+        "ch1 01:01",
+        "ch1 01:50",
+        "ch1 02:38"
+      ],
+      "tile_seconds": [
+        13.8,
+        61.9,
+        110.1,
+        158.2
+      ],
+      "time_start": 13.8,
+      "time_end": 158.2,
+      "range_start": 0.0,
+      "range_end": 172.0
+    },
+    {
+      "file": "composites/ch02-adaptive-learning-rates-panel1of1.png",
+      "chapter": 2,
+      "slug": "adaptive-learning-rates",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-adaptive-learning-rates-t0178s.png",
+        "006-ch02-adaptive-learning-rates-t0201s.png",
+        "007-ch02-adaptive-learning-rates-t0224s.png",
+        "008-ch02-adaptive-learning-rates-t0247s.png"
+      ],
+      "labels": [
+        "ch2 02:58",
+        "ch2 03:21",
+        "ch2 03:44",
+        "ch2 04:07"
+      ],
+      "tile_seconds": [
+        178.6,
+        201.5,
+        224.5,
+        247.4
+      ],
+      "time_start": 178.6,
+      "time_end": 247.4,
+      "range_start": 172.0,
+      "range_end": 254.0
+    },
+    {
+      "file": "composites/ch03-sgd-with-momentum-panel1of1.png",
+      "chapter": 3,
+      "slug": "sgd-with-momentum",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-sgd-with-momentum-t0268s.png",
+        "010-ch03-sgd-with-momentum-t0317s.png",
+        "011-ch03-sgd-with-momentum-t0366s.png",
+        "012-ch03-sgd-with-momentum-t0415s.png"
+      ],
+      "labels": [
+        "ch3 04:28",
+        "ch3 05:17",
+        "ch3 06:06",
+        "ch3 06:55"
+      ],
+      "tile_seconds": [
+        268.1,
+        317.4,
+        366.6,
+        415.9
+      ],
+      "time_start": 268.1,
+      "time_end": 415.9,
+      "range_start": 254.0,
+      "range_end": 430.0
+    },
+    {
+      "file": "composites/ch04-rms-prop-panel1of1.png",
+      "chapter": 4,
+      "slug": "rms-prop",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-rms-prop-t0441s.png",
+        "014-ch04-rms-prop-t0482s.png",
+        "015-ch04-rms-prop-t0524s.png",
+        "016-ch04-rms-prop-t0565s.png"
+      ],
+      "labels": [
+        "ch4 07:21",
+        "ch4 08:02",
+        "ch4 08:44",
+        "ch4 09:25"
+      ],
+      "tile_seconds": [
+        441.8,
+        482.9,
+        524.1,
+        565.2
+      ],
+      "time_start": 441.8,
+      "time_end": 565.2,
+      "range_start": 430.0,
+      "range_end": 577.0
+    },
+    {
+      "file": "composites/ch05-adam-optimizer-panel1of1.png",
+      "chapter": 5,
+      "slug": "adam-optimizer",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch05-adam-optimizer-t0591s.png",
+        "018-ch05-adam-optimizer-t0640s.png",
+        "019-ch05-adam-optimizer-t0689s.png",
+        "020-ch05-adam-optimizer-t0738s.png"
+      ],
+      "labels": [
+        "ch5 09:51",
+        "ch5 10:40",
+        "ch5 11:29",
+        "ch5 12:18"
+      ],
+      "tile_seconds": [
+        591.0,
+        640.0,
+        689.0,
+        738.0
+      ],
+      "time_start": 591.0,
+      "time_end": 738.0,
+      "range_start": 577.0,
+      "range_end": 752.0
+    },
+    {
+      "file": "composites/ch06-optimization-challenges-panel1of1.png",
+      "chapter": 6,
+      "slug": "optimization-challenges",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch06-optimization-challenges-t0775s.png",
+        "022-ch06-optimization-challenges-t0855s.png",
+        "023-ch06-optimization-challenges-t0936s.png",
+        "024-ch06-optimization-challenges-t1016s.png"
+      ],
+      "labels": [
+        "ch6 12:55",
+        "ch6 14:15",
+        "ch6 15:36",
+        "ch6 16:56"
+      ],
+      "tile_seconds": [
+        775.0,
+        855.7,
+        936.3,
+        1017.0
+      ],
+      "time_start": 775.0,
+      "time_end": 1017.0,
+      "range_start": 752.0,
+      "range_end": 1040.0
+    },
+    {
+      "file": "composites/ch07-training-and-evaluation-panel1of1.png",
+      "chapter": 7,
+      "slug": "training-and-evaluation",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch07-training-and-evaluation-t1050s.png",
+        "026-ch07-training-and-evaluation-t1086s.png",
+        "027-ch07-training-and-evaluation-t1121s.png",
+        "028-ch07-training-and-evaluation-t1157s.png"
+      ],
+      "labels": [
+        "ch7 17:30",
+        "ch7 18:06",
+        "ch7 18:41",
+        "ch7 19:17"
+      ],
+      "tile_seconds": [
+        1050.2,
+        1086.1,
+        1121.9,
+        1157.8
+      ],
+      "time_start": 1050.2,
+      "time_end": 1157.8,
+      "range_start": 1040.0,
+      "range_end": 1168.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

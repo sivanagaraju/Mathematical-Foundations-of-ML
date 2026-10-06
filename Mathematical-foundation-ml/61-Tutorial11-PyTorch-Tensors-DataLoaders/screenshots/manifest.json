@@ -1,0 +1,1227 @@
+{
+  "duration_seconds": 2718.0,
+  "range_source": "topic-ranges",
+  "range_count": 6,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 2718.0,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m"
+    },
+    {
+      "index": 2,
+      "start": 0.0,
+      "end": 2718.0,
+      "slug": "constructors-memory-strides-essential-attributes"
+    },
+    {
+      "index": 3,
+      "start": 0.0,
+      "end": 2718.0,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio"
+    },
+    {
+      "index": 4,
+      "start": 0.0,
+      "end": 2718.0,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm"
+    },
+    {
+      "index": 5,
+      "start": 0.0,
+      "end": 2718.0,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti"
+    },
+    {
+      "index": 6,
+      "start": 0.0,
+      "end": 2718.0,
+      "slug": "custom-dataset-architecture-dataloader-integrati"
+    }
+  ],
+  "raw_count": 72,
+  "composite_count": 18,
+  "raw": [
+    {
+      "file": "raw/001-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t0217s.png",
+      "seconds": 217.4,
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "label": "03:37",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/002-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t0424s.png",
+      "seconds": 425.0,
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "label": "07:04",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/003-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t0632s.png",
+      "seconds": 632.6,
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "label": "10:32",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/004-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t0840s.png",
+      "seconds": 840.1,
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "label": "14:00",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/005-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t1047s.png",
+      "seconds": 1047.7,
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "label": "17:27",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/006-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t1255s.png",
+      "seconds": 1255.2,
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "label": "20:55",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/007-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t1462s.png",
+      "seconds": 1462.8,
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "label": "24:22",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/008-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t1670s.png",
+      "seconds": 1670.3,
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "label": "27:50",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/009-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t1877s.png",
+      "seconds": 1877.9,
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "label": "31:17",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/010-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t2085s.png",
+      "seconds": 2085.4,
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "label": "34:45",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/011-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t2293s.png",
+      "seconds": 2293.0,
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "label": "38:13",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/012-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t2500s.png",
+      "seconds": 2500.6,
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "label": "41:40",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/013-ch02-constructors-memory-strides-essential-attributes-t0217s.png",
+      "seconds": 217.4,
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "label": "03:37",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/014-ch02-constructors-memory-strides-essential-attributes-t0424s.png",
+      "seconds": 425.0,
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "label": "07:04",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/015-ch02-constructors-memory-strides-essential-attributes-t0632s.png",
+      "seconds": 632.6,
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "label": "10:32",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/016-ch02-constructors-memory-strides-essential-attributes-t0840s.png",
+      "seconds": 840.1,
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "label": "14:00",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/017-ch02-constructors-memory-strides-essential-attributes-t1047s.png",
+      "seconds": 1047.7,
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "label": "17:27",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/018-ch02-constructors-memory-strides-essential-attributes-t1255s.png",
+      "seconds": 1255.2,
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "label": "20:55",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/019-ch02-constructors-memory-strides-essential-attributes-t1462s.png",
+      "seconds": 1462.8,
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "label": "24:22",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/020-ch02-constructors-memory-strides-essential-attributes-t1670s.png",
+      "seconds": 1670.3,
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "label": "27:50",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/021-ch02-constructors-memory-strides-essential-attributes-t1877s.png",
+      "seconds": 1877.9,
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "label": "31:17",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/022-ch02-constructors-memory-strides-essential-attributes-t2085s.png",
+      "seconds": 2085.4,
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "label": "34:45",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/023-ch02-constructors-memory-strides-essential-attributes-t2293s.png",
+      "seconds": 2293.0,
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "label": "38:13",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/024-ch02-constructors-memory-strides-essential-attributes-t2500s.png",
+      "seconds": 2500.6,
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "label": "41:40",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/025-ch03-indexing-multi-axis-slicing-in-place-modificatio-t0217s.png",
+      "seconds": 217.4,
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "label": "03:37",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/026-ch03-indexing-multi-axis-slicing-in-place-modificatio-t0424s.png",
+      "seconds": 425.0,
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "label": "07:04",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/027-ch03-indexing-multi-axis-slicing-in-place-modificatio-t0632s.png",
+      "seconds": 632.6,
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "label": "10:32",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/028-ch03-indexing-multi-axis-slicing-in-place-modificatio-t0840s.png",
+      "seconds": 840.1,
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "label": "14:00",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/029-ch03-indexing-multi-axis-slicing-in-place-modificatio-t1047s.png",
+      "seconds": 1047.7,
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "label": "17:27",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/030-ch03-indexing-multi-axis-slicing-in-place-modificatio-t1255s.png",
+      "seconds": 1255.2,
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "label": "20:55",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/031-ch03-indexing-multi-axis-slicing-in-place-modificatio-t1462s.png",
+      "seconds": 1462.8,
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "label": "24:22",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/032-ch03-indexing-multi-axis-slicing-in-place-modificatio-t1670s.png",
+      "seconds": 1670.3,
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "label": "27:50",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/033-ch03-indexing-multi-axis-slicing-in-place-modificatio-t1877s.png",
+      "seconds": 1877.9,
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "label": "31:17",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/034-ch03-indexing-multi-axis-slicing-in-place-modificatio-t2085s.png",
+      "seconds": 2085.4,
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "label": "34:45",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/035-ch03-indexing-multi-axis-slicing-in-place-modificatio-t2293s.png",
+      "seconds": 2293.0,
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "label": "38:13",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/036-ch03-indexing-multi-axis-slicing-in-place-modificatio-t2500s.png",
+      "seconds": 2500.6,
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "label": "41:40",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/037-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t0217s.png",
+      "seconds": 217.4,
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "label": "03:37",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/038-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t0424s.png",
+      "seconds": 425.0,
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "label": "07:04",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/039-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t0632s.png",
+      "seconds": 632.6,
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "label": "10:32",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/040-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t0840s.png",
+      "seconds": 840.1,
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "label": "14:00",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/041-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t1047s.png",
+      "seconds": 1047.7,
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "label": "17:27",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/042-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t1255s.png",
+      "seconds": 1255.2,
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "label": "20:55",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/043-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t1462s.png",
+      "seconds": 1462.8,
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "label": "24:22",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/044-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t1670s.png",
+      "seconds": 1670.3,
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "label": "27:50",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/045-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t1877s.png",
+      "seconds": 1877.9,
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "label": "31:17",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/046-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t2085s.png",
+      "seconds": 2085.4,
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "label": "34:45",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/047-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t2293s.png",
+      "seconds": 2293.0,
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "label": "38:13",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/048-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t2500s.png",
+      "seconds": 2500.6,
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "label": "41:40",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/049-ch05-academic-data-pipelines-transforms-mnist-ingesti-t0217s.png",
+      "seconds": 217.4,
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "label": "03:37",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/050-ch05-academic-data-pipelines-transforms-mnist-ingesti-t0424s.png",
+      "seconds": 425.0,
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "label": "07:04",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/051-ch05-academic-data-pipelines-transforms-mnist-ingesti-t0632s.png",
+      "seconds": 632.6,
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "label": "10:32",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/052-ch05-academic-data-pipelines-transforms-mnist-ingesti-t0840s.png",
+      "seconds": 840.1,
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "label": "14:00",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/053-ch05-academic-data-pipelines-transforms-mnist-ingesti-t1047s.png",
+      "seconds": 1047.7,
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "label": "17:27",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/054-ch05-academic-data-pipelines-transforms-mnist-ingesti-t1255s.png",
+      "seconds": 1255.2,
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "label": "20:55",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/055-ch05-academic-data-pipelines-transforms-mnist-ingesti-t1462s.png",
+      "seconds": 1462.8,
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "label": "24:22",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/056-ch05-academic-data-pipelines-transforms-mnist-ingesti-t1670s.png",
+      "seconds": 1670.3,
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "label": "27:50",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/057-ch05-academic-data-pipelines-transforms-mnist-ingesti-t1877s.png",
+      "seconds": 1877.9,
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "label": "31:17",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/058-ch05-academic-data-pipelines-transforms-mnist-ingesti-t2085s.png",
+      "seconds": 2085.4,
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "label": "34:45",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/059-ch05-academic-data-pipelines-transforms-mnist-ingesti-t2293s.png",
+      "seconds": 2293.0,
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "label": "38:13",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/060-ch05-academic-data-pipelines-transforms-mnist-ingesti-t2500s.png",
+      "seconds": 2500.6,
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "label": "41:40",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/061-ch06-custom-dataset-architecture-dataloader-integrati-t0217s.png",
+      "seconds": 217.4,
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "label": "03:37",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/062-ch06-custom-dataset-architecture-dataloader-integrati-t0424s.png",
+      "seconds": 425.0,
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "label": "07:04",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/063-ch06-custom-dataset-architecture-dataloader-integrati-t0632s.png",
+      "seconds": 632.6,
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "label": "10:32",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/064-ch06-custom-dataset-architecture-dataloader-integrati-t0840s.png",
+      "seconds": 840.1,
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "label": "14:00",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/065-ch06-custom-dataset-architecture-dataloader-integrati-t1047s.png",
+      "seconds": 1047.7,
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "label": "17:27",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/066-ch06-custom-dataset-architecture-dataloader-integrati-t1255s.png",
+      "seconds": 1255.2,
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "label": "20:55",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/067-ch06-custom-dataset-architecture-dataloader-integrati-t1462s.png",
+      "seconds": 1462.8,
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "label": "24:22",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/068-ch06-custom-dataset-architecture-dataloader-integrati-t1670s.png",
+      "seconds": 1670.3,
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "label": "27:50",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/069-ch06-custom-dataset-architecture-dataloader-integrati-t1877s.png",
+      "seconds": 1877.9,
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "label": "31:17",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/070-ch06-custom-dataset-architecture-dataloader-integrati-t2085s.png",
+      "seconds": 2085.4,
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "label": "34:45",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/071-ch06-custom-dataset-architecture-dataloader-integrati-t2293s.png",
+      "seconds": 2293.0,
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "label": "38:13",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "raw/072-ch06-custom-dataset-architecture-dataloader-integrati-t2500s.png",
+      "seconds": 2500.6,
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "label": "41:40",
+      "range_start": 0.0,
+      "range_end": 2718.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-hardware-acceleration-tensor-creation-from-cpu-m-panel1of3.png",
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "panel": 1,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "001-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t0217s.png",
+        "002-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t0424s.png",
+        "003-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t0632s.png",
+        "004-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t0840s.png"
+      ],
+      "labels": [
+        "ch1 03:37",
+        "ch1 07:04",
+        "ch1 10:32",
+        "ch1 14:00"
+      ],
+      "tile_seconds": [
+        217.4,
+        425.0,
+        632.6,
+        840.1
+      ],
+      "time_start": 217.4,
+      "time_end": 840.1,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch01-hardware-acceleration-tensor-creation-from-cpu-m-panel2of3.png",
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "panel": 2,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "005-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t1047s.png",
+        "006-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t1255s.png",
+        "007-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t1462s.png",
+        "008-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t1670s.png"
+      ],
+      "labels": [
+        "ch1 17:27",
+        "ch1 20:55",
+        "ch1 24:22",
+        "ch1 27:50"
+      ],
+      "tile_seconds": [
+        1047.7,
+        1255.2,
+        1462.8,
+        1670.3
+      ],
+      "time_start": 1047.7,
+      "time_end": 1670.3,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch01-hardware-acceleration-tensor-creation-from-cpu-m-panel3of3.png",
+      "chapter": 1,
+      "slug": "hardware-acceleration-tensor-creation-from-cpu-m",
+      "panel": 3,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "009-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t1877s.png",
+        "010-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t2085s.png",
+        "011-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t2293s.png",
+        "012-ch01-hardware-acceleration-tensor-creation-from-cpu-m-t2500s.png"
+      ],
+      "labels": [
+        "ch1 31:17",
+        "ch1 34:45",
+        "ch1 38:13",
+        "ch1 41:40"
+      ],
+      "tile_seconds": [
+        1877.9,
+        2085.4,
+        2293.0,
+        2500.6
+      ],
+      "time_start": 1877.9,
+      "time_end": 2500.6,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch02-constructors-memory-strides-essential-attributes-panel1of3.png",
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "panel": 1,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "013-ch02-constructors-memory-strides-essential-attributes-t0217s.png",
+        "014-ch02-constructors-memory-strides-essential-attributes-t0424s.png",
+        "015-ch02-constructors-memory-strides-essential-attributes-t0632s.png",
+        "016-ch02-constructors-memory-strides-essential-attributes-t0840s.png"
+      ],
+      "labels": [
+        "ch2 03:37",
+        "ch2 07:04",
+        "ch2 10:32",
+        "ch2 14:00"
+      ],
+      "tile_seconds": [
+        217.4,
+        425.0,
+        632.6,
+        840.1
+      ],
+      "time_start": 217.4,
+      "time_end": 840.1,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch02-constructors-memory-strides-essential-attributes-panel2of3.png",
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "panel": 2,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "017-ch02-constructors-memory-strides-essential-attributes-t1047s.png",
+        "018-ch02-constructors-memory-strides-essential-attributes-t1255s.png",
+        "019-ch02-constructors-memory-strides-essential-attributes-t1462s.png",
+        "020-ch02-constructors-memory-strides-essential-attributes-t1670s.png"
+      ],
+      "labels": [
+        "ch2 17:27",
+        "ch2 20:55",
+        "ch2 24:22",
+        "ch2 27:50"
+      ],
+      "tile_seconds": [
+        1047.7,
+        1255.2,
+        1462.8,
+        1670.3
+      ],
+      "time_start": 1047.7,
+      "time_end": 1670.3,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch02-constructors-memory-strides-essential-attributes-panel3of3.png",
+      "chapter": 2,
+      "slug": "constructors-memory-strides-essential-attributes",
+      "panel": 3,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "021-ch02-constructors-memory-strides-essential-attributes-t1877s.png",
+        "022-ch02-constructors-memory-strides-essential-attributes-t2085s.png",
+        "023-ch02-constructors-memory-strides-essential-attributes-t2293s.png",
+        "024-ch02-constructors-memory-strides-essential-attributes-t2500s.png"
+      ],
+      "labels": [
+        "ch2 31:17",
+        "ch2 34:45",
+        "ch2 38:13",
+        "ch2 41:40"
+      ],
+      "tile_seconds": [
+        1877.9,
+        2085.4,
+        2293.0,
+        2500.6
+      ],
+      "time_start": 1877.9,
+      "time_end": 2500.6,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch03-indexing-multi-axis-slicing-in-place-modificatio-panel1of3.png",
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "panel": 1,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "025-ch03-indexing-multi-axis-slicing-in-place-modificatio-t0217s.png",
+        "026-ch03-indexing-multi-axis-slicing-in-place-modificatio-t0424s.png",
+        "027-ch03-indexing-multi-axis-slicing-in-place-modificatio-t0632s.png",
+        "028-ch03-indexing-multi-axis-slicing-in-place-modificatio-t0840s.png"
+      ],
+      "labels": [
+        "ch3 03:37",
+        "ch3 07:04",
+        "ch3 10:32",
+        "ch3 14:00"
+      ],
+      "tile_seconds": [
+        217.4,
+        425.0,
+        632.6,
+        840.1
+      ],
+      "time_start": 217.4,
+      "time_end": 840.1,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch03-indexing-multi-axis-slicing-in-place-modificatio-panel2of3.png",
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "panel": 2,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "029-ch03-indexing-multi-axis-slicing-in-place-modificatio-t1047s.png",
+        "030-ch03-indexing-multi-axis-slicing-in-place-modificatio-t1255s.png",
+        "031-ch03-indexing-multi-axis-slicing-in-place-modificatio-t1462s.png",
+        "032-ch03-indexing-multi-axis-slicing-in-place-modificatio-t1670s.png"
+      ],
+      "labels": [
+        "ch3 17:27",
+        "ch3 20:55",
+        "ch3 24:22",
+        "ch3 27:50"
+      ],
+      "tile_seconds": [
+        1047.7,
+        1255.2,
+        1462.8,
+        1670.3
+      ],
+      "time_start": 1047.7,
+      "time_end": 1670.3,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch03-indexing-multi-axis-slicing-in-place-modificatio-panel3of3.png",
+      "chapter": 3,
+      "slug": "indexing-multi-axis-slicing-in-place-modificatio",
+      "panel": 3,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "033-ch03-indexing-multi-axis-slicing-in-place-modificatio-t1877s.png",
+        "034-ch03-indexing-multi-axis-slicing-in-place-modificatio-t2085s.png",
+        "035-ch03-indexing-multi-axis-slicing-in-place-modificatio-t2293s.png",
+        "036-ch03-indexing-multi-axis-slicing-in-place-modificatio-t2500s.png"
+      ],
+      "labels": [
+        "ch3 31:17",
+        "ch3 34:45",
+        "ch3 38:13",
+        "ch3 41:40"
+      ],
+      "tile_seconds": [
+        1877.9,
+        2085.4,
+        2293.0,
+        2500.6
+      ],
+      "time_start": 1877.9,
+      "time_end": 2500.6,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch04-linear-algebra-arithmetic-operations-matrix-gemm-panel1of3.png",
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "panel": 1,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "037-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t0217s.png",
+        "038-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t0424s.png",
+        "039-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t0632s.png",
+        "040-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t0840s.png"
+      ],
+      "labels": [
+        "ch4 03:37",
+        "ch4 07:04",
+        "ch4 10:32",
+        "ch4 14:00"
+      ],
+      "tile_seconds": [
+        217.4,
+        425.0,
+        632.6,
+        840.1
+      ],
+      "time_start": 217.4,
+      "time_end": 840.1,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch04-linear-algebra-arithmetic-operations-matrix-gemm-panel2of3.png",
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "panel": 2,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "041-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t1047s.png",
+        "042-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t1255s.png",
+        "043-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t1462s.png",
+        "044-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t1670s.png"
+      ],
+      "labels": [
+        "ch4 17:27",
+        "ch4 20:55",
+        "ch4 24:22",
+        "ch4 27:50"
+      ],
+      "tile_seconds": [
+        1047.7,
+        1255.2,
+        1462.8,
+        1670.3
+      ],
+      "time_start": 1047.7,
+      "time_end": 1670.3,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch04-linear-algebra-arithmetic-operations-matrix-gemm-panel3of3.png",
+      "chapter": 4,
+      "slug": "linear-algebra-arithmetic-operations-matrix-gemm",
+      "panel": 3,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "045-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t1877s.png",
+        "046-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t2085s.png",
+        "047-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t2293s.png",
+        "048-ch04-linear-algebra-arithmetic-operations-matrix-gemm-t2500s.png"
+      ],
+      "labels": [
+        "ch4 31:17",
+        "ch4 34:45",
+        "ch4 38:13",
+        "ch4 41:40"
+      ],
+      "tile_seconds": [
+        1877.9,
+        2085.4,
+        2293.0,
+        2500.6
+      ],
+      "time_start": 1877.9,
+      "time_end": 2500.6,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch05-academic-data-pipelines-transforms-mnist-ingesti-panel1of3.png",
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "panel": 1,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "049-ch05-academic-data-pipelines-transforms-mnist-ingesti-t0217s.png",
+        "050-ch05-academic-data-pipelines-transforms-mnist-ingesti-t0424s.png",
+        "051-ch05-academic-data-pipelines-transforms-mnist-ingesti-t0632s.png",
+        "052-ch05-academic-data-pipelines-transforms-mnist-ingesti-t0840s.png"
+      ],
+      "labels": [
+        "ch5 03:37",
+        "ch5 07:04",
+        "ch5 10:32",
+        "ch5 14:00"
+      ],
+      "tile_seconds": [
+        217.4,
+        425.0,
+        632.6,
+        840.1
+      ],
+      "time_start": 217.4,
+      "time_end": 840.1,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch05-academic-data-pipelines-transforms-mnist-ingesti-panel2of3.png",
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "panel": 2,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "053-ch05-academic-data-pipelines-transforms-mnist-ingesti-t1047s.png",
+        "054-ch05-academic-data-pipelines-transforms-mnist-ingesti-t1255s.png",
+        "055-ch05-academic-data-pipelines-transforms-mnist-ingesti-t1462s.png",
+        "056-ch05-academic-data-pipelines-transforms-mnist-ingesti-t1670s.png"
+      ],
+      "labels": [
+        "ch5 17:27",
+        "ch5 20:55",
+        "ch5 24:22",
+        "ch5 27:50"
+      ],
+      "tile_seconds": [
+        1047.7,
+        1255.2,
+        1462.8,
+        1670.3
+      ],
+      "time_start": 1047.7,
+      "time_end": 1670.3,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch05-academic-data-pipelines-transforms-mnist-ingesti-panel3of3.png",
+      "chapter": 5,
+      "slug": "academic-data-pipelines-transforms-mnist-ingesti",
+      "panel": 3,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "057-ch05-academic-data-pipelines-transforms-mnist-ingesti-t1877s.png",
+        "058-ch05-academic-data-pipelines-transforms-mnist-ingesti-t2085s.png",
+        "059-ch05-academic-data-pipelines-transforms-mnist-ingesti-t2293s.png",
+        "060-ch05-academic-data-pipelines-transforms-mnist-ingesti-t2500s.png"
+      ],
+      "labels": [
+        "ch5 31:17",
+        "ch5 34:45",
+        "ch5 38:13",
+        "ch5 41:40"
+      ],
+      "tile_seconds": [
+        1877.9,
+        2085.4,
+        2293.0,
+        2500.6
+      ],
+      "time_start": 1877.9,
+      "time_end": 2500.6,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch06-custom-dataset-architecture-dataloader-integrati-panel1of3.png",
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "panel": 1,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "061-ch06-custom-dataset-architecture-dataloader-integrati-t0217s.png",
+        "062-ch06-custom-dataset-architecture-dataloader-integrati-t0424s.png",
+        "063-ch06-custom-dataset-architecture-dataloader-integrati-t0632s.png",
+        "064-ch06-custom-dataset-architecture-dataloader-integrati-t0840s.png"
+      ],
+      "labels": [
+        "ch6 03:37",
+        "ch6 07:04",
+        "ch6 10:32",
+        "ch6 14:00"
+      ],
+      "tile_seconds": [
+        217.4,
+        425.0,
+        632.6,
+        840.1
+      ],
+      "time_start": 217.4,
+      "time_end": 840.1,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch06-custom-dataset-architecture-dataloader-integrati-panel2of3.png",
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "panel": 2,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "065-ch06-custom-dataset-architecture-dataloader-integrati-t1047s.png",
+        "066-ch06-custom-dataset-architecture-dataloader-integrati-t1255s.png",
+        "067-ch06-custom-dataset-architecture-dataloader-integrati-t1462s.png",
+        "068-ch06-custom-dataset-architecture-dataloader-integrati-t1670s.png"
+      ],
+      "labels": [
+        "ch6 17:27",
+        "ch6 20:55",
+        "ch6 24:22",
+        "ch6 27:50"
+      ],
+      "tile_seconds": [
+        1047.7,
+        1255.2,
+        1462.8,
+        1670.3
+      ],
+      "time_start": 1047.7,
+      "time_end": 1670.3,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    },
+    {
+      "file": "composites/ch06-custom-dataset-architecture-dataloader-integrati-panel3of3.png",
+      "chapter": 6,
+      "slug": "custom-dataset-architecture-dataloader-integrati",
+      "panel": 3,
+      "panels_in_chapter": 3,
+      "tiles": [
+        "069-ch06-custom-dataset-architecture-dataloader-integrati-t1877s.png",
+        "070-ch06-custom-dataset-architecture-dataloader-integrati-t2085s.png",
+        "071-ch06-custom-dataset-architecture-dataloader-integrati-t2293s.png",
+        "072-ch06-custom-dataset-architecture-dataloader-integrati-t2500s.png"
+      ],
+      "labels": [
+        "ch6 31:17",
+        "ch6 34:45",
+        "ch6 38:13",
+        "ch6 41:40"
+      ],
+      "tile_seconds": [
+        1877.9,
+        2085.4,
+        2293.0,
+        2500.6
+      ],
+      "time_start": 1877.9,
+      "time_end": 2500.6,
+      "range_start": 0.0,
+      "range_end": 2718.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

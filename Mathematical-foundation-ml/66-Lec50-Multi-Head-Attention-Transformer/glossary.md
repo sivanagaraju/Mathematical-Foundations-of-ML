@@ -1,0 +1,20 @@
+# Glossary of Core Terms: Lecture 50 (Multi-Head Attention and Transformer Architecture)
+
+A rigorous mathematical glossary defining the terminology, spoken phonetics, and operational definitions of Multi-Head Attention, Normalization Mechanics, and the complete Transformer architecture.
+
+---
+
+## Terminology Dictionary
+
+| Term | Spoken English (Phonetics) | Mathematical Symbol | Formal Mathematical Definition | Course / Conceptual Context | Foundation Link |
+|:-----|:---------------------------|:--------------------|:-------------------------------|:----------------------------|:----------------|
+| **Multi-Head Attention** | *MUL-tee HED Uh-TEN-shun* | $\operatorname{MHA}(Q, K, V)$ | $\operatorname{Concat}(\operatorname{head}_1, \dots, \operatorname{head}_M) W^O$ | Extension of attention projecting tokens into $M$ parallel subspaces to capture diverse relational features. | [01-Vectors_and_Matrices.md](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) |
+| **Output Projection Matrix** | *OWT-put Proh-JEK-shun MAY-triks* | $W^O \in \mathbb{R}^{(M D_v) \times D}$ | Linear transformation fusing concatenated attention head representations back to model dimension $D$. | [01-Vectors_and_Matrices.md](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) |
+| **Layer Normalization** | *LAY-er Norm-uh-ly-ZAY-shun* | $\operatorname{LN}(x)$ | $\gamma \frac{x - \mu_L}{\sqrt{\sigma_L^2 + \epsilon}} + \beta$ | Per-token standardization computed across feature channels independently of batch size. | [01-Random_Variables_and_Distributions.md](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| **Batch Normalization** | *BATCH Norm-uh-ly-ZAY-shun* | $\operatorname{BN}(x)$ | $\gamma \frac{x - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}} + \beta$ | Standardization computed across batch and sequence dimensions per feature channel; sensitive to padding. | [01-Random_Variables_and_Distributions.md](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| **Internal Covariate Shift** | *in-TUR-nul koh-VAIR-ee-it SHIFT* | $\Delta P(z_l \mid x)$ | The shifting distribution of layer inputs during training caused by parameter updates in earlier layers. | [01-Random_Variables_and_Distributions.md](../../MathsTerms/03-Probability-and-Statistical-Estimation/01-Random_Variables_and_Distributions.md) |
+| **Residual Shortcut Connection** | *reh-ZID-yoo-ul SHORT-kut* | $y = x + F(x)$ | Skip connection adding input identity directly to sub-layer output, ensuring unattenuated gradient propagation. | [01-Vectors_and_Matrices.md](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) |
+| **Activity Regularization** | *ak-TIV-ih-tee Reg-yoo-ler-eye-ZAY-shun* | $\mathcal{R}(Z)$ | Imposing mathematical bounds or standardization constraints on intermediate activations rather than weights. | [01-Convexity_and_Jensens_Inequality.md](../../MathsTerms/05-Convexity-Duality-and-Metric-Analysis/01-Convexity_and_Jensens_Inequality.md) |
+| **Inductive Bias** | *in-DUK-tiv BY-us* | $\mathcal{H}_{\text{prior}}$ | The architectural assumptions a model uses to generalize to unseen inputs (e.g., locality, equivariance). | [01-Vectors_and_Matrices.md](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/01-Vectors_and_Matrices.md) |
+| **Vision Transformer (ViT)** | *VIZH-un Trans-FOR-mer* | $\operatorname{ViT}(I)$ | Architecture that partitions 2D images into $P \times P$ flattened grid patches, processing them as sequence tokens. | [04-Tensors_and_Shapes.md](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |
+| **State Space Model (SSM)** | *STAYT SPAYS MOD-ul* | $h_t = A h_{t-1} + B x_t$ | Structured recurrent sequence model (such as Mamba) achieving $\mathcal{O}(T)$ linear computational complexity. | [04-Tensors_and_Shapes.md](../../MathsTerms/01-Linear-Algebra-Geometry-and-Tensors/04-Tensors_and_Shapes.md) |

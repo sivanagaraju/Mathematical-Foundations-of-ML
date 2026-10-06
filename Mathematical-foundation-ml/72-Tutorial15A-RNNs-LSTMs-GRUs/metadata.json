@@ -1,0 +1,52 @@
+{
+  "title": "Tutorial 15 Part 1 : RNNs, LSTMs and GRUs",
+  "video_id": "zM5-TlrmKg8",
+  "url": "https://www.youtube.com/watch?v=zM5-TlrmKg8",
+  "duration_seconds": 2046,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Teaching Assistant / Prof. Prathosh A P",
+  "playlist_index": 72,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 5,
+  "package_variant": "production",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "topics": [
+    {
+      "index": 1,
+      "title": "Sequence Tensor Geometry & Vanilla RNN Cell Mechanics",
+      "start_time": "00:00",
+      "end_time": "06:15",
+      "duration_seconds": 375
+    },
+    {
+      "index": 2,
+      "title": "Vanishing Gradients & Gated Recurrent Unit (GRU) Formulation",
+      "start_time": "06:15",
+      "end_time": "14:30",
+      "duration_seconds": 495
+    },
+    {
+      "index": 3,
+      "title": "Long Short-Term Memory (LSTM): Cell States & Triple Gating",
+      "start_time": "14:30",
+      "end_time": "22:45",
+      "duration_seconds": 495
+    },
+    {
+      "index": 4,
+      "title": "Mathematical Parameter Counting & Recurrent Cell Comparison",
+      "start_time": "22:45",
+      "end_time": "28:30",
+      "duration_seconds": 345
+    },
+    {
+      "index": 5,
+      "title": "PyTorch Recurrent Layers & Sequence Classification Architecture",
+      "start_time": "28:30",
+      "end_time": "34:06",
+      "duration_seconds": 336
+    }
+  ]
+}

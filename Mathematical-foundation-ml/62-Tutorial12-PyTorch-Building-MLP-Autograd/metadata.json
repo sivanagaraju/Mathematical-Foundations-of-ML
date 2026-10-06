@@ -1,0 +1,68 @@
+{
+  "title": "Tutorial 12 : Pytorch - Building MLP and Auto Grad",
+  "video_id": "SEEQ2A2WN9g",
+  "url": "https://www.youtube.com/watch?v=SEEQ2A2WN9g",
+  "duration_seconds": 2567,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "MLP Class, Forward method, Automatic Differentiation, Computational Graph, Directed Acyclic Graph",
+  "playlist_index": 62,
+  "chapter_count": 6,
+  "instructor": "Teaching Assistant / Prof. Prathosh A P",
+  "skill": "youtube-lecture-tutor",
+  "topic_count": 6,
+  "package_variant": "standard",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "content_type": "code_tutorial",
+  "ingest_evidence": {
+    "captions_file": "raw/captions.en.vtt",
+    "video_file": "raw/lecture.mp4",
+    "screenshot_manifest": "screenshots/manifest.json",
+    "topic_ranges_file": "raw/topic-ranges.json"
+  },
+  "topics": [
+    {
+      "index": 1,
+      "title": "Designing the MLP Architecture: Dimensionality, Flattening & Softmax",
+      "time_range": "00:00–09:42",
+      "summary": "Formulates the MNIST handwritten digit classification task as an MLP hypothesis class mapping flattened 784-dimensional image vectors through two 512-neuron hidden layers to 10-dimensional logits, converting logits to class posterior probabilities via the softmax operator.",
+      "board_screenshot": "screenshots/composites/ch01-designing-the-mlp-architecture-panel1of2.png"
+    },
+    {
+      "index": 2,
+      "title": "Coding the Neural Network: nn.Module, super().__init__, and nn.Sequential Stacking",
+      "time_range": "09:42–17:25",
+      "summary": "Implements the custom neural network class subclassing torch.nn.Module, calling super().__init__() for parameter tracking, configuring CUDA accelerator hardware, and chaining nn.Flatten, nn.Linear weight projections, and nn.ReLU non-linear activations inside an nn.Sequential modular pipeline.",
+      "board_screenshot": "screenshots/composites/ch02-coding-the-neural-network-panel1of2.png"
+    },
+    {
+      "index": 3,
+      "title": "Forward Propagation & Prediction: Model Calling, Device Migration & Logit-to-Posterior Pipeline",
+      "time_range": "17:25–23:12",
+      "summary": "Defines the forward(self, x) execution path, enforces invoking the model instance directly via model(x) to execute registered hooks, migrates the network to GPU memory via .to(device), computes total trainable parameter counts across the loss landscape (669,706 parameters), and extracts predicted class indices via torch.argmax().",
+      "board_screenshot": "screenshots/composites/ch03-forward-propagation-panel1of2.png"
+    },
+    {
+      "index": 4,
+      "title": "Visualizing Layer Operations & Dissecting Intermediate Activations",
+      "time_range": "23:12–28:49",
+      "summary": "Steps through individual neural network transformations in isolation, demonstrating nn.Flatten() reshaping (1, 28, 28) to (1, 784), debugging device mismatches between standalone layers and inputs, and verifying the piecewise linear activation thresholding of nn.ReLU() clamping negative values to zero.",
+      "board_screenshot": "screenshots/composites/ch04-visualizing-layer-operations-panel1of2.png"
+    },
+    {
+      "index": 5,
+      "title": "Backpropagation Concepts & Automatic Differentiation: The Autograd Engine & grad_fn",
+      "time_range": "28:49–35:44",
+      "summary": "Derives reverse-mode automatic differentiation on a single-cell linear model with binary cross-entropy with logits, flags leaf parameter tensors with requires_grad=True, inspects backward operation records in grad_fn, triggers backpropagation via loss.backward(), and inspects partial derivative accumulations in .grad attributes.",
+      "board_screenshot": "screenshots/composites/ch05-backpropagation-concepts-panel1of2.png"
+    },
+    {
+      "index": 6,
+      "title": "Gradient Tracking Controls: torch.no_grad(), .detach(), and Computational DAG Mechanics",
+      "time_range": "35:44–42:47",
+      "summary": "Disables autograd tracking during inference via torch.no_grad(), severs gradient history using zero-copy .detach() views for parameter freezing and transfer learning, and synthesizes the theoretical engine of PyTorch's dynamic Directed Acyclic Graph (DAG) traversing from loss root to parameter leaves via the multivariable calculus chain rule.",
+      "board_screenshot": "screenshots/composites/ch06-gradient-tracking-controls-panel1of2.png"
+    }
+  ]
+}

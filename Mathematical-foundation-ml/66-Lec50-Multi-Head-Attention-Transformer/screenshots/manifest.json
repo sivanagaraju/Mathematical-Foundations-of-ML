@@ -1,0 +1,648 @@
+{
+  "duration_seconds": 1645.0,
+  "range_source": "youtube-chapters",
+  "range_count": 7,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 330.0,
+      "slug": "multi-head-attention"
+    },
+    {
+      "index": 2,
+      "start": 330.0,
+      "end": 437.0,
+      "slug": "empirical-nature-of-models"
+    },
+    {
+      "index": 3,
+      "start": 437.0,
+      "end": 602.0,
+      "slug": "regularization-techniques"
+    },
+    {
+      "index": 4,
+      "start": 602.0,
+      "end": 1032.0,
+      "slug": "normalization-methods"
+    },
+    {
+      "index": 5,
+      "start": 1032.0,
+      "end": 1271.0,
+      "slug": "transformer-architecture"
+    },
+    {
+      "index": 6,
+      "start": 1271.0,
+      "end": 1406.0,
+      "slug": "vision-transformers"
+    },
+    {
+      "index": 7,
+      "start": 1406.0,
+      "end": 1645.0,
+      "slug": "architectural-philosophy"
+    }
+  ],
+  "raw_count": 36,
+  "composite_count": 9,
+  "raw": [
+    {
+      "file": "raw/001-ch01-multi-head-attention-t0026s.png",
+      "seconds": 26.4,
+      "chapter": 1,
+      "slug": "multi-head-attention",
+      "label": "00:26",
+      "range_start": 0.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/002-ch01-multi-head-attention-t0066s.png",
+      "seconds": 66.0,
+      "chapter": 1,
+      "slug": "multi-head-attention",
+      "label": "01:06",
+      "range_start": 0.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/003-ch01-multi-head-attention-t0105s.png",
+      "seconds": 105.6,
+      "chapter": 1,
+      "slug": "multi-head-attention",
+      "label": "01:45",
+      "range_start": 0.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/004-ch01-multi-head-attention-t0145s.png",
+      "seconds": 145.2,
+      "chapter": 1,
+      "slug": "multi-head-attention",
+      "label": "02:25",
+      "range_start": 0.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/005-ch01-multi-head-attention-t0184s.png",
+      "seconds": 184.8,
+      "chapter": 1,
+      "slug": "multi-head-attention",
+      "label": "03:04",
+      "range_start": 0.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/006-ch01-multi-head-attention-t0224s.png",
+      "seconds": 224.4,
+      "chapter": 1,
+      "slug": "multi-head-attention",
+      "label": "03:44",
+      "range_start": 0.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/007-ch01-multi-head-attention-t0264s.png",
+      "seconds": 264.0,
+      "chapter": 1,
+      "slug": "multi-head-attention",
+      "label": "04:24",
+      "range_start": 0.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/008-ch01-multi-head-attention-t0303s.png",
+      "seconds": 303.6,
+      "chapter": 1,
+      "slug": "multi-head-attention",
+      "label": "05:03",
+      "range_start": 0.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "raw/009-ch02-empirical-nature-of-models-t0338s.png",
+      "seconds": 338.6,
+      "chapter": 2,
+      "slug": "empirical-nature-of-models",
+      "label": "05:38",
+      "range_start": 330.0,
+      "range_end": 437.0
+    },
+    {
+      "file": "raw/010-ch02-empirical-nature-of-models-t0368s.png",
+      "seconds": 368.5,
+      "chapter": 2,
+      "slug": "empirical-nature-of-models",
+      "label": "06:08",
+      "range_start": 330.0,
+      "range_end": 437.0
+    },
+    {
+      "file": "raw/011-ch02-empirical-nature-of-models-t0398s.png",
+      "seconds": 398.5,
+      "chapter": 2,
+      "slug": "empirical-nature-of-models",
+      "label": "06:38",
+      "range_start": 330.0,
+      "range_end": 437.0
+    },
+    {
+      "file": "raw/012-ch02-empirical-nature-of-models-t0428s.png",
+      "seconds": 428.4,
+      "chapter": 2,
+      "slug": "empirical-nature-of-models",
+      "label": "07:08",
+      "range_start": 330.0,
+      "range_end": 437.0
+    },
+    {
+      "file": "raw/013-ch03-regularization-techniques-t0450s.png",
+      "seconds": 450.2,
+      "chapter": 3,
+      "slug": "regularization-techniques",
+      "label": "07:30",
+      "range_start": 437.0,
+      "range_end": 602.0
+    },
+    {
+      "file": "raw/014-ch03-regularization-techniques-t0496s.png",
+      "seconds": 496.4,
+      "chapter": 3,
+      "slug": "regularization-techniques",
+      "label": "08:16",
+      "range_start": 437.0,
+      "range_end": 602.0
+    },
+    {
+      "file": "raw/015-ch03-regularization-techniques-t0542s.png",
+      "seconds": 542.6,
+      "chapter": 3,
+      "slug": "regularization-techniques",
+      "label": "09:02",
+      "range_start": 437.0,
+      "range_end": 602.0
+    },
+    {
+      "file": "raw/016-ch03-regularization-techniques-t0588s.png",
+      "seconds": 588.8,
+      "chapter": 3,
+      "slug": "regularization-techniques",
+      "label": "09:48",
+      "range_start": 437.0,
+      "range_end": 602.0
+    },
+    {
+      "file": "raw/017-ch04-normalization-methods-t0636s.png",
+      "seconds": 636.4,
+      "chapter": 4,
+      "slug": "normalization-methods",
+      "label": "10:36",
+      "range_start": 602.0,
+      "range_end": 1032.0
+    },
+    {
+      "file": "raw/018-ch04-normalization-methods-t0688s.png",
+      "seconds": 688.0,
+      "chapter": 4,
+      "slug": "normalization-methods",
+      "label": "11:28",
+      "range_start": 602.0,
+      "range_end": 1032.0
+    },
+    {
+      "file": "raw/019-ch04-normalization-methods-t0739s.png",
+      "seconds": 739.6,
+      "chapter": 4,
+      "slug": "normalization-methods",
+      "label": "12:19",
+      "range_start": 602.0,
+      "range_end": 1032.0
+    },
+    {
+      "file": "raw/020-ch04-normalization-methods-t0791s.png",
+      "seconds": 791.2,
+      "chapter": 4,
+      "slug": "normalization-methods",
+      "label": "13:11",
+      "range_start": 602.0,
+      "range_end": 1032.0
+    },
+    {
+      "file": "raw/021-ch04-normalization-methods-t0842s.png",
+      "seconds": 842.8,
+      "chapter": 4,
+      "slug": "normalization-methods",
+      "label": "14:02",
+      "range_start": 602.0,
+      "range_end": 1032.0
+    },
+    {
+      "file": "raw/022-ch04-normalization-methods-t0894s.png",
+      "seconds": 894.4,
+      "chapter": 4,
+      "slug": "normalization-methods",
+      "label": "14:54",
+      "range_start": 602.0,
+      "range_end": 1032.0
+    },
+    {
+      "file": "raw/023-ch04-normalization-methods-t0946s.png",
+      "seconds": 946.0,
+      "chapter": 4,
+      "slug": "normalization-methods",
+      "label": "15:46",
+      "range_start": 602.0,
+      "range_end": 1032.0
+    },
+    {
+      "file": "raw/024-ch04-normalization-methods-t0997s.png",
+      "seconds": 997.6,
+      "chapter": 4,
+      "slug": "normalization-methods",
+      "label": "16:37",
+      "range_start": 602.0,
+      "range_end": 1032.0
+    },
+    {
+      "file": "raw/025-ch05-transformer-architecture-t1051s.png",
+      "seconds": 1051.1,
+      "chapter": 5,
+      "slug": "transformer-architecture",
+      "label": "17:31",
+      "range_start": 1032.0,
+      "range_end": 1271.0
+    },
+    {
+      "file": "raw/026-ch05-transformer-architecture-t1118s.png",
+      "seconds": 1118.0,
+      "chapter": 5,
+      "slug": "transformer-architecture",
+      "label": "18:38",
+      "range_start": 1032.0,
+      "range_end": 1271.0
+    },
+    {
+      "file": "raw/027-ch05-transformer-architecture-t1184s.png",
+      "seconds": 1185.0,
+      "chapter": 5,
+      "slug": "transformer-architecture",
+      "label": "19:44",
+      "range_start": 1032.0,
+      "range_end": 1271.0
+    },
+    {
+      "file": "raw/028-ch05-transformer-architecture-t1251s.png",
+      "seconds": 1251.9,
+      "chapter": 5,
+      "slug": "transformer-architecture",
+      "label": "20:51",
+      "range_start": 1032.0,
+      "range_end": 1271.0
+    },
+    {
+      "file": "raw/029-ch06-vision-transformers-t1281s.png",
+      "seconds": 1281.8,
+      "chapter": 6,
+      "slug": "vision-transformers",
+      "label": "21:21",
+      "range_start": 1271.0,
+      "range_end": 1406.0
+    },
+    {
+      "file": "raw/030-ch06-vision-transformers-t1319s.png",
+      "seconds": 1319.6,
+      "chapter": 6,
+      "slug": "vision-transformers",
+      "label": "21:59",
+      "range_start": 1271.0,
+      "range_end": 1406.0
+    },
+    {
+      "file": "raw/031-ch06-vision-transformers-t1357s.png",
+      "seconds": 1357.4,
+      "chapter": 6,
+      "slug": "vision-transformers",
+      "label": "22:37",
+      "range_start": 1271.0,
+      "range_end": 1406.0
+    },
+    {
+      "file": "raw/032-ch06-vision-transformers-t1395s.png",
+      "seconds": 1395.2,
+      "chapter": 6,
+      "slug": "vision-transformers",
+      "label": "23:15",
+      "range_start": 1271.0,
+      "range_end": 1406.0
+    },
+    {
+      "file": "raw/033-ch07-architectural-philosophy-t1425s.png",
+      "seconds": 1425.1,
+      "chapter": 7,
+      "slug": "architectural-philosophy",
+      "label": "23:45",
+      "range_start": 1406.0,
+      "range_end": 1645.0
+    },
+    {
+      "file": "raw/034-ch07-architectural-philosophy-t1492s.png",
+      "seconds": 1492.0,
+      "chapter": 7,
+      "slug": "architectural-philosophy",
+      "label": "24:52",
+      "range_start": 1406.0,
+      "range_end": 1645.0
+    },
+    {
+      "file": "raw/035-ch07-architectural-philosophy-t1558s.png",
+      "seconds": 1559.0,
+      "chapter": 7,
+      "slug": "architectural-philosophy",
+      "label": "25:58",
+      "range_start": 1406.0,
+      "range_end": 1645.0
+    },
+    {
+      "file": "raw/036-ch07-architectural-philosophy-t1625s.png",
+      "seconds": 1625.9,
+      "chapter": 7,
+      "slug": "architectural-philosophy",
+      "label": "27:05",
+      "range_start": 1406.0,
+      "range_end": 1645.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-multi-head-attention-panel1of2.png",
+      "chapter": 1,
+      "slug": "multi-head-attention",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "001-ch01-multi-head-attention-t0026s.png",
+        "002-ch01-multi-head-attention-t0066s.png",
+        "003-ch01-multi-head-attention-t0105s.png",
+        "004-ch01-multi-head-attention-t0145s.png"
+      ],
+      "labels": [
+        "ch1 00:26",
+        "ch1 01:06",
+        "ch1 01:45",
+        "ch1 02:25"
+      ],
+      "tile_seconds": [
+        26.4,
+        66.0,
+        105.6,
+        145.2
+      ],
+      "time_start": 26.4,
+      "time_end": 145.2,
+      "range_start": 0.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "composites/ch01-multi-head-attention-panel2of2.png",
+      "chapter": 1,
+      "slug": "multi-head-attention",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "005-ch01-multi-head-attention-t0184s.png",
+        "006-ch01-multi-head-attention-t0224s.png",
+        "007-ch01-multi-head-attention-t0264s.png",
+        "008-ch01-multi-head-attention-t0303s.png"
+      ],
+      "labels": [
+        "ch1 03:04",
+        "ch1 03:44",
+        "ch1 04:24",
+        "ch1 05:03"
+      ],
+      "tile_seconds": [
+        184.8,
+        224.4,
+        264.0,
+        303.6
+      ],
+      "time_start": 184.8,
+      "time_end": 303.6,
+      "range_start": 0.0,
+      "range_end": 330.0
+    },
+    {
+      "file": "composites/ch02-empirical-nature-of-models-panel1of1.png",
+      "chapter": 2,
+      "slug": "empirical-nature-of-models",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch02-empirical-nature-of-models-t0338s.png",
+        "010-ch02-empirical-nature-of-models-t0368s.png",
+        "011-ch02-empirical-nature-of-models-t0398s.png",
+        "012-ch02-empirical-nature-of-models-t0428s.png"
+      ],
+      "labels": [
+        "ch2 05:38",
+        "ch2 06:08",
+        "ch2 06:38",
+        "ch2 07:08"
+      ],
+      "tile_seconds": [
+        338.6,
+        368.5,
+        398.5,
+        428.4
+      ],
+      "time_start": 338.6,
+      "time_end": 428.4,
+      "range_start": 330.0,
+      "range_end": 437.0
+    },
+    {
+      "file": "composites/ch03-regularization-techniques-panel1of1.png",
+      "chapter": 3,
+      "slug": "regularization-techniques",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch03-regularization-techniques-t0450s.png",
+        "014-ch03-regularization-techniques-t0496s.png",
+        "015-ch03-regularization-techniques-t0542s.png",
+        "016-ch03-regularization-techniques-t0588s.png"
+      ],
+      "labels": [
+        "ch3 07:30",
+        "ch3 08:16",
+        "ch3 09:02",
+        "ch3 09:48"
+      ],
+      "tile_seconds": [
+        450.2,
+        496.4,
+        542.6,
+        588.8
+      ],
+      "time_start": 450.2,
+      "time_end": 588.8,
+      "range_start": 437.0,
+      "range_end": 602.0
+    },
+    {
+      "file": "composites/ch04-normalization-methods-panel1of2.png",
+      "chapter": 4,
+      "slug": "normalization-methods",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "017-ch04-normalization-methods-t0636s.png",
+        "018-ch04-normalization-methods-t0688s.png",
+        "019-ch04-normalization-methods-t0739s.png",
+        "020-ch04-normalization-methods-t0791s.png"
+      ],
+      "labels": [
+        "ch4 10:36",
+        "ch4 11:28",
+        "ch4 12:19",
+        "ch4 13:11"
+      ],
+      "tile_seconds": [
+        636.4,
+        688.0,
+        739.6,
+        791.2
+      ],
+      "time_start": 636.4,
+      "time_end": 791.2,
+      "range_start": 602.0,
+      "range_end": 1032.0
+    },
+    {
+      "file": "composites/ch04-normalization-methods-panel2of2.png",
+      "chapter": 4,
+      "slug": "normalization-methods",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "021-ch04-normalization-methods-t0842s.png",
+        "022-ch04-normalization-methods-t0894s.png",
+        "023-ch04-normalization-methods-t0946s.png",
+        "024-ch04-normalization-methods-t0997s.png"
+      ],
+      "labels": [
+        "ch4 14:02",
+        "ch4 14:54",
+        "ch4 15:46",
+        "ch4 16:37"
+      ],
+      "tile_seconds": [
+        842.8,
+        894.4,
+        946.0,
+        997.6
+      ],
+      "time_start": 842.8,
+      "time_end": 997.6,
+      "range_start": 602.0,
+      "range_end": 1032.0
+    },
+    {
+      "file": "composites/ch05-transformer-architecture-panel1of1.png",
+      "chapter": 5,
+      "slug": "transformer-architecture",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "025-ch05-transformer-architecture-t1051s.png",
+        "026-ch05-transformer-architecture-t1118s.png",
+        "027-ch05-transformer-architecture-t1184s.png",
+        "028-ch05-transformer-architecture-t1251s.png"
+      ],
+      "labels": [
+        "ch5 17:31",
+        "ch5 18:38",
+        "ch5 19:44",
+        "ch5 20:51"
+      ],
+      "tile_seconds": [
+        1051.1,
+        1118.0,
+        1185.0,
+        1251.9
+      ],
+      "time_start": 1051.1,
+      "time_end": 1251.9,
+      "range_start": 1032.0,
+      "range_end": 1271.0
+    },
+    {
+      "file": "composites/ch06-vision-transformers-panel1of1.png",
+      "chapter": 6,
+      "slug": "vision-transformers",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "029-ch06-vision-transformers-t1281s.png",
+        "030-ch06-vision-transformers-t1319s.png",
+        "031-ch06-vision-transformers-t1357s.png",
+        "032-ch06-vision-transformers-t1395s.png"
+      ],
+      "labels": [
+        "ch6 21:21",
+        "ch6 21:59",
+        "ch6 22:37",
+        "ch6 23:15"
+      ],
+      "tile_seconds": [
+        1281.8,
+        1319.6,
+        1357.4,
+        1395.2
+      ],
+      "time_start": 1281.8,
+      "time_end": 1395.2,
+      "range_start": 1271.0,
+      "range_end": 1406.0
+    },
+    {
+      "file": "composites/ch07-architectural-philosophy-panel1of1.png",
+      "chapter": 7,
+      "slug": "architectural-philosophy",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch07-architectural-philosophy-t1425s.png",
+        "034-ch07-architectural-philosophy-t1492s.png",
+        "035-ch07-architectural-philosophy-t1558s.png",
+        "036-ch07-architectural-philosophy-t1625s.png"
+      ],
+      "labels": [
+        "ch7 23:45",
+        "ch7 24:52",
+        "ch7 25:58",
+        "ch7 27:05"
+      ],
+      "tile_seconds": [
+        1425.1,
+        1492.0,
+        1559.0,
+        1625.9
+      ],
+      "time_start": 1425.1,
+      "time_end": 1625.9,
+      "range_start": 1406.0,
+      "range_end": 1645.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

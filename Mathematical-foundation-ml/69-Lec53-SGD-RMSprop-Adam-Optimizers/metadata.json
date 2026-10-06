@@ -1,0 +1,59 @@
+{
+  "title": "Lec 53 SGD, RMS Prop, ADAM : Optimizers",
+  "video_id": "N6F1J-wcE_E",
+  "url": "https://www.youtube.com/watch?v=N6F1J-wcE_E",
+  "duration_seconds": 1168,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh AP",
+  "playlist_index": 69,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 6,
+  "package_variant": "production",
+  "requires_claim_mining": true,
+  "beginner_prereqs": false,
+  "topics": [
+    {
+      "index": 1,
+      "title": "Vanilla Gradient Descent & Pathologies of Fixed Learning Rates",
+      "start_time": "00:00",
+      "end_time": "03:30",
+      "duration_seconds": 210
+    },
+    {
+      "index": 2,
+      "title": "SGD with Momentum: Heavy Ball Dynamics & Ravine Acceleration",
+      "start_time": "03:31",
+      "end_time": "07:10",
+      "duration_seconds": 220
+    },
+    {
+      "index": 3,
+      "title": "RMSprop: Root Mean Square Normalization & Coordinate Adaptation",
+      "start_time": "07:11",
+      "end_time": "09:37",
+      "duration_seconds": 147
+    },
+    {
+      "index": 4,
+      "title": "The Adam Optimizer: Combining First and Second Moment Estimators",
+      "start_time": "09:38",
+      "end_time": "12:32",
+      "duration_seconds": 175
+    },
+    {
+      "index": 5,
+      "title": "Optimization Landscapes: Ill-Conditioning, Saddle Points & Local Minima",
+      "start_time": "12:33",
+      "end_time": "17:20",
+      "duration_seconds": 288
+    },
+    {
+      "index": 6,
+      "title": "Generalization Dynamics: Training Curves, Overfitting & Early Stopping",
+      "start_time": "17:21",
+      "end_time": "19:28",
+      "duration_seconds": 128
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "title": "Lec 51 Positional Embeddings",
+  "video_id": "xbkJIeLoGyw",
+  "url": "https://www.youtube.com/watch?v=xbkJIeLoGyw",
+  "duration_seconds": 809,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh AP",
+  "playlist_index": 67,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 5,
+  "package_variant": "production",
+  "requires_claim_mining": true,
+  "beginner_prereqs": false,
+  "topics": [
+    {
+      "index": 1,
+      "title": "Loss of Ordinality: Why Self-Attention is Permutation Equivariant",
+      "start_time": "00:00",
+      "end_time": "03:20",
+      "duration_seconds": 200
+    },
+    {
+      "index": 2,
+      "title": "The Positional Mapping Function & Failure of Naive Scalar Offsets",
+      "start_time": "03:21",
+      "end_time": "06:30",
+      "duration_seconds": 190
+    },
+    {
+      "index": 3,
+      "title": "Sinusoidal Positional Embeddings: Frequency Geometry & Relative Shift Properties",
+      "start_time": "06:31",
+      "end_time": "10:50",
+      "duration_seconds": 260
+    },
+    {
+      "index": 4,
+      "title": "Architectural Design Choices: Addition vs Concatenation & Learned vs Rotary (RoPE)",
+      "start_time": "10:51",
+      "end_time": "11:45",
+      "duration_seconds": 55
+    },
+    {
+      "index": 5,
+      "title": "Self-Attention vs Cross-Attention & Meta-Learning Roadmap",
+      "start_time": "11:46",
+      "end_time": "13:29",
+      "duration_seconds": 104
+    }
+  ]
+}

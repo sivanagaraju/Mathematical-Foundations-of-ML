@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz · Lec 48 Attention Part 1</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz · Lec 48 Attention Part 1</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. This video only.</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "prereq-01", "part": "prerequisites", "flavor": "compare", "anchor": "PREREQUISITES.md#p1", "prompt": "How does a learnable linear subspace projection $Z = X W$ in deep neural networks differ fundamentally from a classical fixed transformation like the Fourier or Polynomial transform $\\phi(X)$?", "options": [{"key": "A", "text": "Fixed transforms adapt their basis functions to minimize training loss, whereas learned projections remain static."}, {"key": "B", "text": "Classical transforms fix the basis functions prior to training, whereas neural networks optimize the basis matrix $W$ directly via gradient descent on empirical risk."}, {"key": "C", "text": "Linear subspace projections are strictly non-linear, whereas Fourier transforms are always non-convex."}, {"key": "D", "text": "Learned projections eliminate all parameter dimensions, whereas polynomial expansions preserve original dimensions."}], "answer": "B", "whyCorrect": "In classical signal processing (Fourier) and kernel methods (polynomial, RBF), the basis functions are predetermined by the human engineer. In deep networks, the transformation matrix $W$ is parameterized and optimized via ERM to learn a task-tailored coordinate basis.", "whyOthers": {"A": "Incorrect; fixed transforms are immutable and do not adapt to loss.", "C": "Incorrect; matrix multiplication $Z = X W$ is linear, while Fourier transforms are linear integral transforms.", "D": "Incorrect; projections can map to any dimension $D_k$ (expansion, reduction, or equal)."}, "diagram": "Fixed basis (Fourier) vs Learned basis (W in ERM)", "useLater": "Connects to Topic 1 representation learning worldview."}, {"id": "prereq-02", "part": "prerequisites", "flavor": "trap", "anchor": "PREREQUISITES.md#p2", "prompt": "Given a sequence matrix $X \\in \\mathbb{R}^{T \\times D}$ and a projection matrix $W \\in \\mathbb{R}^{D \\times D_k}$, what does the matrix product $Z = X W$ compute regarding individual tokens across time steps $T$?", "options": [{"key": "A", "text": "It computes a recurrent unrolling where token $t$ depends on all preceding tokens $1, \\dots, t-1$."}, {"key": "B", "text": "It applies a 1D temporal convolution with kernel size $T$ across all token channels."}, {"key": "C", "text": "It projects each token row $X_{i, :}$ independently into the $D_k$-dimensional subspace without mixing information across time steps."}, {"key": "D", "text": "It enforces strict orthogonality between all token vectors."}], "answer": "C", "whyCorrect": "Standard matrix multiplication $Z = X W$ applies row-by-row: $Z_{i, :} = X_{i, :} W$. Token $i$ is projected independently; no cross-token interaction occurs until dot products between queries and keys are calculated.", "whyOthers": {"A": "Incorrect; linear matrix multiplication has no recurrent state recurrence.", "B": "Incorrect; convolution involves sliding kernels across temporal indices; this is a point-wise linear projection.", "D": "Incorrect; matrix multiplication does not force orthogonality unless $W$ is constrained to be an orthogonal projection."}, "diagram": "Z[i, :] = X[i, :] @ W (row-wise token isolation)", "useLater": "Foundation for defining Query, Key, and Value matrices in Topic 4."}, {"id": "prereq-03", "part": "prerequisites", "flavor": "connect", "anchor": "PREREQUISITES.md#p3", "prompt": "According to the Data Processing Inequality, what mathematical phenomenon causes the severe information bottleneck in classical RNN encoders as sequence length $T$ grows?", "options": [{"key": "A", "text": "Mutual information $I(X_1; H_T)$ monotonically decreases along the Markov chain $X_1 \\to H_1 \\to \\dots \\to H_T$, causing exponential loss of early context."}, {"key": "B", "text": "The hidden state $H_T$ expands in dimension exponentially with sequence length $T$, exceeding GPU memory."}, {"key": "C", "text": "The gradient norm of the terminal state diverges toward infinity for all sequence lengths $T > 10$."}, {"key": "D", "text": "The decoder is prohibited by information theory from accepting vectors of dimension greater than 1."}], "answer": "A", "whyCorrect": "The Data Processing Inequality dictates that post-processing cannot increase information: $I(X_1; H_T) \\le I(X_1; H_1)$. With contracting recurrent maps, early token signal decays exponentially as it traverses the sequential Markov chain.", "whyOthers": {"B": "Incorrect; the hidden state dimension $m$ is fixed and constant, which is the precise cause of the bottleneck.", "C": "Incorrect; vanishing gradients (shrinking to zero), not divergence to infinity, is the standard degradation mode.", "D": "Incorrect; the decoder can receive vectors of arbitrary dimension."}, "diagram": "I(X_1; H_T) <= ... <= I(X_1; H_1) -> 0", "useLater": "Motivates the introduction of the attention mechanism in Topic 2 and 3."}, {"id": "prereq-04", "part": "prerequisites", "flavor": "definition", "anchor": "PREREQUISITES.md#p4", "prompt": "What geometric constraint is strictly satisfied by attention weights $\\alpha_t$ produced by applying the softmax operator to raw compatibility scores?", "options": [{"key": "A", "text": "They form an orthogonal matrix whose determinant is identically $+1.0$."}, {"key": "B", "text": "They lie strictly on the probability simplex $\\Delta^{T-1}$, satisfying $\\alpha_{t, i} \\ge 0$ and $\\sum_{i=1}^T \\alpha_{t, i} = 1$."}, {"key": "C", "text": "They are unconstrained real scalars with zero mean and unit variance."}, {"key": "D", "text": "They strictly equal either $0.0$ or $1.0$, creating hard deterministic routing."}], "answer": "B", "whyCorrect": "The softmax operator maps any real vector $s \\in \\mathbb{R}^T$ onto the standard probability simplex $\\Delta^{T-1}$, ensuring non-negativity and sum-to-one normalization.", "whyOthers": {"A": "Incorrect; attention weights form a probability vector, not an orthogonal matrix.", "C": "Incorrect; unconstrained scalars would produce arbitrary vector expansions rather than convex combinations.", "D": "Incorrect; standard softmax produces soft continuous probabilities in $(0, 1)$, not hard binary indicators."}, "diagram": "Softmax: R^T -> Delta^{T-1}", "useLater": "Foundation for computing dynamic context vectors in Topic 3."}, {"id": "notes-01", "part": "notes", "flavor": "map", "anchor": "NOTES.md#executive-summary", "prompt": "How does the master architecture blueprint of sequence modeling connect the transition from classical recurrent encoders to modern attention projections?", "options": [{"key": "A", "text": "Attention replaces recurrence by projecting input tokens into Query, Key, and Value subspaces in parallel, bypassing the single terminal hidden state $H_T$ bottleneck with $O(1)$ pairwise interaction paths."}, {"key": "B", "text": "Attention retains the sequential recurrent chain but doubles the number of hidden states unrolled per second."}, {"key": "C", "text": "Attention replaces neural networks with fixed Fourier basis decompositions to avoid gradient descent."}, {"key": "D", "text": "Attention forces all input tokens to share an identical Query and Key vector to prevent overfitting."}], "answer": "A", "whyCorrect": "As shown in the master architecture blueprint, attention eliminates the $O(T)$ sequential recurrence chain and the lossy bottleneck vector $H_T$, establishing direct $O(1)$ pairwise interaction between tokens via Query, Key, and Value projections.", "whyOthers": {"B": "Incorrect; modern Transformers discard the recurrent chain entirely.", "C": "Incorrect; Transformers use learned parameterized projections optimized via ERM, not fixed Fourier transforms.", "D": "Incorrect; each token computes its own distinct Query, Key, and Value vector."}, "diagram": "Recurrent Bottleneck (H_T) -> Attention Subspaces (Q, K, V)", "useLater": "Synthesizes the core paradigm shift of the entire lecture."}, {"id": "notes-02", "part": "notes", "flavor": "compare", "anchor": "NOTES.md#topic-1-representation-learning-worldview-from-fixed-transforms-to-learned-non-linear-embeddings", "prompt": "Why can intermediate layer activations of a pre-trained deep neural network be tapped and transferred to new downstream tasks, according to the representation learning worldview?", "options": [{"key": "A", "text": "Because intermediate layers contain hardcoded rules written specifically for all downstream domains."}, {"key": "B", "text": "Because deep networks act as hierarchical changes of basis, learning geometric embeddings where semantic concepts become linearly separable."}, {"key": "C", "text": "Because deep network weights are mathematically identical to the discrete cosine transform."}, {"key": "D", "text": "Because intermediate activations eliminate all stochasticity and reduce data entropy to zero."}], "answer": "B", "whyCorrect": "Every layer in a deep network performs a parameterized non-linear projection. Tapping intermediate layers yields rich, hierarchical feature representations where data manifolds have been untangled, making downstream classification easy.", "whyOthers": {"A": "Incorrect; neural networks learn representations from data, not handcrafted rules.", "C": "Incorrect; deep representations are data-dependent and learned, unlike DCT basis functions.", "D": "Incorrect; activations transform and structure information without reducing entropy to zero."}, "diagram": "x -> [Layer 1 Basis] -> [Layer 2 Basis] -> untangled representation", "useLater": "Foundation for modern pre-trained foundation models."}, {"id": "notes-03", "part": "notes", "flavor": "connect", "anchor": "NOTES.md#topic-2-the-sequence-to-sequence-bottleneck-information-compression-in-recurrent-encoders", "prompt": "In a classical Seq2Seq RNN encoder, what is the architectural consequence of having input length $T$ much larger than the hidden state dimension $m$?", "options": [{"key": "A", "text": "The model automatically switches to an analytical closed-form linear solver."}, {"key": "B", "text": "The encoder memory carousel expands dynamically to store all tokens lossless in RAM."}, {"key": "C", "text": "Information is lossily compressed into $H_T$, causing severe degradation in translation or generation quality for long sequences."}, {"key": "D", "text": "The decoder can only produce output sequences of length $T' = 1$."}], "answer": "C", "whyCorrect": "The fixed dimension $m$ creates an informational bottleneck. When $T$ is large, the capacity of $H_T \\in \\mathbb{R}^m$ is overwhelmed, leading to catastrophic context forgetting as highlighted in the lecture.", "whyOthers": {"A": "Incorrect; Seq2Seq models do not switch to closed-form solvers.", "B": "Incorrect; standard RNN encoders do not dynamically expand hidden state dimension.", "D": "Incorrect; output sequence length $T'$ is independent of $T$ and can be arbitrarily long."}, "diagram": "Long sequence T >> m -> Bottleneck H_T loss", "useLater": "Connects the bottleneck problem to the Bahdanau attention solution."}, {"id": "notes-04", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#topic-3-historical-genesis-of-attention-dynamic-linear-combinations-of-hidden-states", "prompt": "What critical gradient flow property distinguishes the attention dynamic context vector $c_t = \\sum_{i=1}^T \\alpha_{t, i} H_i$ from the recurrent terminal state $H_T$ during backpropagation?", "options": [{"key": "A", "text": "Attention gradients flow directly to any encoder state $H_i$ scaled by $\\alpha_{t, i}$ with path length $O(1)$, completely bypassing the product of $T$ Jacobians."}, {"key": "B", "text": "Attention gradients must still traverse all $T$ intermediate time steps sequentially before reaching token 1."}, {"key": "C", "text": "Attention gradients are always identically zero for all tokens except token $T$."}, {"key": "D", "text": "Attention gradients require inverting the encoder weight matrix $W_{xh}$ using pseudo-inverses."}], "answer": "A", "whyCorrect": "Because $c_t$ is a direct linear combination of all hidden states, the derivative $\\frac{\\partial c_t}{\\partial H_i} = \\alpha_{t, i} \\mathbf{I}$ establishes an unattenuated $O(1)$ highway directly from the loss to any token $i$.", "whyOthers": {"B": "Incorrect; attention provides direct shortcut connections, eliminating sequential traversal.", "C": "Incorrect; all tokens with non-zero attention $\\alpha_{t, i} > 0$ receive gradient proportional to their weight.", "D": "Incorrect; backpropagation uses standard chain rule vector-Jacobian products, not matrix inversion."}, "diagram": "dL/dH_i = alpha_{t,i} * dL/dc_t (O(1) path)", "useLater": "Explains why attention scales effectively to long context lengths."}, {"id": "notes-05", "part": "notes", "flavor": "compare", "anchor": "NOTES.md#topic-4-mathematical-formulation-of-query-key-and-value-projections", "prompt": "Why does the attention mechanism project the sequence matrix $X$ using separate matrices $W^Q$ and $W^K$ rather than computing self-attention directly as $\\operatorname{softmax}(X X^T) X$?", "options": [{"key": "A", "text": "Separate $W^Q$ and $W^K$ allow the model to learn asymmetric, directed relationships ($A \\to B \\neq B \\to A$), whereas $X X^T$ is strictly symmetric."}, {"key": "B", "text": "Using $X X^T$ would require GPU memory to be complex-valued rather than real-valued."}, {"key": "C", "text": "Direct multiplication $X X^T$ violates the associative property of matrix algebra."}, {"key": "D", "text": "Without $W^Q$ and $W^K$, the sequence matrix $X$ cannot be loaded onto a GPU."}], "answer": "A", "whyCorrect": "Raw inner products $X_i X_j^T = X_j X_i^T$ are symmetric, forcing bidirectional equality. Separate projections create an asymmetric bilinear form $X_i W^Q (W^K)^T X_j^T$, allowing directed relationships like subject-verb or verb-object.", "whyOthers": {"B": "Incorrect; $X X^T$ is completely real-valued for real input matrices.", "C": "Incorrect; matrix multiplication is always associative.", "D": "Incorrect; tensor loading is independent of whether parameter matrices exist."}, "diagram": "Asymmetric bilinear form: X_i W^Q (W^K)^T X_j^T != X_j W^Q (W^K)^T X_i^T", "useLater": "Foundation for understanding scaled dot-product attention in Lecture 49."}, {"id": "notes-06", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#top-level-python-verification-suite", "prompt": "What mathematical property ensures that token-wise linear projections $Q = X W^Q$ commute with token permutation, and what architectural component is required downstream as a result?", "options": [{"key": "A", "text": "Linear projections are strictly permutation equivariant $(\\Pi X) W = \\Pi (X W)$, meaning the model is inherently order-blind and requires Positional Embeddings to recognize word order."}, {"key": "B", "text": "Linear projections are permutation invariant, meaning that reordering tokens collapses all outputs to zero."}, {"key": "C", "text": "Projections are non-commutative, ensuring word order is naturally preserved without extra embeddings."}, {"key": "D", "text": "Linear projections violate matrix distributivity, requiring batch normalization."}], "answer": "A", "whyCorrect": "Because $W$ acts on the feature dimension $D$ rather than across sequence time $T$, permuting rows of $X$ simply permutes the rows of $Q$. Without explicit positional encodings (Lecture 51), attention models treat sequences as unordered bags of words.", "whyOthers": {"B": "Incorrect; it is equivariant (outputs permute identically), not invariant (outputs do not collapse).", "C": "Incorrect; standard linear projections do not naturally encode sequential order.", "D": "Incorrect; matrix algebra is strictly distributive."}, "diagram": "(Pi @ X) @ W = Pi @ (X @ W) (Order-blind equivariance)", "useLater": "Direct preview for Lecture 51: Positional Embeddings."}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

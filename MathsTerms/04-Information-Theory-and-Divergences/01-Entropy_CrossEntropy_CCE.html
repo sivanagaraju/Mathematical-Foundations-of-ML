@@ -1,0 +1,2108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entropy, Cross-Entropy &amp; Categorical Cross-Entropy (CCE) — The Master Interactive Guide</title>
+
+<!-- KaTeX CSS & JS for In-Browser Formula Rendering -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    --ivory:     #FAF9F5;
+    --paper:     #FFFFFF;
+    --slate:     #141413;
+    --clay:      #D97757;
+    --clay-dark: #B85C3E;
+    --clay-soft: rgba(217, 119, 87, 0.08);
+    --oat:       #E3DACC;
+    --olive:     #5F7546;
+    --olive-soft: rgba(95, 117, 70, 0.10);
+    --sky:       #4A7A96;
+    --sky-soft:  rgba(74, 122, 150, 0.10);
+    --purple:    #7E6B9B;
+    --rose:      #C24D4D;
+    --rose-soft: rgba(194, 77, 77, 0.08);
+    --amber:     #D48817;
+    --amber-soft: rgba(212, 136, 23, 0.10);
+    --gray-100:  #F7F6F2;
+    --gray-150:  #F0EEE6;
+    --gray-200:  #E6E3DA;
+    --gray-300:  #D1CFC5;
+    --gray-500:  #87867F;
+    --gray-700:  #3D3D3A;
+    --gray-900:  #1C1C1A;
+    --serif:     ui-serif, Georgia, "Times New Roman", Cambria, serif;
+    --sans:      system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono:      ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --shadow-sm: 0 1px 3px rgba(20,20,19,0.06);
+    --shadow-md: 0 4px 14px rgba(20,20,19,0.08);
+    --shadow-lg: 0 12px 32px rgba(20,20,19,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ivory);
+    color: var(--gray-700);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    padding: 0 0 140px;
+  }
+
+  /* Top sticky navigation */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    background: rgba(250, 249, 245, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+  .nav-left { display: flex; align-items: center; gap: 14px; }
+  .nav-badge {
+    background: var(--clay);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .nav-title { font-weight: 600; color: var(--slate); }
+  .nav-links { display: flex; gap: 16px; font-family: var(--mono); font-size: 11.5px; }
+  .nav-links a { color: var(--gray-500); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--clay); }
+
+  .wrap {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* Masthead */
+  header.masthead {
+    padding: 64px 0 44px;
+    border-bottom: 1.5px solid var(--gray-300);
+    margin-bottom: 36px;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 24px; height: 2px;
+    background: var(--clay);
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(34px, 4.6vw, 56px);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--slate);
+    margin-bottom: 16px;
+  }
+  h1 em { font-style: italic; color: var(--clay); }
+  .lead {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--gray-700);
+    max-width: 820px;
+    margin-bottom: 24px;
+  }
+
+  /* Tags & Meta Badges */
+  .meta-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .chip {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    background: var(--gray-150);
+    border: 1px solid var(--gray-200);
+    padding: 4px 10px;
+    border-radius: 6px;
+    color: var(--gray-700);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .chip strong { color: var(--slate); }
+
+  /* 4-Box Metadata Banner */
+  .meta-banner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .meta-card {
+    background: var(--paper);
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 16px 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .meta-card h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--clay);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .meta-card p {
+    font-size: 13.5px;
+    color: var(--gray-700);
+    line-height: 1.5;
+  }
+
+  /* Section Styling */
+  section.topic-block {
+    margin-bottom: 72px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gray-200);
+  }
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--clay);
+    margin-bottom: 8px;
+  }
+  .section-tag span.num {
+    background: var(--clay);
+    color: #fff;
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+  h2.section-heading {
+    font-family: var(--serif);
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 500;
+    color: var(--slate);
+    line-height: 1.25;
+    margin-bottom: 18px;
+    letter-spacing: -0.01em;
+  }
+  h3.sub-heading {
+    font-family: var(--sans);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--slate);
+    margin: 28px 0 12px;
+  }
+
+  p { margin-bottom: 14px; }
+  strong { color: var(--slate); }
+
+  /* Callouts & Alert Boxes */
+  .callout {
+    background: var(--paper);
+    border-left: 4px solid var(--clay);
+    border-radius: 0 8px 8px 0;
+    padding: 18px 22px;
+    margin: 20px 0;
+    box-shadow: var(--shadow-sm);
+  }
+  .callout.tip { border-color: var(--olive); background: #FAFBF7; }
+  .callout.warn { border-color: var(--rose); background: #FCF7F7; }
+  .callout.info { border-color: var(--sky); background: #F6F9FA; }
+  .callout.amber { border-color: var(--amber); background: #FDF9F2; }
+  .callout-title {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    color: var(--slate);
+  }
+
+  /* Figures & Image Cards */
+  .figure-card {
+    background: var(--paper);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 14px;
+    margin: 28px 0;
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+  }
+  .figure-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    cursor: zoom-in;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .figure-card img:hover {
+    transform: scale(1.005);
+    box-shadow: var(--shadow-md);
+  }
+  .figure-card figcaption {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 10px;
+    line-height: 1.45;
+  }
+  .figure-card figcaption strong { color: var(--gray-700); }
+
+  /* Formula Callout Card */
+  .formula-display {
+    background: var(--paper);
+    border: 1.5px solid var(--oat);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    overflow-x: auto;
+  }
+  .formula-caption {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 10px;
+  }
+
+  /* Tables */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 24px 0;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    background: var(--paper);
+    box-shadow: var(--shadow-sm);
+  }
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    text-align: left;
+  }
+  table.data-table th {
+    background: var(--gray-150);
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 12px 16px;
+    border-bottom: 1.5px solid var(--gray-300);
+    color: var(--slate);
+  }
+  table.data-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--gray-200);
+    vertical-align: top;
+  }
+  table.data-table tr:last-child td { border-bottom: none; }
+  table.data-table tr:hover td { background: var(--gray-100); }
+
+  /* Interactive Simulator Container */
+  .simulator-box {
+    background: var(--paper);
+    border: 1.5px solid var(--gray-300);
+    border-radius: 14px;
+    padding: 24px;
+    margin: 32px 0;
+    box-shadow: var(--shadow-md);
+  }
+  .sim-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-bottom: 1px solid var(--gray-200);
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+  }
+  .sim-title {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--slate);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sim-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--olive-soft);
+    color: var(--olive);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .sim-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 860px) {
+    .sim-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Interactive Controls */
+  .control-group { margin-bottom: 14px; }
+  .control-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--slate);
+    margin-bottom: 6px;
+  }
+  .control-label span.val {
+    font-family: var(--mono);
+    color: var(--clay);
+  }
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--clay);
+    cursor: pointer;
+  }
+
+  /* Metric Readout Cards */
+  .readout-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .readout-card {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .readout-card.highlight {
+    background: var(--clay-soft);
+    border-color: var(--clay);
+  }
+  .readout-card.green {
+    background: var(--olive-soft);
+    border-color: var(--olive);
+  }
+  .readout-card.red {
+    background: var(--rose-soft);
+    border-color: var(--rose);
+  }
+  .readout-label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--gray-500);
+    margin-bottom: 4px;
+  }
+  .readout-val {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--slate);
+  }
+
+  /* Canvas Visualizers */
+  .canvas-container {
+    position: relative;
+    background: #111110;
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 16/10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
+  }
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .canvas-hint {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: rgba(255,255,255,0.45);
+    pointer-events: none;
+  }
+
+  /* Code Block Styling */
+  pre {
+    background: #181816;
+    color: #F0EEE6;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    margin: 18px 0;
+    border: 1px solid #2B2A27;
+    position: relative;
+  }
+  code {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    background: var(--gray-150);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--clay-dark);
+  }
+  pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+    font-size: 13px;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    background: #2B2A27;
+    color: #CFCBC2;
+    border: 1px solid #444;
+    border-radius: 5px;
+    padding: 4px 9px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .copy-btn:hover { background: #3C3B37; color: #fff; }
+
+  /* Tree Diagram Box */
+  .tree-box {
+    background: #181816;
+    color: #E2DFD2;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.45;
+    padding: 22px;
+    border-radius: 10px;
+    overflow-x: auto;
+    margin: 22px 0;
+    border: 1px solid #2F2E2A;
+  }
+
+  /* Proof Card */
+  .proof-card {
+    background: var(--paper);
+    border: 1.5px solid var(--gray-300);
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin: 22px 0;
+    box-shadow: var(--shadow-sm);
+  }
+  .proof-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--gray-200);
+    padding-bottom: 10px;
+  }
+  .proof-title {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--slate);
+  }
+  .qed-badge {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--clay);
+  }
+
+  /* Diagnostic Accordions */
+  details.diag-accordion {
+    background: var(--paper);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    padding: 14px 18px;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.2s;
+  }
+  details.diag-accordion[open] { border-color: var(--clay); }
+  details.diag-accordion summary {
+    font-weight: 600;
+    color: var(--slate);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  details.diag-accordion summary::after {
+    content: "＋";
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--clay);
+  }
+  details.diag-accordion[open] summary::after { content: "—"; }
+  .accordion-content {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--gray-150);
+    font-size: 14px;
+    color: var(--gray-700);
+  }
+
+  /* Lightbox Modal */
+  .lightbox-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(18, 18, 17, 0.88);
+    backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+  }
+  .lightbox-modal.active { display: flex; }
+  .lightbox-img {
+    max-width: 90vw;
+    max-height: 88vh;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 24px; right: 28px;
+    color: #fff;
+    font-size: 32px;
+    font-weight: 300;
+    cursor: pointer;
+    font-family: var(--mono);
+  }
+
+  /* Checklist items */
+  .checklist { list-style: none; margin: 16px 0; }
+  .checklist li {
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  .checklist li::before {
+    content: "✓";
+    position: absolute;
+    left: 4px;
+    color: var(--olive);
+    font-weight: 700;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    body { padding-bottom: 90px; }
+    .wrap { padding: 0 18px; }
+    .nav-links { display: none; }
+    .simulator-box { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top Sticky Navigation -->
+<nav class="top-nav">
+  <div class="nav-left">
+    <span class="nav-badge">MathsTerms 04</span>
+    <span class="nav-title">Entropy, Cross-Entropy &amp; CCE</span>
+  </div>
+  <div class="nav-links">
+    <a href="#sec-01">01 Summary</a>
+    <a href="#sec-02">02 Telegraph</a>
+    <a href="#sec-04">04 Master Identity</a>
+    <a href="#sec-05">05 MSE vs CCE</a>
+    <a href="#sec-08">08 Softmax Gradient</a>
+    <a href="#sec-09">09 Micro Examples</a>
+    <a href="#sec-10">10 GenAI Pipeline</a>
+    <a href="#sec-11">11 Python &amp; PyTorch</a>
+    <a href="#sec-14">14 References</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- Masthead -->
+  <header class="masthead">
+    <div class="eyebrow">Information Theory &amp; Neural Network Training Loss</div>
+    <h1>Entropy, Cross-Entropy &amp; Categorical Cross-Entropy: <em>The Master Interactive Guide</em></h1>
+    <p class="lead">
+      From Claude Shannon’s 1948 noisy telegraph wire to next-token prediction in modern Large Language Models:
+      an exhaustive, mathematically rigorous, and visually illustrated interactive explainer.
+    </p>
+
+    <div class="meta-chips">
+      <span class="chip">🏷️ <strong>Topic:</strong> Information Theory</span>
+      <span class="chip">🎯 <strong>Where Used:</strong> LLM Loss, ViT Classification, RLHF</span>
+      <span class="chip">📚 <strong>Prerequisites:</strong> Logarithms, Probability Axioms, Random Variables</span>
+      <span class="chip">⏱️ <strong>Difficulty:</strong> ⭐⭐☆☆☆ (Foundational &amp; Rigorous)</span>
+    </div>
+
+    <!-- Metadata 4-Box Grid -->
+    <div class="meta-banner">
+      <div class="meta-card">
+        <h4>1. What is this about?</h4>
+        <p>The mathematical decomposition of Shannon Entropy $H(P)$, Cross-Entropy $H(P, Q)$, Categorical Cross-Entropy (CCE), and their exact algebraic relation via KL Divergence $D_{\text{KL}}(P \parallel Q)$.</p>
+      </div>
+      <div class="meta-card">
+        <h4>2. Why does this exist?</h4>
+        <p>In 1948, Shannon sought the theoretical minimum bit bandwidth for telegraph messages. Deep learning adopted this exact metric because training a classifier is a communication task: minimizing cross-entropy forces model beliefs to match reality.</p>
+      </div>
+      <div class="meta-card">
+        <h4>3. What will you master?</h4>
+        <p>Pencil-and-paper proofs (Gibbs' inequality, Lagrange maximum entropy, zero-prob limit), why MSE paralyzes learning via vanishing gradients, and how fused LogSumExp runs on GPU SRAM.</p>
+      </div>
+      <div class="meta-card">
+        <h4>4. The Core Identity</h4>
+        <p><strong>$H(P, Q) = H(P) + D_{\text{KL}}(P \parallel Q)$</strong><br>Total taxi fare = Fixed straight-line distance ($H(P)$) + Detour penalty from getting lost ($D_{\text{KL}}$).</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 01: Executive Summary & Metadata Header -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-01">
+    <div class="section-tag"><span class="num">01</span> Overview &amp; Architecture</div>
+    <h2 class="section-heading">Executive Summary &amp; The Grand Unified Tree</h2>
+
+    <figure class="figure-card">
+      <img src="./chatgpt_images/01-Entropy_CrossEntropy_CCE/topic-01_Executive_Summary_Metadata_Header_img1.jpg" alt="Executive Summary &amp; Architecture Diagram" onclick="openLightbox(this.src)">
+      <figcaption><strong>Figure 1.1:</strong> The Information-Theoretic hierarchy from Shannon Surprise to Next-Token Prediction in Large Language Models.</figcaption>
+    </figure>
+
+    <div class="tree-box">
+====================================================================================
+                THE GRAND UNIFIED ENTROPY & INFORMATION THEORY TREE
+====================================================================================
+
+                        TOTAL CROSS-ENTROPY PENALTY: H(P, Q)
+             "Total cost/penalty when your model Q tries to predict reality P"
+                                    │
+                ┌───────────────────┴───────────────────┐
+                ▼                                       ▼
+       SHANNON ENTROPY: H(P)               KL DIVERGENCE: D_KL(P || Q)
+       "Inherent, unavoidable randomness   "Extra wasted error penalty caused by
+        that exists in nature itself"       your model's flawed predictions"
+                │                                       │
+        ┌────────┴────────┐                     ┌────────┴────────┐
+        ▼                 ▼                     ▼                 ▼
+   Decision Trees     Policy Entropy        RLHF Alignment     VAE Latent
+  (Information Gain) (SAC/PPO Bonus)      (D_KL to π_ref)    (D_KL to N(0,I))
+====================================================================================
+    </div>
+
+    <p>
+      Each row in the diagram above answers the question left open by the row directly above it:
+    </p>
+    <div class="tree-box">
+Probability of one outcome: p(x)
+        │
+        ▼  How much does observing this outcome surprise you?
+Surprisal of that outcome: I(x) = -log₂(p(x))
+        │  Average this surprisal using the true frequencies of reality
+        ▼
+Shannon Entropy of reality: H(P) = E_P[-log₂ P(X)]
+        │  Score reality using a machine learning model's beliefs Q instead
+        ▼
+Cross-Entropy: H(P, Q) = E_P[-log₂ Q(X)]
+        │  Subtract the unavoidable baseline randomness H(P)
+        ▼
+KL Divergence mismatch: D_KL(P || Q) = H(P, Q) - H(P)
+        │  Observe one labelled class or next token (one-hot ground truth)
+        ▼
+Categorical Cross-Entropy = Negative Log-Likelihood (NLL) for that token!
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 02: The Missing Foundation (Domain-Specific Primitive) -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-02">
+    <div class="section-tag"><span class="num">02</span> Historical Primitive</div>
+    <h2 class="section-heading">The Missing Foundation: The 1948 Telegraph &amp; Guessing Game</h2>
+
+    <figure class="figure-card">
+      <img src="./chatgpt_images/01-Entropy_CrossEntropy_CCE/topic-02_The_Missing_Foundation_Domain_Speci_img1.jpg" alt="The 1948 Telegraph Wire Physical Primitive" onclick="openLightbox(this.src)">
+      <figcaption><strong>Figure 2.1:</strong> Claude Shannon's physical problem: Transmitting symbols over noisy copper cables with minimum power.</figcaption>
+    </figure>
+
+    <h3 class="sub-heading">What Real-World Physical Problem Forced Humans to Invent This Math?</h3>
+    <p>
+      In 1948, Bell Labs mathematician <strong>Claude Shannon</strong> faced a fundamental engineering dilemma:
+      <em>"What is the absolute minimum number of electrical telegraph pulses (or binary bits) needed to transmit an English message across a noisy copper wire without wasting power or channel bandwidth?"</em>
+    </p>
+    <p>
+      If a telegraph operator sends the word <em>"THE"</em> (which appears in roughly 7% of all English text), sending 50 electrical pulses is an enormous waste of copper wire bandwidth. But if an extremely rare word like <em>"ZEBRA"</em> arrives, it deserves a longer code because it occurs infrequently.
+    </p>
+    <p>
+      Shannon discovered that <strong>Information is directly proportional to Surprise</strong>:
+    </p>
+    <ul style="margin-left: 24px; margin-bottom: 18px;">
+      <li>Common event ($p \to 1.0$) $\implies$ Low surprise $\implies$ Short binary code needed.</li>
+      <li>Rare event ($p \to 0.0$) $\implies$ High surprise $\implies$ Long binary code needed.</li>
+    </ul>
+
+    <h3 class="sub-heading">The Four Status Messages: A Concrete Guessing Game</h3>
+    <p>
+      Imagine a server backend that sends four types of status messages: <strong>A, B, C, and D</strong>. A naive fixed binary code allocates 2 bits for every message:
+    </p>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Message</th><th>Fixed Binary Code</th><th>Code Length</th><th>Empirical Telemetry Frequency</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Message A</strong></td><td><code>00</code></td><td>2 bits</td><td><strong>50.0%</strong> ($p = 1/2$)</td></tr>
+          <tr><td><strong>Message D</strong></td><td><code>11</code></td><td>2 bits</td><td><strong>25.0%</strong> ($p = 1/4$)</td></tr>
+          <tr><td><strong>Message B</strong></td><td><code>01</code></td><td>2 bits</td><td><strong>12.5%</strong> ($p = 1/8$)</td></tr>
+          <tr><td><strong>Message C</strong></td><td><code>10</code></td><td>2 bits</td><td><strong>12.5%</strong> ($p = 1/8$)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      Under the fixed naive code, sending 8 messages costs $8 \times 2 = \mathbf{16\text{ bits}}$ (an average of $2.0\text{ bits/msg}$).<br>
+      Now, can we build an optimal <strong>prefix-free code tree</strong> where no codeword is a prefix of another?
+    </p>
+
+    <div class="tree-box">
+Read the next binary pulse:
+├── 0 ───────────────────► Message A    (Codeword: 0,   Length: 1 bit)
+└── 1
+    ├── 0 ───────────────► Message D    (Codeword: 10,  Length: 2 bits)
+    └── 1
+        ├── 0 ──────────► Message B    (Codeword: 110, Length: 3 bits)
+        └── 1 ──────────► Message C    (Codeword: 111, Length: 3 bits)
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">Bandwidth Calculation Check</div>
+      <p>
+        For an 8-message burst with proportions $[4\text{ As}, 2\text{ Ds}, 1\text{ B}, 1\text{ C}]$:
+        $$\underbrace{4 \times 1}_{\text{four As}} + \underbrace{2 \times 2}_{\text{two Ds}} + \underbrace{1 \times 3}_{\text{one B}} + \underbrace{1 \times 3}_{\text{one C}} = 4 + 4 + 3 + 3 = 14\text{ bits}.$$
+        Dividing by 8 messages gives the average code length:
+        $$\frac{14}{8} = \mathbf{1.75\text{ bits per message}}.$$
+        Direct weighted average calculation:
+        $$\frac{1}{2}(1) + \frac{1}{4}(2) + \frac{1}{8}(3) + \frac{1}{8}(3) = 0.5 + 0.5 + 0.375 + 0.375 = \mathbf{1.75\text{ bits}}.$$
+        <strong>We have saved 12.5% of network bandwidth!</strong> This theoretical lower bound of 1.75 bits is precisely the <strong>Shannon Entropy</strong> of the distribution.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 03: How to Read Every Mathematical Symbol -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-03">
+    <div class="section-tag"><span class="num">03</span> Pronunciation &amp; Notation</div>
+    <h2 class="section-heading">How to Read Every Mathematical Symbol (Pronunciation Guide)</h2>
+
+    <figure class="figure-card">
+      <img src="./chatgpt_images/01-Entropy_CrossEntropy_CCE/topic-03_How_to_Read_Every_Mathematical_Symb_img1.jpg" alt="Mathematical Notation Pronunciation Guide" onclick="openLightbox(this.src)">
+      <figcaption><strong>Figure 3.1:</strong> Mental translation keys for information-theoretic operators and calculus derivatives.</figcaption>
+    </figure>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Symbol / Formula</th><th>Spoken English Pronunciation</th><th>Plain-English Meaning</th><th>Deep Learning &amp; AI Context</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>$I(x) = -\log_2 p(x)$</td>
+            <td><em>"Surprisal of x equals negative log base two of p of x"</em></td>
+            <td>The unexpectedness or information payload of observing outcome $x$.</td>
+            <td>Quantifies why rare tokens carry much larger gradient signals than frequent stopwords.</td>
+          </tr>
+          <tr>
+            <td>$H(P) = -\sum_{i} p_i \log_2 p_i$</td>
+            <td><em>"Shannon entropy of distribution P equals negative sum of p-sub-i log p-sub-i"</em></td>
+            <td>The average expected surprise of an outcome drawn from reality $P$.</td>
+            <td>Theoretical lower bound on lossless data compression; baseline uncertainty of data.</td>
+          </tr>
+          <tr>
+            <td>$H(P, Q) = -\sum_{i} p_i \ln q_i$</td>
+            <td><em>"Cross-entropy of P and Q equals negative sum of p-sub-i log q-sub-i"</em></td>
+            <td>Expected penalty when using model $Q$ to encode events from reality $P$.</td>
+            <td>Standard training loss in multi-class classification and LLM next-token prediction.</td>
+          </tr>
+          <tr>
+            <td>$D_{\text{KL}}(P \parallel Q)$</td>
+            <td><em>"K-L divergence from Q to P"</em> or <em>"Relative entropy"</em></td>
+            <td>Excess penalty or wasted bits paid because model $Q$ misjudged reality $P$.</td>
+            <td>Measures belief mismatch; RLHF reference leash; VAE latent Gaussian prior penalty.</td>
+          </tr>
+          <tr>
+            <td>$\mathcal{L}_{\text{CCE}} = -\sum y_k \ln \hat{p}_k$</td>
+            <td><em>"Categorical cross-entropy loss equals negative sum of y-sub-k log p-hat-sub-k"</em></td>
+            <td>Sifts cross-entropy sum over one-hot labels, penalizing confidence on the correct class.</td>
+            <td>PyTorch production loss (<code>torch.nn.CrossEntropyLoss</code>).</td>
+          </tr>
+          <tr>
+            <td>$\nabla_z \mathcal{L} = \hat{p} - y$</td>
+            <td><em>"Gradient of loss with respect to logits z equals p-hat minus y"</em></td>
+            <td>The backpropagation error vector is simply predicted probability minus target label.</td>
+            <td>The linear restoring gradient driving Adam, AdamW, and SGD parameter updates.</td>
+          </tr>
+          <tr>
+            <td>$\text{PPL} = \exp(H(P, Q))$</td>
+            <td><em>"Perplexity equals exponential of cross-entropy"</em></td>
+            <td>Effective branching factor: number of equally likely tokens the model is guessing between.</td>
+            <td>Primary benchmark metric for LLMs (GPT-4, LLaMA-3) on held-out test corpora.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 04: The Core "Aha!" Pivot Point & Memory Hooks -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-04">
+    <div class="section-tag"><span class="num">04</span> Mathematical Proofs</div>
+    <h2 class="section-heading">The Core "Aha!" Pivot Point &amp; Rigorous Proofs</h2>
+
+    <figure class="figure-card">
+      <img src="./chatgpt_images/01-Entropy_CrossEntropy_CCE/topic-04_The_Core_Aha_Pivot_Point_Memory_Hoo_img1.jpg" alt="The Core Aha Pivot Point" onclick="openLightbox(this.src)">
+      <figcaption><strong>Figure 4.1:</strong> The Master Decomposition: Total Cross-Entropy = Inherent Entropy + KL Detour Divergence.</figcaption>
+    </figure>
+
+    <div class="callout tip">
+      <div class="callout-title">The Fundamental Aha! Insight</div>
+      <p>
+        <strong>$$H(P, Q) = H(P) + D_{\text{KL}}(P \parallel Q)$$</strong><br>
+        Because the training dataset distribution $P$ is fixed and immutable, its inherent entropy $H(P)$ is a constant with gradient zero ($\nabla_\theta H(P) = 0$).<br>
+        Therefore: <strong>Minimizing Cross-Entropy $H(P, Q_\theta)$ is mathematically identical to driving the KL Divergence $D_{\text{KL}}(P \parallel Q_\theta)$ to ZERO!</strong>
+      </p>
+    </div>
+
+    <h3 class="sub-heading">Why a Logarithm Enters the Story: Additivity of Surprise</h3>
+    <p>
+      Why must surprisal use a logarithm ($-\log_2 p$) rather than an intuitive linear formula like $1 - p$?
+      Suppose you flip two independent fair coins:
+    </p>
+    <ul style="margin-left: 24px; margin-bottom: 14px;">
+      <li>Coin 1 lands Heads ($p_1 = 1/2$): Surprisal = $-\log_2(1/2) = 1\text{ bit}$.</li>
+      <li>Coin 2 lands Heads ($p_2 = 1/2$): Surprisal = $-\log_2(1/2) = 1\text{ bit}$.</li>
+      <li>Joint Event: Both land Heads ($p_{12} = 1/4$): Since the events are independent, observing both coins together must deliver exactly $1 + 1 = \mathbf{2\text{ bits of information}}$.</li>
+    </ul>
+    <p>
+      When probabilities <strong>multiply</strong>, information must <strong>add</strong>:
+      $$I(p_1 \times p_2) = I(p_1) + I(p_2).$$
+      The logarithm is the <strong>only continuous function</strong> satisfying $f(ab) = f(a) + f(b)$. A linear penalty like $1 - p$ completely fails this: for one coin $1 - 0.5 = 0.5$ (sum = $1.0$), but for both coins $1 - 0.25 = 0.75 \ne 1.0$.
+    </p>
+
+    <!-- Proof 1: Zero-Probability Limit -->
+    <div class="proof-card">
+      <div class="proof-header">
+        <span class="proof-title">Proof 1: The Zero-Probability Limit ($\lim_{p \to 0^+} p \log_2 p = 0$)</span>
+        <span class="qed-badge">L'Hôpital's Rule</span>
+      </div>
+      <p>
+        When an event is impossible ($p \to 0^+$), its surprisal $-\log_2(p) \to +\infty$, creating an indeterminate form of type $0 \times \infty$. We rewrite this as a fraction:
+        $$\lim_{p \to 0^+} p \ln p = \lim_{p \to 0^+} \frac{\ln p}{1/p}.$$
+        Since $\ln p \to -\infty$ and $1/p \to +\infty$, this is an indeterminate form of type $\frac{\infty}{\infty}$. Differentiating numerator and denominator:
+        $$\frac{d}{dp}[\ln p] = \frac{1}{p}, \qquad \frac{d}{dp}\left[\frac{1}{p}\right] = -\frac{1}{p^2}.$$
+        Applying L'Hôpital's Rule:
+        $$\lim_{p \to 0^+} \frac{1/p}{-1/p^2} = \lim_{p \to 0^+} \left(\frac{1}{p} \cdot (-p^2)\right) = \lim_{p \to 0^+} (-p) = \mathbf{0}.$$
+        Dividing by $\ln 2$ yields the exact result:
+        $$\boxed{\lim_{p \to 0^+} p \log_2 p = 0}.$$
+        <em>Physical reality: Impossible events carry infinite surprise if they were to occur, but because they never occur, their net contribution to average uncertainty is exactly zero.</em>
+      </p>
+    </div>
+
+    <!-- Proof 2: Lagrange Multipliers for Max Entropy -->
+    <div class="proof-card">
+      <div class="proof-header">
+        <span class="proof-title">Proof 2: Maximum Entropy of Discrete Distribution via Lagrange Multipliers</span>
+        <span class="qed-badge">Strict Concavity Proof</span>
+      </div>
+      <p>
+        We seek to maximize $H(P) = -\sum_{i=1}^K p_i \ln p_i$ subject to the simplex constraint $g(p) = \sum_{i=1}^K p_i - 1 = 0$.<br>
+        We formulate the Lagrangian with multiplier $\lambda$:
+        $$\mathcal{L}(p_1, \dots, p_K, \lambda) = -\sum_{i=1}^K p_i \ln p_i + \lambda \left(\sum_{i=1}^K p_i - 1\right).$$
+        Taking the partial derivative with respect to coordinate $p_i$:
+        $$\frac{\partial \mathcal{L}}{\partial p_i} = -\left(\ln p_i + p_i \cdot \frac{1}{p_i}\right) + \lambda = -\ln p_i - 1 + \lambda.$$
+        Setting the derivative to zero:
+        $$-\ln p_i - 1 + \lambda = 0 \implies \ln p_i = \lambda - 1 \implies p_i = e^{\lambda - 1} = \text{constant } c.$$
+        Since all $p_i = c$ and $\sum_{i=1}^K p_i = 1$, we have $K \cdot c = 1 \implies c = \frac{1}{K}$. The unique critical point is the <strong>uniform distribution</strong>:
+        $$\boxed{p_i^* = \frac{1}{K} \quad \text{for all } i \in \{1, \dots, K\}}.$$
+        To verify that this critical point is a global maximum, we compute the Hessian matrix:
+        $$\frac{\partial^2 H}{\partial p_i^2} = -\frac{1}{p_i} < 0, \qquad \frac{\partial^2 H}{\partial p_i \partial p_j} = 0 \quad (i \ne j).$$
+        The Hessian $\nabla^2 H(P) = -\text{diag}(1/p_1, \dots, 1/p_K)$ is strictly negative definite on the entire probability simplex interior. Therefore, $H(P)$ is strictly concave, and the uniform distribution achieves the absolute maximum entropy:
+        $$\boxed{H_{\max} = \log_2 K\text{ bits}}.$$
+      </p>
+    </div>
+
+    <!-- Proof 3: Gibbs' Inequality -->
+    <div class="proof-card">
+      <div class="proof-header">
+        <span class="proof-title">Proof 3: Gibbs' Inequality ($D_{\text{KL}}(P \parallel Q) \ge 0$)</span>
+        <span class="qed-badge">Log-Tangent Inequality</span>
+      </div>
+      <p>
+        Recall the fundamental tangent inequality for the natural logarithm: for any $u > 0$,
+        $$-\ln u \ge 1 - u,$$
+        with equality if and only if $u = 1$. Substitute $u = q_i / p_i$ for all $i$ where $p_i > 0$:
+        $$-\ln\left(\frac{q_i}{p_i}\right) \ge 1 - \frac{q_i}{p_i} \iff \ln\left(\frac{p_i}{q_i}\right) \ge 1 - \frac{q_i}{p_i}.$$
+        Multiply both sides by $p_i > 0$ and sum across all outcomes:
+        $$\sum_{i} p_i \ln\left(\frac{p_i}{q_i}\right) \ge \sum_{i} p_i \left(1 - \frac{q_i}{p_i}\right) = \sum_{i} p_i - \sum_{i} q_i = 1 - 1 = \mathbf{0}.$$
+        Therefore:
+        $$\boxed{D_{\text{KL}}(P \parallel Q) \ge 0, \quad \text{with } D_{\text{KL}} = 0 \iff P = Q}.$$
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 05: Contrastive Analysis: Why MSE Fails & CCE Succeeds -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-05">
+    <div class="section-tag"><span class="num">05</span> Failure Modes &amp; Derivations</div>
+    <h2 class="section-heading">Contrastive Analysis: The Gradient Vanishing Trap of MSE</h2>
+
+    <figure class="figure-card">
+      <img src="./chatgpt_images/01-Entropy_CrossEntropy_CCE/topic-05_Contrastive_Analysis_Why_This_Math_img1.jpg" alt="Contrastive Analysis of MSE vs CCE" onclick="openLightbox(this.src)">
+      <figcaption><strong>Figure 5.1:</strong> Why MSE fails on classification: the sigmoid derivative collapses to zero when the model is dead wrong.</figcaption>
+    </figure>
+
+    <div class="callout warn">
+      <div class="callout-title">The Dead-Wrong Failure Scenario</div>
+      <p>
+        Suppose an image of a Cat has true label $y = 1$. The neural network outputs logit $z = -10.0$.<br>
+        Passing through Sigmoid gives predicted probability $\hat{p} = \sigma(-10) = \frac{1}{1 + e^{10}} \approx \mathbf{0.0000454}$ (the model is catastrophically confident and completely wrong!).
+      </p>
+    </div>
+
+    <div class="sim-grid" style="margin-bottom: 24px;">
+      <div class="proof-card" style="margin: 0;">
+        <div class="proof-header">
+          <span class="proof-title">Under Mean Squared Error (MSE)</span>
+          <span class="qed-badge" style="color: var(--rose);">Paralyzed!</span>
+        </div>
+        <p>Loss formulation: $\mathcal{L}_{\text{MSE}} = (1 - \hat{p})^2$. By chain rule:</p>
+        $$\frac{\partial \mathcal{L}}{\partial z} = \frac{\partial \mathcal{L}}{\partial \hat{p}} \cdot \frac{\partial \hat{p}}{\partial z} = 2(\hat{p} - 1) \cdot \hat{p}(1 - \hat{p})$$
+        <p>Substituting $\hat{p} \approx 0.0000454$:</p>
+        $$\frac{\partial \mathcal{L}}{\partial z} \approx 2(0.0000454 - 1) \cdot (0.0000454)(0.99995) \approx \mathbf{-0.0000908}$$
+        <p style="color: var(--rose); font-size: 13.5px; font-weight: 600;">
+          ⚠️ The gradient is virtually ZERO! The sigmoid saturation factor $\hat{p}(1-\hat{p}) \to 0$ extinguishes learning. The network freezes and cannot update its weights.
+        </p>
+      </div>
+
+      <div class="proof-card" style="margin: 0;">
+        <div class="proof-header">
+          <span class="proof-title">Under Categorical Cross-Entropy (CCE)</span>
+          <span class="qed-badge" style="color: var(--olive);">Full Power!</span>
+        </div>
+        <p>Loss formulation: $\mathcal{L}_{\text{CCE}} = -\ln \hat{p}$. By chain rule:</p>
+        $$\frac{\partial \mathcal{L}}{\partial z} = -\frac{1}{\hat{p}} \cdot \frac{\partial \hat{p}}{\partial z} = -\frac{1}{\hat{p}} \cdot \hat{p}(1 - \hat{p}) = \hat{p} - 1$$
+        <p>Substituting $\hat{p} \approx 0.0000454$:</p>
+        $$\frac{\partial \mathcal{L}}{\partial z} = 0.0000454 - 1 \approx \mathbf{-0.9999546} \approx \mathbf{-1.0}$$
+        <p style="color: var(--olive); font-size: 13.5px; font-weight: 600;">
+          ✅ The $-\frac{1}{\hat{p}}$ derivative of the log cancels the $\hat{p}$ in the sigmoid derivative! The gradient is at its absolute maximum ($-1.0$), delivering a full corrective kick.
+        </p>
+      </div>
+    </div>
+
+    <!-- Live Interactive MSE vs CCE Simulator -->
+    <div class="simulator-box">
+      <div class="sim-header">
+        <span class="sim-title">⚡ Interactive Vanishing Gradient Simulator (True Label $y = 1$)</span>
+        <span class="sim-tag">Live Chain-Rule Calculator</span>
+      </div>
+      <p style="font-size: 13.5px; color: var(--gray-500); margin-bottom: 16px;">
+        Drag the predicted probability $\hat{p}$ towards 0 (dead wrong) or 1 (correct) to see how the backpropagation gradients respond in real time:
+      </p>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>Predicted Probability $\hat{p}$</span>
+          <span class="val" id="p-hat-val">0.050</span>
+        </div>
+        <input type="range" id="p-hat-slider" min="0.001" max="0.999" step="0.001" value="0.050">
+      </div>
+
+      <div class="readout-grid">
+        <div class="readout-card red">
+          <div class="readout-label">MSE Loss</div>
+          <div class="readout-val" id="mse-loss-val">0.9025</div>
+        </div>
+        <div class="readout-card red">
+          <div class="readout-label">MSE Gradient $\frac{\partial \mathcal{L}}{\partial z}$</div>
+          <div class="readout-val" id="mse-grad-val">-0.0903</div>
+          <div style="font-size: 10px; color: var(--rose); margin-top: 4px;" id="mse-status">Sat. Factor = 0.0475</div>
+        </div>
+        <div class="readout-card green">
+          <div class="readout-label">CCE Loss</div>
+          <div class="readout-val" id="cce-loss-val">2.9957</div>
+        </div>
+        <div class="readout-card green">
+          <div class="readout-label">CCE Gradient $\frac{\partial \mathcal{L}}{\partial z}$</div>
+          <div class="readout-val" id="cce-grad-val">-0.9500</div>
+          <div style="font-size: 10px; color: var(--olive); margin-top: 4px;" id="cce-status">Maximum Correction!</div>
+        </div>
+      </div>
+
+      <!-- Real-time SVG Gradient Curve -->
+      <div style="margin-top: 20px; background: #FAF9F5; border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px; text-align: center;">
+        <svg id="gradient-svg" width="100%" height="160" viewBox="0 0 600 160" style="overflow: visible;"></svg>
+        <div style="display: flex; justify-content: center; gap: 20px; font-family: var(--mono); font-size: 11px; margin-top: 8px;">
+          <span style="color: var(--rose);">■ MSE Gradient: $2(\hat{p}-1)\hat{p}(1-\hat{p})$</span>
+          <span style="color: var(--olive);">■ CCE Gradient: $\hat{p}-1$</span>
+          <span style="color: var(--slate);">● Current Position</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 06: ELI5 Intuition & Limitations of Metaphors -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-06">
+    <div class="section-tag"><span class="num">06</span> Intuition &amp; Metaphors</div>
+    <h2 class="section-heading">ELI5 Intuition: The End-to-End AI Lifecycle</h2>
+
+    <figure class="figure-card">
+      <img src="./chatgpt_images/01-Entropy_CrossEntropy_CCE/topic-06_ELI5_Intuition_The_End_to_End_AI_Li_img1.jpg" alt="ELI5 Real World Metaphors" onclick="openLightbox(this.src)">
+      <figcaption><strong>Figure 6.1:</strong> Real-world intuition: The paid telegram wire, the taxi detour receipt, and where metaphors break down.</figcaption>
+    </figure>
+
+    <div class="sim-grid">
+      <div class="meta-card">
+        <h4 style="color: var(--sky);">Metaphor 1: The Paid Telegram Wire</h4>
+        <p>
+          You run an animal shelter sending telegram updates where every letter costs $\$1.00$.<br>
+          In reality, 90% of adoptions are Cats and 10% are Dogs.<br>
+          An optimal codebook assigns Cat a 1-letter code <code>"C"</code> and Dog 4 letters <code>"DOGS"</code>:
+          $$0.90(1) + 0.10(4) = \$1.30 \quad (H(P)).$$
+          A novice assumes 90% Dogs and 10% Cats, assigning <code>"CATS"</code> and <code>"D"</code>:
+          $$0.90(4) + 0.10(1) = \$3.70 \quad (H(P, Q)).$$
+          The wasted $\$2.40$ ($3.70 - 1.30$) is the <strong>KL Divergence</strong> detour tax!
+        </p>
+      </div>
+
+      <div class="meta-card">
+        <h4 style="color: var(--purple);">Metaphor 2: The Taxi Ride Receipt</h4>
+        <p>
+          <strong>Base Distance Fare ($H(P)$):</strong> The straight-line physical distance between pickup and dropoff. Nature's inherent unpredictability that you must pay regardless of how good the driver is.<br><br>
+          <strong>Detour Charge ($D_{\text{KL}}(P \parallel Q)$):</strong> Extra meter fees accumulated because the driver took wrong turns and got lost.<br><br>
+          <strong>Total Receipt ($H(P, Q)$):</strong> The total amount paid at the destination.
+        </p>
+      </div>
+    </div>
+
+    <div class="callout amber">
+      <div class="callout-title">⚠️ Where the Metaphors Break Down (Limits of the Analogy)</div>
+      <p>
+        <strong>1. Continuous Differential Entropy Paradox:</strong> While discrete entropy is always non-negative ($H(P) \ge 0$), continuous differential entropy $h(X) = -\int f(x)\ln f(x)\,dx$ can be <strong>negative</strong>! For example, a uniform distribution on $[0, 0.5]$ has density $f(x) = 2$ and entropy $h(X) = -\ln 2 \approx -0.693\text{ nats}$.<br>
+        <strong>2. Semantic Blindness:</strong> Shannon entropy measures statistical rarity, not factual truth. Predicting <em>"The cat sat on the mat"</em> versus <em>"The cat sat on the moon"</em> yields identical cross-entropy if both words have equal logit probability.<br>
+        <strong>3. Non-Integer Bits:</strong> Ideal entropy $-\log_2 p$ yields continuous numbers (e.g., 1.75 bits), while physical pulses must be discrete integers ($1, 2, 3$).
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 07: Deep Terminology Master Glossary -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-07">
+    <div class="section-tag"><span class="num">07</span> Terminology Master Glossary</div>
+    <h2 class="section-heading">Deep Terminology Master Glossary (15 Core Concepts)</h2>
+
+    <figure class="figure-card">
+      <img src="./chatgpt_images/01-Entropy_CrossEntropy_CCE/topic-07_Deep_Terminology_Master_Glossary_15_img1.jpg" alt="Master Glossary Concepts" onclick="openLightbox(this.src)">
+      <figcaption><strong>Figure 7.1:</strong> Conceptual map dissecting the 15 fundamental pillars of modern information-theoretic AI.</figcaption>
+    </figure>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Term / Concept</th><th>Mathematical Formulation</th><th>Intuitive Explanation</th><th>Architectural AI Role</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Surprisal ($I$)</strong></td>
+            <td>$-\log_2 p(x)$</td>
+            <td>The shock value of an event. Rare events carry massive surprise.</td>
+            <td>Loss weighting in token prediction.</td>
+          </tr>
+          <tr>
+            <td><strong>Shannon Entropy ($H$)</strong></td>
+            <td>$-\sum p_i \log_2 p_i$</td>
+            <td>Unavoidable baseline average uncertainty of a system.</td>
+            <td>Theoretical data compression limit.</td>
+          </tr>
+          <tr>
+            <td><strong>Cross-Entropy ($H(P, Q)$)</strong></td>
+            <td>$-\sum p_i \ln q_i$</td>
+            <td>Total cost when using model $Q$ to approximate reality $P$.</td>
+            <td>Universal deep learning training loss.</td>
+          </tr>
+          <tr>
+            <td><strong>KL Divergence ($D_{\text{KL}}$)</strong></td>
+            <td>$\sum p_i \ln(p_i / q_i)$</td>
+            <td>Extra wasted penalty caused by model errors. Always $\ge 0$.</td>
+            <td>RLHF reference policy leash; VAE prior.</td>
+          </tr>
+          <tr>
+            <td><strong>Categorical Cross-Entropy</strong></td>
+            <td>$-\sum y_k \ln \hat{p}_k$</td>
+            <td>Cross-entropy evaluated over one-hot ground-truth vectors.</td>
+            <td>Multi-class classification loss.</td>
+          </tr>
+          <tr>
+            <td><strong>Logits ($z$)</strong></td>
+            <td>$z = Wx + b \in \mathbb{R}^K$</td>
+            <td>Raw, unbounded real-valued scores output by final linear layer.</td>
+            <td>Inputs to Softmax layer.</td>
+          </tr>
+          <tr>
+            <td><strong>Softmax ($\hat{p}$)</strong></td>
+            <td>$e^{z_k} / \sum e^{z_r}$</td>
+            <td>Normalizes logits into positive probabilities summing to 1.</td>
+            <td>Probability generation head.</td>
+          </tr>
+          <tr>
+            <td><strong>Perplexity (PPL)</strong></td>
+            <td>$\exp(\mathcal{L}_{\text{CCE}})$</td>
+            <td>Effective branching factor (how many tokens LLM is guessing between).</td>
+            <td>Evaluation metric for language models.</td>
+          </tr>
+          <tr>
+            <td><strong>Temperature ($T$)</strong></td>
+            <td>$\text{Softmax}(z / T)$</td>
+            <td>Controls entropy of sampling: cold is rigid, hot is wild.</td>
+            <td>Inference-time sampling randomness.</td>
+          </tr>
+          <tr>
+            <td><strong>Label Smoothing</strong></td>
+            <td>$(1-\epsilon)y_k + \frac{\epsilon}{K}$</td>
+            <td>Mixes hard one-hot targets with uniform distribution to avoid overconfidence.</td>
+            <td>Regularization in Vision Transformers.</td>
+          </tr>
+          <tr>
+            <td><strong>Focal Loss</strong></td>
+            <td>$-(1-p_t)^\gamma \ln p_t$</td>
+            <td>Downweights easy samples to focus learning on hard edge cases.</td>
+            <td>Dense object detection (RetinaNet).</td>
+          </tr>
+          <tr>
+            <td><strong>Negative Log-Likelihood (NLL)</strong></td>
+            <td>$-\ln p(x \mid \theta)$</td>
+            <td>Penalty for assigning low probability to true observed data.</td>
+            <td>Equivalent to CCE with one-hot targets.</td>
+          </tr>
+          <tr>
+            <td><strong>Policy Entropy Bonus</strong></td>
+            <td>$+\alpha H(\pi(a \mid s))$</td>
+            <td>Reward added to encourage reinforcement learning agents to explore.</td>
+            <td>Prevents premature collapse in PPO/SAC.</td>
+          </tr>
+          <tr>
+            <td><strong>Fused LogSumExp</strong></td>
+            <td>$m + \ln\sum e^{z_r - m}$</td>
+            <td>Numerically stable log-sum-exp trick subtracting $\max(z)$.</td>
+            <td>Eliminates FP16 underflow/overflow in GPUs.</td>
+          </tr>
+          <tr>
+            <td><strong>SRAM Streaming</strong></td>
+            <td>FlashCrossEntropy</td>
+            <td>Computes loss in on-chip SRAM without writing 4GB logits to HBM.</td>
+            <td>Enables training LLMs with 128k vocabulary.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 08: Mathematical Formulations & Hardware Realities -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-08">
+    <div class="section-tag"><span class="num">08</span> Hardware &amp; Calculus</div>
+    <h2 class="section-heading">Mathematical Formulations, Softmax Gradient &amp; Hardware Realities</h2>
+
+    <figure class="figure-card">
+      <img src="./chatgpt_images/01-Entropy_CrossEntropy_CCE/topic-08_Mathematical_Formulations_Rules_Har_img1.jpg" alt="Mathematical Formulations and Hardware Realities" onclick="openLightbox(this.src)">
+      <figcaption><strong>Figure 8.1:</strong> Hardware execution: Fused LogSumExp kernels and streaming memory pipelines on modern AI GPUs.</figcaption>
+    </figure>
+
+    <div class="proof-card">
+      <div class="proof-header">
+        <span class="proof-title">Step-by-Step Derivation of the Softmax CCE Gradient ($\nabla_z \mathcal{L} = \hat{p} - y$)</span>
+        <span class="qed-badge">Calculus Core</span>
+      </div>
+      <p>
+        The network produces logits $z = [z_1, \dots, z_K]^\top$. Softmax probabilities are $\hat{p}_k = \frac{e^{z_k}}{\sum_{r} e^{z_r}}$.<br>
+        Substituting Softmax directly into CCE loss:
+        $$\begin{aligned}
+        \mathcal{L} &= -\sum_{k=1}^K y_k \ln\left(\frac{e^{z_k}}{\sum_r e^{z_r}}\right) = -\sum_{k=1}^K y_k \left(z_k - \ln\sum_r e^{z_r}\right) \\
+        &= -\sum_{k=1}^K y_k z_k + \left(\sum_{k=1}^K y_k\right) \ln\sum_{r=1}^K e^{z_r} = -\sum_{k=1}^K y_k z_k + \ln\sum_{r=1}^K e^{z_r}.
+        \end{aligned}$$
+        Now differentiate with respect to logit $z_j$:
+        $$\frac{\partial \mathcal{L}}{\partial z_j} = -y_j + \frac{1}{\sum_r e^{z_r}} \cdot \frac{\partial}{\partial z_j}\left(\sum_r e^{z_r}\right) = -y_j + \frac{e^{z_j}}{\sum_r e^{z_r}} = \mathbf{\hat{p}_j - y_j}.$$
+        In vector notation:
+        $$\boxed{\nabla_z \mathcal{L} = \hat{p} - y}.$$
+        <strong>The gradient is simply: Predicted Probability minus Ground Truth!</strong>
+      </p>
+    </div>
+
+    <div class="sim-grid">
+      <div class="meta-card">
+        <h4 style="color: var(--clay);">Fused LogSumExp GPU Stability Trick</h4>
+        <p>
+          Computing $\hat{p}_k = e^{z_k} / \sum e^{z_r}$ naively causes catastrophic failure in float16:<br>
+          • If $z = 100$, $e^{100} \to +\infty$ (overflow $\implies$ <code>NaN</code>).<br>
+          • If $z = -100$, $e^{-100} \to 0$, causing $\ln(0) = -\infty$ (underflow $\implies$ <code>NaN</code>).<br>
+          <strong>The Solution:</strong> Subtract $m = \max_r z_r$:
+          $$\ln \hat{p}_k = z_k - m - \ln\sum_{r=1}^K e^{z_r - m}.$$
+          The largest exponent is $e^0 = 1$, completely banishing overflow!
+        </p>
+      </div>
+
+      <div class="meta-card">
+        <h4 style="color: var(--olive);">SRAM Streaming &amp; FlashCrossEntropy</h4>
+        <p>
+          For LLaMA-3 with vocabulary $V = 128{,}000$, batch size $B=4$, and sequence length $T=4{,}096$:<br>
+          The intermediate logits tensor has $4 \times 4096 \times 128000 \times 2\text{ bytes} \approx \mathbf{4.19\text{ GB of VRAM}}$ per forward pass!<br>
+          Modern fused kernels compute cross-entropy on-chip in ultra-fast <strong>SRAM</strong> in streaming tiles, avoiding the massive memory bandwidth bottleneck to GPU HBM.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 09: Concrete Micro-Numerical Worked Examples -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-09">
+    <div class="section-tag"><span class="num">09</span> Pencil &amp; Paper</div>
+    <h2 class="section-heading">Concrete Micro-Numerical Worked Examples (Pencil-and-Paper)</h2>
+
+    <figure class="figure-card">
+      <img src="./chatgpt_images/01-Entropy_CrossEntropy_CCE/topic-09_Concrete_Micro_Numerical_Worked_Exa_img1.jpg" alt="Pencil and Paper Worked Examples" onclick="openLightbox(this.src)">
+      <figcaption><strong>Figure 9.1:</strong> Exact step-by-step arithmetic verification of the Master Identity and Softmax backpropagation vector.</figcaption>
+    </figure>
+
+    <h3 class="sub-heading">Example 1: 2-Class Weather Distribution Master Identity Verification</h3>
+    <p>Let True Reality $P = [0.80, 0.20]$ (Sunny vs Rainy) and Model Prediction $Q = [0.50, 0.50]$.</p>
+
+    <div class="sim-grid">
+      <div class="meta-card">
+        <h4>1. Shannon Entropy $H(P)$</h4>
+        $$H(P) = -[0.80 \ln(0.80) + 0.20 \ln(0.20)]$$
+        Using natural logs: $\ln(0.80) \approx -0.223144$, $\ln(0.20) \approx -1.609438$:
+        $$H(P) = -[-0.178515 - 0.321888] = \mathbf{0.500403\text{ nats}}.$$
+      </div>
+      <div class="meta-card">
+        <h4>2. Cross-Entropy $H(P, Q)$</h4>
+        $$H(P, Q) = -[0.80 \ln(0.50) + 0.20 \ln(0.50)]$$
+        Using $\ln(0.50) \approx -0.693147$:
+        $$H(P, Q) = -[-0.693147] = \mathbf{0.693147\text{ nats}}.$$
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">3. KL Divergence &amp; Master Identity Verification</div>
+      <p>
+        $$D_{\text{KL}}(P \parallel Q) = 0.80 \ln\left(\frac{0.80}{0.50}\right) + 0.20 \ln\left(\frac{0.20}{0.50}\right) = 0.80(0.470004) + 0.20(-0.916291) = \mathbf{0.192745\text{ nats}}.$$
+        Summing entropy and divergence:
+        $$H(P) + D_{\text{KL}}(P \parallel Q) = 0.500403 + 0.192745 = \mathbf{0.693148\text{ nats}} \equiv H(P, Q) \quad \text{✅ Exact Match!}$$
+      </p>
+    </div>
+
+    <h3 class="sub-heading">Example 2: 3-Class CCE Loss &amp; Zero-Sum Backprop Gradient</h3>
+    <p>
+      Suppose an image classifier evaluates a <strong>Cat</strong> (Index 1).<br>
+      True one-hot target: $y = [0, 1, 0]^\top$ (Dog, Cat, Fox).<br>
+      Model Softmax output: $\hat{p} = [0.060, 0.899, 0.041]^\top$.
+    </p>
+
+    <div class="formula-display">
+      $$\mathcal{L}_{\text{CCE}} = -\ln(\hat{p}_{\text{cat}}) = -\ln(0.899) = \mathbf{0.106460\text{ nats}}.$$
+      $$\nabla_z \mathcal{L} = \hat{p} - y = \begin{bmatrix} 0.060 - 0 \\ 0.899 - 1.0 \\ 0.041 - 0 \end{bmatrix} = \begin{bmatrix} \mathbf{+0.060} \\ \mathbf{-0.101} \\ \mathbf{+0.041} \end{bmatrix}.$$
+      <div class="formula-caption">Zero-Sum Energy Invariant: $\sum_{k=1}^3 \nabla_{z_k} \mathcal{L} = +0.060 - 0.101 + 0.041 = \mathbf{0.0000}$</div>
+    </div>
+
+    <!-- Live 3D Simplex & Entropy Dome Visualizer -->
+    <div class="simulator-box">
+      <div class="sim-header">
+        <span class="sim-title">🌐 Interactive 3D Probability Simplex &amp; Entropy Dome</span>
+        <span class="sim-tag">Canvas 3D Mesh</span>
+      </div>
+      <p style="font-size: 13.5px; color: var(--gray-500); margin-bottom: 14px;">
+        Click and drag the canvas to rotate the 3-class simplex ($p_1 + p_2 + p_3 = 1$). Notice how the concave entropy surface rises to its global maximum at the center $(1/3, 1/3, 1/3)$ with $H = \log_2 3 \approx 1.585\text{ bits}$, dropping to zero at each apex!
+      </p>
+      <div class="canvas-container">
+        <canvas id="simplex-canvas" width="800" height="480"></canvas>
+        <div class="canvas-hint">Drag to rotate • Shift-drag to pitch</div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-family: var(--mono); font-size: 11.5px; color: var(--gray-500);">
+        <span>Center: $p = [0.333, 0.333, 0.333] \implies H = 1.585\text{ bits}$</span>
+        <button id="reset-simplex-btn" style="background: var(--gray-200); border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer;">Reset View</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 10: Connecting the Dots: Generative AI Architecture Blocks -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-10">
+    <div class="section-tag"><span class="num">10</span> The Generative Pipeline</div>
+    <h2 class="section-heading">Connecting the Dots: Generative AI Architecture Blocks</h2>
+
+    <figure class="figure-card">
+      <img src="./chatgpt_images/01-Entropy_CrossEntropy_CCE/topic-10_Connecting_the_Dots_Generative_AI_A_img1.jpg" alt="Generative AI Pipeline" onclick="openLightbox(this.src)">
+      <figcaption><strong>Figure 10.1:</strong> The non-repetitive dependency chain connecting Information Theory to Modern LLMs and Diffusion Models.</figcaption>
+    </figure>
+
+    <div class="callout tip">
+      <div class="callout-title">The Non-Repetitive Dependency Chain: Why Each Step Demands the Next</div>
+      <p>
+        <strong>1. Physical Constraint:</strong> Copper wire bandwidth is limited $\to$ Must compress symbols.<br>
+        <strong>2. Surprisal Metric:</strong> Rare symbols require more bits $\to$ Quantified by $-\log_2 p_i$.<br>
+        <strong>3. Shannon Entropy:</strong> Expected length under optimal coding $\to$ Absolute baseline $H(P)$.<br>
+        <strong>4. Cross-Entropy:</strong> When sender uses model $Q$ instead of reality $P$ $\to$ Length becomes $H(P, Q)$.<br>
+        <strong>5. KL Divergence:</strong> The strictly positive waste tax $\to$ $D_{\text{KL}}(P \parallel Q) = H(P, Q) - H(P) \ge 0$.<br>
+        <strong>6. Softmax Transformation:</strong> Neural nets output unconstrained logits $z \in \mathbb{R}^K$ $\to$ Must normalize to valid distribution $\hat{p}$.<br>
+        <strong>7. CCE Loss &amp; Gradient:</strong> Minimizing divergence yields $\mathcal{L} = -\sum y_k \ln \hat{p}_k$ whose gradient $\hat{p} - y$ avoids sigmoid saturation.<br>
+        <strong>8. LLM Next-Token Prediction:</strong> Predicting next token across 128,000 vocabulary words is repeated CCE at every position!<br>
+        <strong>9. Perplexity:</strong> Model uncertainty across sequences is measured by $\text{PPL} = \exp(\overline{\mathcal{L}}_{\text{token}})$.<br>
+        <strong>10. Control &amp; Alignment:</strong> Sampling is sharpened via Temperature ($z/T$) and fine-tuned via RLHF / DPO policy leashes ($-\beta D_{\text{KL}}$).
+      </p>
+    </div>
+
+    <!-- Live Interactive Temperature & Softmax Sampler -->
+    <div class="simulator-box">
+      <div class="sim-header">
+        <span class="sim-title">🌡️ Interactive Temperature &amp; LLM Softmax Sampling</span>
+        <span class="sim-tag">Token Generator</span>
+      </div>
+      <p style="font-size: 13.5px; color: var(--gray-500); margin-bottom: 16px;">
+        Adjust the sampling temperature $T$ to observe how logits $z = [3.2, 2.1, 1.4, 0.2]$ transform from deterministic argmax ($T \to 0$) to uniform gibberish ($T \to \infty$):
+      </p>
+
+      <div class="control-group">
+        <div class="control-label">
+          <span>Sampling Temperature ($T$)</span>
+          <span class="val" id="temp-val">1.00</span>
+        </div>
+        <input type="range" id="temp-slider" min="0.10" max="2.50" step="0.05" value="1.00">
+      </div>
+
+      <div class="readout-grid">
+        <div class="readout-card">
+          <div class="readout-label">Token 1 ("Paris")</div>
+          <div class="readout-val" id="tok-1-val">67.2%</div>
+        </div>
+        <div class="readout-card">
+          <div class="readout-label">Token 2 ("London")</div>
+          <div class="readout-val" id="tok-2-val">22.6%</div>
+        </div>
+        <div class="readout-card">
+          <div class="readout-label">Token 3 ("Rome")</div>
+          <div class="readout-val" id="tok-3-val">7.5%</div>
+        </div>
+        <div class="readout-card">
+          <div class="readout-label">Token 4 ("Apple")</div>
+          <div class="readout-val" id="tok-4-val">2.7%</div>
+        </div>
+        <div class="readout-card highlight">
+          <div class="readout-label">Output Entropy</div>
+          <div class="readout-val" id="temp-entropy-val">1.34 bits</div>
+        </div>
+        <div class="readout-card highlight">
+          <div class="readout-label">Perplexity (Branching)</div>
+          <div class="readout-val" id="temp-ppl-val">2.53 tokens</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Generative System</th><th>Information Theory Application</th><th>Architectural Mechanism</th><th>Practical Approximation</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>LLMs (GPT-4, Claude, LLaMA)</strong></td>
+            <td><strong>Autoregressive Next-Token CCE</strong></td>
+            <td>Minimizes surprisal $-\sum \ln P_\theta(w_t \mid w_{&lt;t})$ across 128k vocabulary</td>
+            <td>One-hot target ignores semantic synonyms.</td>
+          </tr>
+          <tr>
+            <td><strong>Vision Transformers (ViT)</strong></td>
+            <td><strong>Categorical Cross-Entropy</strong></td>
+            <td>Backpropagates $\hat{p}_i - y_i$ through self-attention layers</td>
+            <td>Unbounded logits require label smoothing.</td>
+          </tr>
+          <tr>
+            <td><strong>RLHF / DPO Alignment</strong></td>
+            <td><strong>Reverse KL Regularization Penalty</strong></td>
+            <td>Enforces policy leash: $-\beta D_{\text{KL}}(\pi_\theta \parallel \pi_{\text{ref}})$</td>
+            <td>Empirical KL estimated via Monte Carlo token samples.</td>
+          </tr>
+          <tr>
+            <td><strong>Variational Autoencoders (VAEs)</strong></td>
+            <td><strong>Latent Gaussian Prior KL</strong></td>
+            <td>$D_{\text{KL}}(q_\phi(z \mid x) \parallel \mathcal{N}(0, I))$</td>
+            <td>Intractable posterior approximated by diagonal Gaussian.</td>
+          </tr>
+          <tr>
+            <td><strong>Representation (CLIP, InfoNCE)</strong></td>
+            <td><strong>Contrastive Cross-Entropy</strong></td>
+            <td>Maximizes mutual information lower bound $I(X; Y)$</td>
+            <td>Finite negative batch bounds true mutual information.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 11: Standalone Executable Python/PyTorch Script -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-11">
+    <div class="section-tag"><span class="num">11</span> Executable Code</div>
+    <h2 class="section-heading">Standalone Executable Python/PyTorch Verification Suite</h2>
+
+    <figure class="figure-card">
+      <img src="./chatgpt_images/01-Entropy_CrossEntropy_CCE/topic-11_Standalone_Executable_Python_PyTorc_img1.jpg" alt="Python and PyTorch Verification" onclick="openLightbox(this.src)">
+      <figcaption><strong>Figure 11.1:</strong> Standalone Python test scripts verifying Master Identity and PyTorch Fused Cross-Entropy loss.</figcaption>
+    </figure>
+
+    <h3 class="sub-heading">Part A: Pure Python Standard Library Simulation</h3>
+    <pre><code>import math
+
+def distribution(values):
+    values = tuple(values)
+    if not values or any(not math.isfinite(v) or v < 0 or v > 1 for v in values):
+        raise ValueError("Use a nonempty sequence of finite probabilities in [0, 1]")
+    if not math.isclose(sum(values), 1.0, rel_tol=0, abs_tol=1e-12):
+        raise ValueError("Probabilities must sum to one")
+    return values
+
+def information_scores(p, q):
+    p, q = distribution(p), distribution(q)
+    if len(p) != len(q):
+        raise ValueError("P and Q must list the same outcomes in the same order")
+    h = -sum(pi * math.log2(pi) for pi in p if pi > 0)
+    if any(pi > 0 and qi == 0 for pi, qi in zip(p, q)):
+        return h, math.inf, math.inf
+    ce = -sum(pi * math.log2(qi) for pi, qi in zip(p, q) if pi > 0)
+    kl = sum(pi * (math.log2(pi) - math.log2(qi)) for pi, qi in zip(p, q) if pi > 0)
+    return h, ce, kl
+
+# Test on 4 Status Messages:
+p = [0.5, 0.125, 0.125, 0.25]  # A, B, C, D
+q = [0.25, 0.25, 0.25, 0.25]
+h, ce, kl = information_scores(p, q)
+assert math.isclose(h, 1.75)
+assert math.isclose(ce, 2.0)
+assert math.isclose(kl, 0.25)
+assert math.isclose(ce, h + kl)
+print(f"Entropy={h:.2f} bits | Cross-Entropy={ce:.2f} bits | KL={kl:.2f} bits")
+</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+
+    <h3 class="sub-heading">Part B: Complete PyTorch Verification Suite</h3>
+    <pre><code>import math
+import torch
+import torch.nn.functional as F
+
+# 1. Verification of Softmax + CCE Gradient:
+z = torch.tensor([[math.log(0.1), math.log(0.7), math.log(0.2)]],
+                 dtype=torch.float64, requires_grad=True)
+target = torch.tensor([1], dtype=torch.long)  # True class is Index 1 (Cat)
+
+loss = F.cross_entropy(z, target)
+equivalent = F.nll_loss(F.log_softmax(z, dim=1), target)
+assert torch.allclose(loss, equivalent)
+assert math.isclose(loss.item(), -math.log(0.7), rel_tol=1e-12)
+
+loss.backward()
+# Expected analytical gradient: p_hat - y = [0.1 - 0, 0.7 - 1.0, 0.2 - 0] = [0.1, -0.3, 0.2]
+expected_gradient = torch.tensor([[0.1, -0.3, 0.2]], dtype=torch.float64)
+assert torch.allclose(z.grad, expected_gradient)
+
+# 2. Extreme Stability Edge Case (No Overflow):
+extreme = torch.tensor([[1000.0, 0.0]], dtype=torch.float64)
+extreme_loss = F.cross_entropy(extreme, torch.tensor([1]))
+assert torch.isfinite(extreme_loss)
+assert math.isclose(extreme_loss.item(), 1000.0)
+print(f"PyTorch CCE Loss={loss.item():.6f} nats | Extreme Stable Loss={extreme_loss.item():.1f}")
+</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 12: Diagnostic Mini-Checks & Common Traps -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-12">
+    <div class="section-tag"><span class="num">12</span> Diagnostics &amp; Practice</div>
+    <h2 class="section-heading">Diagnostic Mini-Checks &amp; Common Engineering Traps</h2>
+
+    <figure class="figure-card">
+      <img src="./chatgpt_images/01-Entropy_CrossEntropy_CCE/topic-12_Diagnostic_Mini_Checks_Common_Traps_img1.jpg" alt="Diagnostic Mini Checks and Engineering Traps" onclick="openLightbox(this.src)">
+      <figcaption><strong>Figure 12.1:</strong> Common production traps: Double softmax bugs, log underflows, and class imbalance failures.</figcaption>
+    </figure>
+
+    <details class="diag-accordion">
+      <summary>Q1: Why does minimizing Cross-Entropy in deep learning automatically minimize KL Divergence?</summary>
+      <div class="accordion-content">
+        <strong>Answer:</strong> By the Master Identity, $H(P, Q) = H(P) + D_{\text{KL}}(P \parallel Q)$. The ground-truth training distribution $P$ is immutable and fixed; therefore, its entropy $H(P)$ is a constant with respect to model parameters $\theta$ ($\nabla_\theta H(P) = 0$). Thus:
+        $$\arg\min_\theta H(P, Q_\theta) \equiv \arg\min_\theta D_{\text{KL}}(P \parallel Q_\theta).$$
+      </div>
+    </details>
+
+    <details class="diag-accordion">
+      <summary>Q2: A classifier achieves 100% training accuracy. Must its CCE loss equal zero?</summary>
+      <div class="accordion-content">
+        <strong>Answer:</strong> <strong>No!</strong> Accuracy only checks whether the correct logit exceeds all other logits ($\arg\max \hat{p} = y$). For CCE loss to equal zero ($-\ln \hat{p}_{\text{true}} = 0$), the predicted probability must equal exactly $1.0$, which requires infinite logits ($z_{\text{true}} \to +\infty$). Finite logits always produce a strictly positive loss.
+      </div>
+    </details>
+
+    <details class="diag-accordion">
+      <summary>Q3: Can an individual summand in the KL Divergence sum be negative?</summary>
+      <div class="accordion-content">
+        <strong>Answer:</strong> <strong>Yes!</strong> When the model overpredicts an outcome ($q_i > p_i$), the term $p_i \log_2(p_i / q_i)$ is negative. However, Gibbs' inequality guarantees that the sum across all outcomes is strictly non-negative ($D_{\text{KL}} \ge 0$).
+      </div>
+    </details>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Production Trap</th><th>Root Cause of Failure</th><th>Production Fix</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Passing Softmax probabilities into <code>nn.CrossEntropyLoss</code></strong></td>
+            <td><code>nn.CrossEntropyLoss</code> expects raw logits; applying Softmax twice corrupts gradients.</td>
+            <td>Pass raw logits directly into <code>nn.CrossEntropyLoss</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Manual $\ln(p)$ without clamping</strong></td>
+            <td>Float underflow evaluates $e^{-100} \to 0 \implies \ln(0) = -\infty \implies \text{NaN}$.</td>
+            <td>Use <code>torch.log_softmax</code> or fused CrossEntropyLoss.</td>
+          </tr>
+          <tr>
+            <td><strong>Applying standard CCE to extreme class imbalance</strong></td>
+            <td>Easy negative background samples overwhelm the loss gradient.</td>
+            <td>Use <strong>Focal Loss</strong> ($\gamma = 2.0$) or class-weighted CCE.</td>
+          </tr>
+          <tr>
+            <td><strong>Confusing bits and nats</strong></td>
+            <td>PyTorch uses natural log $\ln$ (nats); paper reports base 2 (bits).</td>
+            <td>Multiply nats by $1/\ln(2) \approx 1.442695$ to report bits.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 13: Explain It Back and Return to It -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-13">
+    <div class="section-tag"><span class="num">13</span> Self-Assessment &amp; Feynman</div>
+    <h2 class="section-heading">Explain It Back and Return to It (The Feynman Challenge)</h2>
+
+    <figure class="figure-card">
+      <img src="./chatgpt_images/01-Entropy_CrossEntropy_CCE/topic-13_Explain_It_Back_and_Return_to_It_img1.jpg" alt="Feynman Technique Challenge" onclick="openLightbox(this.src)">
+      <figcaption><strong>Figure 13.1:</strong> Prove your deep understanding by explaining the concepts without notes.</figcaption>
+    </figure>
+
+    <div class="callout tip">
+      <div class="callout-title">The Feynman Prompt</div>
+      <p>
+        Explain to a junior engineer why rare events require longer codewords, why cross-entropy is like a taxi receipt, why MSE freezes learning when dead wrong, and why minimizing cross-entropy forces model beliefs to mirror reality.
+      </p>
+    </div>
+
+    <ul class="checklist">
+      <li>I can pronounce every symbol ($I(x), H(P), H(P, Q), D_{\text{KL}}, \nabla_z \mathcal{L}$) aloud accurately.</li>
+      <li>I can calculate Shannon entropy and cross-entropy by hand for discrete probability distributions.</li>
+      <li>I can derive the Master Information Identity $H(P, Q) = H(P) + D_{\text{KL}}(P \parallel Q)$ algebraically.</li>
+      <li>I can explain why MSE gradient vanishes when dead wrong ($\hat{p} \to 0$), while CCE delivers maximum force ($-1.0$).</li>
+      <li>I can derive the Softmax error gradient $\nabla_z \mathcal{L} = \hat{p} - y$ step-by-step.</li>
+      <li>I understand how Fused LogSumExp prevents numerical underflow in GPU silicon.</li>
+    </ul>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 14: Curated External Learning References -->
+  <!-- ===================================================================== -->
+  <section class="topic-block" id="sec-14">
+    <div class="section-tag"><span class="num">14</span> Curated References</div>
+    <h2 class="section-heading">Curated External Learning References &amp; Further Study</h2>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Resource and Author</th><th>Learning Job</th><th>Exact Starting Point</th><th>Readiness Level</th><th>Access</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="https://www.youtube.com/watch?v=2s3aJfRr9gE" target="_blank">3Blue1Brown: A Short Introduction to Entropy</a></strong> (Grant Sanderson)</td>
+            <td>Geometric animation of codebooks, probability partitioning, and average surprise</td>
+            <td>Full 20-minute video</td>
+            <td>Zero prerequisites beyond arithmetic</td>
+            <td>Free YouTube</td>
+            <td>Verified Sep 2026</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://colah.github.io/posts/2015-09-Visual-Information/" target="_blank">Visual Information Theory</a></strong> (Christopher Olah)</td>
+            <td>Intuitive 2D area visualizer of entropy, codeword spaces, and cross-entropy</td>
+            <td>Section: "Entropy" and "Cross-Entropy"</td>
+            <td>Probabilities summing to 1.0</td>
+            <td>Free Open Web</td>
+            <td>Verified Sep 2026</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://seeing-theory.brown.edu/" target="_blank">Seeing Theory: Probability &amp; Information</a></strong> (Brown University)</td>
+            <td>Interactive web sliders adjusting outcome probabilities and observing entropy shifts</td>
+            <td>Chapter 3: Probability Distributions</td>
+            <td>Beginner browser interactive</td>
+            <td>Free Educational</td>
+            <td>Verified Sep 2026</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://ia800102.us.archive.org/22/items/bellsystemtechni27amerrich/bellsystemtechni27amerrich.pdf" target="_blank">A Mathematical Theory of Communication</a></strong> (Claude Shannon, 1948)</td>
+            <td>Historical seminal paper establishing information theory and logarithmic surprise</td>
+            <td>Part I: Discrete Systems, §1–§3 (pp. 379–393)</td>
+            <td>Logarithms &amp; probability</td>
+            <td>Free Archive PDF</td>
+            <td>Bell Labs Classic</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://www.wiley.com/en-us/Elements+of+Information+Theory%2C+2nd+Edition-p-9780471241959" target="_blank">Elements of Information Theory (2nd Ed)</a></strong> (Cover &amp; Thomas)</td>
+            <td>Definitive graduate textbook for formal mathematical proofs and Jensen bounds</td>
+            <td>Chapter 2: Entropy &amp; Relative Entropy (pp. 13–24)</td>
+            <td>Calculus &amp; probability</td>
+            <td>Academic Textbook</td>
+            <td>Graduate Standard</td>
+          </tr>
+          <tr>
+            <td><strong><a href="https://docs.pytorch.org/docs/2.8/generated/torch.nn.CrossEntropyLoss.html" target="_blank">PyTorch: torch.nn.CrossEntropyLoss</a></strong> (PyTorch Team)</td>
+            <td>Official software documentation for fused LogSoftmax + NLLLoss implementation</td>
+            <td>API formulas, reduction, label smoothing</td>
+            <td>PyTorch tensors</td>
+            <td>Free Official Docs</td>
+            <td>Verified Sep 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+<!-- Lightbox Modal for Full-Resolution Image Inspection -->
+<div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
+  <span class="lightbox-close">&times;</span>
+  <img id="lightbox-img" class="lightbox-img" src="" alt="Full view">
+</div>
+
+<!-- KaTeX Auto-Render Initialization and Interactive Simulator Scripts -->
+<script>
+  // 1. Initialize KaTeX with robust delimiters and tag shielding
+  document.addEventListener("DOMContentLoaded", function() {
+    if (typeof renderMathInElement === "function") {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false,
+        ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+      });
+    }
+  });
+
+  // 2. Lightbox Modal functions
+  function openLightbox(src) {
+    var modal = document.getElementById("lightbox");
+    var img = document.getElementById("lightbox-img");
+    img.src = src;
+    modal.classList.add("active");
+  }
+  function closeLightbox() {
+    document.getElementById("lightbox").classList.remove("active");
+  }
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") closeLightbox();
+  });
+
+  // 3. Code Copy function
+  function copyCode(btn) {
+    var pre = btn.parentElement;
+    var code = pre.querySelector("code").innerText;
+    navigator.clipboard.writeText(code).then(function() {
+      btn.innerText = "Copied!";
+      setTimeout(function() { btn.innerText = "Copy"; }, 2000);
+    });
+  }
+
+  // 4. Interactive MSE vs CCE Gradient Vanishing Simulator
+  (function() {
+    var slider = document.getElementById("p-hat-slider");
+    var pHatVal = document.getElementById("p-hat-val");
+    var mseLossVal = document.getElementById("mse-loss-val");
+    var mseGradVal = document.getElementById("mse-grad-val");
+    var cceLossVal = document.getElementById("cce-loss-val");
+    var cceGradVal = document.getElementById("cce-grad-val");
+    var mseStatus = document.getElementById("mse-status");
+    var cceStatus = document.getElementById("cce-status");
+    var svg = document.getElementById("gradient-svg");
+
+    function update() {
+      var p = parseFloat(slider.value);
+      pHatVal.textContent = p.toFixed(3);
+
+      // Calculations for y = 1:
+      // MSE: Loss = (1 - p)^2, dL/dz = 2 * (p - 1) * p * (1 - p)
+      var mseLoss = Math.pow(1 - p, 2);
+      var saturationFactor = p * (1 - p);
+      var mseGrad = 2 * (p - 1) * saturationFactor;
+
+      // CCE: Loss = -ln(p), dL/dz = p - 1
+      var cceLoss = -Math.log(p);
+      var cceGrad = p - 1;
+
+      mseLossVal.textContent = mseLoss.toFixed(4);
+      mseGradVal.textContent = mseGrad.toFixed(4);
+      cceLossVal.textContent = cceLoss.toFixed(4);
+      cceGradVal.textContent = cceGrad.toFixed(4);
+
+      if (p < 0.05) {
+        mseStatus.textContent = "⚠️ STALLED: Gradient vanished!";
+        mseStatus.style.color = "var(--rose)";
+        cceStatus.textContent = "⚡ Full Restoration: Gradient ≈ -1.0";
+        cceStatus.style.color = "var(--olive)";
+      } else {
+        mseStatus.textContent = "Sat. Factor = " + saturationFactor.toFixed(4);
+        mseStatus.style.color = "var(--gray-500)";
+        cceStatus.textContent = "Linear pull = " + cceGrad.toFixed(3);
+        cceStatus.style.color = "var(--gray-500)";
+      }
+
+      // Draw SVG plot
+      drawPlot(p, mseGrad, cceGrad);
+    }
+
+    function drawPlot(currentP, curMseGrad, curCceGrad) {
+      var W = 600, H = 160;
+      var padL = 50, padR = 20, padT = 20, padB = 30;
+      var plotW = W - padL - padR;
+      var plotH = H - padT - padB;
+
+      // x: p in [0, 1] -> [padL, W - padR]
+      // y: grad in [-1.0, 0.0] -> [-1 -> H - padB, 0 -> padT]
+      function scaleX(x) { return padL + x * plotW; }
+      function scaleY(y) { return padT + (y / -1.0) * plotH; }
+
+      var html = "";
+      // Grid lines
+      html += '<line x1="' + padL + '" y1="' + scaleY(0) + '" x2="' + (W - padR) + '" y2="' + scaleY(0) + '" stroke="#D1CFC5" stroke-width="1.5"/>';
+      html += '<line x1="' + padL + '" y1="' + scaleY(-0.5) + '" x2="' + (W - padR) + '" y2="' + scaleY(-0.5) + '" stroke="#E6E3DA" stroke-dasharray="3,3"/>';
+      html += '<line x1="' + padL + '" y1="' + scaleY(-1.0) + '" x2="' + (W - padR) + '" y2="' + scaleY(-1.0) + '" stroke="#E6E3DA" stroke-dasharray="3,3"/>';
+
+      // Axis labels
+      html += '<text x="' + (padL - 10) + '" y="' + (scaleY(0) + 4) + '" font-family="monospace" font-size="10" fill="#87867F" text-anchor="end">0.0</text>';
+      html += '<text x="' + (padL - 10) + '" y="' + (scaleY(-0.5) + 4) + '" font-family="monospace" font-size="10" fill="#87867F" text-anchor="end">-0.5</text>';
+      html += '<text x="' + (padL - 10) + '" y="' + (scaleY(-1.0) + 4) + '" font-family="monospace" font-size="10" fill="#87867F" text-anchor="end">-1.0</text>';
+
+      html += '<text x="' + scaleX(0) + '" y="' + (H - 10) + '" font-family="monospace" font-size="10" fill="#87867F" text-anchor="middle">p̂=0 (Dead Wrong)</text>';
+      html += '<text x="' + scaleX(0.5) + '" y="' + (H - 10) + '" font-family="monospace" font-size="10" fill="#87867F" text-anchor="middle">p̂=0.5</text>';
+      html += '<text x="' + scaleX(1) + '" y="' + (H - 10) + '" font-family="monospace" font-size="10" fill="#87867F" text-anchor="middle">p̂=1 (Correct)</text>';
+
+      // Generate MSE curve: 2*(p-1)*p*(1-p)
+      var dMse = "M";
+      var dCce = "M";
+      for (var i = 0; i <= 100; i++) {
+        var xVal = i / 100;
+        var yMse = 2 * (xVal - 1) * xVal * (1 - xVal);
+        var yCce = xVal - 1;
+        var sx = scaleX(xVal);
+        var syMse = scaleY(yMse);
+        var syCce = scaleY(yCce);
+        dMse += (i === 0 ? " " : " L ") + sx.toFixed(1) + " " + syMse.toFixed(1);
+        dCce += (i === 0 ? " " : " L ") + sx.toFixed(1) + " " + syCce.toFixed(1);
+      }
+
+      html += '<path d="' + dMse + '" fill="none" stroke="#C24D4D" stroke-width="2.5"/>';
+      html += '<path d="' + dCce + '" fill="none" stroke="#5F7546" stroke-width="2.5"/>';
+
+      // Current point markers
+      var curX = scaleX(currentP);
+      var curYMse = scaleY(curMseGrad);
+      var curYCce = scaleY(curCceGrad);
+
+      html += '<line x1="' + curX + '" y1="' + padT + '" x2="' + curX + '" y2="' + (H - padB) + '" stroke="#141413" stroke-width="1" stroke-dasharray="2,2"/>';
+      html += '<circle cx="' + curX + '" cy="' + curYMse + '" r="5" fill="#C24D4D" stroke="#fff" stroke-width="2"/>';
+      html += '<circle cx="' + curX + '" cy="' + curYCce + '" r="5" fill="#5F7546" stroke="#fff" stroke-width="2"/>';
+
+      svg.innerHTML = html;
+    }
+
+    slider.addEventListener("input", update);
+    update();
+  })();
+
+  // 5. Interactive Temperature & Softmax Sampler
+  (function() {
+    var slider = document.getElementById("temp-slider");
+    var tempVal = document.getElementById("temp-val");
+    var tok1 = document.getElementById("tok-1-val");
+    var tok2 = document.getElementById("tok-2-val");
+    var tok3 = document.getElementById("tok-3-val");
+    var tok4 = document.getElementById("tok-4-val");
+    var entVal = document.getElementById("temp-entropy-val");
+    var pplVal = document.getElementById("temp-ppl-val");
+
+    var baseLogits = [3.2, 2.1, 1.4, 0.2];
+
+    function update() {
+      var T = parseFloat(slider.value);
+      tempVal.textContent = T.toFixed(2);
+
+      // Scaled logits
+      var scaled = baseLogits.map(function(z) { return z / T; });
+      var maxZ = Math.max.apply(null, scaled);
+      var exps = scaled.map(function(s) { return Math.exp(s - maxZ); });
+      var sumExps = exps.reduce(function(a, b) { return a + b; }, 0);
+      var probs = exps.map(function(e) { return e / sumExps; });
+
+      tok1.textContent = (probs[0] * 100).toFixed(1) + "%";
+      tok2.textContent = (probs[1] * 100).toFixed(1) + "%";
+      tok3.textContent = (probs[2] * 100).toFixed(1) + "%";
+      tok4.textContent = (probs[3] * 100).toFixed(1) + "%";
+
+      // Entropy in bits
+      var H = 0;
+      for (var i = 0; i < probs.length; i++) {
+        if (probs[i] > 1e-12) {
+          H -= probs[i] * (Math.log(probs[i]) / Math.LN2);
+        }
+      }
+      entVal.textContent = H.toFixed(2) + " bits";
+
+      // Perplexity (branching factor) = 2^H
+      var ppl = Math.pow(2, H);
+      pplVal.textContent = ppl.toFixed(2) + " tokens";
+    }
+
+    slider.addEventListener("input", update);
+    update();
+  })();
+
+  // 6. 3D Simplex & Entropy Dome Canvas Visualizer
+  (function() {
+    var canvas = document.getElementById("simplex-canvas");
+    if (!canvas) return;
+    var ctx = canvas.getContext("2d");
+
+    var rotY = 0.45;
+    var rotX = 0.35;
+    var isDragging = false;
+    var lastX = 0, lastY = 0;
+
+    // Triangle vertices in 3D: (p1, p2, p3)
+    // Map to equilateral triangle in 3D:
+    // A = (1, 0, 0), B = (0, 1, 0), C = (0, 0, 1)
+    var N = 24; // grid resolution
+    var gridPoints = [];
+
+    // Precompute triangle mesh points
+    for (var i = 0; i <= N; i++) {
+      for (var j = 0; j <= N - i; j++) {
+        var k = N - i - j;
+        var p1 = i / N;
+        var p2 = j / N;
+        var p3 = k / N;
+
+        // Entropy H in bits
+        var h = 0;
+        if (p1 > 0) h -= p1 * (Math.log(p1) / Math.LN2);
+        if (p2 > 0) h -= p2 * (Math.log(p2) / Math.LN2);
+        if (p3 > 0) h -= p3 * (Math.log(p3) / Math.LN2);
+
+        // Map barycentric (p1, p2, p3) to Cartesian 3D (x, y, z):
+        // Base triangle in X-Z plane, entropy H as Y height
+        var x = (p2 - p3) * Math.sqrt(3) / 2;
+        var z = p1 - 0.5 * (p2 + p3);
+        var y = h * 0.75; // scale height
+
+        gridPoints.push({ p1: p1, p2: p2, p3: p3, x: x * 180, y: -y * 140 + 40, z: z * 180, h: h });
+      }
+    }
+
+    function project(pt) {
+      // Rotate around Y
+      var cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+      var x1 = pt.x * cosY + pt.z * sinY;
+      var z1 = -pt.x * sinY + pt.z * cosY;
+
+      // Rotate around X
+      var cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+      var y2 = pt.y * cosX - z1 * sinX;
+      var z2 = pt.y * sinX + z1 * cosX;
+
+      // Perspective projection
+      var fov = 450;
+      var scale = fov / (fov + z2 + 250);
+      var px = canvas.width / 2 + x1 * scale;
+      var py = canvas.height / 2 + y2 * scale;
+      return { x: px, y: py, z: z2, h: pt.h };
+    }
+
+    function render() {
+      ctx.fillStyle = "#141413";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw wireframe triangles
+      var projected = gridPoints.map(project);
+
+      // Draw dome points and connecting lines
+      var idx = 0;
+      for (var i = 0; i <= N; i++) {
+        for (var j = 0; j <= N - i; j++) {
+          var pCurrent = projected[idx];
+
+          // Draw line to neighbor j+1
+          if (j + 1 <= N - i) {
+            var pRight = projected[idx + 1];
+            drawLine(pCurrent, pRight);
+          }
+          // Draw line to neighbor i+1
+          if (i + 1 <= N) {
+            var nextRowStart = idx + (N - i + 1);
+            if (nextRowStart < projected.length) {
+              var pDown = projected[nextRowStart];
+              drawLine(pCurrent, pDown);
+            }
+          }
+          idx++;
+        }
+      }
+
+      // Draw base triangle outline on the floor (H = 0)
+      drawBaseOutline();
+    }
+
+    function drawLine(p1, p2) {
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      var avgH = (p1.h + p2.h) / 2;
+      // Color from dark purple at 0 to warm clay at max H (1.585)
+      var ratio = Math.min(1.0, avgH / 1.585);
+      var r = Math.round(90 + ratio * 127);
+      var g = Math.round(110 + ratio * 8);
+      var b = Math.round(150 - ratio * 63);
+      ctx.strokeStyle = "rgba(" + r + "," + g + "," + b + "," + (0.35 + ratio * 0.55) + ")";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    function drawBaseOutline() {
+      // 3 vertices at H=0
+      var vA = project({ x: 0, y: 40, z: 180, h: 0 });
+      var vB = project({ x: 180 * Math.sqrt(3)/2, y: 40, z: -90, h: 0 });
+      var vC = project({ x: -180 * Math.sqrt(3)/2, y: 40, z: -90, h: 0 });
+
+      ctx.beginPath();
+      ctx.moveTo(vA.x, vA.y);
+      ctx.lineTo(vB.x, vB.y);
+      ctx.lineTo(vC.x, vC.y);
+      ctx.closePath();
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Peak point at center: (1/3, 1/3, 1/3)
+      var peak = project({ x: 0, y: -(1.585 * 0.75 * 140) + 40, z: 0, h: 1.585 });
+      ctx.beginPath();
+      ctx.arc(peak.x, peak.y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = "#D97757";
+      ctx.fill();
+      ctx.fillStyle = "#FAF9F5";
+      ctx.font = "11px monospace";
+      ctx.fillText("Max H ≈ 1.585 bits", peak.x + 8, peak.y - 6);
+    }
+
+    canvas.addEventListener("mousedown", function(e) {
+      isDragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    });
+    window.addEventListener("mouseup", function() { isDragging = false; });
+    window.addEventListener("mousemove", function(e) {
+      if (!isDragging) return;
+      var dx = e.clientX - lastX;
+      var dy = e.clientY - lastY;
+      rotY += dx * 0.008;
+      rotX += dy * 0.008;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      render();
+    });
+
+    document.getElementById("reset-simplex-btn").addEventListener("click", function() {
+      rotY = 0.45;
+      rotX = 0.35;
+      render();
+    });
+
+    render();
+  })();
+</script>
+
+</body>
+</html>

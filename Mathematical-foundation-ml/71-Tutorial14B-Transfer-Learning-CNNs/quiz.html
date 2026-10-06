@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tutorial 14 Part 2 : Transfer Learning using CNNs</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Tutorial 14 Part 2 : Transfer Learning using CNNs</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. Comprehension quiz covering pretrained vision backbones, linear probe head surgery, gradient freezing, and multimodal embedding extraction</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q01", "part": "prerequisites", "flavor": "concept", "anchor": "PREREQUISITES.md#p1", "prompt": "Why do early convolutional layers in a deep CNN generalize effectively across radically different visual domains (e.g. from ImageNet animals to medical X-rays)?", "options": ["Because medical X-rays contain the same species of animals as ImageNet.", "Because early layers extract low-level spatial primitives like oriented edges, corners, and textures that are universal properties of optical images.", "Because early layers are strictly linear and have no activation functions.", "Because early layers memorize high-level diagnostic labels during pretraining."], "answer": "B", "whyCorrect": "Early convolutional layers function as Gabor-like filter banks detecting primitive contours, gradients, and textures that are shared across all natural and clinical optical imagery.", "whyOthers": "Option A is absurd. Option C is false because all conv layers use non-linear activations (ReLU). Option D is incorrect because high-level semantic labels are captured only in deep layers.", "diagram": "Early Conv Layers -> Low-Level Primitives (Edges, Textures) -> Universal Transfer Across Domains"}, {"id": "q02", "part": "prerequisites", "flavor": "mechanism", "anchor": "PREREQUISITES.md#p2", "prompt": "When performing classifier head surgery on a pretrained ResNet-18 model for a 5-class target problem, which layer must be replaced?", "options": ["model.conv1 = nn.Conv2d(3, 5, kernel_size=7)", "model.layer4[1].conv2 = nn.Conv2d(512, 5, kernel_size=3)", "model.fc = nn.Linear(in_features=512, out_features=5)", "model.avgpool = nn.AdaptiveAvgPool2d((5, 5))"], "answer": "C", "whyCorrect": "In ResNet architectures, the final classification head is the fully connected layer attribute `model.fc`, which maps 512-dimensional pooled embeddings to class logits.", "whyOthers": "Option A replaces the initial input convolution, destroying early features. Option B modifies an internal residual block. Option D modifies spatial pooling instead of the linear classification projection.", "diagram": "ResNet-18: [AvgPool -> Z (512-d)] ==> model.fc = nn.Linear(512, 5) -> Class Logits"}, {"id": "q03", "part": "prerequisites", "flavor": "mechanism", "anchor": "PREREQUISITES.md#p3", "prompt": "What occurs in PyTorch during the backward pass for parameters that have been set to 'param.requires_grad = False'?", "options": ["Their gradients are automatically clamped to zero and saved in memory.", "PyTorch throws a RuntimeError because all parameters must receive gradients.", "The autograd engine skips gradient computation for those parameters, leaving 'param.grad' as None and saving GPU memory.", "Their parameter values are reset to random normal distributions."], "answer": "C", "whyCorrect": "Setting requires_grad=False prunes the backward computational graph branch, so autograd neither computes nor stores gradient tensors, leaving param.grad as None.", "whyOthers": "Option A is false because no zero tensors are allocated. Option B is incorrect because freezing is a standard supported feature. Option D falsely suggests weights are randomized.", "diagram": "param.requires_grad = False ==> Autograd Branch Pruned ==> param.grad is None"}, {"id": "q04", "part": "prerequisites", "flavor": "math", "anchor": "PREREQUISITES.md#p5", "prompt": "In ResNet, why does the residual identity formulation y = F(x) + x resolve the vanishing gradient problem in networks with over 100 layers?", "options": ["Because the derivative dy/dx = dF/dx + I contains an additive identity matrix I, ensuring an unattenuated gradient signal flows backward even if dF/dx vanishes.", "Because it replaces standard backpropagation with forward-only Hebbian learning.", "Because it removes all non-linear activation functions from the network.", "Because it forces all convolutional weights to take eigenvalues greater than 10."], "answer": "A", "whyCorrect": "The derivative of y = F(x) + x with respect to x contains the additive identity term I. By the chain rule, this creates an unattenuated gradient highway that directly propagates error signals across layers.", "whyOthers": "Option B is false; ResNet trains via standard backpropagation. Option C is false; ReLUs are maintained inside the residual branches. Option D is incorrect and would cause gradient explosion.", "diagram": "y = F(x) + x ==> dy/dx = dF/dx + I (Identity term I guarantees gradient flow)"}, {"id": "q05", "part": "notes", "flavor": "master_map", "anchor": "NOTES.md#executive-summary", "prompt": "How do pretrained vision backbones, parameter freezing, and surgical classifier head replacement connect to form the master transfer learning workflow?", "options": ["They flatten entire images into dense vectors, double the learning rate at every epoch, and discard pretrained weights to prevent overfitting.", "Pretrained backbones provide expert low-level feature representations, parameter freezing locks those representations to prevent catastrophic forgetting, and surgical head replacement trains a lightweight linear probe for the target domain.", "Pretrained backbones eliminate the need for target data, parameter freezing randomizes convolutional filters, and head surgery converts 2D convolutions into 1D RNNs.", "They replace gradient descent with evolutionary algorithms to search for optimal neural architecture hyperparameters."], "answer": "B", "whyCorrect": "The master transfer learning workflow leverages pretrained backbones (for rich visual representations), locks them via parameter freezing (preventing catastrophic forgetting), and trains a newly attached head on the target dataset.", "whyOthers": "Option A describes destructive training from scratch. Option C contains multiple factual contradictions. Option D references unrelated evolutionary architecture search.", "diagram": "Pretrained Backbone (Visual Representations) + Parameter Freezing (Locking) + Head Replacement (Task Adapter)"}, {"id": "q06", "part": "notes", "flavor": "concept", "anchor": "NOTES.md#topic-3-modifying-classifier-heads--parameter-freezing", "prompt": "What real-world intuition was illustrated by the instructor's 'bicycle-to-motorbike' transfer learning analogy?", "options": ["Motorbikes are faster than bicycles, just as ResNet is faster than VGG.", "An individual who already knows how to balance and steer a bicycle can reuse those core motor skills directly when learning to ride a motorbike, needing only to learn throttle and engine controls.", "Bicycles have 2 wheels while motorbikes have 4 wheels, illustrating dimension mismatch.", "Learning to ride a bicycle from scratch is easier than learning on a motorbike."], "answer": "B", "whyCorrect": "The instructor used this analogy to illustrate inductive transfer: foundational skills (balance/steering or low-level edge/texture detection) transfer directly to new related tasks without retraining from scratch.", "whyOthers": "Option A confuses learning transfer with computational speed. Option C is factually incorrect. Option D misses the pedagogical point of transferring prior competence.", "diagram": "Bicycle Balance & Steering (Pretrained Trunk) -> Motorbike Throttle Controls (New Classifier Head)"}, {"id": "q07", "part": "notes", "flavor": "mechanism", "anchor": "NOTES.md#topic-3-modifying-classifier-heads--parameter-freezing", "prompt": "In VGG-19, which specific sub-module within 'model.classifier' is replaced to adapt the network to a custom 10-class problem?", "options": ["model.classifier[0] = nn.Linear(25088, 10)", "model.classifier[3] = nn.Linear(4096, 10)", "model.classifier[6] = nn.Linear(4096, 10)", "model.features[36] = nn.Conv2d(512, 10, kernel_size=3)"], "answer": "C", "whyCorrect": "In VGG models, `model.classifier` is an `nn.Sequential` container where index 0 is Linear(25088, 4096), index 3 is Linear(4096, 4096), and index 6 is the final linear layer (Linear(4096, 1000)). Replacing index 6 adapts the output to 10 classes.", "whyOthers": "Option A discards both intermediate 4096-dimensional dense layers. Option B replaces the middle dense layer. Option D modifies the final convolutional layer in `features`.", "diagram": "VGG classifier: [0: Linear] -> [3: Linear] -> [6: Linear(4096, 1000)] ==> Replace layer [6]"}, {"id": "q08", "part": "notes", "flavor": "mechanism", "anchor": "NOTES.md#topic-2-pretrained-inference--top-k-predictions-on-imagenet", "prompt": "Why is it mandatory to call 'model.eval()' before performing inference with pretrained torchvision vision models?", "options": ["Because PyTorch models cannot execute forward passes on CPU without eval mode.", "Because eval mode disables stochastic Dropout and forces Batch Normalization to use frozen population running statistics rather than volatile batch statistics.", "Because eval mode automatically converts float32 weights into int8 quantized integers.", "Because eval mode sends model telemetry back to the open-source repository."], "answer": "B", "whyCorrect": "In training mode, Dropout randomly zeroes 50% of activations and BatchNorm calculates batch-specific statistics. Calling `model.eval()` ensures deterministic forward inference using fixed running statistics.", "whyOthers": "Option A is false; CPU execution works in train mode. Option C confuses eval mode with post-training quantization. Option D is an erroneous privacy misconception.", "diagram": "model.eval() ==> Dropout Disabled + BatchNorm Uses Running Stats (mu_running, sigma^2_running)"}, {"id": "q09", "part": "notes", "flavor": "math", "anchor": "NOTES.md#topic-4-spatial-input-resolution--dimension-recomputation", "prompt": "If a 152x152x3 image is fed into a standard VGG backbone without adaptive pooling, what is the spatial shape of the final feature map before flattening, and why does it crash?", "options": ["Shape is 7x7x512; it executes normally without crashing.", "Shape is 4x4x512 = 8,192 features; it crashes because the dense layer expects 25,088 features (7x7x512).", "Shape is 1x1x512; it produces 512 features.", "Shape is 0x0x512; it crashes due to negative spatial coordinates."], "answer": "B", "whyCorrect": "Five 2x2 pooling stages reduce 152 -> 76 -> 38 -> 19 -> 9 -> 4. The feature volume is 4x4x512 = 8,192, causing a matrix multiplication mismatch with `Linear(25088, 4096)`.", "whyOthers": "Option A is the dimension for 224x224 inputs. Option C is the dimension for ResNet with Global Average Pooling. Option D is incorrect because spatial dimensions remain positive.", "diagram": "152x152 -> 5 Pools -> [512, 4, 4] -> Flatten [8192] != Expected [25088] (Crash!)"}, {"id": "q10", "part": "notes", "flavor": "architecture", "anchor": "NOTES.md#topic-5-decoupled-feature-extraction--latent-embeddings", "prompt": "How does the embedding dimensionality extracted from ResNet-18 compare to that of VGG-19, and why is ResNet's embedding advantageous for downstream sequence captioning?", "options": ["VGG outputs 512 dimensions while ResNet outputs 25,088 dimensions.", "ResNet outputs a compact 512-dimensional vector via Global Average Pooling, requiring 48x fewer input weights in downstream LSTM decoders than VGG's 25,088-dimensional vector.", "Both models output identical 1,000-dimensional embeddings.", "ResNet embeddings require GPUs to decode, whereas VGG embeddings run on CPUs."], "answer": "B", "whyCorrect": "ResNet uses Global Average Pooling to compress feature maps to 512 dimensions, whereas VGG unrolls unpooled maps to 25,088 dimensions. Projecting 512 into an LSTM saves millions of parameters and prevents overfitting.", "whyOthers": "Option A reverses the dimensions. Option C describes the final logits, not intermediate embeddings. Option D is false because embeddings are hardware-agnostic tensors.", "diagram": "ResNet Embedding: 512-d (Compact, GAP) vs VGG Embedding: 25,088-d (High Parameter Overhead in Decoders)"}, {"id": "q11", "part": "notes", "flavor": "application", "anchor": "NOTES.md#topic-5-decoupled-feature-extraction--latent-embeddings", "prompt": "In an image captioning architecture (e.g. 'Show and Tell'), how is the decoupled CNN visual embedding Z utilized by the sequence model?", "options": ["It is used to compute the learning rate for the Adam optimizer.", "It is passed as the initial hidden state or conditioning context vector to an RNN/LSTM, which generates natural language words sequentially.", "It replaces the vocabulary dictionary with raw RGB pixel values.", "It is discarded after the first training epoch."], "answer": "B", "whyCorrect": "The visual embedding Z encodes the semantic content of the photograph; it initializes or conditions the autoregressive recurrent network (RNN/LSTM), which predicts subsequent words step by step.", "whyOthers": "Option A is nonsensical. Option C confuses image embeddings with vocabulary tokenizers. Option D would eliminate visual conditioning entirely.", "diagram": "CNN Trunk -> Embedding Z -> Initial Hidden State h_0 -> LSTM Decoder -> ['A', 'dog', 'running']"}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

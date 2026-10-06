@@ -1,0 +1,45 @@
+{
+  "title": "Tutorial 15 Part 2 : Deep RNNs, LSTMs and GRUs",
+  "video_id": "nJivfX9VY7Y",
+  "url": "https://www.youtube.com/watch?v=nJivfX9VY7Y",
+  "duration_seconds": 1012,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Teaching Assistant / Prof. Prathosh A P",
+  "playlist_index": 73,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 4,
+  "package_variant": "production",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "topics": [
+    {
+      "index": 1,
+      "title": "PyTorch Recurrent Initialization & Input Geometry Tracking",
+      "start_time": "00:00",
+      "end_time": "04:30",
+      "duration_seconds": 270
+    },
+    {
+      "index": 2,
+      "title": "End-to-End Many-to-One Sequence Classification Pipeline",
+      "start_time": "04:30",
+      "end_time": "08:30",
+      "duration_seconds": 240
+    },
+    {
+      "index": 3,
+      "title": "Deep Stacked Recurrent Networks: Vertical Depth & Layer Propagation",
+      "start_time": "08:30",
+      "end_time": "12:30",
+      "duration_seconds": 240
+    },
+    {
+      "index": 4,
+      "title": "Bidirectional Recurrence & Sequence-to-Sequence Decoding Mechanics",
+      "start_time": "12:30",
+      "end_time": "16:52",
+      "duration_seconds": 262
+    }
+  ]
+}

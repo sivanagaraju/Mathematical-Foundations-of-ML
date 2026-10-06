@@ -1,0 +1,48 @@
+{
+  "title": "Lec 49 Attention Part2",
+  "video_id": "TGzZ8jCX4y0",
+  "url": "https://www.youtube.com/watch?v=TGzZ8jCX4y0",
+  "duration_seconds": 2036,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "description": "Attention Computation, Scaled Dot-Product, Matrix Formulation, and Universal Approximation",
+  "playlist_index": 65,
+  "chapter_count": 0,
+  "instructor": "Prof. Prathosh A P",
+  "skill": "youtube-lecture-tutor",
+  "topic_count": 4,
+  "package_variant": "standard",
+  "package_status": "current",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "content_type": "math_technical",
+  "ingest_evidence": {
+    "captions_file": "raw/captions.en.vtt",
+    "topic_ranges_file": "raw/topic-ranges.json"
+  },
+  "topics": [
+    {
+      "index": 1,
+      "title": "Scaled Dot-Product Alignment & The Softmax Simplex",
+      "time_range": "00:00–08:35",
+      "summary": "Prof. Prathosh derives the single-token attention vector, computes inner products between query q_i and all keys K, formalizes variance scaling by sqrt(D_k) to prevent softmax saturation, and projects raw scores onto the probability simplex via softmax."
+    },
+    {
+      "index": 2,
+      "title": "Full Matrix Attention & Dimensionality Flow",
+      "time_range": "08:36–17:30",
+      "summary": "Generalizes token-level attention to the canonical matrix equation Attention(Q, K, V) = softmax(Q K^T / sqrt(D_k)) V, tracking exact tensor dimensions and framing the attention block as a non-linear global sequence projector mapping R^{T x D} to R^{T x D_v}."
+    },
+    {
+      "index": 3,
+      "title": "Architectural Inquiry: Why Three Projections, Self-Attention & Values",
+      "time_range": "17:31–27:35",
+      "summary": "Addresses fundamental questions on architectural design: why three projections (Q, K, V) rather than two or five, why self-attention includes token self-alignment, why attention weights alpha cannot replace value vectors, and why attention eliminates vanishing gradients."
+    },
+    {
+      "index": 4,
+      "title": "Complexity, Universal Approximation & The Role of Post-Attention MLPs",
+      "time_range": "27:36–33:56",
+      "summary": "Analyzes the O(T^2) computational complexity and context window padding in practical implementations, introduces KV caching and FlashAttention, and proves why linear attention mixtures require subsequent position-wise MLPs to achieve universal function approximation."
+    }
+  ]
+}

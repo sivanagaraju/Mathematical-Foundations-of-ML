@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lecture 52: Transfer Learning and Knowledge Distillation</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Lecture 52: Transfer Learning and Knowledge Distillation</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. Self-Assessment Quiz for Lecture 52</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q01", "part": "prerequisites", "flavor": "concept", "anchor": "PREREQUISITES.md#p1", "prompt": "Why does initializing a downstream model with pre-trained weights G* provide superior generalization on small datasets compared to random Gaussian initialization?", "options": ["Because pre-trained weights eliminate the need to run the softmax activation in the final classification head.", "Because pre-trained parameters reside in a well-conditioned basin of attraction encoding low-level invariances, restricting the effective hypothesis space and reducing sample complexity.", "Because random Gaussian initialization violates the non-negativity constraint of Empirical Risk Minimization.", "Because pre-trained weights automatically double the number of training samples via virtual data augmentation."], "answer": "B", "whyCorrect": "Pre-trained models place optimization directly inside a favorable basin of attraction with pre-learned feature filters. This restricts the effective search radius, lowering Rademacher complexity and preventing overfitting on small target datasets.", "whyOthers": "Option A is false; the classification head still requires softmax for multi-class prediction. Option C is false; ERM does not impose non-negativity constraints on weights. Option D is false; pre-training does not alter target sample counts.", "diagram": "Random Init (High VC-dim, overfitting) vs Pretrained Init (Restricted basin B_eps(theta*), fast convergence)"}, {"id": "q02", "part": "prerequisites", "flavor": "mechanism", "anchor": "PREREQUISITES.md#p2", "prompt": "When freezing backbone layers in PyTorch by setting param.requires_grad = False, how is backpropagation affected during downstream training?", "options": ["The forward pass is completely skipped for the frozen layers to conserve inference latency.", "Gradients are still calculated for all backbone layers, but they are subtracted rather than added during the optimizer step.", "The downstream head parameters are also automatically set to requires_grad = False by inheritance.", "Backpropagation computes gradients solely for the trainable downstream head and terminates at the tapped layer Z, expending zero backward FLOPs on trunk parameters."], "answer": "D", "whyCorrect": "Setting requires_grad = False removes trunk parameters from the autograd computational graph. Backpropagation evaluates dL/dZ for the head and stops, saving memory and compute by avoiding backward passes through the trunk.", "whyOthers": "Option A is false; the forward pass must still execute to compute embeddings Z. Option B is false; no gradients are computed for frozen weights. Option C is false; newly defined head parameters default to requires_grad = True.", "diagram": "Forward: X -> [Trunk (Frozen)] -> Z -> [Head (Active)] -> Loss\nBackward: Stop at Z <======================== dL/d(Head)"}, {"id": "q03", "part": "prerequisites", "flavor": "math", "anchor": "PREREQUISITES.md#p3", "prompt": "In multitask hard parameter sharing with two loss functions L_1 and L_2, what is the exact gradient arriving at the shared representation trunk Z = G_trunk(X)?", "options": ["nabla_Z L_total = nabla_Z L_1 + nabla_Z L_2 (the exact vector sum of the task head gradients by the multivariate chain rule).", "nabla_Z L_total = (nabla_Z L_1) * (nabla_Z L_2) (an element-wise Hadamard product).", "nabla_Z L_total = max(nabla_Z L_1, nabla_Z L_2) (taking the coordinate-wise supremum).", "nabla_Z L_total = nabla_Z L_1 - nabla_Z L_2 (subtracting task gradients to enforce orthogonality)."], "answer": "A", "whyCorrect": "Because the total joint loss is L_total = L_1 + L_2, the multivariate chain rule dictates that the total derivative with respect to intermediate node Z is the sum of partial derivatives across all outgoing computation paths: nabla_Z L_total = nabla_Z L_1 + nabla_Z L_2.", "whyOthers": "Option B confuses the sum rule of differentiation with product rules. Option C is non-differentiable and incorrect. Option D describes adversarial gradient projection, not standard multitask learning.", "diagram": "dL_total/dZ = dL_1/dZ + dL_2/dZ (Additive gradient accumulation at branching point)"}, {"id": "q04", "part": "prerequisites", "flavor": "numerical", "anchor": "PREREQUISITES.md#p4", "prompt": "Given teacher logits z = [10.0, 5.0, 0.0] for classes [Cat, Dog, Table], what is the ratio of probabilities p(Dog) / p(Table) at temperature tau = 1 versus tau = 5?", "options": ["The ratio is 1.0 at tau = 1 and 5.0 at tau = 5.", "The ratio is exp(10) at both temperatures because logits are constant.", "At tau = 1, the ratio is exp(5) ~ 148.4; at tau = 5, the ratio is exp((5-0)/5) = exp(1) ~ 2.72.", "The ratio is 0.0 at both temperatures due to softmax normalization."], "answer": "C", "whyCorrect": "By logit geometry, p_i^tau / p_k^tau = exp((z_i - z_k)/tau). For Dog (5.0) and Table (0.0): at tau = 1, the ratio is exp(5 - 0) = exp(5) ~ 148.4. At tau = 5, the ratio is exp(5/5) = exp(1) ~ 2.718. The relative contrast is softened, keeping secondary probabilities well within non-zero numerical range.", "whyOthers": "Option A is mathematically incorrect. Option B fails to account for temperature scaling in the exponent. Option D is false since probabilities are strictly positive.", "diagram": "p(Dog)/p(Table) = exp((z_dog - z_table)/tau) ==> tau=1: 148.4; tau=5: 2.72 (softened)"}, {"id": "q05", "part": "notes", "flavor": "definition", "anchor": "NOTES.md#topic-1", "prompt": "What is the operational definition of representation tapping in pre-trained composite neural networks G*(X)?", "options": ["Extracting intermediate activation vectors Z = G*_L(X) at layer L to serve as dense, task-agnostic feature embeddings for downstream tasks.", "Inserting recurrent LSTM cells into convolutional filter layers to enforce temporal sequence ordering.", "Evaluating the gradient of the loss function with respect to the input pixels to generate adversarial perturbations.", "Pruning 90% of model weights using magnitude thresholding to accelerate inference on CPU hardware."], "answer": "A", "whyCorrect": "Representation tapping treats the first L layers of pre-trained model G* as an embedding extractor, producing dense vector Z = G*_L(X) that encodes invariant visual or linguistic features.", "whyOthers": "Option B describes hybrid recurrent architectures. Option C defines adversarial attack methods (e.g. FGSM). Option D defines magnitude weight pruning.", "diagram": "X |---> [g_1 o ... o g_L] |---> Z = G*_L(X) (Tapped Intermediate Embedding)"}, {"id": "q06", "part": "notes", "flavor": "compare", "anchor": "NOTES.md#topic-2", "prompt": "How does feature extraction (linear probing) compare to full fine-tuning in terms of optimization behavior and resource utilization?", "options": ["Linear probing is much more prone to catastrophic forgetting than full fine-tuning.", "Full fine-tuning is strictly convex, whereas linear probing creates thousands of local minima.", "Linear probing optimizes a convex subproblem over only head parameters with frozen trunk, whereas full fine-tuning adapts all layers in a non-convex space with higher overfitting risk.", "Linear probing requires 10x more GPU memory because it caches all intermediate activation Jacobians."], "answer": "C", "whyCorrect": "When the backbone is frozen, optimizing a linear head under standard convex loss functions (cross-entropy or MSE) is strictly convex, eliminating local minima and converging rapidly without destroying pre-trained weights. Full fine-tuning updates all parameters in a non-convex landscape, offering higher capacity at the cost of overfitting risk.", "whyOthers": "Option A is inverted; full fine-tuning causes catastrophic forgetting, not linear probing. Option B is inverted. Option D is false; freezing trunk weights reduces memory since intermediate backward Jacobians are discarded.", "diagram": "Linear Probing: Convex head optimization on fixed Z | Full Fine-Tuning: Non-convex full-parameter adaptation"}, {"id": "q07", "part": "notes", "flavor": "connect", "anchor": "NOTES.md#topic-3", "prompt": "Looking across the master map connecting multitask learning with representation tapping, why does training a shared trunk on both classification and bounding-box regression act as an inductive regularizer?", "options": ["Because bounding box regression zeroes out the classification head gradients during alternating iterations.", "Because the shared trunk is forced to learn features that satisfy multiple task objectives, penalizing representations that fit noise in only one task.", "Because multitask learning guarantees that the Hessian matrix of the shared trunk becomes strictly diagonal.", "Because sharing parameters doubles the effective learning rate of the Adam optimizer."], "answer": "B", "whyCorrect": "Hard parameter sharing enforces that representations in the trunk must be useful across multiple distinct task heads. Random noise or spurious correlations present in one task will not correlate with the other, effectively regularizing the trunk against single-task overfitting.", "whyOthers": "Option A is false; gradients sum additively rather than zeroing out. Option C is mathematically false. Option D is false; optimizer learning rates are independent of architecture.", "diagram": "Task 1 noise is penalized by Task 2 loss ==> Shared trunk learns invariant task intersection manifold"}, {"id": "q08", "part": "notes", "flavor": "tradeoff", "anchor": "NOTES.md#topic-4", "prompt": "When would a team prefer self-supervised pre-training estimating marginal density P(X) rather than supervised pre-training estimating conditional posterior P(Y | X)?", "options": ["Marginal estimation models do not require backpropagation or gradient descent during training.", "Conditional models P(Y|X) have exponentially more parameters than marginal models P(X).", "Conditional models P(Y|X) only work on scalar regression tasks, not classification.", "Supervised models P(Y|X) discard input variance uninformative for target label Y, whereas marginal estimators P(X) must model the full intrinsic geometry and manifold of input data, enabling broad downstream transfer."], "answer": "D", "whyCorrect": "Supervised ERM explicitly trains the model to project away feature dimensions that do not assist in predicting label Y. Marginal pre-training (autoencoding, masked token modeling, next-token prediction) forces the model to capture the universal structural manifold of X, producing embeddings that transfer across arbitrary downstream labels.", "whyOthers": "Option A is false; self-supervised models rely heavily on backpropagation. Option B is false; model size depends on architecture, not probability formulation. Option C is false; conditional models power standard multi-class classification.", "diagram": "Supervised P(Y|X): Strips non-Y features | Marginal P(X): Encodes complete data manifold geometry"}, {"id": "q09", "part": "notes", "flavor": "definition", "anchor": "NOTES.md#topic-5", "prompt": "What is the precise definition of Geoffrey Hinton's 'Dark Knowledge' in knowledge distillation?", "options": ["Uninitialized parameters that remain zero-valued throughout neural network training.", "The information encoded in the relative probabilities of incorrect, non-target classes generated by an overparameterized teacher model.", "Security vulnerabilities hidden within open-source pre-trained model checkpoints.", "The unobservable latent noise injected by dropout layers during the forward pass."], "answer": "B", "whyCorrect": "Dark knowledge refers to the rich structural information residing in the soft, non-target class outputs of a teacher (e.g. knowing a truck is similar to a car but dissimilar to an apple), which is completely lost in one-hot ground-truth labels.", "whyOthers": "Option A describes dead neurons or uninitialized weights. Option C refers to cybersecurity threats. Option D refers to stochastic regularization noise.", "diagram": "One-hot: [1, 0, 0] (Blind to similarities) vs Soft: [0.85, 0.14, 0.01] (Dark Knowledge: Car ~ Truck >> Apple)"}, {"id": "q10", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#topic-6", "prompt": "In the combined distillation objective L_KD = (1 - alpha) * L_CE + alpha * tau^2 * D_KL(p_T^tau || p_S^tau), why is the soft-target KL divergence term multiplied by tau^2?", "options": ["Because the derivative of the temperature-scaled KL divergence scales as 1/tau^2 at high temperatures, requiring a tau^2 factor to maintain gradient scale parity with cross-entropy.", "Because the teacher network's parameter count is proportional to tau^2.", "To ensure that the total loss value is always strictly bounded between 0 and 1.", "Because PyTorch's autograd engine automatically divides all backward losses by tau."], "answer": "A", "whyCorrect": "Deriving temperature-scaled softmax yields a 1/tau derivative factor, and the difference in softened probabilities (p_S - p_T) scales as 1/tau for high tau. Thus, the unscaled soft gradient scales as O(1/tau^2). Multiplying by tau^2 prevents this gradient from vanishing as temperature increases.", "whyOthers": "Option B is absurd; temperature is an inference/loss scalar unrelated to parameter counts. Option C is false; distillation loss is not bounded to [0, 1]. Option D is fabricated; PyTorch does not divide gradients by temperature.", "diagram": "d(D_KL)/dz_S ~ O(1/tau^2) ==> d(tau^2 * D_KL)/dz_S ~ O(1) (Gradient scale invariance across tau)"}, {"id": "q11", "part": "notes", "flavor": "connect", "anchor": "NOTES.md#topic-6", "prompt": "What surprising empirical phenomenon links self-distillation (distilling a model into a student of identical architecture and capacity) with training set noise filtering?", "options": ["The student model diverges immediately because KL divergence between identical models evaluates to negative infinity.", "The student model's parameters become an exact clone of the teacher within one training step.", "The distilled student frequently outperforms the teacher by acting as an epistemic regularizer that filters out label noise and smooths decision boundaries.", "The student model automatically compresses its weights into 8-bit integers without quantization-aware training."], "answer": "C", "whyCorrect": "Self-distillation regularizes training: the teacher's soft probability distributions prevent the student from overfitting to hard label noise or corrupted labels in the training set, leading to smoother decision boundaries and improved test accuracy.", "whyOthers": "Option A is false; KL divergence is non-negative and finite. Option B is false; SGD optimization does not copy parameters in one step. Option D confuses knowledge distillation with post-training integer quantization.", "diagram": "Self-Distillation (Teacher Size = Student Size) ==> Filters label noise ==> Outperforms base teacher!"}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

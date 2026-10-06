@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lecture 53: SGD, RMSprop, Adam: Optimizers — Diagnostic Quiz</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Lecture 53: SGD, RMSprop, Adam: Optimizers — Diagnostic Quiz</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. Mastery check for SGD, Heavy Ball Momentum, RMSprop, Adam, Hessian Eigenvalue Geometry, and Generalization Dynamics</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q01", "part": "prerequisites", "flavor": "concept", "anchor": "PREREQUISITES.md#p1", "prompt": "For an objective function with Hessian matrix H, what is the maximum theoretical learning rate alpha that guarantees gradient descent will not diverge along the steepest curvature coordinate?", "options": ["alpha < 1 / det(H)", "alpha < 2 / lambda_max(H), where lambda_max(H) is the spectral radius (maximal eigenvalue) of the Hessian.", "alpha < Tr(H) / 2", "alpha < 1 / (2 * lambda_min(H))"], "answer": "B", "whyCorrect": "Taylor series expansion along the principal eigenvector reveals the linear recurrence theta_{t+1} = (1 - alpha * lambda_max) * theta_t. The contraction factor must satisfy |1 - alpha * lambda_max| < 1, which strictly requires alpha < 2 / lambda_max.", "whyOthers": "Option A confuses the spectral radius with the matrix determinant. Option C uses the trace (sum of eigenvalues), which is irrelevant to the single worst-case divergence direction. Option D uses lambda_min, which would produce a massive learning rate that violently diverges along steep coordinates.", "diagram": "Contraction factor: |1 - alpha * lambda_max| < 1 ==> alpha < 2 / lambda_max (Theoretical Stability Threshold)"}, {"id": "q02", "part": "prerequisites", "flavor": "mechanism", "anchor": "PREREQUISITES.md#p2", "prompt": "In Polyak's Heavy Ball momentum formulation m_t = beta_1 * m_{t-1} + (1 - beta_1) * g_t with beta_1 = 0.95, what is the effective time horizon (number of past gradient steps) integrated into the current velocity?", "options": ["Exactly 1 step (only the previous gradient is remembered).", "95 steps (equal to 100 * beta_1).", "20 steps, derived from the effective exponential window tau_eff = 1 / (1 - beta_1).", "Infinite steps with uniform equal weight across all history."], "answer": "C", "whyCorrect": "The unrolled geometric series weights past gradients by (1 - beta_1) * beta_1^k. Summing this geometric decay reveals that the center of mass or effective memory window is tau_eff = 1 / (1 - beta_1) = 1 / (1 - 0.95) = 1 / 0.05 = 20 steps.", "whyOthers": "Option A describes vanilla SGD without momentum. Option B is an arbitrary multiplication. Option D ignores the exponential decay beta_1^k, which gives negligible weight to distant history.", "diagram": "tau_eff = 1 / (1 - beta_1) = 1 / (1 - 0.95) = 20 steps (Low-pass velocity filter)"}, {"id": "q03", "part": "prerequisites", "flavor": "math", "anchor": "PREREQUISITES.md#p3", "prompt": "Through physical dimensional analysis, why does dividing the gradient g_t by sqrt(v_t) + eps in RMSprop guarantee dimensionally consistent parameter updates?", "options": ["Because g_t has units [Loss / Theta] and sqrt(v_t) also has units [Loss / Theta], making the ratio g_t / sqrt(v_t) strictly dimensionless, allowing scalar alpha (in units [Theta]) to scale parameters directly.", "Because sqrt(v_t) transforms Euclidean vector norms into Riemannian curvature manifolds.", "Because dividing by squared gradients converts continuous loss gradients into discrete boolean bit shifts.", "Because the units of v_t cancel out the batch size dimension B."], "answer": "A", "whyCorrect": "Since g_t = dL/d(theta) has physical dimension [Loss/Theta], squared gradients g_t^2 and their running average v_t carry dimension [Loss^2 / Theta^2]. Taking the square root yields [Loss/Theta]. The quotient g_t / sqrt(v_t) is strictly dimensionless, ensuring that Delta theta = -alpha * (g_t / sqrt(v_t)) carries the exact physical dimension of parameter theta.", "whyOthers": "Option B uses pseudo-mathematical buzzwords unrelated to unit dimensions. Option C is nonsensical; neural network parameters remain continuous floats. Option D confuses batch dimensions with physical unit analysis.", "diagram": "[g_t] = Loss/Theta, [sqrt(v_t)] = Loss/Theta ==> [g_t / sqrt(v_t)] = 1 (Dimensionless scaling)"}, {"id": "q04", "part": "prerequisites", "flavor": "numerical", "anchor": "PREREQUISITES.md#p4", "prompt": "Under Prof. Prathosh's Bernoulli model where the sign of each Hessian eigenvalue has probability p = 0.99 of being positive, what is the probability that a critical point in a 1,000-parameter neural network is a true local minimum?", "options": ["Exactly 0.99 (99% probability).", "0.50 (50% probability by symmetry).", "Approximately 0.01 (1% probability).", "Approximately 4.32 x 10^-5 (approximately 1 in 23,000)."], "answer": "D", "whyCorrect": "For a critical point to be a local minimum, all P = 1000 eigenvalues must be strictly positive. Under the independent Bernoulli model, P(All lambda_i > 0) = p^P = (0.99)^1000 = exp(1000 * ln(0.99)) = exp(-10.0503) = 4.32 x 10^-5. Even with a 99% individual positivity rate, local minima are vanishingly rare.", "whyOthers": "Option A assumes the probability does not decay with dimension. Option B assumes an unbiased coin toss for the whole matrix. Option C is off by three orders of magnitude.", "diagram": "P(Local Min) = (0.99)^1000 = 4.32e-5 (Only 1 in 23,000 critical points is a local minimum!)"}, {"id": "q05", "part": "notes", "flavor": "derivation", "anchor": "NOTES.md#topic-1", "prompt": "Why does Vanilla SGD with a single fixed scalar learning rate alpha fail on an ill-conditioned quadratic ravine with condition number kappa = lambda_max / lambda_min = 1000?", "options": ["Because the gradient operator becomes non-differentiable on quadratic manifolds.", "Because the number of iterations required for backpropagation exceeds PyTorch's recursion limit.", "Because stability requires alpha < 2 / lambda_max, which forces the step size along the shallow direction to be bounded by 2 / (1000 * lambda_min), stalling progress along the valley floor.", "Because quadratic functions cannot be evaluated on GPU hardware."], "answer": "C", "whyCorrect": "To prevent explosive oscillations along the steep canyon wall, alpha must satisfy alpha < 2/lambda_max. When kappa = 1000, this forces alpha to be extremely small relative to the flat direction, meaning progress per step along the valley floor is at most (1 - 2/kappa) = 0.998, requiring thousands of steps to make even trivial headway.", "whyOthers": "Option A is false; quadratics are infinitely smooth C-infinity functions. Option B is false; PyTorch iterations are simple loops, not recursive calls. Option D is absurd; GPUs excel at quadratic matrix operations.", "diagram": "Steep axis forces tiny alpha < 2/lambda_max ==> Progress on flat axis = alpha * lambda_min < 2/kappa = 0.002 (Stalled!)"}, {"id": "q06", "part": "notes", "flavor": "mechanism", "anchor": "NOTES.md#topic-2", "prompt": "How does Heavy Ball momentum physically resolve the ill-conditioned ravine problem where gradients alternate signs across the valley walls?", "options": ["The velocity accumulator m_t averages out the alternating sign components (+g, -g, +g) across the steep walls, while compounding the consistent one-directional pushes down the valley floor.", "Momentum replaces the neural network weights with an analytical closed-form linear regression formula.", "Momentum zeroes out all second-order derivatives in the Hessian matrix.", "Momentum forces all minibatches to be drawn exclusively from the global minimum."], "answer": "A", "whyCorrect": "Because momentum is an exponentially decaying moving average, high-frequency oscillations with alternating signs sum to approximately zero: sum beta_1^k (+/- g) ~ 0. Conversely, along the valley floor where gradients have consistent signs, the momentum accumulator builds forward velocity, accelerating descent.", "whyOthers": "Option B is false; momentum is an iterative first-order optimizer, not a closed-form solver. Option C is false; momentum does not modify the Hessian. Option D describes an impossible clairvoyant sampling procedure.", "diagram": "Transverse (Wall): +20, -18, +19 ==> sum ~ 0 (Cancelled!)\nLongitudinal (Floor): +2, +2, +2 ==> Velocity accelerates!"}, {"id": "q07", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#topic-3", "prompt": "Why did Geoffrey Hinton introduce RMSprop's exponential moving average v_t = beta_2 * v_{t-1} + (1 - beta_2) * g_t^2 rather than using AdaGrad's cumulative sum v_t = v_{t-1} + g_t^2?", "options": ["Because AdaGrad requires computing full matrix determinants which is O(P^3).", "Because AdaGrad's cumulative sum of squared gradients grows monotonically toward infinity, causing the effective learning rate alpha / sqrt(v_t) to vanish prematurely in deep networks.", "Because AdaGrad cannot be implemented on floating-point hardware.", "Because RMSprop automatically eliminates the need for a training dataset."], "answer": "B", "whyCorrect": "In AdaGrad, v_t monotonically increases with every step: v_t = sum_{i=1}^t g_i^2. In deep learning across millions of iterations, v_t becomes gigantic, causing the effective step size to shrink to zero long before approaching the optimal basin. RMSprop replaces the monotonic sum with an exponential moving average, allowing the optimizer to 'forget' distant historical gradients.", "whyOthers": "Option A is false; AdaGrad uses diagonal elements and is O(P), not O(P^3). Option C is false; AdaGrad is trivially implemented in floating point. Option D is absurd.", "diagram": "AdaGrad: v_t -> infinity ==> Step -> 0 (Premature freezing!)\nRMSprop: v_t = beta_2 * v_{t-1} + (1-beta_2)*g_t^2 (Continuous adaptation)"}, {"id": "q08", "part": "notes", "flavor": "math", "anchor": "NOTES.md#topic-4", "prompt": "At step t = 1 with beta_1 = 0.9 and beta_2 = 0.999, what would happen to the effective step size in Adam if bias corrections were omitted?", "options": ["The step size would be exactly zero because zero divided by any number is zero.", "The step size would be reduced by 1000x, causing optimization to freeze.", "The parameter vector would immediately diverge to NaN due to square root of negative numbers.", "The step size would suffer an uncalibrated distortion factor of (1 - beta_1) / sqrt(1 - beta_2) = 0.1 / sqrt(0.001) = sqrt(10) approx 3.16x."], "answer": "D", "whyCorrect": "With m_0 = 0 and v_0 = 0, at step 1: m_1 = (1 - beta_1) * g_1 = 0.1 * g_1, and v_1 = (1 - beta_2) * g_1^2 = 0.001 * g_1^2. The uncorrected ratio is m_1 / sqrt(v_1) = (0.1 * g_1) / (sqrt(0.001) * |g_1|) = (0.1 / 0.03162) * sign(g_1) = sqrt(10) * sign(g_1) approx 3.162 * sign(g_1). Bias correction divides by (1 - beta^t), exactly eliminating this 3.16x distortion factor.", "whyOthers": "Option A is false; m_1 and v_1 are non-zero after receiving gradient g_1. Option B is the opposite of reality; uncorrected steps are 3.16x too large, not 1000x too small. Option C is false; squared gradients are non-negative.", "diagram": "Uncorrected: 0.1 / sqrt(0.001) = 3.16x distortion!\nCorrected: m_hat_1 / sqrt(v_hat_1) = g_1 / |g_1| = sign(g_1) (Exact unit step)"}, {"id": "q09", "part": "notes", "flavor": "proof", "anchor": "NOTES.md#topic-5", "prompt": "What does Prof. Prathosh's Bernoulli eigenvalue argument prove regarding critical points (points where grad R(theta) = 0) in deep neural networks with P >= 10^6 parameters?", "options": ["Critical points are overwhelmingly saddle points rather than local minima, because the probability that all 10^6 eigenvalues of the Hessian are positive scales as p^P -> 0.", "All critical points in deep learning are global minima with identical zero empirical risk.", "The Hessian matrix is always strictly singular with rank exactly equal to 1.", "Stochastic gradient descent is mathematically incapable of taking more than P steps."], "answer": "A", "whyCorrect": "For a critical point to be a local minimum, all P eigenvalues must be strictly positive. Modeling eigenvalue signs as Bernoulli(p), the joint probability is p^P. For P = 10^6, even with p = 0.999, p^P = (0.999)^10^6 approx 10^-435 approx 0. Critical points almost surely possess negative-curvature directions, proving they are saddle points.", "whyOthers": "Option B is contradicted by non-convex optimization theory; deep loss surfaces have varied energy levels. Option C is false; empirical Hessians have non-trivial rank spectra. Option D is absurd.", "diagram": "lim_{P -> infinity} p^P = 0 ==> Critical points are 99.999...% Saddle Points, NOT Local Minima!"}, {"id": "q10", "part": "notes", "flavor": "connect", "anchor": "NOTES.md#executive-summary", "prompt": "How does the master chain of optimization connect empirical risk minimization on ill-conditioned ravines through momentum and RMSprop second moments to high-dimensional saddle point traversal and validation checkpoints?", "options": ["By replacing all backpropagation gradients with Monte Carlo tree search rollouts.", "Vanilla SGD fails on ravines due to fixed alpha pathologies; momentum filters directional chatter; RMSprop normalizes coordinate curvature scales; Adam unifies both with bias correction to traverse ubiquitous high-dimensional saddles; and validation checkpoints capture empirical generalization peaks where theoretical gradient stopping criteria fail.", "By proving that all neural network training is convex and converges in a single matrix inversion.", "By eliminating the need to evaluate validation data through asymptotic Lyapunov functions."], "answer": "B", "whyCorrect": "This captures the foundational worldview arc of the lecture: vanilla SGD with fixed alpha is defeated by anisotropic ravines; momentum provides heavy-ball velocity to damp cross-axis oscillations; RMSprop provides diagonal coordinate normalization; Adam unifies them into the modern workhorse optimizer capable of traversing high-dimensional saddle-dominated landscapes; and validation checkpoints govern early stopping because gradient norms cannot serve as stopping criteria in non-convex learning.", "whyOthers": "Option A confuses continuous optimization with discrete reinforcement learning tree search. Option C is completely false; deep learning is profoundly non-convex. Option D is false; validation evaluation is the core empirical truth.", "diagram": "ERM Ravines -> Momentum (Velocity) + RMSprop (Scale) -> Adam (Unified) -> Saddle Traversal -> Validation Checkpoint"}, {"id": "q11", "part": "notes", "flavor": "definition", "anchor": "NOTES.md#topic-6", "prompt": "What is the precise definition and production role of a 'model checkpoint' theta* in modern deep learning frameworks (such as PyTorch and Hugging Face)?", "options": ["A software unit test that asserts whether the GPU cooling fan is functioning properly.", "A temporary cache file storing raw uncompressed video frames from YouTube.", "A serialized snapshot of model parameter tensors theta in R^P saved at an optimal validation step t*, serving as the foundation asset for deployment, downstream transfer learning, or distillation.", "A cryptographic hash proving that a model was trained on proprietary enterprise servers."], "answer": "C", "whyCorrect": "A model checkpoint is the serialized parameter state dict theta* captured during training at the point of minimal validation error. Because deep learning lacks theoretical stopping criteria, checkpoints are the concrete deployable artifacts distributed across repositories for inference, fine-tuning, or distillation.", "whyOthers": "Option A describes hardware monitoring. Option B describes video caching. Option D describes cryptographic proof of training or digital watermarking.", "diagram": "Training Trajectory {theta_1, theta_2, ..., theta_T} -> Validation Minimum t* -> Checkpoint theta* (Hugging Face / PyTorch Hub)"}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

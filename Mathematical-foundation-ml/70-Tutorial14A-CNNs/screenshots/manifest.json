@@ -1,0 +1,648 @@
+{
+  "duration_seconds": 2032.0,
+  "range_source": "youtube-chapters",
+  "range_count": 7,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 65.0,
+      "slug": "introduction-to-cnns"
+    },
+    {
+      "index": 2,
+      "start": 65.0,
+      "end": 341.0,
+      "slug": "visualizing-cnn-components"
+    },
+    {
+      "index": 3,
+      "start": 341.0,
+      "end": 786.0,
+      "slug": "convolution-operation-details"
+    },
+    {
+      "index": 4,
+      "start": 786.0,
+      "end": 1023.0,
+      "slug": "pooling-and-network-architecture"
+    },
+    {
+      "index": 5,
+      "start": 1023.0,
+      "end": 1275.0,
+      "slug": "lenet-architecture-overview"
+    },
+    {
+      "index": 6,
+      "start": 1275.0,
+      "end": 1749.0,
+      "slug": "implementing-lenet-in-pytorch"
+    },
+    {
+      "index": 7,
+      "start": 1749.0,
+      "end": 2032.0,
+      "slug": "alexnet-and-future-outlook"
+    }
+  ],
+  "raw_count": 36,
+  "composite_count": 9,
+  "raw": [
+    {
+      "file": "raw/001-ch01-introduction-to-cnns-t0005s.png",
+      "seconds": 5.2,
+      "chapter": 1,
+      "slug": "introduction-to-cnns",
+      "label": "00:05",
+      "range_start": 0.0,
+      "range_end": 65.0
+    },
+    {
+      "file": "raw/002-ch01-introduction-to-cnns-t0023s.png",
+      "seconds": 23.4,
+      "chapter": 1,
+      "slug": "introduction-to-cnns",
+      "label": "00:23",
+      "range_start": 0.0,
+      "range_end": 65.0
+    },
+    {
+      "file": "raw/003-ch01-introduction-to-cnns-t0041s.png",
+      "seconds": 41.6,
+      "chapter": 1,
+      "slug": "introduction-to-cnns",
+      "label": "00:41",
+      "range_start": 0.0,
+      "range_end": 65.0
+    },
+    {
+      "file": "raw/004-ch01-introduction-to-cnns-t0059s.png",
+      "seconds": 59.8,
+      "chapter": 1,
+      "slug": "introduction-to-cnns",
+      "label": "00:59",
+      "range_start": 0.0,
+      "range_end": 65.0
+    },
+    {
+      "file": "raw/005-ch02-visualizing-cnn-components-t0087s.png",
+      "seconds": 87.1,
+      "chapter": 2,
+      "slug": "visualizing-cnn-components",
+      "label": "01:27",
+      "range_start": 65.0,
+      "range_end": 341.0
+    },
+    {
+      "file": "raw/006-ch02-visualizing-cnn-components-t0164s.png",
+      "seconds": 164.4,
+      "chapter": 2,
+      "slug": "visualizing-cnn-components",
+      "label": "02:44",
+      "range_start": 65.0,
+      "range_end": 341.0
+    },
+    {
+      "file": "raw/007-ch02-visualizing-cnn-components-t0241s.png",
+      "seconds": 241.6,
+      "chapter": 2,
+      "slug": "visualizing-cnn-components",
+      "label": "04:01",
+      "range_start": 65.0,
+      "range_end": 341.0
+    },
+    {
+      "file": "raw/008-ch02-visualizing-cnn-components-t0318s.png",
+      "seconds": 318.9,
+      "chapter": 2,
+      "slug": "visualizing-cnn-components",
+      "label": "05:18",
+      "range_start": 65.0,
+      "range_end": 341.0
+    },
+    {
+      "file": "raw/009-ch03-convolution-operation-details-t0376s.png",
+      "seconds": 376.6,
+      "chapter": 3,
+      "slug": "convolution-operation-details",
+      "label": "06:16",
+      "range_start": 341.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "raw/010-ch03-convolution-operation-details-t0430s.png",
+      "seconds": 430.0,
+      "chapter": 3,
+      "slug": "convolution-operation-details",
+      "label": "07:10",
+      "range_start": 341.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "raw/011-ch03-convolution-operation-details-t0483s.png",
+      "seconds": 483.4,
+      "chapter": 3,
+      "slug": "convolution-operation-details",
+      "label": "08:03",
+      "range_start": 341.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "raw/012-ch03-convolution-operation-details-t0536s.png",
+      "seconds": 536.8,
+      "chapter": 3,
+      "slug": "convolution-operation-details",
+      "label": "08:56",
+      "range_start": 341.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "raw/013-ch03-convolution-operation-details-t0590s.png",
+      "seconds": 590.2,
+      "chapter": 3,
+      "slug": "convolution-operation-details",
+      "label": "09:50",
+      "range_start": 341.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "raw/014-ch03-convolution-operation-details-t0643s.png",
+      "seconds": 643.6,
+      "chapter": 3,
+      "slug": "convolution-operation-details",
+      "label": "10:43",
+      "range_start": 341.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "raw/015-ch03-convolution-operation-details-t0697s.png",
+      "seconds": 697.0,
+      "chapter": 3,
+      "slug": "convolution-operation-details",
+      "label": "11:37",
+      "range_start": 341.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "raw/016-ch03-convolution-operation-details-t0750s.png",
+      "seconds": 750.4,
+      "chapter": 3,
+      "slug": "convolution-operation-details",
+      "label": "12:30",
+      "range_start": 341.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "raw/017-ch04-pooling-and-network-architecture-t0804s.png",
+      "seconds": 805.0,
+      "chapter": 4,
+      "slug": "pooling-and-network-architecture",
+      "label": "13:24",
+      "range_start": 786.0,
+      "range_end": 1023.0
+    },
+    {
+      "file": "raw/018-ch04-pooling-and-network-architecture-t0871s.png",
+      "seconds": 871.3,
+      "chapter": 4,
+      "slug": "pooling-and-network-architecture",
+      "label": "14:31",
+      "range_start": 786.0,
+      "range_end": 1023.0
+    },
+    {
+      "file": "raw/019-ch04-pooling-and-network-architecture-t0937s.png",
+      "seconds": 937.7,
+      "chapter": 4,
+      "slug": "pooling-and-network-architecture",
+      "label": "15:37",
+      "range_start": 786.0,
+      "range_end": 1023.0
+    },
+    {
+      "file": "raw/020-ch04-pooling-and-network-architecture-t1004s.png",
+      "seconds": 1004.0,
+      "chapter": 4,
+      "slug": "pooling-and-network-architecture",
+      "label": "16:44",
+      "range_start": 786.0,
+      "range_end": 1023.0
+    },
+    {
+      "file": "raw/021-ch05-lenet-architecture-overview-t1043s.png",
+      "seconds": 1043.2,
+      "chapter": 5,
+      "slug": "lenet-architecture-overview",
+      "label": "17:23",
+      "range_start": 1023.0,
+      "range_end": 1275.0
+    },
+    {
+      "file": "raw/022-ch05-lenet-architecture-overview-t1113s.png",
+      "seconds": 1113.7,
+      "chapter": 5,
+      "slug": "lenet-architecture-overview",
+      "label": "18:33",
+      "range_start": 1023.0,
+      "range_end": 1275.0
+    },
+    {
+      "file": "raw/023-ch05-lenet-architecture-overview-t1184s.png",
+      "seconds": 1184.3,
+      "chapter": 5,
+      "slug": "lenet-architecture-overview",
+      "label": "19:44",
+      "range_start": 1023.0,
+      "range_end": 1275.0
+    },
+    {
+      "file": "raw/024-ch05-lenet-architecture-overview-t1254s.png",
+      "seconds": 1254.8,
+      "chapter": 5,
+      "slug": "lenet-architecture-overview",
+      "label": "20:54",
+      "range_start": 1023.0,
+      "range_end": 1275.0
+    },
+    {
+      "file": "raw/025-ch06-implementing-lenet-in-pytorch-t1312s.png",
+      "seconds": 1312.9,
+      "chapter": 6,
+      "slug": "implementing-lenet-in-pytorch",
+      "label": "21:52",
+      "range_start": 1275.0,
+      "range_end": 1749.0
+    },
+    {
+      "file": "raw/026-ch06-implementing-lenet-in-pytorch-t1369s.png",
+      "seconds": 1369.8,
+      "chapter": 6,
+      "slug": "implementing-lenet-in-pytorch",
+      "label": "22:49",
+      "range_start": 1275.0,
+      "range_end": 1749.0
+    },
+    {
+      "file": "raw/027-ch06-implementing-lenet-in-pytorch-t1426s.png",
+      "seconds": 1426.7,
+      "chapter": 6,
+      "slug": "implementing-lenet-in-pytorch",
+      "label": "23:46",
+      "range_start": 1275.0,
+      "range_end": 1749.0
+    },
+    {
+      "file": "raw/028-ch06-implementing-lenet-in-pytorch-t1483s.png",
+      "seconds": 1483.6,
+      "chapter": 6,
+      "slug": "implementing-lenet-in-pytorch",
+      "label": "24:43",
+      "range_start": 1275.0,
+      "range_end": 1749.0
+    },
+    {
+      "file": "raw/029-ch06-implementing-lenet-in-pytorch-t1540s.png",
+      "seconds": 1540.4,
+      "chapter": 6,
+      "slug": "implementing-lenet-in-pytorch",
+      "label": "25:40",
+      "range_start": 1275.0,
+      "range_end": 1749.0
+    },
+    {
+      "file": "raw/030-ch06-implementing-lenet-in-pytorch-t1597s.png",
+      "seconds": 1597.3,
+      "chapter": 6,
+      "slug": "implementing-lenet-in-pytorch",
+      "label": "26:37",
+      "range_start": 1275.0,
+      "range_end": 1749.0
+    },
+    {
+      "file": "raw/031-ch06-implementing-lenet-in-pytorch-t1654s.png",
+      "seconds": 1654.2,
+      "chapter": 6,
+      "slug": "implementing-lenet-in-pytorch",
+      "label": "27:34",
+      "range_start": 1275.0,
+      "range_end": 1749.0
+    },
+    {
+      "file": "raw/032-ch06-implementing-lenet-in-pytorch-t1711s.png",
+      "seconds": 1711.1,
+      "chapter": 6,
+      "slug": "implementing-lenet-in-pytorch",
+      "label": "28:31",
+      "range_start": 1275.0,
+      "range_end": 1749.0
+    },
+    {
+      "file": "raw/033-ch07-alexnet-and-future-outlook-t1771s.png",
+      "seconds": 1771.6,
+      "chapter": 7,
+      "slug": "alexnet-and-future-outlook",
+      "label": "29:31",
+      "range_start": 1749.0,
+      "range_end": 2032.0
+    },
+    {
+      "file": "raw/034-ch07-alexnet-and-future-outlook-t1850s.png",
+      "seconds": 1850.9,
+      "chapter": 7,
+      "slug": "alexnet-and-future-outlook",
+      "label": "30:50",
+      "range_start": 1749.0,
+      "range_end": 2032.0
+    },
+    {
+      "file": "raw/035-ch07-alexnet-and-future-outlook-t1930s.png",
+      "seconds": 1930.1,
+      "chapter": 7,
+      "slug": "alexnet-and-future-outlook",
+      "label": "32:10",
+      "range_start": 1749.0,
+      "range_end": 2032.0
+    },
+    {
+      "file": "raw/036-ch07-alexnet-and-future-outlook-t2009s.png",
+      "seconds": 2009.4,
+      "chapter": 7,
+      "slug": "alexnet-and-future-outlook",
+      "label": "33:29",
+      "range_start": 1749.0,
+      "range_end": 2032.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-introduction-to-cnns-panel1of1.png",
+      "chapter": 1,
+      "slug": "introduction-to-cnns",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-introduction-to-cnns-t0005s.png",
+        "002-ch01-introduction-to-cnns-t0023s.png",
+        "003-ch01-introduction-to-cnns-t0041s.png",
+        "004-ch01-introduction-to-cnns-t0059s.png"
+      ],
+      "labels": [
+        "ch1 00:05",
+        "ch1 00:23",
+        "ch1 00:41",
+        "ch1 00:59"
+      ],
+      "tile_seconds": [
+        5.2,
+        23.4,
+        41.6,
+        59.8
+      ],
+      "time_start": 5.2,
+      "time_end": 59.8,
+      "range_start": 0.0,
+      "range_end": 65.0
+    },
+    {
+      "file": "composites/ch02-visualizing-cnn-components-panel1of1.png",
+      "chapter": 2,
+      "slug": "visualizing-cnn-components",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-visualizing-cnn-components-t0087s.png",
+        "006-ch02-visualizing-cnn-components-t0164s.png",
+        "007-ch02-visualizing-cnn-components-t0241s.png",
+        "008-ch02-visualizing-cnn-components-t0318s.png"
+      ],
+      "labels": [
+        "ch2 01:27",
+        "ch2 02:44",
+        "ch2 04:01",
+        "ch2 05:18"
+      ],
+      "tile_seconds": [
+        87.1,
+        164.4,
+        241.6,
+        318.9
+      ],
+      "time_start": 87.1,
+      "time_end": 318.9,
+      "range_start": 65.0,
+      "range_end": 341.0
+    },
+    {
+      "file": "composites/ch03-convolution-operation-details-panel1of2.png",
+      "chapter": 3,
+      "slug": "convolution-operation-details",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "009-ch03-convolution-operation-details-t0376s.png",
+        "010-ch03-convolution-operation-details-t0430s.png",
+        "011-ch03-convolution-operation-details-t0483s.png",
+        "012-ch03-convolution-operation-details-t0536s.png"
+      ],
+      "labels": [
+        "ch3 06:16",
+        "ch3 07:10",
+        "ch3 08:03",
+        "ch3 08:56"
+      ],
+      "tile_seconds": [
+        376.6,
+        430.0,
+        483.4,
+        536.8
+      ],
+      "time_start": 376.6,
+      "time_end": 536.8,
+      "range_start": 341.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "composites/ch03-convolution-operation-details-panel2of2.png",
+      "chapter": 3,
+      "slug": "convolution-operation-details",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "013-ch03-convolution-operation-details-t0590s.png",
+        "014-ch03-convolution-operation-details-t0643s.png",
+        "015-ch03-convolution-operation-details-t0697s.png",
+        "016-ch03-convolution-operation-details-t0750s.png"
+      ],
+      "labels": [
+        "ch3 09:50",
+        "ch3 10:43",
+        "ch3 11:37",
+        "ch3 12:30"
+      ],
+      "tile_seconds": [
+        590.2,
+        643.6,
+        697.0,
+        750.4
+      ],
+      "time_start": 590.2,
+      "time_end": 750.4,
+      "range_start": 341.0,
+      "range_end": 786.0
+    },
+    {
+      "file": "composites/ch04-pooling-and-network-architecture-panel1of1.png",
+      "chapter": 4,
+      "slug": "pooling-and-network-architecture",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "017-ch04-pooling-and-network-architecture-t0804s.png",
+        "018-ch04-pooling-and-network-architecture-t0871s.png",
+        "019-ch04-pooling-and-network-architecture-t0937s.png",
+        "020-ch04-pooling-and-network-architecture-t1004s.png"
+      ],
+      "labels": [
+        "ch4 13:24",
+        "ch4 14:31",
+        "ch4 15:37",
+        "ch4 16:44"
+      ],
+      "tile_seconds": [
+        805.0,
+        871.3,
+        937.7,
+        1004.0
+      ],
+      "time_start": 805.0,
+      "time_end": 1004.0,
+      "range_start": 786.0,
+      "range_end": 1023.0
+    },
+    {
+      "file": "composites/ch05-lenet-architecture-overview-panel1of1.png",
+      "chapter": 5,
+      "slug": "lenet-architecture-overview",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "021-ch05-lenet-architecture-overview-t1043s.png",
+        "022-ch05-lenet-architecture-overview-t1113s.png",
+        "023-ch05-lenet-architecture-overview-t1184s.png",
+        "024-ch05-lenet-architecture-overview-t1254s.png"
+      ],
+      "labels": [
+        "ch5 17:23",
+        "ch5 18:33",
+        "ch5 19:44",
+        "ch5 20:54"
+      ],
+      "tile_seconds": [
+        1043.2,
+        1113.7,
+        1184.3,
+        1254.8
+      ],
+      "time_start": 1043.2,
+      "time_end": 1254.8,
+      "range_start": 1023.0,
+      "range_end": 1275.0
+    },
+    {
+      "file": "composites/ch06-implementing-lenet-in-pytorch-panel1of2.png",
+      "chapter": 6,
+      "slug": "implementing-lenet-in-pytorch",
+      "panel": 1,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "025-ch06-implementing-lenet-in-pytorch-t1312s.png",
+        "026-ch06-implementing-lenet-in-pytorch-t1369s.png",
+        "027-ch06-implementing-lenet-in-pytorch-t1426s.png",
+        "028-ch06-implementing-lenet-in-pytorch-t1483s.png"
+      ],
+      "labels": [
+        "ch6 21:52",
+        "ch6 22:49",
+        "ch6 23:46",
+        "ch6 24:43"
+      ],
+      "tile_seconds": [
+        1312.9,
+        1369.8,
+        1426.7,
+        1483.6
+      ],
+      "time_start": 1312.9,
+      "time_end": 1483.6,
+      "range_start": 1275.0,
+      "range_end": 1749.0
+    },
+    {
+      "file": "composites/ch06-implementing-lenet-in-pytorch-panel2of2.png",
+      "chapter": 6,
+      "slug": "implementing-lenet-in-pytorch",
+      "panel": 2,
+      "panels_in_chapter": 2,
+      "tiles": [
+        "029-ch06-implementing-lenet-in-pytorch-t1540s.png",
+        "030-ch06-implementing-lenet-in-pytorch-t1597s.png",
+        "031-ch06-implementing-lenet-in-pytorch-t1654s.png",
+        "032-ch06-implementing-lenet-in-pytorch-t1711s.png"
+      ],
+      "labels": [
+        "ch6 25:40",
+        "ch6 26:37",
+        "ch6 27:34",
+        "ch6 28:31"
+      ],
+      "tile_seconds": [
+        1540.4,
+        1597.3,
+        1654.2,
+        1711.1
+      ],
+      "time_start": 1540.4,
+      "time_end": 1711.1,
+      "range_start": 1275.0,
+      "range_end": 1749.0
+    },
+    {
+      "file": "composites/ch07-alexnet-and-future-outlook-panel1of1.png",
+      "chapter": 7,
+      "slug": "alexnet-and-future-outlook",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "033-ch07-alexnet-and-future-outlook-t1771s.png",
+        "034-ch07-alexnet-and-future-outlook-t1850s.png",
+        "035-ch07-alexnet-and-future-outlook-t1930s.png",
+        "036-ch07-alexnet-and-future-outlook-t2009s.png"
+      ],
+      "labels": [
+        "ch7 29:31",
+        "ch7 30:50",
+        "ch7 32:10",
+        "ch7 33:29"
+      ],
+      "tile_seconds": [
+        1771.6,
+        1850.9,
+        1930.1,
+        2009.4
+      ],
+      "time_start": 1771.6,
+      "time_end": 2009.4,
+      "range_start": 1749.0,
+      "range_end": 2032.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

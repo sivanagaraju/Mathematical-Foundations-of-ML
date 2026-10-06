@@ -1,0 +1,305 @@
+{
+  "duration_seconds": 1012.0,
+  "range_source": "topic-ranges",
+  "range_count": 4,
+  "policy": "per-range multi-frame \u2192 2x2 composites; prefer topic-ranges.json; else chapters; else synthetic ~6min slices",
+  "frames_per_range_rule": {
+    "synthetic": "4 frames (1 panel) per ~6min slice",
+    "topic-ranges": "4 / 8 / 12 by topic length",
+    "chapters": "<5min:4 \u00b7 5-15min:8 \u00b7 >=15min:12",
+    "composites": "ceil(frames/4) panels per range"
+  },
+  "ranges": [
+    {
+      "index": 1,
+      "start": 0.0,
+      "end": 270.0,
+      "slug": "pytorch-recurrent-initialization-input-geometry-"
+    },
+    {
+      "index": 2,
+      "start": 270.0,
+      "end": 510.0,
+      "slug": "end-to-end-many-to-one-sequence-classification-p"
+    },
+    {
+      "index": 3,
+      "start": 510.0,
+      "end": 750.0,
+      "slug": "deep-stacked-recurrent-networks-vertical-depth-l"
+    },
+    {
+      "index": 4,
+      "start": 750.0,
+      "end": 1012.0,
+      "slug": "bidirectional-recurrence-sequence-to-sequence-de"
+    }
+  ],
+  "raw_count": 16,
+  "composite_count": 4,
+  "raw": [
+    {
+      "file": "raw/001-ch01-pytorch-recurrent-initialization-input-geometry--t0021s.png",
+      "seconds": 21.6,
+      "chapter": 1,
+      "slug": "pytorch-recurrent-initialization-input-geometry-",
+      "label": "00:21",
+      "range_start": 0.0,
+      "range_end": 270.0
+    },
+    {
+      "file": "raw/002-ch01-pytorch-recurrent-initialization-input-geometry--t0097s.png",
+      "seconds": 97.2,
+      "chapter": 1,
+      "slug": "pytorch-recurrent-initialization-input-geometry-",
+      "label": "01:37",
+      "range_start": 0.0,
+      "range_end": 270.0
+    },
+    {
+      "file": "raw/003-ch01-pytorch-recurrent-initialization-input-geometry--t0172s.png",
+      "seconds": 172.8,
+      "chapter": 1,
+      "slug": "pytorch-recurrent-initialization-input-geometry-",
+      "label": "02:52",
+      "range_start": 0.0,
+      "range_end": 270.0
+    },
+    {
+      "file": "raw/004-ch01-pytorch-recurrent-initialization-input-geometry--t0248s.png",
+      "seconds": 248.4,
+      "chapter": 1,
+      "slug": "pytorch-recurrent-initialization-input-geometry-",
+      "label": "04:08",
+      "range_start": 0.0,
+      "range_end": 270.0
+    },
+    {
+      "file": "raw/005-ch02-end-to-end-many-to-one-sequence-classification-p-t0289s.png",
+      "seconds": 289.2,
+      "chapter": 2,
+      "slug": "end-to-end-many-to-one-sequence-classification-p",
+      "label": "04:49",
+      "range_start": 270.0,
+      "range_end": 510.0
+    },
+    {
+      "file": "raw/006-ch02-end-to-end-many-to-one-sequence-classification-p-t0356s.png",
+      "seconds": 356.4,
+      "chapter": 2,
+      "slug": "end-to-end-many-to-one-sequence-classification-p",
+      "label": "05:56",
+      "range_start": 270.0,
+      "range_end": 510.0
+    },
+    {
+      "file": "raw/007-ch02-end-to-end-many-to-one-sequence-classification-p-t0423s.png",
+      "seconds": 423.6,
+      "chapter": 2,
+      "slug": "end-to-end-many-to-one-sequence-classification-p",
+      "label": "07:03",
+      "range_start": 270.0,
+      "range_end": 510.0
+    },
+    {
+      "file": "raw/008-ch02-end-to-end-many-to-one-sequence-classification-p-t0490s.png",
+      "seconds": 490.8,
+      "chapter": 2,
+      "slug": "end-to-end-many-to-one-sequence-classification-p",
+      "label": "08:10",
+      "range_start": 270.0,
+      "range_end": 510.0
+    },
+    {
+      "file": "raw/009-ch03-deep-stacked-recurrent-networks-vertical-depth-l-t0529s.png",
+      "seconds": 529.2,
+      "chapter": 3,
+      "slug": "deep-stacked-recurrent-networks-vertical-depth-l",
+      "label": "08:49",
+      "range_start": 510.0,
+      "range_end": 750.0
+    },
+    {
+      "file": "raw/010-ch03-deep-stacked-recurrent-networks-vertical-depth-l-t0596s.png",
+      "seconds": 596.4,
+      "chapter": 3,
+      "slug": "deep-stacked-recurrent-networks-vertical-depth-l",
+      "label": "09:56",
+      "range_start": 510.0,
+      "range_end": 750.0
+    },
+    {
+      "file": "raw/011-ch03-deep-stacked-recurrent-networks-vertical-depth-l-t0663s.png",
+      "seconds": 663.6,
+      "chapter": 3,
+      "slug": "deep-stacked-recurrent-networks-vertical-depth-l",
+      "label": "11:03",
+      "range_start": 510.0,
+      "range_end": 750.0
+    },
+    {
+      "file": "raw/012-ch03-deep-stacked-recurrent-networks-vertical-depth-l-t0730s.png",
+      "seconds": 730.8,
+      "chapter": 3,
+      "slug": "deep-stacked-recurrent-networks-vertical-depth-l",
+      "label": "12:10",
+      "range_start": 510.0,
+      "range_end": 750.0
+    },
+    {
+      "file": "raw/013-ch04-bidirectional-recurrence-sequence-to-sequence-de-t0770s.png",
+      "seconds": 771.0,
+      "chapter": 4,
+      "slug": "bidirectional-recurrence-sequence-to-sequence-de",
+      "label": "12:50",
+      "range_start": 750.0,
+      "range_end": 1012.0
+    },
+    {
+      "file": "raw/014-ch04-bidirectional-recurrence-sequence-to-sequence-de-t0844s.png",
+      "seconds": 844.3,
+      "chapter": 4,
+      "slug": "bidirectional-recurrence-sequence-to-sequence-de",
+      "label": "14:04",
+      "range_start": 750.0,
+      "range_end": 1012.0
+    },
+    {
+      "file": "raw/015-ch04-bidirectional-recurrence-sequence-to-sequence-de-t0917s.png",
+      "seconds": 917.7,
+      "chapter": 4,
+      "slug": "bidirectional-recurrence-sequence-to-sequence-de",
+      "label": "15:17",
+      "range_start": 750.0,
+      "range_end": 1012.0
+    },
+    {
+      "file": "raw/016-ch04-bidirectional-recurrence-sequence-to-sequence-de-t0991s.png",
+      "seconds": 991.0,
+      "chapter": 4,
+      "slug": "bidirectional-recurrence-sequence-to-sequence-de",
+      "label": "16:31",
+      "range_start": 750.0,
+      "range_end": 1012.0
+    }
+  ],
+  "composites": [
+    {
+      "file": "composites/ch01-pytorch-recurrent-initialization-input-geometry--panel1of1.png",
+      "chapter": 1,
+      "slug": "pytorch-recurrent-initialization-input-geometry-",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "001-ch01-pytorch-recurrent-initialization-input-geometry--t0021s.png",
+        "002-ch01-pytorch-recurrent-initialization-input-geometry--t0097s.png",
+        "003-ch01-pytorch-recurrent-initialization-input-geometry--t0172s.png",
+        "004-ch01-pytorch-recurrent-initialization-input-geometry--t0248s.png"
+      ],
+      "labels": [
+        "ch1 00:21",
+        "ch1 01:37",
+        "ch1 02:52",
+        "ch1 04:08"
+      ],
+      "tile_seconds": [
+        21.6,
+        97.2,
+        172.8,
+        248.4
+      ],
+      "time_start": 21.6,
+      "time_end": 248.4,
+      "range_start": 0.0,
+      "range_end": 270.0
+    },
+    {
+      "file": "composites/ch02-end-to-end-many-to-one-sequence-classification-p-panel1of1.png",
+      "chapter": 2,
+      "slug": "end-to-end-many-to-one-sequence-classification-p",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "005-ch02-end-to-end-many-to-one-sequence-classification-p-t0289s.png",
+        "006-ch02-end-to-end-many-to-one-sequence-classification-p-t0356s.png",
+        "007-ch02-end-to-end-many-to-one-sequence-classification-p-t0423s.png",
+        "008-ch02-end-to-end-many-to-one-sequence-classification-p-t0490s.png"
+      ],
+      "labels": [
+        "ch2 04:49",
+        "ch2 05:56",
+        "ch2 07:03",
+        "ch2 08:10"
+      ],
+      "tile_seconds": [
+        289.2,
+        356.4,
+        423.6,
+        490.8
+      ],
+      "time_start": 289.2,
+      "time_end": 490.8,
+      "range_start": 270.0,
+      "range_end": 510.0
+    },
+    {
+      "file": "composites/ch03-deep-stacked-recurrent-networks-vertical-depth-l-panel1of1.png",
+      "chapter": 3,
+      "slug": "deep-stacked-recurrent-networks-vertical-depth-l",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "009-ch03-deep-stacked-recurrent-networks-vertical-depth-l-t0529s.png",
+        "010-ch03-deep-stacked-recurrent-networks-vertical-depth-l-t0596s.png",
+        "011-ch03-deep-stacked-recurrent-networks-vertical-depth-l-t0663s.png",
+        "012-ch03-deep-stacked-recurrent-networks-vertical-depth-l-t0730s.png"
+      ],
+      "labels": [
+        "ch3 08:49",
+        "ch3 09:56",
+        "ch3 11:03",
+        "ch3 12:10"
+      ],
+      "tile_seconds": [
+        529.2,
+        596.4,
+        663.6,
+        730.8
+      ],
+      "time_start": 529.2,
+      "time_end": 730.8,
+      "range_start": 510.0,
+      "range_end": 750.0
+    },
+    {
+      "file": "composites/ch04-bidirectional-recurrence-sequence-to-sequence-de-panel1of1.png",
+      "chapter": 4,
+      "slug": "bidirectional-recurrence-sequence-to-sequence-de",
+      "panel": 1,
+      "panels_in_chapter": 1,
+      "tiles": [
+        "013-ch04-bidirectional-recurrence-sequence-to-sequence-de-t0770s.png",
+        "014-ch04-bidirectional-recurrence-sequence-to-sequence-de-t0844s.png",
+        "015-ch04-bidirectional-recurrence-sequence-to-sequence-de-t0917s.png",
+        "016-ch04-bidirectional-recurrence-sequence-to-sequence-de-t0991s.png"
+      ],
+      "labels": [
+        "ch4 12:50",
+        "ch4 14:04",
+        "ch4 15:17",
+        "ch4 16:31"
+      ],
+      "tile_seconds": [
+        771.0,
+        844.3,
+        917.7,
+        991.0
+      ],
+      "time_start": 771.0,
+      "time_end": 991.0,
+      "range_start": 750.0,
+      "range_end": 1012.0
+    }
+  ],
+  "notes_embed_hint": "Assign each composite to ONE topic whose MM:SS overlaps time_start\u2013time_end (or range_start\u2013range_end). Never reuse the same composite path on multiple topics. If composite_count < topic_count, write raw/topic-ranges.json and re-run --frames-only."
+}

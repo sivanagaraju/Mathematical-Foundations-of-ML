@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz - Tutorial 15 Part 2 : Deep RNNs, LSTMs and GRUs</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a2332; --panel2: #243044; --text: #e7ecf3;
+      --muted: #9aabbf; --accent: #5b9fd4; --ok: #3dba7a; --bad: #e06c75;
+      --warn: #e5c07b; --border: #2d3a4f;
+      --mono: "Cascadia Code", "Fira Code", Consolas, monospace;
+      --sans: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; }
+    header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #1a2838 0%, var(--bg) 100%); }
+    header h1 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 650; }
+    header p { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 52rem; }
+    header a { color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+    .mode-toggle { display: inline-flex; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; overflow: hidden; }
+    .mode-toggle button { border: 0; background: transparent; color: var(--muted); padding: 0.45rem 0.9rem; cursor: pointer; font: inherit; }
+    .mode-toggle button.active { background: var(--accent); color: #0b1220; font-weight: 600; }
+    main { padding: 1.25rem 1.5rem 3rem; max-width: 52rem; margin: 0 auto; }
+    .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .qcard { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .qcard h2 { margin: 0 0 0.35rem; font-size: 1.02rem; font-weight: 650; }
+    .qmeta { color: var(--muted); font-size: 0.8rem; margin-bottom: 0.75rem; }
+    .opts { display: flex; flex-direction: column; gap: 0.45rem; }
+    .opt { display: flex; gap: 0.65rem; align-items: flex-start; padding: 0.65rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel2); cursor: pointer; }
+    .opt:hover { border-color: var(--accent); }
+    .opt.selected { border-color: var(--accent); background: #1e3348; box-shadow: inset 0 0 0 1px var(--accent); }
+    .opt input { margin-top: 0.25rem; accent-color: var(--accent); }
+    .opt.reveal-correct { border-color: var(--ok); background: #163528; }
+    .opt.reveal-wrong-picked { border-color: var(--bad); background: #3a1f24; }
+    .q-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    .q-actions button { font: inherit; border-radius: 8px; padding: 0.5rem 0.95rem; cursor: pointer; border: 1px solid var(--border); }
+    .q-actions .check-btn { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    .q-actions .check-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .q-actions .clear-btn { background: var(--panel2); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; position: sticky; bottom: 0; padding: 0.75rem 0; background: linear-gradient(transparent, var(--bg) 30%); }
+    button.primary, button.secondary { font: inherit; border-radius: 8px; padding: 0.65rem 1.1rem; cursor: pointer; border: 1px solid var(--border); }
+    button.primary { background: var(--accent); color: #0b1220; border-color: transparent; font-weight: 650; }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.secondary { background: var(--panel); color: var(--text); }
+    .score { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .score.show { display: block; }
+    .explain { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .explain.show { display: block; }
+    .explain h3 { margin: 0.75rem 0 0.4rem; font-size: 0.92rem; color: var(--warn); }
+    .verdict { font-weight: 650; margin-bottom: 0.5rem; }
+    .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); } .verdict.skip { color: var(--muted); }
+    .why { background: #121a24; border-radius: 8px; padding: 0.75rem 0.9rem; margin: 0.45rem 0; font-size: 0.92rem; }
+    .why .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+    pre.diagram { font-family: var(--mono); font-size: 0.76rem; line-height: 1.35; background: #0b1018; border: 1px solid var(--border); border-radius: 8px; padding: 0.85rem 1rem; overflow-x: auto; color: #c5d4e8; margin: 0.55rem 0; white-space: pre; }
+    .later { border-left: 3px solid var(--accent); padding-left: 0.75rem; color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+    .wizard-nav { display: none; gap: 0.5rem; }
+    body.mode-wizard .wizard-nav { display: flex; }
+    body.mode-wizard .qcard { display: none; }
+    body.mode-wizard .qcard.active { display: block; }
+    footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 0 1rem 2rem; }
+    .part-banner { margin: 1.25rem 0 0.75rem; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: #152032; }
+    .part-banner h2 { margin: 0 0 0.25rem; font-size: 1.05rem; color: var(--accent); }
+    .part-banner p { margin: 0; color: var(--muted); font-size: 0.88rem; }
+    .part-banner.notes { border-color: #3d5a40; background: #15241a; }
+    .part-banner.notes h2 { color: var(--ok); }
+    .part-pill { display: inline-block; font-size: 0.72rem; font-weight: 650; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .part-pill.prereq { background: #1e3a55; color: #8ec8f0; }
+    .part-pill.notes { background: #1e4030; color: #8fe0b0; }
+    .hint { font-size: 0.85rem; color: var(--muted); margin-top: 0.35rem; }
+  </style>
+</head>
+<body class="mode-all">
+  <header>
+    <h1>Quiz - Tutorial 15 Part 2 : Deep RNNs, LSTMs and GRUs</h1>
+    <p><strong>Two parts:</strong> <em>Part A</em> = <a href="./PREREQUISITES.md">PREREQUISITES.md</a> · <em>Part B</em> = <a href="./NOTES.md">NOTES.md</a>. Interactive self-assessment for Tutorial 15 Part 2</p>
+    <p class="hint" style="margin-top:0.5rem">Pick an option → <strong>Check this answer</strong> on that card to see why (per question). Optional: <strong>Score all</strong> for totals.</p>
+    <div class="toolbar">
+      <div class="mode-toggle">
+        <button type="button" id="mode-all" class="active">All at once</button>
+        <button type="button" id="mode-wizard">One at a time</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="progress" id="progress"></div>
+    <div class="score" id="score"></div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button type="button" class="primary" id="submit">Score all answered</button>
+      <button type="button" class="secondary" id="reset">Reset all</button>
+      <div class="wizard-nav">
+        <button type="button" class="secondary" id="prev">← Prev</button>
+        <button type="button" class="secondary" id="next">Next →</button>
+      </div>
+    </div>
+  </main>
+  <footer>Per-video quiz · check each question · Part A prereqs + Part B notes</footer>
+  <script>
+    const QUESTIONS = [{"id": "q01", "part": "prerequisites", "flavor": "definition", "anchor": "PREREQUISITES.md#p1", "prompt": "In a deep stacked recurrent network with L layers, what serves as the input sequence to intermediate layer l (for l >= 2)?", "options": ["The raw input feature vectors x_t in R^D", "The sequence of hidden states h_t^{(l-1)} emitted by the preceding layer l-1 across all time steps", "The classification logits from the output head", "A vector of random Gaussian noise"], "answer": "B", "whyCorrect": "In stacked recurrent networks, Layer 1 ingests raw inputs x_t, while each subsequent layer l ingests the sequence of hidden activations h_t^{(l-1)} generated by layer l-1.", "whyOthers": "Option A describes Layer 1 input only. Option C is the downstream model prediction. Option D is unrelated noise injection.", "diagram": "x_t -> [Layer 1] -> h_t^{(1)} -> [Layer 2] -> h_t^{(2)} -> ... -> [Layer L] -> h_t^{(L)}"}, {"id": "q02", "part": "prerequisites", "flavor": "compare", "anchor": "PREREQUISITES.md#p2", "prompt": "How does the sequence tensor 'output' differ in structure and content from the recurrent state tensor 'h_n' in PyTorch multi-layer models?", "options": ["output contains hidden states strictly from the top-most layer across all time steps [B, T, H], whereas h_n preserves the terminal time-step state h_T across all vertical layers [L, B, H].", "output contains only the first token, while h_n contains all tokens.", "output contains gradients, while h_n contains parameters.", "output and h_n are identical tensors with different variable names."], "answer": "A", "whyCorrect": "output tracks the temporal trajectory of the final vertical layer across all T steps, while h_n tracks the terminal state h_T across all vertical layers.", "whyOthers": "Option B inverts temporal semantics. Option C confuses forward activations with autograd gradients. Option D ignores layer and temporal differences.", "diagram": "output: [B, T, H] (Top layer, all time) vs h_n: [L, B, H] (All layers, time T)"}, {"id": "q03", "part": "prerequisites", "flavor": "trap", "anchor": "PREREQUISITES.md#p2", "prompt": "In a 3-layer stacked unidirectional recurrent model, which slice of 'h_n' matches 'output[:, -1, :]'?", "options": ["h_n[0, :, :]", "h_n[-1, :, :] (the top-most layer index L-1)", "h_n[1, :, :]", "None, they have completely different values"], "answer": "B", "whyCorrect": "output[:, -1, :] extracts the terminal step of the top layer, which exactly corresponds to the highest layer index in h_n (h_n[-1, :, :]).", "whyOthers": "Option A extracts Layer 1 (the shallowest layer). Option C extracts Layer 2. Option D is incorrect because they are mathematically and numerically identical.", "diagram": "output[:, -1, :] == h_n[-1, :, :] == h_T^{(L)}"}, {"id": "q04", "part": "prerequisites", "flavor": "mechanism", "anchor": "PREREQUISITES.md#p3", "prompt": "Why does a Many-to-Many sequence tagging model apply 'nn.Linear(H, K)' across the full sequence 'output' rather than just 'h_n[-1]'?", "options": ["Because Many-to-Many requires an output decision for every token in the sequence, requiring a projection of each temporal hidden state h_t.", "Because Many-to-Many models cannot use backpropagation.", "Because Many-to-Many models do not have hidden states.", "Because h_n is always empty in Many-to-Many models."], "answer": "A", "whyCorrect": "In sequence tagging (e.g. POS tagging, NER), each token t requires a label; projecting output [B, T, H] yields logits [B, T, K] for all time steps.", "whyOthers": "Option B is false (they train via standard BPTT). Option C is false (they use recurrent hidden states). Option D is false (h_n is populated in all models).", "diagram": "Many-to-Many: output [B, T, H] --(Linear)--> Logits [B, T, K] for all t in [1, T]"}, {"id": "q05", "part": "prerequisites", "flavor": "connect", "anchor": "PREREQUISITES.md#p4", "prompt": "Why does bidirectional recurrence ('bidirectional=True') require concatenating the forward and backward hidden vectors into [h_t^-> ; h_t^<-] in R^{2H}?", "options": ["To compress the sequence into a single scalar value.", "To provide each token representation with complete context from both preceding tokens (past) and succeeding tokens (future).", "To eliminate the need for parameter weights.", "To prevent PyTorch from allocating memory on GPUs."], "answer": "B", "whyCorrect": "The forward pass summarizes past context (1 to t), and the backward pass summarizes future context (T down to t). Concatenating them provides a non-causal representation containing bidirectional context.", "whyOthers": "Option A describes pooling to a scalar. Option C is false (weights double). Option D is false (BiRNNs execute on GPUs).", "diagram": "t: [ h_t^-> (past) ; h_t^<- (future) ] in R^{2H}"}, {"id": "q06", "part": "notes", "flavor": "master_map", "anchor": "NOTES.md#executive-summary", "prompt": "How do vertical layer stacking, bidirectional context fusion, and task-specific projection heads integrate across the deep recurrent architecture master blueprint?", "options": ["Input sequences are flattened into 1D arrays, fed through a single feedforward layer without temporal recurrent updates, and evaluated using random guessing.", "Input tensors [B, T, D] propagate vertically through L stacked recurrent layers to extract hierarchical abstractions, bidirectional paths fuse past and future contexts into 2H representations, and linear heads route either terminal states (Many-to-One) or entire sequences (Many-to-Many) into predictions.", "Inputs bypass recurrent layers entirely and are directly passed into multi-head self-attention matrices.", "Vertical stacking removes all parameters so that the model relies purely on hard-coded heuristics."], "answer": "B", "whyCorrect": "The master blueprint establishes vertical hierarchical depth across L layers, bidirectional context aggregation into 2H channels, and modular head projection tailored to sequence classification or dense token generation.", "whyOthers": "Option A destroys sequence geometry. Option C describes pure Transformers without recurrence. Option D is mathematically absurd.", "diagram": "X [B,T,D] -> Deep L-Layer Bi-Recurrence [B,T,2H] -> Head Routing (Many-to-One vs Many-to-Many) -> Logits"}, {"id": "q07", "part": "notes", "flavor": "definition", "anchor": "NOTES.md#topic-1-pytorch-recurrent-initialization--input-geometry-tracking", "prompt": "What does setting 'batch_first=True' explicitly instruct PyTorch recurrent layers to do with input mini-batches?", "options": ["Process the mini-batch using 16-bit floating point precision.", "Expect mini-batch tensors organized with batch size B at dimension 0, sequence length T at dimension 1, and feature dimension D at dimension 2: [B, T, D].", "Discard all inputs except the first batch item.", "Run the forward pass backwards in time."], "answer": "B", "whyCorrect": "batch_first=True aligns PyTorch recurrent modules with standard deep learning data layouts [B, T, D], preventing transposition overhead.", "whyOthers": "Option A refers to mixed precision. Option C describes arbitrary data loss. Option D describes bidirectional backward sweeps.", "diagram": "batch_first=True: Dim 0 = Batch (B), Dim 1 = Time (T), Dim 2 = Features (D)"}, {"id": "q08", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#topic-2-end-to-end-many-to-one-sequence-classification-pipeline", "prompt": "Why can the unnormalized logits output by 'nn.Linear(H, K)' contain negative numbers, while the softmax probabilities cannot?", "options": ["Because logits represent raw unbounded affine transformations W h + b in R^K, whereas softmax computes exponentials e^{z_k} / sum(e^{z_j}) which are strictly positive and normalized to sum to 1.", "Because negative logits represent training errors that cause immediate runtime crashes.", "Because softmax rounds all negative numbers to zero before computing derivatives.", "Because PyTorch automatically clips negative logits to -1."], "answer": "A", "whyCorrect": "Affine projections have range (-inf, +inf); the exponential function e^z maps all real inputs to strictly positive values (0, +inf), ensuring valid probability distributions.", "whyOthers": "Option B is false (negative logits are completely normal and valid). Options C and D misrepresent softmax mathematical definitions.", "diagram": "z in R^K (can be negative) --(Softmax: e^z / sum(e^z))--> p in [0, 1]^K"}, {"id": "q09", "part": "notes", "flavor": "compare", "anchor": "NOTES.md#topic-3-deep-stacked-recurrent-networks-vertical-depth--layer-propagation", "prompt": "In a 2-layer stacked RNN with input dimension D = 10 and hidden dimension H = 16, why does Layer 2 have more parameters than Layer 1?", "options": ["Because Layer 2 has more hidden units than Layer 1.", "Because Layer 1 receives input dimension D = 10 (giving W_ih of shape 16 x 10), while Layer 2 receives the hidden state of Layer 1 as input (giving W_ih of shape 16 x 16).", "Because Layer 2 has four gates while Layer 1 has only one gate.", "Because Layer 2 parameters are duplicated for each time step."], "answer": "B", "whyCorrect": "Layer 1 projects D=10 to H=16 (160 weights). Layer 2 projects H=16 to H=16 (256 weights). Both have identical recurrent weights W_hh (16x16 = 256).", "whyOthers": "Option A is false (both have H=16). Option C is false (both are vanilla RNN layers). Option D confuses time unrolling with parameter duplication.", "diagram": "Layer 1: W_ih in R^{16 x 10} (160 w) vs Layer 2: W_ih in R^{16 x 16} (256 w)"}, {"id": "q10", "part": "notes", "flavor": "trap", "anchor": "NOTES.md#topic-4-bidirectional-recurrence--sequence-to-sequence-decoding-mechanics", "prompt": "In a bidirectional recurrent network, why is slicing 'output[:, -1, :]' a serious bug if intended to extract the complete contextual summary of the sequence?", "options": ["Because output[:, -1, :] produces a tensor of shape [0].", "Because output[:, -1, :H] contains the complete forward pass at step T, but output[:, -1, H:] contains the initial step of the backward pass (having observed only token T and zero backward context).", "Because output cannot be indexed with negative integers in PyTorch.", "Because bidirectional models do not support sequence outputs."], "answer": "B", "whyCorrect": "The backward pass unrolls from T to 1. At step T (index -1), the backward cell has only seen the last token. The complete backward summary is at step 1 (index 0), or in h_n[-1].", "whyOthers": "Option A, C, and D are factually and syntactically incorrect.", "diagram": "output[:,-1,:] = [ h_T^-> (Full past) ; h_T^<- (First backward step!) ]. Correct summary: [h_n[-2]; h_n[-1]]."}, {"id": "q11", "part": "notes", "flavor": "connect", "anchor": "NOTES.md#topic-4-bidirectional-recurrence--sequence-to-sequence-decoding-mechanics", "prompt": "What is the primary architectural limitation of deep recurrent networks that motivated the development and widespread adoption of Transformers?", "options": ["Recurrent networks cannot be trained using gradient descent.", "Recurrent networks require sequential step-by-step state propagation h_t = cell(x_t, h_{t-1}), creating an O(T) sequential wall-clock bottleneck that prevents parallelization across time steps on GPUs.", "Recurrent networks cannot process text or time-series data.", "Recurrent networks require exponential parameter growth as sequence length increases."], "answer": "B", "whyCorrect": "Recurrent state transitions are inherently sequential (step t depends on step t-1), capping GPU parallelism. Transformers replace recurrence with self-attention, processing all T tokens in parallel (O(1) sequential steps).", "whyOthers": "Option A is false (BPTT uses gradient descent). Option C is false (RNNs were standard for text). Option D is false (weights are shared across time).", "diagram": "RNN: t_1 -> t_2 -> ... -> t_T (O(T) sequential latency) vs Transformer: All t processed simultaneously (O(1))"}];
+    const state = { answers: {}, checked: {}, wizardIndex: 0 };
+    const $questions = document.getElementById("questions");
+    const $score = document.getElementById("score");
+    const $progress = document.getElementById("progress");
+
+    function partOf(q) { return q.part === "notes" ? "notes" : "prerequisites"; }
+
+    function fixLink(q) {
+      const defaultFix = partOf(q) === "notes" ? "NOTES.md" : "PREREQUISITES.md";
+      let fixHref = "./" + defaultFix, fixLabel = defaultFix;
+      if (q.anchor) {
+        const a = String(q.anchor).trim();
+        if (a.startsWith("#")) { fixHref = "./" + defaultFix + a; fixLabel = defaultFix + a; }
+        else if (a.startsWith("./")) { fixHref = a; fixLabel = a.slice(2); }
+        else { fixHref = "./" + a; fixLabel = a; }
+      }
+      return { fixHref, fixLabel };
+    }
+
+    function explainHtml(q, picked, show) {
+      if (!show) return "";
+      let verdictClass = "skip", verdictText = "No answer selected.";
+      if (picked) {
+        const ok = picked === q.answer;
+        verdictClass = ok ? "ok" : "bad";
+        verdictText = ok
+          ? `Correct — you chose ${picked}.`
+          : `Not quite — you chose ${picked}; correct is ${q.answer}.`;
+      } else {
+        verdictText = `No answer — correct is ${q.answer}.`;
+      }
+      const whyWrong = Object.entries(q.whyOthers || {})
+        .map(([k,v]) => `<div class="why"><div class="label">Why not ${k}?</div>${v}</div>`).join("");
+      const { fixHref, fixLabel } = fixLink(q);
+      return `<div class="explain show">
+        <div class="verdict ${verdictClass}">${verdictText}</div>
+        <h3>Why the correct option (${q.answer})</h3>
+        <div class="why"><div class="label">Explanation</div>${q.whyCorrect || ""}</div>
+        <h3>Why not the other options</h3>${whyWrong}
+        <h3>Picture</h3><pre class="diagram">${q.diagram || ""}</pre>
+        <div class="later"><strong>Use later:</strong> ${q.useLater || ""}<br/>
+        <strong>If wrong:</strong> re-read <a href="${fixHref}" style="color:var(--accent)">${fixLabel}</a></div>
+      </div>`;
+    }
+
+    function render() {
+      let html = "";
+      let lastPart = null;
+      QUESTIONS.forEach((q, i) => {
+        const part = partOf(q);
+        if (part !== lastPart) {
+          lastPart = part;
+          if (part === "prerequisites") {
+            html += `<div class="part-banner prereq"><h2>Part A · PREREQUISITES.md</h2><p>Warm-up. Weak here → re-open PREREQUISITES.md.</p></div>`;
+          } else {
+            html += `<div class="part-banner notes"><h2>Part B · NOTES.md</h2><p>Article spine. Weak here → re-open NOTES.md (not only the video).</p></div>`;
+          }
+        }
+        const picked = state.answers[q.id];
+        const show = !!state.checked[q.id];
+        const opts = q.options.map(o => {
+          let cls = "opt" + (picked === o.key ? " selected" : "");
+          if (show) {
+            if (o.key === q.answer) cls += " reveal-correct";
+            else if (picked === o.key) cls += " reveal-wrong-picked";
+          }
+          return `<label class="${cls}"><input type="radio" name="${q.id}" value="${o.key}" ${picked===o.key?"checked":""} ${show?"disabled":""}/><span><strong>${o.key}.</strong> ${o.text}</span></label>`;
+        }).join("");
+        const pill = part === "notes"
+          ? `<span class="part-pill notes">NOTES</span>`
+          : `<span class="part-pill prereq">PREREQ</span>`;
+        const { fixLabel } = fixLink(q);
+        const checkDisabled = show ? "disabled" : "";
+        html += `<section class="qcard ${i===state.wizardIndex?"active":""}" data-idx="${i}" data-id="${q.id}" data-part="${part}">
+          <h2>Q${i+1}. ${q.prompt}</h2>
+          <div class="qmeta">${pill}${q.tag || ""} · review: ${fixLabel}</div>
+          <div class="opts">${opts}</div>
+          <div class="q-actions">
+            <button type="button" class="check-btn" data-check="${q.id}" ${checkDisabled}>Check this answer</button>
+            <button type="button" class="clear-btn" data-clear="${q.id}">Clear</button>
+          </div>
+          ${explainHtml(q, picked, show)}
+        </section>`;
+      });
+      $questions.innerHTML = html;
+
+      $questions.querySelectorAll("input[type=radio]").forEach(input => {
+        input.addEventListener("change", () => {
+          if (state.checked[input.name]) return;
+          state.answers[input.name] = input.value;
+          updateProgress();
+          // refresh selected styling without wiping other checks
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-check]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-check");
+          if (!state.answers[id]) {
+            alert("Pick an option first, then check this answer.");
+            return;
+          }
+          state.checked[id] = true;
+          render();
+        });
+      });
+      $questions.querySelectorAll("[data-clear]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-clear");
+          delete state.answers[id];
+          delete state.checked[id];
+          render();
+        });
+      });
+      updateProgress();
+      updateWizard();
+    }
+
+    function updateProgress() {
+      const n = QUESTIONS.length;
+      const a = Object.keys(state.answers).length;
+      const ch = Object.keys(state.checked).length;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      let c = 0, cP = 0, cN = 0;
+      QUESTIONS.forEach(q => {
+        if (state.checked[q.id] && state.answers[q.id] === q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $progress.textContent =
+        `Checked ${ch}/${n} · correct so far ${c} · answered ${a}/${n} · Part A ${nP} qs · Part B ${nN} qs`;
+    }
+
+    function updateWizard() {
+      if (!document.body.classList.contains("mode-wizard")) return;
+      document.querySelectorAll(".qcard").forEach((el,i) => el.classList.toggle("active", i===state.wizardIndex));
+    }
+    document.getElementById("mode-all").onclick = () => {
+      document.body.classList.add("mode-all"); document.body.classList.remove("mode-wizard");
+      document.getElementById("mode-all").classList.add("active");
+      document.getElementById("mode-wizard").classList.remove("active");
+    };
+    document.getElementById("mode-wizard").onclick = () => {
+      document.body.classList.add("mode-wizard"); document.body.classList.remove("mode-all");
+      document.getElementById("mode-wizard").classList.add("active");
+      document.getElementById("mode-all").classList.remove("active");
+      updateWizard();
+    };
+    document.getElementById("prev").onclick = () => { state.wizardIndex = Math.max(0, state.wizardIndex-1); updateWizard(); };
+    document.getElementById("next").onclick = () => { state.wizardIndex = Math.min(QUESTIONS.length-1, state.wizardIndex+1); updateWizard(); };
+
+    document.getElementById("submit").onclick = () => {
+      // score all that have answers; mark them checked
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]) state.checked[q.id] = true;
+      });
+      let c=0, cP=0, cN=0;
+      const nP = QUESTIONS.filter(q => partOf(q)==="prerequisites").length;
+      const nN = QUESTIONS.filter(q => partOf(q)==="notes").length;
+      QUESTIONS.forEach(q => {
+        if (state.answers[q.id]===q.answer) {
+          c++;
+          if (partOf(q)==="prerequisites") cP++; else cN++;
+        }
+      });
+      $score.classList.add("show");
+      $score.innerHTML = `<strong>Score (answered items): ${c} / ${QUESTIONS.length}</strong>
+        <p style="margin:0.5rem 0 0"><strong>Part A · PREREQUISITES.md:</strong> ${cP}/${nP}
+        &nbsp;·&nbsp; <strong>Part B · NOTES.md:</strong> ${cN}/${nN}</p>
+        <p style="margin:0.4rem 0 0;color:var(--muted)">
+          Missed Part A → <a href="./PREREQUISITES.md" style="color:var(--accent)">PREREQUISITES.md</a>.
+          Missed Part B → <a href="./NOTES.md" style="color:var(--accent)">NOTES.md</a>.
+          Unanswered items are not marked correct.
+        </p>`;
+      render();
+    };
+    document.getElementById("reset").onclick = () => {
+      state.answers = {}; state.checked = {}; state.wizardIndex = 0;
+      $score.classList.remove("show"); $score.innerHTML = ""; render();
+    };
+    render();
+  </script>
+</body>
+</html>

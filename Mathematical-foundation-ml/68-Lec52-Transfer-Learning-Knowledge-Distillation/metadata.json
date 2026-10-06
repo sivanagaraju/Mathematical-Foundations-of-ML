@@ -1,0 +1,59 @@
+{
+  "title": "Lec 52 Transfer Learning and Knowledge Distilation",
+  "video_id": "5f2_TocU_CU",
+  "url": "https://www.youtube.com/watch?v=5f2_TocU_CU",
+  "duration_seconds": 2254,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Prof. Prathosh AP",
+  "playlist_index": 68,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "math_technical",
+  "topic_count": 6,
+  "package_variant": "production",
+  "requires_claim_mining": true,
+  "beginner_prereqs": false,
+  "topics": [
+    {
+      "index": 1,
+      "title": "Transfer Learning Foundations: Inductive Bias & Representation Reuse",
+      "start_time": "00:00",
+      "end_time": "04:20",
+      "duration_seconds": 260
+    },
+    {
+      "index": 2,
+      "title": "Implementation Mechanics: Feature Extraction, Freezing, and Fine-Tuning",
+      "start_time": "04:21",
+      "end_time": "08:50",
+      "duration_seconds": 270
+    },
+    {
+      "index": 3,
+      "title": "Multitask Learning: Shared Representations and Hard Parameter Sharing",
+      "start_time": "08:51",
+      "end_time": "12:30",
+      "duration_seconds": 220
+    },
+    {
+      "index": 4,
+      "title": "Self-Supervised & Unsupervised Pre-training Paradigms",
+      "start_time": "12:31",
+      "end_time": "17:30",
+      "duration_seconds": 300
+    },
+    {
+      "index": 5,
+      "title": "Knowledge Distillation: Teacher-Student Architecture & Dark Knowledge",
+      "start_time": "17:31",
+      "end_time": "27:00",
+      "duration_seconds": 570
+    },
+    {
+      "index": 6,
+      "title": "The Distillation Objective: Temperature Scaling & Combined Loss Formulation",
+      "start_time": "27:01",
+      "end_time": "37:35",
+      "duration_seconds": 634
+    }
+  ]
+}

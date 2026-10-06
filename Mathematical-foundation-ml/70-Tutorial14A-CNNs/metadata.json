@@ -1,0 +1,59 @@
+{
+  "title": "Tutorial 14 Part 1 : CNNs",
+  "video_id": "0wd-LIzzfM0",
+  "url": "https://www.youtube.com/watch?v=0wd-LIzzfM0",
+  "duration_seconds": 2032,
+  "channel": "NPTEL - Indian Institute of Science, Bengaluru",
+  "instructor": "Teaching Assistant / Prof. Prathosh A P",
+  "playlist_index": 70,
+  "skill": "youtube-lecture-tutor",
+  "content_type": "code_tutorial",
+  "topic_count": 6,
+  "package_variant": "production",
+  "requires_claim_mining": true,
+  "beginner_prereqs": true,
+  "topics": [
+    {
+      "index": 1,
+      "title": "Foundations of CNNs & Visualizing Conv Filters",
+      "start_time": "00:00",
+      "end_time": "05:41",
+      "duration_seconds": 341
+    },
+    {
+      "index": 2,
+      "title": "The 2D Convolution Operation: Stride, Padding & Dimension Arithmetic",
+      "start_time": "05:41",
+      "end_time": "13:06",
+      "duration_seconds": 445
+    },
+    {
+      "index": 3,
+      "title": "Spatial Pooling Mechanisms: Max Pooling, Average Pooling & Invariance",
+      "start_time": "13:06",
+      "end_time": "17:03",
+      "duration_seconds": 237
+    },
+    {
+      "index": 4,
+      "title": "Classic CNN Anatomy: The LeNet-5 Architecture & Layer Transitions",
+      "start_time": "17:03",
+      "end_time": "21:15",
+      "duration_seconds": 252
+    },
+    {
+      "index": 5,
+      "title": "Hands-on PyTorch Implementation of LeNet-5: nn.Conv2d, Flatten & Sequential",
+      "start_time": "21:15",
+      "end_time": "29:09",
+      "duration_seconds": 474
+    },
+    {
+      "index": 6,
+      "title": "Scaling Vision Architectures: ImageNet, AlexNet, VGG & ResNet",
+      "start_time": "29:09",
+      "end_time": "33:52",
+      "duration_seconds": 283
+    }
+  ]
+}
